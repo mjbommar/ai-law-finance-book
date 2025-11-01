@@ -1,0 +1,638 @@
+\documentclass[11pt]{article}
+
+% ============================================================================
+% MODERN TYPOGRAPHY AND LAYOUT
+% ============================================================================
+\usepackage[margin=1.2in, top=1.3in, bottom=1.3in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+% Modern font: Libertinus (elegant, readable serif)
+\usepackage{libertinus}
+\usepackage{libertinust1math} % Math support for Libertinus
+
+% Typography enhancements
+\usepackage{microtype}  % Improved typography and spacing
+\usepackage{setspace}   % Line spacing control
+\setstretch{1.15}       % Slightly increased line spacing for readability
+
+% Paragraph formatting
+\usepackage{parskip}    % Space between paragraphs instead of indentation
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+% Language and quotation support (must come before biblatex)
+\usepackage[english]{babel}
+\usepackage{csquotes}
+
+% ============================================================================
+% MATHEMATICS AND SYMBOLS
+% ============================================================================
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% ============================================================================
+% GRAPHICS AND FIGURES
+% ============================================================================
+\usepackage{graphicx}
+\usepackage{float}      % Better float control
+
+% ============================================================================
+% COLOR SYSTEM - Educational Semantic Palette
+% ============================================================================
+%
+% ARCHITECTURE:
+%   This color system uses a four-layer architecture for modularity and clarity:
+%
+%   Layer 1: PRIMITIVES - Raw RGB values (the actual color palette)
+%            Named by visual appearance (slate-900, green-600, etc.)
+%            Change these to rebrand the entire document
+%
+%   Layer 2: SEMANTICS - Educational content types
+%            Named by pedagogical purpose (definition, example, key, caution)
+%            Maps content types to primitive colors
+%
+%   Layer 3: COMPONENTS - Specific usage contexts
+%            Named by component role (bg-*, border-*, text-*)
+%            Makes code self-documenting and explicit
+%
+%   Layer 4: LEGACY - Backward compatibility aliases
+%            Preserves old naming for gradual migration
+%
+% EDUCATIONAL CONTENT TYPES:
+%   - definition: Formal definitions, theoretical concepts (Blue)
+%   - example:    Concrete examples, demonstrations, applications (Green)
+%   - key:        Important takeaways, essential concepts (Orange/Amber)
+%   - caution:    Warnings, pitfalls, common mistakes (Red)
+%   - note:       Supplementary info, asides, optional reading (Neutral)
+%   - theorem:    Formal statements, proofs, logical arguments (Indigo)
+%   - practice:   Exercises, problems, hands-on activities (Teal)
+%
+% VARIANT PATTERN:
+%   Each semantic type has three consistent variants:
+%   - [type]-dark:  For text and strong borders (high contrast, readable)
+%   - [type]-base:  For medium emphasis (icons, accents, highlights)
+%   - [type]-light: For backgrounds (subtle, doesn't overwhelm content)
+%
+% ============================================================================
+
+\usepackage{xcolor}
+
+% ============================================================================
+% LAYER 1: PRIMITIVE COLOR PALETTE
+% ============================================================================
+% Raw color values named by visual appearance, not purpose.
+% These form the foundation - modify these to rebrand the entire document.
+% Organized by color family with numeric scale: 900 (darkest) → 100 (lightest)
+% ============================================================================
+
+% --- SLATE/BLUE FAMILY: Professional, Formal, Structural ---
+\definecolor{slate-900}{RGB}{30,58,95}          % Deep slate blue - maximum depth/authority
+\definecolor{slate-700}{RGB}{71,101,135}        % Medium slate - readable structure
+\definecolor{slate-100}{RGB}{240,246,252}       % Ice blue - subtle professional backgrounds
+
+% --- GREEN FAMILY: Natural, Practical, Concrete ---
+\definecolor{green-900}{RGB}{46,125,50}         % Forest green - maximum depth/seriousness
+\definecolor{green-600}{RGB}{67,160,71}         % Vibrant green - clear emphasis
+\definecolor{green-100}{RGB}{232,245,233}       % Light green - fresh, approachable backgrounds
+
+% --- AMBER/ORANGE FAMILY: Warm, Important, Attention ---
+\definecolor{amber-900}{RGB}{230,124,0}         % Deep amber - strong attention signal
+\definecolor{amber-600}{RGB}{251,140,0}         % Medium amber - warm emphasis
+\definecolor{amber-100}{RGB}{255,243,224}       % Light amber - gentle highlight backgrounds
+
+% --- RED FAMILY: Alert, Warning, Critical ---
+\definecolor{red-900}{RGB}{198,40,40}           % Deep red - serious warnings/errors
+\definecolor{red-600}{RGB}{229,57,53}           % Medium red - clear alert signal
+\definecolor{red-100}{RGB}{255,235,238}         % Light red - soft warning backgrounds
+
+% --- TEAL FAMILY: Modern, Technical, Alternative ---
+\definecolor{teal-700}{RGB}{0,128,128}          % Deep teal - strong technical tone
+\definecolor{teal-600}{RGB}{0,137,123}          % Professional teal - modern accent
+\definecolor{teal-100}{RGB}{224,242,241}        % Light teal - fresh technical backgrounds
+
+% --- INDIGO/PURPLE FAMILY: Abstract, Theoretical, Formal ---
+\definecolor{indigo-700}{RGB}{63,81,181}        % Medium indigo - thoughtful, abstract tone
+\definecolor{indigo-600}{RGB}{92,107,192}       % Lighter indigo - approachable formal tone
+\definecolor{indigo-100}{RGB}{232,234,246}      % Light indigo - subtle theoretical backgrounds
+
+% --- GRAY FAMILY: Neutral, Text, Structure ---
+\definecolor{gray-900}{RGB}{30,32,34}           % Almost black - primary body text
+\definecolor{gray-800}{RGB}{52,58,64}           % Very dark gray - strong headings
+\definecolor{gray-700}{RGB}{73,80,87}           % Dark gray - secondary text
+\definecolor{gray-600}{RGB}{95,100,105}         % Medium-dark gray - muted/de-emphasized text
+\definecolor{gray-500}{RGB}{134,142,150}        % Medium gray - borders, dividers
+\definecolor{gray-400}{RGB}{173,181,189}        % Medium-light gray - subtle dividers
+\definecolor{gray-300}{RGB}{210,215,220}        % Light gray - soft borders
+\definecolor{gray-200}{RGB}{233,236,239}        % Very light gray - hover states
+\definecolor{gray-100}{RGB}{247,248,250}        % Near white - subtle backgrounds
+
+% --- WARM NEUTRALS ---
+\definecolor{cream-100}{RGB}{252,250,246}       % Warm cream - inviting, friendly backgrounds
+
+
+% ============================================================================
+% LAYER 2: SEMANTIC COLOR MAPPINGS (Educational Content Types)
+% ============================================================================
+% Maps educational content types to primitive colors.
+% USE THESE when creating educational content boxes and callouts.
+% Each type follows the pattern: [type]-dark, [type]-base, [type]-light
+% ============================================================================
+
+% --- DEFINITION: Formal definitions, theoretical concepts, foundational knowledge ---
+% Color: Blue (professional, formal, authoritative, structural)
+% Use for: Formal term definitions, conceptual frameworks, theoretical foundations
+\definecolor{definition-dark}{RGB}{30,58,95}    % slate-900 → text, strong borders
+\definecolor{definition-base}{RGB}{71,101,135}  % slate-700 → medium borders, accents
+\definecolor{definition-light}{RGB}{240,246,252}% slate-100 → box backgrounds
+
+% --- EXAMPLE: Concrete examples, demonstrations, applications, case studies ---
+% Color: Green (practical, real-world, natural, accessible)
+% Use for: Code examples, real-world applications, demonstrations, case studies
+\definecolor{example-dark}{RGB}{46,125,50}      % green-900 → text, strong borders
+\definecolor{example-base}{RGB}{67,160,71}      % green-600 → medium borders, accents
+\definecolor{example-light}{RGB}{232,245,233}   % green-100 → box backgrounds
+
+% --- KEY: Important takeaways, essential concepts, memorable points ---
+% Color: Orange/Amber (warm, attention-getting, important, energetic)
+% Use for: Key takeaways, must-remember concepts, essential points, summaries
+\definecolor{key-dark}{RGB}{230,124,0}          % amber-900 → text, strong borders
+\definecolor{key-base}{RGB}{251,140,0}          % amber-600 → medium borders, accents
+\definecolor{key-light}{RGB}{255,243,224}       % amber-100 → box backgrounds
+
+% --- CAUTION: Warnings, pitfalls, common mistakes, things to avoid ---
+% Color: Red (alert, warning, danger, critical attention)
+% Use for: Common mistakes, pitfalls to avoid, deprecated patterns, errors
+\definecolor{caution-dark}{RGB}{198,40,40}      % red-900 → text, strong borders
+\definecolor{caution-base}{RGB}{229,57,53}      % red-600 → medium borders, accents
+\definecolor{caution-light}{RGB}{255,235,238}   % red-100 → box backgrounds
+
+% --- NOTE: General notes, asides, supplementary information, optional reading ---
+% Color: Neutral/Gray (calm, supportive, non-intrusive, optional)
+% Use for: Sidebar notes, historical context, tangential info, further reading
+\definecolor{note-dark}{RGB}{73,80,87}          % gray-700 → text, strong borders
+\definecolor{note-base}{RGB}{134,142,150}       % gray-500 → medium borders, accents
+\definecolor{note-light}{RGB}{252,250,246}      % cream-100 → box backgrounds
+
+% --- THEOREM: Mathematical statements, formal proofs, logical arguments ---
+% Color: Indigo/Purple (abstract, theoretical, formal, rigorous)
+% Use for: Theorems, lemmas, proofs, formal logical statements
+\definecolor{theorem-dark}{RGB}{63,81,181}      % indigo-700 → text, strong borders
+\definecolor{theorem-base}{RGB}{92,107,192}     % indigo-600 → medium borders, accents
+\definecolor{theorem-light}{RGB}{232,234,246}   % indigo-100 → box backgrounds
+
+% --- PRACTICE: Exercises, problems, hands-on activities, try-it-yourself ---
+% Color: Teal (modern, technical, interactive, hands-on)
+% Use for: Practice problems, exercises, coding challenges, interactive tasks
+\definecolor{practice-dark}{RGB}{0,128,128}     % teal-700 → text, strong borders
+\definecolor{practice-base}{RGB}{0,137,123}     % teal-600 → medium borders, accents
+\definecolor{practice-light}{RGB}{224,242,241}  % teal-100 → box backgrounds
+
+
+% ============================================================================
+% LAYER 3: COMPONENT-SPECIFIC ALIASES
+% ============================================================================
+% Explicit naming for specific component usage (backgrounds, borders, text).
+% These make code self-documenting and usage intentions clear.
+% Use these when building custom components or tcolorbox definitions.
+% ============================================================================
+
+% --- General Text Colors (Body Text, Headings, Emphasis) ---
+\definecolor{text-primary}{RGB}{30,32,34}       % gray-900 → main body text
+\definecolor{text-secondary}{RGB}{73,80,87}     % gray-700 → secondary text, captions
+\definecolor{text-muted}{RGB}{95,100,105}       % gray-600 → de-emphasized, metadata
+
+% --- Background Colors for Content Boxes ---
+\definecolor{bg-definition}{RGB}{240,246,252}   % definition-light → definition boxes
+\definecolor{bg-example}{RGB}{232,245,233}      % example-light → example boxes
+\definecolor{bg-key}{RGB}{255,243,224}          % key-light → key takeaway boxes
+\definecolor{bg-caution}{RGB}{255,235,238}      % caution-light → warning boxes
+\definecolor{bg-note}{RGB}{252,250,246}         % note-light → note/aside boxes
+\definecolor{bg-theorem}{RGB}{232,234,246}      % theorem-light → theorem boxes
+\definecolor{bg-practice}{RGB}{224,242,241}     % practice-light → practice boxes
+\definecolor{bg-neutral}{RGB}{247,248,250}      % gray-100 → neutral backgrounds
+
+% --- Border Colors for Content Boxes ---
+\definecolor{border-definition}{RGB}{71,101,135}% definition-base → definition frames
+\definecolor{border-example}{RGB}{67,160,71}    % example-base → example frames
+\definecolor{border-key}{RGB}{251,140,0}        % key-base → key takeaway frames
+\definecolor{border-caution}{RGB}{229,57,53}    % caution-base → warning frames
+\definecolor{border-note}{RGB}{210,215,220}     % gray-300 → note frames
+\definecolor{border-theorem}{RGB}{92,107,192}   % theorem-base → theorem frames
+\definecolor{border-practice}{RGB}{0,137,123}   % practice-base → practice frames
+\definecolor{border-neutral}{RGB}{210,215,220}  % gray-300 → subtle neutral borders
+
+% --- Primary Structural Colors (Headings, Links, Main Theme) ---
+\definecolor{primary}{RGB}{30,58,95}            % slate-900 → main brand/theme color
+\definecolor{primary-light}{RGB}{71,101,135}    % slate-700 → lighter brand variant
+\definecolor{accent}{RGB}{251,140,0}            % amber-600 → attention/emphasis accent
+
+
+% ============================================================================
+% LAYER 4: LEGACY COMPATIBILITY ALIASES
+% ============================================================================
+% Backward-compatible aliases preserving old color names.
+% Allows gradual migration to new semantic system without breaking existing code.
+% TODO: Gradually replace these throughout the document with semantic names.
+% ============================================================================
+
+\definecolor{agentblue}{RGB}{30,58,95}          % → slate-900 / primary
+\definecolor{agentlightblue}{RGB}{240,246,252}  % → slate-100 / bg-definition
+\definecolor{accentorange}{RGB}{191,97,35}      % Legacy (slightly warmer than amber-900)
+\definecolor{highlightgray}{RGB}{252,250,246}   % → cream-100 / bg-note
+\definecolor{bordergray}{RGB}{210,215,220}      % → gray-300 / border-neutral
+\definecolor{darkgray}{RGB}{95,100,105}         % → gray-600 / text-muted
+
+% Old semantic names from previous color system
+\definecolor{primary-slate}{RGB}{30,58,95}      % → slate-900
+\definecolor{accent-amber}{RGB}{191,97,35}      % Legacy warm amber
+\definecolor{secondary-sage}{RGB}{82,121,111}   % Legacy sage green (no longer in palette)
+\definecolor{bg-ice}{RGB}{240,246,252}          % → slate-100
+\definecolor{bg-cream}{RGB}{252,250,246}        % → cream-100
+\definecolor{bg-amber-light}{RGB}{254,245,237}  % Legacy (slightly different than amber-100)
+\definecolor{bg-gray-cool}{RGB}{247,248,250}    % → gray-100
+\definecolor{border-slate}{RGB}{71,101,135}     % → slate-700
+\definecolor{border-sage}{RGB}{118,145,137}     % Legacy sage border (no longer in palette)
+
+% ============================================================================
+% TABLES - Modern styling
+% ============================================================================
+\usepackage{booktabs}    % Professional quality tables
+\usepackage{longtable}   % Tables spanning multiple pages
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{tabularx}    % Better column sizing
+
+% Table row coloring
+\usepackage{colortbl}
+
+% Landscape pages
+\usepackage{pdflscape}
+\renewcommand{\arraystretch}{1.3}  % Better row spacing
+
+% ============================================================================
+% BOXES AND VISUAL ELEMENTS
+% ============================================================================
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable,skins,theorems}
+
+% Definition box style - Most prominent, formal definitions
+\newtcolorbox{definitionbox}[1][]{
+  enhanced,
+  colback=bg-definition,
+  colframe=border-definition,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=10pt,
+  right=10pt,
+  top=10pt,
+  bottom=10pt,
+  breakable,
+  drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.08},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=definition-dark,
+    colframe=definition-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% Highlight box style - Warm, inviting context and notes
+\newtcolorbox{highlightbox}[1][]{
+  enhanced,
+  colback=bg-note,
+  colframe=border-note,
+  fonttitle=\bfseries,
+  coltitle=note-dark,
+  boxrule=1pt,
+  arc=2.5pt,
+  left=10pt,
+  right=10pt,
+  top=8pt,
+  bottom=8pt,
+  breakable,
+  drop shadow={shadow xshift=0.5pt, shadow yshift=-0.5pt, opacity=0.05},
+  #1
+}
+
+% Key takeaway box - Stands out for important points
+\newtcolorbox{keybox}[1][]{
+  enhanced,
+  colback=bg-key,
+  colframe=key-base,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=2pt,
+  arc=3pt,
+  left=12pt,
+  right=12pt,
+  top=10pt,
+  bottom=10pt,
+  breakable,
+  drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.1},
+  borderline west={3pt}{0pt}{key-base},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=key-base,
+    colframe=key-base,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% Question box style - Distinct professional style for evaluation questions
+\newtcolorbox{questionbox}[1][]{
+  enhanced,
+  colback=gray-100,
+  colframe=gray-600,
+  fonttitle=\bfseries,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=2pt,
+  left=10pt,
+  right=10pt,
+  top=8pt,
+  bottom=8pt,
+  breakable,
+  borderline west={4pt}{0pt}{slate-700},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=slate-700,
+    colframe=slate-700,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% ============================================================================
+% LISTS - Better spacing and appearance
+% ============================================================================
+\usepackage{enumitem}
+\setlist{
+  itemsep=0.4em,
+  parsep=0.2em,
+  topsep=0.5em,
+  leftmargin=1.5em
+}
+
+% Custom list for evaluation questions
+\newlist{evallist}{enumerate}{1}
+\setlist[evallist]{
+  label=\textbf{Q\arabic*.},
+  leftmargin=2em,
+  itemsep=0.5em,
+  labelsep=0.5em
+}
+
+% ============================================================================
+% TIKZ for diagrams
+% ============================================================================
+\usepackage{tikz}
+\usetikzlibrary{
+  positioning,
+  arrows.meta,
+  shapes.geometric,
+  shapes.misc,
+  calc,
+  decorations.pathreplacing,
+  backgrounds,
+  fit,
+  shadows.blur
+}
+
+% Ensure TikZ uses the document's main font (Fira Sans)
+\tikzset{
+  every node/.style={font=\normalfont},
+  every text node part/.style={font=\normalfont}
+}
+
+% ============================================================================
+% SECTION STYLING
+% ============================================================================
+\usepackage{titlesec}
+\usepackage{titletoc}
+
+% Section formatting
+\titleformat{\section}
+  {\Large\bfseries\color{primary}}
+  {\thesection}{1em}{}
+  [\vspace{0.3em}{\color{primary}\titlerule[1.5pt]}\vspace{0.5em}]
+
+% Subsection formatting
+\titleformat{\subsection}
+  {\large\bfseries\color{primary}}
+  {\thesubsection}{1em}{}
+  [\vspace{-0.3em}]
+
+% Subsubsection formatting
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{text-secondary}}
+  {\thesubsubsection}{1em}{}
+
+% Paragraph formatting (for \paragraph)
+\titleformat{\paragraph}[runin]
+  {\normalsize\bfseries\color{primary}}
+  {}{0em}{}[.]
+\titlespacing*{\paragraph}{0pt}{1em}{0.5em}
+
+% ============================================================================
+% TABLE OF CONTENTS STYLING
+% ============================================================================
+% Customize ToC title
+\renewcommand{\contentsname}{%
+  {\color{primary}\Large\bfseries Contents}%
+}
+
+% Section entries in ToC
+\titlecontents{section}
+  [1.5em]                          % left margin
+  {\vspace{0.5em}\bfseries}        % above code
+  {\color{primary}\contentslabel{1.5em}}  % numbered entry format
+  {}                               % numberless entry format
+  {\titlerule*[0.75pc]{.}\contentspage}  % filler and page
+
+% Subsection entries in ToC
+\titlecontents{subsection}
+  [3.8em]                          % left margin
+  {\vspace{0.2em}}                 % above code
+  {\contentslabel{2.3em}}          % numbered entry format
+  {}                               % numberless entry format
+  {\titlerule*[0.75pc]{.}\contentspage}  % filler and page
+
+% ============================================================================
+% CAPTIONS - Cleaner appearance
+% ============================================================================
+\usepackage[
+  font={small},
+  labelfont={bf,color=primary},
+  format=plain,
+  justification=justified,
+  skip=8pt
+]{caption}
+
+% ============================================================================
+% HYPERLINKS AND PDF PROPERTIES
+% ============================================================================
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  citecolor=accent,
+  urlcolor=primary,
+  bookmarksnumbered=true,
+  pdfborder={0 0 0},
+  pdftitle={What is an Agent? A Primer on Agents, Agentic Software, and Agentic AI},
+  pdfauthor={},
+  pdfsubject={Artificial Intelligence, Agents, Legal Technology, Agentic Systems},
+  pdfkeywords={agentic AI, AI agents, legal AI, agent taxonomy, agentic systems, goal-directed systems, autonomous agents, LLM agents}
+}
+
+% Better cross-referencing
+\usepackage{cleveref}
+\crefname{section}{Section}{Sections}
+\crefname{figure}{Figure}{Figures}
+\crefname{table}{Table}{Tables}
+
+% ============================================================================
+% BIBLIOGRAPHY
+% ============================================================================
+\usepackage[
+  backend=biber,
+  style=authoryear,
+  maxcitenames=2,
+  maxbibnames=99,
+  uniquename=false,
+  uniquelist=false,
+  sorting=nyt,
+  dashed=false
+]{biblatex}
+
+% Citation formatting
+\DeclareFieldFormat{citetitle}{\mkbibquote{#1}}
+\DeclareFieldFormat[article]{citetitle}{#1}
+\DeclareFieldFormat[inproceedings]{citetitle}{#1}
+\DeclareFieldFormat[book]{citetitle}{\mkbibemph{#1}}
+\DeclareFieldFormat[techreport]{citetitle}{#1}
+\DeclareFieldFormat[misc]{citetitle}{#1}
+
+\addbibresource{bib/refs.bib}
+
+% ============================================================================
+% CUSTOM COMMANDS
+% ============================================================================
+
+% Highlighted text for key terms
+\newcommand{\keyterm}[1]{\textbf{\color{primary}#1}}
+
+% Three-level hierarchy terms
+\newcommand{\levelone}[1]{\textbf{#1}}
+\newcommand{\leveltwo}[1]{\textbf{#1}}
+\newcommand{\levelthree}[1]{\textbf{#1}}
+
+% ============================================================================
+% TITLE AND METADATA
+% ============================================================================
+\title{
+  \vspace{-0.5em}
+  {\Huge\bfseries\color{primary} Agents}\\[0.6em]
+  {\LARGE\color{primary} Part I: What is an Agent?}\\[0.4em]
+  {\large\itshape\color{text-secondary} A Conceptual Primer and History}
+  \vspace{0.5em}
+}
+
+\author{
+  \vspace{-0.5em}
+  {\large\color{text-muted}
+    Michael J Bommarito II \enspace $\cdot$ \enspace
+    Jillian Bommarito \enspace $\cdot$ \enspace
+    Daniel Martin Katz
+  }
+  \vspace{-0.5em}
+}
+
+\date{
+  {\normalsize\color{text-muted}\today}
+}
+
+% ============================================================================
+% DOCUMENT START
+% ============================================================================
+\begin{document}
+
+\maketitle
+
+% Decorative rule after title block
+\vspace{-1em}
+\noindent{\color{border-neutral}\rule{\textwidth}{0.5pt}}
+\vspace{1.0em}
+
+% Draft notice - professional blue-gray theme
+\begin{center}
+	\begin{tcolorbox}[
+			enhanced,
+			width=0.80\textwidth,
+			colback=bg-note,
+			colframe=border-note,
+			fonttitle=\bfseries\large\color{note-dark},
+			boxrule=1.5pt,
+			arc=4pt,
+			left=16pt,
+			right=16pt,
+			top=12pt,
+			bottom=12pt,
+			breakable,
+			drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.08},
+			borderline west={4pt}{0pt}{note-dark}
+		]
+
+		% Header - centered
+		\begin{center}
+			{\large\bfseries\color{note-dark} Working Draft Chapter} \\[0.2em]
+			{\small\color{text-muted} Version 0.1}
+		\end{center}
+
+		\vspace{0.25em}
+
+		% Body text - justified
+		{\small
+			This chapter is Part I of a three-part series from the textbook \textit{Artificial Intelligence for Law and Finance}, currently under development. Individual chapters are being drafted and refined independently before integration into the complete book. Part II: \textit{How to Build an Agent} and Part III: \textit{How to Govern an Agent} are forthcoming.
+
+			\vspace{0.5em}
+
+			You can find the most current copy of the textbook project here:\\
+			\url{https://github.com/mjbommar/ai-law-finance-book/}
+		}
+
+	\end{tcolorbox}
+\end{center}
+
+\vspace{1em}
+
+% Table of contents
+\tableofcontents
+
+% ============================================================================
+% MAIN CONTENT
+% ============================================================================
+\input{sections/howtoread}
+\input{sections/intro}
+\input{sections/practical}
+\input{sections/history}
+\input{sections/disciplines}
+\input{sections/dimensions}
+\input{sections/synthesis}
+\input{sections/furtherlearning}
+
+% ============================================================================
+% BIBLIOGRAPHY
+% ============================================================================
+
+\printbibliography
+
+\end{document}
