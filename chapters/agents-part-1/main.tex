@@ -370,6 +370,31 @@
   #1
 }
 
+% Theorem box style - For formal logical statements and proofs
+\newtcolorbox{theorembox}[1][]{
+  enhanced,
+  colback=bg-theorem,
+  colframe=border-theorem,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=12pt,
+  right=12pt,
+  top=10pt,
+  bottom=10pt,
+  breakable,
+  drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.08},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=theorem-dark,
+    colframe=theorem-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
 % ============================================================================
 % LISTS - Better spacing and appearance
 % ============================================================================
