@@ -1,0 +1,300 @@
+# ============================================================================
+# .gitignore for "Artificial Intelligence for Law and Finance" Textbook
+# ============================================================================
+# Last updated: 2025-10-31
+#
+# This file excludes build artifacts, temporary files, and OS-specific junk
+# while preserving source files and final PDFs where appropriate.
+# ============================================================================
+
+# ============================================================================
+# LaTeX Build Artifacts
+# ============================================================================
+# Auxiliary files
+*.aux
+*.lof
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+
+# Bibliography
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+
+# Build tool files
+*.fdb_latexmk
+*.synctex
+*.synctex(busy)
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdfsync
+
+# Build directories
+*.dvi
+*.xdv
+*-converted-to.*
+
+# Multi-file projects
+*.end
+*.hyperref
+
+# Glossaries
+*.acn
+*.acr
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.lzo
+*.lzs
+
+# gnuplot
+*.gnuplot
+*.table
+
+# Index
+*.idx
+*.ilg
+*.ind
+
+# Latexmk
+*.fdb_latexmk
+
+# Listings
+*.lol
+
+# Makeindex
+*.maf
+*.mlf
+*.mlt
+*.mtc[0-9]*
+*.slf[0-9]*
+*.slt[0-9]*
+*.stc[0-9]*
+
+# Minitoc
+*.maf
+*.mlf
+*.mlt
+*.mtc[0-9]*
+*.slf[0-9]*
+*.slt[0-9]*
+*.stc[0-9]*
+
+# Minted (code highlighting)
+_minted*
+*.pyg
+
+# Nomenclature
+*.nlg
+*.nlo
+*.nls
+
+# Pax
+*.pax
+
+# PdfTeX
+*.pdf_tex
+
+# SageTeX
+*.sagetex.sage
+*.sagetex.py
+*.sagetex.scmd
+
+# Scrwfile
+*.wrt
+
+# Sympy
+*.sout
+*.sympy
+sympy-plots-for-*.tex/
+
+# TikZ & PGF
+*.dpth
+*.md5
+*.auxlock
+
+# Todonotes
+*.tdo
+
+# Xindy
+*.xdy
+
+# xypic precompiled matrices
+*.xyc
+
+# endfloat
+*.ttt
+*.fff
+
+# Latexian
+TSWLatexianTemp*
+
+# ============================================================================
+# Python / Jupyter (for notebooks/)
+# ============================================================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# ============================================================================
+# Backup and Temporary Files
+# ============================================================================
+# Backup files (from our reorganization and edits)
+*.backup
+*.bak
+*~
+*.swp
+*.swo
+*.tmp
+
+# Auto-save files
+\#*\#
+.\#*
+
+# Temporary compile logs
+compile*.log
+biber.log
+
+# ============================================================================
+# OS-Specific Files
+# ============================================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.directory
+.Trash-*
+
+# ============================================================================
+# Editor and IDE Files
+# ============================================================================
+# VSCode
+.vscode/
+*.code-workspace
+
+# IntelliJ / PyCharm
+.idea/
+*.iml
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+
+# Vim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+Session.vim
+.netrwhist
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# ============================================================================
+# Build Directories and Generated Content
+# ============================================================================
+# PNG output from make png
+png_pages/
+*.png
+
+# Auto-generated files from scripts
+auto/
+
+# Distribution packages
+dist/
+build/
+*.egg-info/
+
+# ============================================================================
+# Project-Specific Exclusions
+# ============================================================================
+# Large data files (use LFS or external sources)
+*.csv
+*.xlsx
+*.json
+!package.json
+!tsconfig.json
+
+# Compiled PDFs (EXCEPT in specific locations)
+# We DO want to keep chapter PDFs in chapters/*/
+# But exclude working drafts and test PDFs
+*-draft.pdf
+*-test.pdf
+scratch*.pdf
+
+# Overleaf/LaTeX zip packages
+*.zip
+
+# ============================================================================
+# KEEP These Files (Override patterns above)
+# ============================================================================
+# Keep final chapter PDFs
+!chapters/*/main.pdf
+
+# Keep figure PDFs (these are source files, not build artifacts)
+!figures/*.pdf
+!*/figures/*.pdf
+
+# Keep any PDFs in assets/ (these are curated resources)
+!assets/**/*.pdf
+
+# Keep bibliography files
+!*.bib
+!bib/*.bib
+!*/bib/*.bib
+
+# ============================================================================
+# Notes
+# ============================================================================
+# - Chapter-level .gitignore files can add additional exclusions
+# - Final book PDF should be tracked in releases, not in git
+# - Use git-lfs for large binary assets if needed
