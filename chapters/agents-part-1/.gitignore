@@ -11,5 +11,5 @@
 *.fdb_latexmk
 *.fls
 
-# Keep the final PDF
-# main.pdf
+# Keep the final PDF - explicitly NOT ignored
+!main.pdf

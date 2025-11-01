@@ -184,6 +184,11 @@ ENV/
 # Temporary compile logs
 compile*.log
 biber.log
+*.log
+
+# Save error files
+*-SAVE-ERROR
+*.bcf-SAVE-ERROR
 
 # ============================================================================
 # OS-Specific Files
@@ -273,10 +278,14 @@ scratch*.pdf
 
 # Overleaf/LaTeX zip packages
 *.zip
+*-overleaf-*/
 
 # ============================================================================
 # KEEP These Files (Override patterns above)
 # ============================================================================
+# Keep final book PDF at root level
+!main.pdf
+
 # Keep final chapter PDFs
 !chapters/*/main.pdf
 
@@ -296,5 +305,5 @@ scratch*.pdf
 # Notes
 # ============================================================================
 # - Chapter-level .gitignore files can add additional exclusions
-# - Final book PDF should be tracked in releases, not in git
+# - Final book and chapter PDFs ARE tracked in git for easy distribution
 # - Use git-lfs for large binary assets if needed
