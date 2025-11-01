@@ -45,7 +45,7 @@ STAR = ★
 # Main Targets
 # ============================================================================
 
-.PHONY: all pdf quick clean cleanall view help watch wordcount png zip validate
+.PHONY: all pdf quick clean cleanall view help watch wordcount png zip overleaf validate
 
 # Default target
 all: pdf
@@ -188,6 +188,45 @@ zip:
 		2>/dev/null || true; \
 	echo "$(GREEN)$(CHECK) Created ../$$zip_name$(RESET)"
 
+# Create Overleaf-ready ZIP package with all dependencies
+overleaf:
+	@echo "$(CYAN)$(BOLD)$(ARROW) Creating Overleaf package...$(RESET)"
+	@# Create temporary directory for package assembly
+	@tmp_dir=$$(mktemp -d -p /tmp); \
+	pkg_name="$(MAIN)-overleaf-$$(date +%Y%m%d-%H%M%S)"; \
+	pkg_dir="$$tmp_dir/$$pkg_name"; \
+	current_dir=$$(pwd); \
+	mkdir -p "$$pkg_dir"; \
+	echo "$(BLUE)  $(ARROW) Assembling files...$(RESET)"; \
+	cp $(TEXFILE) "$$pkg_dir/" 2>/dev/null || true; \
+	mkdir -p "$$pkg_dir/bib" && cp $(BIBFILE) "$$pkg_dir/bib/" 2>/dev/null || true; \
+	if [ -d sections ]; then cp -r sections "$$pkg_dir/"; fi; \
+	if [ -d figures ]; then cp -r figures "$$pkg_dir/"; fi; \
+	cp ../../preamble.tex "$$pkg_dir/" 2>/dev/null || true; \
+	if [ -f ../../bib/refs.bib ]; then \
+		mkdir -p "$$pkg_dir/bib"; \
+		cp ../../bib/refs.bib "$$pkg_dir/bib/" 2>/dev/null || true; \
+	fi; \
+	find "$$pkg_dir" -type f \( \
+		-name "*.aux" -o -name "*.log" -o -name "*.bbl" -o \
+		-name "*.bcf" -o -name "*.blg" -o -name "*.out" -o \
+		-name "*.toc" -o -name "*.run.xml" -o -name "*.fls" -o \
+		-name "*.fdb_latexmk" -o -name "*.synctex.gz" -o \
+		-name "*-SAVE-ERROR" \
+	\) -delete 2>/dev/null || true; \
+	echo "$(BLUE)  $(ARROW) Creating ZIP archive...$(RESET)"; \
+	cd "$$tmp_dir" && zip -r "$$pkg_name.zip" "$$pkg_name" > /dev/null 2>&1; \
+	mv "$$tmp_dir/$$pkg_name.zip" "$$current_dir/$$pkg_name.zip"; \
+	rm -rf "$$tmp_dir"; \
+	if [ -f "$$current_dir/$$pkg_name.zip" ]; then \
+		size=$$(du -h "$$current_dir/$$pkg_name.zip" | cut -f1); \
+		echo "$(GREEN)$(CHECK) Created $$pkg_name.zip ($$size)$(RESET)"; \
+		echo "$(CYAN)  $(ARROW) Ready for upload to Overleaf!$(RESET)"; \
+	else \
+		echo "$(RED)$(CROSS) Failed to create Overleaf package$(RESET)"; \
+		exit 1; \
+	fi
+
 # ============================================================================
 # Cleaning Targets
 # ============================================================================
@@ -235,6 +274,7 @@ help:
 	@echo "  $(GREEN)make validate$(RESET)        Check for undefined references/citations"
 	@echo "  $(GREEN)make png$(RESET)             Convert PDF pages to PNG images"
 	@echo "  $(GREEN)make zip$(RESET)             Create distributable ZIP package"
+	@echo "  $(GREEN)make overleaf$(RESET)        Create Overleaf-ready ZIP with all dependencies"
 	@echo ""
 	@echo "$(BOLD)Cleaning Targets:$(RESET)"
 	@echo "  $(GREEN)make clean$(RESET)           Remove auxiliary files (keep PDF)"
