@@ -1,0 +1,331 @@
+\documentclass[11pt]{article}
+
+% ============================================================================
+% MODERN TYPOGRAPHY AND LAYOUT
+% ============================================================================
+\usepackage[margin=1.2in, top=1.3in, bottom=1.3in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+% Modern font: Libertinus (elegant, readable serif)
+\usepackage{libertinus}
+\usepackage{libertinust1math} % Math support for Libertinus
+
+% Typography enhancements
+\usepackage{microtype}  % Improved typography and spacing
+\usepackage{setspace}   % Line spacing control
+\setstretch{1.15}       % Slightly increased line spacing for readability
+
+% Paragraph formatting
+\usepackage{parskip}    % Space between paragraphs instead of indentation
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+% Language and quotation support (must come before biblatex)
+\usepackage[english]{babel}
+\usepackage{csquotes}
+
+% ============================================================================
+% MATHEMATICS AND SYMBOLS
+% ============================================================================
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% ============================================================================
+% GRAPHICS AND FIGURES
+% ============================================================================
+\usepackage{graphicx}
+\usepackage{float}      % Better float control
+
+% ============================================================================
+% COLORS - Modern sophisticated palette
+% ============================================================================
+\usepackage{xcolor}
+
+% PRIMARY COLORS - Structure and emphasis
+\definecolor{primary-slate}{RGB}{30,58,95}      % Deep slate blue - headings, structure
+\definecolor{accent-amber}{RGB}{191,97,35}      % Warm amber - key highlights
+\definecolor{secondary-sage}{RGB}{82,121,111}   % Muted sage green - variety
+
+% BACKGROUND TINTS - Subtle, sophisticated
+\definecolor{bg-ice}{RGB}{240,246,252}          % Ice blue - definition boxes
+\definecolor{bg-cream}{RGB}{252,250,246}        % Warm cream - highlight boxes
+\definecolor{bg-amber-light}{RGB}{254,245,237}  % Soft amber - key boxes
+\definecolor{bg-gray-cool}{RGB}{247,248,250}    % Cool gray - alternative
+
+% BORDERS & ACCENTS - Clear hierarchy
+\definecolor{border-slate}{RGB}{71,101,135}     % Medium slate - definition frames
+\definecolor{border-sage}{RGB}{118,145,137}     % Soft sage - alternative frames
+\definecolor{border-neutral}{RGB}{210,215,220}  % Light neutral - subtle borders
+\definecolor{text-muted}{RGB}{95,100,105}       % Muted text - de-emphasis
+
+% LEGACY ALIASES (for backward compatibility)
+\definecolor{agentblue}{RGB}{30,58,95}          % Maps to primary-slate
+\definecolor{agentlightblue}{RGB}{240,246,252}  % Maps to bg-ice
+\definecolor{accentorange}{RGB}{191,97,35}      % Maps to accent-amber
+\definecolor{highlightgray}{RGB}{252,250,246}   % Maps to bg-cream
+\definecolor{bordergray}{RGB}{210,215,220}      % Maps to border-neutral
+\definecolor{darkgray}{RGB}{95,100,105}         % Maps to text-muted
+
+% ============================================================================
+% TABLES - Modern styling
+% ============================================================================
+\usepackage{booktabs}    % Professional quality tables
+\usepackage{longtable}   % Tables spanning multiple pages
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{tabularx}    % Better column sizing
+
+% Table row coloring
+\usepackage{colortbl}
+
+% Landscape pages
+\usepackage{pdflscape}
+\renewcommand{\arraystretch}{1.3}  % Better row spacing
+
+% ============================================================================
+% BOXES AND VISUAL ELEMENTS
+% ============================================================================
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable,skins,theorems}
+
+% Definition box style - Most prominent, formal definitions
+\newtcolorbox{definitionbox}[1][]{
+  enhanced,
+  colback=bg-ice,
+  colframe=border-slate,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=10pt,
+  right=10pt,
+  top=10pt,
+  bottom=10pt,
+  breakable,
+  drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.08},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=primary-slate,
+    colframe=primary-slate,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% Highlight box style - Warm, inviting context and notes
+\newtcolorbox{highlightbox}[1][]{
+  enhanced,
+  colback=bg-cream,
+  colframe=border-neutral,
+  fonttitle=\bfseries,
+  coltitle=primary-slate,
+  boxrule=1pt,
+  arc=2.5pt,
+  left=10pt,
+  right=10pt,
+  top=8pt,
+  bottom=8pt,
+  breakable,
+  drop shadow={shadow xshift=0.5pt, shadow yshift=-0.5pt, opacity=0.05},
+  #1
+}
+
+% Key takeaway box - Stands out for important points
+\newtcolorbox{keybox}[1][]{
+  enhanced,
+  colback=bg-amber-light,
+  colframe=accent-amber,
+  fonttitle=\bfseries\large,
+  coltitle=accent-amber,
+  boxrule=2pt,
+  arc=3pt,
+  left=12pt,
+  right=12pt,
+  top=10pt,
+  bottom=10pt,
+  breakable,
+  drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.1},
+  borderline west={3pt}{0pt}{accent-amber},
+  #1
+}
+
+% ============================================================================
+% LISTS - Better spacing and appearance
+% ============================================================================
+\usepackage{enumitem}
+\setlist{
+  itemsep=0.4em,
+  parsep=0.2em,
+  topsep=0.5em,
+  leftmargin=1.5em
+}
+
+% Custom list for evaluation questions
+\newlist{evallist}{enumerate}{1}
+\setlist[evallist]{
+  label=\textbf{Q\arabic*.},
+  leftmargin=2em,
+  itemsep=0.5em,
+  labelsep=0.5em
+}
+
+% ============================================================================
+% TIKZ for diagrams
+% ============================================================================
+\usepackage{tikz}
+\usetikzlibrary{
+  positioning,
+  arrows.meta,
+  shapes.geometric,
+  shapes.misc,
+  calc,
+  decorations.pathreplacing,
+  backgrounds,
+  fit,
+  shadows.blur
+}
+
+% ============================================================================
+% SECTION STYLING
+% ============================================================================
+\usepackage{titlesec}
+
+% Section formatting
+\titleformat{\section}
+  {\Large\bfseries\color{agentblue}}
+  {\thesection}{1em}{}
+  [\vspace{0.3em}{\color{agentblue}\titlerule[1.5pt]}\vspace{0.5em}]
+
+% Subsection formatting
+\titleformat{\subsection}
+  {\large\bfseries\color{agentblue}}
+  {\thesubsection}{1em}{}
+  [\vspace{-0.3em}]
+
+% Subsubsection formatting
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{darkgray}}
+  {\thesubsubsection}{1em}{}
+
+% Paragraph formatting (for \paragraph)
+\titleformat{\paragraph}[runin]
+  {\normalsize\bfseries\color{agentblue}}
+  {}{0em}{}[.]
+\titlespacing*{\paragraph}{0pt}{1em}{0.5em}
+
+% ============================================================================
+% CAPTIONS - Cleaner appearance
+% ============================================================================
+\usepackage[
+  font={small,sf},
+  labelfont={bf,color=agentblue},
+  format=plain,
+  justification=justified,
+  skip=8pt
+]{caption}
+
+% ============================================================================
+% HYPERLINKS AND PDF PROPERTIES
+% ============================================================================
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=agentblue,
+  citecolor=accentorange,
+  urlcolor=agentblue,
+  bookmarksnumbered=true,
+  pdfborder={0 0 0},
+  pdftitle={What is an Agent? A Primer on Agents, Agentic Software, and Agentic AI},
+  pdfauthor={},
+  pdfsubject={Artificial Intelligence, Agents, Legal Technology, Agentic Systems},
+  pdfkeywords={agentic AI, AI agents, legal AI, agent taxonomy, agentic systems, goal-directed systems, autonomous agents, LLM agents}
+}
+
+% Better cross-referencing
+\usepackage{cleveref}
+\crefname{section}{Section}{Sections}
+\crefname{figure}{Figure}{Figures}
+\crefname{table}{Table}{Tables}
+
+% ============================================================================
+% BIBLIOGRAPHY
+% ============================================================================
+\usepackage[
+  backend=biber,
+  style=authoryear,
+  maxcitenames=2,
+  maxbibnames=99,
+  uniquename=false,
+  uniquelist=false,
+  sorting=nyt,
+  dashed=false
+]{biblatex}
+
+% Citation formatting
+\DeclareFieldFormat{citetitle}{\mkbibquote{#1}}
+\DeclareFieldFormat[article]{citetitle}{#1}
+\DeclareFieldFormat[inproceedings]{citetitle}{#1}
+\DeclareFieldFormat[book]{citetitle}{\mkbibemph{#1}}
+\DeclareFieldFormat[techreport]{citetitle}{#1}
+\DeclareFieldFormat[misc]{citetitle}{#1}
+
+\addbibresource{bib/refs.bib}
+
+% ============================================================================
+% CUSTOM COMMANDS
+% ============================================================================
+
+% Highlighted text for key terms
+\newcommand{\keyterm}[1]{\textbf{\color{agentblue}#1}}
+
+% Three-level hierarchy terms
+\newcommand{\levelone}[1]{\textbf{#1}}
+\newcommand{\leveltwo}[1]{\textbf{#1}}
+\newcommand{\levelthree}[1]{\textbf{#1}}
+
+% ============================================================================
+% TITLE AND METADATA
+% ============================================================================
+\title{
+  \vspace{-1em}
+  {\Huge\bfseries\color{agentblue} What is an Agent?}\\[0.5em]
+  {\LARGE A Primer on Agents, Agentic Software, and Agentic AI}\\[0.3em]
+  {\large\itshape for Legal and Financial Professionals}
+  \vspace{-0.5em}
+}
+
+\author{}
+\date{\today}
+
+% ============================================================================
+% DOCUMENT START
+% ============================================================================
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+
+% ============================================================================
+% MAIN CONTENT
+% ============================================================================
+\input{sections/howtoread}
+\input{sections/intro}
+\input{sections/practical}
+\input{sections/history}
+\input{sections/disciplines}
+\input{sections/dimensions}
+\input{sections/synthesis}
+\input{sections/furtherlearning}
+
+% ============================================================================
+% BIBLIOGRAPHY
+% ============================================================================
+\newpage
+\printbibliography
+
+\end{document}
