@@ -46,10 +46,36 @@ STAR = ★
 # ============================================================================
 
 .PHONY: all pdf quick clean cleanall view help watch wordcount png zip validate
+.PHONY: book chapters all-pdfs
 
 # Default target
 all: pdf
 	@echo "$(GREEN)$(BOLD)$(CHECK) Build complete!$(RESET)"
+
+# ============================================================================
+# Book & Chapter Targets (Subfiles Workflow)
+# ============================================================================
+
+# Build complete book (with all chapters)
+book: pdf
+	@echo "$(GREEN)$(BOLD)$(CHECK) Complete book built successfully!$(RESET)"
+
+# Build all individual chapter PDFs
+chapters:
+	@echo "$(CYAN)$(BOLD)════════════════════════════════════════════════════════$(RESET)"
+	@echo "$(CYAN)$(BOLD)  Building All Chapters$(RESET)"
+	@echo "$(CYAN)$(BOLD)════════════════════════════════════════════════════════$(RESET)"
+	@for chapter in chapters/*/; do \
+		if [ -f "$$chapter/Makefile" ]; then \
+			echo "$(BLUE)$(ARROW) Building chapter: $$chapter$(RESET)"; \
+			$(MAKE) -C "$$chapter" pdf || exit 1; \
+		fi; \
+	done
+	@echo "$(GREEN)$(BOLD)$(CHECK) All chapters built successfully!$(RESET)"
+
+# Build everything: all chapters + complete book
+all-pdfs: chapters book
+	@echo "$(GREEN)$(BOLD)$(STAR) All PDFs generated successfully!$(RESET)"
 
 # Build PDF using smart method (latexmk if available, manual otherwise)
 pdf:

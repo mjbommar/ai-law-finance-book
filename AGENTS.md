@@ -41,10 +41,17 @@ Capture for each citation: title, authors, venue/body, date, stable URL/DOI, and
 - Notebooks: place in `notebooks/` and render outputs during builds; do not commit large binary outputs.
 
 ## LaTeX & Build Expectations
-- Default toolchain: `latexmk` + `biber`. Each chapter must compile with `make pdf`.
-- Packages in common preamble: `babel`, `csquotes`, `microtype`, `graphicx`, `booktabs`, `xcolor`, `tcolorbox`, `hyperref`, `cleveref`.
-- Cross‑refs: always “Section~`\ref{}`” or `\Cref{}`; never “see above”.
-- Before opening a PR: run `make validate`; fix undefined references and citation warnings.
+- **Dual-compilation system**: Individual chapters compile standalone AND integrate into complete book
+- **See [docs/build-guide.md](docs/build-guide.md)** for comprehensive build system documentation
+- Default toolchain: `latexmk` + `biber`; uses `subfiles` package for dual compilation
+- Shared preamble: `preamble.tex` contains all formatting, colors, packages (4-layer semantic color system)
+- Build targets:
+  - `make book` (or `make pdf`) — Complete book PDF with all chapters
+  - `make chapters` — All individual chapter PDFs
+  - `make all-pdfs` — Build everything (chapters + book)
+  - From chapter dir: `cd chapters/name && make pdf` — Standalone chapter
+- Cross‑refs: always "Section~`\ref{}`" or `\Cref{}`; never "see above"
+- Before opening a PR: run `make validate`; fix undefined references and citation warnings
 
 ## Legal and Financial Citation Guidance
 - Default style: BibLaTeX `authoryear` for academic/industry works.
@@ -69,16 +76,19 @@ Capture for each citation: title, authors, venue/body, date, stable URL/DOI, and
 - Do not commit large binaries; prefer vector graphics or scripted generation.
 - If adding dependencies or build steps, document them in `README.md` and chapter `Makefile`.
 
-## Open Tasks (initial)
-- Create `book/main.tex` and top‑level Makefile that includes compiled chapters.
-- Consolidate citations into `book/bib/refs.bib`; add a Bluebook mapping appendix.
-- Add CI to compile chapters and the book on PRs; surface `make validate` output.
+## Open Tasks
+- ✅ ~~Create book-level main.tex with dual-compilation system~~ (Completed: November 2025)
+- ✅ ~~Consolidate citations into root `bib/refs.bib`~~ (Completed: November 2025)
+- ✅ ~~Create shared preamble for all documents~~ (Completed: November 2025)
+- Add Bluebook mapping appendix for legal citations
+- Add CI to compile chapters and the book on PRs; surface `make validate` output
 
 ## Related Guidance Files
 - **[CLAUDE.md](CLAUDE.md)** — Quick start guide for AI assistants (Claude Code)
+- **[docs/build-guide.md](docs/build-guide.md)** — **Build system guide (dual-compilation architecture)**
 - **[docs/style-guide.md](docs/style-guide.md)** — Comprehensive writing and presentation standards
 - **[docs/color-guide.md](docs/color-guide.md)** — Visual design system and semantic color palette
 - **[README.md](README.md)** — Project overview and build instructions
 
-_Last updated: October 31, 2025_
+_Last updated: November 1, 2025_
 

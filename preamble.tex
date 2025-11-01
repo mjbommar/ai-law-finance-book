@@ -1,4 +1,12 @@
-\documentclass[11pt]{article}
+% ============================================================================
+% SHARED PREAMBLE - Artificial Intelligence for Law and Finance
+% ============================================================================
+% This preamble is used by both:
+%   - Individual chapter compilations (standalone mode)
+%   - Complete book compilation (via subfiles)
+%
+% Do NOT include \documentclass or \begin{document} here
+% ============================================================================
 
 % ============================================================================
 % MODERN TYPOGRAPHY AND LAYOUT
@@ -221,6 +229,15 @@
 \definecolor{border-theorem}{RGB}{92,107,192}   % theorem-base → theorem frames
 \definecolor{border-practice}{RGB}{0,137,123}   % practice-base → practice frames
 \definecolor{border-neutral}{RGB}{210,215,220}  % gray-300 → subtle neutral borders
+
+% --- Text Colors for Content Boxes ---
+\definecolor{text-definition}{RGB}{30,58,95}    % definition-dark → definition text/titles
+\definecolor{text-example}{RGB}{46,125,50}      % example-dark → example text/titles
+\definecolor{text-key}{RGB}{230,124,0}          % key-dark → key takeaway text/titles
+\definecolor{text-caution}{RGB}{198,40,40}      % caution-dark → warning text/titles
+\definecolor{text-note}{RGB}{73,80,87}          % note-dark → note text/titles
+\definecolor{text-theorem}{RGB}{63,81,181}      % theorem-dark → theorem text/titles
+\definecolor{text-practice}{RGB}{0,128,128}     % practice-dark → practice text/titles
 
 % --- Primary Structural Colors (Headings, Links, Main Theme) ---
 \definecolor{primary}{RGB}{30,58,95}            % slate-900 → main brand/theme color
@@ -486,11 +503,7 @@
   citecolor=accent,
   urlcolor=primary,
   bookmarksnumbered=true,
-  pdfborder={0 0 0},
-  pdftitle={What is an Agent? A Primer on Agents, Agentic Software, and Agentic AI},
-  pdfauthor={},
-  pdfsubject={Artificial Intelligence, Agents, Legal Technology, Agentic Systems},
-  pdfkeywords={agentic AI, AI agents, legal AI, agent taxonomy, agentic systems, goal-directed systems, autonomous agents, LLM agents}
+  pdfborder={0 0 0}
 }
 
 % Better cross-referencing
@@ -521,8 +534,6 @@
 \DeclareFieldFormat[techreport]{citetitle}{#1}
 \DeclareFieldFormat[misc]{citetitle}{#1}
 
-\addbibresource{bib/refs.bib}
-
 % ============================================================================
 % CUSTOM COMMANDS
 % ============================================================================
@@ -534,105 +545,3 @@
 \newcommand{\levelone}[1]{\textbf{#1}}
 \newcommand{\leveltwo}[1]{\textbf{#1}}
 \newcommand{\levelthree}[1]{\textbf{#1}}
-
-% ============================================================================
-% TITLE AND METADATA
-% ============================================================================
-\title{
-  \vspace{-0.5em}
-  {\Huge\bfseries\color{primary} Agents}\\[0.6em]
-  {\LARGE\color{primary} Part I: What is an Agent?}\\[0.4em]
-  {\large\itshape\color{text-secondary} A Conceptual Primer and History}
-  \vspace{0.5em}
-}
-
-\author{
-  \vspace{-0.5em}
-  {\large\color{text-muted}
-    Michael J Bommarito II \enspace $\cdot$ \enspace
-    Jillian Bommarito \enspace $\cdot$ \enspace
-    Daniel Martin Katz
-  }
-  \vspace{-0.5em}
-}
-
-\date{
-  {\normalsize\color{text-muted}\today}
-}
-
-% ============================================================================
-% DOCUMENT START
-% ============================================================================
-\begin{document}
-
-\maketitle
-
-% Decorative rule after title block
-\vspace{-1em}
-\noindent{\color{border-neutral}\rule{\textwidth}{0.5pt}}
-\vspace{1.0em}
-
-% Draft notice - professional blue-gray theme
-\begin{center}
-	\begin{tcolorbox}[
-			enhanced,
-			width=0.80\textwidth,
-			colback=bg-note,
-			colframe=border-note,
-			fonttitle=\bfseries\large\color{note-dark},
-			boxrule=1.5pt,
-			arc=4pt,
-			left=16pt,
-			right=16pt,
-			top=12pt,
-			bottom=12pt,
-			breakable,
-			drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.08},
-			borderline west={4pt}{0pt}{note-dark}
-		]
-
-		% Header - centered
-		\begin{center}
-			{\large\bfseries\color{note-dark} Working Draft Chapter} \\[0.2em]
-			{\small\color{text-muted} Version 0.1}
-		\end{center}
-
-		\vspace{0.25em}
-
-		% Body text - justified
-		{\small
-			This chapter is Part I of a three-part series from the textbook \textit{Artificial Intelligence for Law and Finance}, currently under development. Individual chapters are being drafted and refined independently before integration into the complete book. Part II: \textit{How to Build an Agent} and Part III: \textit{How to Govern an Agent} are forthcoming.
-
-			\vspace{0.5em}
-
-			You can find the most current copy of the textbook project here:\\
-			\url{https://github.com/mjbommar/ai-law-finance-book/}
-		}
-
-	\end{tcolorbox}
-\end{center}
-
-\vspace{1em}
-
-% Table of contents
-\tableofcontents
-
-% ============================================================================
-% MAIN CONTENT
-% ============================================================================
-\input{sections/howtoread}
-\input{sections/intro}
-\input{sections/practical}
-\input{sections/history}
-\input{sections/disciplines}
-\input{sections/dimensions}
-\input{sections/synthesis}
-\input{sections/furtherlearning}
-
-% ============================================================================
-% BIBLIOGRAPHY
-% ============================================================================
-
-\printbibliography
-
-\end{document}

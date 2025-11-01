@@ -2,7 +2,7 @@
 
 > **⚠️ Note on File Naming**: This file is named `CLAUDE.md` because Claude Code requires this exact filename. It contains **AI assistant workflow and quick start guide**, not content about AI agents or Claude (which is the book's subject matter found in `chapters/`).
 
-**Last Updated**: October 31, 2025
+**Last Updated**: November 1, 2025
 **Purpose**: Primary entry point for AI assistants (like Claude Code) working on this textbook project
 **Scope**: Entire repository
 
@@ -20,9 +20,10 @@ This repository is a **LaTeX-based textbook project** targeting legal and financ
 
 1. **THIS FILE (CLAUDE.md)** — Overview and quick reference
 2. **[AGENTS.md](AGENTS.md)** — Detailed workflow, evidence standards, and file conventions
-3. **[docs/style-guide.md](docs/style-guide.md)** — Writing and presentation standards
-4. **[docs/color-guide.md](docs/color-guide.md)** — Visual design system and color usage
-5. **[README.md](README.md)** — Project overview for human readers
+3. **[docs/build-guide.md](docs/build-guide.md)** — **Build system guide (dual-compilation)**
+4. **[docs/style-guide.md](docs/style-guide.md)** — Writing and presentation standards
+5. **[docs/color-guide.md](docs/color-guide.md)** — Visual design system and color usage
+6. **[README.md](README.md)** — Project overview for human readers
 
 ---
 
@@ -92,35 +93,57 @@ See [AGENTS.md](AGENTS.md) for complete file and naming conventions.
 
 ## LaTeX & Build System
 
+**IMPORTANT**: This project uses a **dual-compilation system** that allows:
+- Building individual chapters as standalone PDFs
+- Building the complete book with all chapters integrated
+
+**See [docs/build-guide.md](docs/build-guide.md) for comprehensive documentation**
+
 ### Toolchain
 
-- **Primary**: `latexmk` + `biber`
-- **Packages**: `babel`, `csquotes`, `microtype`, `graphicx`, `booktabs`, `xcolor`, `tcolorbox`, `hyperref`, `cleveref`
+- **Primary**: `latexmk` + `biber` + `subfiles` package
+- **Shared Preamble**: `preamble.tex` contains all formatting, colors, packages
+- **4-Layer Color System**: Educational semantic color palette (see [docs/color-guide.md](docs/color-guide.md))
 - **Citations**: BibLaTeX with `backend=biber`, style `authoryear`
 
 ### Build Commands
 
+**From Root Directory** (build book):
 ```bash
-# Full build
+# Build complete book with all chapters
+make book             # or: make pdf
+
+# Build all individual chapter PDFs
+make chapters
+
+# Build everything (chapters + book)
+make all-pdfs
+
+# Validate references and citations
+make validate
+
+# Clean auxiliary files
+make clean
+
+# Clean everything including PDFs
+make cleanall
+```
+
+**From Chapter Directory** (build standalone chapter):
+```bash
+cd chapters/agents-part-1
+
+# Build standalone chapter PDF
 make pdf
 
 # Quick single-pass
 make quick
 
-# Watch mode (continuous compilation)
-make watch
-
-# Validate references and citations
+# Validate references
 make validate
 
-# Word count
-make wordcount
-
-# Clean auxiliary files
+# Clean
 make clean
-
-# Clean everything including PDF
-make cleanall
 ```
 
 ### Quality Gates
@@ -308,6 +331,15 @@ grep -rn "\\cite" sections/          # Verify citations exist in bib
 - Preparing PRs or commits
 - Working with legal or financial content
 
+**[docs/build-guide.md](docs/build-guide.md)** — Read when:
+- **Setting up or troubleshooting builds**
+- **Adding a new chapter**
+- Understanding dual-compilation system
+- Need to build standalone chapters or complete book
+- Debugging LaTeX compilation errors
+- Want to understand subfiles package usage
+- Need bibliography management guidance
+
 **[docs/style-guide.md](docs/style-guide.md)** — Read when:
 - Writing or editing prose
 - Choosing tone and voice
@@ -486,6 +518,13 @@ AGENTS.md
     ├─→ Legal/financial citation guidance
     └─→ Quality gates and PR checklist
 
+docs/build-guide.md ⭐
+    ├─→ Dual-compilation architecture (subfiles package)
+    ├─→ Build commands and targets
+    ├─→ Adding new chapters
+    ├─→ Troubleshooting builds
+    └─→ Bibliography management
+
 docs/style-guide.md
     ├─→ Tone, voice, and tense
     ├─→ Cross-referencing standards
@@ -505,6 +544,8 @@ README.md
     ├─→ Build instructions
     └─→ Contributing guidelines
 ```
+
+**⭐ Essential reading for build/compilation tasks**
 
 ---
 
