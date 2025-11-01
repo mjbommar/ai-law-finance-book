@@ -1,108 +1,231 @@
 # Artificial Intelligence for Law and Finance
 
-Status: Working Draft (October 30, 2025)
+**A Modern Textbook at the Intersection of AI, Law, and Finance**
 
-This repository hosts the evolving textbook “Artificial Intelligence for Law and Finance.” It unifies first‑draft chapters into a coherent, reproducible book with consistent style, citations, build tooling, and quality gates.
+🚧 **Status: Working Draft** (Last Updated: November 2025)
 
-Goals
-- Build a rigorous, vendor‑neutral, and readable textbook for legal and financial professionals, researchers, and regulators.
-- Keep content LaTeX‑ready, well‑cited (BibLaTeX + biber), and reproducible for code/data examples.
-- Enforce consistent tone, terminology, and cross‑referencing across chapters.
+Welcome! This repository contains the evolving draft of *Artificial Intelligence for Law and Finance*, an open-source textbook designed to bridge the gap between cutting-edge AI technology and its practical applications in legal and financial domains.
 
-Audience
-- Primary: practitioners (law, compliance, risk, finance), regulators, and graduate students.
-- Secondary: industry builders, researchers in AI/ML, law & economics, and information systems.
+⭐ **Stay Updated**: [Star this repository](https://github.com/mjbommar/ai-law-finance-book) or click "Watch" to get notified of new chapters and updates!
 
-Guidance Files
-This repository uses multiple guidance files for different purposes. **Start with the right file for your role:**
+## 📚 About This Book
 
-**Root-level entry points:**
-- **[CLAUDE.md](CLAUDE.md)** — **Primary entry point for AI assistants** (like Claude Code). Quick start guide with cross-references to all other guidance files, common tasks, and quality standards. *Note: Named CLAUDE.md per tool requirements.*
-- **[AGENTS.md](AGENTS.md)** — Detailed workflow for human and AI contributors. Covers evidence hierarchy, source standards, file conventions, LaTeX build expectations, and quality gates. Essential for research and citation work. *Note: Named AGENTS.md per Codex/Gemini requirements.*
-- **[README.md](README.md)** — This file. Project overview, build instructions, and getting started guide for human readers.
+We're creating a comprehensive, vendor-neutral resource that combines academic rigor with real-world practicality. Whether you're a legal professional exploring AI's impact on your field, a financial analyst considering machine learning applications, or a researcher studying this interdisciplinary space, this book is for you.
 
-**Detailed guides in `docs/`:**
-- **[docs/style-guide.md](docs/style-guide.md)** — Comprehensive writing and presentation standards. Covers tone, voice, tense, cross-referencing, terminology, section-specific guidelines, and revision checklist. Read before drafting or editing content.
-- **[docs/color-guide.md](docs/color-guide.md)** — Visual design system. Educational semantic color palette with 4-layer architecture, usage guidelines, validation checklist, and migration guide from legacy colors.
+### Who This Book Is For
 
-**Quick guidance selection:**
-- Contributing content? → Read [AGENTS.md](AGENTS.md) and [docs/style-guide.md](docs/style-guide.md)
-- AI assistant starting work? → Start with [CLAUDE.md](CLAUDE.md)
-- Adding visuals or colors? → Read [docs/color-guide.md](docs/color-guide.md)
-- Setting up the build? → This file (README.md)
+- **Practitioners**: Lawyers, compliance officers, risk managers, and financial professionals seeking to understand and apply AI
+- **Regulators & Policymakers**: Those shaping the future of AI governance in law and finance
+- **Graduate Students & Researchers**: Academics exploring the intersection of AI, law, economics, and information systems
+- **Industry Builders**: Technologists and entrepreneurs developing AI solutions for legal and financial sectors
 
-Repository Layout (current and planned)
-- `chapters/` — chapter workspaces (drafts) with their own LaTeX and Makefile
-  - Example: `chapters/agentic-primer/` with `main.tex`, `sections/`, `bib/refs.bib`, `Makefile`
-  - Example: `chapters/prompting-and-meta-prompting/` with executive summaries and citations
-- `CLAUDE.md` — AI assistant entry point and quick start guide (required filename for Claude Code)
-- `AGENTS.md` — guidance for human and AI contributors (required filename for Codex/Gemini)
-- `docs/` — detailed guidance documentation
-  - `docs/style-guide.md` — comprehensive writing and presentation standards
-  - `docs/color-guide.md` — visual design system and semantic color palette
-- `scripts/` — validation scripts (markdown, LaTeX, spelling, links, bibliography)
-- Planned top‑level scaffold (added as chapters converge):
-  - `book/` — master LaTeX project (`book/main.tex`) that `\include`s chapter PDFs or sources
-  - `book/bib/refs.bib` — consolidated bibliography (merged from chapter `bib/refs.bib` files)
-  - `assets/` — shared figures (vector first: PDF/SVG); `assets/tables/` for generated tables
-  - `code/` — example code used in chapters (language‑specific subfolders)
-  - `data/` — small sample datasets; larger data via DataLad/LFS or external links
-  - `notebooks/` — Jupyter notebooks that render figures/tables used by the text
-  - `scripts/` — helper scripts for linting, builds, and bibliography checks
+## 🌐 Coming Soon: ai4lf.com
 
-Build Instructions
-- Per‑chapter (today):
-  - `cd chapters/agentic-primer && make pdf` (uses `latexmk` if available, falls back to manual)
-  - Other helpful targets: `make quick`, `make clean`, `make validate`, `make wordcount`
-- Book‑level (planned):
-  - `make book` → compiles `book/main.tex` and includes chapter PDFs/sources
-  - `make docker` → reproducible build using a LaTeX container with `latexmk` and `biber`
+We're building a dedicated website at **[ai4lf.com](https://ai4lf.com)** where you'll be able to:
+- Read the book online with enhanced navigation
+- Access interactive examples and visualizations
+- Download the latest versions in multiple formats
+- Join the community discussion
 
-Requirements
-- Local: TeX Live with `latexmk`, `biber`, `biblatex`, `csquotes`, `cleveref`, `booktabs`, `tcolorbox`
-- Or Docker: a LaTeX image that includes `latexmk` and `biber` (e.g., `ghcr.io/latex-action/latex:latest`)
+Stay tuned for the launch!
 
-Writing & Style
-- Read `docs/style-guide.md` before drafting. It sets tone, person/voice, cross‑references (`\Cref{}`), labels, figures/tables, and terminology for a law‑finance audience.
-- Each chapter keeps its own `bib/refs.bib` during drafting; maintain clean keys and full metadata (authors, year, venue, DOI/URL, `urldate`). Consolidation to `book/bib/refs.bib` happens before integration.
+## 📖 Read the Latest Drafts
 
-Legal and Financial Citations
-- Default: BibLaTeX `authoryear` for academic/industry sources.
-- Legal sources (cases, statutes, regulations): include Bluebook‑style information in BibLaTeX entries (`title`, `shorttitle`, `note`, `institution`, `jurisdiction`, `date`); use footnotes where clarity is improved. A harmonized appendix will document mapping from BibLaTeX fields to Bluebook forms.
-- Finance/regulatory sources: prefer primary issuers (SEC, FRB, FDIC, OCC, CFTC/ESMA, BIS/FSB, IMF/WB) with stable URLs and release dates.
+Want to dive right in? Here's where to find the current PDF drafts:
 
-Reproducibility (code, data, figures)
-- Place runnable code in `code/` or `notebooks/`; generate assets into `assets/figures/` or `assets/tables/` with deterministic file names referenced by LaTeX.
-- Keep datasets small in‑repo; larger data via LFS or documented external sources with checksums.
-- Notebooks should clear outputs in git; CI or `make` regenerates figures/tables.
+### 📚 Complete Book
+- **[main.pdf](main.pdf)** — The full book with all current chapters integrated
 
-Quality Gates (definition of done for a section/chapter)
-- Compiles without errors; `make validate` shows no undefined references/citations.
-- Conforms to `docs/style-guide.md` tone, structure, and cross‑referencing rules.
-- Citations present for claims beyond general knowledge; time‑sensitive facts verified.
-- Figures/tables labeled, referenced, and have meaningful captions and alt text.
-- No client‑confidential, privileged, or proprietary third‑party content without license.
+### 📑 Individual Chapters
+Currently available chapters that can be read standalone:
 
-Contributing
-- Small, focused commits; message format `area: summary (refs #issue)`.
-- Discuss outlines and anchor citations before large drafts; open an issue for new chapters.
-- Use `AGENTS.md` when involving AI assistants; always verify time‑sensitive facts and use primary sources.
+- **Agents - Part I: What is an Agent?**: [chapters/agents-part-1/main.pdf](chapters/agents-part-1/main.pdf)
+  *A Conceptual Primer and History — Understanding AI agents in legal and financial contexts*
 
-Disclaimers
-- Educational material only; not legal, financial, or investment advice.
-- Examples are illustrative; verify local laws, court rules, and regulatory guidance.
+- **Prompting & Meta-Prompting**: *In development*
+  *Advanced techniques for working with language models in professional settings*
 
-Roadmap (near‑term)
-- Create `book/main.tex` and top‑level Makefile that includes chapter PDFs/sources.
-- Merge chapter bibliographies; add citation style appendix (Bluebook mapping).
-- Add `assets/` policy and figure naming scheme; add CI to compile PDFs on PRs.
+More chapters coming soon! This is a living document—we're actively writing and revising.
 
-Local Checks (scripts)
-- Run all repo checks: `scripts/run_all.sh .`
-- Test a chapter (example): `scripts/test_chapter.sh chapters/agentic-primer`
-  - Markdown: markdownlint, Vale, alex (skips if not installed)
-  - Spelling: codespell, cspell (skips if not installed)
-  - LaTeX: chktex + lacheck (non‑fatal by default) and `make validate`
-  - BibTeX: `biber --tool` validation; `bibtex-tidy` if available
-  - Links: lychee link checker (skips if not installed)
+⭐ **Star this repository** to get notified when new chapters are published!
+
+## 🚀 Getting Started
+
+### For Readers
+Simply download the PDFs above and start reading! We welcome feedback through [GitHub issues](https://github.com/mjbommar/ai-law-finance-book/issues).
+
+### For Contributors
+We'd love your help making this book better! Whether you're fixing a typo, improving an explanation, or adding new content, your contributions are welcome.
+
+#### Quick Setup
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/mjbommar/ai-law-finance-book.git
+   cd ai-law-finance-book
+   ```
+
+2. **Build the book** (requires LaTeX):
+   ```bash
+   make pdf  # Build the complete book
+   ```
+
+3. **Work on a specific chapter**:
+   ```bash
+   cd chapters/agents-part-1
+   make pdf  # Build just this chapter
+   ```
+
+## 📂 Repository Structure
+
+We've organized everything to be intuitive and maintainable:
+
+```
+📁 ai-law-finance-book/
+├── 📄 main.tex           # Complete book document
+├── 📄 main.pdf           # 👈 Full book PDF
+├── 📄 Makefile           # Build automation
+├── 📄 preamble.tex       # Shared LaTeX configuration
+├── 📁 chapters/          # Individual chapter workspaces
+│   ├── 📁 agents-part-1/
+│   │   ├── main.tex
+│   │   ├── main.pdf      # 👈 Chapter PDF
+│   │   ├── sections/
+│   │   └── bib/
+│   └── 📁 prompting-and-meta-prompting/
+│       └── EXECUTIVE_SUMMARY.md  # Chapter outline
+├── 📁 docs/              # Style and contribution guides
+│   ├── build-guide.md    # Build system documentation
+│   ├── style-guide.md    # Writing standards
+│   └── color-guide.md    # Visual design system
+├── 📁 scripts/           # Quality check tools
+├── 📄 AGENTS.md          # Contributor workflows
+├── 📄 CLAUDE.md          # AI assistant guide
+└── 📄 README.md          # You are here!
+```
+
+## 🔨 Building from Source
+
+### Prerequisites
+You'll need a LaTeX distribution installed:
+- **macOS**: MacTeX or BasicTeX
+- **Linux**: TeX Live (`sudo apt install texlive-full` or equivalent)
+- **Windows**: MiKTeX or TeX Live
+- **Docker Alternative**: No local install needed! Just use `make docker`
+
+### Build Commands
+
+#### Build Everything
+```bash
+make pdf          # Build the complete book
+make all-pdfs     # Build book + all individual chapters
+```
+
+#### Build Individual Chapters
+```bash
+cd chapters/agents-part-1
+make pdf          # Full build with bibliography
+make quick        # Quick preview (single pass)
+make validate     # Check references and citations
+```
+
+#### Other Useful Commands
+```bash
+make clean        # Remove temporary files
+make cleanall     # Remove everything including PDFs
+make wordcount    # Get word counts for tracking progress
+```
+
+## ✍️ Writing Guidelines
+
+### Our Approach
+We aim for clarity and accessibility while maintaining academic rigor. Think of your favorite textbook—the one that made complex topics click. That's what we're building here.
+
+### Key Principles
+- **Tone**: Professional yet approachable, like a knowledgeable colleague explaining concepts
+- **Citations**: Every claim needs backing. We use BibLaTeX with full metadata
+- **Examples**: Real-world scenarios from law firms, banks, and regulatory bodies
+- **Visuals**: Diagrams and figures to illuminate complex concepts
+
+For detailed guidelines, see our [Style Guide](docs/style-guide.md).
+
+## 🤝 Contributing
+
+We welcome contributions from practitioners, academics, and anyone passionate about AI's intersection with law and finance!
+
+### How to Contribute
+
+1. **Small improvements**: Typo fixes, clarifications, or citation updates—just submit a PR!
+2. **New content**: Open an issue first to discuss your ideas
+3. **Feedback**: Use [GitHub issues](https://github.com/mjbommar/ai-law-finance-book/issues) to suggest improvements
+
+### Contribution Guidelines
+- Write for your audience: legal and financial professionals who may be new to AI
+- Back up claims with citations from primary sources
+- Test your LaTeX thoroughly before submitting
+- Keep commits focused and descriptive
+
+See [AGENTS.md](AGENTS.md) for detailed contribution workflows.
+
+## 🛠️ Development Tools
+
+### Quality Checks
+Run these scripts to validate your contributions:
+
+```bash
+# Run all checks on the repository
+./scripts/run_all.sh .
+
+# Test a specific chapter
+./scripts/test_chapter.sh chapters/agents-part-1
+```
+
+Our validation suite includes:
+- **Markdown**: Linting and style checks
+- **Spelling**: Multiple spell checkers
+- **LaTeX**: Syntax and reference validation
+- **Bibliography**: Citation format verification
+- **Links**: URL validation
+
+## 📜 Legal Disclaimer
+
+This textbook is for **educational purposes only**. Nothing in this book constitutes:
+- Legal advice or attorney-client relationship
+- Financial, investment, or trading advice
+- Professional consulting or recommendations
+
+Always consult qualified professionals for specific legal or financial matters. Examples are illustrative—verify current laws and regulations in your jurisdiction.
+
+## 🗺️ Roadmap
+
+### Coming Soon (Q4 2025 - Q1 2026)
+- Launch website at [ai4lf.com](https://ai4lf.com)
+- Complete Chapter 2: Prompting & Meta-Prompting
+- Add interactive Jupyter notebooks for examples
+- Implement continuous integration for PDF builds
+
+### Future Plans (2026)
+- Complete 10 core chapters covering AI fundamentals for law and finance
+- Add case studies from major financial institutions and law firms
+- Create companion course materials for universities
+- Develop practitioner resources and workshops
+
+## 📬 Contact & Community
+
+- **Issues & Feedback**: [GitHub Issues](https://github.com/mjbommar/ai-law-finance-book/issues)
+- **Website**: [ai4lf.com](https://ai4lf.com) (coming soon)
+- **Updates**: Star this repository for notifications
+
+## 📄 License
+
+This work is licensed under [Creative Commons Attribution 4.0 International License](LICENSE).
+
+You are free to:
+- **Share**: Copy and redistribute the material
+- **Adapt**: Remix, transform, and build upon the material
+
+As long as you provide appropriate credit and indicate changes.
+
+---
+
+*Building bridges between artificial intelligence and professional practice in law and finance.*
 
