@@ -1,0 +1,23 @@
+% ============================================================================
+% Protocols — Agents Part II (Build)
+% Purpose: Agent-tool and agent-agent protocols; capability discovery; safety hooks
+% Label prefix: sec:agents2-protocols
+% ============================================================================
+
+\section{Protocols for Safe Interoperation}
+\label{sec:agents2-protocols}
+
+Agents rely on interoperable protocols to discover capabilities and invoke tools safely under uncertainty. We outline design requirements and legal-domain extensions for modern protocols (e.g., MCP, agent-to-agent exchanges).
+
+\subsection{Capability Discovery and Contracts}
+\label{sec:agents2-proto-discovery}
+Advertise actions with names, schemas, pre/postconditions, data classifications, and audit requirements. Prefer machine-readable descriptors over prose documentation.
+
+\subsection{Invocation Semantics and Governance Metadata}
+\label{sec:agents2-proto-governance}
+Attach governance metadata to each call: purpose, legal basis, user identity, privilege flags, jurisdiction, and retention directives. Ensure hooks for audit logging and downstream provenance.
+
+\subsection{Error Handling and Escalation}
+\label{sec:agents2-proto-errors}
+Standardize error classes (authn/authz, validation, rate limits, data sensitivity) and define escalation policies compatible with Part III oversight modes.
+

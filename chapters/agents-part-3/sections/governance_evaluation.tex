@@ -1,0 +1,35 @@
+% ============================================================================
+% Governance Evaluation (Layer 4) — Agents Part III (Govern)
+% Purpose: Tests for attribution, privilege, audit, escalation
+% Label: sec:agents3-eval
+%
+% APEX‑2D mapping (comments only):
+%   Primary: A, P, E, X (this section is the direct test suite for all four)
+%   Dials: Autonomy/Actuation (raise/lower thresholds), Jurisdiction (test matrices)
+% ============================================================================
+
+\section{Governance Evaluation: Safety and Compliance Tests}
+\label{sec:agents3-eval}
+
+Layer 4 focuses on governance and safety. These tests gate progression from technical readiness (Part II) to production use. They extend Part I’s 6‑Question Evaluation Rubric by adding objective pass/fail criteria, evidence artifacts, and target thresholds for attribution, privilege, audit, and escalation.
+
+\subsection{Attribution and Quote Fidelity}
+Verify every claim is grounded to an authoritative source with quote‑level accuracy; fail closed on ambiguous grounding.
+
+\subsection{Privilege Boundaries}
+Simulate privileged inputs; confirm suppression of retention, encrypted transit/storage, access review, and non‑disclosure outside need‑to‑know roles.
+
+\subsection{Audit Completeness and Tamper Evidence}
+Ensure all tool invocations and agent actions produce immutable, complete logs with user/context metadata.
+
+\subsection{Escalation Triggers}
+Configure thresholds for uncertainty, out‑of‑scope tasks, or policy conflicts that require human approval.
+
+\begin{questionbox}[title={Gate Criteria Before Go‑Live (Extends Part I’s 6Q)}]
+\begin{evallist}
+  \item Attribution pass rate and quote fidelity meet thresholds.
+  \item Privilege boundary tests pass across all storage tiers and logs.
+  \item Audit trail completeness $\ge$ target; tamper‑evident storage enabled.
+  \item Escalation triggers verified end‑to‑end with approvals captured.
+\end{evallist}
+\end{questionbox}

@@ -1,0 +1,31 @@
+% ============================================================================
+% Technical Evaluation — Agents Part II (Build)
+% Purpose: Layers 1–3 (retrieval, reasoning, workflow). Governance layers in Part III.
+% Label prefix: sec:agents2-eval
+% ============================================================================
+
+\section{Technical Evaluation: Retrieval, Reasoning, and Workflows}
+\label{sec:agents2-eval}
+
+This section defines evaluation layers for technical correctness prior to governance gates in Part III.
+
+\subsection{Layer 1: Retrieval}
+\label{sec:agents2-eval-retrieval}
+Assess precision/recall, MRR, and nDCG on legal corpora; include jurisdictional coverage and temporal validity checks.
+
+\subsection{Layer 2: Reasoning}
+\label{sec:agents2-eval-reasoning}
+Evaluate legal analysis and citation grounding; separate chain-of-thought instrumentation from user-visible outputs.
+
+\subsection{Layer 3: Agentic Workflows}
+\label{sec:agents2-eval-workflow}
+Measure end-to-end task completion, robustness to tool errors, and escalation triggers under uncertainty.
+
+\begin{questionbox}[title={Evaluation Checklist}]
+\begin{evallist}
+  \item Does retrieval achieve task-appropriate recall with dated sources and jurisdiction tags?
+  \item Are generated claims traceable to exact sources and quotations?
+  \item Do workflows recover gracefully from tool failures and rate limits?
+\end{evallist}
+\end{questionbox}
+

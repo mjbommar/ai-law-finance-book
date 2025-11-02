@@ -1,0 +1,48 @@
+% ============================================================================
+% Controls Catalogue — Agents Part III (Govern)
+% Purpose: Practical control set mapped to COSO/COBIT/ISO 27001/SOC 2
+% Label: sec:agents3-controls
+%
+% APEX‑2D mapping (comments only):
+%   Primary: E (Evidence/Audit), A (Attribution/Provenance), P (Privilege)
+%   Secondary: X (Escalation/eXit via change gates and stop/rollback)
+%   Dials: Autonomy/Actuation (control strength), Jurisdiction (local controls)
+% ============================================================================
+
+\section{Controls Catalogue: From Risk to Evidence}
+\label{sec:agents3-controls}
+
+We present a practical controls set aligned to COSO, COBIT, ISO/IEC 27001, and SOC 2 Trust Services Criteria. Each control should have owners, procedures, and objective evidence. Controls are organized so they directly support Part I’s six operational properties (Iteration, Adaptation, Termination layered on Goal/Perception/Action) and the four analytical dimensions (Autonomy, Entity Frame, Goal Dynamics, Persistence).
+
+\subsection{Control Domains}
+\begin{itemize}
+  \item \textbf{Data Governance (Persistence/Entity):} Classification, residency, retention, and deletion; lawful basis records tied to entity context.
+  \item \textbf{Privilege and Confidentiality (Confidentiality):} Privilege‑safe memory/logging; tool‑level gating; secure enclaves.
+  \item \textbf{Attribution and Verification (Perception/Action):} Source‑grounding, quote fidelity, mandatory citator checks.
+  \item \textbf{Identity and Access (Autonomy):} SSO, role‑based access, least privilege, session recording for sensitive actions and higher autonomy.
+  \item \textbf{Change and Model Management (Adaptation):} Versioning, release approvals, rollback; dataset lineage and drift monitoring.
+  \item \textbf{Incident/BCP/DR (Termination):} Detection, response, notification, tabletop tests, recovery time objectives.
+  \item \textbf{Third‑Party Risk (Entity/Provenance):} Due diligence, SOC 2/ISO evidence, subprocessor inventories, DPAs.
+\end{itemize}
+
+\subsection{Framework Alignment (Illustrative)}
+\begin{center}
+\begin{tabular}{p{0.35\textwidth}p{0.55\textwidth}}
+\toprule
+\textbf{Control} & \textbf{Alignment (examples)} \\
+\midrule
+Privilege‑safe memory/logging & COSO Control Activities; COBIT DSS05; ISO 27001 A.8, A.12; SOC 2 CC6/CC7/Confidentiality \\
+Attribution/verification pipeline & COSO Information \,\& Communication; COBIT BAI03; ISO 27001 A.12; SOC 2 Processing Integrity \\
+Change/model approvals & COSO Risk Assessment; COBIT BAI06; ISO 27001 A.12/A.14; SOC 2 CC8 \\
+Third‑party due diligence & COSO Control Activities; COBIT APO10; ISO 27001 A.15; SOC 2 CC9 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{questionbox}[title={Evidence Checklist (per control)}]
+\begin{evallist}
+  \item Written procedure and control owner identified.
+  \item Configuration screenshots/exports and automated test artifacts.
+  \item Logs and sampled records demonstrating operation over time.
+\end{evallist}
+\end{questionbox}

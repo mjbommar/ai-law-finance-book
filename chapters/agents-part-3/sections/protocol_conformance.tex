@@ -1,0 +1,24 @@
+% ============================================================================
+% Protocol Conformance (Layer 5) — Agents Part III (Govern)
+% Purpose: Interoperability and governance metadata tests (MCP/A2A)
+% Label: sec:agents3-conformance
+%
+% APEX‑2D mapping (comments only):
+%   Primary: E (Evidence/Audit metadata), A (Attribution through provenance fields)
+%   Secondary: X (Governance gates signaled at protocol level)
+%   Dials: Autonomy/Actuation (capability descriptors), Jurisdiction (policy tags)
+% ============================================================================
+
+\section{Protocol Conformance: Interoperability and Traceability}
+\label{sec:agents3-conformance}
+
+Layer 5 validates that protocols advertise capabilities and carry governance metadata required for audit and policy enforcement. In Part I terms, this instruments the \emph{Perception} and \emph{Action} channels so every observation and actuation is typed, attributed, and traceable across \emph{persistent} sessions.
+
+\subsection{Capability Descriptors}
+Tools and agents must publish machine‑readable actions with schemas, pre/postconditions, data classifications, and audit requirements. Describe autonomy/actuation risk so orchestrators can select oversight modes.
+
+\subsection{Governance Metadata on Calls}
+Each call should include purpose, user identity, data class, privilege flag, jurisdiction, retention directive, and correlation IDs for full traceability.
+
+\subsection{Conformance Tests}
+Automated tests should confirm descriptor completeness, metadata presence, and end‑to‑end replayability from logs (provenance), with negative tests for missing or malformed metadata.

@@ -1,0 +1,82 @@
+\documentclass[../../main.tex]{subfiles}
+
+\title{
+  \vspace{-0.5em}
+  {\Huge\bfseries\color{primary} Agents}\\[0.6em]
+  {\LARGE\color{primary} Part III: How to Govern an Agent}\\[0.4em]
+  {\large\itshape\color{text-secondary} Regulation, Controls, Conformance, and Deployment}
+  \vspace{0.5em}
+}
+
+\author{
+  \vspace{-0.5em}
+  {\large\color{text-muted}
+    Michael J Bommarito II \enspace $\cdot$ \enspace
+    Jillian Bommarito \enspace $\cdot$ \enspace
+    Daniel Martin Katz
+  }
+  \vspace{-0.5em}
+}
+
+\date{{\normalsize\color{text-muted}\today}}
+
+\begin{document}
+
+\maketitle
+
+\vspace{-1em}
+\noindent{\color{border-neutral}\rule{\textwidth}{0.5pt}}
+\vspace{1.0em}
+
+% Draft notice, matching Part I/II style
+\begin{center}
+  \begin{tcolorbox}[
+      enhanced,
+      width=0.80\textwidth,
+      colback=bg-note,
+      colframe=border-note,
+      fonttitle=\bfseries\large\color{note-dark},
+      boxrule=1.5pt,
+      arc=4pt,
+      left=16pt,
+      right=16pt,
+      top=12pt,
+      bottom=12pt,
+      breakable,
+      drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.08},
+      borderline west={4pt}{0pt}{note-dark}
+    ]
+    \begin{center}
+      {\large\bfseries\color{note-dark} Working Draft Chapter} \\[0.2em]
+      {\small\color{text-muted} Version 0.1}
+    \end{center}
+    \vspace{0.25em}
+    {\small
+      This chapter is Part III of a three-part series. Part I (What is an Agent?) defines concepts and taxonomy. Part II (How to Build an Agent) covers architectures, protocols, and technical evaluation. Part III explains governance, conformance, and deployment for CRO/CCO/CFO/GC audiences.
+    }
+  \end{tcolorbox}
+\end{center}
+
+\vspace{1em}
+
+\tableofcontents
+
+% Main content
+\input{sections/howtoread}
+\input{sections/intro}
+\input{sections/regulatory_landscape}
+\input{sections/professional_ethics}
+\input{sections/controls_catalogue}
+\input{sections/governance_evaluation}
+\input{sections/protocol_conformance}
+\input{sections/deployment_guidance}
+\input{sections/organizational_readiness}
+\input{sections/case_patterns}
+\input{sections/synthesis}
+\input{sections/furtherlearning}
+\input{sections/conclusion}
+
+% Only print bibliography when compiling standalone
+\IfSubfilesClassLoaded{\printbibliography}{}
+
+\end{document}

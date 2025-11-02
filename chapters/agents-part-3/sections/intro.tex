@@ -1,0 +1,47 @@
+% ============================================================================
+% Introduction and Scope — Agents Part III (Govern)
+% Purpose: Define governance scope, roles, oversight modes
+% Label: sec:agents3-intro
+% ============================================================================
+
+% Executive mnemonic (comments only): APEX‑2D
+%   A — Attribution/Provenance (source‑grounding, quote fidelity)
+%   P — Privilege/Confidentiality (ethical walls, retention)
+%   E — Evidence/Audit (complete, tamper‑evident logs)
+%   X — Escalation/eXit (oversight modes, stop/rollback)
+%   Dials — Autonomy/Actuation; Jurisdiction/Localization
+% This section sets context for all four questions and both dials.
+
+\section{Introduction and Scope}
+\label{sec:agents3-intro}
+
+Part III explains how to \textit{govern} agentic systems in practice. We focus on what a chief risk officer, compliance officer, CFO, general counsel, and security leadership need to approve, monitor, and continuously improve deployments.
+
+\begin{keybox}[title={Executive Objectives}]
+\begin{itemize}
+  \item Map laws, ethics, and standards to concrete, testable controls.
+  \item Establish evidence requirements, KPIs/SLAs, and change‑management gates.
+  \item Ensure interoperability and auditability via protocol‑level metadata.
+\end{itemize}
+\end{keybox}
+
+\paragraph{Roles and Oversight.} We distinguish \emph{provider}, \emph{deployer}, and \emph{user}. Oversight modes include human‑in‑the‑loop (pre‑approval), human‑on‑the‑loop (monitor/interrupt), and human‑in‑command (override/stop). Choice depends on task risk.
+
+\vspace{0.5em}
+\noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}
+
+\subsection*{Terminology Bridge from Part I}
+\addcontentsline{toc}{subsection}{Terminology Bridge from Part I}
+
+This governance chapter explicitly reuses the terms introduced at the beginning of Part I:
+
+\begin{definitionbox}[title={Core Terms from Part I}]
+\begin{itemize}
+  \item \textbf{Agent (Level 1)}: possesses \emph{Goal}, \emph{Perception}, and \emph{Action}.
+  \item \textbf{Agentic System}: adds \emph{Iteration}, \emph{Adaptation}, and \emph{Termination} to the Level 1 baseline.
+  \item \textbf{Analytical Dimensions}: \emph{Autonomy}, \emph{Entity Frames} (human / hybrid / machine / institutional), \emph{Goal Dynamics} (accept, adapt, negotiate), and \emph{Persistence}.
+  \item \textbf{6‑Question Evaluation Rubric}: practical test used to decide whether something is agentic in operation.
+\end{itemize}
+\end{definitionbox}
+
+All governance requirements below map to these foundations. For example, autonomy and actuation scope drive oversight mode and approval gates; entity frame and persistence drive records, retention, and audit design; goal dynamics influence escalation triggers and SLAs.
