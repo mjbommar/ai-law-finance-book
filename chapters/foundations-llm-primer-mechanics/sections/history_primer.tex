@@ -1,0 +1,26 @@
+% =============================================================================
+% History & Conceptual Primer — LLM Primer & Mechanics
+% Purpose: Milestones, why LLMs improved, where they shine/fail
+% Label: sec:llmA-history
+% =============================================================================
+
+\section{Conceptual Primer and Brief History}
+\label{sec:llmA-history}
+
+% Outline (comments):
+% - Transformers and pretraining at a glance
+% - Instruction tuning and alignment (why instructions work)
+% - From text-only to tool-using systems
+% - Strengths/limits for legal and financial tasks
+
+\begin{highlightbox}[title={Plain-English Summary}]
+LLMs predict the next token given previous tokens. With instruction tuning, they follow natural-language directions well. They are powerful at reading, summarizing, and patterning text—but require grounding for facts and dates.
+\end{highlightbox}
+
+\subsection{Model Lifecycle and Cutoffs}
+% Pre-train → instruction/preference tuning → post-train capabilities
+\textbf{Pre-train} on large corpora establishes general language ability and sets the \emph{training cutoff date}. \textbf{Instruction/preference tuning} (e.g., SFT, RLHF/DPO) teaches following directions and preferences. \textbf{Post-train} adds tools, safety rules, and deployment policies. Always state cutoff dates and effective dates when making time-sensitive claims.
+
+\subsection{Data Governance and Sources (Overview)}
+High-level sources include public web, licensed datasets, and proprietary corpora. Legal considerations: licensing, privacy/PII, confidentiality, and provenance. Later chapters cover governance controls; here we flag that recency gaps are normal and should be mitigated with retrieval.
+

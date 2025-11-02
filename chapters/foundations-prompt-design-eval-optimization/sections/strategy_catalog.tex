@@ -1,0 +1,27 @@
+% =============================================================================
+% Strategy Catalog — Prompt Design, Evaluation, Optimization
+% Purpose: CoT, self-consistency, ReAct/ToT/GoT, few-shot retrieval
+% Label: sec:llmE-strategy
+% =============================================================================
+
+\section{Strategy Catalog: When and Why}
+\label{sec:llmE-strategy}
+
+% Outline (comments):
+% - Direct prompting vs. structured scratchpads (CoT) vs. short rationales
+% - Self-consistency (multi-sample) and voting/aggregation
+% - ReAct: reasoning + acting with tools; trace separation
+% - Tree/Graph-of-Thought for branching exploration
+% - Few-shot retrieval selection and budgeting
+% - Decision table: pick simplest strategy that meets evidence/risk needs
+
+\begin{keybox}[title={Decision Table (High Level)}]
+\begin{itemize}
+  \item \textbf{Low-risk, fast:} direct prompting with minimal constraints.
+  \item \textbf{Schema-bound:} direct prompting + validators; low temperature.
+  \item \textbf{Hard reasoning:} CoT or short scratchpads; consider self-consistency.
+  \item \textbf{Tool workflows:} ReAct-style traces; separate logs vs. user output.
+  \item \textbf{Exploration/branching:} Tree/Graph-of-Thought within budget.
+\end{itemize}
+\end{keybox}
+

@@ -1,0 +1,27 @@
+% =============================================================================
+% Failure Modes — LLM Primer & Mechanics
+% Purpose: Common pitfalls to anticipate early
+% Label: sec:llmA-fail
+% =============================================================================
+
+\section{Common Failure Modes and Why They Happen}
+\label{sec:llmA-fail}
+
+% Outline (comments): hallucination, staleness/recency, formatting drift, overlong outputs, misread structure
+\begin{cautionbox}[title={Watch Outs}]
+\begin{itemize}
+  \item \textbf{Ungrounded claims:} require source citations and quotes.
+  \item \textbf{Context overflow:} enforce concise prompts and chunk inputs.
+  \item \textbf{Formatting drift:} use schemas and validators early.
+\end{itemize}
+\end{cautionbox}
+
+\subsection{Recency and Cutoff Effects}
+Models omit events after their training cutoff. Mitigation: require dated sources and retrieval with freshness controls.
+
+\subsection{Prompt Injection and Jailbreaks (Preview)}
+Malicious or untrusted inputs can steer models off-task. Use strict schemas, role separation, and validation; defer to later governance chapters for controls.
+
+\subsection{Domain/Format Shift}
+Performance drops when inputs differ from training formats (e.g., complex tables, scanned PDFs). Prefer native text, structure-preserving parsers, and targeted evaluation.
+

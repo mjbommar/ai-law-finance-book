@@ -1,0 +1,77 @@
+\documentclass[../../main.tex]{subfiles}
+
+\begin{document}
+
+\title{
+  \vspace{-0.5em}
+  {\Huge\bfseries\color{primary} Foundations}\\[0.6em]
+  {\LARGE\color{primary} Conversations and Reasoning}\\[0.4em]
+  {\large\itshape\color{text-secondary} Chat Mechanics and Reasoning Patterns}
+  \vspace{0.5em}
+}
+
+\author{
+  \vspace{-0.5em}
+  {\large\color{text-muted}
+    Michael J Bommarito II \enspace $\cdot$ \enspace
+    Jillian Bommarito \enspace $\cdot$ \enspace
+    Daniel Martin Katz
+  }
+  \vspace{-0.5em}
+}
+
+\date{{\normalsize\color{text-muted}\today}}
+
+\maketitle
+
+\vspace{-1em}
+\noindent{\color{border-neutral}\rule{\textwidth}{0.5pt}}
+\vspace{1.0em}
+
+\begin{center}
+  \begin{tcolorbox}[
+      enhanced,
+      width=0.80\textwidth,
+      colback=bg-note,
+      colframe=border-note,
+      fonttitle=\bfseries\large\color{note-dark},
+      boxrule=1.5pt,
+      arc=4pt,
+      left=16pt,
+      right=16pt,
+      top=12pt,
+      bottom=12pt,
+      breakable,
+      drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.08},
+      borderline west={4pt}{0pt}{note-dark}
+    ]
+    \begin{center}
+      {\large\bfseries\color{note-dark} Working Draft Chapter} \\[0.2em]
+      {\small\color{text-muted} Version 0.1}
+    \end{center}
+    \vspace{0.25em}
+    {\small
+      From single-shot completions to multi-turn chats and structured reasoning. We cover roles, memory, scratchpads, and strategy selection.
+    }
+  \end{tcolorbox}
+\end{center}
+
+\vspace{1em}
+
+\tableofcontents
+
+% Main content
+\input{sections/howtoread}
+\input{sections/intro}
+\input{sections/conversational_models}
+\input{sections/reasoning_patterns}
+\input{sections/strategy_selection}
+\input{sections/synthesis}
+\input{sections/furtherlearning}
+\input{sections/conclusion}
+
+% Only print bibliography when compiling standalone
+\IfSubfilesClassLoaded{\printbibliography}{}
+
+\end{document}
+

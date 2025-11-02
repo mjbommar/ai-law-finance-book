@@ -1,0 +1,50 @@
+% =============================================================================
+% Reasoning Patterns — Conversations & Reasoning
+% Purpose: CoT, self-consistency, ReAct, ToT/GoT
+% Label: sec:llmB-reason
+% =============================================================================
+
+\section{Reasoning Patterns and When to Use Them}
+\label{sec:llmB-reason}
+
+% Outline (comments):
+% - Chain-of-Thought (private scratchpads) vs. concise rationales
+% - Self-consistency (multiple samples) and cost implications
+% - ReAct (reason+act) for tool-using flows; Tree/Graph-of-Thought
+% - Pick the simplest pattern that meets evidence needs
+
+\begin{keybox}[title={Selection Heuristics}]
+\begin{itemize}
+  \item Prefer direct prompting; add scratchpads only when accuracy gains are material.
+  \item Use self-consistency for hard problems; cap samples and budget.
+  \item For tools, adopt ReAct-like traces; separate user-visible output from logs.
+\end{itemize}
+\end{keybox}
+
+\subsection{Private Scratchpads vs. User-Facing Rationales}
+Keep detailed reasoning traces private for safety and simplicity; provide concise rationales to users when necessary.
+
+\subsection{Tool-Augmented Reasoning}
+Combine planning with tool calls (ReAct-style). Separate plan, actions, observations, and final answers for auditability.
+
+\begin{highlightbox}[title={Where to Find the Full Catalog}]
+This chapter provides a practical preview. For a consolidated strategy catalog (CoT, self-consistency, ReAct/ToT/GoT, and selection heuristics), see Chapter E, Section~\ref{sec:llmE-strategy}.
+\end{highlightbox}
+
+\subsection{Few-Shot Examples: Design and Selection}
+% Purpose: show the model how to behave with demonstrations
+Use \emph{few-shot} exemplars to teach format, tone, and edge cases. Prefer:
+\begin{itemize}
+  \item \textbf{Positive exemplars} (what good looks like), \textbf{negative exemplars} (what to avoid), and \textbf{boundary cases} (hard edges).
+  \item \textbf{Selection by similarity}: retrieve examples using semantic search; cap token budgets.
+  \item \textbf{Locality}: prefer examples close to the current task’s jurisdiction, date, and document type.
+\end{itemize}
+
+\subsection{Self-Consistency (Multi-Sample) and Budgeting}
+Sample multiple candidate solutions and pick the majority/consensus. Useful for hard reasoning; control total samples and cost; verify all outputs against constraints before selection.
+
+\subsection{Self-Reflection (Critique-Improve Loops)}
+Ask the model to critique its own draft against explicit criteria, then revise. Keep critiques private; limit loop counts; measure gains vs. latency.
+
+\subsection{Bootstrapping Exemplars}
+When few-shot examples are scarce, bootstrap: generate candidates with strict schemas, score against rubrics, and retain only high-quality items. Always perform human review before adding to the exemplar library; track provenance and dates.

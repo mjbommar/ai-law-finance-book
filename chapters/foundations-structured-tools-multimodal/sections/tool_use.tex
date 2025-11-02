@@ -1,0 +1,68 @@
+% =============================================================================
+% Tool Use — Structured Outputs, Tools, Multimodal
+% Purpose: Function calling with governance metadata
+% Label: sec:llmC-tools
+% =============================================================================
+
+\section{Tool Use and Function Calling}
+\label{sec:llmC-tools}
+
+% Outline (comments): inputs/outputs; pre/postconditions; idempotency; error classes; governance metadata (purpose, user, privilege, jurisdiction, retention)
+\begin{keybox}[title={Invocation Contract Checklist}]
+\begin{itemize}
+  \item Name, inputs, outputs, and validation rules.
+  \item Pre/postconditions and idempotency expectations.
+  \item Governance metadata and audit hooks on every call.
+\end{itemize}
+\end{keybox}
+
+\subsection{Prompted JSON vs. Function Calling}
+Prefer function calls for strong typing, validation, and audit logs. Keep prompts minimal by referencing function names and arguments.
+
+\subsection{Governance Metadata on Every Call}
+Include purpose, user/actor, privilege flags, jurisdiction, legal basis (where applicable), retention directives, and correlation IDs. This metadata enables downstream audit and Part~III controls.
+
+\subsection{Error Taxonomy, Retries, and Backoff}
+Standardize error classes (authn/authz, validation, rate limits, network). Implement retries with exponential backoff and circuit breakers for reliability.
+
+\subsection{Idempotency and Auditing}
+Use idempotency keys for externally visible actions; store full request/response payloads with hashes and timestamps for tamper-evident logs.
+
+\subsection{Capability Discovery and Contracts}
+Advertise actions with names, versions, input/output schemas, pre/postconditions, and side effects. Keep a registry for change management.
+
+\subsection{Security and Privacy Basics}
+Minimize PII; redact before sending to third parties; avoid secrets in prompts; prefer short-lived tokens and scoped credentials.
+
+\subsection{Contract Template (YAML/JSON)}
+% Minimal, copyable contract for capability registries
+\begin{highlightbox}[title={Minimal Contract (YAML)}]
+\small
+\begin{verbatim}
+name: compute_interest
+version: 1.2.0
+inputs:
+  principal: {type: number, required: true}
+  rate: {type: number, required: true}
+  period_days: {type: integer, required: true}
+preconditions:
+  - rate >= 0
+postconditions:
+  - result >= 0
+idempotent: true
+governance:
+  purpose: finance.calculation
+  privilege: client-confidential
+  jurisdiction: US
+  retention: 7d
+\end{verbatim}
+\end{highlightbox}
+
+\subsection{Deployment Modes and Metadata}
+Indicate whether a call uses on-prem, private cloud, or SaaS endpoints. Add region pins (e.g., EU-only) and DPAs/BAAs as metadata fields.
+
+\subsection{Capacity and Cost Planning}
+Document expected rate limits, concurrency, and maximum payload sizes. Track per-call token costs and latency percentiles; define fallbacks.
+
+\subsection{Calculator/Numeracy Guardrail}
+For numeric tasks, call a calculator/tool and assert results match within tolerance; do not rely on free-form generation for math.

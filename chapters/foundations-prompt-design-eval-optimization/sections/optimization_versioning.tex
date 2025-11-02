@@ -1,0 +1,31 @@
+% =============================================================================
+% Optimization & Versioning — Prompt Design, Evaluation, Optimization
+% Purpose: A/B tests; drift control; change management
+% Label: sec:llmD-opt
+% =============================================================================
+
+\section{Optimization, Versioning, and Change Management}
+\label{sec:llmD-opt}
+
+% Outline (comments): A/B tests; data drift; prompt registries; rollback; governance tie-in
+\begin{keybox}[title={Operational Hygiene}]
+Track prompt versions, model/config, and evaluation scores. Require approvals for production changes and keep rollback plans.
+\end{keybox}
+
+\subsection{When to Fine-Tune (Escalation Ladder)}
+Prefer prompt design + RAG + tools first. Consider fine-tuning when (i) stable, organization-wide distribution is needed, (ii) prompt/RAG/tool ceilings are reached, and (iii) governance can support data/weights lifecycle.
+
+\subsection{Fine-Tuning Methods at a Glance}
+Overview: full fine-tune vs. parameter-efficient methods (LoRA/adapters). Track datasets, licenses, and privacy constraints. Re-evaluate against the same gold sets pre/post.
+
+\subsection{Risk, Cost, and Governance}
+Document training data provenance, consent, and confidentiality. Require approvals, shadow testing, and rollback. Record model cards and evaluations with dates.
+
+\subsection{Registries, Rollbacks, and Shadow Tests}
+Maintain a registry of prompt/model versions. Deploy changes behind flags; compare online metrics before full rollout.
+
+\subsection{Active Learning and Human-in-the-Loop}
+Select hard or ambiguous cases for review; add curated examples back into exemplar libraries or fine-tuning sets with documented decisions.
+
+\subsection{A/B Testing Prompts and Exemplars}
+Run controlled experiments on prompt wording and example sets. Record statistical significance thresholds and guard for p-hacking.

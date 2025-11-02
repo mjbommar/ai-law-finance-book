@@ -1,0 +1,45 @@
+% =============================================================================
+% Evaluation — Prompt Design, Evaluation, Optimization
+% Purpose: Quick, repeatable tests; logging
+% Label: sec:llmD-eval
+% =============================================================================
+
+\section{Prompt Evaluation and Test Sets}
+\label{sec:llmD-eval}
+
+% Outline (comments): gold sets; correctness; citation fidelity; robustness; offline/online; logging
+\begin{keybox}[title={Minimal Viable Test Suite}]
+\begin{itemize}
+  \item \textbf{Correctness:} task-specific checks, including date/jurisdiction.
+  \item \textbf{Citation Fidelity:} quotes, page IDs, timestamps, stable URLs.
+  \item \textbf{Robustness:} adversarial formatting, missing fields, time shifts.
+\end{itemize}
+\end{keybox}
+
+\subsection{Metrics and Protocols}
+Use task-appropriate metrics (exact match, F1, BLEU/ROUGE for summaries) and citation metrics (precision/recall on sources/quotes). Define evaluation protocols and seeds.
+
+\subsection{Human Review and Agreement}
+Calibrate with expert review; measure inter-rater agreement and label quality. Document tie-breaker rules.
+
+\subsection{Adversarial and Robustness Tests}
+Include malformed inputs, time-shifted facts, and formatting noise. Track abstention/refusal rates and escalation triggers.
+
+\subsection{Confidence and Abstention}
+Capture model self-reported confidence where available; prefer explicit abstain options and enforce escalation on low confidence.
+
+\subsection{Logging for Explainability}
+Record prompts, configurations, model versions, and outputs with hashes and timestamps; respect privacy and retention policies.
+
+\subsection{Leakage Controls for Few-Shot and Bootstrapped Data}
+Separate evaluation from training/examples; avoid reusing exemplars in test sets. Use holdouts and time-based splits. Monitor for contamination by searching for near-duplicates.
+
+\subsection{Measuring Exemplar Effects}
+A/B prompts with and without examples; vary selection strategies. Track accuracy vs. token cost and latency.
+
+\subsection{Eval Harness Pattern (Minimal)}
+\begin{highlightbox}[title={Inputs → Checks → Verdict}]
+\textbf{Inputs:} prompt template + params, test items, expected fields.\\
+\textbf{Checks:} schema validation, correctness rules, citation fidelity.\\
+\textbf{Verdict:} pass/fail per case; aggregate metrics; store run metadata.
+\end{highlightbox}

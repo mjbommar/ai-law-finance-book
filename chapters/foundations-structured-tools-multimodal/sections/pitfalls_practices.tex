@@ -1,0 +1,17 @@
+% =============================================================================
+% Pitfalls & Practices — Structured Outputs, Tools, Multimodal
+% Purpose: Practical do's/don'ts
+% Label: sec:llmC-pitfalls
+% =============================================================================
+
+\section{Pitfalls and Best Practices (Structured Outputs and Tools)}
+\label{sec:llmC-pitfalls}
+
+% Outline (comments): rate limits; retries/backoff; PII handling; logging; redaction
+\begin{cautionbox}[title={Avoid These}]
+\begin{itemize}
+  \item Free-form outputs without validators in regulated workflows.
+  \item Tool calls without purpose/user/privilege metadata.
+  \item Changing schemas without versioning and migration notes.
+\end{itemize}
+\end{cautionbox}

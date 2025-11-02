@@ -1,0 +1,27 @@
+% =============================================================================
+% Conversational Models — Conversations & Reasoning
+% Purpose: Roles, memory/state, chat mechanics
+% Label: sec:llmB-convo
+% =============================================================================
+
+\section{Conversational Models and State}
+\label{sec:llmB-convo}
+
+% Outline (comments): roles; conversation memory; context budgeting; safety prompts
+\begin{definitionbox}[title={Roles and State}]
+\begin{itemize}
+  \item \textbf{Roles:} system, user, assistant; when to set constraints at the system level.
+  \item \textbf{State:} short vs. long-term context; summarization vs. full replay.
+  \item \textbf{Budgeting:} keep critical instructions near the end; repeat key constraints.
+\end{itemize}
+\end{definitionbox}
+
+\subsection{Memory Strategies}
+Short-term summaries conserve context; retrieval memories rehydrate facts on demand. Choose based on length, accuracy needs, and audit requirements.
+
+\subsection{Context Management and Instruction Placement}
+Repeat key constraints near the end of the prompt; use reminders to mitigate forgetting. Track cumulative token budgets.
+
+\subsection{Safety and Guardrails (Preview)}
+Define allowed/blocked topics and refusal criteria at the system level; log policy versions. Part~III covers governance controls.
+

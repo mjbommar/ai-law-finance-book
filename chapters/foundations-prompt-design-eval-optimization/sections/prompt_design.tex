@@ -1,0 +1,28 @@
+% =============================================================================
+% Prompt Design — Prompt Design, Evaluation, Optimization
+% Purpose: Prompts as specifications with success criteria
+% Label: sec:llmD-design
+% =============================================================================
+
+\section{Prompt Design as Specification}
+\label{sec:llmD-design}
+
+% Outline (comments): roles, constraints, examples, success criteria, anti-patterns
+\begin{definitionbox}[title={Specification Template}]
+Include role, objective, constraints, inputs/outputs, success criteria, and examples. Add explicit refusal/edge-case guidance.
+\end{definitionbox}
+
+\subsection{JSON vs. XML Prompt Templates}
+Provide minimal, unambiguous exemplars. Call out required fields and allowed values. Prefer JSON unless an XML interface is mandatory.
+
+\subsection{Grammar/Schema Constraints (Optional)}
+Where supported, use JSON schema or grammars to constrain outputs. Validate and retry on mismatch; log failures.
+
+\subsection{Designing Few-Shot Exemplars}
+Curate 3--5 demonstrations that reflect real variability. Include at least one hard negative and one boundary case. Keep examples concise to preserve context.
+
+\subsection{Exemplar Libraries and Retrieval}
+Organize examples with metadata (domain, jurisdiction, date, doc type). Retrieve relevant exemplars at runtime via semantic similarity; avoid leaking answers into prompts.
+
+\subsection{Anti-Patterns}
+Golden-path examples that hide complexity, leaking labels or solutions, and overly long exemplars that crowd out instructions.

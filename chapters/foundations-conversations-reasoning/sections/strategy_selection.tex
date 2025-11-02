@@ -1,0 +1,14 @@
+% =============================================================================
+% Strategy Selection — Conversations & Reasoning
+% Purpose: Match pattern to task risk/cost
+% Label: sec:llmB-strategy
+% =============================================================================
+
+\section{Choosing Strategies Under Constraints}
+\label{sec:llmB-strategy}
+
+% Outline (comments): time/cost/risk tradeoffs; governance implications of revealing rationales
+\begin{highlightbox}[title={Quick Decision Flow}]
+If the task is low-risk and time-sensitive, use direct prompting. If correctness is critical and tooling is allowed, prefer ReAct with validation and escalation triggers. Use multi-sample tactics only when justified by accuracy gains.
+\end{highlightbox}
+

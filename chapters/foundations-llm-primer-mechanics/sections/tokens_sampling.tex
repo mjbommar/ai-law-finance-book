@@ -1,0 +1,43 @@
+% =============================================================================
+% Tokens, Tokenizers, Sampling — LLM Primer & Mechanics
+% Purpose: Explain tokens, context windows, sampling knobs
+% Label: sec:llmA-tokens
+% =============================================================================
+
+\section{Tokens, Tokenizers, and Completions}
+\label{sec:llmA-tokens}
+
+% Outline (comments):
+% - How text → tokens (BPE/unigram); why token counts matter (cost, latency)
+% - Context window; truncation risks; system/user/assistant roles
+% - Sampling: temperature, top-p, stop sequences; determinism vs. diversity
+
+\begin{keybox}[title={Practical Defaults}]
+\begin{itemize}
+  \item Use conservative temperature for regulated outputs; prefer determinism.
+  \item Set clear stop sequences and maximum tokens to bound responses.
+  \item Log prompt/output token counts for cost and audit purposes.
+\end{itemize}
+\end{keybox}
+
+\subsection{Sampling Knobs and Defaults}
+% Broad, plain-English intuition for regulated workflows
+\textbf{Temperature} controls diversity; lower is more deterministic. \textbf{Top-$p$} (nucleus) limits to the smallest mass of likely tokens; \textbf{top-$k$} limits to the $k$ most likely tokens. Prefer low temperature with modest top-$p$ for schema-bound tasks.
+
+\begin{highlightbox}[title={Recommended Starting Points}]
+\begin{itemize}
+  \item \textbf{Grounded/structured outputs:} temperature 0.0--0.2, top-$p$ 0.8--0.95; set stop sequences.
+  \item \textbf{Exploratory drafting/ideation:} temperature 0.5--0.8, top-$p$ 0.9--0.95.
+  \item \textbf{Reasoning with self-consistency:} keep temperature moderate; control total samples.
+\end{itemize}
+\end{highlightbox}
+
+\subsection{Determinism, Seeds, and Reproducibility}
+For repeatable audits, fix sampling parameters, set random seeds where available, and record model version, date, and token counts. Beware vendor differences in determinism across hardware/backends.
+
+\subsection{Stops, Length, and Biases}
+Define clear stop sequences to prevent run-on text. Set maximum tokens to bound cost/latency. Note length bias: some models prefer shorter/longer outputs; use length penalties or explicit length requirements.
+
+\subsection{Latency/Cost Budgeting and Batching}
+Track prompt/output tokens. Consider batching low-risk evaluations and using shorter prompts via references/summaries to fit context windows.
+

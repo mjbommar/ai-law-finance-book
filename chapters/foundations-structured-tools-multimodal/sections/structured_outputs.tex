@@ -1,0 +1,33 @@
+% =============================================================================
+% Structured Outputs — Structured Outputs, Tools, Multimodal
+% Purpose: JSON/CSV/XML with validation
+% Label: sec:llmC-structured
+% =============================================================================
+
+\section{Structured Outputs with Validation}
+\label{sec:llmC-structured}
+
+% Outline (comments): schema-first prompts; retries; validators; error handling; schema versioning
+\begin{definitionbox}[title={Schema-First Prompting}]
+\begin{itemize}
+  \item Provide explicit field names, types, and allowed values.
+  \item Validate and retry on failure; capture errors for audit.
+  \item Version schemas and record model/config used.
+\end{itemize}
+\end{definitionbox}
+
+\subsection{JSON vs. XML vs. CSV: Tradeoffs}
+JSON is concise and maps naturally to application objects. XML offers schemas and legacy compatibility. CSV is compact but fragile for nested data. Prefer JSON unless downstream mandates XML/CSV.
+
+\subsection{Prompt Schemas vs. Function Calling}
+Prompted JSON/XML can work, but function calling enforces structure at the API level. Use prompts for quick prototypes; migrate to functions for reliability and auditability.
+
+\subsection{Validation, Retries, and Migrations}
+Validate outputs against schemas; on failure, retry with error hints. Version schemas; document breaking changes and provide migration notes.
+
+\subsection{Locale, Time, and Numeric Formatting}
+Normalize dates (ISO 8601), times (UTC offsets), currencies, and units. Require explicit jurisdiction and effective dates in evidence records.
+
+\subsection{Streaming and Partial Outputs (Optional)}
+When streaming, buffer tokens and validate incrementally. Consider end-of-object markers or chunked JSON strategies.
+

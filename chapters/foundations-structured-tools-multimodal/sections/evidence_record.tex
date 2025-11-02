@@ -1,0 +1,40 @@
+% =============================================================================
+% Evidence Record Schema — Structured Outputs and Tools
+% Purpose: Canonical record for claims: source, quote, span, date, jurisdiction
+% Label: sec:llmC-evidence
+% =============================================================================
+
+\section{Canonical Evidence Record}
+\label{sec:llmC-evidence}
+
+We standardize how to capture evidence for any claim the system makes.
+
+\begin{definitionbox}[title={Evidence Record (Fields)}]
+\begin{itemize}
+  \item \textbf{source}: stable URL/DOI or repository identifier
+  \item \textbf{locator}: page/paragraph/figure/table identifiers
+  \item \textbf{quote}: exact quoted text (or figure/table description)
+  \item \textbf{date}: publication/effective date; include timezone
+  \item \textbf{jurisdiction}: e.g., US/MI; sector flags (HIPAA/GLBA, etc.)
+  \item \textbf{hash}: content hash (e.g., SHA-256) of the cited artifact
+  \item \textbf{model}: model name/version; sampling params; seeds
+  \item \textbf{correlationId}: run/request ID linking logs and actions
+\end{itemize}
+\end{definitionbox}
+
+\begin{highlightbox}[title={JSON Example}]
+\small
+\begin{verbatim}
+{
+  "source": "https://example.org/reg/2025-05-01",
+  "locator": {"page": 12, "paragraph": 4},
+  "quote": "The rule takes effect on May 1, 2025.",
+  "date": "2025-05-01",
+  "jurisdiction": "US",
+  "hash": "sha256-...",
+  "model": {"name": "ModelX-2025-04", "temperature": 0.1, "top_p": 0.9},
+  "correlationId": "run-abc123"
+}
+\end{verbatim}
+\end{highlightbox}
+
