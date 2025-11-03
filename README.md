@@ -39,7 +39,7 @@ Want to dive right in? Here's where to find the current PDF drafts:
 ### 📑 Individual Chapters
 Currently available chapters that can be read standalone:
 
-- **Agents - Part I: What is an Agent?**: [chapters/agents-part-1/main.pdf](chapters/agents-part-1/main.pdf)
+- **Agents - Part I: What is an Agent?**: [chapters/06-agents-part-1/main.pdf](chapters/06-agents-part-1/main.pdf)
   *A Conceptual Primer and History — Understanding AI agents in legal and financial contexts*
 
 - **Prompting & Meta-Prompting**: *In development*
@@ -71,7 +71,7 @@ We'd love your help making this book better! Whether you're fixing a typo, impro
 
 3. **Work on a specific chapter**:
    ```bash
-   cd chapters/agents-part-1
+   cd chapters/06-agents-part-1
    make pdf  # Build just this chapter
    ```
 
@@ -122,7 +122,7 @@ make all-pdfs     # Build book + all individual chapters
 
 #### Build Individual Chapters
 ```bash
-cd chapters/agents-part-1
+cd chapters/06-agents-part-1
 make pdf          # Full build with bibliography
 make quick        # Quick preview (single pass)
 make validate     # Check references and citations
@@ -176,7 +176,7 @@ Run these scripts to validate your contributions:
 ./scripts/run_all.sh .
 
 # Test a specific chapter
-./scripts/test_chapter.sh chapters/agents-part-1
+./scripts/test_chapter.sh chapters/06-agents-part-1
 ```
 
 Our validation suite includes:
@@ -228,4 +228,3 @@ As long as you provide appropriate credit and indicate changes.
 ---
 
 *Building bridges between artificial intelligence and professional practice in law and finance.*
-

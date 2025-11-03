@@ -131,7 +131,7 @@ make cleanall
 
 **From Chapter Directory** (build standalone chapter):
 ```bash
-cd chapters/agents-part-1
+cd chapters/06-agents-part-1
 
 # Build standalone chapter PDF
 make pdf

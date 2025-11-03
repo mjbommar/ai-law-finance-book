@@ -21,7 +21,7 @@ make pdf          # or: make book
 ### Build Individual Chapters
 ```bash
 make chapters                      # Build all chapters
-cd chapters/agents-part-1 && make pdf  # Build one chapter
+cd chapters/06-agents-part-1 && make pdf  # Build one chapter
 ```
 
 ---
@@ -93,7 +93,7 @@ The root document uses the `book` document class and:
 
 \mainmatter
 \part{Agents and Agentic Systems}
-\subfile{chapters/agents-part-1/main}  % Include chapter as subfile
+\subfile{chapters/06-agents-part-1/main}  % Include chapter as subfile
 
 \backmatter
 \printbibliography
@@ -200,7 +200,7 @@ This means:
 
 ### Standalone Chapter Compilation
 
-1. `pdflatex` reads `chapters/agents-part-1/main.tex`
+1. `pdflatex` reads `chapters/06-agents-part-1/main.tex`
 2. Sees `\documentclass[../../main.tex]{subfiles}`
 3. Loads parent preamble from `../../main.tex` → finds `preamble.tex`
 4. `\ifx\chapter\undefined` is TRUE (article class) → shows title, TOC
@@ -212,7 +212,7 @@ This means:
 
 1. `pdflatex` reads `main.tex` (book class)
 2. Loads `preamble.tex` directly
-3. In mainmatter, encounters `\subfile{chapters/agents-part-1/main}`
+3. In mainmatter, encounters `\subfile{chapters/06-agents-part-1/main}`
 4. Subfiles package processes chapter:
    - `\ifx\chapter\undefined` is FALSE (book class defined) → skips title/TOC
    - Executes `\chapter{...}` → creates chapter heading
@@ -273,7 +273,7 @@ mkdir -p chapters/new-chapter/{sections,figures,bib}
 ### 3. Copy Chapter Makefile
 
 ```bash
-cp chapters/agents-part-1/Makefile chapters/new-chapter/Makefile
+cp chapters/06-agents-part-1/Makefile chapters/new-chapter/Makefile
 ```
 
 ### 4. Add to Root Book
@@ -284,7 +284,7 @@ Edit `main.tex`:
 \mainmatter
 
 \part{Part Title}
-\subfile{chapters/agents-part-1/main}
+\subfile{chapters/06-agents-part-1/main}
 \subfile{chapters/new-chapter/main}  % Add this line
 ```
 
@@ -458,7 +458,7 @@ For book with per-chapter bibliographies (advanced):
 When working on a single chapter:
 
 ```bash
-cd chapters/agents-part-1
+cd chapters/06-agents-part-1
 make quick  # Single pass, no biber (fast)
 ```
 
@@ -471,7 +471,7 @@ When colors, preamble, or bibliography change:
 make cleanall && make all-pdfs
 
 # Or from chapter
-cd chapters/agents-part-1
+cd chapters/06-agents-part-1
 make cleanall && make pdf
 ```
 
