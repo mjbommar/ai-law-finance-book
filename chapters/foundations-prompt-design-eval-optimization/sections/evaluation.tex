@@ -43,3 +43,7 @@ A/B prompts with and without examples; vary selection strategies. Track accuracy
 \textbf{Checks:} schema validation, correctness rules, citation fidelity.\\
 \textbf{Verdict:} pass/fail per case; aggregate metrics; store run metadata.
 \end{highlightbox}
+
+\subsection{Retrieval Sanity Checks (Quick)}
+\label{sec:llmD-eval-retrieval-quick}
+Before advanced system evaluation, run simple retrieval checks on small, dated corpora: confirm recall@k on known Q\&A items, ensure returned passages carry dates/jurisdictions, and verify quotes/locators match sources. Use the evidence record from \Cref{sec:llmC-evidence} and design tasks that make temporal validity explicit.

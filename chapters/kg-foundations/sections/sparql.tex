@@ -1,0 +1,20 @@
+% =============================================================================
+% SPARQL — KG Foundations
+% Label: sec:kg-foundations-sparql
+% =============================================================================
+
+\section{SPARQL Query, Update, and Federation}
+\label{sec:kg-foundations-sparql}
+
+SPARQL 1.1 standardizes querying RDF graphs, updating graphs, a uniform protocol, and federated querying across endpoints. It is the primary interface to KGs. \autocite{w3c-sparql11-overview}
+
+\begin{keybox}[title={Query Essentials}]
+\begin{itemize}
+  \item \texttt{SELECT}/\texttt{CONSTRUCT}/\texttt{ASK}/\texttt{DESCRIBE} forms cover common needs.
+  \item Use IRIs for precise joins; lean on datatypes (\texttt{xsd:date}, \texttt{xsd:decimal}).
+  \item Prefer parameterized queries and fixed graph names for auditability.
+\end{itemize}
+\end{keybox}
+
+\paragraph{SPARQL 1.2.} Track ongoing updates (e.g., quoted triple support alignment) and adopt once Recommendations are finalized. \autocite{w3c-sparql12-status}
+

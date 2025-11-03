@@ -1,0 +1,14 @@
+% =============================================================================
+% KG Pipeline — Ops with LLMs
+% Label: sec:kg-ops-pipeline
+% =============================================================================
+
+\section{Ingestion and Mapping Pipeline}
+\label{sec:kg-ops-pipeline}
+
+From documents and APIs to RDF: normalize inputs, resolve entities, mint IRIs, map to SKOS/OWL terms, and validate with SHACL at each stage. Treat shapes and mappings as code with version control. \autocite{w3c-shacl}
+
+\begin{highlightbox}[title={Alignment with Evidence Record}]
+Carry source IRIs, dates, jurisdiction codes, and content hashes into the graph so KG facts link back to the book's Evidence Record (\Cref{sec:llmC-evidence}).
+\end{highlightbox}
+

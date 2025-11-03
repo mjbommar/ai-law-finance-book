@@ -4,9 +4,9 @@
 
 \title{
   \vspace{-0.5em}
-  {\Huge\bfseries\color{primary} Foundations}\\[0.6em]
-  {\LARGE\color{primary} LLM Primer and Mechanics}\\[0.4em]
-  {\large\itshape\color{text-secondary} Conceptual Primer, History, Tokens, and Sampling}
+  {\Huge\bfseries\color{primary} Knowledge Graphs \& Semantic Web}\\[0.6em]
+  {\LARGE\color{primary} Foundations for Law and Finance}\\[0.4em]
+  {\large\itshape\color{text-secondary} RDF, RDFS/OWL, SKOS, SPARQL, SHACL, JSON-LD}
   \vspace{0.5em}
 }
 
@@ -51,7 +51,7 @@
     \end{center}
     \vspace{0.25em}
     {\small
-      This chapter introduces modern LLMs for legal and financial practitioners. It covers a conceptual primer and brief history, then explains tokens, tokenizers, context windows, and completion sampling.
+      This chapter introduces core Semantic Web technologies that support durable identifiers, typed relations, validation, and query. We align examples to legal and financial data and connect to the book's Evidence Record (\Cref{sec:llmC-evidence}).
     }
   \end{tcolorbox}
 \end{center}
@@ -60,18 +60,18 @@
 
 \tableofcontents
 
-% Main content
-\input{sections/howtoread}
-\input{sections/intro}
-\input{sections/history_primer}
-\input{sections/tokens_sampling}
-\input{sections/representations_embeddings}
-\input{sections/failure_modes}
-\input{sections/synthesis}
-\input{sections/furtherlearning}
-\input{sections/conclusion}
+% Sections
+\input{sections/linked_data}
+\input{sections/rdf_rdfs_owl}
+\input{sections/skos}
+\input{sections/sparql}
+\input{sections/shacl}
+\input{sections/jsonld}
+\input{sections/identifiers_vocab}
+\input{sections/publishing_best_practices}
 
-% Only print bibliography when compiling standalone
+% Standalone compile bibliography
 \IfSubfilesClassLoaded{\printbibliography}{}
 
 \end{document}
+

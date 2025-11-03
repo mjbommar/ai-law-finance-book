@@ -15,9 +15,8 @@ Design tools with schemas that capture both functionality and governance metadat
 
 \subsection{Memory and State Management}
 \label{sec:agents2-memory}
-Combine short-term conversational state with persistent case/project memory. Enforce privilege boundaries and retention policies; prefer content-addressed storage for provenance.
+Combine short-term conversational state with persistent case/project memory. Enforce privilege boundaries and retention policies; prefer content-addressed storage for provenance. Treat the retrieval layer as governed memory: index content with dates and jurisdictions, filter by authorization at query time, and attach \emph{evidence records} per \Cref{sec:llmC-evidence}. Keep mechanics lightweight here and defer retrieval basics to \Cref{sec:llmC-rag}.
 
 \subsection{Planning, Reasoning, and Control}
 \label{sec:agents2-planning}
 Adopt planning patterns (react, plan-act-observe, graph/workflow) appropriate to task risk. Separate deliberation traces from user-facing output; instrument escalation triggers for low confidence.
-

@@ -1,0 +1,28 @@
+% =============================================================================
+% Representations and Embeddings — LLM Primer & Mechanics
+% Purpose: Introduce vectors early; why similarity matters
+% Label: sec:llmA-embeddings
+% =============================================================================
+
+\section{Representations and Embeddings}
+\label{sec:llmA-embeddings}
+
+Language models map tokens to numeric vectors (``embeddings'') in high-dimensional space. Distances in this space correlate with semantic relatedness, which enables similarity search and downstream retrieval. This section introduces the idea without vendor specifics and defers system details to \Cref{sec:llmC-rag}.
+
+\begin{definitionbox}[title={From Tokens to Vectors}]
+\begin{itemize}
+  \item \textbf{Tokenization:} text is split into tokens; each token has an index.
+  \item \textbf{Embedding:} a function maps tokens or texts to vectors of fixed length.
+  \item \textbf{Similarity:} cosine, dot product, or inner product measure closeness.
+\end{itemize}
+\end{definitionbox}
+
+\subsection{Why Embeddings Matter for Practice}
+Embeddings let systems find ``nearest'' passages, contracts, filings, or precedents without exact keyword matches. In regulated domains, they must be paired with provenance and dates; see \Cref{sec:llmC-evidence} for the canonical evidence record and \Cref{sec:llmC-rag} for retrieval basics.
+
+\begin{highlightbox}[title={Mental Model}]
+Think of embeddings as coordinates. Tokenization chooses the pieces; embeddings place them on a map; similarity search finds nearby coordinates to ground the model's answers.
+\end{highlightbox}
+
+\paragraph{Scope and Limits.} This primer stays conceptual. Model families, dimensions, precision, and indexing strategies are covered later when we discuss retrieval systems.
+

@@ -11,7 +11,7 @@ This section defines evaluation layers for technical correctness prior to govern
 
 \subsection{Layer 1: Retrieval}
 \label{sec:agents2-eval-retrieval}
-Assess precision/recall, MRR, and nDCG on legal corpora; include jurisdictional coverage and temporal validity checks.
+Assess precision/recall, MRR, and nDCG on legal corpora; include jurisdictional coverage and temporal validity checks. For quick gates before system trials, use the retrieval sanity checks in \Cref{sec:llmD-eval-retrieval-quick} and require evidence records per \Cref{sec:llmC-evidence}.
 
 \subsection{Layer 2: Reasoning}
 \label{sec:agents2-eval-reasoning}
@@ -28,4 +28,3 @@ Measure end-to-end task completion, robustness to tool errors, and escalation tr
   \item Do workflows recover gracefully from tool failures and rate limits?
 \end{evallist}
 \end{questionbox}
-

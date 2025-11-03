@@ -1,0 +1,17 @@
+% =============================================================================
+% LLM-Assisted KG — Ops with LLMs
+% Label: sec:kg-ops-llm
+% =============================================================================
+
+\section{LLM-Assisted Construction and Curation}
+\label{sec:kg-ops-llm}
+
+LLMs can propose entities, relations, and candidate axioms from text, tables, and schemas; they can also draft SPARQL queries and SHACL shapes. Keep humans-in-the-loop and gate changes through validation and provenance capture. Surveys highlight promise and current limits for schema-precise extraction. \autocite{survey-llm-kg-2024}
+
+\begin{definitionbox}[title={Human-in-the-Loop Gates}]
+\begin{itemize}
+  \item Candidate triples and shapes must pass SHACL and reviewer checks before merge.
+  \item Keep suggested vs. accepted changes separate for measurement.
+\end{itemize}
+\end{definitionbox}
+

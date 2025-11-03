@@ -12,3 +12,5 @@
 If the task is low-risk and time-sensitive, use direct prompting. If correctness is critical and tooling is allowed, prefer ReAct with validation and escalation triggers. Use multi-sample tactics only when justified by accuracy gains.
 \end{highlightbox}
 
+\subsection{Context Assembly (Brief)}
+Many conversational failures are context failures. Assemble context with a minimal recipe: summarize prior turns, include key facts/dates, and add small, relevant excerpts from sources when allowed. Retrieval and grounding mechanics are introduced in \Cref{sec:llmC-rag} with evidence capture in \Cref{sec:llmC-evidence}; keep this chapter focused on choosing when to pull context rather than how.

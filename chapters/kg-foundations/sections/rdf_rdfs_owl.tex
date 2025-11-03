@@ -1,0 +1,22 @@
+% =============================================================================
+% RDF, RDFS, OWL — KG Foundations
+% Labels: sec:kg-foundations-rdf, sec:kg-foundations-owl
+% =============================================================================
+
+\section{RDF Data Model and RDFS/OWL}
+\label{sec:kg-foundations-rdf}
+
+RDF 1.1 defines a graph data model of triples (subject, predicate, object), IRIs, literals with datatypes, and blank nodes. It provides a foundation for interoperable data across systems. \autocite{w3c-rdf11-concepts}
+
+RDFS supplies basic vocabulary for classes and properties. OWL~2 adds richer semantics for classes, properties, and individuals; its profiles (EL, QL, RL) target tractable reasoning in different scenarios. \autocite{w3c-rdf-schema, w3c-owl2-profiles}
+
+\begin{highlightbox}[title={Choosing an OWL 2 Profile}]
+Use \textbf{EL} for large taxonomies/hierarchies (e.g., healthcare codes), \textbf{QL} for efficient querying over relational backends, and \textbf{RL} for rule-engine implementations. Profiles trade expressivity for predictable performance.
+\end{highlightbox}
+
+\paragraph{Note on RDF 1.2.} Quoted triples and related features are tracked in ongoing RDF 1.2 work; adopt when specifications reach Recommendation status.\autocite{w3c-rdf12-status}
+
+\section{Vocabulary Design Basics}
+\label{sec:kg-foundations-owl}
+Model only what you need. Start with existing terms (e.g., FOAF, PROV, schema.org modules when appropriate) and mint new IRIs in a controlled namespace. Provide labels, definitions, examples, and version IRIs.
+

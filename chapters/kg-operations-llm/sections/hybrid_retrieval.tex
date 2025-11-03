@@ -1,0 +1,17 @@
+% =============================================================================
+% Hybrid Retrieval — Ops with LLMs
+% Label: sec:kg-ops-retrieval
+% =============================================================================
+
+\section{Hybrid Retrieval: SPARQL + Text/Vector}
+\label{sec:kg-ops-retrieval}
+
+Combine symbolic queries (SPARQL) for precise filters (jurisdiction, effective date, identifiers) with text/vector retrieval for semantic matching. Use KGs to disambiguate entities and assemble authoritative context before LLM generation. \autocite{w3c-sparql11-overview}
+
+\begin{keybox}[title={Pattern}]
+\begin{itemize}
+  \item Resolve entities via IRIs (LEI/CIK/etc.), then retrieve related filings, rulings, or contracts.
+  \item Pass grounded snippets plus citations (\Cref{sec:llmC-evidence}) to the LLM.
+\end{itemize}
+\end{keybox}
+

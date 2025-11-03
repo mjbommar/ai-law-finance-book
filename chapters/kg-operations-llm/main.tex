@@ -4,9 +4,9 @@
 
 \title{
   \vspace{-0.5em}
-  {\Huge\bfseries\color{primary} Foundations}\\[0.6em]
-  {\LARGE\color{primary} LLM Primer and Mechanics}\\[0.4em]
-  {\large\itshape\color{text-secondary} Conceptual Primer, History, Tokens, and Sampling}
+  {\Huge\bfseries\color{primary} Knowledge Graphs \& Semantic Web}\\[0.6em]
+  {\LARGE\color{primary} Operations with LLMs}\\[0.4em]
+  {\large\itshape\color{text-secondary} Build, Validate, Govern, and Use}
   \vspace{0.5em}
 }
 
@@ -51,7 +51,7 @@
     \end{center}
     \vspace{0.25em}
     {\small
-      This chapter introduces modern LLMs for legal and financial practitioners. It covers a conceptual primer and brief history, then explains tokens, tokenizers, context windows, and completion sampling.
+      This chapter covers operational pipelines for building and governing KGs with LLM assistance, hybrid retrieval (symbolic + vector), and evaluation aligned to the book's governance patterns.
     }
   \end{tcolorbox}
 \end{center}
@@ -60,18 +60,16 @@
 
 \tableofcontents
 
-% Main content
-\input{sections/howtoread}
-\input{sections/intro}
-\input{sections/history_primer}
-\input{sections/tokens_sampling}
-\input{sections/representations_embeddings}
-\input{sections/failure_modes}
-\input{sections/synthesis}
-\input{sections/furtherlearning}
-\input{sections/conclusion}
+% Sections
+\input{sections/pipeline}
+\input{sections/provenance}
+\input{sections/llm_assisted}
+\input{sections/hybrid_retrieval}
+\input{sections/examples}
+\input{sections/evaluation_ops}
 
-% Only print bibliography when compiling standalone
+% Standalone compile bibliography
 \IfSubfilesClassLoaded{\printbibliography}{}
 
 \end{document}
+
