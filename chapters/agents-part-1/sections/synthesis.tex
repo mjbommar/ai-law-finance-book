@@ -1,246 +1,200 @@
 \section{Analytical Framework}
 \label{sec:synthesis}
 
-Having traced the historical evolution (Section~\ref{sec:history}), examined disciplinary perspectives (Section~\ref{sec:disciplines}), and identified analytical dimensions (Section~\ref{sec:dimensions}), we now synthesize these insights into a theoretical framework for analyzing agentic systems in legal contexts.
+Having traced the historical evolution (\Cref{sec:history}), examined disciplinary perspectives (\Cref{sec:disciplines}), and identified analytical dimensions (\Cref{sec:dimensions}), we now synthesize these insights into a coherent analytical framework. This framework provides both the theoretical foundation for understanding agency and practical tools for evaluating real-world systems.
+
+
 
 \subsection{Cross-Cutting Patterns}
 
-Despite disciplinary diversity, several patterns emerge consistently:
+Our analysis across disciplines reveals four fundamental patterns that consistently appear when scholars and practitioners identify agency. These patterns transcend individual fields, providing a shared foundation for recognizing agentic behavior regardless of whether we're examining human decision-makers, organizational structures, or computational systems.
 
-\begin{keybox}[title={Cross-Cutting Patterns}]
-\paragraph{Goal-Directedness}
-Nearly every definition involves goals, objectives, or performance measures. Whether expressed as intentions (philosophy), reward functions (AI), mandates (law), or incentive structures (economics), agents are distinguished by oriented behavior toward outcomes.
-
-\paragraph{Perception-Action Coupling}
-From \textcite{russellnorvig2020aima}'s sensors and actuators to \textcite{bratman1987intention}'s practical reasoning to \textcite{bandura1989human}'s self-reactiveness, agents observe their environments and take actions. Single-shot transformations (compilers, converters) fall outside this pattern; iterative loops characterize agentic systems.
-
-\paragraph{Selective Autonomy}
-While autonomy levels vary (Section~\ref{sec:dimensions}), agency requires some discretion. Pure puppets executing scripted commands without choice do not count. The threshold varies---legal agents have minimal discretion, AI agents have substantial discretion---but the requirement persists.
-
-\paragraph{Stopping Conditions}
-Implicit or explicit, operational definitions assume systems eventually complete tasks or reach terminal states. Unbounded processes without convergence criteria—infinite loops, perpetual monitoring without decision points—lack the bounded purposefulness that characterizes agentic systems.
+\begin{keybox}[title={\textbf{Pattern 1: Goal-Directedness}}]
+Agents pursue objectives or performance criteria. Whether we call them intentions in philosophy, rewards in reinforcement learning, mandates in law, or incentives in economics, the common thread remains: agents exhibit behavior oriented toward achieving outcomes rather than merely reacting to stimuli. This distinguishes purposeful action from reflexive response.
 \end{keybox}
 
-\subsection{Theoretical Foundations}
+\begin{keybox}[title={\textbf{Pattern 2: Perception–Action Coupling}}]
+Agents operate through iterative cycles of sensing and acting. This pattern appears across theoretical frameworks---from \textcite{russellnorvig2020aima}'s sensor-actuator loops to \textcite{bratman1987intention}'s practical reasoning and \textcite{bandura1989human}'s reciprocal determinism. Systems that transform inputs once without iteration, such as compilers or single-shot classifiers, lack this essential coupling that characterizes agentic systems.
+\end{keybox}
 
-The cross-cutting patterns observed across disciplines build on rich theoretical traditions:
+\begin{keybox}[title={\textbf{Pattern 3: Selective Autonomy}}]
+Agents require some degree of discretion in their choices, as we explored in \Cref{sec:dimensions}. Systems that execute fixed scripts without any decision-making capacity do not qualify as agents. The degree of autonomy varies significantly across domains---from minimal discretion in rule-based systems to substantial independence in modern AI agents---with higher levels of discretion typically raising more complex governance and accountability questions.
+\end{keybox}
 
-\paragraph{Classical Planning (AI)}
-\keyterm{Goal-directedness} and means-end reasoning connect to STRIPS-style planning, where agents decompose goals into subgoals and select actions to achieve preconditions. Legal tasks like due diligence map naturally to hierarchical goal structures.
+\begin{keybox}[title={\textbf{Pattern 4: Termination}}]
+Purposeful behavior requires boundaries. Agents must have mechanisms for recognizing when to stop, whether through explicit controls (resource budgets, time limits, escalation triggers) or implicit goal satisfaction (achieving target state, exhausting search space). Systems that run indefinitely without clear stopping conditions or decision points fall outside our definition of agentic systems, as they lack the goal-oriented closure that characterizes purposeful action.
+\end{keybox}
 
-\paragraph{Reactive Architectures (Robotics)}
-The \keyterm{perception-action coupling} loop reflects Brooks' subsumption architecture (layered reactive control) and behavior-based robotics. Agents need not maintain complex world models---tight coupling between sensing and acting suffices for many tasks.
+\subsection{Formal Core}
 
-\paragraph{BDI Models (Cognitive Science, Computer Science)}
-Beliefs (about the world), Desires (goals to achieve), and Intentions (committed plans) provide one influential formal model. BDI architectures persist in agent-oriented programming and explain how agents manage competing objectives.
+While the patterns above provide intuitive understanding, precision demands formal specification. We now translate our insights into a mathematical framework that enables rigorous analysis and falsifiable claims about agency.
 
-\paragraph{Reinforcement Learning (AI)}
-The agent-environment interaction framework, where agents select actions, receive observations and rewards, and update policies, implements the iterative loop. RL formalizes learning from experience.
-
-\paragraph{Intentional Stance (Philosophy)}
-\textcite{dennett1987intentional}'s pragmatic criterion---treat systems as agents when attributing mental states yields reliable predictions---provides a philosophical justification. We adopt the intentional stance toward systems that exhibit goal-directed behavior.
-
-\subsection{Application to Professional Contexts}
-
-The analytical framework establishes what makes something an agent in general. Professional deployment in legal, medical, or financial contexts requires additional governance safeguards beyond these core properties—attribution mechanisms for tracing claims to sources, provenance tracking for auditable reasoning chains, escalation protocols for recognizing limitations, and confidentiality enforcement for maintaining information barriers. These capability-centric refinements are addressed in a companion chapter on governance and risk management for agentic systems.
-
-\subsection{Limitations and Boundary Cases}
-
-The analytical framework inevitably confronts boundary cases:
-
-\paragraph{Minimal Autonomy}
-Thermostats qualify as agents under our definition, yet have trivial autonomy. We accept this inclusion---thermostats exhibit goal-directedness, sensing, acting, and looping. Modern smart thermostats include explicit termination logic (time windows, energy budgets), while basic thermostats rely on implicit goal satisfaction through continuous cycling. We acknowledge that interesting agency questions arise at higher autonomy levels.
-
-\paragraph{Emergent vs Individual Agency}
-In multi-agent systems, is agency located in individuals or collectives? Both, potentially. Individual agents exhibit goal-directed behavior; the collective may exhibit emergent properties not reducible to individuals. Legal frameworks struggle with this (corporate vs individual liability), and AI systems inherit these tensions.
-
-\paragraph{Virtual vs Embodied}
-\textcite{kauffman2000investigations}'s thermodynamic criteria exclude purely virtual agents. We side with the computational traditions that accept virtual agents, but acknowledge philosophical objections remain valid.
-
-\paragraph{Single-Shot LLM Responses}
-As discussed in Section~\ref{sec:practical}, single-shot responses lack the iteration and adaptation required for agentic systems. However, if a response includes internal tool calls, observations, and updated reasoning within a single interaction, it may exhibit agentic properties architecturally even if perceived as one response by the user.
-
-\subsection{Looking Forward}
-
-The analytical framework and theoretical foundations provide stable conceptual tools during rapid technological change. As LLMs grow more capable, as multi-agent systems proliferate, and as AI-human collaboration evolves, these cross-disciplinary patterns help us:
-\begin{itemize}
-\item Distinguish genuine architectural innovations from repackaged capabilities
-\item Maintain cross-disciplinary communication through shared vocabulary
-\item Evaluate new systems against consistent criteria
-\item Anticipate legal and ethical challenges based on autonomy levels and entity frames
+To formalize our framework, we denote the six essential properties as follows:
+\begin{itemize}[leftmargin=1.5em]
+\item $G$ = goal or utility function that directs behavior
+\item $P$ = perception capability for sensing environment
+\item $A$ = action capability for affecting environment
+\item $I$ = iteration across multiple steps with state preservation
+\item $D$ = discretion or autonomy in decision-making
+\item $T$ = termination through explicit or implicit conditions
 \end{itemize}
 
-A companion chapter examines how these theoretical foundations manifest in contemporary AI systems and frameworks.
+We use the notation $\mathit{has}(x, \cdot)$ to indicate that system $x$ possesses a given property.
 
-\subsection{Definitional Consistency and Formal Verification}
+\begin{definitionbox}[title={\textbf{Formal Definitions}}]
+We define three nested categories of systems based on their properties:
+\begin{align*}
+\mathit{Agent}(x) &\iff \mathit{has}(x,G) \land \mathit{has}(x,P) \land \mathit{has}(x,A) \\
+&\quad\text{(Minimal agency: goals, perception, action)}\\[0.5em]
+\mathit{AgenticSystem}(x) &\iff \mathit{Agent}(x) \land \mathit{has}(x,I) \land \mathit{has}(x,D) \land \mathit{has}(x,T) \\
+&\quad\text{(Full operational system: all six properties)}\\[0.5em]
+\mathit{AIAgent}(x) &\iff \mathit{AgenticSystem}(x) \land \mathit{implementedWithAI}(x)\\
+&\quad\text{(AI-powered implementation of agentic system)}
+\end{align*}
+\end{definitionbox}
 
-The cross-disciplinary patterns and theoretical foundations we've identified provide valuable insights, but they also demand precision. When legal professionals evaluate AI agents for regulatory compliance, when engineers design multi-agent systems for financial markets, or when researchers assess claims about ``agentic'' capabilities, we need definitions that are not merely descriptive but formally verifiable.
+These formal definitions yield several important theoretical results that clarify the relationships between different types of systems:
 
-To bridge the gap between conceptual understanding and rigorous application, we now present our framework in formal logical notation. This serves two purposes: it enables precise reasoning about edge cases and boundary conditions, and it provides a foundation for automated verification in computational systems. Each formal statement is paired with an accessible explanation, ensuring that both logically-trained readers and domain practitioners can engage with the material.
+\begin{theorembox}[title={\textbf{Key Theoretical Results}}]
+\textbf{Hierarchical Subsumption.} The categories form a nested hierarchy:
+$$\mathit{AIAgent}(x) \Rightarrow \mathit{AgenticSystem}(x) \Rightarrow \mathit{Agent}(x)$$
+Every AI agent is necessarily an agentic system, and every agentic system is necessarily an agent, but the converses do not hold.
 
-\subsubsection{Formal Notation and Predicates}
+\textbf{Non-Equivalence.} The categories are strictly distinct:
+$$\exists x:\ \mathit{Agent}(x) \land \neg\mathit{AgenticSystem}(x)$$
+For example, a single-shot classifier might have goals, perception, and action capabilities, but lacks the iteration, discretion, and termination properties required for an agentic system.
 
-\begin{definitionbox}[title={Predicates and Relations}]
-We define the following predicates for our formal framework:
-\begin{itemize}
-\item $\mathit{Agent}(x)$ — ``$x$ is an agent''
-\item $\mathit{AgenticSystem}(x)$ — ``$x$ is an agentic system''
-\item $\mathit{AIAgent}(x)$ — ``$x$ is an AI agent''
-\item $\mathit{has}(x, p)$ — ``system $x$ has property $p$''
-\item $\mathit{implementedWith}(x, t)$ — ``system $x$ is implemented with technology $t$''
+\textbf{Property Attribution.} Individual features can be described as ``agentic'' (such as ``agentic perception'' or ``agentic planning'') without implying the system as a whole qualifies as an $\mathit{AgenticSystem}$. Full agentic system status requires all six properties.
+\end{theorembox}
+
+The termination property deserves special attention, as it can manifest in two distinct forms:
+
+\begin{definitionbox}[title={\textbf{Termination Modes}}]
+A system satisfies the termination requirement through either explicit or implicit mechanisms:
+$$\mathit{has}(x,T) \iff \text{ExplicitTerm}(x)\ \lor\ \text{ImplicitTerm}(x)$$
+
+\textbf{Explicit termination} involves programmed monitoring of conditions such as:
+\begin{itemize}[leftmargin=1.5em,nosep]
+\item Resource budgets (computation time, API calls, token limits)
+\item Timeout constraints (wall clock time, iteration counts)
+\item Escalation triggers (confidence thresholds, error conditions)
 \end{itemize}
 
-Properties are denoted as:
-\begin{itemize}
-\item $G$ = Goal-directedness
-\item $P$ = Perception capability
-\item $A$ = Action capability
-\item $I$ = Iteration (multi-cycle operation)
-\item $D$ = Adaptation (learning/adjustment)
-\item $T$ = Termination (explicit or implicit)
+\textbf{Implicit termination} occurs naturally through:
+\begin{itemize}[leftmargin=1.5em,nosep]
+\item Goal satisfaction (target state achieved)
+\item Quiescent states (no further actions available)
+\item Bounded episodes (fixed-duration tasks)
 \end{itemize}
 \end{definitionbox}
 
-\subsubsection{Foundational Axioms}
+\subsection{Foundations in Context}
 
-\begin{theorembox}[title={Axiom A1: Minimal Agency}]
-\textbf{Formal statement:}
-$$\forall x \: [\mathit{Agent}(x) \leftrightarrow (\mathit{has}(x, G) \land \mathit{has}(x, P) \land \mathit{has}(x, A))]$$
+Our formal framework draws from multiple theoretical traditions, each contributing essential insights about how agents operate. Understanding these foundations helps practitioners from different backgrounds connect our framework to established concepts in their fields.
 
-\textbf{Accessible explanation:}
-Something is an agent if and only if it has all three core properties: goal-directedness, perception, and action. This bidirectional relationship ($\leftrightarrow$) means these three properties are both necessary and sufficient for minimal agency.
-\end{theorembox}
+\paragraph{Plan-Based Control}
+The tradition of \keyterm{plan-based control} emphasizes how agents decompose high-level goals into actionable steps. This approach, central to cognitive science and AI planning systems, treats agency as means-end reasoning---connecting what we want to achieve with how to achieve it. In legal practice, we see this pattern in structured workflows like due diligence, where complex objectives decompose into systematic review tasks. Modern AI agents employ similar hierarchical planning when breaking down user requests into sequences of tool calls and sub-tasks.
 
-\begin{theorembox}[title={Axiom A2: Agentic Systems}]
-\textbf{Formal statement:}
-$$\forall x \: [\mathit{AgenticSystem}(x) \leftrightarrow (\mathit{Agent}(x) \land \mathit{has}(x, I) \land \mathit{has}(x, D) \land \mathit{has}(x, T))]$$
+\paragraph{Reactive Control}
+Not all intelligent behavior requires elaborate planning. The \keyterm{reactive control} paradigm demonstrates that simple perception-action rules can produce sophisticated behavior when properly designed. This insight, pioneered in robotics by researchers like Rodney Brooks, shows that agents can be effective without maintaining complex world models. In fast-changing environments or when sensing is reliable, responsive behavior often outperforms deliberative planning. Contemporary LLM agents balance both approaches---maintaining high-level plans while reacting dynamically to unexpected outputs or errors.
 
-\textbf{Accessible explanation:}
-An agentic system is precisely an agent that additionally possesses iteration, adaptation, and termination capabilities. The conjunction ($\land$) requires all six properties to be present.
-\end{theorembox}
+\paragraph{BDI Models}
+The \keyterm{Belief-Desire-Intention} (BDI) framework provides a structured account of agent mental states. Agents maintain beliefs about their environment, desires about preferred outcomes, and intentions representing committed plans. This model, influential in agent-oriented programming, explains how agents form and revise commitments as new information arrives. Legal agents exemplify this pattern: maintaining beliefs about applicable law, desires to serve client interests, and intentions manifested as filed documents or negotiation positions.
 
-\begin{theorembox}[title={Axiom A3: AI Implementation}]
-\textbf{Formal statement:}
-$$\forall x \: [\mathit{AIAgent}(x) \leftrightarrow (\mathit{AgenticSystem}(x) \land \mathit{implementedWith}(x, \text{AI/ML}))]$$
+\paragraph{Reinforcement Learning}
+The \keyterm{reinforcement learning} paradigm formalizes how agents learn from experience. Through cycles of action, observation, and reward, agents discover which behaviors achieve their goals. This framework clarifies why iterative interaction outperforms single-shot processing---each cycle provides information that improves future decisions. Modern AI agents increasingly incorporate reinforcement learning, whether through fine-tuning on human feedback or real-time adaptation during task execution.
 
-\textbf{Accessible explanation:}
-An AI agent is defined as an agentic system whose planning or orchestration mechanisms are implemented using artificial intelligence or machine learning technologies. Implementation is orthogonal to the definitional properties.
-\end{theorembox}
+\paragraph{Intentional Stance}
+Following philosopher Daniel Dennett's influential work \parencite{dennett1987intentional}, the \keyterm{intentional stance} treats agency as a pragmatic attribution rather than metaphysical fact. We describe systems as having beliefs, desires, and intentions when such descriptions improve our ability to predict and control their behavior. This perspective liberates us from endless debates about whether AI systems ``really'' have goals or merely simulate goal-directed behavior. What matters is whether treating them as agents yields practical benefits.
 
-\subsubsection{Derived Consequences}
+\begin{highlightbox}[title={\textbf{Why These Foundations Matter}}]
+These theoretical foundations aren't merely academic background---they directly inform how we build and evaluate agentic systems:
 
-\begin{keybox}[title={Theorem C1: Subsumption Hierarchy}]
-\textbf{Formal statement:}
-$$\forall x \: [\mathit{AgenticSystem}(x) \rightarrow \mathit{Agent}(x)]$$
-
-\textbf{Proof:} Follows immediately from Axiom A2, since $\mathit{AgenticSystem}(x)$ requires $\mathit{Agent}(x)$.
-
-\textbf{Accessible explanation:}
-Every agentic system is necessarily an agent (but not vice versa). This creates a proper hierarchy where agentic systems form a subset of agents.
-\end{keybox}
-
-\begin{keybox}[title={Theorem C2: Non-Equivalence}]
-\textbf{Formal statement:}
-$$\exists x \: [\mathit{Agent}(x) \land \neg\mathit{AgenticSystem}(x)]$$
-
-\textbf{Proof:} Consider a single-shot system with $G$, $P$, and $A$ but lacking $I$, $D$, or $T$.
-
-\textbf{Accessible explanation:}
-There exist agents that are not agentic systems. For example, a one-shot classification system that perceives input, pursues a goal of accurate classification, and outputs an action (the classification) is an agent but not an agentic system.
-\end{keybox}
-
-\begin{keybox}[title={Theorem C3: AI Agent Hierarchy}]
-\textbf{Formal statement:}
-$$\forall x \: [\mathit{AIAgent}(x) \rightarrow \mathit{AgenticSystem}(x) \rightarrow \mathit{Agent}(x)]$$
-
-\textbf{Proof:} Chain of implications from Axioms A3 and A2.
-
-\textbf{Accessible explanation:}
-AI agents form the most specific category in our hierarchy. Every AI agent is an agentic system, and every agentic system is an agent, creating a three-level taxonomy.
-\end{keybox}
-
-\begin{keybox}[title={Theorem C4: Property Attribution}]
-\textbf{Formal statement:}
-$$\forall x, p \in \{G, P, A, I, D, T\} \: [\mathit{has}(x, p) \rightarrow \text{``}x\text{ exhibits agentic behavior w.r.t. } p\text{''}]$$
-$$\text{but } \neg[\exists p \subset \{G, P, A, I, D, T\} \: \mathit{has}(x, p) \rightarrow \mathit{AgenticSystem}(x)]$$
-
-\textbf{Accessible explanation:}
-We can describe individual features as ``agentic'' without claiming the system is fully agentic. The term ``agentic system'' is reserved for systems exhibiting all six properties.
-\end{keybox}
-
-\subsubsection{Clarifying Principles}
-
-\begin{highlightbox}
-\textbf{Principle P1: Property-Implementation Distinction}
-
-\textbf{Formal statement:}
-$$\forall x, t_1, t_2 \: [(\mathit{Agent}(x) \land \mathit{implementedWith}(x, t_1)) \land (\mathit{Agent}(x) \land \mathit{implementedWith}(x, t_2))]$$
-$$\rightarrow \text{Properties of } x \text{ are independent of } t_1 \text{ vs } t_2$$
-
-\textbf{Accessible explanation:}
-The properties that make something an agent (goal, perception, action) are distinct from how it's built. An agent implemented with rule-based systems has the same definitional properties as one implemented with neural networks.
-\end{highlightbox}
-
-\begin{highlightbox}
-\textbf{Principle P2: Single-Shot LLM Constraint}
-
-\textbf{Formal statement:}
-$$\forall x \: [\text{SingleShotLLM}(x) \rightarrow (\mathit{Agent}(x) \leftrightarrow \text{InternalLoop}(x))]$$
-$$\land \: [\text{SingleShotLLM}(x) \rightarrow \neg\mathit{has}(x, I) \rightarrow \neg\mathit{AgenticSystem}(x)]$$
-
-\textbf{Accessible explanation:}
-Single-shot LLM responses can only qualify as agents if they internally instantiate goal-perception-action loops within one interaction. Without iteration across interactions, they cannot be agentic systems.
-\end{highlightbox}
-
-\begin{highlightbox}
-\textbf{Principle P3: Tool Use Necessity}
-
-\textbf{Formal statement:}
-$$\forall x \: [\text{UsesTool}(x) \not\rightarrow \mathit{Agent}(x)]$$
-$$\text{but } \forall x \: [(\text{UsesTool}(x) \land \mathit{has}(x, I) \land \mathit{has}(x, D) \land \mathit{has}(x, G)) \rightarrow \mathit{Agent}(x)]$$
-
-\textbf{Accessible explanation:}
-Tool use alone doesn't make something an agent. However, iterative and adaptive tool use directed toward goals does contribute to agency. The key is the purposeful, iterative pattern, not the mere presence of tools.
-\end{highlightbox}
-
-\subsubsection{Termination Formalization}
-
-\begin{definitionbox}[title={Termination Modes}]
-We formalize termination $T$ as:
-$$\mathit{has}(x, T) \leftrightarrow [\text{ExplicitTerm}(x) \lor \text{ImplicitTerm}(x)]$$
-
-where:
-\begin{itemize}
-\item $\text{ExplicitTerm}(x) \leftrightarrow \exists c \: [\text{TermCondition}(c) \land \text{monitors}(x, c)]$
-\item $\text{ImplicitTerm}(x) \leftrightarrow \exists g \: [\mathit{has}(x, g) \land \text{GoalSatisfiable}(g)]$
+\begin{itemize}[leftmargin=1.5em]
+\item \textbf{Planning} provides techniques for goal decomposition and task orchestration
+\item \textbf{Reactive control} validates simple, robust designs that respond to environmental changes
+\item \textbf{BDI models} offer architectures for managing commitments and updating beliefs
+\item \textbf{Reinforcement learning} explains how agents improve through experience and feedback
+\item \textbf{Intentional stance} justifies treating systems as agents when it enhances prediction and control
 \end{itemize}
 
-\textbf{Accessible explanation:}
-A system has termination capability if it either explicitly monitors termination conditions (budgets, timeouts, escalation triggers) or implicitly terminates through goal satisfaction (reaching target state). Continuous control tasks qualify when they use bounded episodes or quiescent states.
-\end{definitionbox}
+Together, these traditions ground our six-property framework in established theory while maintaining practical applicability. The result is a definition precise enough for formal verification yet flexible enough to span disciplines from law to computer science.
+\end{highlightbox}
 
-\subsubsection{Practical Application of Formal Framework}
+\subsection{Boundary Cases and Clarifications}
 
-This formal framework serves as a reference point for evaluating systems and resolving definitional disputes. When assessing whether a new AI system qualifies as an ``agent,'' ``agentic system,'' or ``AI agent,'' practitioners can apply these formal criteria systematically. The logical structure also reveals why certain boundary cases—like thermostats or single-shot LLMs—generate debate: they satisfy some but not all definitional requirements.
+Testing our framework against boundary cases reveals both its strengths and the subtleties of applying formal definitions to real-world systems. These edge cases aren't merely academic exercises---they illuminate where practitioners disagree about agency and help refine our understanding of what distinguishes agents from non-agents.
 
-More importantly, this formalization enables automated verification. Systems can self-certify their capabilities against these predicates, and regulatory frameworks can encode compliance requirements using the same logical structure. As we move toward environments where AI agents interact with legal and financial systems at scale, such formal verification becomes not just useful but essential.
+\begin{highlightbox}[title={\textbf{Case 1: Thermostats as Minimal Agents}}]
+A simple thermostat qualifies as an agent under our minimal definition: it pursues a goal (maintain target temperature), perceives its environment (temperature sensor), acts to affect that environment (heating/cooling control), and iterates continuously. However, its discretion is minimal---essentially binary decisions about heating or cooling. This example shows why minimal agency (Level 1) sets a low bar, and why most interesting questions about governance, liability, and capability emerge only at higher levels of autonomy.
+\end{highlightbox}
+
+\begin{highlightbox}[title={\textbf{Case 2: Multi-Agent Collectives and Emergent Behavior}}]
+When multiple agents interact, the collective can exhibit properties no single agent possesses. A trading floor, legal team, or swarm of autonomous vehicles may demonstrate emergent behaviors that challenge our individual-focused definitions. Legal systems have long grappled with this through doctrines distinguishing corporate from individual liability. Our framework accommodates both perspectives: we can analyze individual agents within the system or treat the collective itself as an agent with emergent goals and capabilities.
+\end{highlightbox}
+
+\begin{highlightbox}[title={\textbf{Case 3: Virtual versus Embodied Agents}}]
+Software agents need not have physical bodies to qualify as agents. A contract analysis system operating entirely in cloud infrastructure satisfies all six properties without any physical embodiment. While robotics researchers sometimes insist on embodiment, our framework follows the broader AI tradition of recognizing virtual agents as fully legitimate instances of agency.
+\end{highlightbox}
+
+\begin{highlightbox}[title={\textbf{Case 4: Single-Shot LLM Interactions}}]
+A single ChatGPT response, however sophisticated, typically lacks the iteration property required for agentic systems. It processes input once and generates output without maintaining state across multiple perception-action cycles. The exception would be if we can identify an internal iterative loop within the single interaction---for instance, chain-of-thought reasoning that cycles through multiple reasoning steps before producing output.
+\end{highlightbox}
+
+\begin{highlightbox}[title={\textbf{Case 5: Tool Use versus Tool-Using Agents}}]
+Simply using tools doesn't make a system agentic. A script that calls an API once isn't an agent. What matters is \textit{purposeful, iterative} tool use directed toward goals. An LLM that repeatedly queries databases, processes results, and decides which tool to invoke next based on accumulated information exhibits agency. The distinction lies in the goal-directed iteration, not the mere presence of tool use.
+\end{highlightbox}
+
+\begin{highlightbox}[title={\textbf{Case 6: Continuous Control and Implicit Termination}}]
+Systems engaged in continuous control (like maintaining server uptime) might seem to violate our termination requirement. However, these systems typically operate in bounded episodes with implicit termination conditions: achieving steady state, exhausting resources, or reaching time limits. Even ``always-on'' systems have mechanisms for recognizing when to stop particular behaviors, satisfying our termination criterion.
+\end{highlightbox}
+
+\subsection{Professional Deployment}
+
+Understanding what makes a system agentic is only the first step. In regulated domains like law and finance, deploying AI agents requires robust governance frameworks that ensure compliance, maintain professional standards, and protect sensitive information. The stakes are particularly high: errors can trigger regulatory sanctions, breach fiduciary duties, or compromise client confidentiality.
+
+Professional deployment demands that we move beyond theoretical properties to operational safeguards. Each of the six properties we've identified creates both opportunities and risks that must be managed through careful system design and governance controls. The following controls transform theoretical capabilities into trustworthy tools:
+
+\begin{keybox}[title={\textbf{1. Attribution and Provenance}}]
+Every factual claim must be traceable to its source. The system should record not just what it concluded but where that information originated---whether from case law, regulatory filings, market data, or expert analysis. This enables independent verification and helps practitioners assess the reliability of agent-generated work product. Modern AI agents should maintain citation chains that would satisfy the standards of legal briefs or investment memoranda.
+\end{keybox}
+
+\begin{keybox}[title={\textbf{2. Auditable Reasoning}}]
+Professional decisions require transparent rationales. The system must log major reasoning steps, tool invocations, and decision points in forms that preserve privilege while enabling review. This isn't about exposing every neural network activation---it's about capturing the business logic an expert would expect to see. Think litigation hold decisions, trade execution rationales, or compliance determination paths.
+\end{keybox}
+
+\begin{keybox}[title={\textbf{3. Bounded Operation}}]
+Unbounded iteration violates both practical and regulatory constraints. Systems need explicit limits: computational budgets, time constraints, maximum iteration counts. These bounds prevent runaway processes while ensuring predictable resource consumption. In financial contexts, this might mean limiting the number of market data queries; in legal contexts, capping document review cycles.
+\end{keybox}
+
+\begin{keybox}[title={\textbf{4. Escalation Pathways}}]
+Agents must know their limits and when to seek help. Clear escalation triggers---low confidence scores, high-stakes decisions, detected conflicts---should route matters to human review. The escalation logic should be transparent and adjustable based on risk tolerance and regulatory requirements. A contract review agent, for instance, might escalate unusual liability provisions or non-standard jurisdiction clauses.
+\end{keybox}
+
+\begin{keybox}[title={\textbf{5. Confidentiality Controls}}]
+Information barriers are non-negotiable in professional services. The system must enforce ethical walls between matters, implement role-based access controls, and apply appropriate redaction rules. This goes beyond basic security to encompass the nuanced confidentiality obligations of legal privilege, insider trading restrictions, and client confidentiality duties.
+\end{keybox}
+
+\begin{keybox}[title={\textbf{6. Accountability Mapping}}]
+When things go wrong---and they will---clear lines of responsibility enable rapid response and remediation. Who configured the agent? Who reviewed its outputs? Who authorized its deployment? These questions must have clear answers before the system processes its first client matter. Accountability isn't about blame; it's about maintaining professional standards when humans and AI systems collaborate.
+\end{keybox}
 
 \subsection{Common Questions About Agency}
 
-Having established both the theoretical foundations and formal framework, we can now address common questions that arise when applying these concepts in practice:
+Our framework inevitably raises questions about edge cases and apparent contradictions. Here we address the most common concerns that arise when applying these definitions to real-world systems.
 
-\begin{questionbox}[title={\textbf{Is ``Iteration'' just repeated Action?}}]
-No. Level~1 allows a single perceive–act cycle. Iteration requires multiple cycles with state carried forward, enabling error correction and pursuit across steps.
+\begin{questionbox}[title={\textbf{Is iteration just repeated action?}}]
+Iteration means more than simply repeating the same action multiple times. True iteration involves maintaining state across perception-action cycles, enabling the system to learn from previous attempts and adjust its approach. A system that simply retries the same failing action indefinitely isn't iterating in our sense---it's stuck in a loop. Iteration requires the ability to incorporate feedback, correct errors, and make progress toward goals through successive refinements. This is why single-shot systems, no matter how sophisticated, don't qualify as agentic systems under our framework.
 \end{questionbox}
 
-\begin{questionbox}[title={\textbf{Do continuous control tasks fail Termination?}}]
-No. We accept implicit termination (goal satisfaction) or explicit governance (budgets, episodes, escalation). Engineered deployments typically bound horizons even for continuing tasks.
+\begin{questionbox}[title={\textbf{Do continuous tasks violate the termination requirement?}}]
+Systems performing continuous tasks like monitoring or maintenance might seem to run forever, apparently violating our termination requirement. However, these systems still satisfy the termination property through implicit or explicit mechanisms. Implicit termination occurs when the system reaches a steady state or exhausts available actions. Explicit termination happens through resource budgets, time limits, or escalation triggers. Even a system that monitors markets continuously operates in bounded episodes---trading sessions, reporting periods, or maintenance windows. The key is that the system has clear conditions under which it will cease its current behavior pattern, even if it later resumes.
 \end{questionbox}
 
-\begin{questionbox}[title={\textbf{If thermostats are agents, doesn't that make everything an agent?}}]
-No. Many systems lack at least one of Goal, Perception, Action (e.g., compilers lack goals; pipelines often lack perception of results). Minimal inclusion does not trivialize the category.
+\begin{questionbox}[title={\textbf{If thermostats count as agents, have we trivialized the concept?}}]
+Recognizing thermostats as minimal agents doesn't trivialize agency---it establishes a meaningful floor. Many systems fail even this basic test: databases lack goals, compilers lack perception-action loops, and lookup tables lack any form of action. More importantly, while thermostats meet the minimal criteria for Level 1 agency, the interesting questions emerge as we move up the hierarchy. The distinction between a thermostat and an AI legal research assistant isn't whether they're agents, but the degree of autonomy, sophistication, and responsibility they possess. Our framework acknowledges the thermostat's basic agency while reserving ``agentic system'' status for systems with all six properties, and ``AI agent'' designation for those using AI/ML for implementation.
 \end{questionbox}
 
-\begin{questionbox}[title={\textbf{Is ``AI agent'' just marketing?}}]
-Here it has a falsifiable meaning: an agentic system (six properties) whose planning/orchestration is implemented with AI/ML. Single-shot chat completion is excluded by construction.
+\begin{questionbox}[title={\textbf{Is ``AI agent'' just marketing hype?}}]
+In our framework, ``AI agent'' has a precise, falsifiable meaning: an agentic system that uses AI or machine learning (particularly large language models) for planning and orchestration. This excludes single-shot chat completions, no matter how impressive, because they lack iteration. It excludes traditional rule-based systems, even if they meet all six properties, because they don't use AI for implementation. It also excludes simple ML classifiers that lack goal-directedness and autonomous action. When vendors claim their product is an ``AI agent,'' we can test this claim against our six properties and the AI implementation requirement. This transforms marketing language into testable assertions about system architecture and capabilities.
 \end{questionbox}
