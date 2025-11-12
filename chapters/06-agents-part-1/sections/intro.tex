@@ -13,6 +13,8 @@ The proliferation of ``agentic AI'' makes definitional clarity urgent. Existing 
 
 Some of this fragmentation reflects genuinely different perspectives, such as whether we recognize agents by their \textit{internal properties} (mental states, intentions) or \textit{external manifestations} (observable behavior, delegated authority)—a spectrum we explore in Section~\ref{sec:disciplines}.  While theoretical considerations like these can be useful, it is now most critical that we \textbf{establish a practical framework} to guide communication and coordination.
 
+The stakes for getting this right are tangible. In \textit{Mata v. Avianca}, an attorney submitted a brief citing nonexistent cases—ChatGPT generated plausible but fictitious citations \parencite{avianca-reuters}. The system appeared sophisticated but lacked the perception-action iteration, attribution mechanisms, and escalation protocols required for legal research. Distinguishing genuinely agentic systems from sophisticated chatbots isn't academic—it's essential for professional practice, regulatory compliance, and client protection.
+
 To do so, we organize agency into three levels that correspond to answering the following questions:
 
 \textbf{Level 1}: What makes \textit{anything}—biological or computational—an agent?
@@ -115,10 +117,10 @@ Level 2 systems achieve all six operational properties through traditional softw
 
 \subsection{Level 3: AI-Powered Agentic Systems}
 
-Level 3 systems use AI/ML—particularly large language models—to manage planning, orchestration, and adaptation. The architectural distinction from Level 2 is straightforward: where Level 2 systems execute explicitly programmed decision logic, Level 3 systems employ neural networks, language models, or other learned components for these functions. In practice, modern Level 3 systems are typically hybrid: LLMs handle high-level planning and natural language interaction, while traditional code manages structured operations like database queries or API calls. This is what most practitioners mean by ``AI agents.''
+Level 3 systems use AI/ML—particularly large language models—to manage planning, orchestration, and adaptation. The architectural distinction from Level 2 is straightforward: where Level 2 systems execute explicitly programmed decision logic, Level 3 systems employ neural networks (especially LLMs) or other learned models for these functions. In practice, modern Level 3 systems are typically hybrid: LLMs handle high-level planning and natural language interaction, while traditional code manages structured operations like database queries or API calls. This is what most practitioners mean by ``AI agents.''
 
 \begin{definitionbox}[title={\textbf{Level 3: AI-Powered Agentic Systems}}]
-	AI-powered agentic systems implement the six operational properties through strategic integration of artificial intelligence—typically large language models (LLMs), vision-language models (VLMs), or neural networks—with traditional computational components.
+	AI-powered agentic systems implement the six operational properties through strategic integration of artificial intelligence—typically neural network models such as large language models (LLMs) and vision-language models (VLMs)—with traditional computational components.
 
 	\textcolor{border-neutral}{\rule{\linewidth}{0.4pt}}
 
@@ -132,7 +134,7 @@ Level 3 systems use AI/ML—particularly large language models—to manage plann
 	\end{itemize}
 \end{definitionbox}
 
-The architectural choice to use AI/ML for planning and orchestration has practical implications. LLMs enable natural language interfaces—users can specify goals conversationally rather than through structured formats. Neural networks handle pattern recognition tasks that would require extensive rule engineering. However, this approach trades some predictability for flexibility: LLM outputs can vary across runs, and behavior may be harder to audit than explicit rule chains. The boundary between Level 2 and Level 3 can blur—is a system using gradient boosting for fraud detection Level 2 or Level 3? Today's practical dividing line focuses on whether LLMs manage high-level planning and orchestration.
+The architectural choice to use AI/ML for planning and orchestration has practical implications. LLMs enable natural language interfaces—users can specify goals conversationally rather than through structured formats. These neural network models handle pattern recognition tasks that would require extensive rule engineering. However, this approach trades some predictability for flexibility: LLM outputs can vary across runs, and behavior may be harder to audit than explicit rule chains. The boundary between Level 2 and Level 3 can blur—is a system using gradient boosting for fraud detection Level 2 or Level 3? Today's practical dividing line focuses on whether LLMs manage high-level planning and orchestration.
 
 Consider an AI contract risk analyzer as a Level 3 exemplar. It possesses all six operational properties: goals (identify and assess contract risks), perception (reads contract text and clause context), action (flags problematic provisions, generates risk assessments), iteration (reviews document section by section), adaptation (adjusts risk scoring based on clause combinations and jurisdiction), and termination (stops when complete review is done or high-severity risk triggers immediate escalation). The LLM manages high-level planning—deciding which clauses merit detailed analysis, how to interpret ambiguous language, when to flag issues versus when to request human review—while traditional code handles document parsing, clause extraction, jurisdiction lookup, and risk score calculation. This hybrid architecture is typical of Level 3 systems: AI handles interpretation and strategic decisions, traditional programming handles structured data operations.
 
@@ -190,30 +192,4 @@ These definitions enable clear exclusions:
 	\end{itemize}
 \end{keybox}
 
-This framework provides scaffolding for the historical and theoretical analysis that follows. Tracing definitions across decades reveals how each level emerged from evolving technological capabilities and disciplinary concerns. But before diving into that scholarly context, we must address a pressing practical question: Why does definitional precision matter? In professional domains where autonomous systems make consequential decisions—legal research, medical diagnosis, financial advising—the distinction between marketing labels and architectural reality has high stakes.
-
-\subsection{Why This Matters: Stakes and Applications}
-
-With our three-level hierarchy and technical definition established, the practical implications become clear. The stakes extend far beyond academic precision—they shape how professionals evaluate systems, how researchers coordinate findings, how regulators craft policy, and how we hold vendors accountable for their claims.
-
-This framework enables:
-
-\textbf{Clearer Evaluation}
-
-Distinguishing genuinely agentic systems from chatbots by assessing whether they meet all six operational properties or merely respond to single prompts (Table~\ref{tab:property-levels}).
-
-\textbf{Better Research Coordination}
-
-Ensuring scholars reference compatible concepts by specifying which properties their systems exhibit rather than relying on ambiguous labels like ``agents'' or ``autonomous systems.''
-
-\textbf{Informed Regulation}
-
-Crafting policies that target measurable capabilities—the six operational properties—rather than vendor marketing claims about ``AI agents.''
-
-\textbf{Vendor Accountability}
-
-Holding companies to falsifiable claims by requiring demonstration of all six operational properties, not just conversational ability or AI-powered text generation.
-
-The stakes are particularly high in professional domains like law, medicine, and finance, where autonomous action by AI systems raises questions of \keyterm{liability}, \keyterm{professional responsibility}, and public safety. For legal professionals, \textit{Mata v. Avianca} sanctions \parencite{avianca-reuters} illustrate the consequences of deploying systems without understanding their architectural properties. Our framework provides the conceptual tools to avoid such failures—not by slowing adoption, but by enabling more precise evaluation of capabilities and limitations.
-
-The remaining sections explain where this definition came from and why it takes this particular form. Section~\ref{sec:practical} provides a practical decision rubric for applying this definition.
+This framework provides scaffolding for the historical and theoretical analysis that follows. Section~\ref{sec:practical} provides a practical decision rubric for immediate application. The remaining sections trace where these definitions came from and why they take this particular form, building toward the professional implications explored in Section~\ref{sec:furtherlearning}.

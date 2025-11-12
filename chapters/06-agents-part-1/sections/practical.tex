@@ -132,54 +132,29 @@ These entities qualify as agents (they exceed the 3-property minimum for Level 1
 
 \subsection{When to Call Something an Agent}
 
-Our taxonomy (Section~\ref{sec:intro}) distinguishes ``agent'' (3 minimal properties) from ``agentic system'' (6 operational properties). This section provides practical guidance on applying these terms in professional contexts.
+Our taxonomy (Section~\ref{sec:intro}) distinguishes ``agent'' (3 minimal properties) from ``agentic system'' (6 operational properties). Table~\ref{tab:terminology-usage} provides practical guidance for applying these terms.
 
-\textbf{Use \keyterm{agent} when:} An entity has the three minimal properties (goals, perception, action). This includes simple entities like thermostats alongside sophisticated AI entities. The term captures the conceptual essence but doesn't guarantee operational readiness.
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{@{}clll@{}}
+\toprule
+\textbf{Properties} & \textbf{Term} & \textbf{When to Use} & \textbf{Notes} \\
+\midrule
+3 (G+P+A) & \keyterm{agent} & Meets baseline & Includes thermostats, simple systems \\
+6 (all) & \keyterm{agentic system} & Production-ready & Required for professional deployment \\
+6 via AI/ML & \keyterm{agentic AI} & AI-powered & AI implements the six properties \\
+4-5 & agent with... & Partial implementation & Specify which properties present \\
+1-2 & (avoid ``agent'') & Insufficient & Use ``tool,'' ``function,'' ``classifier'' \\
+\bottomrule
+\end{tabular}
+\caption{Terminology usage based on property count. G=goals, P=perception, A=action.}
+\label{tab:terminology-usage}
+\end{table}
 
-\textbf{Use \keyterm{agentic system} when:} All six operational properties are present (goals, perception, action, iteration, adaptation, termination). This signals production-ready systems suitable for professional deployment.
+Precision requirements vary by context. Regulatory filings and academic papers demand explicit enumeration of properties and clear distinction between agent and agentic system. Informal discussions permit looser usage—``agent'' for entities meeting the 3-property baseline, with specific properties noted when relevant: ``has goals and perception but limited adaptation.'' Marketing claims should specify which properties are present rather than using ``agentic AI'' without substantiation.
 
-\textbf{Use \keyterm{agentic AI} when:} The six properties are implemented through artificial intelligence rather than traditional programming.
-
-\textbf{For entities with partial properties:}
-
-\begin{itemize}
-\item \textbf{3 properties (agent):} Use ``agent'' correctly—it meets the baseline. Clarify it's not an agentic system if operational properties are missing.
-\item \textbf{4-5 properties:} Specify which properties are present: ``agent with iterative capability but fixed strategy'' or ``agent lacking explicit termination.''
-\item \textbf{1-2 properties:} Avoid ``agent''—describe what it actually does: ``tool,'' ``function,'' ``transformation.''
-\end{itemize}
-
-\textbf{The term \keyterm{agentic} is useful for:}
-\begin{itemize}
-\item Describing properties: ``exhibits agentic properties'' or ``agentic behavior''
-\item Architectural patterns: ``agentic architecture'' or ``agentic workflow''
-\item Adjective usage when precision isn't critical
-\end{itemize}
-
-\textbf{Context-dependent usage:}
-
-The level of precision required varies by context:
-
-\begin{description}[style=nextline]
-\item[Regulatory filings or legal documents:] Use precise language. Specify whether the entity qualifies as an agent (3 properties), agentic system (6 properties), or neither. List which properties are present.
-
-\item[Academic papers:] Be explicit about your framework. State which definition you're using and which properties your entity exhibits. Distinguish agent from agentic system clearly.
-
-\item[Informal discussion or presentations:] Use ``agent'' for entities meeting the 3-property baseline, ``agentic system'' for the 6-property standard. When uncertain, describe specific properties: ``has goals and perception but limited adaptation.''
-
-\item[Marketing or vendor communications:] Be honest and specific. State which properties your entity has. Don't claim ``agentic AI'' unless all six properties are implemented through AI/ML.
-\end{description}
-
-\textbf{Quick decision guide:}
-
-\begin{itemize}
-\item 3 minimal properties → ``agent''
-\item 6 operational properties → ``agentic system''
-\item 6 properties via AI → ``agentic AI''
-\item 1-2 properties → Not an agent; describe actual function
-\item 4-5 properties → Specify: ``agent with [properties]''
-\end{itemize}
-
-When in doubt, use the 6-question rubric (~\autoref{sec:rubric-6q}). It provides clear, answerable criteria that cut through ambiguity. For professional deployments in high-stakes domains, additional governance safeguards are covered in our companion chapter on governance frameworks.
+When in doubt, use the 6-question rubric (\autoref{sec:rubric-6q}). It provides clear, answerable criteria that cut through ambiguity. For professional deployments in high-stakes domains, additional governance safeguards are covered in our companion chapter on governance frameworks.
 
 \begin{keybox}[colback=bg-key, colframe=key-base, boxrule=3pt, title={\textbf{Stop Here If You're Busy}}]
 \textbf{You now know enough to:}
