@@ -2,12 +2,10 @@
 % Modern, elegant design with professional color palette
 % Expanded canvas with 8 distinct visual markers
 
-% Reduce page margins for this landscape page to maximize diagram space
-\newgeometry{margin=0.4in}
-
-\begin{landscape}
-\begin{figure}[p]
+% Portrait-friendly timeline figure (no forced page break)
+\begin{figure}[htbp]
 \centering
+\resizebox{\textwidth}{!}{%
 \begin{tikzpicture}[
     node distance=0.7cm,
     decadebox/.style={
@@ -181,14 +179,11 @@
 \node[rectangle, fill=bg-key, draw=border-key, line width=2.5pt, minimum width=0.6cm, minimum height=0.4cm] at (13.5, -4.1) {};
 \node[font=\footnotesize, anchor=west] at (14, -4.1) {AI};
 
-\end{tikzpicture}
+\end{tikzpicture}%
+}% end resizebox
 
 \vspace{1em}
 
 \caption{Timeline of key milestones in agent definitions across eight disciplines (1957--2025). The figure traces the intellectual evolution of ``agency'' from philosophical accounts of intentionality (1950s--80s) through the computational revolution (1990s) and toward modern convergence around LLM-based agentic systems (2020s). Each discipline has a distinct visual marker combining border patterns (solid, dashed, dotted, double, thick) with color families: blue for theoretical foundations (philosophy, psychology, cognitive science, computer science) and orange for applied domains (law, economics, complex systems, AI engineering).}
 \label{fig:timeline}
 \end{figure}
-\end{landscape}
-
-% Restore normal page margins after timeline
-\restoregeometry

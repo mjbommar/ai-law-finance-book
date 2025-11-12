@@ -7,7 +7,7 @@ While Section~\ref{sec:history} traced chronological evolution, this section exa
 
 \subsection{\textsf{Philosophy}: Intentionality and Reasons}
 
-Philosophy's distinctive contribution centers on \keyterm{intentional descriptions}, responsibility for actions, and predictive stances. \textcite{anscombe1957intention} established that actions are intentional ``under a description''---the same physical movement can be intentional under one description (``signing a contract'') but not another (``smudging ink''). This insight matters for AI agents: when we attribute intentions to systems, we're choosing explanatory frameworks, not discovering intrinsic properties.
+Philosophy's distinctive contribution centers on \keyterm{intentional descriptions}, responsibility for actions, and predictive stances. \textcite{anscombe1957intention} established that actions are intentional ``under a description''---the same physical movement can be intentional under one description (``signing a contract'') but not another (``smudging ink''). This insight matters for AI agents: when we attribute intentions to entities, we're choosing explanatory frameworks, not discovering intrinsic properties.
 
 \textcite{bratman1987intention}'s planning theory and \textcite{dennett1987intentional}'s \keyterm{intentional stance} provide complementary perspectives: agents act according to their plans and commitments (Bratman) or can be treated as rational goal-pursuers regardless of internal mechanism (Dennett). Philosophy emphasizes \textit{reasons} for action over mechanical causation, focusing on responsibility for actions and conceptual foundations rather than implementation.
 
@@ -17,7 +17,7 @@ Philosophy's distinctive contribution centers on \keyterm{intentional descriptio
 
 Psychology approaches agency through \keyterm{self-regulation}, \keyterm{perceived control}, and contextual variability. Bakan's agency-communion spectrum characterizes fundamental modes of human existence, while \textcite{milgram1974obedience}'s agentic state describes conditions under which people suppress personal judgment and defer to authority. \textcite{bandura1989human}'s social cognitive theory emphasizes human agency as exercised through intentionality, forethought, self-reactiveness, and self-reflectiveness.
 
-Psychology's distinctive insight: agency is not merely a property of isolated actions but a stable characteristic of cognitive systems capable of self-regulation. Crucially, agency exists on a spectrum and can be diminished by context \parencite{milgram1974obedience} or enhanced through \keyterm{self-efficacy} beliefs. For AI systems, this highlights how humans \textit{perceive} AI agency, affecting trust and delegation decisions.
+Psychology's distinctive insight: agency is not merely a property of isolated actions but a stable characteristic of cognitive entities capable of self-regulation. Crucially, agency exists on a spectrum and can be diminished by context \parencite{milgram1974obedience} or enhanced through \keyterm{self-efficacy} beliefs. For AI systems, this highlights how humans \textit{perceive} AI agency, affecting trust and delegation decisions.
 
 \noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}
 
@@ -25,7 +25,7 @@ Psychology's distinctive insight: agency is not merely a property of isolated ac
 
 Legal doctrine understands agency through \keyterm{delegated authority}, \keyterm{fiduciary duties}, and \keyterm{institutional contexts}. The Restatement of Agency defines the relationship as arising when a principal manifests assent that an agent shall act on the principal's behalf and subject to the principal's control. Key elements include: (1) relational structure requiring a principal-agent pair, (2) delegated authority derived from the principal, (3) fiduciary obligations of loyalty and care, and (4) liability attribution within scope of authority.
 
-Law's distinctive approach focuses on external authority structures and legally enforceable duties rather than internal intentions or motivations. Legal frameworks embed agency in formal mechanisms---contracts, corporate charters, powers of attorney---that create, bound, and terminate authority relationships. For AI systems, this raises immediate questions: Can an AI be an agent in the legal sense? Who serves as principal? As illustrated in Section~\ref{sec:intro}, misunderstanding these relationships can have serious consequences when systems lack mechanisms for fulfilling fiduciary duties.
+Law's distinctive approach focuses on external authority structures and legally enforceable duties rather than internal intentions or motivations. Legal frameworks embed agency in formal mechanisms---contracts, corporate charters, powers of attorney---that create, bound, and terminate authority relationships. For AI systems, this raises immediate questions: Can an AI be an agent in the legal sense? Who serves as principal? As illustrated in Section~\ref{sec:intro}, misunderstanding these relationships can have serious consequences when entities lack mechanisms for fulfilling fiduciary duties.
 
 \noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}
 
@@ -57,7 +57,7 @@ Complex systems' distinctive insight treats agents as embedded components of ada
 
 Computer science, particularly agent-oriented software engineering, frames agency through \keyterm{mentalistic programming abstractions}, \keyterm{interaction protocols}, and \keyterm{organizational modeling}. \textcite{shoham1993aop}'s agent-oriented programming introduced beliefs, commitments, and choices as first-class programming constructs. Unlike object-oriented programming (encapsulation and message-passing), agent-oriented programming treats components as having mental states and engaging in speech acts. FIPA agent communication languages formalized performatives (inform, request, propose) modeled on human \keyterm{speech acts}.
 
-Computer science's distinctive approach uses mentalistic vocabulary as an \textit{engineering tool} rather than philosophical claim. Attributing beliefs to software agents improves code clarity and reasoning about distributed systems, whether or not agents ``really'' have beliefs. For AI systems, computer science provides the middleware---communication standards, coordination mechanisms, organizational structures---that enable multi-agent systems to function. Agents negotiate rather than merely receiving method calls.
+Computer science's distinctive approach uses mentalistic vocabulary as an \textit{engineering tool} rather than philosophical claim. Attributing beliefs to software entities improves code clarity and reasoning about distributed systems, whether or not agents ``really'' have beliefs. For AI systems, computer science provides the middleware---communication standards, coordination mechanisms, organizational structures---that enable multi-agent systems to function. Agents negotiate rather than merely receiving method calls.
 
 \noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}
 
@@ -70,19 +70,19 @@ Table~\ref{tab:disciplines} summarizes key differences across disciplines.
 \centering
 \small
 \rowcolors{2}{white}{bg-neutral}
-\begin{tabular}{@{}lp{3.5cm}p{4cm}p{4.5cm}p{6cm}@{}}
+\begin{tabular}{@{}lp{2.8cm}p{3.2cm}p{3.8cm}p{5.2cm}@{}}
 \toprule
 \rowcolor{white}
 \textbf{Discipline} & \textbf{Autonomy Level} & \textbf{Entity Frame} & \textbf{Key Mechanism} & \textbf{Primary Concern} \\
 \midrule
 \textsf{Philosophy} & Low--moderate & Human, extensible & Intention \& reasons & Rational causality, responsibility \\
 \textsf{Psychology} & Varies by context & Human-centered & Self-regulation \& control & Lived experience, efficacy \\
-\textsf{Law} & Low--moderate & Hybrid (principal-agent) & Authority \& fiduciary duty & Liability, professional responsibility \\
+\textsf{Law} & Low--moderate & \raggedright Hybrid (principal/agent) & Authority \& fiduciary duty & Liability, professional responsibility \\
 \textsf{Economics} & Moderate & Institutional/hybrid & Incentive alignment & Agency costs, information asymmetry \\
 \textsf{Cognitive Science} & Moderate--high & Human, generalizable & Plans \& representations & Mental architecture \\
 \textsf{Complex Systems} & Moderate--high & Machine/hybrid & Local rules \& emergence & Collective behavior, adaptation \\
 \textsf{Computer Science} & Moderate--high & Machine/hybrid & Protocols \& coordination & System organization, communication \\
-\textsf{AI} & High & Machine (+ hybrid modern) & Perception-action loops, tools & Task completion, capabilities \\
+\textsf{AI} & High & Machine (+ hybrid) & \raggedright Perception/action loops, tools & Task completion, capabilities \\
 \bottomrule
 \end{tabular}
 \caption{Cross-disciplinary comparison of agency perspectives. Disciplines vary systematically in assumed autonomy level, entity framing, core mechanisms, and primary concerns.}

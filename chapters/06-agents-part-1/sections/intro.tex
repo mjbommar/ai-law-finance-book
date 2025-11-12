@@ -30,14 +30,13 @@ Answering these progressive questions establishes a nested hierarchy with three 
 We begin with the conceptual foundation. What is the absolute minimum required for something to qualify as an agent—whether human, organizational, or computational? Level 1 establishes this baseline, applicable across all domains and technologies.
 
 \begin{definitionbox}[title={\textbf{Level 1: Agent}}]
-	An \keyterm{agent} is any system that pursues goals through perception and action, with at least minimal discretion over which action to take in response to what it perceives.
+	An \keyterm{agent} is any entity that pursues goals through perception and action, with at least minimal discretion over which action to take in response to what it perceives.
 
 	\textcolor{border-neutral}{\rule{\linewidth}{0.4pt}}
 
-	\textit{Examples:} A paralegal researching case law. A thermostat maintaining temperature. An organization pursuing objectives.
+	\textit{Examples:} A paralegal researching case law, a thermostat maintaining temperature, an organization pursuing objectives.
 
-	\textcolor{border-neutral}{\rule{\linewidth}{0.4pt}}
-
+	\noindent\textcolor{border-neutral}{\rule{\linewidth}{0.4pt}}\par\noindent
 	\textbf{Minimal properties (3):}
 	\begin{itemize}[nosep,leftmargin=1.5em]
 		\item \textbf{Goal}
@@ -48,11 +47,11 @@ We begin with the conceptual foundation. What is the absolute minimum required f
 
 \textbf{What these properties mean:}
 
-\textbf{Goal} refers to a clear objective or task that the system pursues. These goals may be simple or complex, short-term or long-term, and may change over time. They may be provided by a human user, a software system, or even autonomously generated through ``meta-goals.'' They provide direction and purpose for the system's actions.
+\textbf{Goal} refers to a clear objective or task that the entity pursues. These goals may be simple or complex, short-term or long-term, and may change over time. They may be provided by a human user, a software system, or even autonomously generated through ``meta-goals.'' They provide direction and purpose for the entity's actions.
 
 \textbf{Perception} is awareness of an environment through sensing capabilities. Notably, this environment need not be physical, let alone real; it could be abstract like a contract bargaining space or simulated in an imaginary world.
 
-\textbf{Action} is the ability to influence the environment, such as by exerting physical forces, modifying the value of variables, executing commands, or any other actuation mechanism, i.e., \textit{actuators}. Minimal \textit{discretion} is assumed: the system can select among at least two possible actions or policies contingent on its perceptions.
+\textbf{Action} is the ability to influence the environment, such as by exerting physical forces, modifying the value of variables, executing commands, or any other actuation mechanism, i.e., \textit{actuators}. Minimal \textit{discretion} is assumed: the entity can select among at least two possible actions or policies contingent on its perceptions.
 
 This trinity forms the conceptual bedrock of agency—equally applicable to humans navigating social contexts, organizations pursuing strategic objectives, biological organisms seeking survival, or computational systems executing tasks. While these three characteristics suffice for theoretical classification, practical deployment demands additional sophistication.
 
@@ -85,7 +84,7 @@ While Level 1 establishes what makes anything an agent, computational systems in
 
 These six properties emerged from decades of agent research as commonly recognized operational requirements for reliable computational deployment. While not formally proven as minimum necessary, they consistently appear across deployed systems in domains from robotics to enterprise software, reflecting lessons from fielding real-world implementations. Section~\ref{sec:history} traces how each property became recognized as essential through both theoretical development and practical experience.
 
-The three additional properties transform minimal agency into operational systems. \textbf{Iteration} sustains the perceive-act cycle, enabling the system to repeatedly gather information and take action rather than executing a single operation. \textbf{Adaptation} allows the system to modify its strategies based on accumulated observations, learning which approaches succeed and which fail. \textbf{Termination} provides stopping conditions through either implicit goal satisfaction (reaching target state) or explicit control logic (resource limits, time constraints, escalation triggers), ensuring the system recognizes when to cease operation rather than cycling indefinitely.
+The three additional properties transform minimal agency into operational systems. \textbf{Iteration} sustains the perceive-act cycle, enabling the entity to repeatedly gather information and take action rather than executing a single operation. \textbf{Adaptation} allows the entity to modify its strategies based on accumulated observations, learning which approaches succeed and which fail. \textbf{Termination} provides stopping conditions through either implicit goal satisfaction (reaching target state) or explicit control logic (resource limits, time constraints, escalation triggers), ensuring the entity recognizes when to cease operation rather than cycling indefinitely.
 
 The relationship between levels clarifies important boundaries. Every agentic system qualifies as an agent (possessing the minimal three properties), but the reverse doesn't hold—many agents lack the operational sophistication of agentic systems. A thermostat exemplifies the minimal baseline: it perceives temperature (sensor readings), acts (heating/cooling), pursues a goal (maintain target), iterates (continuous monitoring), adapts (responds to temperature changes), and terminates through implicit goal satisfaction (stops heating when target reached, stops cooling when target maintained). This implicit termination—where achieving the target state constitutes the stopping condition—differs from the explicit termination logic (resource budgets, escalation triggers, maximum iteration limits) typical of professional agentic systems. Both forms satisfy the termination requirement, though explicit mechanisms provide stronger operational guarantees for high-stakes deployments. Similarly, a human paralegal demonstrates all six properties behaviorally but operates through cognitive processes rather than discrete computational cycles.
 
@@ -110,7 +109,7 @@ This operational framework now raises the implementation question: \textit{How} 
 
 Traditional agentic software uses human-designed programming to implement all six properties. Planning and orchestration logic is explicitly coded through rules, algorithms, state machines, or control systems. Level 2 systems can be extremely sophisticated: a conflict checking system might employ graph analysis for relationship detection, fuzzy matching for entity resolution, and adaptive threshold tuning—all implemented through traditional programming techniques. The key architectural characteristic is that decision logic is specified by programmers at design time.
 
-A conflicts checking system exemplifies Level 2: it has goals (identify potential conflicts), perception (scans firm databases for client/matter relationships), action (flags matches and escalates to ethics committee), iteration (continuous monitoring as new matters are opened), adaptation (adjusts matching thresholds based on false positive rates), and termination (stops when matter is cleared or rejected). The system achieves these properties through explicitly programmed logic—rules for relationship detection, graph traversal algorithms for indirect conflicts, configurable thresholds for fuzzy name matching.
+A conflicts checking system exemplifies Level 2: it has goals (identify potential conflicts), perception (scans firm databases for client/matter relationships), action (flags matches and escalates to ethics committee), iteration (continuous monitoring as new matters are opened), adaptation (adjusts matching thresholds based on false positive rates), and termination (stops when matter is cleared or rejected). The entity achieves these properties through explicitly programmed logic—rules for relationship detection, graph traversal algorithms for indirect conflicts, configurable thresholds for fuzzy name matching.
 
 Level 2 systems achieve all six operational properties through traditional software engineering. Their performance depends on design quality, domain expertise, and implementation rigor—not on whether they employ AI/ML techniques. A well-engineered Level 2 system can substantially outperform a poorly designed Level 3 system in reliability, predictability, and effectiveness for its intended domain.
 
@@ -197,7 +196,7 @@ This framework provides scaffolding for the historical and theoretical analysis 
 
 With our three-level hierarchy and technical definition established, the practical implications become clear. The stakes extend far beyond academic precision—they shape how professionals evaluate systems, how researchers coordinate findings, how regulators craft policy, and how we hold vendors accountable for their claims.
 
-Using the framework that we develop here, we can:
+This framework enables:
 
 \textbf{Clearer Evaluation}
 

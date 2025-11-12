@@ -294,6 +294,27 @@
 \usepackage{tcolorbox}
 \tcbuselibrary{breakable,skins,theorems}
 
+% Importance scaling for tcolorbox environments (book-wide)
+% Usage in any box: [importance=low|medium|high]
+\tcbset{
+  importance/.is choice,
+  importance/high/.style={
+    boxrule=2pt,
+    drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.14},
+    top=10pt,bottom=10pt,left=12pt,right=12pt
+  },
+  importance/medium/.style={},
+  importance/low/.style={
+    boxrule=0.8pt,
+    drop shadow={opacity=0},
+    opacityback=0.92,
+    opacityframe=0.6,
+    boxed title style={opacityback=0.85},
+    top=6pt,bottom=6pt,left=8pt,right=8pt
+  },
+  importance/.default=medium
+}
+
 % Definition box style - Most prominent, formal definitions
 \newtcolorbox{definitionbox}[1][]{
   enhanced,

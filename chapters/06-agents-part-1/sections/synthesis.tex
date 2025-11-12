@@ -7,22 +7,22 @@ Having traced the historical evolution (\Cref{sec:history}), examined disciplina
 
 \subsection{Cross-Cutting Patterns}
 
-Our analysis across disciplines reveals four fundamental patterns that consistently appear when scholars and practitioners identify agency. These patterns transcend individual fields, providing a shared foundation for recognizing agentic behavior regardless of whether we're examining human decision-makers, organizational structures, or computational systems.
+Our analysis across disciplines reveals four fundamental patterns that consistently appear when scholars and practitioners identify agency. These patterns transcend individual fields, providing a shared foundation for recognizing agentic behavior regardless of whether we're examining human decision-makers, organizational structures, or computational entities.
 
 \begin{keybox}[title={\textbf{Pattern 1: Goal-Directedness}}]
 Agents pursue objectives or performance criteria. Whether we call them intentions in philosophy, rewards in reinforcement learning, mandates in law, or incentives in economics, the common thread remains: agents exhibit behavior oriented toward achieving outcomes rather than merely reacting to stimuli. This distinguishes purposeful action from reflexive response.
 \end{keybox}
 
 \begin{keybox}[title={\textbf{Pattern 2: Perception–Action Coupling}}]
-Agents operate through iterative cycles of sensing and acting. This pattern appears across theoretical frameworks---from \textcite{russellnorvig2020aima}'s sensor-actuator loops to \textcite{bratman1987intention}'s practical reasoning and \textcite{bandura1989human}'s reciprocal determinism. Systems that transform inputs once without iteration, such as compilers or single-shot classifiers, lack this essential coupling that characterizes agentic systems.
+Agents operate through iterative cycles of sensing and acting. This pattern appears across theoretical frameworks---from \textcite{russellnorvig2020aima}'s sensor-actuator loops to \textcite{bratman1987intention}'s practical reasoning and \textcite{bandura1989human}'s reciprocal determinism. Entities that transform inputs once without iteration, such as compilers or single-shot classifiers, lack this essential coupling that characterizes agentic systems.
 \end{keybox}
 
 \begin{keybox}[title={\textbf{Pattern 3: Selective Autonomy}}]
-Agents require some degree of discretion in their choices, as we explored in \Cref{sec:dimensions}. Systems that execute fixed scripts without any decision-making capacity do not qualify as agents. The degree of autonomy varies significantly across domains---from minimal discretion in rule-based systems to substantial independence in modern AI agents---with higher levels of discretion typically raising more complex governance and accountability questions.
+Agents require some degree of discretion in their choices, as we explored in \Cref{sec:dimensions}. Entities that execute fixed scripts without any decision-making capacity do not qualify as agents. The degree of autonomy varies significantly across domains---from minimal discretion in rule-based entities to substantial independence in modern AI agents---with higher levels of discretion typically raising more complex governance and accountability questions.
 \end{keybox}
 
 \begin{keybox}[title={\textbf{Pattern 4: Termination}}]
-Purposeful behavior requires boundaries. Agents must have mechanisms for recognizing when to stop, whether through explicit controls (resource budgets, time limits, escalation triggers) or implicit goal satisfaction (achieving target state, exhausting search space). Systems that run indefinitely without clear stopping conditions or decision points fall outside our definition of agentic systems, as they lack the goal-oriented closure that characterizes purposeful action.
+Purposeful behavior requires boundaries. Agents must have mechanisms for recognizing when to stop, whether through explicit controls (resource budgets, time limits, escalation triggers) or implicit goal satisfaction (achieving target state, exhausting search space). Entities that run indefinitely without clear stopping conditions or decision points fall outside our definition of agentic systems, as they lack the goal-oriented closure that characterizes purposeful action.
 \end{keybox}
 
 \subsection{Formal Core}
@@ -39,10 +39,10 @@ To formalize our framework, we denote the six essential properties as follows:
 \item $T$ = termination through explicit or implicit conditions
 \end{itemize}
 
-We use the notation $\mathit{has}(x, \cdot)$ to indicate that system $x$ possesses a given property.
+We use the notation $\mathit{has}(x, \cdot)$ to indicate that entity $x$ possesses a given property.
 
 \begin{definitionbox}[title={\textbf{Formal Definitions}}]
-We define three nested categories of systems based on their properties:
+We define three nested categories of entities based on their properties:
 \begin{align*}
 \mathit{Agent}(x) &\iff \mathit{has}(x,G) \land \mathit{has}(x,P) \land \mathit{has}(x,A) \\
 &\quad\text{(Minimal agency: goals, perception, action)}\\[0.5em]
@@ -53,7 +53,7 @@ We define three nested categories of systems based on their properties:
 \end{align*}
 \end{definitionbox}
 
-These formal definitions yield several important theoretical results that clarify the relationships between different types of systems:
+These formal definitions yield several important theoretical results that clarify the relationships between different types of entities:
 
 \begin{theorembox}[title={\textbf{Key Theoretical Results}}]
 \textbf{Hierarchical Subsumption.} The categories form a nested hierarchy:
@@ -70,7 +70,7 @@ For example, a single-shot classifier might have goals, perception, and action c
 The termination property deserves special attention, as it can manifest in two distinct forms:
 
 \begin{definitionbox}[title={\textbf{Termination Modes}}]
-A system satisfies the termination requirement through either explicit or implicit mechanisms:
+An entity satisfies the termination requirement through either explicit or implicit mechanisms:
 $$\mathit{has}(x,T) \iff \text{ExplicitTerm}(x)\ \lor\ \text{ImplicitTerm}(x)$$
 
 \textbf{Explicit termination} involves programmed monitoring of conditions such as:
@@ -137,23 +137,23 @@ When multiple agents interact, the collective can exhibit properties no single a
 Software agents need not have physical bodies to qualify as agents. A contract analysis system operating entirely in cloud infrastructure satisfies all six properties without any physical embodiment. While robotics researchers sometimes insist on embodiment, our framework follows the broader AI tradition of recognizing virtual agents as fully legitimate instances of agency.
 \end{highlightbox}
 
-\begin{highlightbox}[title={\textbf{Case 4: Single-Shot LLM Interactions}}]
+\begin{highlightbox}[importance=low,title={\textbf{Case 4: Single-Shot LLM Interactions}}]
 A single ChatGPT response, however sophisticated, typically lacks the iteration property required for agentic systems. It processes input once and generates output without maintaining state across multiple perception-action cycles. The exception would be if we can identify an internal iterative loop within the single interaction---for instance, chain-of-thought reasoning that cycles through multiple reasoning steps before producing output.
 \end{highlightbox}
 
-\begin{highlightbox}[title={\textbf{Case 5: Tool Use versus Tool-Using Agents}}]
-Simply using tools doesn't make a system agentic. A script that calls an API once isn't an agent. What matters is \textit{purposeful, iterative} tool use directed toward goals. An LLM that repeatedly queries databases, processes results, and decides which tool to invoke next based on accumulated information exhibits agency. The distinction lies in the goal-directed iteration, not the mere presence of tool use.
+\begin{highlightbox}[importance=low,title={\textbf{Case 5: Tool Use versus Tool-Using Agents}}]
+Simply using tools doesn't make an entity agentic. A script that calls an API once isn't an agent. What matters is \textit{purposeful, iterative} tool use directed toward goals. An LLM that repeatedly queries databases, processes results, and decides which tool to invoke next based on accumulated information exhibits agency. The distinction lies in the goal-directed iteration, not the mere presence of tool use.
 \end{highlightbox}
 
-\begin{highlightbox}[title={\textbf{Case 6: Continuous Control and Implicit Termination}}]
-Systems engaged in continuous control (like maintaining server uptime) might seem to violate our termination requirement. However, these systems typically operate in bounded episodes with implicit termination conditions: achieving steady state, exhausting resources, or reaching time limits. Even ``always-on'' systems have mechanisms for recognizing when to stop particular behaviors, satisfying our termination criterion.
+\begin{highlightbox}[importance=low,title={\textbf{Case 6: Continuous Control and Implicit Termination}}]
+Entities engaged in continuous control (like maintaining server uptime) might seem to violate our termination requirement. However, these entities typically operate in bounded episodes with implicit termination conditions: achieving steady state, exhausting resources, or reaching time limits. Even ``always-on'' entities have mechanisms for recognizing when to stop particular behaviors, satisfying our termination criterion.
 \end{highlightbox}
 
 \subsection{Professional Deployment}
 
-Understanding what makes a system agentic is only the first step. In regulated domains like law and finance, deploying AI agents requires robust governance frameworks that ensure compliance, maintain professional standards, and protect sensitive information. The stakes are particularly high: errors can trigger regulatory sanctions, breach fiduciary duties, or compromise client confidentiality.
+Understanding what makes an entity agentic is only the first step. In regulated domains like law and finance, deploying AI agents requires robust governance frameworks that ensure compliance, maintain professional standards, and protect sensitive information. The stakes are particularly high: errors can trigger regulatory sanctions, breach fiduciary duties, or compromise client confidentiality.
 
-Professional deployment demands that we move beyond theoretical properties to operational safeguards. Each of the six properties we've identified creates both opportunities and risks that must be managed through careful system design and governance controls. The following controls transform theoretical capabilities into trustworthy tools:
+Professional deployment demands that we move beyond theoretical properties to operational safeguards. Each of the six properties we've identified creates both opportunities and risks that must be managed through careful entity design and governance controls. The following controls transform theoretical capabilities into trustworthy tools:
 
 \begin{keybox}[title={\textbf{1. Attribution and Provenance}}]
 Every factual claim must be traceable to its source. The system should record not just what it concluded but where that information originated---whether from case law, regulatory filings, market data, or expert analysis. This enables independent verification and helps practitioners assess the reliability of agent-generated work product. Modern AI agents should maintain citation chains that would satisfy the standards of legal briefs or investment memoranda.
@@ -184,15 +184,15 @@ When things go wrong---and they will---clear lines of responsibility enable rapi
 Our framework inevitably raises questions about edge cases and apparent contradictions. Here we address the most common concerns that arise when applying these definitions to real-world systems.
 
 \begin{questionbox}[title={\textbf{Is iteration just repeated action?}}]
-Iteration means more than simply repeating the same action multiple times. True iteration involves maintaining state across perception-action cycles, enabling the system to learn from previous attempts and adjust its approach. A system that simply retries the same failing action indefinitely isn't iterating in our sense---it's stuck in a loop. Iteration requires the ability to incorporate feedback, correct errors, and make progress toward goals through successive refinements. This is why single-shot systems, no matter how sophisticated, don't qualify as agentic systems under our framework.
+Iteration means more than simply repeating the same action multiple times. True iteration involves maintaining state across perception-action cycles, enabling the entity to learn from previous attempts and adjust its approach. An entity that simply retries the same failing action indefinitely isn't iterating in our sense---it's stuck in a loop. Iteration requires the ability to incorporate feedback, correct errors, and make progress toward goals through successive refinements. This is why single-shot entities, no matter how sophisticated, don't qualify as agentic systems under our framework.
 \end{questionbox}
 
 \begin{questionbox}[title={\textbf{Do continuous tasks violate the termination requirement?}}]
-Systems performing continuous tasks like monitoring or maintenance might seem to run forever, apparently violating our termination requirement. However, these systems still satisfy the termination property through implicit or explicit mechanisms. Implicit termination occurs when the system reaches a steady state or exhausts available actions. Explicit termination happens through resource budgets, time limits, or escalation triggers. Even a system that monitors markets continuously operates in bounded episodes---trading sessions, reporting periods, or maintenance windows. The key is that the system has clear conditions under which it will cease its current behavior pattern, even if it later resumes.
+Entities performing continuous tasks like monitoring or maintenance might seem to run forever, apparently violating our termination requirement. However, these entities still satisfy the termination property through implicit or explicit mechanisms. Implicit termination occurs when the entity reaches a steady state or exhausts available actions. Explicit termination happens through resource budgets, time limits, or escalation triggers. Even an entity that monitors markets continuously operates in bounded episodes---trading sessions, reporting periods, or maintenance windows. The key is that the entity has clear conditions under which it will cease its current behavior pattern, even if it later resumes.
 \end{questionbox}
 
 \begin{questionbox}[title={\textbf{If thermostats count as agents, have we trivialized the concept?}}]
-Recognizing thermostats as minimal agents doesn't trivialize agency---it establishes a meaningful floor. Many systems fail even this basic test: databases lack goals, compilers lack perception-action loops, and lookup tables lack any form of action. More importantly, while thermostats meet the minimal criteria for Level 1 agency, the interesting questions emerge as we move up the hierarchy. The distinction between a thermostat and an AI legal research assistant isn't whether they're agents, but the degree of autonomy, sophistication, and responsibility they possess. Our framework acknowledges the thermostat's basic agency while reserving ``agentic system'' status for systems with all six properties, and ``AI agent'' designation for those using AI/ML for implementation.
+Recognizing thermostats as minimal agents doesn't trivialize agency---it establishes a meaningful floor. Many entities fail even this basic test: databases lack goals, compilers lack perception-action loops, and lookup tables lack any form of action. More importantly, while thermostats meet the minimal criteria for Level 1 agency, the interesting questions emerge as we move up the hierarchy. The distinction between a thermostat and an AI legal research assistant isn't whether they're agents, but the degree of autonomy, sophistication, and responsibility they possess. Our framework acknowledges the thermostat's basic agency while reserving ``agentic system'' status for entities with all six properties, and ``AI agent'' designation for those using AI/ML for implementation.
 \end{questionbox}
 
 \begin{questionbox}[title={\textbf{Is ``AI agent'' just marketing hype?}}]
