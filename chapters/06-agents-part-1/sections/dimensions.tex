@@ -14,7 +14,7 @@ Does the agent accept goals from an external principal, or does it generate its 
 \end{questionbox}
 
 \begin{questionbox}[title={\textbf{Who decides the next step?}}]
-Does the agent execute predefined plans step-by-step, or does it choose tactics autonomously? Contract-bound delegates have tactical discretion; perception-action planners select actions independently.
+Does the agent execute predefined plans step-by-step, or does it choose actions autonomously? Delegated proxies follow explicit instructions. Contract-bound delegates choose methods (how) but not objectives (what). Perception-action planners select both tactics and timing independently.
 \end{questionbox}
 
 \begin{questionbox}[title={\textbf{Who carries responsibility if things go wrong?}}]
@@ -65,11 +65,13 @@ Table~\ref{tab:autonomy} summarizes this progression.
 		Independent finisher & \textcite{xi2023rise}             & Plans and completes tasks                         \\
 		\bottomrule
 	\end{tabular}
-	\caption{Autonomy spectrum: from delegated proxies to self-directed entities.}
+	\caption{Autonomy spectrum: from delegated proxies to self-directed entities. \textit{Accessibility:} Progressive classification table with 3 columns (Position, Source, Description) and 10 rows ordered by increasing autonomy: from ``Delegated proxy'' (follows instructions, principal retains liability) through intermediate positions (obedience, contract-bound, self-regulating, adaptive assistant, perception-action, agenda-setting, learning loop, tool orchestrator) to ``Independent finisher'' (plans and completes tasks). Each row cites specific researchers showing chronological evolution.}
 	\label{tab:autonomy}
 \end{table}
 
 This dimension correlates with but differs from technological capability. Rule-based expert systems can exhibit moderate autonomy (goal-directed loops), while capable neural networks, including LLMs, operating in single-shot mode exhibit none. Autonomy is architectural, not merely a function of model sophistication.
+
+\textbf{Autonomy and Governance:} The autonomy level directly determines governance requirements. Low-autonomy agents (delegated proxies, contract-bound delegates) operate under tight principal control with lighter oversight burdens---the principal validates each step or constrains choices through explicit contracts. High-autonomy agents (tool orchestrators, independent finishers) make consequential decisions with minimal intervention, demanding mandatory precommit limits (resource budgets, scope boundaries), explicit escalation triggers (confidence thresholds, high-stakes decisions), and robust audit trails. \textit{Governance principle:} Oversight rigor must scale with autonomy level. An agent that independently orchestrates tools and completes multi-step tasks requires explicit termination mechanisms, human-in-the-loop checkpoints for irreversible actions, and clear accountability mapping---safeguards unnecessary for agents executing predefined scripts under direct supervision.
 
 \noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}
 \vspace{0.5em}
@@ -102,7 +104,7 @@ Table~\ref{tab:entities} summarizes representative examples.
 		Machine        & \begin{tabular}[t]{@{}r@{}}\textcite{russellnorvig1995ai} \\ \textcite{franklin-graesser-1997} \\ \textcite{xi2023rise}\end{tabular}         & Computational entities, loops        \\
 		\bottomrule
 	\end{tabular}
-	\caption{Entity frames: human minds, institutional relationships, or computational entities.}
+	\caption{Entity frames: human minds, institutional relationships, or computational entities. \textit{Accessibility:} Categorization table with 3 columns (Frame, Source, Description) and 3 rows representing three fundamental approaches. Row 1: Human frame (philosophy/psychology) emphasizes human minds and intentions. Row 2: Institutional frame (law/economics) emphasizes organizations and authority structures. Row 3: Machine frame (computer science/AI) emphasizes computational entities and loops. Multiple scholars cited per frame showing discipline-spanning taxonomy.}
 	\label{tab:entities}
 \end{table}
 
@@ -139,7 +141,7 @@ Table~\ref{tab:goals} summarizes this dimension.
 		Negotiation     & \begin{tabular}[t]{@{}r@{}}\textcite{weiss1999mas} \\ \textcite{jennings1998roadmap}\end{tabular}                                         & Co-determines objectives       \\
 		\bottomrule
 	\end{tabular}
-	\caption{Goal dynamics: from acceptance through adaptation to negotiation.}
+	\caption{Goal dynamics: from acceptance through adaptation to negotiation. \textit{Accessibility:} Progressive stance table with 3 columns (Stance, Source, Description) and 3 rows showing increasing autonomy in goal-setting. Row 1: Acceptance stance (follows supplied objectives without modification). Row 2: Adaptation stance (refines goals and chooses tactics within constraints). Row 3: Negotiation stance (co-determines objectives through communication). Progression has direct implications for legal accountability.}
 	\label{tab:goals}
 \end{table}
 

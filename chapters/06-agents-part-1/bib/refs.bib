@@ -136,12 +136,14 @@
   urldate      = {2025-10-25}
 }
 
-@online{avianca-reuters,
-  title        = {US lawyer sanctioned for using ChatGPT to make up case citations},
+@misc{mata-avianca-2023,
+  author       = {{Mata v. Avianca, Inc.}},
+  title        = {678 F. Supp. 3d 443 (S.D.N.Y. 2023)},
+  howpublished = {United States District Court for the Southern District of New York, No. 1:22-cv-01461 (PKC)},
   year         = {2023},
-  url          = {https://www.reuters.com/world/us/us-lawyer-who-used-chatgpt-made-up-cases-sanctioned-2023-06-23/},
-  urldate      = {2025-10-25},
-  note         = {Reuters coverage of Mata v. Avianca sanctions}
+  url          = {https://scholar.google.com/scholar_case?case=13849516024529169137},
+  urldate      = {2025-11-13},
+  note         = {Federal court sanctions for attorney submitting AI-generated hallucinated case citations. ChatGPT fabricated six nonexistent cases; court imposed \$5,000 sanctions under Fed. R. Civ. P. 11, 28 U.S.C. \S~1927, and inherent authority. Leading precedent on professional responsibility for AI tool use in legal research.}
 }
 
 @online{kelvin-los,
@@ -162,13 +164,16 @@
 }
 
 @book{russellnorvig2020aima,
-  title     = {Artificial Intelligence: A Modern Approach},
   author    = {Russell, Stuart J. and Norvig, Peter},
-  year      = {2020},
+  title     = {Artificial Intelligence: A Modern Approach},
   edition   = {4},
+  year      = {2020},
   publisher = {Pearson},
+  address   = {Hoboken, NJ},
+  isbn      = {9780134610993},
   url       = {http://aima.cs.berkeley.edu/},
-  urldate   = {2025-10-27}
+  urldate   = {2025-10-27},
+  note      = {Standard AI textbook establishing sensor-actuator agent framework; 4th edition incorporates modern ML/AI developments}
 }
 
 @article{wooldridge1995intelligent,
@@ -228,13 +233,25 @@
 }
 
 @online{willison-2025-agents-definition,
-  title   = {I think ``agent'' may finally have a widely enough agreed upon definition to be useful jargon now},
   author  = {Willison, Simon},
+  title   = {I think ``agent'' may finally have a widely enough agreed upon definition to be useful jargon now},
   year    = {2025},
-  month   = {09},
+  month   = sep,
+  day     = {18},
   url     = {https://simonwillison.net/2025/Sep/18/agents/},
-  urldate = {2025-10-26},
-  note    = {Practitioner definition: tools-in-a-loop to achieve a goal}
+  urldate = {2025-11-13},
+  note    = {Defines LLM agents as systems running tools in loops to achieve goals; consolidates definition emerging from Anthropic and broader LLM community}
+}
+
+@online{willison-2025-tools-loop,
+  author  = {Willison, Simon},
+  title   = {Agents are models using tools in a loop},
+  year    = {2025},
+  month   = may,
+  day     = {22},
+  url     = {https://simonwillison.net/2025/May/22/tools-in-a-loop/},
+  urldate = {2025-11-13},
+  note    = {Reports Hannah Moran (Anthropic) presenting definition ``Agents are models using tools in a loop'' at Anthropic developer conference; early documentation of emerging standard}
 }
 
 @online{claude-code-subagents,
@@ -1108,9 +1125,11 @@
 @book{russellnorvig1995ai,
   author    = {Russell, Stuart J. and Norvig, Peter},
   title     = {Artificial Intelligence: A Modern Approach},
-  publisher = {Prentice Hall},
+  edition   = {1},
   year      = {1995},
-  edition   = {1}
+  publisher = {Prentice Hall},
+  address   = {Upper Saddle River, NJ},
+  note      = {First edition establishing foundational sensor-actuator agent framework; core definition remains stable through 4th edition}
 }
 
 @book{holland1995cas,
@@ -1139,6 +1158,18 @@
   title     = {Multi-Agent Systems: An Introduction to Distributed Artificial Intelligence},
   publisher = {Addison-Wesley},
   year      = {1999}
+}
+
+@inproceedings{shardanand1995sif,
+  author       = {Shardanand, Upendra and Maes, Pattie},
+  title        = {Social Information Filtering: Algorithms for Automating 'Word of Mouth'},
+  booktitle    = {Proceedings of the SIGCHI Conference on Human Factors in Computing Systems},
+  year         = {1995},
+  pages        = {210--217},
+  address      = {Denver, CO},
+  publisher    = {ACM Press/Addison-Wesley},
+  doi          = {10.1145/223904.223931},
+  note         = {Describes Ringo and collaborative filtering for personalized recommendations}
 }
 
 @book{kauffman2000investigations,

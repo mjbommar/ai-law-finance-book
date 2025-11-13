@@ -21,32 +21,11 @@ Willison's practitioner synthesis—``LLM agent runs tools in a loop to achieve 
 
 For legal and financial applications, general agency definitions require additional safeguards: attribution to authoritative sources, auditable provenance, escalation protocols recognizing human judgment needs, and confidentiality mechanisms protecting privilege. These augment rather than replace the six-property framework—they define what makes entities suitable for high-stakes professional work.
 
-\begin{highlightbox}[title={\textbf{For Practitioners: Apply the Framework Monday Morning}}]
-\begin{itemize}[nosep,leftmargin=1.5em]
-\item Evaluate vendor claims using the six-question rubric—demand evidence for each property
-\item Recognize that higher autonomy brings both capability and risk—align deployment with organizational readiness
-\item Insist on attribution and provenance mechanisms—absent these, verification becomes prohibitive
-\item Treat AI agents as you would junior associates: supervise, verify, correct
-\end{itemize}
-\end{highlightbox}
+\textbf{For Practitioners: Evaluate Rigorously, Deploy Carefully.} Evaluate vendor claims using the six-question rubric—demand evidence for each property. Recognize that higher autonomy brings both capability and risk—align deployment with organizational readiness. Insist on attribution and provenance mechanisms; absent these, verification becomes prohibitive. Treat AI agents as you would junior associates: supervise, verify, correct.
 
-\begin{highlightbox}[title={\textbf{For Researchers: Build on These Foundations}}]
-\begin{itemize}[nosep,leftmargin=1.5em]
-\item Develop compre\-hensive benchmarks assessing agentic properties beyond accuracy—iteration quality, adaptation effectiveness, escalation appropriateness
-\item Study real-world deployments to understand adoption patterns and failure modes
-\item Address responsibility attribution when high-autonomy agents err—traditional agency law provides foundations but novel questions demand new frameworks
-\item Extend cross-disciplinary synthesis to medical AI, educational AI, and other professional domains
-\end{itemize}
-\end{highlightbox}
+\textbf{For Researchers: Build on These Foundations.} Develop comprehensive benchmarks assessing agentic properties beyond accuracy—iteration quality, adaptation effectiveness, escalation appropriateness. Study real-world deployments to understand adoption patterns and failure modes. Address responsibility attribution when high-autonomy agents err—traditional agency law provides foundations but novel questions demand new frameworks. Extend cross-disciplinary synthesis to medical AI, educational AI, and other professional domains.
 
-\begin{highlightbox}[title={\textbf{For Regulators: Regulate Architecture, Not Marketing}}]
-\begin{itemize}[nosep,leftmargin=1.5em]
-\item Base regulations on architectural properties (autonomy level, capability level) rather than vendor labels
-\item Require transparency mechanisms enabling verification of attribution and provenance claims
-\item Mandate human oversight aligned with autonomy levels—higher autonomy demands stronger oversight
-\item Coordinate with professional ethics bodies to align AI governance with fiduciary and professional responsibilities
-\end{itemize}
-\end{highlightbox}
+\textbf{For Regulators: Regulate Architecture, Not Marketing.} Base regulations on architectural properties (autonomy level, capability level) rather than vendor labels. Require transparency mechanisms enabling verification of attribution and provenance claims. Mandate human oversight aligned with autonomy levels—higher autonomy demands stronger oversight. Coordinate with professional ethics bodies to align AI governance with fiduciary and professional responsibilities.
 
 \paragraph{Connections within this textbook} Part II (\textit{How to Build an Agent}) explores architectures like ReAct and Reflexion in depth. Part III (\textit{How to Govern an Agent}) addresses professional safeguards, liability frameworks, and regulatory approaches. Additional chapters cover evaluation methods, deployment patterns, and domain-specific considerations for legal practice and financial services.
 
@@ -67,3 +46,53 @@ The distinction between marketing labels and architectural reality has direct pr
 The stakes are particularly high in professional domains like law, medicine, and finance, where autonomous action by AI systems raises questions of liability, professional responsibility, and public safety. Without shared definitions linking architectural properties to operational requirements, we cannot write enforceable contracts, establish professional standards, or hold entities accountable.
 
 The journey from ``driving cattle'' to ``pleading a case''—both senses of Latin \textit{agō}—to ``running tools in a loop'' spans millennia of human intellectual development and decades of computational innovation. The conceptual foundations traced here continue through the remaining chapters of this textbook and into your professional practice. Apply them rigorously. The technology evolves rapidly; the principles endure.
+
+\clearpage
+
+\section*{At a Glance: The Framework in One Page}
+\addcontentsline{toc}{section}{At a Glance: The Framework in One Page}
+
+\begin{definitionbox}[title={\textbf{Six Properties (Mnemonic: GPA + IAT)}}]
+\small
+\textbf{G (Goal):} Objective directing behavior toward desired outcomes \\
+\textbf{P (Perception):} Observing environment to inform action selection \\
+\textbf{A (Action):} Executing decisions that affect environment or state \\
+\textbf{I (Iteration):} Multiple perception-action cycles, not single-shot \\
+\textbf{A (Adaptation):} Modifying policy based on observations within session \\
+\textbf{T (Termination):} Explicit or implicit stopping conditions
+\end{definitionbox}
+
+\begin{keybox}[title={\textbf{Three-Level Hierarchy}}]
+\textbf{Level 1 (Agent):} G + P + A — 3 properties minimum
+
+\textbf{Level 2 (Agentic System):} G + P + A + I + A + T — All 6 via rules/algorithms
+
+\textbf{Level 3 (Agentic AI):} G + P + A + I + A + T — All 6 via LLMs/neural networks
+
+\vspace{0.3em}
+\small\textit{Quick check: Q1--Q3 yes = Agent | Q1--Q6 yes = Agentic System | All 6 + AI/ML = Agentic AI}
+\end{keybox}
+
+\begin{table}[h!]
+\centering
+\small
+\begin{tabular}{@{}p{7.2cm}p{7.2cm}@{}}
+\toprule
+\textbf{Example: Portfolio Rebalancer (L2)} & \textbf{Example: Legal Research (L3)} \\
+\midrule
+Monitors positions, executes trades, adapts to volatility, stops when balanced. \textit{(6 properties via rules)} & Searches case law, refines queries based on results, escalates when stuck. \textit{(6 properties via LLM)} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{-0.5em}
+
+\begin{highlightbox}[title={\textbf{Professional Deployment Adds Four Safeguards}}]
+\small
+\textbf{Attribution}: Every claim traceable to authoritative sources \\
+\textbf{Provenance}: Auditable logs showing reasoning steps and tool invocations \\
+\textbf{Escalation}: Clear triggers for human review of high-stakes decisions \\
+\textbf{Confidentiality}: Ethical walls and privilege protection mechanisms
+\end{highlightbox}
+
+\clearpage
