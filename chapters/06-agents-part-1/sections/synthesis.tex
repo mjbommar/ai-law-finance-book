@@ -35,9 +35,11 @@ To formalize our framework, we denote the six essential properties as follows:
 \item $P$ = perception capability for sensing environment
 \item $A$ = action capability for affecting environment
 \item $I$ = iteration across multiple steps with state preservation
-\item $D$ = discretion or autonomy in decision-making
+\item $A_{\text{adapt}}$ = adaptation through modifying strategy based on accumulated observations and feedback
 \item $T$ = termination through explicit or implicit conditions
 \end{itemize}
+
+Consistent with the operational definition in Section~\ref{sec:intro}, the six formal properties are Goal, Perception, Action, Iteration, Adaptation, and Termination (GPA + IAT). Autonomy or discretion remains an analytical dimension from Section~\ref{sec:dimensions} that describes \emph{how} these properties are exercised rather than a separate core property.
 
 We use the notation $\mathit{has}(x, \cdot)$ to indicate that entity $x$ possesses a given property.
 
@@ -46,7 +48,7 @@ We define three nested categories of entities based on their properties:
 \begin{align*}
 \mathit{Agent}(x) &\iff \mathit{has}(x,G) \land \mathit{has}(x,P) \land \mathit{has}(x,A) \\
 &\quad\text{(Minimal agency: goals, perception, action)}\\[0.5em]
-\mathit{AgenticSystem}(x) &\iff \mathit{Agent}(x) \land \mathit{has}(x,I) \land \mathit{has}(x,D) \land \mathit{has}(x,T) \\
+\mathit{AgenticSystem}(x) &\iff \mathit{Agent}(x) \land \mathit{has}(x,I) \land \mathit{has}(x,A_{\text{adapt}}) \land \mathit{has}(x,T) \\
 &\quad\text{(Full operational system: all six properties)}\\[0.5em]
 \mathit{AIAgent}(x) &\iff \mathit{AgenticSystem}(x) \land \mathit{implementedWithAI}(x)\\
 &\quad\text{(AI-powered implementation of agentic system)}
@@ -124,17 +126,17 @@ The \keyterm{reinforcement learning} paradigm formalizes how agents learn from e
 Following philosopher Daniel Dennett's influential work \parencite{dennett1987intentional}, the \keyterm{intentional stance} treats agency as a pragmatic attribution rather than metaphysical fact. We describe systems as having beliefs, desires, and intentions when such descriptions improve our ability to predict and control their behavior. This perspective liberates us from endless debates about whether AI systems ``really'' have goals or merely simulate goal-directed behavior. What matters is whether treating them as agents yields practical benefits.
 
 \begin{highlightbox}[title={\textbf{Why These Foundations Matter}}]
-These theoretical foundations aren't merely academic background---they directly inform how we build and evaluate agentic systems:
+These foundations directly inform how we build and evaluate agentic systems:
 
 \begin{itemize}[leftmargin=1.5em]
-\item \textbf{Planning} provides techniques for goal decomposition and task orchestration
-\item \textbf{Reactive control} validates simple, robust designs that respond to environmental changes
-\item \textbf{BDI models} offer architectures for managing commitments and updating beliefs
-\item \textbf{Reinforcement learning} explains how agents improve through experience and feedback
-\item \textbf{Intentional stance} justifies treating systems as agents when it enhances prediction and control
+\item \textbf{Planning} supports goal decomposition and task orchestration
+\item \textbf{Reactive control} validates simple, robust responses to changing environments
+\item \textbf{BDI models} supply architectures for managing commitments and updating beliefs
+\item \textbf{Reinforcement learning} explains improvement through experience and feedback
+\item \textbf{Intentional stance} guides when to treat systems as agents for prediction and control
 \end{itemize}
 
-Together, these traditions ground our six-property framework in established theory while maintaining practical applicability. The result is a definition precise enough for formal verification yet flexible enough to span disciplines from law to computer science.
+Together, these traditions ground the six-property framework in established theory while keeping it practically usable across disciplines from law to computer science.
 \end{highlightbox}
 
 \subsection{Boundary Cases and Clarifications}
@@ -147,9 +149,9 @@ Testing our framework against boundary cases reveals both its strengths and the 
 
 \textbf{Virtual versus Embodied Agents.} Software agents need not have physical bodies to qualify as agents. A contract analysis system operating entirely in cloud infrastructure satisfies all six properties without any physical embodiment. While robotics researchers sometimes insist on embodiment as essential to agency, our framework follows the broader AI tradition of recognizing virtual agents as fully legitimate instances. The perception-action loop operates equally well whether the environment is physical (sensor readings, motor commands) or virtual (API queries, database updates). Professional legal and financial applications predominantly involve virtual agents, making this inclusive stance practically necessary.
 
-\textbf{Single-Shot LLM Interactions.} A single ChatGPT response, however sophisticated, typically lacks the iteration property required for agentic systems. It processes input once and generates output without maintaining state across multiple perception-action cycles. The system doesn't observe results, adjust strategy, and continue pursuing goals—it completes and stops. The exception would be if we identify an internal iterative loop within the single interaction, such as chain-of-thought reasoning that cycles through multiple reasoning steps before producing output. However, most single-shot interactions remain one-time transformations rather than goal-directed iteration.
+\textbf{Single-Shot LLM Interactions.} A single ChatGPT response, however sophisticated, typically lacks the iteration property required for agentic systems. It processes input once and generates output without maintaining state across multiple perception-action cycles. The system doesn't observe results, adjust strategy, and continue pursuing goals—it completes and stops. For the purposes of this framework, we treat such single-shot LLM calls as non-iterative, even if they internally perform multiple reasoning steps, because they do not observe and react to \emph{external} feedback within a perception-action loop.
 
-\textbf{Tool Use versus Tool-Using Agents.} Simply using tools doesn't make an entity agentic. A script that calls an API once isn't an agent—it lacks the iteration and adaptation that characterize agentic systems. What matters is purposeful, iterative tool use directed toward goals. An LLM that repeatedly queries databases, processes results, and decides which tool to invoke next based on accumulated information exhibits agency. The distinction lies in the goal-directed iteration, not the mere presence of tool use. Advanced agentic systems extend this further by creating new tools—writing Python scripts to expand their capabilities or composing prompts that define specialized sub-agents \parencite{claude-code-subagents}. This recursive capability, where agents manage the design and implementation of their own tools, represents a meta-level of agency beyond mere tool invocation.
+\textbf{Tool Use versus Tool-Using Agents.} Simply using tools doesn't make an entity agentic. A script that calls an API once isn't an agent—it lacks the iteration and adaptation that characterize agentic systems. What matters is purposeful, iterative tool use directed toward goals. \textbf{Simply calling an API once does \emph{not} make a system an agent; the difference lies in goal-directed, iterative tool use with adaptation.} An LLM that repeatedly queries databases, processes results, and decides which tool to invoke next based on accumulated information exhibits agency. The distinction lies in the goal-directed iteration, not the mere presence of tool use. Advanced agentic systems extend this further by creating new tools—writing Python scripts to expand their capabilities or composing prompts that define specialized sub-agents \parencite{claude-code-subagents}. This recursive capability, where agents manage the design and implementation of their own tools, represents a meta-level of agency beyond mere tool invocation.
 
 \textbf{Continuous Control and Implicit Termination.} Entities engaged in continuous control—like systems maintaining server uptime or monitoring market conditions—might seem to violate our termination requirement. However, these entities typically operate in bounded episodes with implicit termination conditions: achieving steady state, exhausting available actions, or reaching time limits. Even ``always-on'' entities have mechanisms for recognizing when to stop particular behaviors, satisfying our termination criterion. A market monitoring system may run continuously, but individual monitoring tasks terminate when specific conditions trigger alerts or when trading sessions close. The distinction between the persistent entity and its bounded tasks resolves the apparent contradiction.
 

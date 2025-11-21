@@ -8,6 +8,56 @@ Welcome! This repository contains the evolving draft of *Artificial Intelligence
 
 ⭐ **Stay Updated**: [Star this repository](https://github.com/mjbommar/ai-law-finance-book) or click "Watch" to get notified of new chapters and updates!
 
+---
+
+## 🧭 Chapter Roadmap (ToC + TODO)
+
+Legend:
+- `[x]` Finished chapter (current working draft ready for readers)
+- `[~]` In progress (substantial draft exists, still being developed)
+- `[ ]` Planned (outline or resources only)
+
+### Part I — Foundations: LLMs and Prompting
+
+- [~] **01 — Foundations: LLM Primer and Mechanics**  
+  [source](chapters/01-foundations-llm-primer-mechanics)
+
+- [~] **02 — Foundations: Conversations and Reasoning**  
+  [source](chapters/02-foundations-conversations-reasoning)
+
+- [~] **03 — Foundations: Structured Outputs and Tool Use**  
+  [source](chapters/03-foundations-structured-tools-multimodal)
+
+- [~] **04 — Foundations: Multimodal Fundamentals**  
+  [source](chapters/04-foundations-multimodal)
+
+- [~] **05 — Foundations: Prompt Design, Evaluation, and Optimization**  
+  [source](chapters/05-foundations-prompt-design-eval-optimization)
+
+### Part II — Agents and Agentic Systems
+
+- [x] **06 — Agents Part I: What Is an Agent?**  
+  [PDF](chapters/06-agents-part-1/main.pdf) · [source](chapters/06-agents-part-1)
+
+- [~] **07 — Agents Part II: How to Build an Agent**  
+  [source](chapters/07-agents-part-2)
+
+- [~] **08 — Agents Part III: How to Govern an Agent**  
+  [PDF](chapters/08-agents-part-3/main.pdf) · [source](chapters/08-agents-part-3)
+
+### Part III — Knowledge Graphs & Semantic Web
+
+- [~] **09 — Knowledge Graphs & Semantic Web: Foundations for Law and Finance**  
+  [source](chapters/09-kg-foundations)
+
+- [~] **10 — Knowledge Graphs & Semantic Web: Operations with LLMs**  
+  [source](chapters/10-kg-operations-llm)
+
+### Future / Planned Chapters
+
+- [ ] **Prompting & Meta-Prompting**  
+  [source](chapters/prompting-and-meta-prompting)
+
 ## 📚 About This Book
 
 We're creating a comprehensive, vendor-neutral resource that combines academic rigor with real-world practicality. Whether you're a legal professional exploring AI's impact on your field, a financial analyst considering machine learning applications, or a researcher studying this interdisciplinary space, this book is for you.
@@ -34,16 +84,18 @@ Stay tuned for the launch!
 Want to dive right in? Here's where to find the current PDF drafts:
 
 ### 📚 Complete Book
-- **[main.pdf](main.pdf)** — The full book with all current chapters integrated
+- **[main.pdf](main.pdf)** — The full book with all current chapters integrated (working draft)
 
 ### 📑 Individual Chapters
 Currently available chapters that can be read standalone:
 
-- **Agents - Part I: What is an Agent?**: [chapters/06-agents-part-1/main.pdf](chapters/06-agents-part-1/main.pdf)
-  *A Conceptual Primer and History — Understanding AI agents in legal and financial contexts*
+- **Agents Part I: What Is an Agent?** — [chapters/06-agents-part-1/main.pdf](chapters/06-agents-part-1/main.pdf)  
+  *Conceptual primer and history — understanding agents and agentic systems in legal and financial contexts.*
 
-- **Prompting & Meta-Prompting**: *In development*
-  *Advanced techniques for working with language models in professional settings*
+- **Agents Part III: How to Govern an Agent** — [chapters/08-agents-part-3/main.pdf](chapters/08-agents-part-3/main.pdf)  
+  *Working draft on regulation, controls, conformance, and deployment of agentic systems.*
+
+Other chapters in the Foundations and Knowledge Graphs parts are under active development and can be explored via their source folders in the chapter roadmap above.
 
 More chapters coming soon! This is a living document—we're actively writing and revising.
 
@@ -86,13 +138,21 @@ We've organized everything to be intuitive and maintainable:
 ├── 📄 Makefile           # Build automation
 ├── 📄 preamble.tex       # Shared LaTeX configuration
 ├── 📁 chapters/          # Individual chapter workspaces
-│   ├── 📁 agents-part-1/
+│   ├── 📁 01-foundations-llm-primer-mechanics/
+│   ├── 📁 02-foundations-conversations-reasoning/
+│   ├── 📁 03-foundations-structured-tools-multimodal/
+│   ├── 📁 04-foundations-multimodal/
+│   ├── 📁 05-foundations-prompt-design-eval-optimization/
+│   ├── 📁 06-agents-part-1/
 │   │   ├── main.tex
-│   │   ├── main.pdf      # 👈 Chapter PDF
-│   │   ├── sections/
-│   │   └── bib/
-│   └── 📁 prompting-and-meta-prompting/
-│       └── EXECUTIVE_SUMMARY.md  # Chapter outline
+│   │   ├── main.pdf      # 👈 Chapter PDF (current working draft)
+│   │   └── sections/
+│   ├── 📁 07-agents-part-2/
+│   ├── 📁 08-agents-part-3/
+│   ├── 📁 09-kg-foundations/
+│   ├── 📁 10-kg-operations-llm/
+│   └── 📁 prompting-and-meta-prompting/   # Outline and resources for a future chapter
+│       └── EXECUTIVE_SUMMARY.md
 ├── 📁 docs/              # Style and contribution guides
 │   ├── build-guide.md    # Build system documentation
 │   ├── style-guide.md    # Writing standards
