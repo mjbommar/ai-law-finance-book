@@ -1,0 +1,9 @@
+# Codespell configuration for AI Law & Finance textbook
+# Ignore common false positives and domain-specific terms
+
+[codespell]
+# Skip generated files
+skip = *.bbl,*.aux,*.log,*.out,*.toc,*.pdf,*.blg,*.fls,*.fdb_latexmk,node_modules,.git
+
+# Ignore words that are correct in our domain
+ignore-words-list = mata,strng,agentic,deployers,decisioning,workpapers,explainability,interpretability

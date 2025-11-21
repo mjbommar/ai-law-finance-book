@@ -1,47 +1,165 @@
 % ============================================================================
-% Introduction and Scope — Agents Part III (Govern)
-% Purpose: Define governance scope, roles, oversight modes
+% Introduction — Agents Part III (Govern)
+% Purpose: Establish governance imperative and map properties to requirements
 % Label: sec:agents3-intro
 % ============================================================================
 
-% Executive mnemonic (comments only): APEX‑2D
-%   A — Attribution/Provenance (source‑grounding, quote fidelity)
-%   P — Privilege/Confidentiality (ethical walls, retention)
-%   E — Evidence/Audit (complete, tamper‑evident logs)
-%   X — Escalation/eXit (oversight modes, stop/rollback)
-%   Dials — Autonomy/Actuation; Jurisdiction/Localization
-% This section sets context for all four questions and both dials.
-
-\section{Introduction and Scope}
+\section{Introduction: The Governance Imperative}
 \label{sec:agents3-intro}
 
-Part III explains how to \textit{govern} agentic systems in practice. We focus on what a chief risk officer, compliance officer, CFO, general counsel, and security leadership need to approve, monitor, and continuously improve deployments.
+Software has always required governance. We audit code, review changes, test deployments, and maintain access controls. Yet the governance challenges posed by agentic systems differ in \emph{kind}, not merely degree. Understanding this shift begins with recognizing what makes agents fundamentally different from the passive tools that dominate enterprise software today—and why those differences create accountability obligations that traditional governance structures were not designed to address.
 
-\begin{keybox}[title={Executive Objectives}]
-\begin{itemize}
-  \item Map laws, ethics, and standards to concrete, testable controls.
-  \item Establish evidence requirements, KPIs/SLAs, and change‑management gates.
-  \item Ensure interoperability and auditability via protocol‑level metadata.
-\end{itemize}
+\subsection{From Tools to Agents: The Governance Shift}
+\label{sec:agents3-tools-to-agents}
+
+Most enterprise software operates as a passive tool: you invoke it, it executes a predetermined sequence, and it stops. A spreadsheet recalculates when you enter data. A database returns results when you query it. A compiler translates source code when you run it. These tools are \keyterm{reactive}—they wait for explicit human commands, execute well-defined operations, and produce outputs that can be traced directly to inputs and logic paths.
+
+Governance for passive tools focuses on \emph{authorization} (who can invoke the tool), \emph{configuration} (what parameters are allowed), and \emph{validation} (does the output match expectations). When a spreadsheet miscalculates, we examine the formulas. When a database returns incorrect results, we inspect the query and schema. The causal chain from invocation to outcome is short, deterministic, and observable.
+
+Agents introduce \keyterm{Goal}, \keyterm{Perception}, and \keyterm{Action}—the GPA properties from Part I. Part I established a three-level hierarchy: \emph{agents} (Level 1) possess these three minimal properties; \emph{agentic systems} (Level 2/3) add three operational properties—Iteration, Adaptation, and Termination—required for production deployment. An agent is not merely invoked; it is assigned an objective. It does not passively wait for instructions; it perceives its environment, evaluates possible actions, and selects behaviors designed to advance its goal.
+
+This autonomy creates three immediate accountability challenges:
+
+\begin{enumerate}
+\item \textbf{Purpose Drift}: A tool does what you tell it to do. An agent interprets what you \emph{want} it to achieve. If the goal specification is ambiguous, incomplete, or misaligned with actual intent, the agent may pursue objectives you did not intend. Governance must verify goal alignment before deployment and monitor for drift during operation.
+
+\item \textbf{Perceptual Opacity}: Agents make decisions based on what they perceive. If perception is incomplete, biased, or adversarially manipulated, actions may be inappropriate even if the goal is well-specified. Unlike a passive tool whose inputs are explicit function parameters, an agent's perceptual inputs may include external data sources, sensor readings, or inferred environmental state. Governance must establish \emph{input validation}, \emph{data provenance}, and \emph{bias detection} mechanisms.
+
+\item \textbf{Actuation Risk}: Agents take actions that affect their environment—filing documents, executing trades, sending communications, modifying databases. Unlike passive tools that produce outputs for human review, agents \emph{do things}. If an agent's action set includes high-consequence operations (e.g., signing contracts, disbursing funds, disclosing confidential information), governance must enforce \emph{approval gates}, \emph{actuation constraints}, and \emph{rollback capabilities}.
+\end{enumerate}
+
+\begin{keybox}[title={Scope: This Chapter Focuses on Agentic Systems}]
+This chapter addresses the specific governance challenges posed by \textbf{agentic systems}—AI systems exhibiting all six operational properties (Goal, Perception, Action, Iteration, Adaptation, Termination) as defined in Part I. While agentic systems present unique accountability and compliance challenges, they represent only one category within the broader landscape of AI technologies deployed in legal, financial, and audit contexts.
+
+\vspace{0.5em}
+
+Many critical AI governance questions—such as foundation model evaluation, training data provenance, algorithmic fairness in non-agentic classifiers, explainability requirements for static models, and sector-specific ethical considerations—extend beyond agentic systems to AI more generally. These broader governance considerations, including frameworks for non-agentic AI applications, will be addressed in a forthcoming companion volume dedicated to comprehensive AI governance across all system types.
+
+\vspace{0.5em}
+% TODO: Reference to standalone AI governance book to be added upon publication.
 \end{keybox}
 
-\paragraph{Roles and Oversight.} We distinguish \emph{provider}, \emph{deployer}, and \emph{user}. Oversight modes include human‑in‑the‑loop (pre‑approval), human‑on‑the‑loop (monitor/interrupt), and human‑in‑command (override/stop). Choice depends on task risk.
+\begin{keybox}[title={The GPA Governance Gap}]
+Traditional software governance assumes human-in-the-loop execution: humans decide when to invoke tools, interpret outputs, and take consequential actions. GPA properties move decision-making \emph{inside} the system boundary. Governance must shift from \emph{access control} to \emph{behavioral oversight}.
+
+\vspace{0.5em}
+\noindent\textbf{Note on Human Agents:} Many of these governance controls—goal authorization, perceptual validation, actuation constraints—mirror requirements we impose on human agents (employees, contractors, delegates). When we hire a paralegal or junior analyst, we specify their objectives, verify the quality of their information sources, and limit their authority to take binding actions. The GPA framework makes explicit what has long been implicit in human delegation: \emph{agency requires accountability structures}. What differs for AI agents is the need to encode these controls in technical systems rather than organizational policies alone.
+\end{keybox}
+
+If GPA creates accountability challenges for basic agents, the properties that define full \keyterm{agentic systems}—\keyterm{Iteration}, \keyterm{Adaptation}, and \keyterm{Termination} (IAT)—amplify them. Iteration means the system operates across multiple perceive-act cycles, each depending on prior state and environmental feedback. Governance must maintain \emph{audit trails} that reconstruct decision sequences and enable reproducibility. Adaptation means the system changes its strategy based on experience; governance must implement \emph{change control} and continuous revalidation. Termination means the system must know when to stop, hand off to a human, or escalate; governance must define \emph{exit protocols} and \emph{emergency stop mechanisms}.
+
+These properties combine multiplicatively. An agentic system that adapts its perception across iterated interactions while pursuing evolving goals creates a governance surface far larger than a deterministic, single-invocation tool.
+
+\subsection{The Stakes: Professional Duties Are Non-Delegable}
+\label{sec:agents3-stakes}
+
+The governance imperative becomes urgent when we recognize a foundational legal and professional principle: \textbf{professional duties cannot be delegated to AI}. Attorneys, investment advisers, auditors, and other licensed professionals remain fully liable for the quality, accuracy, and ethical propriety of their work product—regardless of whether they used AI assistance.
+
+Consider three domains:
+
+\paragraph{Legal Practice}
+The American Bar Association's Model Rules of Professional Conduct impose duties of \emph{competence} (Rule 1.1), \emph{confidentiality} (Rule 1.6), and \emph{candor to the tribunal} (Rule 3.3) on attorneys personally. When an attorney files a brief containing AI-generated citations, the attorney is responsible for verifying those citations exist and support the legal argument. In \emph{Mata v.\ Avianca}, Inc., an attorney submitted a brief with hallucinated case citations generated by ChatGPT—a single-shot text generator lacking the iteration, tool access, and verification loops that would characterize an agentic legal research system \parencite{mata-avianca-2023}. The court sanctioned the attorney—not the AI vendor—because the professional duty to verify legal research is non-delegable \parencite{aba-formal-opinion-512}. This case illustrates that even non-agentic AI tools create professional responsibility obligations; agentic systems with autonomous iteration and actuation capabilities demand even greater governance.
+
+\paragraph{Financial Services}
+Investment advisers owe fiduciary duties to clients under the Investment Advisers Act of 1940. This includes duties of care (providing suitable advice) and loyalty (acting in the client's best interest). If an adviser uses an AI chatbot to generate portfolio recommendations, the adviser remains liable for ensuring those recommendations are suitable, free from conflicts of interest, and supported by adequate analysis. ``The AI recommended it'' is not a defense to a breach of fiduciary duty claim.
+
+\paragraph{Audit and Accounting}
+The Public Company Accounting Oversight Board (PCAOB) requires auditors to exercise \emph{professional skepticism} and maintain \emph{independence} when auditing financial statements. If an auditor uses AI to select samples for testing or analyze accounting estimates, the auditor must understand the tool's methodology, validate its outputs, and document the rationale in workpapers. The auditor cannot delegate professional judgment to the AI and remain compliant with PCAOB standards \parencite{pcaob-as1015,pcaob-as1105}.
+
+\begin{keybox}[title={``The AI Did It'' Is Not a Defense}]
+Across legal, financial, and audit domains, professional responsibility rules establish that using AI tools does not diminish the professional's accountability. Governance is not optional—it is the operational mechanism for maintaining professional competence and fulfilling non-delegable duties.
+\end{keybox}
+
+\subsection{Three Forces Driving Governance Adoption}
+\label{sec:agents3-forces}
+
+Beyond professional obligations, three converging forces make governance essential for any organization deploying agentic systems:
+
+\paragraph{Regulatory Momentum}
+AI-specific regulation is no longer hypothetical. The European Union's AI Act entered into force in August 2024, establishing risk-based requirements for high-risk AI systems including those used in credit decisioning, employment, law enforcement, and critical infrastructure \parencite{eu-ai-act-2024}. Systems classified as high-risk must undergo conformity assessments, maintain documentation, implement human oversight, and enable auditability—or face penalties up to €35 million or 7\% of global annual turnover.
+
+In the United States, sector-specific regulators are issuing guidance at an accelerating pace. The Federal Reserve's SR 11-7 guidance on model risk management applies to AI/ML systems used by banking institutions \parencite{fed-sr11-7}. The Equal Credit Opportunity Act requires lenders to provide ``principal reasons'' for adverse credit decisions, a requirement that extends to AI-driven underwriting \parencite{ecoa-reg-b}. States are enacting their own requirements: Colorado's AI Act (effective January 2026) prohibits algorithmic discrimination and requires impact assessments for high-risk systems \parencite{colorado-ai-act}.
+
+This regulatory patchwork means organizations cannot rely on a single compliance framework. Governance must layer multiple obligations.
+
+\paragraph{Liability Exposure}
+Early litigation is establishing precedents that governance gaps create liability. \emph{Mata v.\ Avianca} demonstrated that attorneys cannot blame AI for professional failures. Fair lending cases under the Equal Credit Opportunity Act impose strict liability—intent is not required; disparate impact suffices. If an AI credit scoring model produces outcomes that disproportionately harm protected classes, the lender is liable regardless of whether the model was ``neutral'' or purchased from a reputable vendor.
+
+Vendor contracts typically shift risk to deployers through liability caps, warranty disclaimers, and indemnification clauses. A foundation model vendor may cap damages at the subscription fee—often insufficient to cover regulatory penalties, reputational harm, or class action settlements. Governance—demonstrating reasonable care through risk assessment, validation, monitoring, and incident response—becomes the primary defense.
+
+\paragraph{Trust and Reputation}
+Legal, financial, and audit services are \emph{trust-intensive} domains. Clients hire attorneys because they trust professional judgment. Investors entrust assets to advisers based on fiduciary obligations. Public companies rely on auditors to provide independent assurance. AI failures that compromise accuracy, confidentiality, or impartiality erode this trust irreparably.
+
+A law firm that discloses client confidential information through an AI tool's training data breach faces not only regulatory sanctions but client defection. An investment adviser whose AI chatbot provides unsuitable recommendations faces not only fiduciary duty claims but loss of clients. An audit firm whose AI sampling tool produces biased or incomplete samples faces not only PCAOB sanctions but damage to its reputation for independence.
+
+In trust-intensive domains, governance is not merely a compliance obligation—it is a competitive necessity.
+
+\subsection{Mapping Agent Properties to Governance Requirements}
+\label{sec:agents3-property-mapping}
+
+Effective governance begins with a systematic mapping from the technical properties that define agentic behavior (the GPA+IAT framework from Part I) to the specific controls required to manage risk, ensure compliance, and maintain accountability. This section provides that mapping, organized by property.
+
+\textbf{Note on System Architecture:} This chapter assumes familiarity with the GPA+IAT framework from Part I. Organizations evaluating whether a specific system qualifies as an ``agentic system'' should apply Part I's six-question rubric and falsification tests. Part II (\emph{How to Build an Agent}) covers specific architectures (ReAct, Reflexion, tool-calling frameworks) and helps teams distinguish agentic systems from sophisticated chatbots or single-shot inference systems.
+
+\paragraph{Goal: Purpose Limitation and Alignment}
+An agent's goal determines what it optimizes for. Governance must ensure goals are:
+\begin{itemize}
+\item \textbf{Authorized}: Who specifies the goal? Under what authority? In regulated domains, goal-setting may require approval from compliance officers, general counsel, or clients.
+\item \textbf{Aligned}: Does the goal match actual organizational or client objectives? Misaligned goals—optimizing for throughput at the expense of quality, minimizing cost without considering risk—create liability.
+\item \textbf{Bounded}: What constraints limit goal pursuit? Agents may pursue goals too aggressively, ignoring side effects, ethical boundaries, or resource limits.
+\item \textbf{Monitorable}: Can we detect when the agent is not achieving its goal or when goal pursuit causes unintended harms? Governance must establish KPIs and SLAs that track goal satisfaction and side-effect metrics.
+\end{itemize}
+
+\paragraph{Perception: Data Governance and Input Validation}
+An agent's perception defines what information it uses to make decisions. Governance must address:
+\begin{itemize}
+\item \textbf{Provenance}: Where does the data come from? Is it authoritative, current, and trustworthy? Agents that perceive stale, fabricated, or biased data will make flawed decisions. For third-party systems, establishing provenance can be exceedingly difficult. Governance must include \emph{vendor assessment protocols} and document provenance gaps as residual risk.
+\item \textbf{Bias and Representation}: Does the agent's perceptual model reflect population diversity, or does it encode historical biases? Governance must implement bias detection and fairness audits.
+\item \textbf{Input Validation}: Can adversaries manipulate what the agent perceives? Prompt injection, data poisoning, and adversarial examples are perceptual attacks. Governance must enforce input validation, sanitization, and anomaly detection.
+\item \textbf{Privacy and Confidentiality}: Does perception require access to sensitive data? Governance must ensure data minimization, encryption, and access controls that preserve confidentiality and comply with privacy regulations.
+\end{itemize}
+
+\paragraph{Action: Actuation Controls and Approval Gates}
+An agent's action set determines what it can \emph{do}. Governance must manage actuation risk:
+\begin{itemize}
+\item \textbf{Action Authorization}: What actions is the agent permitted to take? High-consequence actions (e.g., signing contracts, disbursing funds) should require explicit authorization.
+\item \textbf{Pre-Action Approval}: Should certain actions require human approval before execution? Human-in-the-loop oversight is appropriate for irreversible or high-stakes actions.
+\item \textbf{Rollback and Remediation}: If an action causes harm, can it be undone? Governance must design systems with rollback capabilities and remediation protocols.
+\item \textbf{Rate Limiting}: Can the agent take actions too quickly or too frequently? Governance must enforce rate limits and circuit breakers.
+\end{itemize}
+
+\paragraph{Iteration: State Management and Audit Trails}
+Iteration means the system operates across multiple cycles, each building on prior state. Governance must ensure:
+\begin{itemize}
+\item \textbf{Reproducibility}: Can we replay the system's decision sequence? Debugging, auditing, and compliance reviews require reconstructing what the system perceived and why it acted as it did.
+\item \textbf{State Integrity}: Is the system's internal state protected from tampering or corruption? Governance must implement tamper-evident logging and state validation.
+\item \textbf{Termination Conditions}: Does the system know when to stop iterating? Governance must define termination criteria (e.g., goal achieved, resource limit reached, safety violation detected).
+\end{itemize}
+
+\paragraph{Adaptation: Change Control and Revalidation}
+Adaptation means the system's behavior changes over time. Governance must manage behavioral drift:
+\begin{itemize}
+\item \textbf{Change Detection}: When did the system's behavior change? What triggered the adaptation? Governance must implement model versioning and change logs.
+\item \textbf{Revalidation Triggers}: Does adapted behavior still satisfy safety, fairness, and compliance constraints? Governance must define revalidation triggers (e.g., performance degradation, distribution shift, policy updates).
+\item \textbf{Rollback to Known-Good States}: If adaptation introduces failures, can we revert to a prior validated version?
+\item \textbf{Human Oversight of Learning}: Should adaptation require human approval? In high-stakes domains, unsupervised learning may be inappropriate.
+\end{itemize}
+
+\paragraph{Termination: Exit Protocols and Escalation}
+Termination governs when and how the system stops operating. Governance must define:
+\begin{itemize}
+\item \textbf{Escalation Triggers}: Under what conditions does the system hand off to a human? Examples include ambiguous inputs, conflicting objectives, safety violations, or low-confidence decisions.
+\item \textbf{Graceful Shutdown}: How does the system cleanly exit? Abrupt termination may leave systems in inconsistent states.
+\item \textbf{Handoff Procedures}: When the system escalates to a human, what information must it provide? Effective handoff requires context.
+\item \textbf{Override and Emergency Stop}: Can humans immediately halt the system? Governance must provide emergency stop mechanisms (the ``red button'') accessible to authorized personnel.
+\end{itemize}
+
+\begin{keybox}[title={From Properties to Controls}]
+The GPA+IAT framework is not merely a taxonomy for understanding agents—it is a \emph{requirements map} for governance. Each property creates specific risks; each risk demands specific controls. Organizations that deploy agentic systems without systematically addressing all six properties face gaps in accountability, compliance, and safety.
+\end{keybox}
+
+The remainder of this chapter builds on this foundation. Section~\ref{sec:agents3-dimensional} shows how to calibrate control intensity based on system autonomy, entity frame, goal dynamics, and persistence—establishing the control logic that governs agentic systems. Section~\ref{sec:agents3-governance-stack} then maps regulatory obligations into a five-layer framework, demonstrating how to apply these calibrated controls across regulatory layers. Sections~\ref{sec:agents3-implementation} and \ref{sec:agents3-accountability} translate principles into operational practices and organizational structures. Section~\ref{sec:agents3-examples} demonstrates governance through worked examples in legal, financial, and audit contexts. Section~\ref{sec:agents3-conclusion} synthesizes the governance imperative and provides a maturity-based path forward.
 
 \vspace{0.5em}
 \noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}
-
-\subsection*{Terminology Bridge from Part I}
-\addcontentsline{toc}{subsection}{Terminology Bridge from Part I}
-
-This governance chapter explicitly reuses the terms introduced at the beginning of Part I:
-
-\begin{definitionbox}[title={Core Terms from Part I}]
-\begin{itemize}
-  \item \textbf{Agent (Level 1)}: possesses \emph{Goal}, \emph{Perception}, and \emph{Action}.
-  \item \textbf{Agentic System}: adds \emph{Iteration}, \emph{Adaptation}, and \emph{Termination} to the Level 1 baseline.
-  \item \textbf{Analytical Dimensions}: \emph{Autonomy}, \emph{Entity Frames} (human / hybrid / machine / institutional), \emph{Goal Dynamics} (accept, adapt, negotiate), and \emph{Persistence}.
-  \item \textbf{6‑Question Evaluation Rubric}: practical test used to decide whether something is agentic in operation.
-\end{itemize}
-\end{definitionbox}
-
-All governance requirements below map to these foundations. For example, autonomy and actuation scope drive oversight mode and approval gates; entity frame and persistence drive records, retention, and audit design; goal dynamics influence escalation triggers and SLAs.
+\vspace{0.5em}
