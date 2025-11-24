@@ -178,22 +178,22 @@ Framework documentation adopted this pattern explicitly. LangChain defines agent
 Park et al.'s ``Generative Agents'' showcased LLM-powered agents simulating believable human behaviors over long horizons via memory, planning, and reflection, popularizing sandboxed LLM agents in society simulations \parencite{park2023generative}.
 \end{definitionbox}
 
+\begin{figure}[t!]
+  \centering
+  \includegraphics[width=0.85\textwidth]{figures/park-2023-generative-agents.png}
+  \caption{\textbf{Park et al.~(2023): Generative agents in Smallville.} Twenty-five LLM-powered agents inhabit a sandbox environment inspired by \textit{The Sims}, each with memories, daily routines, and social relationships. The architecture extends an LLM with three core components: a memory stream storing experiences in natural language, a reflection mechanism synthesizing memories into higher-level insights, and a planning module generating behavior dynamically. In evaluation, agents exhibited emergent social behaviors---autonomously spreading party invitations, forming new acquaintances, coordinating attendance, and asking each other on dates---all from a single seed notion that one agent wanted to throw a Valentine's Day party. This demonstrated that LLM-based agents could sustain coherent, believable behavior over extended time horizons. Source: \textcite{park2023generative}, Figure 1.}
+  \label{fig:park-2023-generative-agents}
+\end{figure}
+
 \begin{definitionbox}[importance=low,title={\textbf{2023: The Rise of LLM Agents}}]
 Xi et al.'s survey ``The Rise and Potential of Large Language Model Based Agents'' documented the emerging architectural consensus: entities using LLMs to iteratively call tools, observe results, and adapt until goals are achieved \parencite{xi2023rise}.
 \end{definitionbox}
-
-\begin{figure}[t!]
-  \centering
-  \includegraphics[width=0.58\textwidth]{figures/xi-2023-agent-society.png}
-  \caption{\textbf{Xi et al.~(2023): Envisioned agent society.} The survey's opening figure depicts multiple AI agents collaborating in a shared environment: agents plan and execute cooking tasks, perform in bands, discuss projects while selecting tools, and coordinate complex activities. Users participate alongside agents. This vision synthesizes the patterns traced through this historical journey—perception-action cycles, tool orchestration, multi-agent coordination, and human-agent collaboration—into an integrated architectural framework that emerged as the consensus by 2023. Source: \textcite{xi2023rise}, Figure 1.}
-  \label{fig:xi-2023-agent-society}
-\end{figure}
 
 \begin{definitionbox}[importance=low,title={\textbf{2024--2025: Commercial Frameworks}}]
 LangChain defines agents as entities using LLMs to iteratively call tools until a stop condition is met \parencite{langchain-agents-docs}. OpenAI's Agents SDK describes agents as LLMs configured with instructions and tools, operating in loops where the LLM decides which tools to call based on iterative feedback \parencite{openai-agents-sdk}. This convergence represents an emerging architectural consensus across research and commercial frameworks.
 \end{definitionbox}
 
-The LLM era's definitional landscape differs from previous periods. Rather than multiple competing frameworks addressing different facets of agency, the field quickly converged on a single architectural pattern: LLMs orchestrating tools in iterative loops. ReAct established the template in 2022, and within months implementations proliferated across academia and industry. Park's generative agents demonstrated the pattern's applicability to social simulation, while commercial frameworks embedded it as default infrastructure.
+The LLM era's definitional landscape differs from previous periods. Rather than multiple competing frameworks addressing different facets of agency, the field quickly converged on architectural patterns exploiting LLMs' flexible reasoning. ReAct established the tool-orchestration template in 2022, and within months implementations proliferated across academia and industry. Park's generative agents demonstrated a complementary pattern—memory, reflection, and planning enabling sustained believable behavior in social simulations—while commercial frameworks embedded tool orchestration as default infrastructure.
 
 What is genuinely new remains debated. Skeptics note that the perception-action cycle, goal-directed behavior, and tool use all appeared in 1990s definitions—the LLM era implements these through learned parameters rather than programmer-specified logic. Proponents argue that flexible reasoning over natural language representations enables qualitatively different agentic capabilities. A plausible resolution is that LLMs shifted where decision-making knowledge resides (from code to weights) without fundamentally changing the functional architecture of agency. Regardless, the speed of convergence—from research demonstration to industry standard in under three years—marks the LLM era as distinctive in the seven-decade history of agent definitions.
 
