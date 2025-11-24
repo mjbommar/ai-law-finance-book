@@ -7,7 +7,7 @@ While Section~\ref{sec:history} traced chronological evolution, this section exa
 
 \subsection{\textsf{Philosophy}: Intentionality and Reasons}
 
-Philosophy's distinctive contribution centers on \keyterm{intentional descriptions}, responsibility for actions, and predictive stances. \textcite{anscombe1957intention} established that actions are intentional ``under a description''---the same physical movement can be intentional under one description (``signing a contract'') but not another (``smudging ink''). This insight matters for AI agents: when we attribute intentions to entities, we're choosing explanatory frameworks, not discovering intrinsic properties.
+Philosophy's distinctive contribution centers on \keyterm{intentional descriptions}, responsibility for actions, and predictive stances. \textcite{anscombe1957intention} established that actions are intentional ``under a description''---the same physical movement can be intentional under one description (``signing a contract'') but not another (``smudging ink''). This insight matters for AI agents: when we attribute intentions to entities, we are choosing explanatory frameworks, not discovering intrinsic properties.
 
 \textcite{bratman1987intention}'s planning theory and \textcite{dennett1987intentional}'s \keyterm{intentional stance} provide complementary perspectives: agents act according to their plans and commitments (Bratman) or can be treated as rational goal-pursuers regardless of internal mechanism (Dennett). Philosophy emphasizes \textit{reasons} for action over mechanical causation, focusing on responsibility for actions and conceptual foundations rather than implementation.
 
@@ -65,30 +65,28 @@ Computer science's distinctive approach uses mentalistic vocabulary as an \texti
 
 Table~\ref{tab:disciplines} summarizes key differences across disciplines.
 
-\begin{landscape}
-\begin{table}[p]
+\begin{table}[htbp]
 \centering
-\small
+\footnotesize
 \rowcolors{2}{white}{bg-neutral}
-\begin{tabular}{@{}lp{2.8cm}p{3.2cm}p{3.8cm}p{5.2cm}@{}}
+\begin{tabular}{@{}>{\sffamily}lp{2.2cm}p{2.4cm}p{3.0cm}p{3.8cm}@{}}
 \toprule
 \rowcolor{white}
 \textbf{Discipline} & \textbf{Autonomy Level} & \textbf{Entity Frame} & \textbf{Key Mechanism} & \textbf{Primary Concern} \\
 \midrule
-\textsf{Philosophy} & Low--moderate & Human, extensible & Intention \& reasons & Rational causality, responsibility \\
-\textsf{Psychology} & Varies by context & Human-centered & Self-regulation \& control & Lived experience, efficacy \\
-\textsf{Law} & Low--moderate & \raggedright Hybrid (principal/agent) & Authority \& fiduciary duty & Liability, professional responsibility \\
-\textsf{Economics} & Moderate & Institutional/hybrid & Incentive alignment & Agency costs, information asymmetry \\
-\textsf{Cognitive Science} & Moderate--high & Human, generalizable & Plans \& representations & Mental architecture \\
-\textsf{Complex Systems} & Moderate--high & Machine/hybrid & Local rules \& emergence & Collective behavior, adaptation \\
-\textsf{Computer Science} & Moderate--high & Machine/hybrid & Protocols \& coordination & System organization, communication \\
-\textsf{AI} & High & Machine (+ hybrid) & \raggedright Perception/action loops, tools & Task completion, capabilities \\
+Philosophy & Low--moderate & Human, extensible & Intention \& reasons & Rational causality, responsibility \\
+Psychology & Varies by context & Human-centered & Self-regulation \& control & Lived experience, efficacy \\
+Law & Low--moderate & Hybrid (principal/agent) & Authority \& fiduciary duty & Liability, professional responsibility \\
+Economics & Moderate & Institutional/hybrid & Incentive alignment & Agency costs, information asymmetry \\
+Cognitive Science & Moderate--high & Human, generalizable & Plans \& representations & Mental architecture \\
+Complex Systems & Moderate--high & Machine/hybrid & Local rules \& emergence & Collective behavior, adaptation \\
+Computer Science & Moderate--high & Machine/hybrid & Protocols \& coordination & System organization, communication \\
+AI & High & Machine (+ hybrid) & Perception/action loops, tools & Task completion, capabilities \\
 \bottomrule
 \end{tabular}
-\caption{Cross-disciplinary comparison of agency perspectives. Disciplines vary systematically in assumed autonomy level, entity framing, core mechanisms, and primary concerns. \textit{Accessibility:} Landscape table with 5 columns (Discipline, Autonomy Level, Entity Frame, Key Mechanism, Primary Concern) and 9 rows (8 disciplines plus AI). Rows ordered: Philosophy (low-moderate, human, intention/reasons, responsibility), Psychology (varies, human, self-regulation, lived experience), Law (low-moderate, hybrid, authority/fiduciary duty, liability), Economics (moderate, institutional, incentive alignment, agency costs), Cognitive Science (moderate-high, human/generalizable, plans/representations, mental architecture), Complex Systems (moderate-high, machine/hybrid, local rules/emergence, collective behavior), Computer Science (moderate-high, machine/hybrid, protocols/coordination, system organization), AI (high, machine + hybrid, perception-action loops/tools, task completion). Table reveals systematic patterns: human vs. machine focus, normative vs. descriptive approaches.}
+\caption{Cross-disciplinary comparison of agency perspectives. Disciplines vary systematically in assumed autonomy (low to high), entity frames (human to machine/hybrid), core mechanisms, and primary concerns. Pattern: human-focused disciplines (philosophy, psychology, law) assume lower autonomy and emphasize responsibility; machine-focused disciplines (AI, complex systems, computer science) assume higher autonomy and emphasize capabilities.}
 \label{tab:disciplines}
 \end{table}
-\end{landscape}
 
 Several patterns emerge:
 \begin{itemize}

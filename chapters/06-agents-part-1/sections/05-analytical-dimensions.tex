@@ -36,7 +36,7 @@ The Restatement (Second) of Agency (1958) exemplifies this end: agents execute t
 \textcite{russellnorvig1995ai}'s AI agents sense environments and select actions via performance-driven policies without waiting for commands. \textcite{franklin-graesser-1997}'s autonomous agents pursue their own agendas over time, acting to influence future perceptions.
 
 \paragraph{Learning Loop Owners (High Autonomy)}
-\textcite{suttonbarto1998rl}'s reinforcement learning agents experiment with actions and update policies from reward signals without human step-by-step guidance. The agent owns the exploration-exploitation tradeoff.
+\textcite{suttonbarto1998rl}'s reinforcement learning agents experiment with actions and update policies from reward signals without human step-by-step guidance. The agent owns the exploration-exploitation trade-off.
 
 \paragraph{Tool Orchestrators (Very High Autonomy)}
 Modern tool-use APIs (2025)---whether implemented through AI/ML or traditional logic---choose when and how to invoke tools, integrating outputs into their reasoning loops. Contemporary LLM frameworks provide one implementation approach for this architectural pattern, ``independently accomplish[ing] tasks on behalf of users,'' planning, sequencing, and completing multi-step workflows before reporting back.
@@ -74,7 +74,6 @@ This dimension correlates with but differs from technological capability. Rule-b
 \textbf{Autonomy and Governance:} The autonomy level directly determines governance requirements. Low-autonomy agents (delegated proxies, contract-bound delegates) operate under tight principal control with lighter oversight burdens---the principal validates each step or constrains choices through explicit contracts. High-autonomy agents (tool orchestrators, independent finishers) make consequential decisions with minimal intervention, demanding mandatory precommit limits (resource budgets, scope boundaries), explicit escalation triggers (confidence thresholds, high-stakes decisions), and robust audit trails. \textit{Governance principle:} Oversight rigor must scale with autonomy level. An agent that independently orchestrates tools and completes multi-step tasks requires explicit termination mechanisms, human-in-the-loop checkpoints for irreversible actions, and clear accountability mapping---safeguards unnecessary for agents executing predefined scripts under direct supervision.
 
 \noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}
-\vspace{0.5em}
 
 \subsection{Entity Frames}
 
