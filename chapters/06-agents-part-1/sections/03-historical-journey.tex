@@ -189,7 +189,7 @@ Park et al.'s ``Generative Agents'' showcased LLM-powered agents simulating beli
 Xi et al.'s survey ``The Rise and Potential of Large Language Model Based Agents'' documented the emerging architectural consensus: entities using LLMs to iteratively call tools, observe results, and adapt until goals are achieved \parencite{xi2023rise}.
 \end{definitionbox}
 
-\begin{definitionbox}[importance=low,title={\textbf{2024--2025: Commercial Frameworks}}]
+\begin{definitionbox}[importance=low,title={\textbf{2024--2025: Commercial Frameworks}},breakable=false]
 LangChain defines agents as entities using LLMs to iteratively call tools until a stop condition is met \parencite{langchain-agents-docs}. OpenAI's Agents SDK describes agents as LLMs configured with instructions and tools, operating in loops where the LLM decides which tools to call based on iterative feedback \parencite{openai-agents-sdk}. This convergence represents an emerging architectural consensus across research and commercial frameworks.
 \end{definitionbox}
 
@@ -199,8 +199,7 @@ What is genuinely new remains debated. Skeptics note that the perception-action 
 
 \subsection{Historical Patterns}
 
-\begin{keybox}[title={\textbf{Five Patterns Across Seven Decades}}]
-Five patterns emerge:
+Five patterns emerge across seven decades:
 
 \paragraph{Broadening entity frames}
 Early definitions focused on humans or human–AI relationships. By the 1990s, purely computational agents became common. The LLM era introduced hybrid framings: humans provided goals, AI systems executed multi-step tasks.
@@ -208,7 +207,7 @@ Early definitions focused on humans or human–AI relationships. By the 1990s, p
 \paragraph{Increasing autonomy}
 Definitions migrated from delegated proxies (1958) through perception-action systems (1995) to self-directed tool orchestrators (2025). The locus of decision-making shifted progressively toward the agent, reflecting evolving expectations of autonomy.
 
-\par\paragraph{From mental states to observable behavior}
+\paragraph{From mental states to observable behavior}
 Philosophical definitions emphasized intention and reasoning. Computer science implemented these as mentalistic constructs. Contemporary definitions focus on observable capabilities—tool use, iterative problem solving, task completion.
 
 \paragraph{``Tools-in-a-loop'' convergence}
@@ -218,7 +217,6 @@ The AI engineering community has converged toward iterative tool orchestration p
 Early agents used explicit rules and plans specified by programmers. Deep RL demonstrated agents learning behaviors through environmental interaction. LLMs shifted the architectural locus of planning and orchestration from programmer-specified logic to learned parameters, changing where decision-making knowledge resides rather than the fundamental agentic capabilities.
 
 \medskip
-\textit{These patterns help explain why contemporary definitions vary: they reflect different points in this evolutionary trajectory and different disciplinary emphases.}
-\end{keybox}
+These patterns help explain why contemporary definitions vary: they reflect different points in this evolutionary trajectory and different disciplinary emphases.
 
 The next section examines how different disciplines approached agency, revealing persistent tensions and complementary insights.
