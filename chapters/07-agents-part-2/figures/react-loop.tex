@@ -1,0 +1,77 @@
+% react-loop.tex
+% ReAct Pattern - Reasoning + Acting Loop
+% Part of: Chapter 07 - Agents Part II: How to Build an Agent
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    node distance=1.5cm,
+    box/.style={
+        font=\small,
+        align=center,
+        text width=3cm,
+        rounded corners=3pt,
+        inner sep=7pt,
+        minimum height=2.2em,
+        fill=bg-definition,
+        draw=border-definition,
+        line width=1pt,
+        drop shadow={shadow scale=1.05, shadow xshift=0.3pt, shadow yshift=-0.3pt}
+    },
+    actbox/.style={
+        font=\small,
+        align=center,
+        text width=3cm,
+        rounded corners=3pt,
+        inner sep=7pt,
+        minimum height=2.2em,
+        fill=bg-key,
+        draw=border-key,
+        line width=1pt,
+        drop shadow={shadow scale=1.05, shadow xshift=0.3pt, shadow yshift=-0.3pt}
+    },
+    decision/.style={
+        diamond,
+        font=\small,
+        align=center,
+        text width=1.8cm,
+        inner sep=3pt,
+        fill=bg-definition,
+        draw=border-definition,
+        line width=1pt,
+        aspect=2,
+        drop shadow={shadow scale=1.05, shadow xshift=0.3pt, shadow yshift=-0.3pt}
+    },
+    arrow/.style={
+        -stealth,
+        line width=1.2pt,
+        color=border-neutral
+    }
+]
+
+% Main ReAct sequence
+\node[box] (thought) at (0, 0) {\textbf{THOUGHT}\\{\scriptsize Reasoning trace}};
+\node[actbox] (action) at (4, 0) {\textbf{ACTION}\\{\scriptsize Tool call}};
+\node[box] (observation) at (8, 0) {\textbf{OBSERVATION}\\{\scriptsize Tool result}};
+\node[decision] (finish) at (8, -2.5) {Finish?};
+
+% Forward arrows
+\draw[arrow] (thought) -- (action);
+\draw[arrow] (action) -- (observation);
+\draw[arrow] (observation) -- (finish);
+
+% Loop back
+\draw[arrow] (finish) -- node[right, font=\scriptsize] {No} ++(0, -1.5) -- ++(-8, 0) -- node[left, font=\scriptsize, align=center] {Append to\\history} (thought);
+
+% Done path
+\draw[arrow] (finish) -- node[above, font=\scriptsize] {Yes} ++(2, 0) node[right, font=\small] {Return answer};
+
+% Labels for example content
+\node[below=0.3cm of thought, font=\scriptsize, text width=3cm, align=center, text=text-secondary] {``I need to find cases on Section 10(b)...''};
+\node[below=0.3cm of action, font=\scriptsize, text width=3cm, align=center, text=text-secondary] {\texttt{legal\_search(...)}};
+\node[below=0.3cm of observation, font=\scriptsize, text width=3cm, align=center, text=text-secondary] {``Found 15 cases...''};
+
+\end{tikzpicture}
+\caption{ReAct (Reasoning + Acting) pattern interleaving explicit reasoning traces (thoughts), tool invocations (actions), and environment feedback (observations). Each cycle appends to the history, enabling the agent to build on previous steps until reaching a final answer.}
+\label{fig:agents2-react-loop}
+\end{figure}

@@ -1,0 +1,246 @@
+% ============================================================================
+% 06-synthesis.tex
+% Synthesis: Putting It All Together
+% Part of: Chapter 07 - Agents Part II: How to Build an Agent
+% ============================================================================
+
+\section{Synthesis: Putting It All Together}
+\label{sec:agents2-synthesis}
+
+The preceding sections presented agent architecture as components: tools for perception and action, memory for context and learning, planning for strategy and termination, protocols for integration and coordination, evaluation for quality assurance. This section synthesizes those components through two comprehensive case studies---one legal, one financial---that demonstrate how the pieces fit together in realistic workflows.
+
+Each case study walks through a complete agent deployment: the task, the architecture, the workflow, and the evaluation. The goal is not to provide implementation blueprints but to show how architectural choices from Sections~\ref{sec:agents2-architecture}--\ref{sec:agents2-evaluation} manifest in practice.
+
+% ============================================================================
+% CASE STUDY 1: CREDIT FACILITY DOCUMENTATION REVIEW
+% ============================================================================
+
+\subsection{Case Study: Credit Facility Documentation Review}
+\label{sec:agents2-case-legal}
+
+A mid-market company needs to borrow \$50 million to fund expansion. The lender proposes a floating-rate credit facility---think of it like a variable-rate mortgage or credit card, but for a business. The interest rate adjusts periodically based on SOFR (the Secured Overnight Financing Rate) plus a spread. If SOFR rises, the company pays more; if it falls, they pay less.
+
+The borrower's counsel---whether at a law firm or in the company's legal department---must review the 200-page credit agreement and related documents before closing. The stakes are significant: unfavorable terms could cost the company millions over the loan's life, and missed issues could expose counsel to malpractice claims.
+
+\subsubsection{The Task}
+
+The partner assigns the review: ``Go through the credit agreement and flag anything that deviates from market terms or creates unusual risk for the borrower. Pay particular attention to the interest rate mechanics, financial covenants, default triggers, and prepayment provisions. I need a summary memo by Thursday.''
+
+This is a classic legal task: document review requiring both comprehensive coverage (don't miss anything important) and professional judgment (distinguish routine terms from problematic ones). A junior associate might spend 15--20 hours on this review. An agent can accelerate the work while maintaining quality.
+
+\subsubsection{Architecture: GPA+IAT in Practice}
+
+The agent architecture maps directly to the GPA+IAT framework from Part I:
+
+\textbf{Goal} becomes the planning system. The agent receives the partner's instruction and decomposes it into reviewable components: interest rate provisions (SOFR mechanics, spread adjustments, fallback rates), financial covenants (leverage ratio, interest coverage, minimum liquidity), default provisions (events of default, cross-default, cure periods), prepayment terms (voluntary prepayment, mandatory prepayment triggers, prepayment penalties), and representations and warranties. Each component becomes a subtask with defined completion criteria.
+
+\textbf{Perception} becomes read-only tools via MCP. The agent connects to the firm's document management system to access the draft credit agreement, the precedent database to retrieve similar deals the firm has handled, and legal research platforms to check current market terms and regulatory requirements. These MCP connections (Section~\ref{sec:agents2-mcp}) provide standardized access---the agent queries Westlaw, the firm's iManage system, and the precedent database through the same protocol.
+
+\textbf{Action} becomes write tools with appropriate controls. The agent can generate analysis memos, create comparison charts, and flag provisions for review. But it cannot modify the credit agreement itself or communicate with opposing counsel---those actions require human authorization.
+
+\textbf{Iteration} becomes the agent loop. For each document section, the agent perceives (reads the provision), reasons (compares to precedent and market terms), acts (generates analysis), and updates (records findings in its working memory). The loop repeats until all sections are reviewed.
+
+\textbf{Adaptation} becomes memory. The agent maintains episodic memory of what it has reviewed in this transaction, RAG access to the firm's precedent database of prior credit facilities, and semantic memory of credit agreement concepts from its training. When the agent encounters an unusual provision, it retrieves similar provisions from prior deals to assess whether this deviation is common or concerning.
+
+\textbf{Termination} becomes guardrails and success criteria. The agent knows it's done when all identified sections have been reviewed and documented. It escalates to the associate when confidence drops below threshold---for example, when a provision uses non-standard language that doesn't match any precedent.
+
+\subsubsection{Workflow: The Agent Loop in Action}
+
+The review proceeds through the ReAct pattern (Section~\ref{sec:agents2-planning}):
+
+\paragraph{Interest Rate Review} The agent reads the interest rate section: ``Interest accrues at SOFR plus 275 basis points, adjusted quarterly.'' It reasons: this is a standard floating rate structure. It retrieves precedent deals from RAG and finds comparable spreads range from 200--350 basis points for similar credit profiles. It acts: documents that the spread is within market range. It observes an unusual provision: if SOFR becomes unavailable, the lender can select a replacement rate ``in its sole discretion.'' The agent flags this---market-standard fallback provisions typically reference ARRC-recommended replacements, not lender discretion. This is a negotiation point.
+
+\paragraph{Financial Covenant Review} The agent reads the leverage covenant: ``Borrower shall maintain a Total Debt to EBITDA ratio not exceeding 4.0:1.0.'' It retrieves comparable deals and finds this is market for the borrower's credit profile. But it notices the EBITDA definition excludes stock-based compensation and one-time restructuring charges---both borrower-favorable adjustments. It documents these as positive terms. It then reviews the cure provisions and finds the borrower has 30 days to cure covenant violations---shorter than the 45-day standard in the firm's precedent database. It flags this for negotiation.
+
+\paragraph{Default Provisions Review} The agent identifies a cross-default provision: default under any debt instrument exceeding \$1 million triggers default under this facility. It retrieves the borrower's other debt instruments from episodic memory (loaded earlier in the session) and identifies three facilities that could trigger cross-default. It documents the interconnection risk and suggests the threshold should be raised to \$5 million to match market terms.
+
+Throughout, the agent maintains a structured issues list with severity ratings (critical, significant, minor) and recommended responses (negotiate, accept, clarify). When it encounters provisions outside its training distribution---say, an unusual environmental compliance representation---it flags the provision for associate review rather than guessing at analysis.
+
+\subsubsection{Protocols: MCP and Human Coordination}
+
+The agent uses MCP (Section~\ref{sec:agents2-mcp}) for all tool access:
+
+\texttt{search\_precedents(deal\_type="credit facility", size\_range="25M-100M")} queries the firm's precedent database and returns relevant prior transactions.
+
+\texttt{retrieve\_document(doc\_id="12345")} fetches the draft credit agreement from iManage.
+
+\texttt{compare\_provision(text, provision\_type="leverage covenant")} matches the provision against market-standard language and returns deviation analysis.
+
+\texttt{check\_current\_law(topic="SOFR transition", jurisdiction="NY")} searches Westlaw for current regulatory guidance on benchmark rate transitions.
+
+For this single-agent deployment, A2A (Section~\ref{sec:agents2-a2a}) is not required. But for a more complex transaction---say, a leveraged buyout requiring simultaneous review of credit documents, acquisition agreement, and regulatory filings---the orchestrating agent could delegate via A2A to specialist agents: a Credit Agent for financing documents, an M\&A Agent for the acquisition agreement, and a Regulatory Agent for HSR filings. Each specialist uses MCP for tool access while A2A coordinates the overall workflow.
+
+Human-in-the-loop integration follows the approval gate pattern (Section~\ref{sec:agents2-hitl}). The agent produces analysis autonomously but does not deliver work product to the partner without associate review. The associate reviews the issues list, validates the analysis, adds judgment where the agent flagged uncertainty, and presents the refined memo to the partner. High-stakes items---like recommending that the client reject the deal---require explicit partner approval.
+
+\subsubsection{Evaluation: Three Layers Applied}
+
+The agent's output is evaluated using the three-layer framework (Section~\ref{sec:agents2-eval-framework}):
+
+\textbf{Layer 1 (Retrieval):} Did the agent find the right precedents? Metrics include retrieval accuracy (percentage of retrieved precedents that are actually comparable), coverage (did it find the firm's most relevant prior deals?), and authority appropriateness (did it prioritize recent deals over outdated ones?). For this review, target: 85\% retrieval accuracy, 90\% coverage of key precedents.
+
+\textbf{Layer 2 (Reasoning):} Did the agent analyze provisions correctly? Metrics include issue identification accuracy (did it flag actual problems?), false positive rate (did it flag routine terms as problematic?), and severity calibration (did ``critical'' issues deserve that rating?). The associate validates by reviewing a sample of flagged and unflagged provisions. Target: 90\% issue identification accuracy, under 20\% false positive rate.
+
+\textbf{Layer 3 (Workflow):} Did the agent complete the review appropriately? Metrics include section coverage (did it review all assigned sections?), deadline compliance (did it finish by Thursday?), escalation appropriateness (did it flag uncertain items rather than guessing?), and output quality (is the memo client-ready after associate review?). Target: 100\% section coverage, all escalations appropriate.
+
+Security evaluation (Section~\ref{sec:agents2-eval-security}) verifies matter isolation (the agent accessed only this client's documents, not other matters), audit trail completeness (all tool calls logged for malpractice defense), and privilege protection (no privileged analysis leaked to unauthorized systems).
+
+\begin{keybox}[title={Credit Deal Review: Architecture Summary}]
+\textbf{Task:} Review 200-page credit agreement for borrower-unfavorable terms
+
+\textbf{Tools (MCP):} Document management, precedent database, legal research
+
+\textbf{Memory:} Episodic (this transaction), RAG (prior deals), semantic (credit concepts)
+
+\textbf{Planning:} ReAct for section-by-section review, Plan-Execute for systematic coverage
+
+\textbf{Human-in-the-Loop:} Associate review before partner delivery
+
+\textbf{Evaluation:} L1 (precedent retrieval), L2 (provision analysis), L3 (workflow completion)
+
+\textbf{Outcome:} 15-hour task completed in 3 hours with associate validation, issues list ready for partner review
+\end{keybox}
+
+% ============================================================================
+% CASE STUDY 2: EQUITY PORTFOLIO MANAGEMENT
+% ============================================================================
+
+\subsection{Case Study: Equity Portfolio Management}
+\label{sec:agents2-case-financial}
+
+A pension fund has entrusted \$500 million in U.S. equities to an asset management firm. Think of it like a 401(k) but at institutional scale---the fund has specific investment objectives, risk constraints, and regulatory requirements that the portfolio manager must honor while seeking returns.
+
+The client's investment policy statement specifies constraints: no single position exceeding 5\% of the portfolio, technology sector limited to 30\%, ESG exclusions (no tobacco, weapons manufacturers, or thermal coal), and tracking error against the S\&P 500 must stay below 3\%. The portfolio manager must continuously monitor compliance, respond to market changes, and rebalance when positions drift outside mandates.
+
+\subsubsection{The Task}
+
+The portfolio manager needs ongoing support: ``Monitor the portfolio for mandate compliance and drift. When positions approach limits or market conditions suggest rebalancing, generate recommendations with supporting analysis. Flag any compliance issues immediately. Prepare quarterly client reports showing performance attribution and risk metrics.''
+
+This is a continuous management task requiring real-time monitoring, periodic rebalancing decisions, and structured reporting---exactly the kind of work where agents can multiply human capacity while humans retain investment judgment.
+
+\subsubsection{Architecture: GPA+IAT in Practice}
+
+\textbf{Goal} becomes the planning system. The agent pursues multiple concurrent objectives: compliance monitoring (continuous), drift detection (daily), rebalancing analysis (triggered), and reporting (quarterly). Each objective has its own success criteria and termination conditions. Hierarchical planning (Section~\ref{sec:agents2-planning}) coordinates these workstreams---the monitoring agent escalates to the rebalancing agent when drift exceeds thresholds.
+
+\textbf{Perception} becomes market data and portfolio system access via MCP. The agent connects to Bloomberg for real-time prices and market data, the firm's portfolio management system for current holdings and transaction history, compliance databases for restricted lists and regulatory limits, and risk systems for VaR calculations and factor exposures. Each connection uses MCP's standardized interface.
+
+\textbf{Action} becomes recommendation generation with approval gates. The agent can generate rebalancing recommendations, calculate proposed trades, and draft client reports. But it cannot execute trades directly---all transactions require portfolio manager approval, with large trades requiring additional compliance sign-off.
+
+\textbf{Iteration} becomes the monitoring loop. The agent continuously perceives (retrieves prices and positions), reasons (calculates exposures and compares to mandates), and acts (updates dashboards, generates alerts, or triggers rebalancing analysis). The loop runs continuously during market hours.
+
+\textbf{Adaptation} becomes memory across market cycles. The agent maintains episodic memory of this client's portfolio history and past rebalancing decisions, RAG access to the firm's investment research on covered securities, and learned patterns about how this client responds to various recommendations. When the PM accepted a rebalancing recommendation six months ago, the agent remembers the reasoning and applies similar logic to current situations.
+
+\textbf{Termination} varies by workstream. Compliance monitoring never terminates during market hours---it runs continuously. Drift detection terminates daily with end-of-day position reconciliation. Rebalancing analysis terminates when recommendations are generated and approved or rejected by the PM. Reporting terminates when quarterly reports are delivered to the client.
+
+\subsubsection{Workflow: Multi-Agent Coordination}
+
+Portfolio management involves multiple specialized functions. This deployment uses multi-agent orchestration (Section~\ref{sec:agents2-multi-agent}) with A2A coordination:
+
+\paragraph{Monitoring Agent} Runs continuously during market hours. Tracks position sizes against the 5\% single-name limit, calculates sector exposures against the 30\% technology cap, screens holdings against the ESG exclusion list, and monitors tracking error against the benchmark. When any metric approaches its limit (say, a position reaches 4.5\%), the Monitoring Agent creates an A2A Task for the Rebalancing Agent.
+
+\paragraph{Rebalancing Agent} Receives drift alerts from the Monitoring Agent and generates rebalancing recommendations. It retrieves current market conditions via MCP (liquidity, volatility, recent price movements), calculates proposed trades to bring the portfolio within mandates, estimates transaction costs and market impact, and generates a recommendation memo for PM review. The memo includes: current exposure, target exposure, proposed trades, estimated costs, and risk impact.
+
+\paragraph{Compliance Agent} Validates all proposed trades before PM review. It checks the restricted list (no trading in securities where the firm has MNPI), verifies position limits, confirms the trades don't violate client mandates, and ensures regulatory reporting thresholds aren't triggered. If any check fails, the Compliance Agent rejects the recommendation with explanation.
+
+\paragraph{Risk Agent} Calculates portfolio-level risk metrics. Before and after each proposed rebalancing, it computes VaR at 95\% and 99\% confidence, tracking error against benchmark, factor exposures (market, size, value, momentum), and stress test results under various scenarios. The PM uses these metrics to assess whether the rebalancing improves the portfolio's risk profile.
+
+The agents communicate via A2A protocol (Section~\ref{sec:agents2-a2a}). The Monitoring Agent creates a Task describing the drift condition. The Rebalancing Agent returns an Artifact containing the recommendation. The Compliance Agent validates and returns approval or rejection. The Risk Agent provides metrics as supporting Artifacts. The PM reviews the complete package---recommendation, compliance approval, and risk analysis---before authorizing execution.
+
+\subsubsection{Protocols: MCP for Data, A2A for Coordination}
+
+Each agent uses MCP for tool access:
+
+\texttt{get\_positions(portfolio\_id, as\_of\_date)} retrieves current holdings from the portfolio management system.
+
+\texttt{get\_market\_data(tickers, fields=["price", "volume", "volatility"])} fetches real-time data from Bloomberg.
+
+\texttt{check\_restricted\_list(tickers)} validates securities against the compliance restricted list.
+
+\texttt{calculate\_var(portfolio, confidence, horizon)} computes Value-at-Risk using the firm's risk engine.
+
+\texttt{get\_esg\_ratings(tickers)} retrieves ESG scores to verify exclusion compliance.
+
+A2A coordinates the multi-agent workflow:
+
+The Monitoring Agent publishes its Agent Card: ``I monitor portfolios for mandate compliance and drift. I produce drift alerts as Tasks for rebalancing analysis.''
+
+When technology sector exposure reaches 29\% (approaching the 30\% limit), the Monitoring Agent creates a Task: ``Technology exposure approaching limit. Current: 29\%. Limit: 30\%. Largest tech holdings: AAPL (4.2\%), MSFT (3.8\%), NVDA (2.5\%). Request rebalancing analysis.''
+
+The Rebalancing Agent accepts the Task, conducts analysis, and returns an Artifact: the recommendation memo proposing to trim AAPL by 50 basis points and reallocate to healthcare.
+
+The Compliance Agent receives the recommendation, validates it, and returns an approval Artifact.
+
+The Risk Agent calculates before/after metrics and returns analysis Artifacts.
+
+The orchestrating system assembles all Artifacts into a decision package for PM review.
+
+\subsubsection{Evaluation: Continuous Monitoring}
+
+Portfolio management requires continuous evaluation (Section~\ref{sec:agents2-eval-continuous}), not just deployment-time validation:
+
+\textbf{Layer 1 (Data Quality):} Is market data accurate and timely? Metrics include data freshness (latency from exchange to agent), identifier accuracy (correct ticker/CUSIP mapping), and completeness (no missing prices for portfolio securities). Automated monitoring compares agent data against independent feeds. Target: 99.9\% accuracy, sub-second latency during market hours.
+
+\textbf{Layer 2 (Analysis Quality):} Are rebalancing recommendations sound? Metrics include recommendation acceptance rate (what percentage does the PM approve?), post-trade performance (did recommended trades improve the portfolio?), and risk calculation accuracy (do realized volatilities match predictions?). Weekly sampling compares agent analysis to analyst review. Target: 85\% acceptance rate, risk predictions within 10\% of realized.
+
+\textbf{Layer 3 (Mandate Compliance):} Does the portfolio stay within client constraints? Metrics include breach frequency (how often do positions exceed limits?), alert timeliness (how far in advance are approaching limits flagged?), and false alert rate (how many alerts don't require action?). Target: zero mandate breaches, 24-hour advance warning on approaching limits, under 10\% false alerts.
+
+Security evaluation verifies client isolation (this client's portfolio data is not accessible to other client agents), MNPI protection (restricted list checking prevents trading on inside information), and audit completeness (all recommendations and approvals logged for regulatory examination).
+
+The evaluation flywheel (Section~\ref{sec:agents2-eval-flywheel}) operates continuously: recommendations the PM rejects become training cases for improving future recommendations, mandate breaches (if any) trigger root cause analysis and system updates, and quarterly performance reviews compare agent-assisted portfolios against benchmarks.
+
+\begin{keybox}[title={Portfolio Management: Architecture Summary}]
+\textbf{Task:} Continuously monitor \$500M equity portfolio for mandate compliance and rebalancing opportunities
+
+\textbf{Tools (MCP):} Market data (Bloomberg), portfolio system, compliance database, risk engine
+
+\textbf{Memory:} Episodic (client history), RAG (investment research), learned (PM preferences)
+
+\textbf{Planning:} Hierarchical coordination of Monitoring, Rebalancing, Compliance, and Risk agents
+
+\textbf{Protocols:} MCP for data access, A2A for multi-agent coordination
+
+\textbf{Human-in-the-Loop:} PM approval for all trades, compliance sign-off for large transactions
+
+\textbf{Evaluation:} Continuous L1 (data), L2 (analysis), L3 (compliance) monitoring with weekly sampling
+
+\textbf{Outcome:} Real-time mandate monitoring, proactive rebalancing recommendations, zero compliance breaches
+\end{keybox}
+
+% ============================================================================
+% SYNTHESIS: KEY PRINCIPLES
+% ============================================================================
+
+\subsection{Synthesis: Principles Across Domains}
+\label{sec:agents2-synthesis-principles}
+
+The two case studies---credit documentation review and portfolio management---differ in domain, time horizon, and complexity. But they share architectural principles that generalize across legal and financial applications:
+
+\textbf{GPA+IAT maps to concrete components.} In both cases, Goals became planning systems, Perception became MCP-connected tools, Action became controlled write operations, Iteration became the agent loop, Adaptation became memory systems, and Termination became explicit stopping criteria. The framework from Part I isn't abstract theory---it's a design checklist.
+
+\textbf{Tools require appropriate controls.} The credit review agent couldn't modify documents or contact opposing counsel. The portfolio agent couldn't execute trades without PM approval. Tool permissions matched task requirements and risk profiles---read access was permissive, write access was gated.
+
+\textbf{Memory enables context and learning.} Both agents used episodic memory (this transaction, this portfolio), RAG (precedent deals, investment research), and semantic knowledge (legal concepts, financial principles). Memory transformed generic reasoning into domain-competent analysis.
+
+\textbf{Protocols enable integration.} MCP provided standardized tool access in both cases. A2A enabled multi-agent coordination for portfolio management. The protocols from Section~\ref{sec:agents2-protocols} aren't optional infrastructure---they're how agents connect to the systems where work actually happens.
+
+\textbf{Humans remain in the loop.} The credit review agent produced recommendations for associate validation. The portfolio agent generated trade proposals for PM approval. Neither agent took consequential action autonomously. Human judgment remained essential for high-stakes decisions.
+
+\textbf{Evaluation is continuous.} Both deployments used three-layer evaluation---retrieval, reasoning, workflow---with metrics appropriate to their domains. Portfolio management added continuous monitoring because the task never ends. Evaluation isn't a deployment gate; it's an ongoing quality system.
+
+\begin{highlightbox}[title={From Architecture to Deployment}]
+Building an agent system is like building a professional practice:
+
+\textbf{Define the work.} What tasks will the agent handle? Credit review? Portfolio monitoring? Research? Drafting? The task determines the architecture.
+
+\textbf{Equip with tools.} What systems does the agent need? Legal research, document management, market data, compliance databases? Connect via MCP with appropriate permissions.
+
+\textbf{Provide context.} What memory does the agent need? Prior deals, investment research, client history? Build RAG and episodic memory for the domain.
+
+\textbf{Design workflows.} How should the agent approach tasks? ReAct for exploration, Plan-Execute for systematic coverage, hierarchical for complex coordination?
+
+\textbf{Integrate humans.} Where do humans review and approve? Associate review of legal analysis, PM approval of trades, partner sign-off on client deliverables?
+
+\textbf{Measure quality.} How will you know the agent works? Layer 1 retrieval metrics, Layer 2 analysis quality, Layer 3 workflow completion? Build evaluation into the system from day one.
+
+The components from Sections~\ref{sec:agents2-architecture}--\ref{sec:agents2-evaluation} become a deployment checklist. Architecture is not theory---it's the blueprint for systems that work.
+\end{highlightbox}
+

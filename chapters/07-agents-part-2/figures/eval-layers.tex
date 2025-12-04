@@ -1,0 +1,71 @@
+% ============================================================================
+% eval-layers.tex
+% Three-Layer Evaluation Framework Diagram
+% Shows stacked layers with GPA+IAT mappings and progression from bottom to top
+% ============================================================================
+
+\begin{tikzpicture}[
+  box/.style={rectangle, minimum width=10cm, minimum height=2cm, align=center, text width=9cm},
+  label/.style={font=\small\bfseries},
+  desc/.style={font=\small},
+  mapping/.style={font=\footnotesize, text=definition-dark}
+]
+
+% Layer 3: Workflows (Top) - Amber/orange for end-to-end results
+\node[box, fill=bg-key, draw=border-key, line width=1.5pt] (layer3) at (0,4) {
+  \textbf{\large Layer 3: Workflows \& Termination} \\[0.3em]
+  \textit{End-to-end task success} \\[0.3em]
+  {\footnotesize GPA+IAT: Goal (G), Iteration (I), Termination (T)} \\[0.1em]
+  {\footnotesize Testing: Integration testing}
+};
+
+% Layer 2: Reasoning (Middle) - Mixed blue-amber for decision quality
+\node[box, fill=bg-definition!30!bg-key, draw=border-definition, line width=1.5pt] (layer2) at (0,1.5) {
+  \textbf{\large Layer 2: Reasoning \& Adaptation} \\[0.3em]
+  \textit{Decision quality, strategy selection} \\[0.3em]
+  {\footnotesize GPA+IAT: Adaptation (A)} \\[0.1em]
+  {\footnotesize Testing: Unit testing}
+};
+
+% Layer 1: Retrieval (Bottom) - Blue for foundational perception
+\node[box, fill=bg-definition, draw=border-definition, line width=1.5pt] (layer1) at (0,-1) {
+  \textbf{\large Layer 1: Retrieval \& Perception} \\[0.3em]
+  \textit{Data accuracy, source quality} \\[0.3em]
+  {\footnotesize GPA+IAT: Perception (P)} \\[0.1em]
+  {\footnotesize Testing: Component testing}
+};
+
+% Vertical flow arrows showing progression
+\draw[-{Stealth[length=3mm]}, line width=1.5pt, definition-dark]
+  (layer1.north) -- (layer2.south) node[midway, right, font=\small] {builds on};
+\draw[-{Stealth[length=3mm]}, line width=1.5pt, definition-dark]
+  (layer2.north) -- (layer3.south) node[midway, right, font=\small] {builds on};
+
+% Side annotations for example metrics
+\node[anchor=west, font=\footnotesize, text width=3.5cm] at (5.5,4) {
+  \textbf{Metrics:} \\
+  • Task success rate \\
+  • Step efficiency \\
+  • Resource usage
+};
+
+\node[anchor=west, font=\footnotesize, text width=3.5cm] at (5.5,1.5) {
+  \textbf{Metrics:} \\
+  • Strategy quality \\
+  • Error recovery \\
+  • Adaptation speed
+};
+
+\node[anchor=west, font=\footnotesize, text width=3.5cm] at (5.5,-1) {
+  \textbf{Metrics:} \\
+  • Precision@k \\
+  • Recall@k \\
+  • MRR, nDCG
+};
+
+% Foundation label
+\node[font=\footnotesize\itshape, text=text-muted] at (0,-2.5) {
+  Foundation $\rightarrow$ Composition $\rightarrow$ Integration
+};
+
+\end{tikzpicture}

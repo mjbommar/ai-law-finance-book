@@ -1,0 +1,275 @@
+% ============================================================================
+% 05-evaluation.tex
+% Technical Evaluation
+% Part of: Chapter 07 - Agents Part II: How to Build an Agent
+% ============================================================================
+
+\section{Technical Evaluation}
+\label{sec:agents2-evaluation}
+
+Evaluating agents is harder than evaluating models. A model produces outputs given inputs; an agent executes multi-step workflows, adapts strategies, and interacts with external systems. This section presents a three-layer evaluation framework that mirrors how law firms evaluate associate work or financial institutions assess analyst performance---a structured performance review system for your AI workforce.
+
+% ============================================================================
+% THREE-LAYER FRAMEWORK
+% ============================================================================
+
+\subsection{Three-Layer Evaluation Framework}
+\label{sec:agents2-eval-framework}
+
+When you evaluate professional work, you assess multiple dimensions: Did they find the right materials? Did they analyze correctly? Did they complete the task appropriately? Agent evaluation follows the same logic.
+
+\textbf{Layer 1: Retrieval and Perception}---the foundational skill of gathering relevant materials. Before you evaluate whether someone wrote a good memo, you check whether they found the right cases or pulled the relevant market data. This maps to Perception from GPA+IAT.
+
+\textbf{Layer 2: Reasoning and Adaptation}---the analytical skill of processing information correctly. Once you know the associate found the right cases, you review their analysis. Did they apply the rule to the facts? Can they adjust when initial research hits a dead end? This maps to Goal decomposition and Adaptation.
+
+\textbf{Layer 3: Workflows and Termination}---the professional skill of completing tasks appropriately. Did the memo arrive on time? Did they know when to escalate? This maps to Iteration, Termination, and Action.
+
+\begin{figure}[htbp]
+\centering
+\input{figures/eval-layers.tex}
+\caption{Three-layer evaluation framework: Layer 1 checks retrieval (did we find the right materials?), Layer 2 checks reasoning (did we analyze correctly?), Layer 3 checks workflow completion (did we finish appropriately?).}
+\label{fig:agents2-eval-layers}
+\end{figure}
+
+% ============================================================================
+% LAYER 1: RETRIEVAL AND PERCEPTION
+% ============================================================================
+
+\subsection{Layer 1: Retrieval and Perception}
+\label{sec:agents2-eval-layer1}
+
+Layer 1 evaluates how well your agent gathers relevant information. When you assign research to a junior professional, your first quality check is: Did they find the right materials?
+
+\subsubsection{Retrieval Quality Metrics}
+\label{sec:agents2-eval-rag}
+
+\paragraph{Retrieval Accuracy} What percentage of retrieved documents are actually relevant? If your associate gave you ten cases but only six are on point, that is 60\% accuracy.
+
+\paragraph{Coverage} What percentage of relevant documents were found? Even if everything retrieved is relevant, did the agent miss the controlling precedent?
+
+\paragraph{Ranking Quality} Are the most important documents ranked first, or buried on page ten? Good associates surface binding authority first.
+
+\paragraph{Data Freshness} Are cases current or overruled? Is market data real-time or stale? Citing bad law or using yesterday's prices for a trade decision is dangerous.
+
+\paragraph{Identifier Accuracy} Do citations exist? Do ticker symbols and CUSIPs resolve correctly? A single character error can cause you to trade the wrong asset.
+
+\begin{highlightbox}[title={Retrieval Examples}]
+\textbf{Legal:} Query ``securities fraud scienter requirement'' returns five documents: \textit{Tellabs}, \textit{Ernst \& Ernst}, \textit{Dura Pharmaceuticals}, plus two unrelated contract cases. \textbf{Assessment:} 60\% accuracy (3/5 relevant), good ranking (first result highly relevant), needs better filtering.
+
+\textbf{Financial:} Query ``high-yield energy sector bonds'' returns eight securities: six relevant BB-rated energy bonds, plus two investment-grade utilities. \textbf{Assessment:} 75\% accuracy, 100\% identifier accuracy, needs better credit rating filtering.
+\end{highlightbox}
+
+\subsubsection{Legal AI Layer 1 Metrics}
+\label{sec:agents2-eval-layer1-legal}
+
+Legal AI faces domain-specific retrieval challenges. A case that looks semantically similar may be from the wrong jurisdiction or overruled. This ``misgrounding'' problem---retrieving real documents but applying them incorrectly---is distinct from hallucination.
+
+\paragraph{Authority Retrieval} Does your agent prioritize binding authority over persuasive sources? A single controlling case outweighs fifty law review articles.
+
+\paragraph{Jurisdictional Accuracy} Research shows top legal AI systems achieve only \textbf{75--82\% jurisdictional accuracy}---nearly one in four documents from the wrong jurisdiction.
+
+\paragraph{Temporal Validity} Are sources current? Many legal AI systems skip citation validation, relying on raw search without checking Shepard's or KeyCite.
+
+\paragraph{Citation Verification} Research found \emph{incomplete answer rates} range from \textbf{18\% to 62\%} across platforms.
+
+\begin{keybox}[title={Layer 1: Context-Dependent Standards}]
+\textbf{Legal:} Transactional (contract accuracy, due diligence completeness), Litigation (case law precision, discovery coding), Regulatory (compliance assessment, filing validation). Big Law requires higher jurisdictional accuracy than small firm research assistants.
+
+\textbf{Financial:} Buy-side (portfolio data quality, research completeness), Sell-side (research accuracy, timeliness), Trading (millisecond data freshness), Risk (VaR input validation). Sell-side trading requires real-time data; buy-side portfolio analysis tolerates end-of-day.
+\end{keybox}
+
+% ============================================================================
+% LAYER 2: REASONING AND ADAPTATION
+% ============================================================================
+
+\subsection{Layer 2: Reasoning and Adaptation}
+\label{sec:agents2-eval-layer2}
+
+Layer 2 evaluates reasoning quality and adaptation. The associate found the right cases (Layer 1 passed)---but did they analyze them correctly?
+
+\subsubsection{Reasoning Quality Metrics}
+\label{sec:agents2-eval-reasoning}
+
+\paragraph{Reasoning Trace Evaluation} Check the reasoning steps, not just conclusions. In legal practice, this is IRAC: Issue, Rule, Application, Conclusion. In finance, a portfolio manager checks the analyst's math, assumptions, and stress tests.
+
+\paragraph{Adaptation Metrics} Can your agent detect when initial approaches fail and try alternatives? Good associates pivot when research hits dead ends; poor ones keep pursuing failed strategies.
+
+\paragraph{Workflow Quality} Domain-specific standards matter. Legal reasoning must weigh binding versus persuasive authority and express appropriate uncertainty. Financial analysis must use appropriate quantitative methods and incorporate risk-adjusted returns.
+
+The baseline should be expert human professionals. If your legal AI performs worse than a competent third-year associate, it is not ready for production.
+
+\begin{definitionbox}[title={Layer 2: Domain-Specific Standards}]
+\textbf{Legal:} Authority weighting (binding over persuasive), counterargument analysis, appropriate hedging (``likely'' vs. ``certainly''), IRAC structure.
+
+\textbf{Financial:} Model appropriateness (fat-tailed distributions for crisis scenarios), risk-adjusted metrics (Sharpe ratios), regulatory compliance, assumption documentation.
+
+\textbf{Baseline:} Compare to competent junior professionals. A third-year associate should identify key liability provisions; a buy-side analyst should stress-test DCF assumptions.
+\end{definitionbox}
+
+% ============================================================================
+% LAYER 3: WORKFLOWS AND TERMINATION
+% ============================================================================
+
+\subsection{Layer 3: Workflows and Termination}
+\label{sec:agents2-eval-layer3}
+
+Layer 3 evaluates complete workflows. Your associate might conduct excellent research (Layer 1) and produce sound analysis (Layer 2), but if they miss deadlines or fail to escalate appropriately, they still fail.
+
+\subsubsection{Workflow Completion Metrics}
+\label{sec:agents2-eval-workflow}
+
+\paragraph{Task Success Rate} What fraction of tasks complete successfully? This is your headline metric.
+
+\paragraph{Step Efficiency} How many steps versus the optimal path? An associate who takes 40 hours for 8-hour research is inefficient even if the work is correct.
+
+\paragraph{Resource Utilization} Tokens, API calls, compute per task. An agent consuming excessive resources may be technically correct but economically unviable.
+
+Research by METR found agents achieve \textbf{100\% success on tasks under 4 minutes}, but \textbf{under 10\% for tasks over 4 hours} \parencite{metr-agent-capability-2025}. Implication: decompose complex tasks into manageable sub-tasks with checkpoints.
+
+\subsubsection{Termination and Action Evaluation}
+\label{sec:agents2-eval-termination}
+
+\paragraph{Appropriate Termination} Does your agent stop at the right time? Successful termination means achieving the goal. Unsuccessful but acceptable termination means hitting limits or correctly escalating. Unacceptable is stopping randomly or declaring success when incomplete.
+
+\paragraph{Action Correctness} Did the agent call the right tools with correct parameters? Basic competence---usually binary.
+
+\paragraph{Output Quality} Is the final work product client-ready? Does it follow formatting conventions and answer the question asked?
+
+\begin{highlightbox}[title={Layer 3 Workflow Examples}]
+\textbf{Legal:} M\&A due diligence agent: complete checklists, flag issues for partner review, produce client-ready reports. Litigation agent: identify precedent, draft arguments, meet court deadlines.
+
+\textbf{Financial:} Portfolio agent: generate allocations respecting mandates, calculate risk metrics correctly. Trade execution agent: achieve best execution, respect restrictions, maintain audit trails.
+\end{highlightbox}
+
+% ============================================================================
+% SECURITY EVALUATION
+% ============================================================================
+
+\subsection{Security Evaluation}
+\label{sec:agents2-eval-security}
+
+Security must be evaluated alongside functionality, like information security audits in professional services.
+
+\paragraph{Layer 1 Security} Can your agent detect and reject prompt injection in queries, documents, and tool outputs? Treat all external inputs as potentially adversarial.
+
+\paragraph{Layer 2 Security} Does your agent resist adversarial context during reasoning? Cross-check facts, verify sources, express skepticism when information seems inconsistent.
+
+\paragraph{Layer 3 Security} Are privilege boundaries maintained across workflows? Are all actions logged with tamper-resistant audit trails?
+
+OWASP 2025 ranks \emph{prompt injection} as the critical vulnerability, appearing in over \textbf{73\%} of deployments \parencite{owasp-llm-top10}. Attack success rates reach \textbf{84\%} for code-generation agents.
+
+\begin{keybox}[title={Security Evaluation: Domain Priorities}]
+\textbf{Legal:} Privilege boundaries (client isolation), conflict checking, ethical compliance, audit trails for malpractice defense.
+
+\textbf{Financial:} Trading restrictions (blackouts, position limits), MNPI isolation (Chinese walls), regulatory reporting, market manipulation detection.
+
+\textbf{Approach:} Red-team testing with domain expertise. Legal: adversarial prompts bypassing privilege. Financial: prompts circumventing trading restrictions.
+\end{keybox}
+
+% ============================================================================
+% BENCHMARKS AND DATASETS
+% ============================================================================
+
+\subsection{Benchmarks and Datasets}
+\label{sec:agents2-benchmarks}
+
+Benchmarks provide standardized tests like professional licensing exams---they tell you how your system compares to baselines.
+
+\paragraph{LegalBench} 162 tasks covering six types of legal reasoning: issue-spotting, rule-recall, rule-application, rule-conclusion, interpretation, and rhetorical-understanding \parencite{legalbench2023}. Spans multiple practice areas. Think of it like a comprehensive law school exam.
+
+\paragraph{VLAIR} First benchmark comparing legal AI against lawyer control groups. Seven tasks including Document Q\&A, Summarization, Redlining. Key finding (October 2025): AI scored \textbf{7 points above lawyer baseline} (\textbf{71\% accuracy}), outperforming on routine tasks but falling short on complex judgment-intensive work.
+
+\paragraph{FinQA} Tests financial question answering over earnings reports \parencite{finqa2021}. Multi-step calculations combining text comprehension and math. Basic analyst competence.
+
+\paragraph{Trading Simulations} Test sequential decision-making: portfolio returns, \textbf{Sharpe ratio}, \textbf{maximum drawdown}, compliance with mandates, transaction cost efficiency.
+
+\begin{keybox}[title={Domain-Specific Evaluation}]
+Generic benchmarks are insufficient. Effective evaluation requires:
+
+\textbf{Legal:} Lawyer baseline comparisons, expert reviewers (partners, senior associates), legal-specific metrics (authority weighting, jurisdictional accuracy), continuous feedback from production.
+
+\textbf{Financial:} Analyst/trader baseline comparisons, expert reviewers (PMs, quants, compliance), financial metrics (Sharpe accuracy, VaR precision), backtesting against historical data.
+
+\textbf{Common thread:} Evaluation by people who actually do the work. Benchmarks screen; expert human evaluation is the gold standard.
+\end{keybox}
+
+% ============================================================================
+% EVALUATION INFRASTRUCTURE
+% ============================================================================
+
+\subsection{Evaluation Infrastructure}
+\label{sec:agents2-eval-infra}
+
+Robust evaluation requires systematic infrastructure---like quality assurance in professional services.
+
+\subsubsection{Core Components}
+\label{sec:agents2-eval-infra-components}
+
+\paragraph{Test Suites} Scenarios with known correct answers. Cover common tasks and edge cases. Like practice exams for bar preparation.
+
+\paragraph{Reference Standards} Expert-verified correct outputs. Like model briefs or exemplar analyses. Must be maintained as law and markets change.
+
+\paragraph{Quality Metrics} Systematic measurements across three layers. Provide objective baselines: ``Retrieval accuracy improved from 78\% to 85\%, but reasoning quality decreased from 82\% to 79\%.''
+
+\paragraph{Performance Monitoring} Ongoing tracking to detect degradation. Agents degrade when models change, data drifts, or adversaries adapt.
+
+\paragraph{Expert Review} Structured procedures with clear rubrics. Calibrate reviewers for consistency. Feed findings back into reference standards.
+
+\begin{definitionbox}[title={Expert Reviewers by Domain}]
+\textbf{Legal:} Partners (overall quality), Senior Associates (analysis, citations), Practice Group Leads (technical accuracy), Ethics Counsel (professional responsibility).
+
+\textbf{Financial:} Portfolio Managers (recommendations), Quants (calculations, assumptions), Compliance Officers (regulatory adherence), Risk Managers (VaR, stress tests), Traders (execution quality).
+
+\textbf{Frequency:} Pre-deployment comprehensive review. Post-deployment: 1--5\% random, 100\% high-risk, 100\% errors. Quarterly calibration.
+\end{definitionbox}
+
+\subsubsection{Building an Evaluation System}
+\label{sec:agents2-eval-pipeline-setup}
+
+\paragraph{Define Standards} Explicit and measurable. Not ``good legal research'' but ``retrieves binding authority in correct jurisdiction at least 85\% of the time.''
+
+\paragraph{Create Reference Examples} Start with 50--100 scenarios. Each includes: task, expert-verified correct output, explanation. Labor-intensive but essential.
+
+\paragraph{Establish Baseline} Measure against references before deployment. If agent scores 85\% on references, target 75--80\% in production (real-world is harder).
+
+\paragraph{Monitor Continuously} Weekly/monthly reference testing, 1--5\% production sampling, automated alerts on threshold violations.
+
+\paragraph{Evaluation Rubrics} Five-point scales with explicit criteria. \textbf{Score 5}: Meets professional standards, client-ready. \textbf{Score 3}: Acceptable but incomplete. \textbf{Score 1}: Fundamentally wrong. Calibrate through inter-rater reliability testing.
+
+% ============================================================================
+% CONTINUOUS EVALUATION
+% ============================================================================
+
+\subsection{Continuous Evaluation}
+\label{sec:agents2-eval-continuous}
+
+Evaluation is not one-time. Like ongoing quality assurance---annual reviews, continuous mentorship---deployed agents require continuous monitoring.
+
+\subsubsection{Production Monitoring}
+\label{sec:agents2-continuous-metrics}
+
+\paragraph{Performance Metrics} Track success rates, error rates, completion times. Legal: citation validity, jurisdiction accuracy, incomplete answer rates. Financial: compliance rates, risk calculation accuracy, identifier verification, audit trail completeness.
+
+\paragraph{Degradation Detection} Compare current performance against baselines. Agents degrade when models update, data drifts, adversaries adapt, or task distributions change.
+
+\paragraph{User Feedback} Track corrections, complaints, escalation rates. Validated corrections become new test cases.
+
+\paragraph{Sampling Strategy} Random (1--5\% for baseline), High-risk (100\% for costly scenarios), Errors (100\% when agent reported uncertainty). Define warning thresholds: citation accuracy below 95\%, compliance rate below 95\%. Critical levels may require disabling pending remediation.
+
+\subsubsection{The Continuous Improvement Cycle}
+\label{sec:agents2-eval-flywheel}
+
+The improvement cycle has eight stages: \textbf{Deploy} with monitoring enabled $\rightarrow$ \textbf{Monitor} metrics and collect feedback $\rightarrow$ \textbf{Sample} outputs for expert review $\rightarrow$ \textbf{Analyze} failures for root causes $\rightarrow$ \textbf{Expand} reference standards with validated failures $\rightarrow$ \textbf{Improve} agent based on analysis $\rightarrow$ \textbf{Validate} against expanded references $\rightarrow$ \textbf{Deploy} improved agent.
+
+\begin{keybox}[title={The Evaluation Flywheel}]
+Evaluation is ongoing quality assurance, not a one-time test.
+
+\textbf{Cycle:} Deploy $\rightarrow$ Monitor $\rightarrow$ Sample $\rightarrow$ Analyze $\rightarrow$ Expand $\rightarrow$ Improve $\rightarrow$ Validate $\rightarrow$ Deploy
+
+\textbf{Key insight:} Each iteration strengthens the agent by expanding reference coverage and addressing discovered edge cases. A mature system with hundreds of reference cases produces more reliable assessment than a new system with dozens.
+
+\textbf{Watch for degradation:} \textit{Definition drift} (changing criteria invalidates comparisons) and \textit{optimism drift} (relaxing expectations over time). Prevent with written rubrics and multiple reviewers.
+\end{keybox}
+
+The continuous improvement cycle separates mature deployments from prototypes. A prototype is evaluated once and hoped to work. A mature system is evaluated continuously, monitored systematically, and improved iteratively.
+
