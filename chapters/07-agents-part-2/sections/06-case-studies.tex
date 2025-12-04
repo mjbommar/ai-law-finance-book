@@ -1,15 +1,23 @@
 % ============================================================================
-% 06-synthesis.tex
-% Synthesis: Putting It All Together
+% 06-case-studies.tex
+% Case Studies: Agents in Practice
 % Part of: Chapter 07 - Agents Part II: How to Build an Agent
 % ============================================================================
 
-\section{Synthesis: Putting It All Together}
+\section{Reference Architectures: Agents in Practice}
 \label{sec:agents2-synthesis}
 
-The preceding sections presented agent architecture as components: tools for perception and action, memory for context and learning, planning for strategy and termination, protocols for integration and coordination, evaluation for quality assurance. This section synthesizes those components through two comprehensive case studies---one legal, one financial---that demonstrate how the pieces fit together in realistic workflows.
+The preceding sections presented agent architecture as components: triggers and channels for how work enters the system (Section~\ref{sec:agents2-triggers}), surfaces for how users interact with agents (Section~\ref{sec:agents2-surfaces}), tools for perception and action, memory for context and learning, planning for strategy and termination, protocols for integration and coordination, and evaluation for quality assurance. This section synthesizes those components through two \textbf{reference architectures}---one legal, one financial---that demonstrate how the pieces fit together.
 
-Each case study walks through a complete agent deployment: the task, the architecture, the workflow, and the evaluation. The goal is not to provide implementation blueprints but to show how architectural choices from Sections~\ref{sec:agents2-architecture}--\ref{sec:agents2-evaluation} manifest in practice.
+\begin{highlightbox}[title={Reference Architectures, Not Production Claims}]
+The case studies below are \textit{reference architectures}: idealized designs showing how architectural components interconnect. They illustrate target states---what well-designed systems aim to achieve---not claims about what current technology reliably delivers.
+
+As discussed in Section~\ref{sec:agents2-limitations}, agents today achieve under 10\% success on tasks exceeding four hours. Both workflows below describe multi-hour processes. \textbf{Current systems will require substantial human oversight, intervention at failure points, and acceptance of partial automation} rather than the end-to-end execution these architectures describe.
+
+Read these case studies as blueprints for how to structure agent systems, not as descriptions of turnkey solutions available today.
+\end{highlightbox}
+
+Each reference architecture walks through a complete agent deployment: the trigger that initiates work, the surface through which users interact, the architecture that processes the task, and the evaluation that validates quality. The goal is not to provide implementation blueprints but to show how architectural choices from Sections~\ref{sec:agents2-triggers}--\ref{sec:agents2-evaluation} manifest in practice.
 
 % ============================================================================
 % CASE STUDY 1: CREDIT FACILITY DOCUMENTATION REVIEW
@@ -18,9 +26,17 @@ Each case study walks through a complete agent deployment: the task, the archite
 \subsection{Case Study: Credit Facility Documentation Review}
 \label{sec:agents2-case-legal}
 
+\paragraph{The Scenario}
+
 A mid-market company needs to borrow \$50 million to fund expansion. The lender proposes a floating-rate credit facility---think of it like a variable-rate mortgage or credit card, but for a business. The interest rate adjusts periodically based on SOFR (the Secured Overnight Financing Rate) plus a spread. If SOFR rises, the company pays more; if it falls, they pay less.
 
 The borrower's counsel---whether at a law firm or in the company's legal department---must review the 200-page credit agreement and related documents before closing. The stakes are significant: unfavorable terms could cost the company millions over the loan's life, and missed issues could expose counsel to malpractice claims.
+
+\paragraph{Trigger and Surface}
+
+The \textbf{trigger} is a document event: the lender's counsel uploads the draft credit agreement to the deal room. This external feed (Section~\ref{sec:agents2-triggers}) initiates the review workflow automatically---the agent doesn't wait for someone to remember to start the review.
+
+The \textbf{surface} is document-first (Section~\ref{sec:agents2-surfaces}): the agent produces a structured issues list and summary memo as work products. The associate reviews and edits the document; the partner approves before delivery. Chat interaction is available for follow-up questions, but the primary output is the memo.
 
 \subsubsection{The Task}
 
@@ -55,6 +71,20 @@ The review proceeds through the ReAct pattern (Section~\ref{sec:agents2-planning
 \paragraph{Default Provisions Review} The agent identifies a cross-default provision: default under any debt instrument exceeding \$1 million triggers default under this facility. It retrieves the borrower's other debt instruments from episodic memory (loaded earlier in the session) and identifies three facilities that could trigger cross-default. It documents the interconnection risk and suggests the threshold should be raised to \$5 million to match market terms.
 
 Throughout, the agent maintains a structured issues list with severity ratings (critical, significant, minor) and recommended responses (negotiate, accept, clarify). When it encounters provisions outside its training distribution---say, an unusual environmental compliance representation---it flags the provision for associate review rather than guessing at analysis.
+
+\subsubsection{Where This Architecture Fails}
+
+Reference architectures should be honest about failure modes. Here are realistic scenarios where the credit review agent falls short:
+
+\textbf{Nuanced definitions escape statistical matching.} The agent flags a ``Change of Control'' provision as standard because it statistically matches the precedent database's patterns. But this deal's definition of ``Control'' excludes the founder's estate and family trusts---a nuance with significant implications for transaction planning that statistical similarity doesn't capture. The provision matches the pattern but misses the point.
+
+\textbf{Cross-document dependencies break retrieval boundaries.} The credit agreement's EBITDA definition references ``Adjusted EBITDA as defined in the Intercreditor Agreement.'' The agent analyzes the credit agreement's language but doesn't retrieve and parse the separate intercreditor agreement to trace the definition chain. It reports the covenant as ``standard'' when the actual calculation methodology buried in the cross-reference is borrower-unfavorable.
+
+\textbf{Market context requires judgment the agent lacks.} The agent retrieves precedents showing 250--350 basis point spreads for comparable credits. But those precedents are from six months ago; the current credit market has tightened significantly. The 275 basis point spread in this deal is actually aggressive in today's market---a point the agent cannot assess because market conditions aren't in the precedent database.
+
+\textbf{Omissions are harder than inclusions.} The agent reviews provisions that exist. But experienced counsel also notice what's \textit{missing}: Where is the equity cure provision that market-standard credit facilities include? The agent finds no precedent for comparison because there's nothing in this document to match against precedents. Missing provisions require a different analytical mode than reviewing existing ones.
+
+These failures illustrate why human review remains essential. The agent accelerates the review but cannot replace professional judgment on nuanced, contextual, or novel issues. The associate validates the agent's work product, catches these limitations, and adds the judgment that turns mechanical analysis into legal advice.
 
 \subsubsection{Protocols: MCP and Human Coordination}
 
@@ -97,7 +127,9 @@ Security evaluation (Section~\ref{sec:agents2-eval-security}) verifies matter is
 
 \textbf{Evaluation:} L1 (precedent retrieval), L2 (provision analysis), L3 (workflow completion)
 
-\textbf{Outcome:} 15-hour task completed in 3 hours with associate validation, issues list ready for partner review
+\textbf{Target Outcome:} 15-hour task reduced to 3 hours of associate time (agent draft + validation), issues list ready for partner review
+
+\textbf{Current Reality:} Expect 6--8 hours with current technology; agent handles routine provisions while associate focuses on nuanced issues and failure mode catch
 \end{keybox}
 
 % ============================================================================
@@ -107,9 +139,17 @@ Security evaluation (Section~\ref{sec:agents2-eval-security}) verifies matter is
 \subsection{Case Study: Equity Portfolio Management}
 \label{sec:agents2-case-financial}
 
+\paragraph{The Scenario}
+
 A pension fund has entrusted \$500 million in U.S. equities to an asset management firm. Think of it like a 401(k) but at institutional scale---the fund has specific investment objectives, risk constraints, and regulatory requirements that the portfolio manager must honor while seeking returns.
 
 The client's investment policy statement specifies constraints: no single position exceeding 5\% of the portfolio, technology sector limited to 30\%, ESG exclusions (no tobacco, weapons manufacturers, or thermal coal), and tracking error against the S\&P 500 must stay below 3\%. The portfolio manager must continuously monitor compliance, respond to market changes, and rebalance when positions drift outside mandates.
+
+\paragraph{Trigger and Surface}
+
+Unlike the credit review---triggered by a discrete document event---portfolio management involves \textbf{multiple trigger types}. Market data feeds provide continuous external triggers (Section~\ref{sec:agents2-external-feeds}): price changes, corporate actions, and news events flow into the system throughout trading hours. Scheduled triggers (Section~\ref{sec:agents2-scheduled}) handle end-of-day reconciliation, weekly drift analysis, and quarterly client reporting. Human prompts arrive when the PM asks ad hoc questions: ``What's our current tech exposure?'' or ``Model the impact of selling half our NVDA position.''
+
+The \textbf{surface} is primarily automation (Section~\ref{sec:agents2-surfaces}): the system monitors continuously and surfaces information only when action is needed. Dashboards show real-time status; alerts appear when positions approach limits; recommendation packages arrive when rebalancing is triggered. Chat interaction is available for PM queries, and quarterly reports use document surfaces. The multi-surface approach matches how the PM actually works: continuous background monitoring with periodic human engagement.
 
 \subsubsection{The Task}
 
@@ -173,6 +213,20 @@ The Risk Agent calculates before/after metrics and returns analysis Artifacts.
 
 The orchestrating system assembles all Artifacts into a decision package for PM review.
 
+\subsubsection{Multi-Agent Failure Modes}
+
+Multi-agent architectures introduce coordination failures beyond single-agent limitations:
+
+\textbf{Cascading errors across agent boundaries.} The Monitoring Agent incorrectly calculates sector exposure due to a stale price feed---it shows technology at 28\% when actual exposure is 31\%, already over the mandate limit. The Rebalancing Agent receives this incorrect signal and generates recommendations to \textit{increase} technology exposure. The Compliance Agent validates against the same stale data. By the time a human notices, the portfolio has drifted further from mandate compliance. Bad data poisoned the entire chain.
+
+\textbf{Coordination overhead exceeds single-agent simplicity.} The A2A handoffs between four agents---Monitoring, Rebalancing, Compliance, Risk---introduce latency. Each handoff requires task creation, artifact packaging, and response parsing. For simple rebalancing decisions, a single well-designed agent might outperform the orchestrated specialists because coordination overhead dominates.
+
+\textbf{Debugging complexity when failures span agents.} The PM rejects a recommendation as economically unreasonable. Which agent failed? Was it bad market data (Monitoring's retrieval)? Flawed optimization logic (Rebalancing's reasoning)? Overly conservative risk estimates (Risk's calculations)? Tracing causation across agent boundaries requires sophisticated logging and often manual forensic analysis.
+
+\textbf{Agent disagreement without resolution.} The Rebalancing Agent recommends selling NVDA. The Risk Agent's stress test shows the sale increases portfolio volatility. Neither agent has authority to override the other. The orchestrator presents conflicting recommendations to the PM without synthesis. Multi-agent architectures distribute expertise but may not aggregate it.
+
+\textbf{When to prefer single-agent simplicity:} Multi-agent orchestration suits genuinely parallel, specialized workstreams (M\&A due diligence with distinct legal, financial, and regulatory tracks). For sequential workflows where one agent's output feeds the next, the coordination overhead and failure propagation risks often favor simpler single-agent designs with explicit human checkpoints.
+
 \subsubsection{Evaluation: Continuous Monitoring}
 
 Portfolio management requires continuous evaluation (Section~\ref{sec:agents2-eval-continuous}), not just deployment-time validation:
@@ -202,7 +256,9 @@ The evaluation flywheel (Section~\ref{sec:agents2-eval-flywheel}) operates conti
 
 \textbf{Evaluation:} Continuous L1 (data), L2 (analysis), L3 (compliance) monitoring with weekly sampling
 
-\textbf{Outcome:} Real-time mandate monitoring, proactive rebalancing recommendations, zero compliance breaches
+\textbf{Target Outcome:} Real-time mandate monitoring, proactive rebalancing recommendations, zero compliance breaches
+
+\textbf{Current Reality:} Position monitoring works well; rebalancing recommendations require significant PM judgment; multi-agent coordination remains fragile and requires human oversight at handoff points
 \end{keybox}
 
 % ============================================================================
@@ -227,20 +283,20 @@ The two case studies---credit documentation review and portfolio management---di
 \textbf{Evaluation is continuous.} Both deployments used three-layer evaluation---retrieval, reasoning, workflow---with metrics appropriate to their domains. Portfolio management added continuous monitoring because the task never ends. Evaluation isn't a deployment gate; it's an ongoing quality system.
 
 \begin{highlightbox}[title={From Architecture to Deployment}]
-Building an agent system is like building a professional practice:
+The components from Sections~\ref{sec:agents2-architecture}--\ref{sec:agents2-evaluation} become a deployment checklist:
 
-\textbf{Define the work.} What tasks will the agent handle? Credit review? Portfolio monitoring? Research? Drafting? The task determines the architecture.
+\textbf{1. Define the work.} What tasks will the agent handle? Credit review? Portfolio monitoring? Research? Drafting? The task determines the architecture.
 
-\textbf{Equip with tools.} What systems does the agent need? Legal research, document management, market data, compliance databases? Connect via MCP with appropriate permissions.
+\textbf{2. Equip with tools.} What systems does the agent need? Legal research, document management, market data, compliance databases? Connect via MCP with appropriate permissions.
 
-\textbf{Provide context.} What memory does the agent need? Prior deals, investment research, client history? Build RAG and episodic memory for the domain.
+\textbf{3. Provide context.} What memory does the agent need? Prior deals, investment research, client history? Build RAG and episodic memory for the domain.
 
-\textbf{Design workflows.} How should the agent approach tasks? ReAct for exploration, Plan-Execute for systematic coverage, hierarchical for complex coordination?
+\textbf{4. Design workflows.} How should the agent approach tasks? ReAct for exploration, Plan-Execute for systematic coverage, hierarchical for complex coordination?
 
-\textbf{Integrate humans.} Where do humans review and approve? Associate review of legal analysis, PM approval of trades, partner sign-off on client deliverables?
+\textbf{5. Integrate humans.} Where do humans review and approve? Associate review of legal analysis, PM approval of trades, partner sign-off on client deliverables?
 
-\textbf{Measure quality.} How will you know the agent works? Layer 1 retrieval metrics, Layer 2 analysis quality, Layer 3 workflow completion? Build evaluation into the system from day one.
+\textbf{6. Measure quality.} How will you know the agent works? Layer 1 retrieval metrics, Layer 2 analysis quality, Layer 3 workflow completion? Build evaluation into the system from day one.
 
-The components from Sections~\ref{sec:agents2-architecture}--\ref{sec:agents2-evaluation} become a deployment checklist. Architecture is not theory---it's the blueprint for systems that work.
+Architecture is the blueprint for systems that work.
 \end{highlightbox}
 

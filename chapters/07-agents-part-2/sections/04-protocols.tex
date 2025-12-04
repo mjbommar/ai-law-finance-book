@@ -9,7 +9,19 @@
 
 Agents do not operate in isolation. They connect to tools, data sources, and other agents. These connections require standardized protocols---shared conventions for communication that ensure different systems can work together safely and reliably.
 
-Think of protocols like the Bluebook for legal citations or GAAP for financial reporting---standardized formats that enable different professionals and systems to understand each other's work. This section examines the two dominant protocols: the Model Context Protocol (MCP) for connecting agents to tools, and the Agent-to-Agent Protocol (A2A) for enabling agents to collaborate with each other.
+Think of protocols like the Bluebook for legal citations or GAAP for financial reporting---standardized formats that enable different professionals and systems to understand each other's work. This section examines two protocols that represent the current state of agent integration: the Model Context Protocol (MCP) for connecting agents to tools, and the Agent-to-Agent Protocol (A2A) for enabling agents to collaborate with each other.
+
+\begin{highlightbox}[title={Protocols as Exemplars, Not Permanence}]
+Technology standards evolve. The specific protocols discussed here---MCP and A2A---represent the leading approaches as of late 2025. By the time you read this, they may have evolved, merged with alternatives, or been superseded.
+
+What matters for practitioners is not the protocol names but the \textit{requirements} they address:
+
+\textbf{Tool integration} requires standardized interfaces so agents can discover and invoke external capabilities without custom integration code. MCP addresses this requirement today.
+
+\textbf{Agent coordination} requires structured delegation and artifact exchange so agents can collaborate on complex tasks. A2A addresses this requirement today.
+
+These requirements are permanent. If different protocols emerge to serve them, the architectural principles in this section remain valid---only the implementation details change. Design your systems around the requirements, not the protocol names.
+\end{highlightbox}
 
 % ============================================================================
 % PROTOCOL LANDSCAPE
@@ -20,7 +32,7 @@ Think of protocols like the Bluebook for legal citations or GAAP for financial r
 
 The agent protocol landscape has consolidated around two complementary standards. MCP handles agent-to-tool communication---the standardized way an agent interacts with databases and systems. A2A handles agent-to-agent collaboration---the standardized way agents delegate work to specialists.
 
-MCP emerged in November 2024 and achieved rapid adoption; by November 2025, over 7,260 MCP servers had been catalogued. A2A launched in April 2025 with fifty-plus enterprise partners and was contributed to the Linux Foundation in June 2025. These protocols complement rather than compete: MCP connects agents to tools; A2A connects agents to each other.
+MCP emerged in November 2024 and achieved rapid adoption; as of November 2025, over 7,260 MCP servers had been catalogued in community directories \parencite{mcp-spec}. A2A launched in April 2025 with fifty-plus enterprise partners and was contributed to the Linux Foundation in June 2025 \parencite{google-a2a}. These adoption numbers will be outdated by the time you read this---what matters is that both protocols have achieved critical mass for enterprise consideration. They complement rather than compete: MCP connects agents to tools; A2A connects agents to each other.
 
 \paragraph{The Integration Problem} Without standardized protocols, ten agents and ten tools would require one hundred unique integrations. Protocols solve this M$\times$N problem: build once, integrate everywhere.
 
@@ -133,49 +145,9 @@ Throughout, MCP handles agent-to-tool communication (database queries, document 
 
 Protocol security parallels building security: access controls (who can enter), audit trails (who came and went), and segregation (keeping functions separate).
 
-\subsubsection{MCP Security}
-\label{sec:agents2-mcp-security}
+Both protocols require security controls paralleling professional safeguards. \textbf{MCP security} verifies agent identity before tool access, limits discoverable servers (like firewall policies), grants minimum required permissions, requires human approval for sensitive operations, and logs all interactions. The threat model addresses deceptive tools (misleading manifests) through approved registries, and excessive permissions through least-privilege design.
 
-MCP security controls which agents access which tools and ensures proper logging.
-
-\begin{definitionbox}[title={MCP Security Controls}]
-\textbf{Authentication \& Authorization:} Verify agent identity and permissions before tool access
-
-\textbf{Approved Tool Lists:} Limit which MCP servers agents can discover (like firewall policies)
-
-\textbf{Least Privilege:} Grant minimum access required for agent's function
-
-\textbf{Human Oversight:} Require approval for sensitive operations (court filings, trade execution)
-
-\textbf{Audit Logging:} Record all interactions for compliance review
-
-\textbf{Threat Model:}
-\begin{itemize}[nosep]
-\item \textit{Deceptive tools:} Misleading manifests $\rightarrow$ approved registries, manifest verification
-\item \textit{Excessive permissions:} Unauthorized access $\rightarrow$ least privilege, anomaly detection
-\end{itemize}
-\end{definitionbox}
-
-\subsubsection{A2A Security}
-\label{sec:agents2-a2a-security}
-
-A2A security verifies agent identities, controls delegation permissions, and audits collaboration flows.
-
-\begin{keybox}[title={A2A Security Controls}]
-\textbf{Cryptographic Signatures:} Verify agent identities (like digitally signed engagement letters)
-
-\textbf{Enterprise Authentication:} Map agents to service accounts with defined roles
-
-\textbf{Audit Logging:} Record all delegations and artifact deliveries
-
-\textbf{Rate Limiting:} Prevent runaway interactions
-
-\textbf{Information Barriers:}
-\begin{itemize}[nosep]
-\item \textit{Legal:} Conflicts screening prevents cross-matter delegation
-\item \textit{Financial:} Chinese walls prevent public/private-side coordination
-\end{itemize}
-\end{keybox}
+\textbf{A2A security} uses cryptographic signatures to verify agent identities (like digitally signed engagement letters), maps agents to enterprise service accounts, logs all delegations and artifact deliveries, and enforces information barriers. Legal contexts require conflicts screening to prevent cross-matter delegation; financial contexts require Chinese walls to prevent public/private-side coordination.
 
 % ============================================================================
 % PROTOCOL SELECTION GUIDANCE
@@ -193,4 +165,6 @@ Protocol selection follows straightforward principles:
 \textbf{Use both} in production systems. An agent drafting a contract uses MCP to access templates, case law, and client data. An agent coordinating due diligence uses A2A to delegate to financial, legal, and compliance specialists---each of which internally uses MCP for tool access.
 
 The decision signal is clear: if you need immediate results from a defined operation, use MCP. If the work requires independent judgment and takes minutes to hours, use A2A. Most complex legal and financial workflows require both---exactly like human professionals who use databases (MCP-like) while coordinating with colleagues (A2A-like).
+
+\paragraph{Maturity Levels (as of late 2025)} MCP is production-ready for tool integration. Major vendors support it; community servers exist for most common integrations; the protocol has stabilized. A2A is earlier in its maturity cycle---the specification is stable, enterprise pilots are underway, but cross-vendor agent coordination remains more aspirational than reliable. Plan to use MCP today; evaluate A2A for near-term roadmaps while designing fallback paths for human coordination where A2A would theoretically apply.
 

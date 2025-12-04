@@ -274,7 +274,17 @@ build/
 # But exclude working drafts and test PDFs
 *-draft.pdf
 *-test.pdf
+test*.pdf
+test-*.pdf
 scratch*.pdf
+
+# Working directories (temp files, not notes)
+temp/
+scratch/
+tmp/
+
+# Plain text exports
+*.txt
 
 # Overleaf/LaTeX zip packages
 *.zip

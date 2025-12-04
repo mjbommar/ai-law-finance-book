@@ -11,9 +11,11 @@
 % Opening and Context
 % ----------------------------------------------------------------------------
 
-Part I answered \textit{What is an agent?}---tracing the concept from cybernetics to modern LLM systems and introducing the GPA+IAT framework (Goal, Perception, Action, Iteration, Adaptation, Termination).
+Part I answered \textit{What is an agent?}---tracing the concept from cybernetics to modern LLM systems and introducing the GPA+IAT framework: Goal, Perception, Action, Iteration, Adaptation, Termination. These six properties distinguish genuine agentic systems from chatbots, simple automation, and marketing hype. An entity that lacks any of these properties---that cannot iterate on feedback, adapt its strategy, or recognize when to stop---is not an agentic system, regardless of what vendors claim.
 
 Part II answers: \textit{How do you build one?}
+
+More precisely: how do you build systems that implement all six properties? The abstract framework becomes concrete architecture. Goal becomes a planning system. Perception becomes tools for reading the environment. Action becomes tools for changing it. Iteration becomes the agent loop. Adaptation becomes memory. Termination becomes guardrails and success criteria. This chapter shows how.
 
 Think about how a law firm or financial institution actually operates. A junior associate or analyst does not work in isolation. They have access to research databases, they maintain case files or deal books that accumulate over time, they break down complex partner assignments or portfolio manager requests into manageable tasks, and they coordinate with other professionals. The associate's effectiveness depends not just on their individual capabilities, but on the infrastructure around them: which systems they can access, what information they can retrieve from past matters, how they decompose ambiguous instructions into concrete work, and how they communicate results back up the chain.
 
@@ -38,6 +40,23 @@ A \keyterm{tool} is an interface enabling agents to interact with external syste
 \end{definitionbox}
 
 % ----------------------------------------------------------------------------
+% Event-Driven Framing
+% ----------------------------------------------------------------------------
+
+\subsection{From Chat to Production: The Event-Driven Agent}
+\label{sec:agents2-event-driven}
+
+When a partner asks an associate to ``keep an eye on'' a pending regulatory filing, what does that actually mean? Not sitting at a desk refreshing the SEC's website. It means the associate configures an alert system that monitors EDGAR for the target company's Form 8-K filings and sends a notification when one appears. The associate then reviews the filing, analyzes its implications, updates the case file, and escalates material findings to the partner. That workflow is \keyterm{event-driven}: an external trigger (filing publication) initiates a sequence of perception, analysis, and action steps, bounded by clear termination conditions (analysis complete or escalation required).
+
+Most discussions of AI agents emphasize interactive chat interfaces---the attorney who asks questions and receives answers in a conversation. That mode is valuable for exploration and ideation. But production deployment in legal and financial environments operates differently. These systems respond continuously to external triggers, not human prompts. A contract review system activates when a new draft arrives in the document management system. A portfolio compliance monitor triggers when end-of-day positions exceed mandate limits. A docket tracking system fires when a court clerk uploads a new filing. The architectural patterns, tool requirements, and evaluation methods for event-driven agents differ substantially from chat-based interaction.
+
+\paragraph{Events as Triggers in Legal and Financial Workflows}
+
+Consider the information flows that drive professional work. In legal practice, regulatory filings (SEC EDGAR publications, Federal Register notices) trigger compliance analysis; court docket updates trigger deadline calculations and strategy adjustments; document events (deal room uploads, contract redlines) trigger review workflows; and calendar deadlines trigger resource allocation. Financial institutions operate on similar patterns: market data events (price thresholds, volatility spikes) trigger portfolio rebalancing; position events (reconciliation failures, mandate breaches) trigger compliance reviews; regulatory deadlines trigger reporting workflows; and risk threshold exceedances trigger escalation protocols.
+
+This operational cadence defines professional practice. Agent systems that cannot respond autonomously to such triggers remain research prototypes. The architectural components we examine in Section~\ref{sec:agents2-architecture} must support event-driven activation, and Section~\ref{sec:agents2-triggers} examines trigger channels in detail.
+
+% ----------------------------------------------------------------------------
 % From Framework to Components
 % ----------------------------------------------------------------------------
 
@@ -58,20 +77,7 @@ Part I introduced the GPA+IAT framework as an abstract characterization of agenc
 
 \textbf{Termination} becomes \keyterm{guardrails} and \keyterm{success criteria}. Imagine an associate assigned to "research the issue thoroughly" with no other guidance. When do they stop? After reading ten cases? Fifty? After three hours or three days? Without termination conditions, the associate could research indefinitely. Agents face the same problem, but worse---they can burn through API budgets or wander into irrelevant tangents far faster than humans. Termination logic specifies when to stop: goal achieved, budget exhausted, time limit reached, confidence threshold crossed, or unrecoverable error detected.
 
-Each dimension represents a design decision. You must specify how goals decompose (planning algorithms), which tools the agent accesses (tool inventory and permissions), how memory persists (storage architecture), and what triggers termination (success criteria and guardrails). The remaining sections detail these components, their interactions, and deployment patterns for legal and financial environments.
-
-\begin{keybox}[title={Framework to Implementation}]
-The GPA+IAT framework is not just conceptual---each dimension maps to concrete architectural components:
-\begin{itemize}
-  \item \textbf{Goal} $\rightarrow$ Planning systems that decompose objectives
-  \item \textbf{Perception} $\rightarrow$ Read-only tools for information gathering
-  \item \textbf{Action} $\rightarrow$ Write tools that change system state
-  \item \textbf{Iteration} $\rightarrow$ Agent loops with termination conditions
-  \item \textbf{Adaptation} $\rightarrow$ Memory systems that persist context
-  \item \textbf{Termination} $\rightarrow$ Guardrails and success criteria
-\end{itemize}
-Building an agent means making explicit design choices for each component, not just connecting a language model to an API.
-\end{keybox}
+Each dimension represents a design decision. You must specify how goals decompose (planning algorithms), which tools the agent accesses (tool inventory and permissions), how memory persists (storage architecture), and what triggers termination (success criteria and guardrails). Building an agent means making explicit design choices for each component, not just connecting a language model to an API. The remaining sections detail these components, their interactions, and deployment patterns for legal and financial environments.
 
 % ----------------------------------------------------------------------------
 % Why Architecture Matters
@@ -80,33 +86,23 @@ Building an agent means making explicit design choices for each component, not j
 \subsection{Why Architecture Matters}
 \label{sec:agents2-why-arch}
 
-Building an agent is not an incremental extension of a chatbot. It is architectural, like the difference between hiring a single contract attorney for document review versus designing a litigation team to handle complex multi-district litigation.
+Building an agent requires architectural thinking analogous to staffing a major matter. When a law firm takes on complex multi-district litigation, partners assemble teams with differentiated roles: senior associates for substantive strategy, junior associates for research and drafting, paralegals for document management, contract attorneys for discovery review, and outside specialists under protective orders. Each role has different access permissions, shared case files maintain common ground, and the partner sets termination conditions (settlement, budget exhaustion, or changed risk calculus).
 
-Consider what happens when a law firm or corporate legal department staffs a major matter. The partner or general counsel does not just assign one person to "handle it." They assemble a team: senior associates who know the substantive area, junior associates who will do the research and drafting, paralegals who manage documents and scheduling, contract attorneys who review discovery, and specialists like forensic accountants or technical experts. Each role has different access permissions: senior associates can communicate directly with the client or business unit, junior associates can access privileged work product, contract attorneys can only see documents cleared for their review, and outside experts operate under protective orders. The team maintains shared case files so everyone works from the same factual record, but individual attorneys keep their own notes. The partner sets overall strategy, but delegates tactical decisions to senior associates, who further delegate discrete tasks down the chain. The team iterates: discovery reveals new facts, the legal theory evolves, research priorities shift. And the partner decides when to stop: the case settles, the budget is exhausted, or the risk-reward calculation changes.
+Agent systems mirror this structure. They execute multi-step tasks requiring tool integration across systems. They maintain context through memory so each interaction builds on prior work. They adapt when initial approaches fail. They collaborate with other agents or escalate to humans when encountering issues beyond their authority. And they operate at varying autonomy levels calibrated to risk: reading public documents can be autonomous, while filing court documents or executing trades typically requires human approval.
 
-Agent systems require the same architectural thinking. An agent must:
+Each capability introduces corresponding requirements. Tools need authentication and audit logging. Memory must respect privilege boundaries and information barriers. Planning requires termination conditions to prevent runaway costs. Protocols must authenticate participants and protect confidential communications.
 
-Execute multiple actions across a task, like gathering statutes from Westlaw, regulations from government websites, and internal policy memos from the firm's knowledge base, then synthesizing them into a coherent analysis. This requires tool integration---ensuring the agent can authenticate to each system, query effectively, and handle different response formats.
+For legal and financial applications, agents handle privileged material, material non-public information, and personally identifiable data. Security, isolation, and auditability must be designed in from the start. Retrofitting privilege protections after a confidentiality breach, or adding audit logging after a regulatory inquiry, is like building a trading platform and then trying to add wash sale controls. The cost of architectural failure in regulated environments exceeds the cost of proper initial design.
 
-Maintain context through memory, like remembering that the client is a financial institution subject to specific regulatory requirements, that prior research eliminated certain arguments as non-viable, and that the partner prefers citations in a particular format. Without memory, every action starts from scratch, forcing users to repeat context in every interaction.
+\begin{highlightbox}[title={Architecture Enables Governance}]
+Part III will examine how to govern agentic systems---establishing controls, assigning accountability, and ensuring compliance. But governance presupposes architecture. You cannot audit what you did not log. You cannot enforce privilege boundaries that were never implemented. You cannot demonstrate bounded operation without termination mechanisms.
 
-Adapt based on intermediate results, like adjusting research strategy when initial case law searches return nothing relevant. A human attorney encountering dead ends will broaden their search, try different terms, look for analogous situations in other jurisdictions, or consult a more senior attorney. Agents need similar adaptation logic: if a tool call fails, try a different tool; if retrieved documents are not helpful, refine the query; if the plan is not working, revise it.
+The architectural choices in this chapter are not merely technical decisions. They are the \textit{infrastructure} that makes governance possible. When a regulator asks how the compliance agent detected a breach, when opposing counsel demands production of the agent's reasoning, when a client questions why the agent recommended a particular strategy---architecture determines whether you can answer.
 
-Collaborate with other agents or humans, like coordinating between a tax specialist and a corporate attorney on an M\&A transaction, a research analyst and a portfolio manager on an investment decision, or escalating to a partner when encountering an issue beyond the associate's authority. Multi-agent systems require protocols for communication, coordination, and conflict resolution. Human-in-the-loop systems require interfaces for review, approval, and intervention.
-
-Operate with varying autonomy, from requiring approval for every research query (fully supervised) to running overnight and producing a draft memo by morning (fully autonomous). The right level of autonomy depends on risk: reading public documents is low-risk and can be autonomous; filing documents with courts is high-risk and typically requires human review; executing trades above certain thresholds might require dual approval.
-
-Each capability introduces complexity and risk. Tools need authentication, authorization, and audit logging---like tracking which attorney accessed which client file and when. Memory must respect privilege boundaries---an agent working on one matter cannot access materials from an unrelated matter, even if both are in the same database. Planning requires termination conditions to prevent runaway costs---like an associate who keeps researching because they have not been told to stop. Protocols must authenticate participants and encrypt communications---like the information barriers that prevent material non-public information from crossing between departments at an investment bank.
-
-For legal and financial applications, agents handle privileged material subject to attorney-client protection, material non-public information that triggers insider trading liability, and personally identifiable information governed by privacy regulations. Architecture must support security, isolation, and auditability from the start. You cannot retrofit privilege protections after an agent has already leaked confidential information across matter boundaries. You cannot add audit logging after regulators ask for records of who accessed what and when. You cannot impose information barriers after the agent has already mixed public and non-public data.
-
-Think of this as building compliance into a financial institution's trading systems. You do not build the trading platform first and then try to add controls for wash sales, position limits, and suspicious activity reporting. You design those controls into the architecture from day one, because the cost of getting it wrong---regulatory sanctions, reputational damage, civil liability---far exceeds the cost of building it correctly in the first place.
-
-\begin{highlightbox}
-Agent architecture resembles organizational design more than software engineering. Just as you would not design a law firm or trading desk without considering access controls, escalation procedures, and audit trails, you cannot build a production agent system by simply connecting a language model to APIs. Security, isolation, and auditability must be architectural decisions, not afterthoughts.
+Professional duties are non-delegable: attorneys remain liable for AI-assisted work product, fiduciaries remain accountable for AI-informed recommendations. Part III addresses those obligations. This chapter gives you the architecture to meet them.
 \end{highlightbox}
 
-The remaining sections of this chapter examine these components in detail: how tools work and what security controls they require (Section~\ref{sec:agents2-architecture}), how memory systems preserve context while respecting access boundaries (also Section~\ref{sec:agents2-architecture}), how planning algorithms decompose goals and when they terminate (also Section~\ref{sec:agents2-architecture}), how protocols enable safe communication between agents and systems (Section~\ref{sec:agents2-protocols}), and how to evaluate whether an agent actually works (Section~\ref{sec:agents2-evaluation}). Section~\ref{sec:agents2-synthesis} synthesizes these concepts through case studies and deployment patterns. Section~\ref{sec:agents2-further} provides resources for continued learning.
+The remaining sections examine triggers and channels for how work enters the system (Section~\ref{sec:agents2-triggers}), tools, memory, and planning (Section~\ref{sec:agents2-architecture}), communication protocols (Section~\ref{sec:agents2-protocols}), evaluation methods (Section~\ref{sec:agents2-evaluation}), and integrated reference architectures (Section~\ref{sec:agents2-synthesis}).
 
 % TODO: Add timeline figure showing November 2024-2025 developments (MCP, A2A, commercial agent frameworks, etc.)
 % TODO: Add motivating example of legal AI agent workflow

@@ -7,108 +7,45 @@
 \section{Further Learning}
 \label{sec:agents2-further}
 
-Building agent systems requires both conceptual understanding and practical experience. The case studies in Section~\ref{sec:agents2-synthesis}---credit facility review and portfolio management---showed how architectural components come together. This section provides resources for going deeper: frameworks for implementation, protocols for integration, research for foundations, and security practices for production deployment.
-
-% ============================================================================
-% FRAMEWORKS
-% ============================================================================
-
-\subsection{Choosing an Agent Framework}
-\label{sec:agents2-further-frameworks}
-
-The right framework depends on what you are building. For simple research assistants where the model calls a few tools in sequence, start with native APIs from your model provider---OpenAI, Anthropic, or Google. You will write less code, have fewer dependencies, and iterate faster.
-
-As complexity grows---branching logic, long-running workflows, persistent state---LangGraph provides explicit control flow through state graphs. You define nodes for operations, edges for transitions, and checkpoints for persistence. This makes agent decisions visible and debuggable, which matters in regulated environments requiring audit trails.
-
-For document-heavy workflows like legal research or compliance monitoring, LlamaIndex specializes in retrieval-augmented generation. It provides document loaders, vector stores, and query engines optimized for grounding agent reasoning in authoritative sources.
-
-Multi-agent coordination frameworks like AutoGen matter only when you have confirmed that specialization is essential---as in the portfolio management case study where Monitoring, Rebalancing, Compliance, and Risk agents each had distinct functions. Most use cases do not actually require multiple agents; a single well-designed agent with appropriate tools usually suffices.
-
-\begin{keybox}[title={Framework Selection}]
-\textbf{Native APIs}: Simple agents, 2--5 tools, straightforward workflows
-
-\textbf{LangGraph}: Production systems, complex branching, auditability requirements
-
-\textbf{LlamaIndex}: Document-heavy workflows, RAG applications, research agents
-
-\textbf{AutoGen}: Multi-agent coordination (only when single-agent solutions are insufficient)
-
-\textbf{Principle}: Start simple, add complexity only when needed, prioritize observability
-\end{keybox}
-
-% ============================================================================
-% PROTOCOLS
-% ============================================================================
-
-\subsection{Protocols and Standards}
-\label{sec:agents2-further-protocols}
-
-The case studies demonstrated protocols in action: MCP for tool access (document management, market data, compliance databases) and A2A for agent coordination (the portfolio management multi-agent workflow).
-
-The Model Context Protocol (MCP) is production-ready. If you are building agents that integrate with multiple data sources---the pattern in both case studies---implementing MCP servers makes your architecture modular. You can swap implementations without changing agent code, which matters when data sources or regulatory requirements change. MCP includes Python and TypeScript SDKs.
-
-The Agent-to-Agent Protocol (A2A) is maturing under the Linux Foundation. It standardizes how agents exchange tasks and artifacts, as shown in the portfolio management workflow. As of November 2025, A2A is suitable for systems where you control all agents; cross-vendor interoperability is still emerging. Use A2A for internal multi-agent coordination, but monitor the standard's evolution before depending on it for external integration.
-
-% ============================================================================
-% RESEARCH
-% ============================================================================
-
 \subsection{Research Foundations}
-\label{sec:agents2-further-research}
 
-Three papers provide essential conceptual foundations:
+For readers seeking deeper engagement with agent systems, several resources provide essential foundations. Xi et al.'s ``Rise and Potential of LLM Based Agents'' (2023) \parencite{xi2023rise} offers the most comprehensive architecture survey, systematically covering design patterns, memory, planning, and tool use. The credit facility review case study demonstrated ReAct in action: perceive the provision, reason about market terms, act by generating analysis, observe results, repeat. Yao et al.'s ``ReAct'' paper (2022) \parencite{yao2022react} introduced this reasoning-action loop. The portfolio management case study implemented memory patterns from Park et al.'s ``Generative Agents'' (2023) \parencite{park2023generative}: episodic memory of client decisions, RAG access to investment research, learned preferences from PM feedback.
 
-\textbf{Xi et al., ``Rise and Potential of LLM Based Agents'' (2023)} \parencite{xi2023rise}---the most comprehensive agent architecture survey. It systematically covers design patterns, memory architectures, planning strategies, and tool use. The taxonomy helps you understand which architectural choices matter for your use case.
+For domain-specific evaluation, LegalBench provides 162 legal reasoning tasks \parencite{legalbench2023}, FinQA tests financial question answering \parencite{finqa2021}, and VLAIR compares legal AI against lawyer baselines \parencite{vlair2025}. These benchmarks help measure whether agents perform at professional standards.
 
-\textbf{Yao et al., ``ReAct'' (2022)} \parencite{yao2022react}---introduced the reasoning-action loop underlying modern agent systems. The credit facility review case study used ReAct: perceive the provision, reason about market terms, act by generating analysis, observe results, repeat. Understanding ReAct helps you understand why frameworks structure prompts and tool calls the way they do.
-
-\textbf{Park et al., ``Generative Agents'' (2023)} \parencite{park2023generative}---introduced memory streams with reflection. The portfolio management case study used similar patterns: episodic memory of client decisions, RAG access to investment research, learned preferences from PM feedback. These mechanisms enable agents to synthesize information over time.
-
-For domain-specific evaluation, LegalBench provides 162 legal reasoning tasks, FinQA tests financial question answering, and VLAIR compares legal AI against lawyer baselines. These benchmarks help you measure whether your agent performs at professional standards.
-
-% ============================================================================
-% SECURITY
-% ============================================================================
-
-\subsection{Security Resources}
-\label{sec:agents2-further-security}
+\subsection{Security Essentials}
 
 Security is not optional. Both case studies required security controls: matter isolation and privilege protection for credit review, client isolation and MNPI protection for portfolio management.
 
-The OWASP LLM Top 10 provides vulnerability taxonomy for LLM applications---prompt injection, insecure output handling, training data poisoning. The NIST AI Risk Management Framework offers lifecycle guidance for identifying and mitigating AI risks. For testing, Garak scans for common LLM vulnerabilities; Microsoft's PyRIT provides red teaming capabilities.
-
-\begin{keybox}[title={Security Essentials}]
+\begin{keybox}[title={Security Controls for Regulated Practice}]
 \begin{itemize}[nosep]
 \item \textbf{Input separation}: Isolate user inputs from system prompts
 \item \textbf{Output validation}: Verify agent outputs before execution
 \item \textbf{Least privilege}: Grant minimum necessary tool access
 \item \textbf{Audit logging}: Maintain comprehensive action logs
 \item \textbf{Matter/client isolation}: Enforce confidentiality boundaries
-\item \textbf{Regular testing}: Use Garak and PyRIT for vulnerability scanning
 \end{itemize}
 \end{keybox}
 
-% ============================================================================
-% LEARNING PATHS
-% ============================================================================
+The OWASP LLM Top 10 provides vulnerability taxonomy for LLM applications. The NIST AI Risk Management Framework offers lifecycle guidance for identifying and mitigating AI risks.
+
+\subsection{Protocols and Standards}
+
+The Model Context Protocol (MCP) is production-ready. If you are building agents that integrate with multiple data sources---the pattern in both case studies---implementing MCP servers makes your architecture modular. You can swap implementations without changing agent code, which matters when data sources or regulatory requirements change.
+
+The Agent-to-Agent Protocol (A2A) is maturing under the Linux Foundation. It standardizes how agents exchange tasks and artifacts, as shown in the portfolio management workflow. As of November 2025, A2A is suitable for systems where you control all agents; cross-vendor interoperability is still emerging. Use A2A for internal multi-agent coordination, but monitor the standard's evolution before depending on it for external integration.
 
 \subsection{Learning Paths}
-\label{sec:agents2-further-nextsteps}
 
-\paragraph{For Legal Professionals} Focus on evaluation criteria: accuracy on domain tasks, audit trail completeness, fail-safe behaviors. Start with narrowly scoped pilots where quality can be validated---contract review like the credit facility case study is ideal. Your domain expertise makes you well-positioned to define acceptable performance thresholds.
+\paragraph{For Legal Professionals} Focus on evaluation criteria: accuracy on domain tasks, audit trail completeness, fail-safe behaviors. Start with narrowly scoped pilots where quality can be validated---contract review like the credit facility case study is ideal. Your domain expertise makes you well-positioned to define acceptable performance thresholds. Key question: Would you accept this output from a third-year associate?
 
-\paragraph{For Financial Professionals} Focus on integration with existing workflows---Bloomberg, portfolio systems, compliance databases. Validate agent outputs against your own analysis before relying on them. The portfolio management case study illustrates the pattern: agents monitor and recommend, humans approve and execute.
+\paragraph{For Financial Professionals} Focus on integration with existing workflows---Bloomberg, portfolio systems, compliance databases. Validate agent outputs against your own analysis before relying on them. The portfolio management case study illustrates the pattern: agents monitor and recommend, humans approve and execute. Key question: Does the agent's recommendation match what you would conclude given the same data?
 
 \paragraph{For Technical Practitioners} Start with a framework tutorial, then build a simple research agent. Add memory, implement evaluation, then build an MCP server for a real data source. This progression takes you from concepts to production-ready skills. For deeper expertise, study the ReAct paper, build custom orchestration logic, and implement comprehensive observability.
 
-\paragraph{For Everyone} Build agents regularly to internalize patterns. Study production code from open-source projects. Implement security controls from the beginning. Follow framework releases and arXiv cs.AI to stay current. The field evolves rapidly; sustained engagement is essential for responsible adoption.
-
-% ============================================================================
-% STAYING CURRENT
-% ============================================================================
+\paragraph{For Everyone} Build agents regularly to internalize patterns. Study production code from open-source projects. Implement security controls from the beginning. The field evolves rapidly; sustained engagement is essential for responsible adoption.
 
 \subsection{Staying Current}
-\label{sec:agents2-further-currency}
 
 Technology advances quickly: new model capabilities, improved reasoning techniques, evolving protocol specifications. Regulation is emerging: the EU AI Act phases in through 2027, US frameworks continue developing. Security risks emerge as researchers discover new vulnerabilities.
 

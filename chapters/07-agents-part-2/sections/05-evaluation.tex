@@ -66,11 +66,11 @@ Legal AI faces domain-specific retrieval challenges. A case that looks semantica
 
 \paragraph{Authority Retrieval} Does your agent prioritize binding authority over persuasive sources? A single controlling case outweighs fifty law review articles.
 
-\paragraph{Jurisdictional Accuracy} Research shows top legal AI systems achieve only \textbf{75--82\% jurisdictional accuracy}---nearly one in four documents from the wrong jurisdiction.
+\paragraph{Jurisdictional Accuracy} Independent evaluations (2024--2025) show that even leading legal AI systems achieve only 75--82\% jurisdictional accuracy---nearly one in four retrieved documents may come from non-binding jurisdictions. These figures improve with explicit jurisdiction filtering but degrade for less common jurisdictions.
 
 \paragraph{Temporal Validity} Are sources current? Many legal AI systems skip citation validation, relying on raw search without checking Shepard's or KeyCite.
 
-\paragraph{Citation Verification} Research found \emph{incomplete answer rates} range from \textbf{18\% to 62\%} across platforms.
+\paragraph{Citation Verification} Independent benchmarks (2024--2025) report wide variance in incomplete answer rates across legal AI platforms---some systems prioritize precision (fewer but more reliable answers), others prioritize recall (more answers with higher incompleteness risk). Verify your vendor's approach matches your use case.
 
 \begin{keybox}[title={Layer 1: Context-Dependent Standards}]
 \textbf{Legal:} Transactional (contract accuracy, due diligence completeness), Litigation (case law precision, discovery coding), Regulatory (compliance assessment, filing validation). Big Law requires higher jurisdictional accuracy than small firm research assistants.
@@ -156,7 +156,7 @@ Security must be evaluated alongside functionality, like information security au
 
 \paragraph{Layer 3 Security} Are privilege boundaries maintained across workflows? Are all actions logged with tamper-resistant audit trails?
 
-OWASP 2025 ranks \emph{prompt injection} as the critical vulnerability, appearing in over \textbf{73\%} of deployments \parencite{owasp-llm-top10}. Attack success rates reach \textbf{84\%} for code-generation agents.
+The OWASP Top 10 for LLM Applications (2025 edition) ranks \emph{prompt injection} as the critical vulnerability \parencite{owasp-llm-top10}. Industry surveys (as of mid-2025) report injection vulnerabilities in over 70\% of LLM deployments, with attack success rates exceeding 80\% against unprotected code-generation agents. These figures will shift as defenses mature, but prompt injection remains the primary attack vector.
 
 \begin{keybox}[title={Security Evaluation: Domain Priorities}]
 \textbf{Legal:} Privilege boundaries (client isolation), conflict checking, ethical compliance, audit trails for malpractice defense.
@@ -165,6 +165,16 @@ OWASP 2025 ranks \emph{prompt injection} as the critical vulnerability, appearin
 
 \textbf{Approach:} Red-team testing with domain expertise. Legal: adversarial prompts bypassing privilege. Financial: prompts circumventing trading restrictions.
 \end{keybox}
+
+\subsubsection{Channel-Specific Security}
+\label{sec:agents2-channel-security}
+
+Different entry points carry different threat profiles. \textbf{Chat channels} face prompt injection: direct jailbreak attempts, indirect injection through document content, and multi-turn privilege escalation. \textbf{Webhook/API channels} face payload injection, SSRF, and schema manipulation. \textbf{Memory channels} face context poisoning---research demonstrates that even a small fraction of adversarial documents in a RAG corpus can meaningfully shift agent outputs. Test each channel with appropriate attack vectors.
+
+\subsubsection{Confidence Threshold Calibration}
+\label{sec:agents2-confidence-thresholds}
+
+Confidence thresholds determine when agents proceed autonomously versus escalate. Legal research (lower stakes, reversible) might auto-proceed at 85\% confidence. Legal advice (higher stakes, liability) should require 95\%+. Trade execution (irreversible, regulatory) might require 99\%. Calibrate thresholds against historical outcomes, targeting 10-20\% escalation rates while maintaining acceptable error rates. ABA Formal Opinion 512 emphasizes that lawyers cannot delegate professional responsibility to AI---this maps to conservative thresholds for judgment-intensive work.
 
 % ============================================================================
 % BENCHMARKS AND DATASETS
@@ -177,7 +187,7 @@ Benchmarks provide standardized tests like professional licensing exams---they t
 
 \paragraph{LegalBench} 162 tasks covering six types of legal reasoning: issue-spotting, rule-recall, rule-application, rule-conclusion, interpretation, and rhetorical-understanding \parencite{legalbench2023}. Spans multiple practice areas. Think of it like a comprehensive law school exam.
 
-\paragraph{VLAIR} First benchmark comparing legal AI against lawyer control groups. Seven tasks including Document Q\&A, Summarization, Redlining. Key finding (October 2025): AI scored \textbf{7 points above lawyer baseline} (\textbf{71\% accuracy}), outperforming on routine tasks but falling short on complex judgment-intensive work.
+\paragraph{VLAIR} First benchmark comparing legal AI against lawyer control groups \parencite{vlair2025}. Seven tasks including Document Q\&A, Summarization, Redlining. Key finding (October 2025): AI scored \textbf{7 points above lawyer baseline} (\textbf{71\% accuracy}), outperforming on routine tasks but falling short on complex judgment-intensive work.
 
 \paragraph{FinQA} Tests financial question answering over earnings reports \parencite{finqa2021}. Multi-step calculations combining text comprehension and math. Basic analyst competence.
 
@@ -259,7 +269,7 @@ Evaluation is not one-time. Like ongoing quality assurance---annual reviews, con
 \subsubsection{The Continuous Improvement Cycle}
 \label{sec:agents2-eval-flywheel}
 
-The improvement cycle has eight stages: \textbf{Deploy} with monitoring enabled $\rightarrow$ \textbf{Monitor} metrics and collect feedback $\rightarrow$ \textbf{Sample} outputs for expert review $\rightarrow$ \textbf{Analyze} failures for root causes $\rightarrow$ \textbf{Expand} reference standards with validated failures $\rightarrow$ \textbf{Improve} agent based on analysis $\rightarrow$ \textbf{Validate} against expanded references $\rightarrow$ \textbf{Deploy} improved agent.
+The improvement cycle runs continuously: deploy with monitoring $\rightarrow$ monitor metrics $\rightarrow$ sample outputs for expert review $\rightarrow$ analyze failures $\rightarrow$ expand reference standards $\rightarrow$ improve agent $\rightarrow$ validate $\rightarrow$ deploy.
 
 \begin{keybox}[title={The Evaluation Flywheel}]
 Evaluation is ongoing quality assurance, not a one-time test.

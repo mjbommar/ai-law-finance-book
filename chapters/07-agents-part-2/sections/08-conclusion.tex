@@ -9,9 +9,9 @@
 
 We began with a simple claim: AI agents are organized like professional teams. The associate reviewing a credit agreement needs tools (Westlaw, the precedent database), memory (prior deals, client context), planning (decompose the review into sections), protocols (how to communicate findings), and evaluation (partner review of work product). The portfolio manager monitoring client mandates needs the same components in a different domain: tools (Bloomberg, the risk engine), memory (investment research, client history), planning (coordinate monitoring, rebalancing, compliance, and risk agents), protocols (how agents share tasks and artifacts), and evaluation (continuous performance monitoring).
 
-The case studies in Section~\ref{sec:agents2-synthesis} made this concrete. The credit facility review agent used ReAct planning to work through document sections, MCP tools to access precedent databases and legal research, episodic memory to track findings within the transaction, and three-layer evaluation to measure retrieval accuracy, analysis quality, and workflow completion. The portfolio management system used hierarchical planning to coordinate specialist agents, A2A protocol for task delegation and artifact exchange, and continuous evaluation to ensure mandate compliance.
+The reference architectures in Section~\ref{sec:agents2-synthesis} made this concrete. The credit facility review agent used ReAct planning to work through document sections, MCP tools to access precedent databases and legal research, episodic memory to track findings within the transaction, and three-layer evaluation to measure retrieval accuracy, analysis quality, and workflow completion. The portfolio management system used hierarchical planning to coordinate specialist agents, A2A protocol for task delegation and artifact exchange, and continuous evaluation to ensure mandate compliance.
 
-These are not toy examples. They represent the kind of work legal and financial professionals do every day---work that can be accelerated by agents when the architecture is right.
+But we were also honest about limitations. Current agents achieve under 10\% success on tasks exceeding four hours. Compounding errors, hallucinations in agentic loops, and brittleness at integration boundaries mean these reference architectures represent target states, not current reality. Production deployment requires human oversight, decomposition into shorter tasks, and acceptance that agents accelerate work rather than replace professional judgment.
 
 \paragraph{What You Now Understand}
 
@@ -35,11 +35,28 @@ You can participate in procurement by asking the right questions. You can design
 You cannot govern what you do not understand. Now that you understand how agents work---their tools, memory, planning, protocols, and evaluation---you are ready to establish controls, set policies, assign accountability, and ensure compliance.
 \end{keybox}
 
-\paragraph{From Building to Governing}
+% ----------------------------------------------------------------------------
+% Governance Bridge
+% ----------------------------------------------------------------------------
 
-Understanding how to build agent systems does not tell you how to govern them. You also need reporting structures, approval workflows, quality standards, compliance requirements, and accountability mechanisms.
+\subsection{From Architecture to Governance}
+\label{sec:agents2-governance-bridge}
 
-Part III translates architectural understanding into governance practice. The tools become objects of approval controls. The memory systems become objects of retention policies. The planning components become objects of oversight mechanisms. The protocols become governance infrastructure. The evaluation frameworks become assurance processes.
+Production systems in legal and financial contexts operate under governance obligations that transform architectural components into compliance artifacts. Every tool invocation becomes an audit log entry. Every memory write becomes a data retention decision subject to the tensions we examined---auditability without over-collection, structured logging without indefinite raw trace retention. Every planning step becomes a decision record subject to regulatory review.
 
-Just as you cannot manage a law firm or investment bank without understanding how professionals work, you cannot govern AI agents without understanding their architecture. Part II gave you that understanding. Part III translates it into practice.
+When an SEC examiner reviews a compliance monitoring agent that detected a mandate breach, they will ask: When did the system detect the problem? What data supported the conclusion? Who approved the corrective action? What controls prevented the agent from exceeding its authority? These questions map directly to architectural components: event timestamps, tool invocation logs, memory retrieval records, and authorization checks.
+
+Similarly, when a legal research agent accesses privileged materials, every access must respect privilege boundaries. An agent that crosses matter boundaries creates waiver risk comparable to an associate who emails the wrong client's confidential materials. The memory system's isolation controls and access logs become evidence in privilege disputes.
+
+The architectural components you now understand become governance objects. Tools become objects of authorization policies---and the security mitigations we examined (prompt injection defense, tool result validation, privilege escalation prevention) become compliance requirements. Memory becomes subject to retention policies, legal hold obligations, and the tiered retention architecture that balances auditability with data minimization. Planning becomes subject to oversight mechanisms specifying which decisions require human review. Protocols become the infrastructure for authentication, logging, and audit trails. Evaluation becomes assurance processes that verify controls operate as intended.
+
+\begin{keybox}[title={The Governance Imperative}]
+Part III addresses a fundamental principle: \textbf{professional duties are non-delegable}. When an attorney files a brief, they are responsible for its accuracy---regardless of whether AI assisted in drafting it. When an investment adviser recommends a strategy, they bear fiduciary duty---regardless of whether an agent generated the analysis. When an auditor signs an opinion, they vouch for its conclusions---regardless of the tools used to reach them.
+
+``The AI did it'' is not a defense to malpractice, breach of fiduciary duty, or professional sanctions.
+
+The architecture in this chapter enables professionals to meet those non-delegable duties. The audit trails support accountability. The human-in-the-loop gates preserve professional judgment. The termination conditions prevent unbounded autonomous action. The security controls protect confidentiality. But architecture alone is insufficient---you must also establish policies, assign responsibilities, and ensure ongoing compliance.
+
+Part III provides that governance framework. It maps the GPA+IAT properties to specific controls, establishes dimensional calibration for risk-based oversight, and translates principles into operational practice. The architecture you now understand makes governance possible. Part III makes it real.
+\end{keybox}
 
