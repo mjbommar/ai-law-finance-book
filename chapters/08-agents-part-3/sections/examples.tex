@@ -1,149 +1,33 @@
 % ============================================================================
 % Examples in Context — Agents Part III
-% Purpose: Demonstrate governance through worked examples in law, finance, accounting
+% Purpose: Demonstrate governance through worked examples in law and accounting
 % Label: sec:agents3-examples
 % ============================================================================
 
 \section{Examples in Context}
 \label{sec:agents3-examples}
 
-This section demonstrates governance principles through worked examples in legal, financial, and accounting contexts. Each example follows a common governance framework: identify risks, calibrate controls, implement monitoring, and respond to incidents. These examples are illustrative—organizations must tailor governance to their specific regulatory obligations, risk appetite, and operational context—but they demonstrate how the conceptual frameworks from Sections~\ref{sec:agents3-dimensional} through \ref{sec:agents3-accountability} translate into practice.
+This section demonstrates governance principles through worked examples in legal and accounting contexts. (Financial services examples---including credit underwriting, financial planning, and fair lending compliance---are developed throughout Section~\ref{sec:agents3-implementation}.) Each example follows a common governance framework: identify risks, calibrate controls, implement monitoring, and respond to incidents. These examples are illustrative---organizations must tailor governance to their specific regulatory obligations, risk appetite, and operational context---but they demonstrate how the conceptual frameworks from Sections~\ref{sec:agents3-dimensional} through \ref{sec:agents3-accountability} translate into practice.
 
 \subsection{Legal Domain: Professional Responsibility and Incident Management}
 \label{sec:agents3-examples-legal}
 
 \paragraph{Example 1: Agentic Legal Research Assistant—Iteration and Verification Controls}
-A mid-sized law firm deploys an agentic legal research system that \emph{iteratively} investigates legal questions by formulating search strategies, retrieving cases, analyzing precedential value, cross-referencing citations, adapting its search based on relevance patterns, and terminating when sufficient authority is identified or confidence thresholds require human escalation. \textbf{Agentic properties}: Goal (identify controlling and persuasive authority), Perception (observes case law databases, statutes, treatises), Action (executes queries, extracts holdings, generates summaries), Iteration (conducts 2-6 research cycles, refining queries), Adaptation (adjusts search when initial results unpersuasive or contradictory authority discovered), Termination (confidence >0.85, maximum 6 cycles, or contradictory binding precedent requiring escalation).
+A mid-sized law firm deploys an agentic legal research system that \emph{iteratively} investigates legal questions by formulating search strategies, retrieving cases, analyzing precedential value, cross-referencing citations, adapting its search based on relevance patterns, and terminating when sufficient authority is identified or confidence thresholds require human escalation. \textit{Dimensional profile: HITL + human frame + static goals + stateless.}
 
-\textit{Dimensional profile: HITL + human frame + static goals + stateless.}
+Figure~\ref{fig:agents3-incident-report-legal} documents an incident where the system's cross-cycle adaptation introduced citation errors that propagated through subsequent iterations—a failure mode unique to agentic systems. The incident report follows ISO 27001 incident management standards while demonstrating key governance principles: (1) iteration and adaptation compound errors across cycles, making single-point output review insufficient; (2) confidence thresholds must incorporate domain-specific accuracy metrics, not just relevance scores; (3) professional duty under Rule 1.1 requires attorneys to understand iterative system logic, not merely review final outputs.
 
-\textbf{Incident: Cross-Cycle Hallucination Detected (Month 3)}:
-Opposing counsel alerts the firm that a motion contains citations that, while identifying real cases, mischaracterize holdings. Investigation reveals the system adapted its case selection across cycles in ways that introduced errors: early cycles identified correct cases, but later cycles synthesized holdings incorrectly when attempting to resolve contradictions.
-
-\textbf{Immediate Response (Detection and Containment)}:
-\begin{itemize}
-\item \textbf{Halt tool usage}: Firm suspends system access pending investigation.
-\item \textbf{Court notification}: Attorneys file corrected motion; submit candor-to-tribunal explanation (ABA Rule 3.3).
-\item \textbf{Client notification}: Firm notifies client; offers fee reduction.
-\end{itemize}
-
-\textbf{Investigation (Agentic-Specific Root Cause)}:
-\begin{itemize}
-\item \textbf{Cycle-level audit}: Iteration logs reveal: Cycles 1-3 correctly identified 8 cases; Cycle 4 detected contradiction and attempted to "harmonize" holdings through paraphrasing—introducing mischaracterization; Cycles 5-6 propagated erroneous synthesis.
-\item \textbf{Adaptation failure}: System's contradiction-resolution logic created hallucination risk when paraphrasing rather than quoting verbatim.
-\item \textbf{Termination failure}: System terminated based on confidence >0.85 despite holding mischaracterization; confidence metric did not capture citation accuracy.
-\item \textbf{Sampling prior work}: 47 research sessions reviewed; 6 additional sessions where cross-cycle adaptation introduced errors (13\% error rate).
-\end{itemize}
-
-\textbf{Remediation (Agentic-Specific Controls)}:
-\begin{itemize}
-\item \textbf{Adaptation constraints}: Prohibit paraphrasing holdings; require verbatim quotations with Bluebook pin cites.
-\item \textbf{Cross-cycle consistency checks}: Flag when later cycles contradict earlier findings; escalate contradictions to attorney rather than automated resolution.
-\item \textbf{Termination condition revision}: Confidence must include citation verification score (database cross-check); terminate only if legal relevance confidence >0.85 AND citation accuracy >0.95.
-\item \textbf{HITL verification strengthened}: Attorneys must review cycle-by-cycle logs, not just final output; workpapers document validation of each cited case.
-\item \textbf{Quarterly iteration audits}: Sample 15\% of research sessions; review cross-cycle adaptation for citation accuracy.
-\end{itemize}
-
-\textbf{Governance Principles Demonstrated}:
-\begin{itemize}
-\item \textbf{Agentic risk}: Iteration and adaptation compound errors across cycles; single-point checks insufficient.
-\item \textbf{Cross-cycle accountability}: Governance must audit how the system evolved, not just final outputs.
-\item \textbf{Termination calibration}: Confidence thresholds must account for domain-specific accuracy (citation fidelity).
-\item \textbf{Professional duty non-delegation}: Attorneys must understand iterative logic to fulfill Rule 1.1 competence obligations.
-\end{itemize}
-
-\subsection{Finance Domain: Fair Lending and Fiduciary Duty}
-\label{sec:agents3-examples-finance}
-
-\paragraph{Example 2: Agentic Credit Underwriting—Process-Based Discrimination}
-A regional bank deploys an agentic mortgage underwriting system (detailed in Section~\ref{sec:agents3-audit-logging}) that \emph{iteratively} investigates applications across 3-7 cycles over 5-15 days, adapting its investigation strategy based on discovered risk patterns. \textbf{Agentic properties}: Goal (approve qualified applicants while managing credit risk and satisfying ECOA), Perception (observes application data, third-party verification responses, historical default patterns), Action (requests documents, queries APIs, generates assessments), Iteration (multiple investigation cycles), Adaptation (adjusts investigation depth based on risk indicators), Termination (confidence >0.90, maximum 7 cycles, or red-flag escalation).
-
-\textit{Dimensional profile: HIC + institutional frame + adaptive goals + stateful.}
-
-\textbf{Agentic-Specific ECOA Compliance Challenges}:
-\begin{itemize}
-\item \textbf{Cross-cycle logging}: Regulation B requires ``principal reasons'' for adverse decisions \parencite{ecoa-reg-b}. For agentic systems, logs must capture how assessment evolved across cycles, not just final decision.
-\item \textbf{Process parity}: Beyond outcome fairness (80\% rule), agentic systems require \emph{process fairness}—investigation cycles must not disproportionately burden protected classes.
-\item \textbf{Adaptation monitoring}: System's strategy adjustments must not introduce prohibited discrimination (e.g., learning to request more documentation from certain demographic groups).
-\end{itemize}
-
-\textbf{Incident: Process-Based Discrimination Detected (Month 6)}:
-Monthly fairness review identifies Hispanic applicants have 65\% approval rate vs. 82\% for white applicants (79.3\% ratio—violates 80\% rule). Critically, cycle-by-cycle analysis reveals the system's \emph{iterative investigation} creates disparate impact: Hispanic applicants trigger 5.2 average cycles vs. 3.8 for white applicants. The system adapted to request employment verification more frequently for shorter U.S. tenure (proxy for national origin—prohibited under ECOA). Prolonged cycles correlate with application abandonment. See Section~\ref{sec:agents3-monitoring-incident} for complete incident response.
-
-\textbf{Governance Principles Demonstrated}:
-\begin{itemize}
-\item \textbf{Agentic fairness risk}: Discrimination emerges through \emph{how} the system iterates (process), not just final outcomes.
-\item \textbf{Cross-cycle accountability}: Traditional fairness testing (outcome parity) insufficient; must audit investigation process across cycles.
-\item \textbf{Adaptation constraints}: System's learning must be constrained to prevent adaptation from introducing prohibited proxies.
-\item \textbf{Termination parity}: Cycle-count monitoring ensures investigation burdens are distributed fairly across demographic groups.
-\end{itemize}
-
-\paragraph{Example 3: Agentic Financial Planning Assistant—Adaptation and Fiduciary Risk}
-A registered investment adviser deploys an agentic financial planning system (detailed in Section~\ref{sec:agents3-risk-assessment}) that \emph{iteratively} analyzes client portfolios, adapts recommendations based on market conditions and client feedback, and determines when to escalate to human advisers. \textbf{Agentic properties}: Goal (optimize portfolio for risk-adjusted returns while satisfying regulatory constraints), Perception (observes market data and client account state across multiple cycles), Action (generates rebalancing recommendations, requests additional client information), Iteration (analysis-recommendation-feedback loops over days or weeks), Adaptation (adjusts strategy based on client responses and market changes), Termination (confidence thresholds met or escalation required).
-
-\textit{Dimensional profile: HITL + hybrid frame + adaptive goals + stateful.}
-
-\textbf{Risk-Calibrated Controls (Agentic-Specific)}:
-\begin{itemize}
-\item \textbf{Compliance risk (High)}: Unlike simple Q\&A chatbots, iterative adaptation creates compounding fiduciary risk. \emph{Controls}: HITL approval before client-facing recommendation; compliance officer reviews recommendation logic monthly; system logs all intermediate reasoning for audit; quarterly fiduciary duty assessment.
-\item \textbf{Adaptation risk (Moderate-High)}: System may adapt toward firm incentives (higher-fee products) rather than client best interest. \emph{Controls}: Adaptation limited to market analysis methods only; recommendation criteria remain fixed and auditable; fee-based recommendations prohibited without explicit client authorization.
-\item \textbf{Iteration risk (Low-Moderate)}: System may iterate excessively (analysis paralysis) or terminate prematurely. \emph{Controls}: Explicit termination conditions (maximum 5 cycles OR confidence >0.85 OR 14-day timeout); human review if timeout termination.
-\item \textbf{Cross-cycle consistency risk (Moderate)}: System may generate contradictory recommendations across cycles. \emph{Controls}: Cross-cycle consistency checks; flag contradictory recommendations for human review.
-\end{itemize}
-
-\textbf{Governance}: Daily active session review (compliance), weekly adaptation log review, monthly termination condition analysis, continuous client feedback. Demonstrates how agentic properties (iteration, adaptation, termination) demand controls unnecessary for non-agentic tools.
+\input{figures/fig-incident-report-legal}
 
 \subsection{Accounting Domain: Independence and Professional Skepticism}
 \label{sec:agents3-examples-accounting}
 
-\paragraph{Example 4: AI Acceptable Use Policy for Agentic Systems (AICPA Independence)}
-A Big Four accounting firm establishes an AI acceptable use policy to operationalize AICPA independence rules and SEC auditor independence requirements for \emph{agentic audit and advisory systems}.
+\paragraph{Example 2: AI Acceptable Use Policy for Agentic Systems (AICPA Independence)}
+A Big Four accounting firm establishes an AI acceptable use policy to operationalize AICPA independence rules and SEC auditor independence requirements for \emph{agentic audit and advisory systems}. \textit{Dimensional profile: Spans HITL, HOTL, and HIC modes across human and institutional frames; policy-level governance rather than a single system.}
 
-\textit{Dimensional profile: Spans HITL, HOTL, and HIC modes across human and institutional frames; policy-level governance rather than a single system.}
+Figure~\ref{fig:agents3-ai-acceptable-use-policy} shows an excerpt from the firm's policy. The policy establishes guiding principles (independence, competence, confidentiality), distinguishes permitted uses (research, analytics, documentation assistance) from prohibited uses (management decisions, audit opinions, unauthorized data sharing), and implements safeguards through vendor approval requirements, mandatory professional review, and documentation standards. Training requirements ensure personnel understand both tool capabilities and professional obligations. Incident reporting procedures establish clear escalation pathways when independence concerns or data breaches arise.
 
-\textbf{Policy Structure (Condensed)}:
-
-\textbf{Scope}: Applies to all AI tools used in audit, tax, and advisory engagements.
-
-\textbf{Guiding Principles}:
-\begin{itemize}
-\item Independence: AI tools must not impair auditor independence (no management decision-making, no self-review threats).
-\item Competence: Professionals must understand tool capabilities and limitations (AICPA due care standard).
-\item Confidentiality: Client data must be protected; tools must satisfy data processing agreements.
-\end{itemize}
-
-\textbf{Permitted Uses}:
-\begin{itemize}
-\item Research and analysis (e.g., industry benchmarking, accounting standards research).
-\item Data analytics (e.g., anomaly detection, sampling optimization).
-\item Documentation assistance (e.g., workpaper summaries, drafted under professional review).
-\end{itemize}
-
-\textbf{Prohibited Uses}:
-\begin{itemize}
-\item Management decisions (e.g., AI selecting accounting policies for audit client—creates self-review threat).
-\item Audit opinions (e.g., AI drafting audit opinion without auditor's professional judgment application).
-\item Confidential data training (e.g., using client data to train vendor models without informed consent and DPA).
-\end{itemize}
-
-\textbf{Safeguards}:
-\begin{itemize}
-\item \textbf{Vendor requirements}: SOC 2 Type II report, Data Processing Agreement (GDPR-compliant), encryption (data at rest and in transit), PII minimization (use client codes, not full names).
-\item \textbf{Professional review}: Partners and managers must review AI-assisted work product before delivery to clients or inclusion in audit workpapers.
-\item \textbf{Documentation}: Workpapers must identify which procedures used AI tools, describe tool methodology, and explain professional judgment applied.
-\end{itemize}
-
-\textbf{Training}:
-\begin{itemize}
-\item \textbf{Role-based}: Auditors receive 4-hour training on tool capabilities, independence considerations, and documentation requirements. Partners receive 2-hour executive briefing.
-\item \textbf{Annual refresher}: 1-hour update on new tools, regulatory developments, lessons learned from incidents.
-\end{itemize}
-
-\textbf{Incident Reporting}:
-\begin{itemize}
-\item \textbf{Immediate escalation triggers}: Independence impairment suspected, confidential data breach, client complaint about AI tool, PCAOB or SEC inquiry.
-\item \textbf{Escalation pathway}: Report to Engagement Partner → National Office Ethics/Independence Group → General Counsel (if regulatory implications).
-\end{itemize}
+\input{figures/fig-ai-acceptable-use-policy}
 
 \textbf{Governance Principles Demonstrated}:
 \begin{itemize}
@@ -151,20 +35,6 @@ A Big Four accounting firm establishes an AI acceptable use policy to operationa
 \item \textbf{Role-based permissions}: Distinguishes permitted (research, analytics) from prohibited (management decisions, audit opinions) uses.
 \item \textbf{Accountability assignment}: Partners responsible for reviewing AI-assisted work; National Office Ethics Group accountable for policy updates.
 \end{itemize}
-
-\paragraph{Example 5: Agentic Audit Investigation System—Iterative Evidence Gathering}
-A Big Four firm deploys an agentic audit assistant (detailed in Section~\ref{sec:agents3-explainability}) that \emph{iteratively} investigates high-risk accounts receivable, adapting its investigation strategy based on discovered anomalies and escalating to senior auditors when material issues are identified. \textbf{Agentic properties}: Goal (identify material misstatements while satisfying PCAOB standards), Perception (observes transaction data, aging reports, payment history, bank confirmations), Action (requests documents, flags anomalies, generates risk assessments), Iteration (conducts 2-5 investigation cycles per high-risk account), Adaptation (adjusts investigation depth based on red flags and evidence quality), Termination (sufficient evidence obtained, material issue requiring escalation, or maximum cycles reached).
-
-\textit{Dimensional profile: HOTL + institutional frame + adaptive goals + stateful.}
-
-\textbf{PCAOB Compliance (Agentic-Specific)}:
-\begin{itemize}
-\item \textbf{AS 1215 (Audit Documentation)}: Workpapers must document \emph{cycle-by-cycle investigation narrative}—what the system perceived, what actions it took, why it adapted—not just final sampling outcome.
-\item \textbf{AS 2315 (Audit Sampling)}: For agentic systems that adaptively investigate, documentation must explain how iteration improved evidence quality and why termination conditions ensured sufficient appropriate audit evidence.
-\item \textbf{Professional Skepticism}: Senior auditor reviews system's investigation logs, assesses escalated accounts, and confirms the system's adaptation logic (adjusting strategy based on discovered evidence) enhances rather than replaces professional judgment.
-\end{itemize}
-
-\textbf{Governance}: Cycle-by-cycle explainability (system generates narrative for each investigation cycle), escalation validation (confirm red-flag accounts appropriately escalated), termination audit (verify sufficient evidence obtained before termination), workpaper integration (investigation logs included in audit documentation). Demonstrates how agentic iteration and adaptation strengthen audit effectiveness when properly governed.
 
 \vspace{0.5em}
 \noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}

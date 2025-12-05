@@ -15,7 +15,7 @@ Organizations deploying agentic systems in regulated domains face a complex, ove
 We organize governance obligations into five layers, each building on the foundation below:
 
 \begin{enumerate}
-\item \textbf{Foundational Law}: Broadly applicable statutes governing data protection, discrimination, consumer protection, and contracts. Examples include the General Data Protection Regulation (GDPR), Equal Credit Opportunity Act (ECOA), and state consumer protection statutes. These laws establish baselines that apply regardless of whether AI is involved.
+\item \textbf{Foundational Law}: Broadly applicable legal obligations governing data protection, discrimination, consumer protection, and contracts. This layer encompasses not only statutes—such as the General Data Protection Regulation (GDPR), Equal Credit Opportunity Act (ECOA), and state consumer protection statutes—but also common law and tort law. Common law doctrines provide protections that predate and operate independently of statutory schemes: defamation law constrains AI-generated content that makes false statements of fact about identifiable individuals; negligence principles may impose duties of care when deploying systems that foreseeably cause harm; and privacy torts (intrusion upon seclusion, public disclosure of private facts) create liability independent of data protection statutes. These legal foundations establish baselines that apply regardless of whether AI is involved.
 
 \item \textbf{Professional and Ethical Obligations}: Duties imposed on licensed professionals—attorneys, investment advisers, auditors, accountants—by their governing bodies, bar associations, or regulatory agencies. These obligations are often more stringent than general law and impose fiduciary duties, confidentiality requirements, and competence standards.
 
@@ -26,9 +26,14 @@ We organize governance obligations into five layers, each building on the founda
 \item \textbf{Voluntary Governance Frameworks}: Standards, best practices, and certification schemes developed by standards bodies, industry groups, or government agencies. Examples include the NIST AI Risk Management Framework, ISO/IEC 42001 (AI Management Systems), COBIT for IT governance, and SOC 2 for vendor assurance. These frameworks are typically voluntary unless incorporated by reference into contracts or regulatory requirements.
 \end{enumerate}
 
+% Float placement: Change [t!] to [b!] (bottom), [h!] (here), or [htbp] (flexible)
+\begin{figure}[t!]
 \begin{keybox}[title={Why Layering is Necessary}]
 No single framework fully satisfies all governance requirements. The EU AI Act establishes high-level risk categories but does not specify how to comply with ECOA's ``principal reasons'' standard for adverse credit decisions. NIST AI RMF provides flexible risk management guidance but does not address attorney-client privilege or auditor independence. Organizations must layer multiple frameworks, augment them with domain-specific controls, and continuously monitor regulatory developments across jurisdictions.
 \end{keybox}
+\end{figure}
+
+\input{figures/fig-five-layer-framework}
 
 The remainder of this section examines each layer in detail, identifying key requirements and illustrating how obligations interact.
 
@@ -57,7 +62,7 @@ ECOA applies regardless of whether the decision was made by a human, an algorith
 \begin{itemize}
 \item Adapt to request more verification cycles from applicants with characteristics correlated with protected classes (e.g., shorter U.S. employment tenure as a proxy for national origin).
 \item Impose higher process burdens (more documentation requests, longer investigation timelines) on protected groups, causing application abandonment even if the system would ultimately approve.
-\item Learn patterns that create disparate \emph{iteration counts} across demographic groups, violating ECOA even when final approval rates satisfy the 80\% rule.
+\item Learn patterns that create disparate \emph{iteration counts} across demographic groups, violating ECOA even when final approval rates satisfy the 80\% rule commonly used in disparate impact analysis.
 \end{itemize}
 
 \emph{Governance Implication}: Agentic credit systems require \emph{process parity monitoring} in addition to outcome fairness testing. Organizations must audit:

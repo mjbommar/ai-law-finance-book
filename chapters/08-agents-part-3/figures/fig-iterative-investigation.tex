@@ -1,0 +1,148 @@
+% Iterative Investigation with Explainable Adaptation - Clean Vertical Flow
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    cycle box/.style={
+        rounded corners=6pt,
+        draw=#1,
+        line width=1.2pt,
+        fill=#1!10,
+        minimum width=5cm,
+        minimum height=1.2cm,
+        font=\small,
+        align=center
+    },
+    detail box/.style={
+        rounded corners=4pt,
+        draw=#1,
+        line width=0.6pt,
+        fill=#1!5,
+        text width=4.5cm,
+        inner sep=5pt,
+        font=\scriptsize,
+        align=left
+    },
+    decision/.style={
+        rounded corners=2pt,
+        draw=amber-600,
+        line width=1pt,
+        fill=amber-100,
+        minimum width=1.6cm,
+        minimum height=1cm,
+        inner sep=3pt,
+        font=\scriptsize,
+        align=center
+    },
+    termination/.style={
+        rounded corners=4pt,
+        draw=red-600,
+        line width=1pt,
+        fill=red-100,
+        minimum width=2.6cm,
+        minimum height=1cm,
+        inner sep=4pt,
+        font=\scriptsize,
+        align=center
+    },
+    lowrisk/.style={
+        rounded corners=4pt,
+        draw=gray-500,
+        line width=0.6pt,
+        fill=gray-100,
+        minimum width=2.2cm,
+        minimum height=0.6cm,
+        font=\scriptsize,
+        align=center
+    },
+    arrow/.style={->, thick, gray-700, >=stealth, line width=1pt},
+    loop arrow/.style={->, thick, green-900, >=stealth, line width=1.2pt},
+    label text/.style={font=\tiny, text=gray-600}
+]
+
+% === CYCLE 1 with detail box ===
+\node[cycle box=slate-700] (cycle1) at (-2.5,0) {
+    \textbf{\textcolor{slate-900}{Cycle 1: Initial Risk Scoring}}
+};
+
+\node[detail box=slate-700, anchor=north west] (c1details) at (1.5,0.6) {
+    \textbf{Risk Criteria:}\\[2pt]
+    High-value (>\$500K): +3\\
+    Overdue >90 days: +2\\
+    New customer: +1\\
+    Prior adjustments: +2\\
+    Related-party: +3
+};
+
+% === DECISION 1 ===
+\node[decision, below=0.8cm of cycle1] (dec1) {
+    Score\\$\geq$6?
+};
+
+% Low risk exit - to the left
+\node[lowrisk, left=1.2cm of dec1] (lowrisk) {
+    Standard procedures
+};
+
+% === CYCLE 2-N with detail box ===
+\node[cycle box=green-900, below=1.5cm of dec1] (cycle2) {
+    \textbf{\textcolor{green-900}{Cycles 2--N: Adaptive Investigation}}
+};
+
+\node[detail box=green-900, anchor=north west] (c2details) at (1.5,-3.2) {
+    \textbf{Actions:}\\
+    Request documents\\
+    Analyze payment patterns\\
+    Cross-reference data\\[3pt]
+    \textbf{Adaptation:}\\
+    Incomplete $\rightarrow$ request more\\
+    Disputes $\rightarrow$ legal review\\
+    Fraud signals $\rightarrow$ escalate
+};
+
+% === DECISION 2 ===
+\node[decision, below=0.8cm of cycle2] (dec2) {
+    Continue?
+};
+
+% === TERMINATION OUTCOMES ===
+\node[termination, below=1cm of dec2, xshift=-3cm] (term1) {
+    \textbf{\textcolor{red-900}{Sufficient Evidence}}\\
+    \textcolor{gray-600}{(conf.\ >0.85)}
+};
+
+\node[termination, below=1cm of dec2] (term2) {
+    \textbf{\textcolor{red-900}{Red Flag}}\\
+    \textcolor{gray-600}{$\rightarrow$ Escalate}
+};
+
+\node[termination, below=1cm of dec2, xshift=3cm] (term3) {
+    \textbf{\textcolor{red-900}{Max Cycles}}\\
+    \textcolor{gray-600}{(5 reached)}
+};
+
+% === ARROWS ===
+% Cycle 1 to Decision 1
+\draw[arrow] (cycle1.south) -- (dec1.north);
+
+% Decision 1: Yes to Cycle 2
+\draw[arrow] (dec1.south) -- node[right, label text] {Yes} (cycle2.north);
+
+% Decision 1: No to low risk (left)
+\draw[arrow] (dec1.west) -- node[above, label text] {No} (lowrisk.east);
+
+% Cycle 2 to Decision 2
+\draw[arrow] (cycle2.south) -- (dec2.north);
+
+% Decision 2 to terminations
+\draw[arrow] (dec2.south) -- ++(0,-0.3) -| (term1.north);
+\draw[arrow] (dec2.south) -- (term2.north);
+\draw[arrow] (dec2.south) -- ++(0,-0.3) -| (term3.north);
+
+% Loop back arrow - on left side, wide enough to clear the box
+\draw[loop arrow, rounded corners=6pt] (dec2.west) -- ++(-4.5,0) node[below, font=\scriptsize, text=green-900] {Next cycle} -- ++(0,2.3) -- (cycle2.west);
+
+\end{tikzpicture}
+\caption{Iterative investigation workflow with explainable adaptation. Cycle~1 scores accounts using risk criteria; high-risk accounts (score $\geq$6) proceed to iterative investigation. Cycles~2--N gather evidence and adapt strategy based on findings. Investigation terminates when sufficient evidence is obtained, a red flag requires escalation, or maximum cycles are reached.}
+\label{fig:agents3-iterative-investigation}
+\end{figure}

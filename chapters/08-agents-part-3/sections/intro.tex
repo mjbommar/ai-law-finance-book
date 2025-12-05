@@ -102,57 +102,22 @@ Effective governance begins with a systematic mapping from the technical propert
 \textbf{Note on System Architecture:} This chapter assumes familiarity with the GPA+IAT framework from Part I. Organizations evaluating whether a specific system qualifies as an ``agentic system'' should apply Part I's six-question rubric and falsification tests. Part II (\emph{How to Build an Agent}) covers specific architectures (ReAct, Reflexion, tool-calling frameworks) and helps teams distinguish agentic systems from sophisticated chatbots or single-shot inference systems.
 
 \paragraph{Goal: Purpose Limitation and Alignment}
-An agent's goal determines what it optimizes for. Governance must ensure goals are:
-\begin{itemize}
-\item \textbf{Authorized}: Who specifies the goal? Under what authority? In regulated domains, goal-setting may require approval from compliance officers, general counsel, or clients.
-\item \textbf{Aligned}: Does the goal match actual organizational or client objectives? Misaligned goals—optimizing for throughput at the expense of quality, minimizing cost without considering risk—create liability.
-\item \textbf{Bounded}: What constraints limit goal pursuit? Agents may pursue goals too aggressively, ignoring side effects, ethical boundaries, or resource limits.
-\item \textbf{Monitorable}: Can we detect when the agent is not achieving its goal or when goal pursuit causes unintended harms? Governance must establish KPIs and SLAs that track goal satisfaction and side-effect metrics.
-\end{itemize}
+An agent's goal determines what it optimizes for. Governance must ensure goals are \emph{authorized}—specifying who may set goals and under what authority, since regulated domains may require approval from compliance officers, general counsel, or clients. Goals must also be \emph{aligned} with actual organizational or client objectives; misaligned goals that optimize for throughput at the expense of quality or minimize cost without considering risk create liability. Furthermore, goals must be \emph{bounded} by constraints that limit aggressive pursuit, preventing agents from ignoring side effects, ethical boundaries, or resource limits. Finally, goals must be \emph{monitorable} so that governance can detect when the agent fails to achieve its objective or when goal pursuit causes unintended harms, requiring the establishment of KPIs and SLAs that track both goal satisfaction and side-effect metrics.
 
 \paragraph{Perception: Data Governance and Input Validation}
-An agent's perception defines what information it uses to make decisions. Governance must address:
-\begin{itemize}
-\item \textbf{Provenance}: Where does the data come from? Is it authoritative, current, and trustworthy? Agents that perceive stale, fabricated, or biased data will make flawed decisions. For third-party systems, establishing provenance can be exceedingly difficult. Governance must include \emph{vendor assessment protocols} and document provenance gaps as residual risk.
-\item \textbf{Bias and Representation}: Does the agent's perceptual model reflect population diversity, or does it encode historical biases? Governance must implement bias detection and fairness audits.
-\item \textbf{Input Validation}: Can adversaries manipulate what the agent perceives? Prompt injection, data poisoning, and adversarial examples are perceptual attacks. Governance must enforce input validation, sanitization, and anomaly detection.
-\item \textbf{Privacy and Confidentiality}: Does perception require access to sensitive data? Governance must ensure data minimization, encryption, and access controls that preserve confidentiality and comply with privacy regulations.
-\end{itemize}
+An agent's perception defines what information it uses to make decisions. Governance must address \emph{provenance}—establishing where data comes from, whether it is authoritative, current, and trustworthy, since agents that perceive stale, fabricated, or biased data will make flawed decisions. For third-party systems, establishing provenance can be exceedingly difficult, requiring vendor assessment protocols and documentation of provenance gaps as residual risk. Governance must also address \emph{bias and representation}, determining whether the agent's perceptual model reflects population diversity or encodes historical biases, and implementing bias detection and fairness audits accordingly. \emph{Input validation} is equally critical: adversaries may manipulate what the agent perceives through prompt injection, data poisoning, or adversarial examples, necessitating input validation, sanitization, and anomaly detection. Finally, governance must address \emph{privacy and confidentiality} when perception requires access to sensitive data, ensuring data minimization, encryption, and access controls that preserve confidentiality and comply with privacy regulations.
 
 \paragraph{Action: Actuation Controls and Approval Gates}
-An agent's action set determines what it can \emph{do}. Governance must manage actuation risk:
-\begin{itemize}
-\item \textbf{Action Authorization}: What actions is the agent permitted to take? High-consequence actions (e.g., signing contracts, disbursing funds) should require explicit authorization.
-\item \textbf{Pre-Action Approval}: Should certain actions require human approval before execution? Human-in-the-loop oversight is appropriate for irreversible or high-stakes actions.
-\item \textbf{Rollback and Remediation}: If an action causes harm, can it be undone? Governance must design systems with rollback capabilities and remediation protocols.
-\item \textbf{Rate Limiting}: Can the agent take actions too quickly or too frequently? Governance must enforce rate limits and circuit breakers.
-\end{itemize}
+An agent's action set determines what it can \emph{do}. Governance must manage actuation risk through \emph{action authorization}—defining what actions the agent is permitted to take and requiring explicit authorization for high-consequence actions such as signing contracts or disbursing funds. \emph{Pre-action approval} determines whether certain actions require human approval before execution; human-in-the-loop oversight is appropriate for irreversible or high-stakes actions. Governance must also ensure \emph{rollback and remediation} capabilities: if an action causes harm, can it be undone? Systems must be designed with rollback capabilities and remediation protocols. Finally, \emph{rate limiting} addresses whether the agent can take actions too quickly or too frequently, requiring governance to enforce rate limits and circuit breakers that prevent runaway execution.
 
 \paragraph{Iteration: State Management and Audit Trails}
-Iteration means the system operates across multiple cycles, each building on prior state. Governance must ensure:
-\begin{itemize}
-\item \textbf{Reproducibility}: Can we replay the system's decision sequence? Debugging, auditing, and compliance reviews require reconstructing what the system perceived and why it acted as it did.
-\item \textbf{State Integrity}: Is the system's internal state protected from tampering or corruption? Governance must implement tamper-evident logging and state validation.
-\item \textbf{Termination Conditions}: Does the system know when to stop iterating? Governance must define termination criteria (e.g., goal achieved, resource limit reached, safety violation detected).
-\end{itemize}
+Iteration means the system operates across multiple cycles, each building on prior state. Governance must ensure \emph{reproducibility}—the ability to replay the system's decision sequence, since debugging, auditing, and compliance reviews require reconstructing what the system perceived and why it acted as it did. \emph{State integrity} requires that the system's internal state be protected from tampering or corruption through tamper-evident logging and state validation. Governance must also define \emph{termination conditions} that specify when the system should stop iterating, whether because the goal has been achieved, a resource limit has been reached, or a safety violation has been detected.
 
 \paragraph{Adaptation: Change Control and Revalidation}
-Adaptation means the system's behavior changes over time. Governance must manage behavioral drift:
-\begin{itemize}
-\item \textbf{Change Detection}: When did the system's behavior change? What triggered the adaptation? Governance must implement model versioning and change logs.
-\item \textbf{Revalidation Triggers}: Does adapted behavior still satisfy safety, fairness, and compliance constraints? Governance must define revalidation triggers (e.g., performance degradation, distribution shift, policy updates).
-\item \textbf{Rollback to Known-Good States}: If adaptation introduces failures, can we revert to a prior validated version?
-\item \textbf{Human Oversight of Learning}: Should adaptation require human approval? In high-stakes domains, unsupervised learning may be inappropriate.
-\end{itemize}
+Adaptation means the system's behavior changes over time. Governance must manage behavioral drift through \emph{change detection}—tracking when the system's behavior changed and what triggered the adaptation, which requires model versioning and change logs. \emph{Revalidation triggers} determine whether adapted behavior still satisfies safety, fairness, and compliance constraints; governance must define triggers such as performance degradation, distribution shift, or policy updates that initiate revalidation. Governance must also enable \emph{rollback to known-good states} so that if adaptation introduces failures, the system can revert to a prior validated version. Finally, \emph{human oversight of learning} addresses whether adaptation should require human approval; in high-stakes domains, unsupervised learning may be inappropriate.
 
 \paragraph{Termination: Exit Protocols and Escalation}
-Termination governs when and how the system stops operating. Governance must define:
-\begin{itemize}
-\item \textbf{Escalation Triggers}: Under what conditions does the system hand off to a human? Examples include ambiguous inputs, conflicting objectives, safety violations, or low-confidence decisions.
-\item \textbf{Graceful Shutdown}: How does the system cleanly exit? Abrupt termination may leave systems in inconsistent states.
-\item \textbf{Handoff Procedures}: When the system escalates to a human, what information must it provide? Effective handoff requires context.
-\item \textbf{Override and Emergency Stop}: Can humans immediately halt the system? Governance must provide emergency stop mechanisms (the ``red button'') accessible to authorized personnel.
-\end{itemize}
+Termination governs when and how the system stops operating. Governance must define \emph{escalation triggers}—the conditions under which the system hands off to a human, such as ambiguous inputs, conflicting objectives, safety violations, or low-confidence decisions. \emph{Graceful shutdown} procedures specify how the system cleanly exits, since abrupt termination may leave systems in inconsistent states. \emph{Handoff procedures} determine what information the system must provide when it escalates to a human, since effective handoff requires context. Finally, \emph{override and emergency stop} mechanisms must allow humans to immediately halt the system; governance must provide emergency stop mechanisms—the ``red button''—accessible to authorized personnel.
 
 \begin{keybox}[title={From Properties to Controls}]
 The GPA+IAT framework is not merely a taxonomy for understanding agents—it is a \emph{requirements map} for governance. Each property creates specific risks; each risk demands specific controls. Organizations that deploy agentic systems without systematically addressing all six properties face gaps in accountability, compliance, and safety.

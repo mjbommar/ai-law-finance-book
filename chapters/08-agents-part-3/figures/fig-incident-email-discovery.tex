@@ -1,0 +1,70 @@
+% Credit Underwriting Incident - Discovery Email from CRO to CEO
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    every node/.style={inner sep=0pt}
+]
+
+% Document frame
+\node[
+    draw=gray-400,
+    line width=0.5pt,
+    fill=white,
+    minimum width=13.5cm,
+    minimum height=14.0cm,
+    rounded corners=2pt
+] (page) at (0,0) {};
+
+% Email header fields
+\node[font=\scriptsize\sffamily, text=gray-600, anchor=west] at ([xshift=0.5cm, yshift=-0.4cm]page.north west) {\textbf{From:}};
+\node[font=\scriptsize\sffamily, text=gray-900, anchor=west] at ([xshift=1.6cm, yshift=-0.4cm]page.north west) {Sarah Chen, Chief Risk Officer <s.chen@firstnational.com>};
+
+\node[font=\scriptsize\sffamily, text=gray-600, anchor=west] at ([xshift=0.5cm, yshift=-0.75cm]page.north west) {\textbf{To:}};
+\node[font=\scriptsize\sffamily, text=gray-900, anchor=west] at ([xshift=1.6cm, yshift=-0.75cm]page.north west) {Michael Torres, Chief Executive Officer <m.torres@firstnational.com>};
+
+\node[font=\scriptsize\sffamily, text=gray-600, anchor=west] at ([xshift=0.5cm, yshift=-1.1cm]page.north west) {\textbf{Cc:}};
+\node[font=\scriptsize\sffamily, text=gray-900, anchor=west] at ([xshift=1.6cm, yshift=-1.1cm]page.north west) {Jennifer Walsh, General Counsel; Board Risk Committee Chair};
+
+\node[font=\scriptsize\sffamily, text=gray-600, anchor=west] at ([xshift=0.5cm, yshift=-1.45cm]page.north west) {\textbf{Date:}};
+\node[font=\scriptsize\sffamily, text=gray-900, anchor=west] at ([xshift=1.6cm, yshift=-1.45cm]page.north west) {June 15, 2024, 3:12 PM};
+
+\node[font=\scriptsize\sffamily, text=gray-600, anchor=west] at ([xshift=0.5cm, yshift=-1.8cm]page.north west) {\textbf{Subject:}};
+\node[font=\scriptsize\bfseries\sffamily, text=gray-900, anchor=west] at ([xshift=1.6cm, yshift=-1.8cm]page.north west) {URGENT: Fair Lending Violation Detected -- Agentic Underwriting System Halted};
+
+% Priority indicator
+\node[font=\tiny\sffamily, text=white, fill=red-900, rounded corners=2pt, inner sep=3pt, anchor=east] at ([xshift=-0.5cm, yshift=-0.4cm]page.north east) {URGENT};
+
+% Horizontal rule
+\draw[gray-300, line width=0.5pt] ([xshift=0.5cm, yshift=-2.15cm]page.north west) -- ([xshift=-0.5cm, yshift=-2.15cm]page.north east);
+
+% Email body
+\node[
+    text width=12.5cm,
+    anchor=north west,
+    font=\scriptsize,
+    align=left
+] at ([xshift=0.5cm, yshift=-2.4cm]page.north west) {
+Michael,\\[6pt]
+I'm escalating a critical issue that requires your immediate awareness. Our compliance team's monthly fairness review identified a significant disparity in the agentic mortgage underwriting system this morning: Hispanic applicants have a 65\% approval rate compared to 82\% for white applicants. This violates the 80\% rule commonly used in disparate impact analysis (65/82 = 79.3\%) and constitutes a potential ECOA fair lending violation.\\[6pt]
+\textbf{Actions taken in the last two hours:}\\[3pt]
+\begin{tabular}{@{\hspace{1em}\textbullet~}p{11.5cm}@{}}
+Halted the agentic underwriting system immediately per emergency stop protocol\\[1pt]
+Reverted all mortgage applications to manual underwriting\\[1pt]
+Preserved 12 months of cycle-level system logs in read-only archive\\[1pt]
+Convened incident response team: Jennifer Walsh (GC) is leading legal strategy, Marcus Thompson (AI Governance), and Rita Gonzalez (Mortgage Systems Lead)\\
+\end{tabular}\\[6pt]
+I just got off the phone with Jennifer. As you know, ECOA violations create strict liability---intent doesn't matter. She's already reviewing our regulatory notification obligations and will have a timeline for CFPB self-reporting by tomorrow. We face potential enforcement action, class action exposure, and reputational risk.\\[6pt]
+I'm requesting an emergency board briefing within 72 hours to approve the investigation scope and remediation budget. I'll send a detailed findings report once the investigation is complete.\\[8pt]
+Sarah\\[6pt]
+\textcolor{gray-400}{\rule{3cm}{0.5pt}}\\[3pt]
+\textbf{Sarah Chen}~\textbar~Chief Risk Officer\\
+First National Bank~\textbar~Tel: (555) 234-5678\\
+\textcolor{slate-700}{s.chen@firstnational.com}\\[12pt]
+\textit{\textcolor{gray-500}{\scriptsize This email and any attachments are confidential and intended solely for the addressee. If you have received this message in error, please notify the sender immediately and delete this message. Unauthorized use, disclosure, or copying is prohibited.}}
+};
+
+\end{tikzpicture}
+\caption{Initial escalation email from the Chief Risk Officer to CEO upon detection of a fair lending violation. The email documents immediate containment actions taken within two hours of detection, consistent with the Tier 3 escalation pathway for critical issues.}
+\label{fig:agents3-incident-email-discovery}
+\end{figure}

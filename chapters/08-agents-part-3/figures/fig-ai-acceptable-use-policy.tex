@@ -1,0 +1,109 @@
+% AI Acceptable Use Policy - Styled as Firm Policy Document (ISO 27001 Compliant)
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    every node/.style={inner sep=0pt}
+]
+
+% Document frame
+\node[
+    draw=gray-400,
+    line width=0.5pt,
+    fill=white,
+    minimum width=12.5cm,
+    minimum height=19cm,
+    rounded corners=2pt
+] (page) at (0,0) {};
+
+% Header bar
+\fill[slate-700] ([yshift=-0.4cm]page.north west) rectangle ([yshift=-1.4cm]page.north east);
+
+% Firm name and policy title
+\node[font=\small\bfseries\sffamily, text=white, anchor=west] at ([xshift=0.5cm, yshift=-0.7cm]page.north west) {BIG FOUR ACCOUNTING LLP};
+\node[font=\footnotesize\sffamily, text=gray-300, anchor=west] at ([xshift=0.5cm, yshift=-1.1cm]page.north west) {National Office --- Professional Standards};
+
+% Policy metadata right side
+\node[font=\scriptsize\sffamily, text=white, anchor=east] at ([xshift=-0.5cm, yshift=-0.7cm]page.north east) {Policy No. AI-2024-003};
+\node[font=\scriptsize\sffamily, text=gray-300, anchor=east] at ([xshift=-0.5cm, yshift=-1.1cm]page.north east) {Version 2.1};
+
+% Policy title
+\node[font=\normalsize\bfseries\sffamily, text=slate-900, anchor=north] at ([yshift=-1.8cm]page.north) {Artificial Intelligence Acceptable Use Policy};
+\node[font=\scriptsize\sffamily, text=gray-600, anchor=north] at ([yshift=-2.25cm]page.north) {Audit, Tax, and Advisory Services};
+
+% Horizontal rule
+\draw[gray-300, line width=0.5pt] ([xshift=0.5cm, yshift=-2.5cm]page.north west) -- ([xshift=-0.5cm, yshift=-2.5cm]page.north east);
+
+% Document metadata box
+\node[
+    draw=gray-300,
+    line width=0.4pt,
+    fill=gray-100,
+    rounded corners=2pt,
+    text width=11.3cm,
+    anchor=north west,
+    inner sep=6pt,
+    font=\tiny
+] at ([xshift=0.5cm, yshift=-2.7cm]page.north west) {
+\begin{tabular}{@{}l@{\hspace{0.3cm}}l@{\hspace{0.8cm}}l@{\hspace{0.3cm}}l@{}}
+\textbf{Owner:} Chief Ethics Officer & \textbf{Approved by:} Executive Committee & \textbf{Effective:} Jan 1, 2025 & \textbf{Review by:} Jan 1, 2026 \\
+\end{tabular}
+};
+
+% Policy content - using a single node with formatted text
+\node[
+    text width=11.5cm,
+    anchor=north west,
+    font=\tiny,
+    align=left
+] at ([xshift=0.5cm, yshift=-3.6cm]page.north west) {
+\textbf{\textsf{1. SCOPE}}\\[1pt]
+This policy governs the use of artificial intelligence tools, including large language models, agentic systems, and automated analytics platforms, in all audit, tax, and advisory engagements conducted by firm personnel.\\[4pt]
+
+\textbf{\textsf{2. DEFINITIONS}}\\[1pt]
+\textbf{2.1} \textit{AI Tool.} Any software system that uses machine learning, natural language processing, or automated reasoning to analyze data or generate outputs.\\[2pt]
+\textbf{2.2} \textit{Agentic System.} An AI tool that operates iteratively, adapts its behavior based on feedback, and determines when to escalate to human review.\\[2pt]
+\textbf{2.3} \textit{Professional Review.} Evaluation by a manager or partner to assess accuracy, completeness, and appropriateness of AI-generated work product.\\[4pt]
+
+\textbf{\textsf{3. GUIDING PRINCIPLES}}\\[1pt]
+\textbf{3.1} \textit{Independence.} AI tools shall not be used in any manner that impairs auditor independence under AICPA Professional Standards or SEC Rule 2-01. Personnel shall not delegate management decisions to AI systems or use AI outputs that create self-review threats.\\[2pt]
+\textbf{3.2} \textit{Professional Competence.} Personnel using AI tools must understand the tool's capabilities, limitations, and potential for error. Use of AI does not diminish the professional's responsibility to exercise due care under AT-C Section 105.\\[2pt]
+\textbf{3.3} \textit{Confidentiality.} Client data processed by AI tools must be protected consistent with firm confidentiality obligations and applicable data processing agreements.\\[4pt]
+
+\textbf{\textsf{4. PERMITTED USES}}\\[1pt]
+AI tools may be used for: (a) research and analysis, including accounting standards research, industry benchmarking, and regulatory guidance review; (b) data analytics, including anomaly detection, transaction testing, and sampling optimization; and (c) documentation assistance, including workpaper drafting and memo summarization, subject to professional review requirements in Section 6.\\[4pt]
+
+\textbf{\textsf{5. PROHIBITED USES}}\\[1pt]
+The following uses are prohibited without exception:\\[2pt]
+\textbf{5.1} Using AI to make or recommend management decisions for audit clients.\\[2pt]
+\textbf{5.2} Issuing or drafting audit opinions based solely on AI analysis without application of professional judgment.\\[2pt]
+\textbf{5.3} Submitting client confidential data to AI systems not approved under Section 6.1.\\[4pt]
+
+\textbf{\textsf{6. SAFEGUARDS}}\\[1pt]
+\textbf{6.1} \textit{Approved Vendors.} AI tools must be approved by the National Office Technology Committee. Approved vendors must maintain SOC 2 Type II certification and execute firm-standard Data Processing Agreements.\\[2pt]
+\textbf{6.2} \textit{Professional Review.} All AI-assisted work product must be reviewed by a manager or partner before inclusion in workpapers or delivery to clients. The reviewer must document their assessment of the AI output's accuracy and appropriateness.\\[2pt]
+\textbf{6.3} \textit{Workpaper Documentation.} Audit documentation must identify procedures that used AI tools, describe the tool and methodology, and explain how professional judgment was applied to AI outputs.\\[4pt]
+
+\textbf{\textsf{7. TRAINING REQUIREMENTS}}\\[1pt]
+All audit professionals must complete AI Fundamentals training (4 hours) before using approved AI tools. Partners and senior managers must complete the Executive AI Briefing (2 hours). Annual refresher training (1 hour) is required for all personnel.\\[4pt]
+
+\textbf{\textsf{8. INCIDENT REPORTING}}\\[1pt]
+Personnel must immediately report to the Engagement Partner any suspected independence impairment, data breach, or client complaint involving AI tools. The Engagement Partner shall escalate to the National Office Ethics Group within 24 hours.\\[4pt]
+
+\textbf{\textsf{9. COMPLIANCE AND ENFORCEMENT}}\\[1pt]
+Violations of this policy may result in disciplinary action, up to and including termination. Willful violations that result in client harm or regulatory action may be referred to professional licensing bodies.\\[4pt]
+
+\textbf{\textsf{10. EXCEPTIONS}}\\[1pt]
+Requests for policy exceptions must be submitted in writing to the National Office Ethics Group and approved by the Chief Ethics Officer prior to implementation. Approved exceptions are valid for one engagement only.\\[4pt]
+
+\textbf{\textsf{RELATED POLICIES:}} Data Classification Policy (DC-2023-001); Vendor Risk Management Policy (VR-2023-004); Professional Standards Manual Ch.\ 12
+};
+
+% Footer
+\draw[gray-300, line width=0.5pt] ([xshift=0.5cm, yshift=0.7cm]page.south west) -- ([xshift=-0.5cm, yshift=0.7cm]page.south east);
+\node[font=\tiny\sffamily, text=gray-500, anchor=south] at ([yshift=0.25cm]page.south) {CONFIDENTIAL --- FOR INTERNAL USE ONLY --- Page 1 of 1};
+
+\end{tikzpicture}
+\caption{Excerpt from an AI acceptable use policy for a professional services firm. The policy follows ISO 27001 documentation standards (document owner, approval authority, version control, review date) while operationalizing AICPA independence rules and SEC auditor independence requirements. Key elements include definitions, permitted and prohibited uses, safeguards, training requirements, incident reporting, and compliance enforcement.}
+\label{fig:agents3-ai-acceptable-use-policy}
+\end{figure}

@@ -17,58 +17,160 @@ Organizations structure AI governance in three primary ways, each with advantage
 \paragraph{Centralized Model: Single AI Governance Office}
 A dedicated AI governance office or committee reports to senior leadership (typically the Chief Risk Officer, Chief Compliance Officer, or Chief Technology Officer), establishing policies, reviewing all proposed AI deployments, conducting risk assessments, and monitoring compliance. This model suits small to medium organizations (500-2,000 employees) with limited AI systems (5-20 use cases), high regulatory stakes (financial services, healthcare, legal), or early AI maturity where governance capability is being built.
 
-\textbf{Advantages}:
-\begin{itemize}
-\item Consistency: Single office ensures uniform governance standards across all systems.
-\item Expertise concentration: Governance specialists develop deep knowledge of regulatory requirements and best practices.
-\item Clear accountability: One office owns all AI governance decisions.
-\item Easier audit: Regulators and internal auditors interact with a single governance function.
-\end{itemize}
+\smallskip
+\noindent
+\begin{minipage}[t]{0.48\textwidth}
+\vspace{0pt}
+\begin{tcolorbox}[
+  enhanced,
+  colback=green-100,
+  colframe=green-900,
+  fonttitle=\bfseries,
+  coltitle=white,
+  title=Advantages,
+  boxrule=1pt,
+  arc=2pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  equal height group=centralized,
+  valign=top
+]
+\small
+\textbf{Consistency}: Single office ensures uniform governance standards across all systems.\\[3pt]
+\textbf{Expertise concentration}: Governance specialists develop deep knowledge of regulatory requirements and best practices.\\[3pt]
+\textbf{Clear accountability}: One office owns all AI governance decisions.\\[3pt]
+\textbf{Easier audit}: Regulators and internal auditors interact with a single governance function.
+\end{tcolorbox}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\vspace{0pt}
+\begin{tcolorbox}[
+  enhanced,
+  colback=red-100,
+  colframe=red-900,
+  fonttitle=\bfseries,
+  coltitle=white,
+  title=Disadvantages,
+  boxrule=1pt,
+  arc=2pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  equal height group=centralized,
+  valign=top
+]
+\small
+\textbf{Bottleneck risk}: All deployment decisions route through one office, creating delays.\\[3pt]
+\textbf{Limited domain expertise}: Central office may lack deep knowledge of domain-specific requirements (e.g., PCAOB audit standards, ECOA fair lending nuances).\\[3pt]
+\textbf{Scalability}: As AI adoption grows, central office becomes overwhelmed.
+\end{tcolorbox}
+\end{minipage}
 
-\textbf{Disadvantages}:
-\begin{itemize}
-\item Bottleneck risk: All deployment decisions route through one office, creating delays.
-\item Limited domain expertise: Central office may lack deep knowledge of domain-specific requirements (e.g., PCAOB audit standards, ECOA fair lending nuances).
-\item Scalability: As AI adoption grows, central office becomes overwhelmed.
-\end{itemize}
+\medskip
 
 \textbf{Example}: Regional investment advisory firm (500 employees, 10 AI tools) establishes AI Governance Office under Chief Compliance Officer with governance lead, technical specialist, and support staff conducting quarterly system reviews.
 
 \paragraph{Federated Model: Central Coordination with Distributed Expertise}
 A central AI governance function establishes enterprise-wide policies and standards, while domain-specific governance teams (e.g., audit practice AI lead, tax practice AI lead, wealth management AI lead) implement and monitor compliance within their areas. The central function coordinates, audits federated teams, and escalates enterprise-wide issues. This model suits large organizations (5,000+ employees) with diverse AI use cases across multiple domains (50+ systems), mature AI adoption, and domain-specific regulatory requirements (audit, legal, banking, securities).
 
-\textbf{Advantages}:
-\begin{itemize}
-\item Domain expertise: Practice leads understand PCAOB standards, tax regulations, or wealth management suitability rules better than a central office.
-\item Scalability: Distributed teams prevent central bottlenecks.
-\item Tailored governance: Each domain calibrates controls to specific regulatory and risk contexts.
-\end{itemize}
+\smallskip
+\noindent
+\begin{minipage}[t]{0.48\textwidth}
+\vspace{0pt}
+\begin{tcolorbox}[
+  enhanced,
+  colback=green-100,
+  colframe=green-900,
+  fonttitle=\bfseries,
+  coltitle=white,
+  title=Advantages,
+  boxrule=1pt,
+  arc=2pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  equal height group=federated,
+  valign=top
+]
+\small
+\textbf{Domain expertise}: Practice leads understand PCAOB standards, tax regulations, or wealth management suitability rules better than a central office.\\[3pt]
+\textbf{Scalability}: Distributed teams prevent central bottlenecks.\\[3pt]
+\textbf{Tailored governance}: Each domain calibrates controls to specific regulatory and risk contexts.
+\end{tcolorbox}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\vspace{0pt}
+\begin{tcolorbox}[
+  enhanced,
+  colback=red-100,
+  colframe=red-900,
+  fonttitle=\bfseries,
+  coltitle=white,
+  title=Disadvantages,
+  boxrule=1pt,
+  arc=2pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  equal height group=federated,
+  valign=top
+]
+\small
+\textbf{Inconsistency risk}: Different domains may interpret policies differently or adopt varying standards.\\[3pt]
+\textbf{Coordination overhead}: Central function must monitor multiple federated teams.\\[3pt]
+\textbf{Accountability diffusion}: Harder to pinpoint responsibility when governance is distributed.
+\end{tcolorbox}
+\end{minipage}
 
-\textbf{Disadvantages}:
-\begin{itemize}
-\item Inconsistency risk: Different domains may interpret policies differently or adopt varying standards.
-\item Coordination overhead: Central function must monitor multiple federated teams.
-\item Accountability diffusion: Harder to pinpoint responsibility when governance is distributed.
-\end{itemize}
+\medskip
 
 \textbf{Example}: Big Four accounting firm (10,000 employees, 50+ AI tools) establishes central AI Governance Committee setting firm-wide policies while each practice (audit, tax, advisory) designates domain-specific AI Leads ensuring compliance with practice-specific regulations (PCAOB, IRS, client confidentiality).
 
 \paragraph{Embedded Model: Governance Within Existing Functions}
 AI governance is integrated into existing risk management, compliance, IT governance, and legal functions rather than creating a separate AI-specific structure, with each function applying its governance processes to AI systems. This model suits organizations with mature, well-functioning governance (strong ERM, compliance, IT governance), AI systems that extend existing processes (e.g., AI-enhanced fraud detection within existing fraud team), and leadership that prefers integration over new silos.
 
-\textbf{Advantages}:
-\begin{itemize}
-\item Efficiency: Leverages existing governance infrastructure.
-\item Avoids silos: Prevents AI governance from operating in isolation from enterprise risk management.
-\item Cultural fit: Organizations resistant to new bureaucracy prefer extending existing processes.
-\end{itemize}
+\smallskip
+\noindent
+\begin{minipage}[t]{0.48\textwidth}
+\vspace{0pt}
+\begin{tcolorbox}[
+  enhanced,
+  colback=green-100,
+  colframe=green-900,
+  fonttitle=\bfseries,
+  coltitle=white,
+  title=Advantages,
+  boxrule=1pt,
+  arc=2pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  equal height group=embedded,
+  valign=top
+]
+\small
+\textbf{Efficiency}: Leverages existing governance infrastructure.\\[3pt]
+\textbf{Avoids silos}: Prevents AI governance from operating in isolation from enterprise risk management.\\[3pt]
+\textbf{Cultural fit}: Organizations resistant to new bureaucracy prefer extending existing processes.
+\end{tcolorbox}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\vspace{0pt}
+\begin{tcolorbox}[
+  enhanced,
+  colback=red-100,
+  colframe=red-900,
+  fonttitle=\bfseries,
+  coltitle=white,
+  title=Disadvantages,
+  boxrule=1pt,
+  arc=2pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  equal height group=embedded,
+  valign=top
+]
+\small
+\textbf{Expertise gaps}: Existing functions may lack AI-specific knowledge (fairness testing, model validation, adversarial robustness).\\[3pt]
+\textbf{Accountability ambiguity}: If AI governance is ``everyone's responsibility,'' it may become no one's priority.\\[3pt]
+\textbf{Inconsistent application}: Different functions may apply AI governance unevenly.
+\end{tcolorbox}
+\end{minipage}
 
-\textbf{Disadvantages}:
-\begin{itemize}
-\item Expertise gaps: Existing functions may lack AI-specific knowledge (fairness testing, model validation, adversarial robustness).
-\item Accountability ambiguity: If AI governance is ``everyone's responsibility,'' it may become no one's priority.
-\item Inconsistent application: Different functions may apply AI governance unevenly.
-\end{itemize}
+\medskip
 
 This model requires AI-specific training for existing governance personnel and clear assignment of AI oversight responsibilities within each function.
 
@@ -77,14 +179,98 @@ This model requires AI-specific training for existing governance personnel and c
 
 Regardless of governance model, organizations must assign accountability for each governance activity using a RACI framework:
 
-\begin{itemize}
-\item \textbf{R (Responsible)}: Who does the work? (May be multiple people.)
-\item \textbf{A (Accountable)}: Who has decision authority and ultimate accountability? (\emph{Only one A per activity.})
-\item \textbf{C (Consulted)}: Who provides input or expertise before decisions?
-\item \textbf{I (Informed)}: Who is notified after decisions?
-\end{itemize}
+\smallskip
+\noindent
+\begin{minipage}[t]{0.235\textwidth}
+\vspace{0pt}
+\begin{tcolorbox}[
+  enhanced,
+  colback=slate-100,
+  colframe=slate-700,
+  fonttitle=\bfseries\Large,
+  coltitle=white,
+  title=\centering R,
+  boxrule=1pt,
+  arc=2pt,
+  left=4pt, right=4pt, top=4pt, bottom=4pt,
+  equal height group=raci,
+  valign=top
+]
+\centering
+\small\textbf{Responsible}\\[4pt]
+\scriptsize Who does the work?\\[6pt]
+\textit{May be multiple people}
+\end{tcolorbox}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.235\textwidth}
+\vspace{0pt}
+\begin{tcolorbox}[
+  enhanced,
+  colback=slate-100,
+  colframe=slate-700,
+  fonttitle=\bfseries\Large,
+  coltitle=white,
+  title=\centering A,
+  boxrule=1pt,
+  arc=2pt,
+  left=4pt, right=4pt, top=4pt, bottom=4pt,
+  equal height group=raci,
+  valign=top
+]
+\centering
+\small\textbf{Accountable}\\[4pt]
+\scriptsize Who has decision authority and ultimate accountability?\\[6pt]
+\textit{\textbf{Only one A per activity}}
+\end{tcolorbox}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.235\textwidth}
+\vspace{0pt}
+\begin{tcolorbox}[
+  enhanced,
+  colback=slate-100,
+  colframe=slate-700,
+  fonttitle=\bfseries\Large,
+  coltitle=white,
+  title=\centering C,
+  boxrule=1pt,
+  arc=2pt,
+  left=4pt, right=4pt, top=4pt, bottom=4pt,
+  equal height group=raci,
+  valign=top
+]
+\centering
+\small\textbf{Consulted}\\[4pt]
+\scriptsize Who provides input or expertise before decisions?\\[6pt]
+\textit{Two-way communication}
+\end{tcolorbox}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.235\textwidth}
+\vspace{0pt}
+\begin{tcolorbox}[
+  enhanced,
+  colback=slate-100,
+  colframe=slate-700,
+  fonttitle=\bfseries\Large,
+  coltitle=white,
+  title=\centering I,
+  boxrule=1pt,
+  arc=2pt,
+  left=4pt, right=4pt, top=4pt, bottom=4pt,
+  equal height group=raci,
+  valign=top
+]
+\centering
+\small\textbf{Informed}\\[4pt]
+\scriptsize Who is notified after decisions?\\[6pt]
+\textit{One-way communication}
+\end{tcolorbox}
+\end{minipage}
 
-The key principle: \textbf{every governance activity must have exactly one Accountable party}. Diffused accountability (``the team is accountable'') creates gaps where no one takes ownership.
+\medskip
+\noindent The key principle: \textbf{every governance activity must have exactly one Accountable party}. Diffused accountability (``the team is accountable'') creates gaps where no one takes ownership.
 
 Table~\ref{tab:agents3-raci} provides a sample RACI matrix for AI governance activities.
 
@@ -93,9 +279,9 @@ Table~\ref{tab:agents3-raci} provides a sample RACI matrix for AI governance act
 \caption{Sample RACI Matrix for AI Governance Activities}
 \label{tab:agents3-raci}
 \small
-\begin{tabular}{>{\raggedright\arraybackslash}p{4.5cm} >{\centering\arraybackslash}p{1.5cm} >{\centering\arraybackslash}p{1.5cm} >{\centering\arraybackslash}p{1.5cm} >{\centering\arraybackslash}p{1.5cm} >{\centering\arraybackslash}p{1.5cm}}
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.0cm} >{\centering\arraybackslash}p{1.5cm} >{\centering\arraybackslash}p{1.4cm} >{\centering\arraybackslash}p{1.5cm} >{\centering\arraybackslash}p{1.5cm} >{\centering\arraybackslash}p{2.0cm}}
 \toprule
-\textbf{Activity} & \textbf{Board / CEO} & \textbf{CRO / CCO} & \textbf{AI Governance Lead} & \textbf{System Owner} & \textbf{Legal / Compliance} \\
+\textbf{Activity} & \textbf{Board / CEO} & \textbf{CRO / CCO} & \textbf{AI Gov. Lead} & \textbf{System Owner} & \textbf{Legal / Compliance} \\
 \midrule
 Approve enterprise AI governance policy & A & C & R & I & C \\
 \addlinespace
@@ -139,11 +325,7 @@ Governance requires clear escalation triggers: when must an operational issue be
 
 \paragraph{Three-Tier Escalation Model}
 
-\textbf{Tier 1 (Operational)}: Routine issues managed by system owners and AI governance teams without escalation. Examples: Low-confidence prediction (handled via HOTL intervention), minor accuracy fluctuation within SLA, user feedback complaint (resolved through customer service).
-
-\textbf{Tier 2 (Significant)}: Issues requiring management review and potential policy or system changes. Examples: Accuracy degradation below SLA for two consecutive weeks, vendor contract violation, user complaint alleging discrimination, data drift requiring model retraining. \emph{Escalate to}: Chief Risk Officer, Chief Compliance Officer, or AI Governance Committee. \emph{Response timeline}: Within 48-72 hours; investigate root cause and implement corrective action.
-
-\textbf{Tier 3 (Critical)}: Issues posing material risk to the organization, requiring immediate executive or board action. Examples: Fairness violation (disparate impact detected in credit decisioning), security breach (confidential data exfiltration), regulatory inquiry, systemic failure affecting multiple systems or customers. \emph{Escalate to}: CEO, Board Risk Committee, General Counsel. \emph{Response timeline}: Immediate (within hours); may require emergency board meeting, system halt, regulatory self-report.
+\input{figures/fig-escalation-tiers}
 
 \paragraph{Reporting Cadence and Audience}
 
@@ -154,16 +336,9 @@ Governance requires clear escalation triggers: when must an operational issue be
 \textbf{Board Presentations (Quarterly/Annual)}: Board receives narrative synthesis: strategic governance posture (are we ahead of or behind regulatory curve?), high-risk system approvals, material incidents and responses, policy changes, budget and resource requests. Format: 10-15 slide deck; focus on risk appetite alignment, not operational details.
 
 \paragraph{Example Escalation: Fairness Violation in Credit Decisioning}
-A bank's monthly fairness monitoring detects disparate impact in credit pre-screening (see Section~\ref{sec:agents3-monitoring-incident}).
+A bank's monthly fairness monitoring detects disparate impact in credit pre-screening (see Section~\ref{sec:agents3-monitoring-incident}). Figure~\ref{fig:agents3-escalation-example} illustrates the Tier 1 → Tier 3 escalation pathway, demonstrating how pre-defined critical issues trigger rapid organizational response with specific time targets at each stage.
 
-\textbf{Tier 1 → Tier 3 Escalation}:
-\begin{itemize}
-\item \textbf{Initial detection}: Compliance analyst (Tier 1 monitoring) identifies 80\% rule violation.
-\item \textbf{Immediate escalation to Tier 3}: Fairness violations are pre-defined as critical (ECOA strict liability; regulatory penalties; class action risk). Analyst notifies Chief Risk Officer within 2 hours.
-\item \textbf{CRO response}: Halt system immediately (emergency stop protocol); convene incident response team (Legal, Compliance, AI Governance Lead, System Owner); notify CEO and Board Risk Committee within 24 hours.
-\item \textbf{Board involvement}: Emergency board meeting (if material); approve remediation plan (model retraining, affected applicant notification, CFPB self-report); allocate investigation budget.
-\item \textbf{Regulatory report}: General Counsel files self-report to CFPB within regulatory timeline.
-\end{itemize}
+\input{figures/fig-escalation-example}
 
 This escalation pathway ensures the organization responds rapidly to critical risks and maintains board-level visibility into material governance failures.
 

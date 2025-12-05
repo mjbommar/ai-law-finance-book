@@ -1,0 +1,184 @@
+% Five-Layer Governance Framework - 3D Layer Cake Visualization
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    label arrow/.style={thick, black!60, ->, >=stealth},
+    label text/.style={align=left, anchor=west}
+]
+
+% ================= LOCAL COLORS =================
+\colorlet{cFoundation}{slate-700}
+\colorlet{cProf}{green-900}
+\colorlet{cSector}{teal-700}
+\colorlet{cAI}{indigo-700}
+\colorlet{cVoluntary}{amber-600}
+\colorlet{cFrosting}{gray-800}
+\colorlet{cFilling}{gray-200}
+
+% ================= CONFIGURATION =================
+\def\Rx{3.2}
+\def\Ry{1.0}
+\def\LayerH{0.7}
+\def\FillH{0.12}
+\def\CutAngA{-20}
+\def\CutAngB{40}
+
+\pgfmathsetmacro{\TotalH}{5*\LayerH + 4*\FillH}
+
+% Pre-calculate edge points on base ellipse
+\pgfmathsetmacro{\EdgeRx}{\Rx*cos(\CutAngB)}
+\pgfmathsetmacro{\EdgeRy}{\Ry*sin(\CutAngB)}
+\pgfmathsetmacro{\EdgeLx}{\Rx*cos(\CutAngA)}
+\pgfmathsetmacro{\EdgeLy}{\Ry*sin(\CutAngA)}
+
+% ================= DRAWING =================
+
+% --- 1. BACK SHELL (drawn first, behind everything) ---
+% Left wall (from cut edge going back around)
+\draw[draw=none, fill=cFrosting]
+    (\EdgeLx, \EdgeLy) -- (\EdgeLx, \EdgeLy + \TotalH)
+    arc[start angle=\CutAngA, end angle=\CutAngB-360, x radius=\Rx, y radius=\Ry]
+    -- (\EdgeRx, \EdgeRy)
+    arc[start angle=\CutAngB, end angle=\CutAngA, x radius=\Rx, y radius=\Ry]
+    -- cycle;
+
+% --- 2. LAYER 0: Foundational Law ---
+\def\yA{0}
+% Cut faces (left first, then right - back to front)
+\draw[draw=white!50, thin, fill=cFoundation!80!black]
+    (0,\yA) -- (\EdgeLx, \EdgeLy + \yA) -- (\EdgeLx, \EdgeLy + \yA + \LayerH) -- (0, \yA + \LayerH) -- cycle;
+\draw[draw=white!50, thin, fill=cFoundation]
+    (0,\yA) -- (\EdgeRx, \EdgeRy + \yA) -- (\EdgeRx, \EdgeRy + \yA + \LayerH) -- (0, \yA + \LayerH) -- cycle;
+% Layer top (ellipse segment)
+\pgfmathsetmacro{\yAtop}{\yA + \LayerH}
+\draw[draw=white!50, thin, fill=cFoundation!70!white]
+    (0, \yAtop) -- (\EdgeRx, \EdgeRy + \yAtop)
+    arc[start angle=\CutAngB, end angle=\CutAngA, x radius=\Rx, y radius=\Ry]
+    -- cycle;
+% Filling layer
+\pgfmathsetmacro{\yAf}{\yA + \LayerH}
+\draw[draw=none, fill=cFilling!90!gray]
+    (0,\yAf) -- (\EdgeLx, \EdgeLy + \yAf) -- (\EdgeLx, \EdgeLy + \yAf + \FillH) -- (0, \yAf + \FillH) -- cycle;
+\draw[draw=none, fill=cFilling]
+    (0,\yAf) -- (\EdgeRx, \EdgeRy + \yAf) -- (\EdgeRx, \EdgeRy + \yAf + \FillH) -- (0, \yAf + \FillH) -- cycle;
+% Filling top
+\pgfmathsetmacro{\yAftop}{\yAf + \FillH}
+\draw[draw=none, fill=cFilling!80!white]
+    (0, \yAftop) -- (\EdgeRx, \EdgeRy + \yAftop)
+    arc[start angle=\CutAngB, end angle=\CutAngA, x radius=\Rx, y radius=\Ry]
+    -- cycle;
+\draw[label arrow] (\EdgeRx, \EdgeRy + \yA + \LayerH/2) -- ++(1.0,0) node[label text] {\footnotesize\textbf{Foundational Law}\\[-2pt]{\scriptsize\textit{GDPR, ECOA, defamation}}};
+
+% --- 3. LAYER 1: Professional & Ethical ---
+\pgfmathsetmacro{\yB}{\LayerH + \FillH}
+% Cut faces
+\draw[draw=white!50, thin, fill=cProf!80!black]
+    (0,\yB) -- (\EdgeLx, \EdgeLy + \yB) -- (\EdgeLx, \EdgeLy + \yB + \LayerH) -- (0, \yB + \LayerH) -- cycle;
+\draw[draw=white!50, thin, fill=cProf]
+    (0,\yB) -- (\EdgeRx, \EdgeRy + \yB) -- (\EdgeRx, \EdgeRy + \yB + \LayerH) -- (0, \yB + \LayerH) -- cycle;
+% Layer top
+\pgfmathsetmacro{\yBtop}{\yB + \LayerH}
+\draw[draw=white!50, thin, fill=cProf!70!white]
+    (0, \yBtop) -- (\EdgeRx, \EdgeRy + \yBtop)
+    arc[start angle=\CutAngB, end angle=\CutAngA, x radius=\Rx, y radius=\Ry]
+    -- cycle;
+% Filling layer
+\pgfmathsetmacro{\yBf}{\yB + \LayerH}
+\draw[draw=none, fill=cFilling!90!gray]
+    (0,\yBf) -- (\EdgeLx, \EdgeLy + \yBf) -- (\EdgeLx, \EdgeLy + \yBf + \FillH) -- (0, \yBf + \FillH) -- cycle;
+\draw[draw=none, fill=cFilling]
+    (0,\yBf) -- (\EdgeRx, \EdgeRy + \yBf) -- (\EdgeRx, \EdgeRy + \yBf + \FillH) -- (0, \yBf + \FillH) -- cycle;
+% Filling top
+\pgfmathsetmacro{\yBftop}{\yBf + \FillH}
+\draw[draw=none, fill=cFilling!80!white]
+    (0, \yBftop) -- (\EdgeRx, \EdgeRy + \yBftop)
+    arc[start angle=\CutAngB, end angle=\CutAngA, x radius=\Rx, y radius=\Ry]
+    -- cycle;
+\draw[label arrow] (\EdgeRx, \EdgeRy + \yB + \LayerH/2) -- ++(1.0,0) node[label text] {\footnotesize\textbf{Professional \& Ethical}\\[-2pt]{\scriptsize\textit{Fiduciary duties, PCAOB}}};
+
+% --- 4. LAYER 2: Sector-Specific ---
+\pgfmathsetmacro{\yC}{2*(\LayerH + \FillH)}
+% Cut faces
+\draw[draw=white!50, thin, fill=cSector!80!black]
+    (0,\yC) -- (\EdgeLx, \EdgeLy + \yC) -- (\EdgeLx, \EdgeLy + \yC + \LayerH) -- (0, \yC + \LayerH) -- cycle;
+\draw[draw=white!50, thin, fill=cSector]
+    (0,\yC) -- (\EdgeRx, \EdgeRy + \yC) -- (\EdgeRx, \EdgeRy + \yC + \LayerH) -- (0, \yC + \LayerH) -- cycle;
+% Layer top
+\pgfmathsetmacro{\yCtop}{\yC + \LayerH}
+\draw[draw=white!50, thin, fill=cSector!70!white]
+    (0, \yCtop) -- (\EdgeRx, \EdgeRy + \yCtop)
+    arc[start angle=\CutAngB, end angle=\CutAngA, x radius=\Rx, y radius=\Ry]
+    -- cycle;
+% Filling layer
+\pgfmathsetmacro{\yCf}{\yC + \LayerH}
+\draw[draw=none, fill=cFilling!90!gray]
+    (0,\yCf) -- (\EdgeLx, \EdgeLy + \yCf) -- (\EdgeLx, \EdgeLy + \yCf + \FillH) -- (0, \yCf + \FillH) -- cycle;
+\draw[draw=none, fill=cFilling]
+    (0,\yCf) -- (\EdgeRx, \EdgeRy + \yCf) -- (\EdgeRx, \EdgeRy + \yCf + \FillH) -- (0, \yCf + \FillH) -- cycle;
+% Filling top
+\pgfmathsetmacro{\yCftop}{\yCf + \FillH}
+\draw[draw=none, fill=cFilling!80!white]
+    (0, \yCftop) -- (\EdgeRx, \EdgeRy + \yCftop)
+    arc[start angle=\CutAngB, end angle=\CutAngA, x radius=\Rx, y radius=\Ry]
+    -- cycle;
+\draw[label arrow] (\EdgeRx, \EdgeRy + \yC + \LayerH/2) -- ++(1.0,0) node[label text] {\footnotesize\textbf{Sector-Specific}\\[-2pt]{\scriptsize\textit{SR 11-7, FINRA rules}}};
+
+% --- 5. LAYER 3: AI-Specific ---
+\pgfmathsetmacro{\yD}{3*(\LayerH + \FillH)}
+% Cut faces
+\draw[draw=white!50, thin, fill=cAI!80!black]
+    (0,\yD) -- (\EdgeLx, \EdgeLy + \yD) -- (\EdgeLx, \EdgeLy + \yD + \LayerH) -- (0, \yD + \LayerH) -- cycle;
+\draw[draw=white!50, thin, fill=cAI]
+    (0,\yD) -- (\EdgeRx, \EdgeRy + \yD) -- (\EdgeRx, \EdgeRy + \yD + \LayerH) -- (0, \yD + \LayerH) -- cycle;
+% Layer top
+\pgfmathsetmacro{\yDtop}{\yD + \LayerH}
+\draw[draw=white!50, thin, fill=cAI!70!white]
+    (0, \yDtop) -- (\EdgeRx, \EdgeRy + \yDtop)
+    arc[start angle=\CutAngB, end angle=\CutAngA, x radius=\Rx, y radius=\Ry]
+    -- cycle;
+% Filling layer
+\pgfmathsetmacro{\yDf}{\yD + \LayerH}
+\draw[draw=none, fill=cFilling!90!gray]
+    (0,\yDf) -- (\EdgeLx, \EdgeLy + \yDf) -- (\EdgeLx, \EdgeLy + \yDf + \FillH) -- (0, \yDf + \FillH) -- cycle;
+\draw[draw=none, fill=cFilling]
+    (0,\yDf) -- (\EdgeRx, \EdgeRy + \yDf) -- (\EdgeRx, \EdgeRy + \yDf + \FillH) -- (0, \yDf + \FillH) -- cycle;
+% Filling top
+\pgfmathsetmacro{\yDftop}{\yDf + \FillH}
+\draw[draw=none, fill=cFilling!80!white]
+    (0, \yDftop) -- (\EdgeRx, \EdgeRy + \yDftop)
+    arc[start angle=\CutAngB, end angle=\CutAngA, x radius=\Rx, y radius=\Ry]
+    -- cycle;
+\draw[label arrow] (\EdgeRx, \EdgeRy + \yD + \LayerH/2) -- ++(1.0,0) node[label text] {\footnotesize\textbf{AI-Specific}\\[-2pt]{\scriptsize\textit{EU AI Act, NYC LL 144}}};
+
+% --- 6. LAYER 4: Voluntary Frameworks ---
+\pgfmathsetmacro{\yE}{4*(\LayerH + \FillH)}
+% Cut faces
+\draw[draw=white!50, thin, fill=cVoluntary!80!black]
+    (0,\yE) -- (\EdgeLx, \EdgeLy + \yE) -- (\EdgeLx, \EdgeLy + \yE + \LayerH) -- (0, \yE + \LayerH) -- cycle;
+\draw[draw=white!50, thin, fill=cVoluntary]
+    (0,\yE) -- (\EdgeRx, \EdgeRy + \yE) -- (\EdgeRx, \EdgeRy + \yE + \LayerH) -- (0, \yE + \LayerH) -- cycle;
+% Layer top (this becomes the lid, drawn later)
+\draw[label arrow] (\EdgeRx, \EdgeRy + \yE + \LayerH/2) -- ++(1.0,0) node[label text] {\footnotesize\textbf{Voluntary Frameworks}\\[-2pt]{\scriptsize\textit{NIST AI RMF, SOC 2}}};
+
+% --- 7. TOP LID (shifted up to top of cake) ---
+\begin{scope}[yshift=\TotalH cm]
+\draw[draw=none, fill=cFrosting!90!white]
+    (0,0) -- (\EdgeRx, \EdgeRy)
+    arc[start angle=\CutAngB, end angle=\CutAngA-360, x radius=\Rx, y radius=\Ry]
+    -- cycle;
+\end{scope}
+
+% --- 8. FINISHES ---
+\draw[thick, cFrosting!50!black] (0,0) -- (0,\TotalH);
+
+\shade[inner color=black!30, outer color=white, opacity=0.3]
+    (0,-0.1) ellipse ({\Rx+0.2} and {\Ry+0.2});
+
+\draw[->, thick, black!60] ({-\Rx-0.5}, 0) -- ({-\Rx-0.5}, \TotalH)
+    node[midway, left, rotate=90] {\scriptsize Increasing specificity};
+
+\end{tikzpicture}
+\caption{The five-layer governance framework visualized as stacked obligations. Each layer builds on the foundation below: foundational law (statutes and common law) provides the broadest baseline; professional duties add licensed-practice requirements; sector-specific rules address industry contexts; AI-specific regulation targets algorithmic systems directly; and voluntary frameworks offer certification and best-practice guidance. Organizations must address all applicable layers---no single layer provides complete coverage.}
+\label{fig:agents3-five-layer-framework}
+\end{figure}

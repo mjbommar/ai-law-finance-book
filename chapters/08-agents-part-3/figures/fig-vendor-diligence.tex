@@ -1,0 +1,61 @@
+% Three-Phase Vendor Due Diligence - Horizontal Flow
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    phase box/.style={
+        rounded corners=6pt,
+        draw=slate-700,
+        line width=1.5pt,
+        fill=slate-100,
+        minimum width=3.2cm,
+        minimum height=2.2cm,
+        font=\small,
+        align=center
+    },
+    phase number/.style={
+        circle,
+        fill=slate-700,
+        text=white,
+        font=\bfseries\small,
+        minimum size=0.7cm,
+        inner sep=0pt
+    },
+    arrow/.style={->, thick, slate-700, >=stealth, line width=1.5pt}
+]
+
+% Phase 1
+\node[phase box] (phase1) at (0,0) {
+    \textbf{Assessment}\\[4pt]
+    Questionnaire on\\
+    data, model,\\
+    security, fairness
+};
+\node[phase number] at ([yshift=0.3cm]phase1.north) {1};
+
+% Phase 2
+\node[phase box] (phase2) at (5,0) {
+    \textbf{Document Review}\\[4pt]
+    SOC 2, DPA,\\
+    validation reports,\\
+    certifications
+};
+\node[phase number] at ([yshift=0.3cm]phase2.north) {2};
+
+% Phase 3
+\node[phase box] (phase3) at (10,0) {
+    \textbf{Validation}\\[4pt]
+    Reference checks,\\
+    pilot testing,\\
+    performance verification
+};
+\node[phase number] at ([yshift=0.3cm]phase3.north) {3};
+
+% Arrows
+\draw[arrow] (phase1.east) -- (phase2.west);
+\draw[arrow] (phase2.east) -- (phase3.west);
+
+\end{tikzpicture}
+\caption{Three-phase vendor due diligence framework. Phase 1 gathers information through questionnaires; Phase 2 reviews supporting documentation and certifications; Phase 3 validates claims through reference checks and pilot testing with representative data.}
+\label{fig:agents3-vendor-diligence}
+\end{figure}

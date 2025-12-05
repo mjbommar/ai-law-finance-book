@@ -1,0 +1,61 @@
+% HIC Autonomy Specification Card
+
+\begin{center}
+\begin{tikzpicture}[
+    every node/.style={inner sep=0pt}
+]
+
+% Card frame
+\node[
+    draw=red-900,
+    line width=1.5pt,
+    fill=white,
+    minimum width=13.5cm,
+    minimum height=5.8cm,
+    rounded corners=4pt
+] (card) at (0,0) {};
+
+% Header bar
+\fill[red-900, rounded corners=4pt]
+    ([yshift=-0.15cm]card.north west) -- ([yshift=-0.15cm]card.north east)
+    [rounded corners=0pt] -- ([yshift=-1.1cm]card.north east) -- ([yshift=-1.1cm]card.north west)
+    [rounded corners=4pt] -- cycle;
+
+% Level name and tagline
+\node[font=\normalsize\bfseries\sffamily, text=white, anchor=west]
+    at ([xshift=0.4cm, yshift=-0.45cm]card.north west) {HIC: Human-in-Command};
+\node[font=\scriptsize\sffamily, text=red-100, anchor=west]
+    at ([xshift=0.4cm, yshift=-0.85cm]card.north west) {Strategic Oversight and Emergency Stop};
+
+% Left column: Appropriate When
+\node[
+    text width=6.2cm,
+    anchor=north west,
+    font=\scriptsize,
+    align=left
+] at ([xshift=0.4cm, yshift=-1.4cm]card.north west) {
+\textbf{\textsf{APPROPRIATE WHEN}}\\[4pt]
+\textcolor{red-900}{$\blacktriangleright$} System operates at scale and speed that precludes individual review (millions of transactions daily)\\[3pt]
+\textcolor{red-900}{$\blacktriangleright$} Actions are individually low-consequence but cumulatively significant\\[3pt]
+\textcolor{red-900}{$\blacktriangleright$} System operates in a stable, well-understood environment with strong safeguards
+};
+
+% Vertical divider
+\draw[gray-300, line width=0.5pt] ([yshift=-1.3cm]card.north) -- ([yshift=0.3cm]card.south);
+
+% Right column: Control Requirements
+\node[
+    text width=6.0cm,
+    anchor=north west,
+    font=\scriptsize,
+    align=left
+] at ([xshift=0.15cm, yshift=-1.4cm]card.north) {
+\textbf{\textsf{CONTROL REQUIREMENTS}}\\[4pt]
+\textbf{Primary Control:} Comprehensive logging + statistical monitoring\\[3pt]
+\textbf{Logging:} Exceptionally detailed---post-action auditability is critical\\[3pt]
+\textbf{Monitoring:} Statistical (fairness metrics, error trends, drift detection)\\[3pt]
+\textbf{Emergency Stop:} Accessible to authorized personnel; tested regularly
+};
+
+\end{tikzpicture}
+\end{center}
