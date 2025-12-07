@@ -1,4 +1,4 @@
-% Five-Layer Governance Framework — refreshed 3D layer cake (no missing slice)
+% Five-Layer Governance Framework — stacked cylinder (solid, no slice)
 
 \begin{figure}[htbp]
 \centering
@@ -7,7 +7,7 @@
     label text/.style={align=left, anchor=west}
 ]
 
-% ---------- LOCAL COLORS ----------
+% ---------- LOCAL COLORS (from shared palette names) ----------
 \colorlet{cFoundation}{slate-700}
 \colorlet{cProf}{green-900}
 \colorlet{cSector}{teal-700}
@@ -34,12 +34,11 @@
     \pgfmathsetmacro{\yMid}{\yBot+\LayerH/2}
     \pgfmathsetmacro{\yFillTop}{\yTop+\FillH}
 
-    % side wall
+    % outer wall
     \path[fill=#2!85!black, draw=none]
         (-\Rx, \yBot) arc[start angle=180, end angle=360, x radius=\Rx, y radius=\Ry] --
         (\Rx, \yTop) arc[start angle=0, end angle=180, x radius=\Rx, y radius=\Ry] -- cycle;
-
-    % soften front face
+    % front soft face
     \path[draw=white!25, fill=#2]
         (-\Rx, \yBot) arc[start angle=180, end angle=360, x radius=\Rx, y radius=\Ry] --
         (\Rx, \yTop) arc[start angle=0, end angle=180, x radius=\Rx, y radius=\Ry] -- cycle;

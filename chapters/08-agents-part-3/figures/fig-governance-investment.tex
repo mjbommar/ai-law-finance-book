@@ -1,77 +1,71 @@
-% Four-Pillar Governance Investment Framework - 2x2 Layout with Outer Frame
+% Four-Pillar Governance Investment Framework - 2x2 Layout
 
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[
-    investment box/.style={
+    base box/.style={
         rounded corners=6pt,
-        draw=slate-700,
-        line width=1pt,
-        fill=white,
-        minimum width=6.2cm,
-        minimum height=2.5cm,
+        line width=1.5pt,
+        minimum width=6.4cm,
+        minimum height=3.2cm,
         align=left,
-        inner sep=10pt
+        inner sep=14pt
     },
     box header/.style={
-        font=\small\bfseries\sffamily,
-        text=slate-900
+        font=\small\bfseries\sffamily
     },
     box content/.style={
         font=\scriptsize,
-        text=slate-700,
+        text=gray-800,
         text width=5.6cm
-    },
-    frame title/.style={
-        font=\normalsize\bfseries\sffamily,
-        text=green-900,
-        fill=green-100,
-        inner sep=4pt
     }
 ]
 
-% Outer frame - drawn explicitly
-\draw[rounded corners=8pt, draw=green-900, line width=1.5pt, fill=green-100]
-    (-6.8,-2.9) rectangle (6.8,3.1);
+% Outer frame
+\draw[rounded corners=8pt, draw=slate-700, line width=2pt, fill=slate-100]
+    (-7.1,-4.0) rectangle (7.1,4.3);
 
 % Frame title
-\node[frame title] at (0,3.1) {Governance Capability};
+\node[font=\normalsize\bfseries\sffamily, text=white, fill=slate-700,
+      rounded corners=3pt, inner sep=6pt] at (0,4.3) {Governance Capability};
 
-% Top row
-\node[investment box] (training) at (-3.4,1.15) {};
-\node[box header, anchor=north west] at ([xshift=2pt, yshift=-2pt]training.north west) {Training};
+% Top-left: Training
+\node[base box, draw=slate-700, fill=white] (training) at (-3.5,1.85) {};
+\node[box header, text=slate-900, anchor=north west] at ([xshift=2pt, yshift=-2pt]training.north west) {Training};
 \node[box content, anchor=north west] at ([xshift=2pt, yshift=-18pt]training.north west) {
-    Role-based programs for AI capabilities, limitations, and governance obligations\\[3pt]
+    Role-based programs for AI capabilities, limitations, and governance obligations\\[4pt]
     \textbullet~Attorneys: hallucination risks, Rule 3.3\\
     \textbullet~Auditors: PCAOB AI documentation\\
     \textbullet~Compliance: fairness, disparate impact
 };
 
-\node[investment box] (hiring) at (3.4,1.15) {};
-\node[box header, anchor=north west] at ([xshift=2pt, yshift=-2pt]hiring.north west) {Hiring};
+% Top-right: Hiring
+\node[base box, draw=slate-700, fill=gray-100] (hiring) at (3.5,1.85) {};
+\node[box header, text=slate-900, anchor=north west] at ([xshift=2pt, yshift=-2pt]hiring.north west) {Hiring};
 \node[box content, anchor=north west] at ([xshift=2pt, yshift=-18pt]hiring.north west) {
-    Specialized expertise that general staff lack\\[3pt]
+    Specialized expertise that general staff lack\\[4pt]
     \textbullet~Risk analysts (AI fairness testing)\\
     \textbullet~Compliance officers (ECOA, GDPR)\\
     \textbullet~Technical specialists (model validation)\\
     \textbullet~AI-aware legal counsel
 };
 
-% Bottom row
-\node[investment box] (partnerships) at (-3.4,-1.45) {};
-\node[box header, anchor=north west] at ([xshift=2pt, yshift=-2pt]partnerships.north west) {Partnerships};
+% Bottom-left: Partnerships
+\node[base box, draw=slate-700, fill=gray-100] (partnerships) at (-3.5,-2.05) {};
+\node[box header, text=slate-900, anchor=north west] at ([xshift=2pt, yshift=-2pt]partnerships.north west) {Partnerships};
 \node[box content, anchor=north west] at ([xshift=2pt, yshift=-18pt]partnerships.north west) {
-    External capabilities for gaps and scale\\[3pt]
+    External capabilities for gaps and scale\\[4pt]
     \textbullet~AI-specialized law firms\\
     \textbullet~Governance consultants\\
     \textbullet~Certification auditors (SOC 2, ISO 42001)\\
     \textbullet~Industry groups and best practices
 };
 
-\node[investment box] (technology) at (3.4,-1.45) {};
-\node[box header, anchor=north west] at ([xshift=2pt, yshift=-2pt]technology.north west) {Technology};
+% Bottom-right: Technology
+\node[base box, draw=slate-700, fill=definition-light] (technology) at (3.5,-2.05) {};
+\node[box header, text=slate-900, anchor=north west] at ([xshift=2pt, yshift=-2pt]technology.north west) {Technology};
 \node[box content, anchor=north west] at ([xshift=2pt, yshift=-18pt]technology.north west) {
-    Infrastructure for high-autonomy governance\\[3pt]
+    Infrastructure for high-autonomy governance\\[4pt]
     \textbullet~Logging and audit trail systems\\
     \textbullet~Real-time monitoring dashboards\\
     \textbullet~Fairness and bias testing tools\\

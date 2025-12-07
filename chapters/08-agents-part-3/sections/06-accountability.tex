@@ -15,7 +15,7 @@ Technical controls alone do not create accountability. Governance requires expli
 Organizations structure AI governance in three primary ways, each with advantages and disadvantages depending on size, AI maturity, and regulatory intensity.
 
 \paragraph{Centralized Model: Single AI Governance Office}
-A dedicated AI governance office or committee reports to senior leadership (typically the Chief Risk Officer, Chief Compliance Officer, or Chief Technology Officer), establishing policies, reviewing all proposed AI deployments, conducting risk assessments, and monitoring compliance. This model suits small to medium organizations (500-2,000 employees) with limited AI systems (5-20 use cases), high regulatory stakes (financial services, healthcare, legal), or early AI maturity where governance capability is being built.
+A dedicated AI governance office or committee reports to senior leadership (typically the Chief Risk Officer, Chief Compliance Officer, or Chief Technology Officer). This office establishes policies, reviews all proposed AI deployments, conducts risk assessments, and monitors compliance. This model suits small to medium organizations (500-2,000 employees) with limited AI systems (5-20 use cases), high regulatory stakes (financial services, healthcare, legal), or early AI maturity where governance capability is being built.
 
 \smallskip
 \noindent
@@ -122,7 +122,7 @@ A central AI governance function establishes enterprise-wide policies and standa
 \textbf{Example}: Big Four accounting firm (10,000 employees, 50+ AI tools) establishes central AI Governance Committee setting firm-wide policies while each practice (audit, tax, advisory) designates domain-specific AI Leads ensuring compliance with practice-specific regulations (PCAOB, IRS, client confidentiality).
 
 \paragraph{Embedded Model: Governance Within Existing Functions}
-AI governance is integrated into existing risk management, compliance, IT governance, and legal functions rather than creating a separate AI-specific structure, with each function applying its governance processes to AI systems. This model suits organizations with mature, well-functioning governance (strong ERM, compliance, IT governance), AI systems that extend existing processes (e.g., AI-enhanced fraud detection within existing fraud team), and leadership that prefers integration over new silos.
+AI governance is integrated into existing risk management, compliance, IT governance, and legal functions rather than creating a separate AI-specific structure. Each function applies its existing governance processes to AI systems. This model suits organizations with mature, well-functioning governance (strong ERM, compliance, IT governance), AI systems that extend existing processes (e.g., AI-enhanced fraud detection within existing fraud team), and leadership that prefers integration over new silos.
 
 \smallskip
 \noindent
@@ -274,11 +274,11 @@ Regardless of governance model, organizations must assign accountability for eac
 
 Table~\ref{tab:agents3-raci} provides a sample RACI matrix for AI governance activities.
 
-\begin{table}[htbp]
+\begin{table}[!ht]
 \centering
 \caption{Sample RACI Matrix for AI Governance Activities}
 \label{tab:agents3-raci}
-\small
+\footnotesize
 \begin{tabular}{>{\raggedright\arraybackslash}p{4.0cm} >{\centering\arraybackslash}p{1.5cm} >{\centering\arraybackslash}p{1.4cm} >{\centering\arraybackslash}p{1.5cm} >{\centering\arraybackslash}p{1.5cm} >{\centering\arraybackslash}p{2.0cm}}
 \toprule
 \textbf{Activity} & \textbf{Board / CEO} & \textbf{CRO / CCO} & \textbf{AI Gov. Lead} & \textbf{System Owner} & \textbf{Legal / Compliance} \\
@@ -299,7 +299,7 @@ Approve vendor contract (high-risk system) & I & A & C & R & C \\
 \addlinespace
 Report to board (quarterly AI governance update) & I & A & R & I & C \\
 \addlinespace
-Respond to regulatory inquiry & C & A & R & R & A (legal) \\
+Respond to regulatory inquiry & C & A & R & R & R \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -382,7 +382,7 @@ Organizations that deploy AI systems without governance face \emph{uninsurable, 
 A mortgage applicant is denied credit by a bank using an AI underwriting system. The applicant sues under ECOA, alleging disparate impact (the system disproportionately denies applications from Hispanic applicants). The liability chain unfolds:
 
 \begin{enumerate}
-\item \textbf{Applicant sues bank}: ECOA imposes strict liability on the \emph{creditor} (the bank), not the technology vendor. The bank is the defendant, regardless of whether it built the system in-house or purchased it.
+\item \textbf{Applicant sues bank}: Under traditional enforcement practice, ECOA liability attaches to the \emph{creditor} (the bank), not the technology vendor. The bank is the defendant, regardless of whether it built the system in-house or purchased it.
 \item \textbf{Bank investigates vendor recovery}: The bank's contract with the AI vendor caps liability at \$100,000 (annual subscription fee). The ECOA settlement is \$3 million (class action covering 500 affected applicants). The bank recovers only \$100,000—3\% of total damages.
 \item \textbf{Bank disciplines employee}: The bank's AI governance policy required quarterly fairness monitoring. The assigned compliance analyst failed to conduct monitoring for six months. The bank terminates the analyst but remains liable to applicants and regulators (the analyst's failure does not excuse the bank's ECOA violation).
 \item \textbf{Regulatory escalation}: The Consumer Financial Protection Bureau (CFPB) investigates and imposes a \$5 million penalty for systemic ECOA violations. The penalty is assessed against the bank, not the vendor or employee.
@@ -394,6 +394,3 @@ A mortgage applicant is denied credit by a bank using an AI underwriting system.
 ``The AI did it'' is not a legal defense. ``We bought it from a reputable vendor'' does not transfer liability. ``Our employee was supposed to monitor it'' does not excuse organizational failures. Deployers own the risk. Governance is the mechanism for managing it.
 \end{keybox}
 
-\vspace{0.5em}
-\noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}
-\vspace{0.5em}

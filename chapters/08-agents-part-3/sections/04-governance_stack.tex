@@ -7,7 +7,7 @@
 \section{The Governance Stack: Overlapping Obligations}
 \label{sec:agents3-governance-stack}
 
-Organizations deploying agentic systems in regulated domains face a complex, overlapping web of legal and professional obligations. There is no single ``AI governance law'' that comprehensively addresses all requirements. Instead, governance emerges from the interaction of five layers: foundational law, professional and ethical obligations, sector-specific regulation, AI-specific regulation, and voluntary governance frameworks. Understanding this layered structure—and why no single layer suffices—is essential for designing governance proportionate to organizational risk.
+Having established dimensional calibration principles in Section~\ref{sec:agents3-dimensional}, we now map the regulatory landscape those controls must satisfy. Organizations deploying agentic systems in regulated domains face a complex, overlapping web of legal and professional obligations. There is no single ``AI governance law'' that comprehensively addresses all requirements. Instead, governance emerges from the interaction of five layers: foundational law, professional and ethical obligations, sector-specific regulation, AI-specific regulation, and voluntary governance frameworks. Understanding this layered structure—and why no single layer suffices—is essential for designing governance proportionate to organizational risk.
 
 \subsection{The Five-Layer Framework}
 \label{sec:agents3-five-layers}
@@ -15,7 +15,13 @@ Organizations deploying agentic systems in regulated domains face a complex, ove
 We organize governance obligations into five layers, each building on the foundation below:
 
 \begin{enumerate}
-\item \textbf{Foundational Law}: Broadly applicable legal obligations governing data protection, discrimination, consumer protection, and contracts. This layer encompasses not only statutes—such as the General Data Protection Regulation (GDPR), Equal Credit Opportunity Act (ECOA), and state consumer protection statutes—but also common law and tort law. Common law doctrines provide protections that predate and operate independently of statutory schemes: defamation law constrains AI-generated content that makes false statements of fact about identifiable individuals; negligence principles may impose duties of care when deploying systems that foreseeably cause harm; and privacy torts (intrusion upon seclusion, public disclosure of private facts) create liability independent of data protection statutes. These legal foundations establish baselines that apply regardless of whether AI is involved.
+\item \textbf{Foundational Law}: Broadly applicable legal obligations governing data protection, discrimination, consumer protection, and contracts. This layer encompasses not only statutes—such as the General Data Protection Regulation (GDPR), Equal Credit Opportunity Act (ECOA), and state consumer protection statutes—but also common law and tort law. Common law doctrines provide protections that predate and operate independently of statutory schemes:
+\begin{itemize}
+\item Defamation law constrains AI-generated content that makes false statements of fact about identifiable individuals.
+\item Negligence principles may impose duties of care when deploying systems that foreseeably cause harm.
+\item Privacy torts (intrusion upon seclusion, public disclosure of private facts) create liability independent of data protection statutes.
+\end{itemize}
+These legal foundations establish baselines that apply regardless of whether AI is involved.
 
 \item \textbf{Professional and Ethical Obligations}: Duties imposed on licensed professionals—attorneys, investment advisers, auditors, accountants—by their governing bodies, bar associations, or regulatory agencies. These obligations are often more stringent than general law and impose fiduciary duties, confidentiality requirements, and competence standards.
 
@@ -27,11 +33,31 @@ We organize governance obligations into five layers, each building on the founda
 \end{enumerate}
 
 % Float placement: Change [t!] to [b!] (bottom), [h!] (here), or [htbp] (flexible)
-\begin{figure}[t!]
 \begin{keybox}[title={Why Layering is Necessary}]
 No single framework fully satisfies all governance requirements. The EU AI Act establishes high-level risk categories but does not specify how to comply with ECOA's ``principal reasons'' standard for adverse credit decisions. NIST AI RMF provides flexible risk management guidance but does not address attorney-client privilege or auditor independence. Organizations must layer multiple frameworks, augment them with domain-specific controls, and continuously monitor regulatory developments across jurisdictions.
 \end{keybox}
-\end{figure}
+
+\begin{table}[htbp]
+\centering
+\caption{Summary of the Five-Layer Governance Framework}
+\label{tab:agents3-five-layers}
+\small
+\begin{tabular}{>{\raggedright\arraybackslash}p{3.5cm} >{\raggedright\arraybackslash}p{4cm} >{\raggedright\arraybackslash}p{5cm}}
+\toprule
+\textbf{Layer} & \textbf{Source} & \textbf{Key Examples} \\
+\midrule
+1. Foundational Law & Statutes, common law, tort law & GDPR, ECOA, defamation, negligence \\
+\addlinespace
+2. Professional Obligations & Bar associations, regulatory bodies & ABA Model Rules, fiduciary duty, AICPA standards \\
+\addlinespace
+3. Sector-Specific Regulation & Industry regulators & SR 11-7, FINRA rules, PCAOB standards \\
+\addlinespace
+4. AI-Specific Regulation & AI-targeted laws & EU AI Act, Colorado AI Act, NYC Local Law 144 \\
+\addlinespace
+5. Voluntary Frameworks & Standards bodies, industry groups & NIST AI RMF, ISO/IEC 42001, SOC 2 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \input{figures/fig-five-layer-framework}
 
@@ -45,7 +71,7 @@ Foundational law provides the baseline for governance, applicable to all organiz
 \paragraph{Data Protection and Privacy: GDPR Article 22 and Stateful Agentic Systems}
 The GDPR establishes rights and obligations for processing personal data of EU residents. Article 22 addresses automated decision-making: individuals have the right not to be subject to decisions based solely on automated processing that produce legal or similarly significant effects \parencite{gdpr-article-22}. While not an absolute prohibition—automated decisions are permitted with explicit consent, contractual necessity, or legal authorization—Article 22 requires organizations to implement ``suitable measures'' to safeguard the data subject's rights, including the right to obtain human intervention and contest the decision.
 
-\textbf{Agentic-Specific Challenge—Stateful Decision Accumulation}: Article 22's human intervention requirement becomes complex for stateful agentic systems that accumulate context across multiple cycles. Generic AI guidance suggests ``add a button for human review,'' but this is insufficient for agentic systems. Meaningful human intervention requires access to the system's accumulated internal state—how the agent's understanding evolved across iterations, what adaptations occurred, what termination logic triggered the final decision. Without comprehensive state logging (capturing perception, action, and rationale at each cycle), human reviewers cannot meaningfully intervene or contest decisions because they lack visibility into how the agent reached its conclusion.
+\textbf{Agentic-Specific Challenge—Stateful Decision Accumulation}: Article 22's human intervention requirement becomes complex for stateful agentic systems that accumulate context across multiple cycles. Generic AI guidance suggests ``add a button for human review,'' but this is insufficient for agentic systems. Meaningful human intervention requires access to the system's accumulated internal state: how the agent's understanding evolved across iterations, what adaptations occurred, and what termination logic triggered the final decision. Without comprehensive state logging (capturing perception, action, and rationale at each cycle), human reviewers cannot meaningfully intervene or contest decisions because they lack visibility into how the agent reached its conclusion.
 
 \emph{Governance Implication}: For agentic systems subject to GDPR Article 22, human intervention controls must be paired with state logging requirements (cross-cycle audit trails). Organizations cannot satisfy Article 22 by providing post-hoc review without the ability to reconstruct the agent's iterative decision process. This links directly to the State Logging control discussed in Section~\ref{sec:agents3-audit-logging}.
 
@@ -192,7 +218,7 @@ Penalties for non-compliance are severe: up to €35 million or 7\% of global an
 In the absence of comprehensive federal AI legislation, U.S. states and cities are enacting targeted rules:
 
 \begin{itemize}
-\item \textbf{Colorado AI Act (HB 24-1142)}: Effective January 1, 2026, Colorado's law prohibits algorithmic discrimination—deployment of high-risk AI systems that result in unlawful differential treatment or impact based on protected classifications \parencite{colorado-ai-act}. Deployers must conduct impact assessments documenting the system's purpose, data sources, intended benefits, known limitations, and measures to mitigate discrimination. A rebuttable presumption of compliance applies if deployers complete a reasonable impact assessment in good faith.
+\item \textbf{Colorado AI Act (SB 24-205)}: Effective January 1, 2026, Colorado's law prohibits algorithmic discrimination—deployment of high-risk AI systems that result in unlawful differential treatment or impact based on protected classifications \parencite{colorado-ai-act}. Deployers must conduct impact assessments documenting the system's purpose, data sources, intended benefits, known limitations, and measures to mitigate discrimination. A rebuttable presumption of compliance applies if deployers complete a reasonable impact assessment in good faith.
 
 \item \textbf{New York City Local Law 144 (Automated Employment Decision Tools)}: Effective since July 2023, NYC requires employers using AI for hiring or promotion to conduct annual bias audits, publish summary results, and notify candidates that an automated tool is in use. Employers must also allow candidates to request alternative evaluation processes.
 
@@ -275,6 +301,3 @@ Despite structural differences, all governance frameworks converge on seven comm
 
 While frameworks differ in emphasis and structure, these seven controls represent governance universals. Section~\ref{sec:agents3-dimensional} (presented earlier) established how to calibrate control intensity based on system properties. Section~\ref{sec:agents3-implementation} operationalizes these calibrated controls through technical architecture and organizational processes.
 
-\vspace{0.5em}
-\noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}
-\vspace{0.5em}

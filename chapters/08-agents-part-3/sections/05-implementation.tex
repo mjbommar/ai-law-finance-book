@@ -82,7 +82,7 @@ Effective audit logging captures:
 Logs must be stored in \emph{tamper-evident} formats (e.g., append-only databases, cryptographic hashing) with access controls limiting who can read or delete logs. Retention periods must satisfy regulatory requirements: 7-10 years for financial services, 25 months minimum for ECOA adverse action records, potentially longer for litigation hold purposes.
 
 \paragraph{Example: Agentic Credit Underwriting Audit Logging (ECOA Compliance)}
-A bank deploys an agentic mortgage underwriting system that \emph{iteratively} investigates applications by requesting additional documentation, querying third-party data sources (employment verification, asset verification), analyzing trends across multiple applicants, adapting its investigation strategy based on discovered risk patterns, and terminating when sufficient information is gathered or escalation is required. \textbf{Agentic properties}: Goal (approve qualified applicants while managing credit risk and satisfying ECOA requirements), Perception (observes application data, third-party verification responses, historical default patterns), Action (requests documents, queries APIs, generates preliminary assessments), Iteration (operates across 3-7 investigation cycles over 5-15 days), Adaptation (adjusts investigation depth based on risk indicators and application complexity), Termination (explicit conditions: confidence >0.90, maximum 7 cycles, or red-flag escalation to senior underwriter). \textit{Dimensional profile: HIC + institutional frame + adaptive goals + stateful.}
+A bank deploys an agentic mortgage underwriting system that \emph{iteratively} investigates applications by requesting additional documentation, querying third-party data sources (employment verification, asset verification), and analyzing trends across multiple applicants. The system adapts its investigation strategy based on discovered risk patterns and terminates when sufficient information is gathered or escalation is required. \textbf{Agentic properties}: Goal (approve qualified applicants while managing credit risk and satisfying ECOA requirements), Perception (observes application data, third-party verification responses, historical default patterns), Action (requests documents, queries APIs, generates preliminary assessments), Iteration (operates across 3-7 investigation cycles over 5-15 days), Adaptation (adjusts investigation depth based on risk indicators and application complexity), Termination (explicit conditions: confidence >0.90, maximum 7 cycles, or red-flag escalation to senior underwriter). \textit{Dimensional profile: HIC + institutional frame + adaptive goals + stateful.}
 
 Equal Credit Opportunity Act Regulation B requires lenders to provide ``principal reasons'' for adverse credit decisions \parencite{ecoa-reg-b}. For agentic systems that iterate across multiple cycles and adapt their investigation strategy, the logging architecture must capture \emph{cross-cycle decision evolution} to enable reconstruction of how the system's assessment changed over time.
 
@@ -146,7 +146,7 @@ Equal Credit Opportunity Act Regulation B requires lenders to provide ``principa
 
 \textbf{Retention}: 25 months (ECOA requirement) + 7 years (standard banking litigation hold).
 
-\textbf{Security}: Logs encrypted at rest; access restricted to compliance officers, auditors, and authorized investigators; append-only with cryptographic integrity verification (tamper-evident); per-cycle hash chains to detect any alteration.
+\textbf{Security}: Logs are encrypted at rest, with access restricted to compliance officers, auditors, and authorized investigators. The system uses append-only storage with cryptographic integrity verification (tamper-evident) and per-cycle hash chains to detect any alteration.
 
 \textbf{Retrievability}: Indexed by application ID, applicant (hashed identifier to protect PII), decision date, termination reason, and number of cycles. Enables compliance officers to query: ``Show all adverse decisions where the system terminated due to timeout rather than confidence'' or ``Identify applications where preliminary assessment changed from LIKELY\_APPROVE to ADVERSE between cycles.''
 
@@ -290,7 +290,7 @@ Adaptation Freeze Options & Customer may temporarily disable learning mechanisms
 \label{tab:agents3-adaptation-clauses}
 \end{table}
 
-\begin{highlightbox}[title={Example Contractual Language: Adaptation Transparency}]
+\begin{highlightbox}[title={Example Contractual Language: Adaptation Transparency}, breakable=false]
 \small
 \textbf{Section X: Adaptation Transparency and Change Control}
 
@@ -343,7 +343,7 @@ Monitor continuously across four dimensions:
 \item \textbf{Performance Metrics}: Accuracy, precision, recall, F1 score, latency—whatever aligns with business objectives. Establish SLAs and alert when performance degrades below thresholds.
 \item \textbf{Data Drift}: Are input distributions changing? If the system was trained on 2020-2022 mortgage applications and is now seeing 2024 applications with different characteristics (higher interest rates, different applicant demographics), performance may degrade.
 \item \textbf{Concept Drift}: Are input-output relationships changing? For example, fraud patterns evolve; a fraud detection model trained on 2022 patterns may miss 2024 attack vectors.
-\item \textbf{Fairness Metrics}: For systems affecting protected classes, monitor approval rates, error rates, and disparate impact ratios by demographic group. ECOA requires lenders to monitor for disparate impact; GDPR Article 22 requires ongoing assessment of automated decision-making.
+\item \textbf{Fairness Metrics}: For systems affecting protected classes, monitor approval rates, error rates, and disparate impact ratios by demographic group. Regulatory expectations and enforcement practice under ECOA effectively require lenders to monitor for disparate impact as part of fair lending compliance. Similarly, GDPR Article 22 requires ongoing assessment of automated decision-making.
 \end{enumerate}
 
 \paragraph{Example: Disparate Impact in Agentic Credit Underwriting}
@@ -365,6 +365,5 @@ Ten weeks later, with the investigation complete and remediation implemented, th
 \item \textbf{Termination parity}: Cycle-count monitoring ensures investigation burdens are distributed fairly across demographic groups.
 \end{itemize}
 
-\vspace{0.5em}
-\noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}
-\vspace{0.5em}
+These technical and operational controls require clear organizational ownership and accountability structures---the subject we turn to next.
+
