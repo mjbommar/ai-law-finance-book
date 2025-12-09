@@ -474,6 +474,43 @@ grep -rn "agentblue\|primary-slate\|secondary-sage" .
 
 ## Additional Resources
 
+### LaTeX Content Analysis Tools
+
+Python tools for analyzing prose quality, repetition, and structure in LaTeX documents.
+Requires `rich` and `typer` — run with `uv run --with rich,typer`.
+
+**`scripts/tex_paragraphs.py`** — Find short/long paragraphs:
+```bash
+# Find short paragraphs (< 30 words) that may need expansion
+uv run --with rich,typer python scripts/tex_paragraphs.py chapters/07-agents-part-2/
+
+# Find long paragraphs (> 150 words) that may need breaking up
+uv run --with rich,typer python scripts/tex_paragraphs.py chapters/07-agents-part-2/ --long
+
+# Output as JSON for processing
+uv run --with rich,typer python scripts/tex_paragraphs.py chapters/07-agents-part-2/ -f json
+```
+
+**`scripts/tex_frequency.py`** — Analyze word/phrase frequencies:
+```bash
+# Find overused words and phrases
+uv run --with rich,typer python scripts/tex_frequency.py chapters/07-agents-part-2/
+
+# Per-file breakdown
+uv run --with rich,typer python scripts/tex_frequency.py chapters/07-agents-part-2/ --show-files
+```
+
+**`scripts/tex_chunks.py`** — Create sliding-window chunks for LLM review:
+```bash
+# Create 3-paragraph chunks with 1-paragraph overlap
+uv run --with rich,typer python scripts/tex_chunks.py chapters/07-agents-part-2/
+
+# Export as JSONL for processing
+uv run --with rich,typer python scripts/tex_chunks.py chapters/07-agents-part-2/ -f jsonl > chunks.jsonl
+```
+
+All tools output clickable `file:line` locations and support multiple formats: `table` (default), `json`, `jsonl`, `csv`.
+
 ### Validation Scripts
 
 Located in `scripts/`:

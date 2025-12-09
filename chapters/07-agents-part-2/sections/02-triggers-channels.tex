@@ -13,11 +13,11 @@
 
 An agent with tools, memory, and planning capabilities remains idle until work arrives. The question is fundamental: \textit{How does work reach an agent?} Or more precisely: through what channels do tasks enter the system, and what events trigger agent execution?
 
-Think about how work reaches a law firm or financial institution. A client calls with an urgent question---that is a \keyterm{human prompt channel}, a synchronous interaction where a person initiates work. The court docket updates with a new filing---that is an \keyterm{external feed}, an asynchronous event that requires response. The calendar reminds the associate that a motion is due tomorrow---that is a \keyterm{scheduled job}, a time-based trigger for predetermined work. The partner reviews a draft memo and finds a section that exceeds the associate's expertise---that is an \keyterm{escalation event}, where execution pauses and control transfers to higher authority.
+Think about how work reaches a law firm or financial institution. A client calls with an urgent question; that is a \keyterm{human prompt channel}, a synchronous interaction where a person initiates work. The court docket updates with a new filing; that is an \keyterm{external feed}, an asynchronous event that requires response. The calendar reminds the associate that a motion is due tomorrow; that is a \keyterm{scheduled job}, a time-based trigger for predetermined work. The partner reviews a draft memo and finds a section that exceeds the associate's expertise; that is an \keyterm{escalation event}, where execution pauses and control transfers to higher authority.
 
-These four channel types---external feeds, human prompts, scheduled jobs, and escalation events---define how work enters agent systems. Understanding these channels and designing routing mechanisms determines whether agents receive the right work at the right time with the right priority.
+These four channel types (external feeds, human prompts, scheduled jobs, and escalation events) define how work enters agent systems. Understanding these channels and designing routing mechanisms determines whether agents receive the right work at the right time with the right priority.
 
-This section maps directly to the \textbf{Perception} dimension of the GPA+IAT framework from Part I. Before an agent can reason or act, it must perceive that work exists. Channels are the sensory apparatus---the mechanisms through which the agent becomes aware of its environment and the tasks it must accomplish. Just as an associate cannot research an issue she does not know exists, an agent cannot execute tasks it never receives.
+Before an agent can reason or act, it must perceive that work exists. Channels are the sensory apparatus, the mechanisms through which the agent becomes aware of its environment and the tasks it must accomplish. Just as associates cannot research issues they do not know exist, agents cannot execute tasks they never receive.
 
 % ----------------------------------------------------------------------------
 % External Feeds
@@ -47,13 +47,13 @@ News feeds deliver breaking headlines, earnings announcements, and sentiment ana
 \begin{highlightbox}[title={Speed vs. Reasoning: A Critical Distinction}]
 Market data arrives at millisecond granularity. LLM-based reasoning operates at second-to-minute timescales. This fundamental mismatch determines where agents add value in financial workflows.
 
-\textbf{Agents are not suited for:} High-frequency trading, market-making, latency-sensitive execution. These domains require deterministic algorithms operating at microsecond latencies. An LLM reasoning loop---even a fast one---cannot compete.
+\textbf{Agents are not suited for:} High-frequency trading, market-making, latency-sensitive execution. These domains require deterministic algorithms operating at microsecond latencies. An LLM reasoning loop, even a fast one, cannot compete.
 
 \textbf{Agents are suited for:} Strategic portfolio decisions, investment thesis development, rebalancing analysis, compliance monitoring, research synthesis. These tasks operate on timescales of minutes to hours, where reasoning quality matters more than latency.
 
-\textbf{The architecture pattern:} Fast deterministic systems handle real-time data capture and threshold detection. When thresholds trigger (position approaching limit, price target hit, anomaly detected), they generate events that LLM agents process. The agent's role is strategic reasoning and recommendation, not execution speed.
+\textbf{The architecture pattern:} Fast deterministic systems handle real-time data capture and threshold detection. When thresholds trigger (position approaching limit, price target hit, anomaly detected), they generate events that LLM agents process. The agent's role is strategic reasoning and recommendation, not execution speed. This complements latency-sensitive pipelines: keep the microsecond path deterministic, hand off to the agent only once an alert is raised.
 
-In the portfolio management reference architecture (Section~\ref{sec:agents2-case-financial}), the Monitoring Agent detects threshold breaches in near-real-time using fast deterministic logic. The Rebalancing Agent receives these alerts and performs multi-step reasoning to generate recommendations---a process that might take 30 seconds to several minutes. The PM reviews and approves. Trade execution then flows back to fast deterministic systems.
+In the portfolio management reference architecture (Section~\ref{sec:agents2-case-financial}), the Monitoring Agent detects threshold breaches in near-real-time using fast deterministic logic. The Rebalancing Agent receives these alerts and performs multi-step reasoning to generate recommendations, a process that might take 30 seconds to several minutes. The PM reviews and approves. Trade execution then flows back to fast deterministic systems.
 
 Match agent capabilities to task requirements. Speed-critical tasks need traditional algorithms; reasoning-critical tasks need agents.
 \end{highlightbox}
@@ -103,7 +103,7 @@ Some work follows predictable schedules rather than arriving from external event
 \subsection{Escalation Events: When Agents Reach Their Limits}
 \label{sec:agents2-escalation}
 
-The previous three channel types bring work into the agent system from outside. Escalation events operate internally: the agent generates an event signaling it has reached a limit and requires human intervention. This implements the Termination property of the GPA+IAT framework, transferring control to human decision-makers when the agent cannot proceed autonomously.
+The previous three channel types bring work into the agent system from outside. Escalation events operate internally: the agent generates an event signaling it has reached a limit and requires human intervention, transferring control to human decision-makers when the agent cannot proceed autonomously.
 
 \textbf{Budget exhaustion} triggers escalation when agents approach resource limits: token consumption, iteration counts, time limits, or cost caps. A research agent nearing its 20-call limit should escalate with a progress summary and options (grant additional budget, conclude with current findings, or escalate for strategic guidance) rather than stopping silently. Financial agents face similar budget constraints on position sizes, capital allocation, and risk limits.
 
@@ -179,7 +179,7 @@ With events arriving from multiple channels, agents need routing and prioritizat
 \draw[arrow] (router.east) -- ++(0.5,0) |- (human-handler.west) node[near start, above, label] {escalation};
 
 \end{tikzpicture}
-\caption{Event routing architecture showing how events from multiple channels flow through a central router that classifies, prioritizes, and dispatches to appropriate handlers (specialist agents or humans). The router implements the Perception layer of the GPA+IAT framework, ensuring agents become aware of work that requires their attention.}
+\caption{Event routing architecture showing how events from multiple channels flow through a central router that classifies, prioritizes, and dispatches to appropriate handlers (specialist agents or humans).}
 \label{fig:agents2-event-routing}
 \end{figure}
 
@@ -190,25 +190,25 @@ With events arriving from multiple channels, agents need routing and prioritizat
 \subsection{Surfaces: How Users Experience Agent Systems}
 \label{sec:agents2-surfaces}
 
-The same agent architecture---tools, memory, planning, protocols---can manifest through different user interfaces, or \textit{surfaces}. Understanding surfaces matters because the appropriate surface depends on the task, the user's expertise, and how the output will be used.
+The same underlying architecture can manifest through different user interfaces, or \textit{surfaces}. Understanding surfaces matters because the appropriate surface depends on the task, the user's expertise, and how the output will be used.
 
-\paragraph{Chat Surfaces} The most familiar interface: a conversation where the user asks questions and the agent responds. Chat works well for exploration and ideation---the partner thinking through case strategy, the analyst exploring market conditions. The agent can clarify ambiguous requests, present intermediate findings, and iterate based on feedback.
+\paragraph{Chat Surfaces} The most familiar interface: a conversation where the user asks questions and the agent responds. Chat works well for exploration and ideation, such as when a partner thinks through case strategy or an analyst explores market conditions. The agent can clarify ambiguous requests, present intermediate findings, and iterate based on feedback.
 
 Chat surfaces suit tasks where the user wants to direct the process interactively. ``Find me cases on personal jurisdiction in e-commerce'' followed by ``focus on the Ninth Circuit'' followed by ``what about cases where the defendant won?'' Each exchange refines the direction. The user remains actively engaged.
 
 The limitation: chat requires user attention throughout. It doesn't work for tasks that should proceed autonomously, like monitoring a portfolio overnight or tracking a docket for new filings.
 
-\paragraph{Automation Surfaces} Many agent tasks should run without user involvement until results are ready or action is required. The portfolio monitoring agent from Section~\ref{sec:agents2-case-financial} doesn't need a chat interface---it monitors continuously, calculates exposures, and only surfaces when something requires human attention.
+\paragraph{Automation Surfaces} Many agent tasks should run without user involvement until results are ready or action is required. The portfolio monitoring agent from Section~\ref{sec:agents2-case-financial} doesn't need a chat interface; it monitors continuously, calculates exposures, and only surfaces when something requires human attention.
 
 Automation surfaces include alerts (``Position approaching limit''), dashboards (real-time compliance status), and notification systems (email or message when action is needed). The user doesn't interact with the agent during normal operation; they receive outputs when relevant.
 
 Automation suits continuous monitoring, scheduled reporting, and background processing. The agent works; the human reviews results. This is how associates handle routine deadline tracking or analysts run overnight portfolio reconciliation.
 
-\paragraph{Document Surfaces} Some agent outputs are work products intended for human consumption: research memos, due diligence reports, client presentations, compliance filings. These aren't conversations or alerts---they're structured documents that the agent produces and the human reviews, edits, and delivers.
+\paragraph{Document Surfaces} Some agent outputs are work products intended for human consumption: research memos, due diligence reports, client presentations, compliance filings. These aren't conversations or alerts but structured documents that the agent produces and the human reviews, edits, and delivers.
 
 Document surfaces suit tasks with defined deliverables. The credit facility review (Section~\ref{sec:agents2-case-legal}) produces an issues list and summary memo. The agent generates a first draft; the associate reviews and refines; the partner approves for delivery. The interface is the document itself, with the agent as author and the human as editor.
 
-\paragraph{Matching Surface to Task} The architectural components---tools, memory, planning---remain constant across surfaces. What changes is how the user engages with the system:
+\paragraph{Matching Surface to Task} The underlying components remain constant across surfaces. What changes is how the user engages with the system:
 
 \begin{itemize}[nosep]
 \item \textbf{Interactive exploration}: Chat surface, ReAct planning, immediate feedback

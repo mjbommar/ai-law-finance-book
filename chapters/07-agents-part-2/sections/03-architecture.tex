@@ -11,7 +11,7 @@
 % Opening
 % ----------------------------------------------------------------------------
 
-Building an AI agent is like hiring a new associate at a law firm or analyst at a bank. The raw talent---the large language model---provides reasoning ability, but that alone doesn't make someone effective. An associate needs access to Westlaw and the document management system. She needs the case files and institutional memory about how the firm handles similar matters. She needs a strategy for approaching complex problems: when to research first versus when to draft, when her work is good enough versus when to dig deeper, and when to ask a partner for guidance instead of proceeding independently.
+Building an AI agent is like hiring a new associate at a law firm or analyst at a bank. The raw talent, meaning the large language model, provides reasoning ability, but that alone doesn't make someone effective. An associate needs access to Westlaw and the document management system. They need the case files and institutional memory about how the firm handles similar matters. They need a strategy for approaching complex problems: when to research first versus when to draft, when the work is good enough versus when to dig deeper, and when to ask a partner for guidance instead of proceeding independently.
 
 This section presents a reference architecture for AI agents organized around three pillars: \textbf{tools}, \textbf{memory}, and \textbf{planning}. Together, these pillars implement the GPA+IAT properties from Part I and transform a reasoning engine into an agent capable of accomplishing real work.
 
@@ -22,52 +22,36 @@ This section presents a reference architecture for AI agents organized around th
 \subsection{Three Pillars of Agent Architecture}
 \label{sec:agents2-pillars}
 
-Think of an effective legal professional. She has three essential capabilities that enable her to deliver value:
+Think of an effective legal professional. They rely on three essential capabilities:
 
-\textbf{Tools} represent her access to resources and systems. The paralegal uses Westlaw for legal research, the firm's document management system for retrieving prior work product, e-filing platforms for court submissions, and citation management software for Bluebook formatting. The junior banker uses Bloomberg for market data, Excel for modeling, the firm's risk systems for compliance checks, and trade execution platforms. Tools implement Perception---gathering information from the world---and Action---effecting change in external systems.
+\textbf{Tools} represent access to resources and systems. The paralegal uses Westlaw for legal research, the firm's document management system for retrieving prior work product, e-filing platforms for court submissions, and citation management software for Bluebook formatting. The junior banker uses Bloomberg for market data, Excel for modeling, the firm's risk systems for compliance checks, and trade execution platforms. Tools implement Perception (gathering information from the world) and Action (effecting change in external systems).
 
-\textbf{Memory} represents the case file, institutional knowledge, and experience. When a securities lawyer starts a new Form S-1 registration, she doesn't begin from scratch. She pulls the last three IPO registration statements the firm filed, reviews the SEC comment history, and checks the precedent database for disclosure language about similar risk factors. A portfolio manager doesn't rebuild his investment thesis daily---he maintains research files on each position, tracks what analysis he's already completed, and remembers which hypotheses worked and which failed. Memory enables context retention across sessions and learning from experience, implementing the Adaptation property of GPA+IAT.
+\textbf{Memory} represents the case file, institutional knowledge, and experience. When a securities lawyer starts a new Form S-1 registration, they do not begin from scratch. They pull the last three IPO registration statements the firm filed, review the SEC comment history, and check the precedent database for disclosure language about similar risk factors. A portfolio manager doesn't rebuild the investment thesis daily; instead, they maintain research files on each position, track what analysis is already complete, and remember which hypotheses worked and which failed. Memory enables context retention across sessions and learning from experience.
 
-\textbf{Planning} represents case strategy and execution discipline. A litigation partner doesn't just reactively respond to each development. She decomposes the overall matter into phases: discovery, summary judgment, trial preparation. She knows when the team has done enough research versus when to dig deeper. She knows when a junior associate can handle a task independently versus when partner review is required before filing. She knows when to escalate to the client for decision-making. Planning implements Goal (pursuing objectives), Iteration (taking steps toward goals), and Termination (knowing when to stop or seek help).
+\textbf{Planning} represents case strategy and execution discipline. A litigation partner doesn't just reactively respond to each development. They decompose the overall matter into phases: discovery, summary judgment, trial preparation. They know when the team has done enough research versus when to dig deeper. They know when a junior associate can handle a task independently versus when partner review is required before filing. They know when to escalate to the client for decision-making. Planning implements Goal (pursuing objectives), Iteration (taking steps toward goals), and Termination (knowing when to stop or seek help).
 
-The LLM provides reasoning---analogous to the associate's legal training or the analyst's finance education---but becomes an agent only when equipped with tools, memory, and planning. The reasoning engine needs resources to query, context to work from, and strategy to guide execution.
+The LLM provides reasoning, analogous to the associate's legal training or the analyst's finance education, but becomes an agent only when equipped with tools, memory, and planning. The reasoning engine needs resources to query, context to work from, and strategy to guide execution.
 
 \subsubsection{The Core Agent Loop}
 \label{sec:agents2-core-loop}
 
-Watch how an experienced associate tackles a research assignment. The partner asks: ``Find me Fifth Circuit authority on the statute of limitations for securities fraud claims under Section 10(b).'' The associate doesn't just stare at the assignment. She follows a natural work cycle:
+Watch how an experienced associate tackles a research assignment. The partner asks: ``Find me Fifth Circuit authority on the statute of limitations for securities fraud claims under Section 10(b).'' The associate doesn't just stare at the assignment. They follow a natural work cycle:
 
-First, she \textbf{perceives} the current state: reads the assignment, recalls what she knows about Section 10(b), remembers that securities fraud limitations changed after Merck v. Reynolds. She pulls the firm's prior briefs on Section 10(b) claims and checks if there's a recent memo on limitations periods.
+First, they \textbf{perceive} the current state: read the assignment, recall what they know about Section 10(b), remember that securities fraud limitations changed after Merck v. Reynolds. They pull the firm's prior briefs on Section 10(b) claims and check if there's a recent memo on limitations periods.
 
-Next, she \textbf{reasons} about what to do: ``I need to find Fifth Circuit cases after the 2010 Merck decision. I should search Westlaw for recent opinions applying the two-year/five-year framework. I'll start with a natural language search and refine based on what I find.''
+Next, they \textbf{reason} about what to do: ``I need to find Fifth Circuit cases after the 2010 Merck decision. I should search Westlaw for recent opinions applying the two-year/five-year framework. I'll start with a natural language search and refine based on what I find.''
 
-Then she \textbf{acts}: she queries Westlaw, retrieves the most cited opinions, pulls the full text of three promising cases.
+Then they \textbf{act}: query Westlaw, retrieve the most cited opinions, pull the full text of three promising cases.
 
-After each action, she \textbf{updates} her understanding: ``Morrison dealt with extraterritoriality, not limitations---not on point. But the court's footnote cites three Fifth Circuit cases analyzing Merck. Let me pull those.'' She adjusts her approach based on what she learned.
+After each action, they \textbf{update} their understanding: ``Morrison dealt with extraterritoriality, not limitations. Not on point. But the court's footnote cites three Fifth Circuit cases analyzing Merck. Let me pull those.'' They adjust the approach based on what they learned.
 
-She \textbf{repeats} this cycle---query, read, assess, refine---until she reaches a \textbf{termination} condition: either she's found sufficient authority to answer the partner's question, or she's hit dead ends and needs to report back that binding Fifth Circuit authority is sparse.
+They \textbf{repeat} this cycle (query, read, assess, refine) until reaching a \textbf{termination} condition: either sufficient authority exists to answer the partner's question, or attempts have hit dead ends and it's time to report back that binding Fifth Circuit authority is sparse.
 
 Figure~\ref{fig:agents2-core-loop} shows this pattern as a formal loop:
 
 \input{figures/agent-loop}
 
-This agent loop embodies the GPA+IAT framework: The agent pursues a \textbf{Goal} (find Fifth Circuit authority). It uses tools to \textbf{Perceive} (query Westlaw) and \textbf{Act} (retrieve cases). It \textbf{Iterates} through multiple cycles, updating \textbf{Memory} with what it learns, until \textbf{Termination} conditions are satisfied.
-
-\begin{keybox}[title={The Agent Loop: An Associate's Work Cycle}]
-The agent loop mirrors how legal and financial professionals accomplish work:
-
-\textbf{1. PERCEIVE}: Read the input (assignment, market signal, client question). Retrieve relevant information from memory (prior work, market history). Query systems for current data (case law, prices, filings).
-
-\textbf{2. REASON}: Process what you've gathered. Identify patterns and gaps. Plan your next step based on what you know and what you still need.
-
-\textbf{3. ACT}: Execute the next step. Call a tool to gather more data. Generate a draft. Run a calculation. Send a communication.
-
-\textbf{4. UPDATE}: Record what happened. Note the outcome in your working file. Adjust your approach based on results. Learn from errors.
-
-\textbf{5. REPEAT OR TERMINATE}: Check whether you're done. If the goal is achieved, return your work product. If you're stuck, you've hit your time budget, or the stakes are too high for your authority level, stop and escalate to human supervision.
-
-This loop runs until termination conditions are met: success achieved, error limit reached, resource budget exhausted, or human intervention required.
-\end{keybox}
+The loop continues until termination conditions are met: the agent finds sufficient authority, exhausts its search budget, or determines that escalation to a human is required.
 
 % ============================================================================
 % PILLAR 1: TOOLS
@@ -76,14 +60,14 @@ This loop runs until termination conditions are met: success achieved, error lim
 \subsection{Pillar 1: Tools}
 \label{sec:agents2-tools}
 
-Tools are the interfaces through which agents interact with systems---the digital equivalent of a paralegal's access to Westlaw, a trader's Bloomberg terminal, or an associate's e-filing credentials. Without tools, an agent can only reason about problems in the abstract. With tools, it can perceive the world and take action.
+Tools are the interfaces through which agents interact with systems: the digital equivalent of a paralegal's access to Westlaw, a trader's Bloomberg terminal, or an associate's e-filing credentials. Without tools, an agent can only reason about problems in the abstract. With tools, it can perceive the world and take action.
 
 \begin{keybox}[title={Tool Use Is Not Agency}]
 A system that calls external tools is not automatically an agent. The critical question from Part I: does the system \textit{iterate on tool results}, \textit{adapt} its strategy based on what it observes, and have clear \textit{termination} conditions?
 
-A script that queries a database once and returns results is not an agent---it lacks iteration and adaptation. A chatbot that answers questions using retrieval but never refines its approach is not an agent---it processes each query independently without learning or strategy.
+A script that queries a database once and returns results is not an agent; it lacks iteration and adaptation. A chatbot that answers questions using retrieval but never refines its approach is not an agent because it processes each query independently without learning or strategy.
 
-An agent perceives the tool's output, evaluates whether results advance toward its goal, decides what to do next based on observations, and knows when to stop. The associate who searches for cases, reads the results, realizes she needs a different search strategy, tries again, and eventually concludes she has enough authority---that's agentic behavior. The script that runs a canned query is not.
+An agent perceives the tool's output, evaluates whether results advance toward its goal, decides what to do next based on observations, and knows when to stop. The associate who searches for cases, reads the results, realizes they need a different search strategy, tries again, and eventually concludes they have enough authority exemplifies agentic behavior. The script that runs a canned query does not.
 
 This distinction matters for governance. Tool-calling systems need access controls and audit logging. Agents need those plus oversight of their decision-making: Are they pursuing the right strategy? Are they terminating appropriately? Are they escalating when they should? The additional autonomy of agents requires additional oversight.
 \end{keybox}
@@ -91,49 +75,49 @@ This distinction matters for governance. Tool-calling systems need access contro
 \subsubsection{Tool Categories}
 \label{sec:agents2-tool-categories}
 
-Consider what a paralegal needs to do her job effectively. She needs \textit{different tools for different purposes}. For gathering information, she uses the firm's legal research platform (Westlaw, Lexis), the document management system (iManage, NetDocuments), court docketing systems (PACER), and public records databases. These are \textbf{information retrieval} tools---they implement Perception by reading from the world without changing it.
+Consider what a paralegal needs to do their job effectively. They need \textit{different tools for different purposes}. For gathering information, they use the firm's legal research platform (Westlaw, Lexis), the document management system (iManage, NetDocuments), court docketing systems (PACER), and public records databases. These \textbf{information retrieval} tools implement Perception by reading from the world without changing it.
 
-For processing documents, she uses PDF readers to extract text from scanned court filings, OCR tools to convert images to searchable text, and document classification systems to identify which exhibits are contracts versus correspondence. These are \textbf{document processing} tools---they transform inputs into structured outputs, still implementing Perception.
+For processing documents, they use PDF readers to extract text from scanned court filings, OCR tools to convert images to searchable text, and document classification systems to identify which exhibits are contracts versus correspondence. These \textbf{document processing} tools transform inputs into structured outputs, still implementing Perception.
 
-For producing work product, she uses citation formatters to convert case names into proper Bluebook format, spell checkers, and deadline calculators to determine when responses are due under local rules. These are \textbf{computation} tools---low-risk transformations with clear inputs and outputs.
+For producing work product, they use citation formatters to convert case names into proper Bluebook format, spell checkers, and deadline calculators to determine when responses are due under local rules. These \textbf{computation} tools perform low-risk transformations with clear inputs and outputs.
 
-For communicating, she uses email to update clients, the docketing calendar to track deadlines, and messaging systems to coordinate with opposing counsel. These are \textbf{communication} tools---they implement Action by sending information outside the firm, though the actions are typically reversible (you can send a clarification email).
+For communicating, they use email to update clients, the docketing calendar to track deadlines, and messaging systems to coordinate with opposing counsel. These \textbf{communication} tools implement Action by sending information outside the firm, though the actions are typically reversible.
 
 The highest-stakes tools implement \textbf{external actions} that change the state of the world irreversibly. When the paralegal files a document with the court through an e-filing system, that filing becomes part of the permanent record. When a trader executes a trade on behalf of a client, the transaction is binding. When a payment processor transfers funds to settle a case, the money is gone. These tools require the most careful oversight and control.
 
 Understanding tool categories matters because \textit{different tools carry different risks}. Legal research is low-risk: if your Westlaw query returns irrelevant cases, you can refine it and search again. Nothing has changed in the world. But court e-filing is high-risk: once you've submitted that motion, it's part of the public record. You can't unsend it. The reversibility of tool actions determines how much oversight they require.
 
-Think about how you delegate to a junior associate. You let her run Westlaw searches independently---if she searches for the wrong terms, she wastes some time but causes no harm. You let her draft internal memos with spot-check review---errors are caught before they leave the firm. But you require partner approval before she files anything with the court or sends substantive communications to clients. The delegation framework tracks reversibility: reversible actions get post-hoc review, partially reversible actions get checkpoint reviews, and irreversible actions require pre-approval.
+Think about how you delegate to a junior associate. You let them run Westlaw searches independently; if they search for the wrong terms, they waste some time but cause no harm. You let them draft internal memos with spot-check review, and errors are caught before they leave the firm. But you require partner approval before they file anything with the court or send substantive communications to clients. The delegation framework tracks reversibility: reversible actions get post-hoc review, partially reversible actions get checkpoint reviews, and irreversible actions require pre-approval.
 
 Agent tools work the same way. Information retrieval tools can be called freely with only rate limiting (to prevent runaway query loops). Document processing and computation tools need output validation (did the calculation produce a reasonable result?). Communication tools need human review before execution (does this email say what we intend?). External action tools need pre-approval gates (get partner signoff before filing).
 
 \subsubsection{Tool Design Principles}
 \label{sec:agents2-tool-design}
 
-Good tools follow the Unix philosophy: do one thing well. Consider a poorly designed tool: \texttt{legal\_research(query, format, validate, extract)}. This tool searches Westlaw, formats citations in Bluebook, validates that cases are still good law, and extracts holdings---four distinct functions in one interface. When it fails, you can't tell which step failed. When you want to reuse just the citation formatter, you can't.
+Good tools follow the Unix philosophy: do one thing well. Consider a poorly designed tool: \texttt{legal\_research(query, format, validate, extract)}. This tool searches Westlaw, formats citations in Bluebook, validates that cases are still good law, and extracts holdings, cramming four distinct functions into one interface. When it fails, you can't tell which step failed. When you want to reuse just the citation formatter, you can't.
 
 Contrast that with well-designed tools: \texttt{search\_cases(query, jurisdiction)} returns a list of citations. \texttt{retrieve\_case(citation)} fetches the full text. \texttt{format\_citation(data, style)} converts to Bluebook. \texttt{shepardize(citation)} checks validity. Each does one thing. The agent composes them: search, retrieve top results, validate they're still good law, extract holdings, format for the memo. If the shepardize step fails, the agent can retry just that step.
 
 This principle of \textit{single responsibility} mirrors how associates organize research. You don't hand a junior associate one giant combined task. You break it into steps: research first, then draft, then cite-check, then partner review. Each step is a separate checkpoint where you can assess quality.
 
-Tools must \textit{fail gracefully}. When things go wrong---and in production, things always go wrong---the tool should return an informative error that enables recovery:
+Tools must \textit{fail gracefully}. When things go wrong (and in production, things always go wrong), the tool should return an informative error that enables recovery:
 
 \textbf{Poor:} \texttt{Exception: NullPointerException at line 847}
 
 \textbf{Good:} \texttt{Error: Case not found for citation ``123 F.3d 456''. Case may not be in database. Suggestion: Check citation manually or try alternative reporter.}
 
-The first error tells you nothing useful. The second explains what happened and suggests a path forward. In legal work, graceful failure is how you avoid malpractice---when you can't find authority, you tell the partner explicitly rather than hoping she won't notice.
+The first error tells you nothing useful. The second explains what happened and suggests a path forward. In legal work, graceful failure is how you avoid malpractice: when you can't find authority, you tell the partner explicitly rather than hoping they won't notice.
 
-The principle of \textit{least privilege} means tools should request only the permissions they actually need. A legal research tool needs read access to case databases---it doesn't need write access to the document management system. This matters critically when tools expose multiple capabilities. If a ``legal research'' tool bundles searching with document downloading with brief filing---and the agent gets credentials to that tool---then a compromised agent can do all of those things. An attacker who gains control of the agent session can file spurious documents with the court. But if filing is a separate tool with separate credentials requiring pre-approval, the damage is contained.
+The principle of \textit{least privilege} means tools should request only the permissions they actually need. A legal research tool needs read access to case databases, not write access to the document management system. This matters critically when tools expose multiple capabilities. If a ``legal research'' tool bundles searching with document downloading with brief filing, and the agent gets credentials to that tool, then a compromised agent can do all of those things. An attacker who gains control of the agent session can file spurious documents with the court. But if filing is a separate tool with separate credentials requiring pre-approval, the damage is contained.
 
-\textit{Rate limiting} prevents runaway loops. Agents can get stuck searching repeatedly without progress. Tools should track invocation frequency and refuse requests beyond reasonable thresholds, escalating to human review. This is how you manage associates who aren't making progress---if she comes back for the fifth time saying ``I searched again but still can't find what you're looking for,'' you stop and reassess.
+\textit{Rate limiting} prevents runaway loops. Agents can get stuck searching repeatedly without progress. Tools should track invocation frequency and refuse requests beyond reasonable thresholds, escalating to human review. This mirrors how you manage associates who aren't making progress. If they come back for the fifth time saying ``I searched again but still can't find what you're looking for,'' you stop and reassess.
 
 \subsubsection{Tool Security}
 \label{sec:agents2-tool-security}
 
 Every tool interface is a potential security boundary. Tools access external systems, process untrusted inputs, and take actions with real-world consequences. All tools must implement authentication (verify the agent is who it claims to be), authorization (verify the agent has permission for this specific action), input validation (reject malformed or suspicious requests), output filtering (don't leak sensitive data in responses), rate limiting (prevent abuse), and audit logging (record every invocation with full context for forensic review).
 
-Think about the security controls in a law firm. When a paralegal accesses the document management system, she authenticates with her credentials. The system checks whether she's authorized to access this specific matter---client conflicts and matter isolation are enforced. When she downloads a document, that access is logged: who accessed what document from which matter at what time. If an audit later reveals that privileged documents were accessed inappropriately, the logs enable investigation.
+Think about the security controls in a law firm. When a paralegal accesses the document management system, they authenticate with their credentials. The system checks whether they're authorized to access this specific matter, enforcing client conflicts and matter isolation. When they download a document, that access is logged: who accessed what document from which matter at what time. If an audit later reveals that privileged documents were accessed inappropriately, the logs enable investigation.
 
 Agent tools require the same controls. Every tool call should be logged with the agent identifier, the tool name, the parameters, the timestamp, and the result. If an agent later takes an inappropriate action, the audit trail enables forensic analysis: what did the agent do, why did it think that action was appropriate, what sequence of tool calls led to the problematic outcome?
 
@@ -175,13 +159,13 @@ The Model Context Protocol (MCP) provides a uniform interface for tools across a
 
 As tool inventories grow, selection becomes its own challenge. A legal research agent might have access to Westlaw, Lexis, Bloomberg Law, court docket systems, the firm's precedent database, citation validators, document formatters, and deadline calculators. A financial agent might access Bloomberg, Reuters, FactSet, the firm's risk engine, compliance databases, trade execution systems, and portfolio management platforms. With dozens of available tools, how does the agent choose?
 
-This is the paralegal's first day problem. A new paralegal joining the firm has access to many systems but doesn't know which to consult for which task. Over time, she learns: Westlaw for case law research, the document management system for prior work product, PACER for federal court filings. Agents need the same.
+This is the paralegal's first day problem. A new paralegal joining the firm has access to many systems but doesn't know which to consult for which task. Over time, they learn: Westlaw for case law research, the document management system for prior work product, PACER for federal court filings. Agents need the same.
 
-A \textbf{tool registry} catalogs available tools with metadata: purpose, scope, inputs, outputs, and usage guidance. Tools can be organized hierarchically by domain. At the top level: legal research tools, document management tools, court filing tools. Within legal research: case law databases, statutory databases, regulatory databases, secondary sources. Within case law databases: Westlaw, Lexis, Bloomberg Law, free sources. This hierarchy enables efficient navigation---when the agent needs case law, it navigates: legal research → case law → (select based on jurisdiction and coverage needs).
+A \textbf{tool registry} catalogs available tools with metadata: purpose, scope, inputs, outputs, and usage guidance. Tools can be organized hierarchically by domain. At the top level: legal research tools, document management tools, court filing tools. Within legal research: case law databases, statutory databases, regulatory databases, secondary sources. Within case law databases: Westlaw, Lexis, Bloomberg Law, free sources. This hierarchy enables efficient navigation, so when the agent needs case law, it navigates: legal research → case law → (select based on jurisdiction and coverage needs).
 
 For financial tools, the hierarchy might be: market data tools, portfolio tools, compliance tools, execution tools. Within market data: real-time feeds (Bloomberg, Reuters), historical databases (CRSP, Compustat), alternative data sources. The agent navigates based on what the task requires.
 
-Selection strategies include \textit{semantic matching} (compare task description to tool descriptions), \textit{example-based selection} (associate tools with example tasks---this is how associates learn, by seeing which resources senior attorneys use), and \textit{capability routing} (match task requirements to tool capabilities---real-time needs route to real-time feeds). Good agents combine these strategies and detect selection failures: if a search returns zero results, consider wrong database? wrong search terms? or genuine absence of authority? Try alternatives before concluding. Audit logging enables post-hoc analysis---when a research memo misses a key case, you can trace which tools were used and why.
+Selection strategies include \textit{semantic matching} (compare task description to tool descriptions), \textit{example-based selection} (associate tools with example tasks, which is how associates learn by seeing which resources senior attorneys use), and \textit{capability routing} (match task requirements to tool capabilities, routing real-time needs to real-time feeds). Good agents combine these strategies and detect selection failures: if a search returns zero results, consider whether it's the wrong database, wrong search terms, or a genuine absence of authority. Try alternatives before concluding. Audit logging enables post-hoc analysis; when a research memo misses a key case, you can trace which tools were used and why.
 
 % ============================================================================
 % PILLAR 2: MEMORY
@@ -190,37 +174,37 @@ Selection strategies include \textit{semantic matching} (compare task descriptio
 \subsection{Pillar 2: Memory}
 \label{sec:agents2-memory}
 
-Every experienced legal professional knows that institutional memory makes the difference between efficient work and reinventing the wheel. When you start a new securities registration matter, you don't begin from scratch. You pull the last three S-1 filings the firm completed, review the SEC comment history, and check the precedent database for disclosure language addressing similar risk factors. You don't re-research basic questions like ``What are the disclosure requirements for executive compensation?''---the firm maintains templates and form language that incorporate years of accumulated knowledge.
+Every experienced legal professional knows that institutional memory makes the difference between efficient work and reinventing the wheel. When you start a new securities registration matter, you don't begin from scratch. You pull the last three S-1 filings the firm completed, review the SEC comment history, and check the precedent database for disclosure language addressing similar risk factors. You don't re-research basic questions like ``What are the disclosure requirements for executive compensation?'' The firm maintains templates and form language that incorporate years of accumulated knowledge.
 
-Memory in agent systems serves the same purpose: context retention across sessions and learning from experience. Without memory, every interaction starts fresh. The agent doesn't remember what it researched yesterday, what approaches worked, or what the human told it about case strategy. With memory, the agent maintains continuity---like the case file that follows a matter from initial consultation through trial.
+Memory in agent systems serves the same purpose: context retention across sessions and learning from experience. Without memory, every interaction starts fresh. The agent doesn't remember what it researched yesterday, what approaches worked, or what the human told it about case strategy. With memory, the agent maintains continuity, much like the case file that follows a matter from initial consultation through trial.
 
 \subsubsection{Memory Types}
 \label{sec:agents2-memory-types}
 
-Think about the different filing systems in a law firm. The associate has papers spread across her desk---the documents she's actively working with right now. That's \textbf{working memory}, the immediate context of the current task. In agent systems, this is the \textit{context window}, the tokens currently loaded in the LLM's attention. Just like desk space, context windows have strict limits. The associate can only have so many documents open at once; the agent can only hold so many tokens in active context (as of late 2025, 200K tokens for leading models, though this ceiling continues to rise). When the case involves more documents than fit on the desk, you need other storage systems.
+Think about the different filing systems in a law firm. The associate has papers spread across their desk, the documents they're actively working with right now. That's \textbf{working memory}, the immediate context of the current task. In agent systems, this is the \textit{context window}, the tokens currently loaded in the LLM's attention. Just like desk space, context windows have strict limits. The associate can only have so many documents open at once; the agent can only hold so many tokens in active context (as of late 2025, 200K tokens for leading models, though this ceiling continues to rise). When the case involves more documents than fit on the desk, you need other storage systems.
 
-The banker has \textit{market data on the trading screen}---live prices, recent news, positions from today's session. That's working memory too, fresh and immediately accessible but gone when the session ends.
+The banker has \textit{market data on the trading screen}: live prices, recent news, positions from today's session. That's working memory too, fresh and immediately accessible but gone when the session ends.
 
-Next is the case file for this specific matter. Every memo, every piece of correspondence, every research result related to this case goes in the file. The associate doesn't re-research questions she already answered---she checks the file first. When the partner asks ``What's our argument on venue?,'' the associate pulls the file and reads her prior research memo rather than starting over. This is \textbf{episodic memory} in agent systems---the history of actions and outcomes for this specific task or session. The agent remembers: ``I searched for Ninth Circuit venue cases, found three relevant opinions, drafted analysis, partner reviewed and approved.'' When asked a follow-up question, the agent retrieves that prior work.
+Next is the matter file for this specific engagement. Every memo, every piece of correspondence, every research result related to this matter goes in the file. The associate doesn't re-research questions they already answered; they check the file first. When the partner asks ``What's our argument on venue?,'' the associate pulls the file and reads their prior research memo rather than starting over. This is \textbf{episodic memory} in agent systems, the history of actions and outcomes for this specific task or session. The agent remembers: ``I searched for Ninth Circuit venue cases, found three relevant opinions, drafted analysis, partner reviewed and approved.'' When asked a follow-up question, the agent retrieves that prior work.
 
 Think about this in financial contexts: the portfolio manager maintains a research file for each position. When revisiting a stock he analyzed six months ago, he doesn't rebuild the entire investment thesis. He pulls the file, reads his prior analysis, and updates it with new information. The agent does the same: retrieve prior analysis, check what's changed, update conclusions.
 
-Then there's the firm's precedent database---the institutional knowledge accumulated over decades. Every time the firm handles a particular type of matter, the work product goes into the archive. Need language for a force majeure clause in a construction contract? The precedent database has fifty examples from prior deals. Need briefing on qualified immunity? The database has the firm's best arguments from the past ten years, organized by circuit and issue. This is \textbf{retrieval-augmented generation (RAG)}---dynamically fetching relevant information from a large corpus to augment the agent's reasoning.
+Then there's the firm's precedent database, the institutional knowledge accumulated over decades. Every time the firm handles a particular type of matter, the work product goes into the archive. Need language for a force majeure clause in a construction contract? The precedent database has fifty examples from prior deals. Need briefing on qualified immunity? The database has the firm's best arguments from the past ten years, organized by circuit and issue. This is \textbf{retrieval-augmented generation (RAG)}, which dynamically fetches relevant information from a large corpus to augment the agent's reasoning.
 
-For the financial analyst, this is the firm's market research database. Historical earnings reports, industry analyses, competitive landscape studies, valuation models---all searchable and retrievable when analyzing new opportunities.
+For the financial analyst, this is the firm's market research database: historical earnings reports, industry analyses, competitive landscape studies, and valuation models, all searchable and retrievable when analyzing new opportunities.
 
-The fourth layer is the \textbf{vector store} that powers RAG---the underlying technology that makes precedent databases searchable. Rather than just keyword search (which misses synonyms and related concepts), vector stores encode documents as high-dimensional embeddings that capture semantic meaning. When you search for ``breach of fiduciary duty,'' the system finds not just documents containing that exact phrase but also documents about ``violation of trust obligations'' or ``failure to act in good faith''---concepts that mean similar things even if worded differently.
+The fourth layer is the \textbf{vector store} that powers RAG, the underlying technology that makes precedent databases searchable. Rather than just keyword search (which misses synonyms and related concepts), vector stores encode documents as high-dimensional embeddings that capture semantic meaning. When you search for ``breach of fiduciary duty,'' the system finds not just documents containing that exact phrase but also documents about ``violation of trust obligations'' or ``failure to act in good faith,'' concepts that mean similar things even if worded differently.
 
-Each memory layer has limitations that mirror physical filing systems. Working memory (context window) is fast but small---you can't fit the entire case on your desk. Episodic memory captures what happened in this session but grows over time---the case file gets thicker and harder to navigate. The precedent database (RAG) is vast but retrieval depends on search quality---if you query poorly, you get irrelevant results. Vector stores make semantic search possible but require currency---old embeddings may reflect outdated law.
+Each memory layer has limitations that mirror physical filing systems. Working memory (context window) is fast but small; you can't fit the entire matter on your desk. Episodic memory captures what happened in this session but grows over time, and the file gets thicker and harder to navigate. The precedent database (RAG) is vast, but retrieval depends on search quality: if you query poorly, you get irrelevant results. Vector stores make semantic search possible but require currency, since old embeddings may reflect outdated law.
 
 \begin{keybox}[title={Memory Layers: From Desk to Archive}]
 Agent memory mirrors professional filing systems with four layers:
 
-\textbf{Working Memory (Context Window)}: Immediate task context. Like documents spread on your desk---fast access but limited space. As of late 2025: 200K tokens for leading models, growing but still finite.
+\textbf{Working Memory (Context Window)}: Immediate task context. Like documents spread on your desk, offering fast access but limited space. As of late 2025: 200K tokens for leading models, growing but still finite.
 
-\textbf{Episodic Memory}: Session history for this specific task. Like the case file or research folder---everything related to this matter. Enables continuity: ``What did I already research?''
+\textbf{Episodic Memory}: Session history for this specific task. Like the matter file or research folder, containing everything related to this engagement. Enables continuity: ``What did I already research?''
 
-\textbf{Retrieval-Augmented Generation (RAG)}: Institutional knowledge base. Like the firm's precedent database or market research archive---decades of accumulated expertise, searchable on demand.
+\textbf{Retrieval-Augmented Generation (RAG)}: Institutional knowledge base. Like the firm's precedent database or market research archive, providing decades of accumulated expertise, searchable on demand.
 
 \textbf{Vector Store}: The technology powering RAG. Semantic search that finds conceptually similar content even when exact words differ. Understands that ``breach of fiduciary duty'' relates to ``violation of trust obligations.''
 
@@ -230,16 +214,16 @@ Each layer trades speed for capacity: working memory is fastest but smallest, ve
 \subsubsection{Retrieval-Augmented Generation (RAG)}
 \label{sec:agents2-rag-implementation}
 
-RAG enables agents to access institutional knowledge---the equivalent of asking the firm librarian ``show me our best research on this issue.'' Traditional keyword search works but misses cases discussing the same concept using different language. Semantic search using embeddings finds conceptually similar content even when exact words differ.
+RAG enables agents to access institutional knowledge, the equivalent of asking the firm librarian ``show me our best research on this issue.'' Traditional keyword search works but misses cases discussing the same concept using different language. Semantic search using embeddings finds conceptually similar content even when exact words differ.
 
 The RAG pipeline has four steps: \textit{chunking} (breaking documents into semantic units with preserved metadata), \textit{embedding} (converting chunks into vectors encoding meaning), \textit{retrieval} (finding chunks similar to the query), and \textit{generation} (augmenting the agent's prompt with retrieved content). The best implementations use hybrid retrieval combining semantic and keyword search, and always cite sources so readers can verify.
 
-Advanced patterns include query rewriting (expanding ambiguous queries), reranking (scoring results by authority---binding precedent over secondary sources), and filtered retrieval (constraining by jurisdiction or time period). The critical requirement: never let fabricated citations reach the user. Verify that cited sources actually appear in retrieved context.
+Advanced patterns include query rewriting (expanding ambiguous queries), reranking (scoring results by authority, with binding precedent over secondary sources), and filtered retrieval (constraining by jurisdiction or time period). The critical requirement: never let fabricated citations reach the user. Verify that cited sources actually appear in retrieved context.
 
 \subsubsection{Domain-Specific Memory Considerations}
 \label{sec:agents2-memory-legal}
 
-Legal and financial AI memory requires specialized enhancements. \textbf{Authority weighting} ensures primary authority (statutes, binding precedent) ranks higher than secondary sources. When searching for ``insider trading liability,'' a Supreme Court opinion should outrank a law review note using more similar language. Financial systems similarly weight official regulatory guidance over commentary.
+Memory for regulated professional services requires specialized enhancements. \textbf{Authority weighting} ensures primary authority (statutes, binding precedent) ranks higher than secondary sources. When searching for ``insider trading liability,'' a Supreme Court opinion should outrank a law review note using more similar language. Financial systems similarly weight official regulatory guidance over commentary.
 
 \textbf{Jurisdiction awareness} respects legal boundaries. California precedent doesn't bind Texas courts; SEC rules differ from CFTC rules. Metadata tagging during ingestion enables proper filtering.
 
@@ -256,9 +240,9 @@ Most critically, \textbf{matter and client isolation} prevents memory from one m
 \subsection{Pillar 3: Planning}
 \label{sec:agents2-planning}
 
-Planning is how agents decompose complex goals into action sequences---the litigation roadmap or deal timeline that guides execution. Without planning, agents react to immediate observations without strategy. With planning, they work systematically toward objectives, adapt when circumstances change, and know when they're done.
+Planning is how agents decompose complex goals into action sequences, much like the litigation roadmap or deal timeline that guides execution. Without planning, agents react to immediate observations without strategy. With planning, they work systematically toward objectives, adapt when circumstances change, and know when they're done.
 
-Think about how a litigation partner approaches a new matter. She doesn't just start drafting motions. She develops a strategy: discovery first (what facts do we need?), then dispositive motions if the law clearly favors us, settlement discussions in parallel, trial prep as a backstop. She breaks discovery into phases: initial disclosures, document requests, interrogatories, depositions. She assigns tasks to the team: senior associate handles briefing, junior associate does document review, paralegal manages scheduling and filings. Throughout, she monitors progress: are we on track for the case management conference deadlines? Are discovery responses revealing helpful facts or should we adjust our theory?
+Think about how a litigation partner approaches a new matter. They don't just start drafting motions. They develop a strategy: discovery first (what facts do we need?), then dispositive motions if the law clearly favors us, settlement discussions in parallel, trial prep as a backstop. They break discovery into phases: initial disclosures, document requests, interrogatories, depositions. They assign tasks to the team: senior associate handles briefing, junior associate does document review, paralegal manages scheduling and filings. Throughout, they monitor progress: are we on track for the case management conference deadlines? Are discovery responses revealing helpful facts or should we adjust our theory?
 
 Agent planning implements the same strategic thinking: decompose the goal, determine the sequence of steps, assign tasks to tools, monitor progress, adapt when new information arrives, and recognize termination conditions.
 
@@ -276,7 +260,7 @@ High-ambiguity requests warrant explicit clarification; low-ambiguity requests c
 \subsubsection{Planning Patterns}
 \label{sec:agents2-planning-patterns}
 
-\paragraph{ReAct: Reasoning + Acting} The most fundamental pattern interleaves reasoning with action \parencite{yao2022react}. The partner asks for authority that a forum selection clause is unenforceable. The associate reasons: ``Key grounds are unconscionability and public policy. Start with \textit{Atlantic Marine}.'' She searches, observes results, reasons again: ``The unconscionability cases involve consumer adhesion contracts---not our commercial situation. The public policy case is closer.'' She searches again, refines based on results.
+\paragraph{ReAct: Reasoning + Acting} The most fundamental pattern interleaves reasoning with action \parencite{yao2022react}. The partner asks for authority that a forum selection clause is unenforceable. The associate reasons: ``Key grounds are unconscionability and public policy. Start with \textit{Atlantic Marine}.'' They search, observe results, reason again: ``The unconscionability cases involve consumer adhesion contracts, not our commercial situation. The public policy case is closer.'' They search again and refine based on results.
 
 Figure~\ref{fig:agents2-react-loop} shows this pattern:
 
@@ -284,7 +268,7 @@ Figure~\ref{fig:agents2-react-loop} shows this pattern:
 
 Each cycle has three components: a \textbf{thought} (explicit reasoning), an \textbf{action} (tool call), and an \textbf{observation} (tool output). Reasoning traces make decisions transparent and auditable. ReAct works well for exploratory tasks where you learn as you go.
 
-\paragraph{Plan-Execute} This pattern separates planning from execution. For document review (``Review 50 contracts for choice-of-law, forum selection, arbitration, and liquidated damages provisions''), the associate makes a plan: checklist of provisions, open each contract, record findings. Then she executes systematically. The plan doesn't change because the task is well-defined.
+\paragraph{Plan-Execute} This pattern separates planning from execution. For document review (``Review 50 contracts for choice-of-law, forum selection, arbitration, and liquidated damages provisions''), the associate makes a plan: checklist of provisions, open each contract, record findings. Then they execute systematically. The plan doesn't change because the task is well-defined.
 
 Plan-Execute fits workflows with established procedures: due diligence checklists, compliance reviews, document assembly. Create the plan upfront, execute methodically. Variants like ReWOO and LLMCompiler enable parallel tool calling when steps are independent.
 
@@ -318,17 +302,17 @@ The autonomy column matters for governance. Higher-autonomy patterns require mor
 \subsubsection{Knowing When to Stop}
 \label{sec:agents2-termination}
 
-Perhaps the most critical planning capability is knowing when to stop. Agents without explicit termination conditions can run indefinitely, burning resources and producing no value. This is the ``runaway associate'' problem: you asked for two cases, the associate gives you fifty because she didn't know when the answer was sufficient.
+Perhaps the most critical planning capability is knowing when to stop. Agents without explicit termination conditions can run indefinitely, burning resources and producing no value. This is the ``runaway associate'' problem: you asked for two cases, the associate gives you fifty because they didn't know when the answer was sufficient.
 
 Termination conditions take several forms. \textbf{Success conditions} are the most obvious: the goal is achieved, return the result. When the agent completes the assigned research, drafts the memo, and cites all sources, it's done. But success isn't always clear. When have you found ``enough'' authority? When is research ``thorough''? These require judgment, often human judgment.
 
-\textbf{Resource budgets} provide hard limits. Token budgets (stop after 50K tokens), time budgets (stop after 10 minutes), iteration budgets (stop after 20 tool calls), cost budgets (stop after spending \$5 in API calls). These prevent runaway execution but don't guarantee success---you might hit the limit before completing the task.
+\textbf{Resource budgets} provide hard limits. Token budgets (stop after 50K tokens), time budgets (stop after 10 minutes), iteration budgets (stop after 20 tool calls), cost budgets (stop after spending \$5 in API calls). These prevent runaway execution but don't guarantee success, since you might hit the limit before completing the task.
 
-\textbf{Confidence thresholds} gate actions on certainty. If the agent's confidence in its answer drops below 80\%, stop and escalate to human review rather than proceeding with uncertain information. This is how associates should work: ``I'm not confident this is right---let me ask the partner before proceeding.''
+\textbf{Confidence thresholds} gate actions on certainty. If the agent's confidence in its answer drops below 80\%, stop and escalate to human review rather than proceeding with uncertain information. This is how associates should work: ``I'm not confident this is right. Let me ask the partner before proceeding.''
 
 \textbf{Error conditions} trigger termination when things go wrong. If tools fail repeatedly, if the agent detects constraint violations, if the task appears impossible, stop. Don't keep trying the same failing approach indefinitely.
 
-\textbf{Escalation triggers} recognize when the agent is out of its depth. High-stakes decisions, novel legal questions, situations outside training data---these require human expertise. An agent that recognizes its limitations and escalates appropriately is more valuable than one that proceeds overconfidently.
+\textbf{Escalation triggers} recognize when the agent is out of its depth. High-stakes decisions, novel legal questions, and situations outside training data all require human expertise. An agent that recognizes its limitations and escalates appropriately is more valuable than one that proceeds overconfidently.
 
 Think about how you train associates: explain not just how to do the research, but when to stop. ``If you find three on-point circuit opinions that all agree, you're done. If you've searched for two hours and found nothing, come talk to me before spending more time.'' Give explicit stopping rules.
 
@@ -337,9 +321,9 @@ Agents need the same. Define success criteria clearly. Set resource budgets to p
 \subsubsection{Guardrails and Loop Detection}
 \label{sec:agents2-guardrails}
 
-Even with termination conditions, agents can get stuck in unproductive loops. The agent searches for cases, finds none, rephrases the search slightly, finds none, rephrases again---repeating indefinitely without making progress.
+Even with termination conditions, agents can get stuck in unproductive loops. The agent searches for cases, finds none, rephrases the search slightly, finds none, rephrases again, repeating indefinitely without making progress.
 
-Guardrails intercept execution before loops cause damage. Step limits simply count iterations: after 20 steps, stop and require human approval to continue. Token thresholds track cumulative token usage: after 50K tokens, stop---you've spent enough.
+Guardrails intercept execution before loops cause damage. Step limits simply count iterations: after 20 steps, stop and require human approval to continue. Token thresholds track cumulative token usage: after 50K tokens, stop because you've spent enough.
 
 Reflection steps periodically check meta-questions: ``Am I making progress toward the goal? Have my last five actions produced new information or just repeated prior searches? Am I stuck in a loop?'' If the agent detects it's spinning, it stops and escalates.
 
@@ -361,37 +345,19 @@ The principle: match oversight to risk. Fully reversible actions like research n
 \subsubsection{Budget Architecture and Cost Economics}
 \label{sec:agents2-budgets}
 
-Without explicit resource budgets, agents can run indefinitely. But cost economics matter beyond runaway prevention---legal and financial professionals obsess over costs, and agent economics must survive scrutiny.
+Without explicit resource budgets, agents can run indefinitely. But cost economics matter beyond runaway prevention; legal and financial professionals obsess over costs, and agent economics must survive scrutiny.
 
 \paragraph{Budget Types} Four budget types provide control: \textbf{token budgets} (limit LLM API consumption), \textbf{time budgets} (enforce deadlines), \textbf{tool call budgets} (prevent runaway loops), and \textbf{cost budgets} (cap total spending in dollars). Budgets cascade through levels: session budgets constrain engagements, task budgets allocate to specific work, subtask budgets subdivide further.
 
-\paragraph{Cost at Scale} Token costs compound across agentic workflows. Consider the credit facility review from Section~\ref{sec:agents2-synthesis}: a 200-page document requires roughly 80,000 tokens to ingest. Each section analysis might consume 10,000--20,000 tokens across reasoning and tool calls. Retrieval from the precedent database adds tokens. Multi-iteration refinement multiplies costs. A comprehensive review might consume 500,000--1,000,000 tokens---at illustrative pricing (late 2025: roughly \$3--15 per million input tokens for leading models; verify current rates), that's \$2--15 per review in API costs alone, before infrastructure, storage, or human review time.
+\paragraph{Cost at Scale} Token costs compound across agentic workflows. Consider the credit facility review from Section~\ref{sec:agents2-synthesis}: a 200-page document requires roughly 80,000 tokens to ingest. Each section analysis might consume 10,000--20,000 tokens across reasoning and tool calls. Retrieval from the precedent database adds tokens. Multi-iteration refinement multiplies costs. A comprehensive review might consume 500,000--1,000,000 tokens. At illustrative pricing (late 2025: roughly \$3--15 per million input tokens for leading models; verify current rates), that's \$2--15 per review in API costs alone, before infrastructure, storage, or human review time.
 
 For portfolio management running continuously, costs accumulate differently: thousands of small queries per day rather than occasional large tasks. Monitor aggregate daily/weekly costs, not just per-task.
 
-\paragraph{Break-Even Analysis} When does agent assistance cost less than pure human work? The calculation depends on task type:
+\paragraph{Break-Even Analysis} The fundamental question of when agent assistance costs less than pure human work depends critically on task type and the degree of human oversight required. \textbf{Retrieval-heavy tasks} such as legal research and document review show the clearest return on investment: if an agent reduces a research assignment from 15 hours of associate time to 5 hours of associate time plus \$10 in API costs, the savings are substantial at typical billing rates. By contrast, \textbf{judgment-intensive tasks} show less clear ROI; when the agent produces a first draft that requires 3 hours of senior attorney revision, compared to 4 hours for the senior to draft directly, the marginal savings may not justify the added workflow complexity. \textbf{Workflow automation} for monitoring, alerting, and routine compliance can show strong ROI if it replaces continuous human attention with exception-based human review, converting fixed labor costs into variable technology costs. Across all these scenarios, the critical variable is often human review time, since agent output that requires extensive human correction may cost more than human-only work, eliminating any economic advantage and potentially creating new quality risks.
 
-\textbf{Retrieval-heavy tasks} (research, document review) show clearest ROI. If an agent reduces 15 hours of associate time to 5 hours of associate time plus \$10 in API costs, the savings are substantial at typical billing rates.
+\paragraph{Billing Models} The legal and financial professions are still developing norms around billing clients for agent-assisted work, with several models emerging in practice. Under the \textbf{efficiency gains passed through} approach, firms bill fewer hours at standard rates, treating AI assistance as they traditionally treated technology adoption, as a productivity improvement that benefits clients through reduced time charges. The \textbf{hybrid billing} model bills human time at standard rates while adding a technology fee to recover agent costs, making AI assistance explicitly visible in invoices. \textbf{Fixed-fee arrangements} price the outcome rather than the process, allowing firms to use agents to improve margins while providing clients with cost certainty. The \textbf{transparency} approach discloses AI assistance and lets clients evaluate the value proposition directly, though this requires client sophistication in assessing AI contribution. ABA Formal Opinion 512 addresses the ethical dimensions of these models: attorneys must ensure competence regardless of tools used, and billing must be reasonable \parencite{aba-formal-opinion-512}. The economic calculus follows from these principles: cost savings must be real, not merely theoretical, and value to clients must be demonstrable, not assumed.
 
-\textbf{Judgment-intensive tasks} show less clear ROI. If the agent produces a first draft that requires 3 hours of senior revision, versus 4 hours for the senior to draft directly, the marginal savings may not justify the complexity.
-
-\textbf{Workflow automation} (monitoring, alerting, routine compliance) can show strong ROI if it replaces continuous human attention with exception-based human review.
-
-The critical variable is often human review time---agent output that requires extensive human correction may cost more than human-only work.
-
-\paragraph{Billing Models} How do you bill clients for agent-assisted work? The profession is still developing norms. Options include:
-
-\textbf{Efficiency gains passed through} (bill fewer hours at standard rates---the traditional approach to technology adoption).
-
-\textbf{Hybrid billing} (bill human time at standard rates plus a technology fee for agent costs).
-
-\textbf{Fixed-fee arrangements} (price the outcome, use agents to improve margins).
-
-\textbf{Transparency} (disclose AI assistance; let clients evaluate value).
-
-ABA Formal Opinion 512 addresses the ethical dimensions: attorneys must ensure competence regardless of tools used, and billing must be reasonable \parencite{aba-formal-opinion-512}. The economic calculus follows from these principles.
-
-\paragraph{Graceful Degradation} When budgets tighten, agents should degrade gracefully rather than failing. Implement tiered outputs: minimal budget delivers the controlling statute with citation; moderate budget adds key holdings; full budget delivers comprehensive analysis. Set soft limits at 75--80\% to warn the agent, and enforce hard limits at 100\% to terminate execution. A budget-aware agent that delivers partial results is more useful than one that fails completely when limits approach.
+\paragraph{Graceful Degradation} When budgets tighten, agents should degrade gracefully rather than failing. Implement tiered outputs: minimal budget delivers the controlling statute with citation; moderate budget adds key holdings; full budget delivers comprehensive analysis. Set soft limits at 75--80\% to warn the agent, and enforce hard limits at 100\% to terminate execution. A budget-aware agent that delivers partial results is more useful than one that fails completely when limits approach. Section~\ref{sec:agents2-degradation} discusses deployment-level degradation patterns in detail.
 
 % ============================================================================
 % DEPLOYMENT PATTERNS
@@ -406,7 +372,7 @@ ABA Formal Opinion 512 addresses the ethical dimensions: attorneys must ensure c
 
 \textbf{Single-agent deployment} offers simplicity: one identity to manage, one permission set to audit, one execution path to debug. It works well for initial deployments and well-defined tasks like practice-area research or compliance checking. Limitations emerge with scale and broad permission requirements.
 
-\textbf{Multi-agent orchestration} distributes work across specialized agents. An orchestrator decomposes tasks and delegates: the research agent has legal database access, the drafting agent has templates, the filing agent has court system access. Each agent gets narrow permissions---if the research agent is compromised, attackers can't file documents. Multi-agent fits complex workflows like M\&A due diligence with parallel workstreams. The tradeoff is coordination overhead and more attack surfaces.
+\textbf{Multi-agent orchestration} distributes work across specialized agents. An orchestrator decomposes tasks and delegates: the research agent has legal database access, the drafting agent has templates, the filing agent has court system access. Each agent gets narrow permissions, so if the research agent is compromised, attackers can't file documents. Multi-agent fits complex workflows like M\&A due diligence with parallel workstreams. The tradeoff is coordination overhead and more attack surfaces.
 
 \subsubsection{Hybrid Human-Agent Teams}
 \label{sec:agents2-hybrid}
@@ -423,7 +389,15 @@ The principle: start conservatively at the lowest scope that delivers value. Inc
 \subsubsection{Graceful Degradation}
 \label{sec:agents2-degradation}
 
-Agents should reduce autonomy when detecting problems. Define degradation triggers: error rates above threshold, confidence below threshold, tool failures, unusual inputs. When triggers fire, the agent drops to supervised mode rather than proceeding with uncertain information.
+When guardrails or budgets trip, agents should not keep operating at full autonomy. Define a small set of triggers and design explicit fallback behaviors:
+
+\textbf{Trigger conditions} that warrant degradation include: sustained tool failures (three consecutive API timeouts), repeated low-confidence outputs (uncertainty above threshold for multiple consecutive queries), abnormal input patterns (requests outside the agent's expected domain), approaching resource limits (token budget at 80\%), and detected adversarial content (prompt injection attempts or suspicious document content).
+
+\textbf{Fallback states} range from mildly constrained to fully paused. \textit{Supervised mode} continues operation but flags all outputs for human review before delivery. \textit{Restricted mode} disables high-risk tools while maintaining read-only capabilities. \textit{Paused mode} halts execution entirely and waits for human intervention. \textit{Safe mode} completes only the current atomic task, then stops.
+
+\textbf{State transitions} should be logged with full context: what triggered the degradation, what state the agent entered, what actions remain pending. This audit trail enables post-hoc analysis and helps calibrate trigger thresholds over time.
+
+The principle mirrors how law firms handle associate capacity constraints: when an associate is overloaded or encountering issues beyond their expertise, they don't keep working at full speed. They slow down, flag concerns, and escalate. Agent systems should do the same.
 
 % ============================================================================
 % TRANSPARENCY AND EXPLAINABILITY
@@ -432,11 +406,11 @@ Agents should reduce autonomy when detecting problems. Define degradation trigge
 \subsection{Transparency and Explainability}
 \label{sec:agents2-transparency}
 
-When a partner asks how an associate reached a conclusion, the associate explains her reasoning: searches conducted, authorities found, how she applied the law to facts. Agent systems require the same traceability. Regulators increasingly require explainability for automated decisions. Professional responsibility demands that attorneys understand the basis for advice they provide.
+When a partner asks how an associate reached a conclusion, the associate explains their reasoning: searches conducted, authorities found, how they applied the law to facts. Agent systems require the same traceability. Regulators increasingly require explainability for automated decisions. Professional responsibility demands that attorneys understand the basis for advice they provide.
 
 \subsubsection{Levels of Explanation}
 
-Think about how attorneys communicate with different audiences. To opposing counsel, you provide conclusions with supporting citations---you don't expose your full reasoning because that's work product. To the client, you explain enough for informed decision-making. To a partner reviewing your work, you expose the complete analysis so she can verify your logic.
+Think about how attorneys communicate with different audiences. To opposing counsel, you provide conclusions with supporting citations; you don't expose your full reasoning because that's work product. To the client, you explain enough for informed decision-making. To a partner reviewing your work, you expose the complete analysis so they can verify your logic.
 
 Agent explanations follow similar gradations:
 
@@ -446,11 +420,11 @@ Agent explanations follow similar gradations:
 
 \textbf{Level 2: Reasoning outline.} Key analytical steps plus sources. ``The limitations period is two years from discovery. I analyzed Section 1658(b)'s text and \textit{Merck}'s interpretation. The discovery rule applies because fraud claims accrue when the plaintiff discovers or should have discovered the violation.'' This is appropriate for substantive work product where the user needs to understand the analysis, not just accept the conclusion.
 
-\textbf{Level 3: Full execution trace.} Structured record of tool calls, retrieved documents, and decision points---but \textit{not} raw chain-of-thought text. ``Query: limitations period for securities fraud. Tool call: search\_cases(10b limitations period). Retrieved: \textit{Merck}, \textit{Lampf}, \textit{Gabelli}. Decision: \textit{Lampf} superseded by Section 1658(b); two-year period applies.'' This structured format enables audit, debugging, and compliance review while avoiding the retention problems of uncontrolled reasoning text (see Section~\ref{sec:agents2-retention}).
+\textbf{Level 3: Full execution trace.} Structured record of tool calls, retrieved documents, and decision points, but \textit{not} raw chain-of-thought text. ``Query: limitations period for securities fraud. Tool call: search\_cases(10b limitations period). Retrieved: \textit{Merck}, \textit{Lampf}, \textit{Gabelli}. Decision: \textit{Lampf} superseded by Section 1658(b); two-year period applies.'' This structured format enables audit, debugging, and compliance review while avoiding the retention problems of uncontrolled reasoning text (see Section~\ref{sec:agents2-retention}).
 
 \subsubsection{Audience-Appropriate Transparency}
 
-Different stakeholders need different explanations---not just different depths, but different framings:
+Different stakeholders need different explanations, not just different depths, but different framings:
 
 \textbf{End users} (the associate using the agent for research) need explanations that support their work. They need to know what sources the agent consulted, what the key findings were, and where uncertainty exists. They don't need to know which embedding model powered the RAG system or how many tokens the query consumed. Technical details distract from the work.
 
@@ -458,9 +432,9 @@ Different stakeholders need different explanations---not just different depths, 
 
 \textbf{Regulators and auditors} need complete trails. When the SEC examiner asks how the compliance agent flagged a particular trade, you need timestamps, the data the agent saw, the rules it applied, and the decision logic. Partial explanations won't satisfy regulatory inquiry.
 
-\textbf{Clients} need explanations they can understand and act on. A client asking ``Can we file this lawsuit?'' needs a clear answer with enough context to make an informed decision---not a technical exposition of the agent's reasoning process.
+\textbf{Clients} need explanations they can understand and act on. A client asking ``Can we file this lawsuit?'' needs a clear answer with enough context to make an informed decision, not a technical exposition of the agent's reasoning process.
 
-The architecture should capture complete traces in logs (Level 3), then generate audience-appropriate summaries on demand (Levels 0--2). However, ``complete logging'' must be reconciled with regulated retention requirements---a tension explored below.
+The architecture should capture complete traces in logs (Level 3), then generate audience-appropriate summaries on demand (Levels 0--2). However, ``complete logging'' must be reconciled with regulated retention requirements, a tension explored below.
 
 \subsubsection{Implementation Patterns}
 
@@ -470,11 +444,11 @@ Several patterns support transparency:
 
 \textbf{Tool call logging.} Every tool invocation should be logged with parameters, results, and timestamps. When something goes wrong, the logs enable forensic analysis.
 
-\textbf{Source attribution.} Link conclusions to the sources that support them. The agent shouldn't just say ``the statute of limitations is two years''---it should cite the specific statute and case law.
+\textbf{Source attribution.} Link conclusions to the sources that support them. The agent shouldn't just say ``the statute of limitations is two years''; it should cite the specific statute and case law.
 
 \textbf{Confidence indicators.} Surface uncertainty explicitly. ``Based on three consistent circuit opinions, I'm confident this is the correct rule'' versus ``I found conflicting authority and recommend partner review.'' Hiding uncertainty is how malpractice happens.
 
-The critical requirement for legal applications: verify that cited sources actually appeared in retrieved context. Hallucinated citations---plausible-sounding but nonexistent cases---are a known failure mode. Before any citation reaches a work product, confirm the source exists and supports the proposition.
+The critical requirement for legal applications: verify that cited sources actually appeared in retrieved context. Hallucinated citations, meaning plausible-sounding but nonexistent cases, are a known failure mode. Before any citation reaches a work product, confirm the source exists and supports the proposition.
 
 \subsubsection{Auditability Without Over-Collection}
 \label{sec:agents2-retention}
@@ -487,30 +461,30 @@ The transparency guidance above emphasizes comprehensive logging for audit trail
 
 \textbf{Principles for reconciliation:}
 
-\textbf{Structured logging, not raw capture.} Don't log raw chain-of-thought text that may contain uncontrolled content. Instead, log \textit{structured decisions}: what tool was called, what parameters were used, what result was returned, what action was taken. Structure enables selective retention---you can purge the raw reasoning while retaining the decision record.
+\textbf{Structured logging, not raw capture.} Don't log raw chain-of-thought text that may contain uncontrolled content. Instead, log \textit{structured decisions}: what tool was called, what parameters were used, what result was returned, what action was taken. Structure enables selective retention; you can purge the raw reasoning while retaining the decision record.
 
 \textbf{Tiered retention by sensitivity.} Implement multiple retention tiers: short-term operational logs (days to weeks, full detail for debugging), medium-term audit logs (months to years, structured decisions only), and long-term compliance archives (permanent where required, minimal but sufficient for regulatory inquiry). Each tier has different access controls and purge schedules.
 
-\textbf{Redaction at capture.} Before logging, apply redaction rules: PII masking, MNPI isolation, privilege tagging. The raw data never enters the general audit log; only the redacted version persists. This is how financial institutions handle trade surveillance---the full detail exists in restricted systems, while audit logs contain references and hashes.
+\textbf{Redaction at capture.} Before logging, apply redaction rules: PII masking, MNPI isolation, privilege tagging. The raw data never enters the general audit log; only the redacted version persists. This is how financial institutions handle trade surveillance: the full detail exists in restricted systems, while audit logs contain references and hashes.
 
-\textbf{Legal hold integration.} Retention schedules must yield to legal holds. When litigation is anticipated, relevant logs shift from normal retention to preservation. Agent systems need hooks into the organization's legal hold processes---when a hold applies, affected logs must be preserved regardless of normal purge schedules.
+\textbf{Legal hold integration.} Retention schedules must yield to legal holds. When litigation is anticipated, relevant logs shift from normal retention to preservation. Agent systems need hooks into the organization's legal hold processes; when a hold applies, affected logs must be preserved regardless of normal purge schedules.
 
 \textbf{Separate evidence stores.} For high-stakes decisions (trading recommendations, legal advice, compliance determinations), maintain separate evidence stores with the supporting data at the time of the decision. The agent's reasoning trace says ``retrieved case X''; the evidence store contains a snapshot of case X as retrieved. This enables reconstruction without maintaining full logs indefinitely.
 
 \begin{highlightbox}[title={Reconciling Audit and Retention}]
 The guidance is \textit{not} ``log everything forever.'' The guidance is:
 
-\textbf{1. Capture sufficient detail} to reconstruct decisions when needed---structured logs, not raw traces.
+\textbf{1. Capture sufficient detail} to reconstruct decisions when needed: structured logs, not raw traces.
 
-\textbf{2. Apply access controls} appropriate to data sensitivity---privilege boundaries, MNPI isolation, PII protection.
+\textbf{2. Apply access controls} appropriate to data sensitivity: privilege boundaries, MNPI isolation, PII protection.
 
-\textbf{3. Implement tiered retention} aligned with regulatory requirements---operational logs purge quickly, audit records persist longer, compliance archives as required.
+\textbf{3. Implement tiered retention} aligned with regulatory requirements: operational logs purge quickly, audit records persist longer, compliance archives as required.
 
-\textbf{4. Support legal holds}---override normal retention when preservation is required.
+\textbf{4. Support legal holds} by overriding normal retention when preservation is required.
 
-\textbf{5. Design for reconstruction}---evidence stores enable audit without indefinite full-log retention.
+\textbf{5. Design for reconstruction} so that evidence stores enable audit without indefinite full-log retention.
 
-\textbf{6. Address reproducibility challenges}---when a regulator asks why the agent made a recommendation six months ago, can you replay the decision? This requires capturing model versions, retrieval context snapshots, and configuration state. Reproducibility is harder than it sounds: hosted LLM providers may deprecate models or update weights without notice; external APIs and MCP servers change behavior; A2A delegations depend on downstream agent versions you don't control. Design for reproducibility where possible, and document reproducibility limitations as residual risk where external dependencies prevent it.
+\textbf{6. Address reproducibility challenges.} When a regulator asks why the agent made a recommendation six months ago, can you replay the decision? This requires capturing model versions, retrieval context snapshots, and configuration state. Reproducibility is harder than it sounds: hosted LLM providers may deprecate models or update weights without notice; external APIs and MCP servers change behavior; A2A delegations depend on downstream agent versions you don't control. Design for reproducibility where possible, and document reproducibility limitations as residual risk where external dependencies prevent it.
 
 Auditability and data governance are not in conflict when both are designed into the architecture from the start.
 \end{highlightbox}
@@ -522,15 +496,15 @@ Auditability and data governance are not in conflict when both are designed into
 \subsection{Current Limitations and Realistic Expectations}
 \label{sec:agents2-limitations}
 
-Before deploying agents in production, practitioners must understand current capability boundaries. The architectural patterns above represent target states---not all are reliably achievable with today's technology.
+Before deploying agents in production, practitioners must understand current capability boundaries. The architectural patterns above represent target states; not all are reliably achievable with today's technology.
 
 \subsubsection{The Reliability Gap}
 
-The METR study cited in Section~\ref{sec:agents2-eval-layer3} found agents achieve near-perfect success on short tasks but performance degrades dramatically as complexity increases: 100\% success on tasks under 4 minutes, but \textbf{under 10\% for tasks over 4 hours} \parencite{metr-agent-capability-2025}. Both case studies in Section~\ref{sec:agents2-synthesis} describe multi-hour workflows. Current systems will not execute these workflows reliably without substantial human oversight and intervention.
+Independent benchmarking provides critical perspective on agent capabilities. METR (Model Evaluation and Threat Research) is a nonprofit research organization that conducts systematic evaluations of AI system capabilities and risks. Their 2025 study tested agents across standardized suites of 100+ tasks varying in duration and complexity. The results revealed a sharp reliability cliff: agents achieved \textbf{near-perfect success on tasks under 4 minutes, but under 10\% success for tasks over 4 hours} \parencite{metr-agent-capability-2025}. This gap (from near-100\% to under-10\%) defines the current boundary between reliable and unreliable agent deployment. Treat multi-hour workflows as human-in-the-loop by default.
 
 This gap between architectural vision and operational reality has several causes:
 
-\textbf{Compounding errors.} Each step in an agentic workflow introduces error probability. A 95\%-accurate retrieval step followed by a 90\%-accurate reasoning step followed by an 85\%-accurate action step yields roughly 73\% end-to-end accuracy---before accounting for the agent's ability to sequence steps correctly. Multi-step workflows compound these probabilities.
+\textbf{Compounding errors.} Each step in an agentic workflow introduces error probability. A 95\%-accurate retrieval step followed by a 90\%-accurate reasoning step followed by an 85\%-accurate action step yields roughly 73\% end-to-end accuracy, before accounting for the agent's ability to sequence steps correctly. Multi-step workflows compound these probabilities.
 
 \textbf{Hallucination in agentic loops.} Single-turn hallucination is well-documented; agentic loops amplify the problem. When an agent hallucinates a case citation, uses it to inform reasoning, then retrieves documents ``supporting'' its fabricated premise, the error propagates and becomes harder to detect. Grounding techniques help but do not eliminate this failure mode.
 
@@ -555,33 +529,31 @@ This gap between architectural vision and operational reality has several causes
 \item Workflows where errors compound across many dependent steps
 \end{itemize}
 
-\textbf{Implication:} Design for human-agent collaboration, not agent autonomy. The case studies in Section~\ref{sec:agents2-synthesis} are \textit{reference architectures}---target designs showing how components fit together---not claims about what systems reliably achieve today.
+\textbf{Implication:} Design for human-agent collaboration, not agent autonomy. The reference architectures later in this chapter illustrate how these components fit together in professional workflows, but they represent target designs, not claims about what current systems reliably achieve autonomously.
 \end{keybox}
 
 \subsubsection{Designing for Failure}
 
-Given these limitations, production deployments should assume agents will fail and design accordingly:
+Given these limitations, production deployments should assume agents will fail and design accordingly. The goal is not to prevent all failures (that is impossible) but to ensure failures are contained, detected, and recoverable.
 
-\textbf{Decompose aggressively.} Break complex tasks into sub-tasks short enough to fall within reliability bounds. Insert human checkpoints between phases rather than expecting end-to-end autonomous completion.
+\textbf{Decompose aggressively} by breaking complex tasks into sub-tasks short enough to fall within reliability bounds. A contract review agent should not attempt to analyze an entire merger agreement in one pass; it should work clause by clause, with intermediate checkpoints where humans can verify progress. Insert human review between phases rather than expecting end-to-end autonomous completion. The decomposition should match the granularity at which humans can meaningfully intervene: too coarse and problems compound before detection; too fine and the overhead of checkpoints negates the efficiency gains.
 
-\textbf{Validate before acting.} Never let agent outputs reach clients, courts, or markets without validation. The Citation Verifier pattern---checking that every cited source actually exists in retrieved context---should be mandatory, not optional.
+\textbf{Validate before acting} means never letting agent outputs reach clients, courts, or markets without verification. The Citation Verifier pattern (checking that every cited source actually exists in retrieved context) should be mandatory, not optional. This pattern extends beyond citations: financial calculations should be spot-checked, legal conclusions should be compared against known precedent, and any output that will be relied upon by external parties should pass through validation gates. The cost of validation is small compared to the cost of error propagation.
 
-\textbf{Implement circuit breakers.} When agents fail repeatedly, stop and escalate rather than retrying indefinitely. Define clear thresholds: after three failed retrieval attempts, after confidence drops below threshold, after token budget reaches 80\%.
+\textbf{Circuit breakers} prevent agents from compounding failures through endless retries. When an agent fails repeatedly, it should stop and escalate rather than continuing indefinitely. Define clear thresholds: after three failed retrieval attempts, escalate to a different search strategy or human assistance. After confidence drops below threshold on multiple consecutive outputs, pause for review. After token budget reaches 80\%, slow down and prioritize completion over exploration. Circuit breakers transform potential runaway failures into controlled pauses.
 
-\textbf{Maintain fallback paths.} Design workflows so humans can complete tasks when agents fail. The agent-assisted workflow should degrade gracefully to human-only execution, not leave work incomplete.
+\textbf{Fallback paths} ensure that work completes even when agents fail. Design workflows so humans can seamlessly take over from failed agents. The agent-assisted workflow should degrade gracefully to human-only execution, not leave work incomplete or in an inconsistent state. This requires maintaining clean handoff points: the case file should always reflect current state, pending tasks should be clearly enumerated, and any in-progress work should be checkpointed frequently enough that humans can resume without starting over.
 
-\textbf{Log exhaustively.} When failures occur, you need forensic capability. Log every tool call, every reasoning step, every decision point. These logs enable post-hoc analysis and continuous improvement.
+\textbf{Exhaustive logging} provides forensic capability when failures occur. Log every tool call, every reasoning step, every decision point. When a court questions how a document was reviewed, when a regulator investigates a compliance failure, when a client challenges a recommendation, the logs should tell the complete story. These logs also enable continuous improvement: patterns in failures reveal systematic weaknesses that can be addressed through better training, clearer tool interfaces, or revised human oversight procedures.
 
-The architectural patterns in this chapter represent sound engineering principles. But sound architecture does not guarantee reliable execution. Production deployment requires accepting current limitations and designing systems that remain useful despite them.
+The architectural patterns in this chapter represent sound engineering principles validated across distributed systems, fault-tolerant computing, and high-reliability organizations. But sound architecture does not guarantee reliable execution. Production deployment requires accepting current limitations and designing systems that remain useful despite them, systems that fail gracefully when failures occur and improve systematically over time.
 
 \subsection{Reference Architecture Summary}
 \label{sec:agents2-arch-summary}
 
-An AI agent requires six essential components working together. The \textbf{LLM core} provides reasoning---the associate's legal training, the analyst's finance education. \textbf{Tools} provide perception and action---the research databases, document systems, calculators, communication channels. \textbf{Memory} provides context retention---the case file, institutional knowledge, experience from prior matters. \textbf{Planning} provides strategy---how to decompose complex goals, when to iterate, when to stop, when to escalate. \textbf{Deployment topology} determines structure---single agent, orchestrated specialists, or hybrid human-agent team. \textbf{Security controls} protect the system---authentication, authorization, audit logging, human oversight.
+An AI agent requires six essential components working together. The \textbf{LLM core} provides reasoning: the associate's legal training, the analyst's finance education. \textbf{Tools} provide perception and action: the research databases, document systems, calculators, communication channels. \textbf{Memory} provides context retention: the case file, institutional knowledge, experience from prior matters. \textbf{Planning} provides strategy: how to decompose complex goals, when to iterate, when to stop, when to escalate. \textbf{Deployment topology} determines structure: single agent, orchestrated specialists, or hybrid human-agent team. \textbf{Security controls} protect the system: authentication, authorization, audit logging, human oversight.
 
-These components implement the GPA+IAT properties from Part I. Tools implement Perception (gathering information) and Action (effecting change). Memory implements Adaptation (learning from experience). Planning implements Goal (pursuing objectives), Iteration (taking steps), and Termination (knowing when to stop or escalate).
-
-\paragraph{Implementation Sequence} Build incrementally. Week 1: Implement the core agent loop with one read-only tool. Verify the basic pattern: perceive, reason, act, update, check termination. Week 2: Add 3-5 tools covering different categories (research, retrieval, computation). Test tool selection---does the agent pick the right tool for each task? Test error handling---when tools fail, does the agent recover gracefully? Week 3: Add memory with basic RAG. Verify retrieval quality and that memory improves agent performance. Week 4: Implement multi-step planning and human-in-the-loop approval gates. Test that the agent can complete complex tasks requiring coordination. Week 5: Harden security---authentication, authorization, audit logging, input validation. Conduct security review. Week 6 and beyond: Deploy to production with monitoring, alerting, cost controls, and feedback loops. Iterate based on real usage.
+\paragraph{Implementation Sequence} Build incrementally. Week 1: Implement the core agent loop with one read-only tool. Verify the basic pattern: perceive, reason, act, update, check termination. Week 2: Add 3-5 tools covering different categories (research, retrieval, computation). Test tool selection: does the agent pick the right tool for each task? Test error handling: when tools fail, does the agent recover gracefully? Week 3: Add memory with basic RAG. Verify retrieval quality and that memory improves agent performance. Week 4: Implement multi-step planning and human-in-the-loop approval gates. Test that the agent can complete complex tasks requiring coordination. Week 5: Harden security (authentication, authorization, audit logging, input validation). Conduct security review. Week 6 and beyond: Deploy to production with monitoring, alerting, cost controls, and feedback loops. Iterate based on real usage.
 
 Don't try to build everything at once. Each week validates a layer before adding the next. This lets you catch problems early when they're easier to fix.
 

@@ -7,10 +7,10 @@
 \section{Reference Architectures: Agents in Practice}
 \label{sec:agents2-synthesis}
 
-The preceding sections presented agent architecture as components: triggers and channels for how work enters the system (Section~\ref{sec:agents2-triggers}), surfaces for how users interact with agents (Section~\ref{sec:agents2-surfaces}), tools for perception and action, memory for context and learning, planning for strategy and termination, protocols for integration and coordination, and evaluation for quality assurance. This section synthesizes those components through two \textbf{reference architectures}---one legal, one financial---that demonstrate how the pieces fit together.
+The preceding sections presented agent architecture as components: triggers and channels for how work enters the system (Section~\ref{sec:agents2-triggers}), surfaces for how users interact with agents (Section~\ref{sec:agents2-surfaces}), tools for perception and action, memory for context and learning, planning for strategy and termination, protocols for integration and coordination, and evaluation for quality assurance. This section synthesizes those components through two \textbf{reference architectures}, one legal and one financial, that demonstrate how the pieces fit together.
 
 \begin{highlightbox}[title={Reference Architectures, Not Production Claims}]
-The case studies below are \textit{reference architectures}: idealized designs showing how architectural components interconnect. They illustrate target states---what well-designed systems aim to achieve---not claims about what current technology reliably delivers.
+The case studies below are \textit{reference architectures}: idealized designs showing how architectural components interconnect. They illustrate target states (what well-designed systems aim to achieve), not claims about what current technology reliably delivers.
 
 As discussed in Section~\ref{sec:agents2-limitations}, agents today achieve under 10\% success on tasks exceeding four hours. Both workflows below describe multi-hour processes. \textbf{Current systems will require substantial human oversight, intervention at failure points, and acceptance of partial automation} rather than the end-to-end execution these architectures describe.
 
@@ -28,13 +28,13 @@ Each reference architecture walks through a complete agent deployment: the trigg
 
 \paragraph{The Scenario}
 
-A mid-market company needs to borrow \$50 million to fund expansion. The lender proposes a floating-rate credit facility---think of it like a variable-rate mortgage or credit card, but for a business. The interest rate adjusts periodically based on SOFR (the Secured Overnight Financing Rate) plus a spread. If SOFR rises, the company pays more; if it falls, they pay less.
+A mid-market company needs to borrow \$50 million to fund expansion. The lender proposes a floating-rate credit facility, similar to a variable-rate mortgage or credit card, but for a business. The interest rate adjusts periodically based on SOFR (the Secured Overnight Financing Rate) plus a spread. If SOFR rises, the company pays more; if it falls, they pay less.
 
-The borrower's counsel---whether at a law firm or in the company's legal department---must review the 200-page credit agreement and related documents before closing. The stakes are significant: unfavorable terms could cost the company millions over the loan's life, and missed issues could expose counsel to malpractice claims.
+The borrower's counsel (whether at a law firm or in the company's legal department) must review the 200-page credit agreement and related documents before closing. The stakes are significant: unfavorable terms could cost the company millions over the loan's life, and missed issues could expose counsel to malpractice claims.
 
 \paragraph{Trigger and Surface}
 
-The \textbf{trigger} is a document event: the lender's counsel uploads the draft credit agreement to the deal room. This external feed (Section~\ref{sec:agents2-triggers}) initiates the review workflow automatically---the agent doesn't wait for someone to remember to start the review.
+The \textbf{trigger} is a document event: the lender's counsel uploads the draft credit agreement to the deal room. This external feed (Section~\ref{sec:agents2-triggers}) initiates the review workflow automatically; the agent does not wait for someone to remember to start the review.
 
 The \textbf{surface} is document-first (Section~\ref{sec:agents2-surfaces}): the agent produces a structured issues list and summary memo as work products. The associate reviews and edits the document; the partner approves before delivery. Chat interaction is available for follow-up questions, but the primary output is the memo.
 
@@ -44,43 +44,33 @@ The partner assigns the review: ``Go through the credit agreement and flag anyth
 
 This is a classic legal task: document review requiring both comprehensive coverage (don't miss anything important) and professional judgment (distinguish routine terms from problematic ones). A junior associate might spend 15--20 hours on this review. An agent can accelerate the work while maintaining quality.
 
-\subsubsection{Architecture: GPA+IAT in Practice}
+\subsubsection{Architecture in Practice}
 
-The agent architecture maps directly to the GPA+IAT framework from Part I:
+The agent implements the architectural patterns from Section~\ref{sec:agents2-architecture}. The \textbf{planning system} decomposes the partner's instruction into reviewable components: interest rate provisions, financial covenants, default triggers, prepayment terms, and representations. \textbf{MCP tools} connect the agent to the firm's document management system, precedent database, and legal research platforms, querying Westlaw, iManage, and the deal database through standardized interfaces. \textbf{Memory} maintains context: episodic memory tracks what's been reviewed in this transaction, RAG provides access to prior credit facilities, and semantic memory supplies credit agreement concepts.
 
-\textbf{Goal} becomes the planning system. The agent receives the partner's instruction and decomposes it into reviewable components: interest rate provisions (SOFR mechanics, spread adjustments, fallback rates), financial covenants (leverage ratio, interest coverage, minimum liquidity), default provisions (events of default, cross-default, cure periods), prepayment terms (voluntary prepayment, mandatory prepayment triggers, prepayment penalties), and representations and warranties. Each component becomes a subtask with defined completion criteria.
-
-\textbf{Perception} becomes read-only tools via MCP. The agent connects to the firm's document management system to access the draft credit agreement, the precedent database to retrieve similar deals the firm has handled, and legal research platforms to check current market terms and regulatory requirements. These MCP connections (Section~\ref{sec:agents2-mcp}) provide standardized access---the agent queries Westlaw, the firm's iManage system, and the precedent database through the same protocol.
-
-\textbf{Action} becomes write tools with appropriate controls. The agent can generate analysis memos, create comparison charts, and flag provisions for review. But it cannot modify the credit agreement itself or communicate with opposing counsel---those actions require human authorization.
-
-\textbf{Iteration} becomes the agent loop. For each document section, the agent perceives (reads the provision), reasons (compares to precedent and market terms), acts (generates analysis), and updates (records findings in its working memory). The loop repeats until all sections are reviewed.
-
-\textbf{Adaptation} becomes memory. The agent maintains episodic memory of what it has reviewed in this transaction, RAG access to the firm's precedent database of prior credit facilities, and semantic memory of credit agreement concepts from its training. When the agent encounters an unusual provision, it retrieves similar provisions from prior deals to assess whether this deviation is common or concerning.
-
-\textbf{Termination} becomes guardrails and success criteria. The agent knows it's done when all identified sections have been reviewed and documented. It escalates to the associate when confidence drops below threshold---for example, when a provision uses non-standard language that doesn't match any precedent.
+The agent follows the \textbf{ReAct loop}: for each section, it reads the provision, compares to precedent and market terms, generates analysis, and records findings. Write actions are controlled: the agent can generate memos and flag issues, but cannot modify the credit agreement or contact opposing counsel. \textbf{Termination} occurs when all sections are reviewed, with escalation to the associate when confidence drops below threshold or provisions fall outside the training distribution.
 
 \subsubsection{Workflow: The Agent Loop in Action}
 
 The review proceeds through the ReAct pattern (Section~\ref{sec:agents2-planning}):
 
-\paragraph{Interest Rate Review} The agent reads the interest rate section: ``Interest accrues at SOFR plus 275 basis points, adjusted quarterly.'' It reasons: this is a standard floating rate structure. It retrieves precedent deals from RAG and finds comparable spreads range from 200--350 basis points for similar credit profiles. It acts: documents that the spread is within market range. It observes an unusual provision: if SOFR becomes unavailable, the lender can select a replacement rate ``in its sole discretion.'' The agent flags this---market-standard fallback provisions typically reference ARRC-recommended replacements, not lender discretion. This is a negotiation point.
+\paragraph{Interest Rate Review} The agent reads the interest rate section: ``Interest accrues at SOFR plus 275 basis points, adjusted quarterly.'' It reasons: this is a standard floating rate structure. It retrieves precedent deals from RAG and finds comparable spreads range from 200--350 basis points for similar credit profiles. It acts: documents that the spread is within market range. It observes an unusual provision: if SOFR becomes unavailable, the lender can select a replacement rate ``in its sole discretion.'' The agent flags this because market-standard fallback provisions typically reference ARRC-recommended replacements, not lender discretion. This is a negotiation point.
 
-\paragraph{Financial Covenant Review} The agent reads the leverage covenant: ``Borrower shall maintain a Total Debt to EBITDA ratio not exceeding 4.0:1.0.'' It retrieves comparable deals and finds this is market for the borrower's credit profile. But it notices the EBITDA definition excludes stock-based compensation and one-time restructuring charges---both borrower-favorable adjustments. It documents these as positive terms. It then reviews the cure provisions and finds the borrower has 30 days to cure covenant violations---shorter than the 45-day standard in the firm's precedent database. It flags this for negotiation.
+\paragraph{Financial Covenant Review} The agent reads the leverage covenant: ``Borrower shall maintain a Total Debt to EBITDA ratio not exceeding 4.0:1.0.'' It retrieves comparable deals and finds this is market for the borrower's credit profile. But it notices the EBITDA definition excludes stock-based compensation and one-time restructuring charges, both borrower-favorable adjustments. It documents these as positive terms. It then reviews the cure provisions and finds the borrower has 30 days to cure covenant violations, shorter than the 45-day standard in the firm's precedent database. It flags this for negotiation.
 
 \paragraph{Default Provisions Review} The agent identifies a cross-default provision: default under any debt instrument exceeding \$1 million triggers default under this facility. It retrieves the borrower's other debt instruments from episodic memory (loaded earlier in the session) and identifies three facilities that could trigger cross-default. It documents the interconnection risk and suggests the threshold should be raised to \$5 million to match market terms.
 
-Throughout, the agent maintains a structured issues list with severity ratings (critical, significant, minor) and recommended responses (negotiate, accept, clarify). When it encounters provisions outside its training distribution---say, an unusual environmental compliance representation---it flags the provision for associate review rather than guessing at analysis.
+Throughout, the agent maintains a structured issues list with severity ratings (critical, significant, minor) and recommended responses (negotiate, accept, clarify). When it encounters provisions outside its training distribution, such as an unusual environmental compliance representation, it flags the provision for associate review rather than guessing at analysis.
 
 \subsubsection{Where This Architecture Fails}
 
 Reference architectures should be honest about failure modes. Here are realistic scenarios where the credit review agent falls short:
 
-\textbf{Nuanced definitions escape statistical matching.} The agent flags a ``Change of Control'' provision as standard because it statistically matches the precedent database's patterns. But this deal's definition of ``Control'' excludes the founder's estate and family trusts---a nuance with significant implications for transaction planning that statistical similarity doesn't capture. The provision matches the pattern but misses the point.
+\textbf{Nuanced definitions escape statistical matching.} The agent flags a ``Change of Control'' provision as standard because it statistically matches the precedent database's patterns. But this deal's definition of ``Control'' excludes the founder's estate and family trusts, a nuance with significant implications for transaction planning that statistical similarity does not capture. The provision matches the pattern but misses the point.
 
 \textbf{Cross-document dependencies break retrieval boundaries.} The credit agreement's EBITDA definition references ``Adjusted EBITDA as defined in the Intercreditor Agreement.'' The agent analyzes the credit agreement's language but doesn't retrieve and parse the separate intercreditor agreement to trace the definition chain. It reports the covenant as ``standard'' when the actual calculation methodology buried in the cross-reference is borrower-unfavorable.
 
-\textbf{Market context requires judgment the agent lacks.} The agent retrieves precedents showing 250--350 basis point spreads for comparable credits. But those precedents are from six months ago; the current credit market has tightened significantly. The 275 basis point spread in this deal is actually aggressive in today's market---a point the agent cannot assess because market conditions aren't in the precedent database.
+\textbf{Market context requires judgment the agent lacks.} The agent retrieves precedents showing 250--350 basis point spreads for comparable credits. But those precedents are from six months ago; the current credit market has tightened significantly. The 275 basis point spread in this deal is actually aggressive in today's market, a point the agent cannot assess because market conditions are not in the precedent database.
 
 \textbf{Omissions are harder than inclusions.} The agent reviews provisions that exist. But experienced counsel also notice what's \textit{missing}: Where is the equity cure provision that market-standard credit facilities include? The agent finds no precedent for comparison because there's nothing in this document to match against precedents. Missing provisions require a different analytical mode than reviewing existing ones.
 
@@ -88,19 +78,11 @@ These failures illustrate why human review remains essential. The agent accelera
 
 \subsubsection{Protocols: MCP and Human Coordination}
 
-The agent uses MCP (Section~\ref{sec:agents2-mcp}) for all tool access:
+The agent relies on MCP (Section~\ref{sec:agents2-mcp}) to access the firm's legal infrastructure through standardized tool interfaces. To retrieve relevant prior transactions, the agent calls \texttt{search\_precedents(deal\_type="credit facility", size\_range="25M-100M")}, querying the firm's precedent database for comparable deals. When it needs to examine the draft credit agreement itself, \texttt{retrieve\_document(doc\_id="12345")} fetches the document from iManage. For provision-specific analysis, \texttt{compare\_provision(text, provision\_type="leverage covenant")} matches the provision text against market-standard language and returns a deviation analysis highlighting non-standard terms. Finally, to verify current regulatory guidance (particularly important for evolving standards like SOFR transition rules), \texttt{check\_current\_law(topic="SOFR transition", jurisdiction="NY")} searches Westlaw for the latest authority. These MCP-connected tools transform the agent from an isolated reasoning system into one integrated with the firm's document management, precedent knowledge, and legal research capabilities.
 
-\texttt{search\_precedents(deal\_type="credit facility", size\_range="25M-100M")} queries the firm's precedent database and returns relevant prior transactions.
+For this single-agent deployment, A2A coordination (Section~\ref{sec:agents2-a2a}) is not required because the credit review involves a single specialized agent with a well-defined scope. However, for more complex transactions that span multiple practice areas, A2A enables orchestrated workflows across specialist agents. Consider a leveraged buyout requiring simultaneous review of credit documents, acquisition agreement, and regulatory filings: the orchestrating agent would delegate via A2A to three specialists: a Credit Agent for financing documents, an M\&A Agent for the acquisition agreement, and a Regulatory Agent for HSR filings. Each specialist would use MCP for its domain-specific tool access while A2A coordinates handoffs, tracks dependencies, and assembles the complete analysis. The architecture scales from single-agent tasks to complex multi-agent workflows without requiring fundamental redesign.
 
-\texttt{retrieve\_document(doc\_id="12345")} fetches the draft credit agreement from iManage.
-
-\texttt{compare\_provision(text, provision\_type="leverage covenant")} matches the provision against market-standard language and returns deviation analysis.
-
-\texttt{check\_current\_law(topic="SOFR transition", jurisdiction="NY")} searches Westlaw for current regulatory guidance on benchmark rate transitions.
-
-For this single-agent deployment, A2A (Section~\ref{sec:agents2-a2a}) is not required. But for a more complex transaction---say, a leveraged buyout requiring simultaneous review of credit documents, acquisition agreement, and regulatory filings---the orchestrating agent could delegate via A2A to specialist agents: a Credit Agent for financing documents, an M\&A Agent for the acquisition agreement, and a Regulatory Agent for HSR filings. Each specialist uses MCP for tool access while A2A coordinates the overall workflow.
-
-Human-in-the-loop integration follows the approval gate pattern (Section~\ref{sec:agents2-hitl}). The agent produces analysis autonomously but does not deliver work product to the partner without associate review. The associate reviews the issues list, validates the analysis, adds judgment where the agent flagged uncertainty, and presents the refined memo to the partner. High-stakes items---like recommending that the client reject the deal---require explicit partner approval.
+Human-in-the-loop integration follows the approval gate pattern (Section~\ref{sec:agents2-hitl}), recognizing that legal work products require professional validation before delivery. The agent produces analysis autonomously, working through the credit agreement sections and generating its issues list and summary memo. But it does not deliver this work product directly to the partner. Instead, the associate receives the agent's draft, reviews the issues list for accuracy and completeness, validates the analysis against their own professional judgment, adds contextual reasoning where the agent flagged uncertainty or encountered provisions outside its training distribution, and refines the memo into client-ready form. High-stakes recommendations, such as advising the client to reject the deal entirely or identifying potential malpractice issues in prior counsel's work, require explicit partner approval before communication to the client.
 
 \subsubsection{Evaluation: Three Layers Applied}
 
@@ -141,13 +123,13 @@ Security evaluation (Section~\ref{sec:agents2-eval-security}) verifies matter is
 
 \paragraph{The Scenario}
 
-A pension fund has entrusted \$500 million in U.S. equities to an asset management firm. Think of it like a 401(k) but at institutional scale---the fund has specific investment objectives, risk constraints, and regulatory requirements that the portfolio manager must honor while seeking returns.
+A pension fund has entrusted \$500 million in U.S. equities to an asset management firm. Think of it like a 401(k) but at institutional scale; the fund has specific investment objectives, risk constraints, and regulatory requirements that the portfolio manager must honor while seeking returns.
 
 The client's investment policy statement specifies constraints: no single position exceeding 5\% of the portfolio, technology sector limited to 30\%, ESG exclusions (no tobacco, weapons manufacturers, or thermal coal), and tracking error against the S\&P 500 must stay below 3\%. The portfolio manager must continuously monitor compliance, respond to market changes, and rebalance when positions drift outside mandates.
 
 \paragraph{Trigger and Surface}
 
-Unlike the credit review---triggered by a discrete document event---portfolio management involves \textbf{multiple trigger types}. Market data feeds provide continuous external triggers (Section~\ref{sec:agents2-external-feeds}): price changes, corporate actions, and news events flow into the system throughout trading hours. Scheduled triggers (Section~\ref{sec:agents2-scheduled}) handle end-of-day reconciliation, weekly drift analysis, and quarterly client reporting. Human prompts arrive when the PM asks ad hoc questions: ``What's our current tech exposure?'' or ``Model the impact of selling half our NVDA position.''
+Unlike the credit review, which is triggered by a discrete document event, portfolio management involves \textbf{multiple trigger types}. Market data feeds provide continuous external triggers (Section~\ref{sec:agents2-external-feeds}): price changes, corporate actions, and news events flow into the system throughout trading hours. Scheduled triggers (Section~\ref{sec:agents2-scheduled}) handle end-of-day reconciliation, weekly drift analysis, and quarterly client reporting. Human prompts arrive when the PM asks ad hoc questions: ``What's our current tech exposure?'' or ``Model the impact of selling half our NVDA position.''
 
 The \textbf{surface} is primarily automation (Section~\ref{sec:agents2-surfaces}): the system monitors continuously and surfaces information only when action is needed. Dashboards show real-time status; alerts appear when positions approach limits; recommendation packages arrive when rebalancing is triggered. Chat interaction is available for PM queries, and quarterly reports use document surfaces. The multi-surface approach matches how the PM actually works: continuous background monitoring with periodic human engagement.
 
@@ -155,21 +137,15 @@ The \textbf{surface} is primarily automation (Section~\ref{sec:agents2-surfaces}
 
 The portfolio manager needs ongoing support: ``Monitor the portfolio for mandate compliance and drift. When positions approach limits or market conditions suggest rebalancing, generate recommendations with supporting analysis. Flag any compliance issues immediately. Prepare quarterly client reports showing performance attribution and risk metrics.''
 
-This is a continuous management task requiring real-time monitoring, periodic rebalancing decisions, and structured reporting---exactly the kind of work where agents can multiply human capacity while humans retain investment judgment.
+This is a continuous management task requiring real-time monitoring, periodic rebalancing decisions, and structured reporting, exactly the kind of work where agents can multiply human capacity while humans retain investment judgment.
 
-\subsubsection{Architecture: GPA+IAT in Practice}
+\subsubsection{Architecture in Practice}
 
-\textbf{Goal} becomes the planning system. The agent pursues multiple concurrent objectives: compliance monitoring (continuous), drift detection (daily), rebalancing analysis (triggered), and reporting (quarterly). Each objective has its own success criteria and termination conditions. Hierarchical planning (Section~\ref{sec:agents2-planning}) coordinates these workstreams---the monitoring agent escalates to the rebalancing agent when drift exceeds thresholds.
+Unlike the discrete credit review, portfolio management involves \textbf{hierarchical planning} with multiple concurrent objectives: compliance monitoring (continuous), drift detection (daily), rebalancing analysis (triggered), and reporting (quarterly). Each workstream has its own termination conditions: compliance monitoring never stops during market hours, while rebalancing terminates when the PM approves or rejects recommendations.
 
-\textbf{Perception} becomes market data and portfolio system access via MCP. The agent connects to Bloomberg for real-time prices and market data, the firm's portfolio management system for current holdings and transaction history, compliance databases for restricted lists and regulatory limits, and risk systems for VaR calculations and factor exposures. Each connection uses MCP's standardized interface.
+\textbf{MCP tools} connect the agent to Bloomberg for market data, the portfolio management system for holdings and history, compliance databases for restricted lists, and risk systems for VaR calculations. \textbf{Memory} spans market cycles: episodic memory tracks this client's portfolio history and past decisions, RAG provides access to investment research, and learned patterns reflect how the PM has responded to similar situations. When the PM accepted a recommendation six months ago, the agent remembers the reasoning and applies similar logic to current situations.
 
-\textbf{Action} becomes recommendation generation with approval gates. The agent can generate rebalancing recommendations, calculate proposed trades, and draft client reports. But it cannot execute trades directly---all transactions require portfolio manager approval, with large trades requiring additional compliance sign-off.
-
-\textbf{Iteration} becomes the monitoring loop. The agent continuously perceives (retrieves prices and positions), reasons (calculates exposures and compares to mandates), and acts (updates dashboards, generates alerts, or triggers rebalancing analysis). The loop runs continuously during market hours.
-
-\textbf{Adaptation} becomes memory across market cycles. The agent maintains episodic memory of this client's portfolio history and past rebalancing decisions, RAG access to the firm's investment research on covered securities, and learned patterns about how this client responds to various recommendations. When the PM accepted a rebalancing recommendation six months ago, the agent remembers the reasoning and applies similar logic to current situations.
-
-\textbf{Termination} varies by workstream. Compliance monitoring never terminates during market hours---it runs continuously. Drift detection terminates daily with end-of-day position reconciliation. Rebalancing analysis terminates when recommendations are generated and approved or rejected by the PM. Reporting terminates when quarterly reports are delivered to the client.
+\textbf{Action} is carefully controlled: agents can generate recommendations, calculate trades, and draft reports, but cannot execute trades directly. All transactions require PM approval, with large trades requiring additional compliance sign-off.
 
 \subsubsection{Workflow: Multi-Agent Coordination}
 
@@ -183,43 +159,21 @@ Portfolio management involves multiple specialized functions. This deployment us
 
 \paragraph{Risk Agent} Calculates portfolio-level risk metrics. Before and after each proposed rebalancing, it computes VaR at 95\% and 99\% confidence, tracking error against benchmark, factor exposures (market, size, value, momentum), and stress test results under various scenarios. The PM uses these metrics to assess whether the rebalancing improves the portfolio's risk profile.
 
-The agents communicate via A2A protocol (Section~\ref{sec:agents2-a2a}). The Monitoring Agent creates a Task describing the drift condition. The Rebalancing Agent returns an Artifact containing the recommendation. The Compliance Agent validates and returns approval or rejection. The Risk Agent provides metrics as supporting Artifacts. The PM reviews the complete package---recommendation, compliance approval, and risk analysis---before authorizing execution.
+The agents communicate via A2A protocol (Section~\ref{sec:agents2-a2a}). The Monitoring Agent creates a Task describing the drift condition. The Rebalancing Agent returns an Artifact containing the recommendation. The Compliance Agent validates and returns approval or rejection. The Risk Agent provides metrics as supporting Artifacts. The PM reviews the complete package (recommendation, compliance approval, and risk analysis) before authorizing execution.
 
 \subsubsection{Protocols: MCP for Data, A2A for Coordination}
 
-Each agent uses MCP for tool access:
+Each specialized agent accesses market and portfolio data through MCP tool interfaces. The foundation is \texttt{get\_positions(portfolio\_id, as\_of\_date)}, which retrieves current holdings from the portfolio management system, providing the agent with the portfolio's composition and historical context. Real-time market information flows through \texttt{get\_market\_data(tickers, fields=["price", "volume", "volatility"])}, connecting to Bloomberg's data feeds for current prices, trading volumes, and volatility metrics that inform rebalancing decisions. Before proposing any trades, the Compliance Agent validates securities using \texttt{check\_restricted\_list(tickers)}, ensuring the firm doesn't trade securities where it possesses material non-public information. Risk analysis depends on \texttt{calculate\_var(portfolio, confidence, horizon)}, which computes Value-at-Risk using the firm's risk engine to quantify downside exposure under various confidence levels and time horizons. Finally, \texttt{get\_esg\_ratings(tickers)} retrieves ESG scores for portfolio securities, enabling the agent to verify compliance with the client's exclusion mandates prohibiting investments in tobacco, weapons manufacturers, or thermal coal producers. Together, these MCP tools provide comprehensive access to the data infrastructure required for continuous portfolio oversight.
 
-\texttt{get\_positions(portfolio\_id, as\_of\_date)} retrieves current holdings from the portfolio management system.
-
-\texttt{get\_market\_data(tickers, fields=["price", "volume", "volatility"])} fetches real-time data from Bloomberg.
-
-\texttt{check\_restricted\_list(tickers)} validates securities against the compliance restricted list.
-
-\texttt{calculate\_var(portfolio, confidence, horizon)} computes Value-at-Risk using the firm's risk engine.
-
-\texttt{get\_esg\_ratings(tickers)} retrieves ESG scores to verify exclusion compliance.
-
-A2A coordinates the multi-agent workflow:
-
-The Monitoring Agent publishes its Agent Card: ``I monitor portfolios for mandate compliance and drift. I produce drift alerts as Tasks for rebalancing analysis.''
-
-When technology sector exposure reaches 29\% (approaching the 30\% limit), the Monitoring Agent creates a Task: ``Technology exposure approaching limit. Current: 29\%. Limit: 30\%. Largest tech holdings: AAPL (4.2\%), MSFT (3.8\%), NVDA (2.5\%). Request rebalancing analysis.''
-
-The Rebalancing Agent accepts the Task, conducts analysis, and returns an Artifact: the recommendation memo proposing to trim AAPL by 50 basis points and reallocate to healthcare.
-
-The Compliance Agent receives the recommendation, validates it, and returns an approval Artifact.
-
-The Risk Agent calculates before/after metrics and returns analysis Artifacts.
-
-The orchestrating system assembles all Artifacts into a decision package for PM review.
+A2A protocol coordinates the workflow across the four specialized agents. The process begins with agent discovery: the Monitoring Agent publishes its Agent Card to the system, advertising its capabilities: ``I monitor portfolios for mandate compliance and drift. I produce drift alerts as Tasks for rebalancing analysis.'' This card enables the orchestrating system to route appropriate work to the Monitoring Agent. When the agent detects that technology sector exposure has reached 29\%, approaching the 30\% mandate limit, it creates an A2A Task containing the situation analysis: ``Technology exposure approaching limit. Current: 29\%. Limit: 30\%. Largest tech holdings: AAPL (4.2\%), MSFT (3.8\%), NVDA (2.5\%). Request rebalancing analysis.'' The Rebalancing Agent accepts this Task, conducts its optimization analysis considering current market conditions and transaction costs, and returns an Artifact containing the recommendation memo, in this case proposing to trim the AAPL position by 50 basis points and reallocate the proceeds to healthcare sector holdings. Before this recommendation reaches the portfolio manager, the Compliance Agent receives it for validation, checking restricted lists and mandate compliance, and returns an approval Artifact if all checks pass. Simultaneously, the Risk Agent calculates before-and-after portfolio metrics (VaR, tracking error, factor exposures) and returns its analysis as supporting Artifacts. The orchestrating system assembles all these Artifacts (the rebalancing recommendation, compliance approval, and risk analysis) into a complete decision package for the portfolio manager's review. This A2A coordination enables specialized agents to work in parallel while maintaining proper sequencing and validation gates.
 
 \subsubsection{Multi-Agent Failure Modes}
 
 Multi-agent architectures introduce coordination failures beyond single-agent limitations:
 
-\textbf{Cascading errors across agent boundaries.} The Monitoring Agent incorrectly calculates sector exposure due to a stale price feed---it shows technology at 28\% when actual exposure is 31\%, already over the mandate limit. The Rebalancing Agent receives this incorrect signal and generates recommendations to \textit{increase} technology exposure. The Compliance Agent validates against the same stale data. By the time a human notices, the portfolio has drifted further from mandate compliance. Bad data poisoned the entire chain.
+\textbf{Cascading errors across agent boundaries.} The Monitoring Agent incorrectly calculates sector exposure due to a stale price feed; it shows technology at 28\% when actual exposure is 31\%, already over the mandate limit. The Rebalancing Agent receives this incorrect signal and generates recommendations to \textit{increase} technology exposure. The Compliance Agent validates against the same stale data. By the time a human notices, the portfolio has drifted further from mandate compliance. Bad data poisoned the entire chain.
 
-\textbf{Coordination overhead exceeds single-agent simplicity.} The A2A handoffs between four agents---Monitoring, Rebalancing, Compliance, Risk---introduce latency. Each handoff requires task creation, artifact packaging, and response parsing. For simple rebalancing decisions, a single well-designed agent might outperform the orchestrated specialists because coordination overhead dominates.
+\textbf{Coordination overhead exceeds single-agent simplicity.} The A2A handoffs between the four agents (Monitoring, Rebalancing, Compliance, Risk) introduce latency. Each handoff requires task creation, artifact packaging, and response parsing. For simple rebalancing decisions, a single well-designed agent might outperform the orchestrated specialists because coordination overhead dominates.
 
 \textbf{Debugging complexity when failures span agents.} The PM rejects a recommendation as economically unreasonable. Which agent failed? Was it bad market data (Monitoring's retrieval)? Flawed optimization logic (Rebalancing's reasoning)? Overly conservative risk estimates (Risk's calculations)? Tracing causation across agent boundaries requires sophisticated logging and often manual forensic analysis.
 
@@ -268,19 +222,19 @@ The evaluation flywheel (Section~\ref{sec:agents2-eval-flywheel}) operates conti
 \subsection{Synthesis: Principles Across Domains}
 \label{sec:agents2-synthesis-principles}
 
-The two case studies---credit documentation review and portfolio management---differ in domain, time horizon, and complexity. But they share architectural principles that generalize across legal and financial applications:
+The two case studies, credit documentation review and portfolio management, differ in domain, time horizon, and complexity. But they share architectural principles that generalize across legal and financial applications:
 
-\textbf{GPA+IAT maps to concrete components.} In both cases, Goals became planning systems, Perception became MCP-connected tools, Action became controlled write operations, Iteration became the agent loop, Adaptation became memory systems, and Termination became explicit stopping criteria. The framework from Part I isn't abstract theory---it's a design checklist.
+\textbf{The framework becomes a design checklist.} Both architectures directly implemented the six properties from Part I: planning systems for goals, tools for perception and action, the agent loop for iteration, memory for adaptation, and explicit stopping criteria for termination. Abstract theory became concrete engineering.
 
-\textbf{Tools require appropriate controls.} The credit review agent couldn't modify documents or contact opposing counsel. The portfolio agent couldn't execute trades without PM approval. Tool permissions matched task requirements and risk profiles---read access was permissive, write access was gated.
+\textbf{Tools require appropriate controls.} The credit review agent couldn't modify documents or contact opposing counsel. The portfolio agent couldn't execute trades without PM approval. Tool permissions matched task requirements and risk profiles: read access was permissive, write access was gated.
 
 \textbf{Memory enables context and learning.} Both agents used episodic memory (this transaction, this portfolio), RAG (precedent deals, investment research), and semantic knowledge (legal concepts, financial principles). Memory transformed generic reasoning into domain-competent analysis.
 
-\textbf{Protocols enable integration.} MCP provided standardized tool access in both cases. A2A enabled multi-agent coordination for portfolio management. The protocols from Section~\ref{sec:agents2-protocols} aren't optional infrastructure---they're how agents connect to the systems where work actually happens.
+\textbf{Protocols enable integration.} MCP provided standardized tool access in both cases. A2A enabled multi-agent coordination for portfolio management. The protocols from Section~\ref{sec:agents2-protocols} are not optional infrastructure; they are how agents connect to the systems where work actually happens.
 
 \textbf{Humans remain in the loop.} The credit review agent produced recommendations for associate validation. The portfolio agent generated trade proposals for PM approval. Neither agent took consequential action autonomously. Human judgment remained essential for high-stakes decisions.
 
-\textbf{Evaluation is continuous.} Both deployments used three-layer evaluation---retrieval, reasoning, workflow---with metrics appropriate to their domains. Portfolio management added continuous monitoring because the task never ends. Evaluation isn't a deployment gate; it's an ongoing quality system.
+\textbf{Evaluation is continuous.} Both deployments used three-layer evaluation (retrieval, reasoning, workflow) with metrics appropriate to their domains. Portfolio management added continuous monitoring because the task never ends. Evaluation is not a deployment gate; it is an ongoing quality system.
 
 \begin{highlightbox}[title={From Architecture to Deployment}]
 The components from Sections~\ref{sec:agents2-architecture}--\ref{sec:agents2-evaluation} become a deployment checklist:

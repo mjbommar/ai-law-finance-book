@@ -7,21 +7,9 @@
 \section{Protocols for Safe Interoperation}
 \label{sec:agents2-protocols}
 
-Agents do not operate in isolation. They connect to tools, data sources, and other agents. These connections require standardized protocols---shared conventions for communication that ensure different systems can work together safely and reliably.
+Agents do not operate in isolation. They connect to tools, data sources, and other agents. These connections require standardized protocols, shared conventions for communication that ensure different systems can work together safely and reliably.
 
-Think of protocols like the Bluebook for legal citations or GAAP for financial reporting---standardized formats that enable different professionals and systems to understand each other's work. This section examines two protocols that represent the current state of agent integration: the Model Context Protocol (MCP) for connecting agents to tools, and the Agent-to-Agent Protocol (A2A) for enabling agents to collaborate with each other.
-
-\begin{highlightbox}[title={Protocols as Exemplars, Not Permanence}]
-Technology standards evolve. The specific protocols discussed here---MCP and A2A---represent the leading approaches as of late 2025. By the time you read this, they may have evolved, merged with alternatives, or been superseded.
-
-What matters for practitioners is not the protocol names but the \textit{requirements} they address:
-
-\textbf{Tool integration} requires standardized interfaces so agents can discover and invoke external capabilities without custom integration code. MCP addresses this requirement today.
-
-\textbf{Agent coordination} requires structured delegation and artifact exchange so agents can collaborate on complex tasks. A2A addresses this requirement today.
-
-These requirements are permanent. If different protocols emerge to serve them, the architectural principles in this section remain valid---only the implementation details change. Design your systems around the requirements, not the protocol names.
-\end{highlightbox}
+Think of protocols like the Bluebook for legal citations or GAAP for financial reporting, standardized formats that enable different professionals and systems to understand each other's work. This section examines two protocols that represent the current state of agent integration: the Model Context Protocol (MCP) for connecting agents to tools, and the Agent-to-Agent Protocol (A2A) for enabling agents to collaborate with each other.
 
 % ============================================================================
 % PROTOCOL LANDSCAPE
@@ -30,11 +18,23 @@ These requirements are permanent. If different protocols emerge to serve them, t
 \subsection{Protocol Landscape}
 \label{sec:agents2-proto-landscape}
 
-The agent protocol landscape has consolidated around two complementary standards. MCP handles agent-to-tool communication---the standardized way an agent interacts with databases and systems. A2A handles agent-to-agent collaboration---the standardized way agents delegate work to specialists.
+The agent protocol landscape has consolidated around two complementary standards. MCP handles agent-to-tool communication: the standardized way an agent interacts with databases and systems. A2A handles agent-to-agent collaboration: the standardized way agents delegate work to specialists.
 
-MCP emerged in November 2024 and achieved rapid adoption; as of November 2025, over 7,260 MCP servers had been catalogued in community directories \parencite{mcp-spec}. A2A launched in April 2025 with fifty-plus enterprise partners and was contributed to the Linux Foundation in June 2025 \parencite{google-a2a}. These adoption numbers will be outdated by the time you read this---what matters is that both protocols have achieved critical mass for enterprise consideration. They complement rather than compete: MCP connects agents to tools; A2A connects agents to each other.
+MCP emerged in November 2024 and achieved rapid adoption; as of November 2025, over 7,260 MCP servers had been catalogued in community directories \parencite{mcp-spec}. A2A launched in April 2025 with fifty-plus enterprise partners and was contributed to the Linux Foundation in June 2025 \parencite{google-a2a}. These adoption numbers will be outdated by the time you read this; what matters is that both protocols have achieved critical mass for enterprise consideration. They complement rather than compete: MCP connects agents to tools; A2A connects agents to each other.
 
 \paragraph{The Integration Problem} Without standardized protocols, ten agents and ten tools would require one hundred unique integrations. Protocols solve this M$\times$N problem: build once, integrate everywhere.
+
+\begin{highlightbox}[title={Protocols as Exemplars, Not Permanence}]
+Technology standards evolve. The specific protocols discussed here (MCP and A2A) represent the leading approaches as of late 2025. By the time you read this, they may have evolved, merged with alternatives, or been superseded.
+
+What matters for practitioners is not the protocol names but the \textit{requirements} they address:
+
+\textbf{Tool integration} requires standardized interfaces so agents can discover and invoke external capabilities without custom integration code. MCP addresses this requirement today.
+
+\textbf{Agent coordination} requires structured delegation and artifact exchange so agents can collaborate on complex tasks. A2A addresses this requirement today.
+
+These requirements are permanent. If different protocols emerge to serve them, the architectural principles in this section remain valid; only the implementation details change. Design your systems around the requirements, not the protocol names.
+\end{highlightbox}
 
 % ============================================================================
 % MODEL CONTEXT PROTOCOL (MCP)
@@ -43,12 +43,12 @@ MCP emerged in November 2024 and achieved rapid adoption; as of November 2025, o
 \subsection{Model Context Protocol (MCP)}
 \label{sec:agents2-mcp}
 
-MCP standardizes how agents access external tools and data sources. Before standardization, every research database had different commands and output formats---Westlaw worked one way, Lexis another, Bloomberg a third. MCP creates a common interface: learn the protocol once, access any compatible tool.
+MCP standardizes how agents access external tools and data sources. Before standardization, every research database had different commands and output formats; Westlaw worked one way, Lexis another, Bloomberg a third. MCP creates a common interface: learn the protocol once, access any compatible tool.
 
 \subsubsection{How MCP Works}
 \label{sec:agents2-mcp-arch}
 
-The architecture has three roles. The \textit{MCP Host} manages the agent and controls which tools it can access---like the firm's IT system determining database subscriptions. The \textit{MCP Client} is the agent-side component that discovers and uses tools. The \textit{MCP Server} is a tool exposing capabilities through a standardized interface---Westlaw, Bloomberg, or iManage. The \textit{Server Manifest} describes what the tool can do, like a vendor's service catalog.
+The architecture has three roles. The \textit{MCP Host} manages the agent and controls which tools it can access, like the firm's IT system determining database subscriptions. The \textit{MCP Client} is the agent-side component that discovers and uses tools. The \textit{MCP Server} is a tool exposing capabilities through a standardized interface, such as a document management system, internal knowledge base, or custom legal research tool. The \textit{Server Manifest} describes what the tool can do, like a vendor's service catalog.
 
 \begin{figure}[htbp]
 \centering
@@ -71,17 +71,17 @@ Without MCP: 10 agents $\times$ 10 tools = 100 custom integrations.
 
 With MCP: 10 agents + 10 tools = 20 implementations (each learns the protocol once).
 
-\textbf{Legal:} One agent queries Westlaw, Lexis, and Bloomberg Law through the same protocol.
+\textbf{Legal:} One agent queries document management systems, internal knowledge bases, and custom research tools through the same protocol.
 
-\textbf{Financial:} One agent accesses Bloomberg, Reuters, and FactSet through the same protocol.
+\textbf{Financial:} One agent accesses portfolio systems, risk engines, and compliance databases through the same protocol.
 \end{keybox}
 
 \subsubsection{MCP in Legal and Financial AI}
 \label{sec:agents2-mcp-legal}
 
-For legal AI, MCP connects agents to legal research databases, document management systems (iManage, NetDocuments), case management platforms, e-filing APIs, and citation formatters---supporting attorneys, paralegals, and staff across Big Law, boutique firms, and in-house departments.
+For legal AI, MCP can connect agents to document management systems, internal knowledge bases, case management platforms, and custom research tools. Major legal research platforms like Westlaw and Lexis have their own proprietary AI assistants (Co-Counsel, Protégé) rather than MCP integrations, but the protocol enables standardized access to firm-controlled resources and third-party tools that adopt the standard.
 
-For financial AI, MCP connects agents to market data feeds (Bloomberg, Reuters), portfolio management systems, compliance databases (KYC/AML, sanctions screening), risk engines (VaR, stress testing), and trade execution platforms---supporting analysts, portfolio managers, traders, and compliance officers on both buy side and sell side.
+For financial AI, MCP can connect agents to portfolio management systems, compliance databases, risk engines, and internal analytics tools. Like legal platforms, major market data providers maintain proprietary interfaces, but MCP enables standardized integration with internal systems and tools that adopt the protocol.
 
 % ============================================================================
 % AGENT-TO-AGENT PROTOCOL (A2A)
@@ -90,12 +90,12 @@ For financial AI, MCP connects agents to market data feeds (Bloomberg, Reuters),
 \subsection{Agent-to-Agent Protocol (A2A)}
 \label{sec:agents2-a2a}
 
-A2A enables collaboration between agents, complementing MCP's tool integration. If MCP is how you access resources, A2A is how you delegate work to specialists. Think of A2A as the protocol for how a partner assigns work to an associate or coordinates with outside counsel---define \textit{what} needs to be done, let the specialist determine \textit{how}.
+A2A enables collaboration between agents, complementing MCP's tool integration. If MCP is how you access resources, A2A is how you delegate work to specialists. Think of A2A as the protocol for how a partner assigns work to an associate or coordinates with outside counsel: define \textit{what} needs to be done, let the specialist determine \textit{how}.
 
 \subsubsection{How A2A Works}
 \label{sec:agents2-a2a-arch}
 
-A2A uses familiar professional concepts. \textit{Agent Cards} are capability statements---like a specialist's CV listing expertise, input requirements, and output formats. \textit{Tasks} are units of delegated work---like engagement letters specifying scope, constraints, and deadlines. \textit{Artifacts} are work products returned upon completion---draft memos, analysis reports, structured data. \textit{Communication Channels} support asynchronous, long-running work---matching reality where you assign research Monday and receive the memo Friday.
+A2A uses familiar professional concepts. \textit{Agent Cards} are capability statements, like a specialist's CV listing expertise, input requirements, and output formats. \textit{Tasks} are units of delegated work, like engagement letters specifying scope, constraints, and deadlines. \textit{Artifacts} are work products returned upon completion: draft memos, analysis reports, structured data. \textit{Communication Channels} support asynchronous, long-running work, matching reality where you assign research Monday and receive the memo Friday.
 
 \subsubsection{Task Lifecycle}
 \label{sec:agents2-a2a-principles}
@@ -113,7 +113,7 @@ Agent collaboration follows five phases mirroring professional delegation:
 
 \textbf{5. COMPLETION:} Coordinator reviews, approves, or requests revision $\rightarrow$ \textit{Like partner review}
 
-\textbf{Key insight:} A2A enables delegation without micromanagement---you define WHAT, the specialist decides HOW.
+\textbf{Key insight:} A2A enables delegation without micromanagement: you define WHAT, the specialist decides HOW.
 \end{keybox}
 
 The benefit is decoupled execution: multiple specialists work in parallel, long-running analyses proceed asynchronously, and agents from different vendors collaborate through the same protocol.
@@ -123,7 +123,7 @@ The benefit is decoupled execution: multiple specialists work in parallel, long-
 
 A2A enables multi-agent workflows mirroring professional collaboration. In legal practice, a coordinating agent receiving ``Assess regulatory compliance risks for proposed fintech product'' delegates to specialists: a Securities Law Agent, Banking Law Agent, Consumer Protection Agent, and AML Agent. Each works independently using MCP for research databases, returning structured memos via A2A for synthesis into a comprehensive assessment. The pattern applies whether coordinating associates within Big Law, outside counsel for in-house departments, or specialists at boutique firms.
 
-In financial practice, a trading orchestrator receiving ``Execute large block trade minimizing market impact'' delegates to specialists: a Market Agent assesses liquidity via MCP connections to market data; a Compliance Agent validates against position limits; a Risk Agent calculates exposure metrics; an Execution Agent implements the strategy. Each specialist uses MCP for tool access while A2A coordinates the workflow---matching how buy-side portfolio managers coordinate with traders, risk managers, and compliance officers, or how sell-side deal teams coordinate across functions.
+In financial practice, a trading orchestrator receiving ``Execute large block trade minimizing market impact'' delegates to specialists: a Market Agent assesses liquidity via MCP connections to market data; a Compliance Agent validates against position limits; a Risk Agent calculates exposure metrics; an Execution Agent implements the strategy. Each specialist uses MCP for tool access while A2A coordinates the workflow, matching how buy-side portfolio managers coordinate with traders, risk managers, and compliance officers, or how sell-side deal teams coordinate across functions.
 
 % ============================================================================
 % DUAL PROTOCOL ARCHITECTURE
@@ -132,9 +132,9 @@ In financial practice, a trading orchestrator receiving ``Execute large block tr
 \subsection{Dual Protocol Strategy}
 \label{sec:agents2-dual-protocol}
 
-Production systems typically require both protocols working in concert. Consider M\&A due diligence: the orchestrator delegates via A2A to specialists---Document Processing, Financial Analysis, Legal Risk. Each specialist uses MCP internally: the Document Agent accesses the virtual data room and document management systems; the Financial Agent queries financial databases and modeling tools; the Legal Agent searches legal research platforms and court records. Specialists return Artifacts via A2A (organized indices, risk assessments, legal memoranda) which the orchestrator synthesizes into a comprehensive report.
+Production systems typically require both protocols working in concert. Consider M\&A due diligence: the orchestrator delegates via A2A to specialists: Document Processing, Financial Analysis, Legal Risk. Each specialist uses MCP internally: the Document Agent accesses the virtual data room and document management systems; the Financial Agent queries financial databases and modeling tools; the Legal Agent searches legal research platforms and court records. Specialists return Artifacts via A2A (organized indices, risk assessments, legal memoranda) which the orchestrator synthesizes into a comprehensive report.
 
-Throughout, MCP handles agent-to-tool communication (database queries, document retrieval) while A2A handles agent-to-agent coordination (task delegation, artifact delivery). Neither protocol alone suffices---MCP provides the tool integration layer, A2A provides the coordination layer.
+Throughout, MCP handles agent-to-tool communication (database queries, document retrieval) while A2A handles agent-to-agent coordination (task delegation, artifact delivery). Neither protocol alone suffices: MCP provides the tool integration layer, A2A provides the coordination layer.
 
 % ============================================================================
 % PROTOCOL SECURITY
@@ -156,15 +156,26 @@ Both protocols require security controls paralleling professional safeguards. \t
 \subsection{Protocol Selection Guidance}
 \label{sec:agents2-proto-selection}
 
-Protocol selection follows straightforward principles:
+Protocol selection follows straightforward principles; the table below makes the routing visual.
 
-\textbf{Use MCP} when connecting to tools, databases, or APIs. The interaction is synchronous request-response: query legal research, retrieve market data, access documents, execute calculations.
+\begin{table}[htbp]
+\centering
+\caption{Protocol selection cues}
+\label{tab:agents2-protocol-selection}
+\small
+\begin{tabular}{p{0.28\textwidth}p{0.15\textwidth}p{0.16\textwidth}p{0.28\textwidth}}
+\toprule
+\textbf{Signal from workflow} & \textbf{Use} & \textbf{Typical latency} & \textbf{Examples} \\
+\midrule
+Immediate, well-defined operation & MCP & milliseconds--seconds & Query market data; retrieve filings; run VaR; fetch precedent language \\
+\midrule
+Delegated work requiring judgment & A2A & minutes--hours & Assign issue-spotting to a specialist agent; coordinate outside counsel; request independent risk analysis \\
+\midrule
+End-to-end workflow with both tools and delegation & MCP + A2A & blended & Due diligence orchestrator delegating to specialists who in turn call research, document, and compliance tools \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\textbf{Use A2A} when delegating to another agent. The interaction is asynchronous and requires independent judgment: assign research to a specialist, coordinate with outside counsel, request analysis from domain experts.
+Read the table left-to-right: detect the signal, choose the protocol path, and size latency expectations accordingly. Most production deployments land in the bottom row: delegation plus tool access with clear fallbacks to human review when protocols fail.
 
-\textbf{Use both} in production systems. An agent drafting a contract uses MCP to access templates, case law, and client data. An agent coordinating due diligence uses A2A to delegate to financial, legal, and compliance specialists---each of which internally uses MCP for tool access.
-
-The decision signal is clear: if you need immediate results from a defined operation, use MCP. If the work requires independent judgment and takes minutes to hours, use A2A. Most complex legal and financial workflows require both---exactly like human professionals who use databases (MCP-like) while coordinating with colleagues (A2A-like).
-
-\paragraph{Maturity Levels (as of late 2025)} MCP is production-ready for tool integration. Major vendors support it; community servers exist for most common integrations; the protocol has stabilized. A2A is earlier in its maturity cycle---the specification is stable, enterprise pilots are underway, but cross-vendor agent coordination remains more aspirational than reliable. Plan to use MCP today; evaluate A2A for near-term roadmaps while designing fallback paths for human coordination where A2A would theoretically apply.
-
+\paragraph{Maturity (late 2025)} MCP is production-ready for tool integration across vendors. A2A is earlier: the spec is stable and pilots are active, but cross-vendor reliability remains uneven. Design fallbacks to human coordination where A2A would ideally apply.

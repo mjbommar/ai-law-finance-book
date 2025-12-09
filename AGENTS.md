@@ -63,6 +63,7 @@ Capture for each citation: title, authors, venue/body, date, stable URL/DOI, and
 - When summarizing, preserve hedges/limitations from sources. Highlight uncertainties.
 - For code/data claims, add minimal runnable artifacts (script or notebook) or clearly mark as conceptual.
 - Keep drafts LaTeX‑ready; write section stubs with labels and TODOs rather than leaving placeholders in prose.
+- Use `scripts/tex_*.py` tools to analyze prose quality (see [CLAUDE.md](CLAUDE.md) for usage).
 
 ## Quality Gates (PR checklist)
 - [ ] Compiles without error (`make pdf`), no undefined refs (`make validate`).
