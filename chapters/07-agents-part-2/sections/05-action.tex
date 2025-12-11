@@ -13,7 +13,7 @@
 
 A junior associate's job extends beyond research to producing work product. They draft memos, send emails, file documents, schedule meetings. A trader's job extends beyond analysis to execution. They enter orders, route trades, confirm allocations. The value comes from action, not just observation.
 
-Agent systems face the same imperative. An agent that only reads---searching databases, retrieving documents, analyzing information---produces no deliverable. To complete tasks, agents must \textit{act}: generate documents, send communications, update systems, execute transactions. Action implements the ``A'' in the GPA framework.
+Agentic systems face the same imperative. An agent that only reads---searching databases, retrieving documents, analyzing information---produces no deliverable. To complete tasks, agents must \textit{act}: generate documents, send communications, update systems, execute transactions. Action implements the ``A'' in the GPA framework.
 
 \begin{definitionbox}[title={Action Tools}]
 \keyterm{Action tools} enable agents to change the state of external systems. Unlike perception tools (read-only), action tools \textit{write}: they file documents, send messages, execute trades, update databases. Once executed, some actions cannot be undone.
@@ -239,7 +239,7 @@ Circuit breakers transform potential runaway failures into controlled pauses tha
 \subsection{Evaluating Action Capabilities}
 \label{sec:agents2-action-eval}
 
-When evaluating agent systems, assess action capabilities against these criteria:
+When evaluating agentic systems, assess action capabilities against these criteria:
 
 \textbf{Action inventory}: What actions can the agent take? Map available action tools against workflow requirements.
 
@@ -260,13 +260,13 @@ When evaluating agent systems, assess action capabilities against these criteria
 \subsection{From Action to Governance}
 \label{sec:agents2-action-governance}
 
-Action tools are where agent systems create real-world consequences. The governance implications are significant:
+Action tools are where agentic systems create real-world consequences. The governance implications are significant:
 
 \textbf{Perception risks} (Q3) include accessing wrong or incomplete information. The agent reasons from bad data, but no external harm has occurred yet.
 
 \textbf{Action risks} (Q4) include taking wrong actions that harm clients, violate regulations, or create liability. The consequences are external and may be irreversible.
 
-The following chapter examines action governance in detail: actuation controls that limit what agents can do, approval gates that require human verification, and audit trails that enable accountability.
+This section introduced action control concepts at the architectural level: the reversibility framework, approval workflow patterns, and rate limiting mechanisms. The following chapter---\textit{How to Govern an Agent}---provides comprehensive governance treatment, examining the five-layer governance stack, dimensional controls that calibrate oversight to risk, regulatory compliance frameworks specific to legal and financial services, and accountability structures that assign responsibility when things go wrong.
 
 Within this chapter, \Cref{sec:agents2-escalation} examines when agents should \textit{not} act---recognizing situations that require human decision-making rather than autonomous execution. The interplay between action capability and escalation judgment is central to safe agent deployment.
 

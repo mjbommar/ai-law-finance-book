@@ -13,7 +13,7 @@
 
 The best junior associates know when to go to the supervisor. They don't interrupt the partner with every question, but they also don't proceed confidently into territory beyond their expertise. They recognize authority boundaries: ``I can draft this motion, but I need partner review before filing.'' They recognize competence limits: ``I've researched for two hours and can't find clear authority---I should ask someone with more experience.'' They recognize high-stakes situations: ``The client is asking about strategy, not just research---this needs partner involvement.''
 
-Agent systems need the same judgment. An agent that never escalates will eventually exceed its competence, authority, or the bounds of safe autonomous operation. An agent that escalates everything provides no value: it becomes a complicated way to route work to humans. The challenge is knowing where to draw the line.
+Agentic systems need the same judgment. An agent that never escalates will eventually exceed its competence, authority, or the bounds of safe autonomous operation. An agent that escalates everything provides no value: it becomes a complicated way to route work to humans. The challenge is knowing where to draw the line.
 
 \begin{definitionbox}[title={Escalation}]
 \keyterm{Escalation} transfers control from the agent to a human when autonomous execution should stop. Unlike termination, which ends the task (success or failure), escalation pauses the task and requests human input before continuing.
@@ -141,17 +141,29 @@ Five patterns integrate human oversight into agent workflows, each suited to dif
 \subsection{Domain-Specific Escalation Requirements}
 \label{sec:agents2-escalation-domain}
 
+Legal and financial services impose domain-specific escalation requirements rooted in professional responsibility rules and regulatory obligations. This section identifies the escalation triggers; the following chapter---\textit{How to Govern an Agent}---provides comprehensive treatment of the underlying regulatory frameworks and compliance structures.
+
 \paragraph{Legal Practice}
 
-Legal practice imposes domain-specific escalation requirements rooted in professional responsibility rules. ABA Model Rule 1.1 requires competent representation, which means agents must escalate when matters exceed their training or the supervising attorney's oversight capacity. Novel legal questions, complex strategic decisions, and matters outside the firm's expertise all warrant escalation---not because the agent failed, but because competence requires recognizing the limits of one's capabilities.
+Legal practice escalation requirements arise from professional responsibility rules:
 
-Privilege protection demands particular vigilance. Attorney-client privilege can be waived by disclosure, and any action that might expose privileged information to third parties requires attorney review before execution. Similarly, conflicts of interest require human judgment because agents cannot assess conflicts without access to the full picture of firm relationships; potential conflict situations must escalate to conflicts counsel. Candor to tribunal creates another mandatory escalation trigger: if the agent discovers authority adverse to the client's position that the attorney may have an obligation to disclose, it must escalate immediately rather than suppressing the finding.
+\begin{itemize}[nosep]
+\item \textbf{Competence limits}: Escalate when matters exceed agent training or supervising attorney capacity (ABA Model Rule 1.1)
+\item \textbf{Privilege protection}: Escalate any action that might expose privileged information to third parties
+\item \textbf{Conflicts of interest}: Escalate potential conflict situations to conflicts counsel
+\item \textbf{Candor to tribunal}: Escalate immediately if adverse authority is discovered that may require disclosure
+\end{itemize}
 
 \paragraph{Financial Services}
 
-Financial services escalation requirements arise from regulatory obligations and fiduciary duties. Suitability and fiduciary duty require that investment recommendations be suitable for the client, but agents cannot fully assess suitability without understanding client circumstances, risk tolerance, and investment objectives. Recommendations therefore escalate for adviser review before reaching the client.
+Financial services escalation requirements arise from regulatory obligations and fiduciary duties:
 
-Regulatory thresholds create mandatory escalation points. Large trades trigger reporting requirements; position accumulations have disclosure thresholds; certain transactions require pre-approval. Agents must recognize when thresholds approach and escalate for compliance review before crossing them. Material non-public information demands immediate escalation: if the agent encounters potential MNPI, it cannot assess whether the information is material or public, so compliance judgment is required. Risk limits similarly require human judgment. Trading agents must escalate when proposed actions would breach risk limits, even if the trade itself appears profitable; risk management requires human judgment about whether limit exceptions are appropriate.
+\begin{itemize}[nosep]
+\item \textbf{Suitability and fiduciary duty}: Escalate investment recommendations for adviser review before client delivery
+\item \textbf{Regulatory thresholds}: Escalate when trades approach reporting thresholds or disclosure requirements
+\item \textbf{Material non-public information}: Escalate immediately if potential MNPI is encountered
+\item \textbf{Risk limits}: Escalate when proposed actions would breach position limits or risk thresholds
+\end{itemize}
 
 % ----------------------------------------------------------------------------
 % Evaluating Escalation
@@ -160,7 +172,7 @@ Regulatory thresholds create mandatory escalation points. Large trades trigger r
 \subsection{Evaluating Escalation Mechanisms}
 \label{sec:agents2-escalation-eval}
 
-When evaluating agent systems, assess escalation mechanisms against six criteria that distinguish effective systems from those that either escalate too much or too little.
+When evaluating agentic systems, assess escalation mechanisms against six criteria that distinguish effective systems from those that either escalate too much or too little.
 
 Coverage determines whether all appropriate situations trigger escalation. Test with edge cases: novel situations that should clearly require human judgment, conflicting data that the agent cannot resolve, near-threshold conditions that might slip through. A system with coverage gaps will occasionally proceed autonomously when it should not. Calibration determines whether thresholds are set appropriately. Too sensitive and the agent escalates everything, providing no value; too loose and it proceeds when it should not. Calibrate thresholds against real scenarios, adjusting until the agent escalates when practitioners agree it should.
 

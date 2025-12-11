@@ -56,7 +56,7 @@ Calibrating these thresholds is challenging. Agents may be overconfident, procee
 
 Some tasks prove impossible as specified. Analysis may reveal conflicting requirements, missing prerequisites, or logical impossibilities. In these cases, the agent should report the impossibility honestly rather than proceeding with a compromised approach that satisfies the letter of the instruction while violating its spirit.
 
-\textbf{Escalation Triggers}: Some situations require human judgment regardless of whether the task has succeeded, failed, or consumed its budget. Novel situations that do not match training patterns need human expertise to navigate. High-stakes decisions warrant human approval even when the agent is confident, because the consequences of error justify the overhead of review. Authority boundaries define what the agent can do autonomously; actions beyond those boundaries require escalation by design, not because something went wrong.
+\textbf{Escalation Triggers}: Some situations require human judgment regardless of whether the task has succeeded, failed, or consumed its budget. Novel situations that do not match training patterns need human expertise to navigate. High-stakes decisions warrant human approval even when the agent is confident, because the consequences of error justify the overhead of review. Authority boundaries define what the agent can do autonomously; actions beyond those boundaries require escalation by design, not because something went wrong. These escalation patterns are one component of the broader governance architecture---including oversight mechanisms and accountability structures---detailed in the following chapter, \textit{How to Govern an Agent}.
 
 \Cref{sec:agents2-escalation} provides comprehensive treatment of when and how to escalate.
 
@@ -148,7 +148,7 @@ Beyond reporting status, agents should recommend next steps when possible. ``Rec
 \subsection{Evaluating Termination Capabilities}
 \label{sec:agents2-termination-eval}
 
-When evaluating agent systems, assess termination capabilities against six criteria that distinguish robust systems from fragile ones.
+When evaluating agentic systems, assess termination capabilities against six criteria that distinguish robust systems from fragile ones.
 
 Success criteria clarity determines whether termination is predictable. Are termination conditions explicit? Can you predict when the agent will stop? Systems with vague or implicit termination conditions produce unpredictable behavior. Budget enforcement determines whether limits actually constrain execution. Test by setting tight budgets and verifying the agent actually stops; some systems log budget exhaustion but continue anyway. Loop detection determines whether the agent recognizes when it is stuck. Test with impossible tasks or unavailable tools; a system without loop detection will spin indefinitely.
 
@@ -165,4 +165,4 @@ Termination defines when agents stop, but not all stopping is the same. Success 
 
 The third category is critical. An agent might complete its search and find conflicting authority, leaving it unable to determine whether the research question has been answered. It might approach a decision that exceeds its authorization. It might recognize that the situation is novel in ways that make its confidence unreliable. In each case, the right response is not to terminate with a result or a failure, but to terminate with a request for human input.
 
-\Cref{sec:agents2-escalation} examines this closely related question: when should an agent stop autonomous operation and ask for human help? Termination and escalation together define the boundaries of autonomous execution. Without termination, agents run forever. Without escalation, agents exceed authority. These boundaries make agent deployment safe---or at least safer.
+\Cref{sec:agents2-escalation} examines this closely related question: when should an agent stop autonomous operation and ask for human help? Termination and escalation together define the boundaries of autonomous execution. Without termination, agents run forever. Without escalation, agents exceed authority. These boundaries make agent deployment safe---or at least safer. The following chapter---\textit{How to Govern an Agent}---builds on these termination and escalation mechanisms, providing the governance architecture that enables robust oversight, regulatory compliance, and accountability for agentic system deployments.

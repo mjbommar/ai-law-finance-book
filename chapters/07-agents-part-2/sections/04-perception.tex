@@ -13,7 +13,7 @@
 
 A junior associate's effectiveness depends not just on reasoning ability but on access. The ability to query Westlaw, access Bloomberg terminals, and search the firm's precedent database determines what problems the associate can actually solve. Without access to information sources, even the most capable professional reasons in a vacuum.
 
-Agent systems face the same constraint. An LLM can reason about legal and financial concepts, but without \textit{perception tools}---interfaces to external information---it cannot access current case law, market prices, client documents, or regulatory filings. Perception tools are the library card, the database subscription, and the research assistant combined: the mechanisms through which agents observe the world.
+Agentic systems face the same constraint. An LLM can reason about legal and financial concepts, but without \textit{perception tools}---interfaces to external information---it cannot access current case law, market prices, client documents, or regulatory filings. Perception tools are the library card, the database subscription, and the research assistant combined: the mechanisms through which agents observe the world.
 
 \begin{definitionbox}[title={Tools and Perception}]
 A \keyterm{tool} is a function that allows an agent to interact with external systems. \keyterm{Perception tools} are read-only: they observe without changing the world. The agent queries a database, retrieves a document, or fetches market data, while the external system's state remains unchanged.
@@ -153,7 +153,7 @@ Most critically, perception must respect confidentiality boundaries:
 
 \textbf{Audit trails}: Every perception must be logged---what was accessed, by which agent, for which matter. This enables compliance review and breach detection.
 
-See \Cref{sec:agents2-memory} for detailed treatment of isolation requirements in memory systems.
+See \Cref{sec:agents2-memory} for detailed treatment of isolation requirements in memory systems. Implementing these isolation requirements involves governance frameworks detailed in the following chapter---\textit{How to Govern an Agent}---which addresses regulation, controls, and compliance structures for agent deployments in regulated industries.
 
 % ----------------------------------------------------------------------------
 % Tool Design Principles for Perception
@@ -193,7 +193,7 @@ The first tells you nothing. The second explains what happened and suggests reco
 \subsection{Evaluating Perception Capabilities}
 \label{sec:agents2-perception-eval}
 
-When evaluating agent systems, assess perception against these criteria:
+When evaluating agentic systems, assess perception against these criteria:
 
 \textbf{Coverage}: Assess which sources the agent can access. A litigation agent that queries Westlaw but not state-specific databases has incomplete coverage. Map available perception tools against information needs to identify gaps.
 

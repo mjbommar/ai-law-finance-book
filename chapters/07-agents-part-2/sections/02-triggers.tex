@@ -31,7 +31,7 @@ Agentic systems operate in the same way. A system with tools, memory, and planni
 \textbf{Escalation events}: Internal signals that ask for human help (budget exhaustion, low confidence).
 \end{definitionbox}
 
-Before an agent can reason or act, it must first notice that work exists. Channels are the sensory apparatus of the system: the ways it becomes aware of its environment and the tasks it must accomplish—just as a lawyer cannot respond to a motion they never received.
+Before an agentic system can reason or act, it must first notice that work exists. Channels are the sensory apparatus of the system: the ways it becomes aware of its environment and the tasks it must accomplish—just as a lawyer cannot respond to a motion they never received.
 
 \input{figures/fig-trigger-channels}
 
@@ -42,25 +42,25 @@ Before an agent can reason or act, it must first notice that work exists. Channe
 \subsection{External Feeds: The World Pushes Work to You}
 \label{sec:agents2-external-feeds}
 
-External feeds deliver events from systems outside the agent's direct control. The external system pushes notifications when events occur, much like receiving service of process rather than checking the courthouse daily to see if you have been sued.
+External feeds deliver events from systems outside the agentic system's direct control. The external system pushes notifications when events occur, much like receiving service of process rather than checking the courthouse daily to see if you have been sued.
 
-\textbf{Legal and Regulatory Feeds}: Court docket systems (CM/ECF, state e-filing) send notifications when documents are filed; an agent receives these alerts, retrieves filed documents via PACER, analyzes contents, and triggers appropriate responses. The SEC's EDGAR system publishes corporate filings with programmatic access, enabling agents to monitor competitors' 10-Ks and flag material differences from your company's disclosures. Regulatory agencies publish through the Federal Register and agency websites. Citator alerts from Westlaw and Lexis notify when monitored cases are cited or overruled.
+\textbf{Legal and Regulatory Feeds}: Court docket systems (CM/ECF, state e-filing) send notifications when documents are filed; an agentic system receives these alerts, retrieves filed documents via PACER, analyzes contents, and triggers appropriate responses. The SEC's EDGAR system publishes corporate filings with programmatic access, enabling agentic systems to monitor competitors' 10-Ks and flag material differences from your company's disclosures. Regulatory agencies publish through the Federal Register and agency websites. Citator alerts from Westlaw and Lexis notify when monitored cases are cited or overruled.
 
-\textbf{Financial Market Feeds}: Financial institutions receive real-time market data through Bloomberg, Reuters, and similar providers. A portfolio management agent subscribes to price alerts, receives notifications when thresholds are crossed, evaluates rebalancing rules, and either executes trades within risk limits or escalates to a portfolio manager. Position and P\&L updates cascade through financial systems: trades trigger position updates, which trigger risk recalculation, compliance checks, and dashboard updates. News feeds deliver headlines, earnings, and sentiment analytics; agents assess materiality and alert managers when news appears significant.
+\textbf{Financial Market Feeds}: Financial institutions receive real-time market data through Bloomberg, Reuters, and similar providers. A portfolio management agentic system subscribes to price alerts, receives notifications when thresholds are crossed, evaluates rebalancing rules, and either executes trades within risk limits or escalates to a portfolio manager. Position and P\&L updates cascade through financial systems: trades trigger position updates, which trigger risk recalculation, compliance checks, and dashboard updates. News feeds deliver headlines, earnings, and sentiment analytics; agentic systems assess materiality and alert managers when news appears significant.
 
 \begin{highlightbox}[title={Speed vs. Reasoning: A Critical Distinction}]
-Market data arrives at millisecond granularity. LLM-based reasoning operates at second-to-minute timescales. This fundamental mismatch determines where agents add value in financial workflows.
+Market data arrives at millisecond granularity. LLM-based reasoning operates at second-to-minute timescales. This fundamental mismatch determines where agentic systems add value in financial workflows.
 
-\textbf{Agents are not suited for:} High-frequency trading, market-making, latency-sensitive execution. These domains require deterministic algorithms operating at microsecond latencies. An LLM reasoning loop, even a fast one, cannot compete.
+\textbf{Agentic systems are not suited for:} High-frequency trading, market-making, latency-sensitive execution. These domains require deterministic algorithms operating at microsecond latencies. An LLM reasoning loop, even a fast one, cannot compete.
 
-\textbf{Agents are suited for:} Strategic portfolio decisions, investment thesis development, rebalancing analysis, compliance monitoring, research synthesis. These tasks operate on timescales of minutes to hours, where reasoning quality matters more than latency.
+\textbf{Agentic systems are suited for:} Strategic portfolio decisions, investment thesis development, rebalancing analysis, compliance monitoring, research synthesis. These tasks operate on timescales of minutes to hours, where reasoning quality matters more than latency.
 
-\textbf{The architecture pattern:} Fast deterministic systems handle real-time data capture and threshold detection. When thresholds trigger (position approaching limit, price target hit, anomaly detected), they generate events that LLM agents process. The agent's role is strategic reasoning and recommendation, not execution speed. This complements latency-sensitive pipelines: keep the microsecond path deterministic, hand off to the agent only once an alert is raised.
+\textbf{The architecture pattern:} Fast deterministic systems handle real-time data capture and threshold detection. When thresholds trigger (position approaching limit, price target hit, anomaly detected), they generate events that agentic systems process. The agentic system's role is strategic reasoning and recommendation, not execution speed. This complements latency-sensitive pipelines: keep the microsecond path deterministic, hand off to the agentic system only once an alert is raised.
 
-Match agent capabilities to task requirements. Speed-critical tasks need traditional algorithms; reasoning-critical tasks need agents.
+Match agentic system capabilities to task requirements. Speed-critical tasks need traditional algorithms; reasoning-critical tasks need agentic systems.
 \end{highlightbox}
 
-\textbf{Integration Patterns}: External feeds reach agents through \keyterm{webhooks} (HTTP callbacks for immediate notification) or \keyterm{message queues} (durable event streams with delivery guarantees). Webhooks work well for low-volume, time-sensitive events where immediate delivery matters and occasional missed events are acceptable. Message queues provide ordering, durability, and replay capabilities essential for regulated applications requiring audit trails. In practice, many systems use both: a portfolio management system might use webhooks to receive immediate notification when a stock price crosses a stop-loss threshold, while using message queues to process daily trade confirmations that require guaranteed delivery and audit logging.
+\textbf{Integration Patterns}: External feeds reach agentic systems through \keyterm{webhooks} (HTTP callbacks for immediate notification) or \keyterm{message queues} (durable event streams with delivery guarantees). Webhooks work well for low-volume, time-sensitive events where immediate delivery matters and occasional missed events are acceptable. Message queues provide ordering, durability, and replay capabilities essential for regulated applications requiring audit trails. In practice, many systems use both: a portfolio management system might use webhooks to receive immediate notification when a stock price crosses a stop-loss threshold, while using message queues to process daily trade confirmations that require guaranteed delivery and audit logging.
 
 % ----------------------------------------------------------------------------
 % Human Prompts as Events
@@ -69,13 +69,13 @@ Match agent capabilities to task requirements. Speed-critical tasks need traditi
 \subsection{Human Prompts as Events}
 \label{sec:agents2-human-events}
 
-Human prompts feel different from external feeds because they are interactive and synchronous. However, at the architectural level a human prompt is still just another event type: the user generates an event, the agent receives it through a channel, processes it, and responds. Treating prompts this way simplifies design, because all events can flow through common routing and prioritization logic rather than requiring separate code paths for ``chat'' versus ``background'' work.
+Human prompts feel different from external feeds because they are interactive and synchronous. However, at the architectural level a human prompt is still just another event type: the user generates an event, the agentic system receives it through a channel, processes it, and responds. Treating prompts this way simplifies design, because all events can flow through common routing and prioritization logic rather than requiring separate code paths for ``chat'' versus ``background'' work.
 
-\textbf{Chat interfaces} are the most direct channel. The associate types ``Find Fifth Circuit authority on personal jurisdiction for e-commerce defendants,'' the agent searches and presents summaries, and the associate follows up with refinements. The analyst asks for revenue growth comparisons across portfolio companies, receives a table, and requests additional filtering. Chat enables iterative clarification while maintaining architectural consistency: each message is simply an event processed through the standard agent loop, with tighter latency expectations than background tasks.
+\textbf{Chat interfaces} are the most direct channel. The associate types ``Find Fifth Circuit authority on personal jurisdiction for e-commerce defendants,'' the agentic system searches and presents summaries, and the associate follows up with refinements. The analyst asks for revenue growth comparisons across portfolio companies, receives a table, and requests additional filtering. Chat enables iterative clarification while maintaining architectural consistency: each message is simply an event processed through the standard loop, with tighter latency expectations than background tasks.
 
-\textbf{Email routing} enables agents to process work arriving through existing communication channels. A general counsel forwards a business unit's compliance question to an agent mailbox; the agent extracts the question, searches relevant guidance, and emails back an assessment. The challenge is intent classification: email bodies are unstructured and may include forwarded threads with multiple topics.
+\textbf{Email routing} enables agentic systems to process work arriving through existing communication channels. A general counsel forwards a business unit's compliance question to a monitored mailbox; the agentic system extracts the question, searches relevant guidance, and emails back an assessment. The challenge is intent classification: email bodies are unstructured and may include forwarded threads with multiple topics.
 
-\textbf{Collaboration platforms} like Slack and Teams allow agents to appear as team members. Users @mention the agent in channels, send direct messages, or use slash commands. The litigation team discussing strategy can invoke research directly in their coordination channel. Security requires authorization checks at the agent layer, since collaboration platforms may log responses and channels may include unauthorized viewers.
+\textbf{Collaboration platforms} like Slack and Teams allow agentic systems to appear as team members. Users @mention the system in channels, send direct messages, or use slash commands. The litigation team discussing strategy can invoke research directly in their coordination channel. Security requires authorization checks at the system layer, since collaboration platforms may log responses and channels may include unauthorized viewers.
 
 \textbf{Voice interfaces} work best for short, urgent requests where typing is impractical. They introduce transcription errors (legal jargon like ``Chevron deference'' may transcribe incorrectly) and authentication challenges. High-stakes voice requests should require explicit confirmation before execution.
 
@@ -88,11 +88,11 @@ Human prompts feel different from external feeds because they are interactive an
 
 Some work follows predictable schedules rather than arriving from external events or human prompts: end-of-day reconciliation, monthly compliance reporting, quarterly reviews, annual filings. For these recurring tasks, time itself triggers execution.
 
-\textbf{Calendar-driven deadlines} govern legal practice. Answer the complaint within 21 days. File motions 30 days before hearings. Respond to discovery within 30 days. Agents can monitor litigation calendars, calculate deadlines accounting for court holidays, schedule reminders as deadlines approach, and escalate if work remains incomplete. Sophisticated deadline agents go further, retrieving the complaint, extracting claims, generating draft answers with standard defenses, and presenting drafts for attorney review before filing. Financial institutions face similar deadline-driven work, from SEC reporting deadlines to tax filings to contractual obligations to lenders.
+\textbf{Calendar-driven deadlines} govern legal practice. Answer the complaint within 21 days. File motions 30 days before hearings. Respond to discovery within 30 days. Agentic systems can monitor litigation calendars, calculate deadlines accounting for court holidays, schedule reminders as deadlines approach, and escalate if work remains incomplete. Sophisticated deadline systems go further, retrieving the complaint, extracting claims, generating draft answers with standard defenses, and presenting drafts for attorney review before filing. Financial institutions face similar deadline-driven work, from SEC reporting deadlines to tax filings to contractual obligations to lenders.
 
-\textbf{Periodic compliance checks} run even when no external event triggers review. An investment compliance agent runs nightly to check portfolios against client guidelines and flag violations. A law firm conflicts agent retrieves new docket entries, extracts party names, and checks them against the conflicts database. These scheduled checks enable continuous monitoring that would be impractical manually across thousands of matters or client accounts.
+\textbf{Periodic compliance checks} run even when no external event triggers review. An investment compliance agentic system runs nightly to check portfolios against client guidelines and flag violations. A law firm conflicts system retrieves new docket entries, extracts party names, and checks them against the conflicts database. These scheduled checks enable continuous monitoring that would be impractical manually across thousands of matters or client accounts.
 
-\textbf{End-of-day workflows} in financial institutions reconcile trades, calculate valuations at market close, generate P\&L reports, and prepare risk reports for the next morning. At market close, an EOD agent retrieves final prices, marks positions to market, calculates P\&L, and identifies unexplained variances. The agent then distributes reports to stakeholders. If any step fails, the agent escalates rather than proceeding with incomplete data. Law firms run similar periodic workflows, reminding attorneys to enter time, generating draft invoices at month-end, and flagging anomalies for partner review.
+\textbf{End-of-day workflows} in financial institutions reconcile trades, calculate valuations at market close, generate P\&L reports, and prepare risk reports for the next morning. At market close, an EOD agentic system retrieves final prices, marks positions to market, calculates P\&L, and identifies unexplained variances. The system then distributes reports to stakeholders. If any step fails, the system escalates rather than proceeding with incomplete data. Law firms run similar periodic workflows, reminding attorneys to enter time, generating draft invoices at month-end, and flagging anomalies for partner review.
 
 % ----------------------------------------------------------------------------
 % Escalation Events (Brief - Full Treatment in Section 09)
@@ -101,19 +101,19 @@ Some work follows predictable schedules rather than arriving from external event
 \subsection{Escalation Events: When Agents Reach Their Limits}
 \label{sec:agents2-escalation-brief}
 
-The previous three channel types bring work into the agent system from outside. Escalation events operate internally: the agent generates an event signaling it has reached a limit and requires human intervention, transferring control to human decision-makers when the agent cannot proceed autonomously.
+The previous three channel types bring work into the agentic system from outside. Escalation events operate internally: the agentic system generates an event signaling it has reached a limit and requires human intervention, transferring control to human decision-makers when the system cannot proceed autonomously.
 
 Four escalation triggers appear most frequently:
 
-\textbf{Budget exhaustion}: The agent approaches resource limits (token consumption, iteration counts, time limits, or cost caps) and must decide whether to stop or request additional budget.
+\textbf{Budget exhaustion}: The agentic system approaches resource limits (token consumption, iteration counts, time limits, or cost caps) and must decide whether to stop or request additional budget.
 
 \textbf{Low confidence}: Uncertainty is too high for autonomous action. Conflicting authority, novel situations, or results that seem implausible warrant human review.
 
-\textbf{Approval requirements}: Certain actions require explicit human authorization regardless of the agent's confidence: filing court documents, sending client communications, executing large trades.
+\textbf{Approval requirements}: Certain actions require explicit human authorization regardless of the system's confidence: filing court documents, sending client communications, executing large trades.
 
-\textbf{Errors and anomalies}: Tools fail repeatedly, data is inconsistent, or the agent detects red flags that require human investigation.
+\textbf{Errors and anomalies}: Tools fail repeatedly, data is inconsistent, or the agentic system detects red flags that require human investigation.
 
-\Cref{sec:agents2-escalation} provides comprehensive treatment of when and how agents should escalate to humans.
+\Cref{sec:agents2-escalation} provides comprehensive treatment of when and how agentic systems should escalate to humans.
 
 % ----------------------------------------------------------------------------
 % Event Routing and Prioritization
@@ -122,15 +122,15 @@ Four escalation triggers appear most frequently:
 \subsection{Event Routing and Prioritization}
 \label{sec:agents2-routing}
 
-With events arriving from multiple channels, agents need routing and prioritization logic. A law firm routes work similarly. Client calls go to appropriate attorneys, court filings route to the litigation coordinator, research requests go to assigned associates. Agent systems implement the same pattern through a central router that receives events, examines metadata, applies routing rules, and dispatches to appropriate handlers.
+With events arriving from multiple channels, agentic systems need routing and prioritization logic. A law firm routes work similarly. Client calls go to appropriate attorneys, court filings route to the litigation coordinator, research requests go to assigned associates. Agentic systems implement the same pattern through a central router that receives events, examines metadata, applies routing rules, and dispatches to appropriate handlers.
 
-\textbf{Routing rules} map event attributes to handlers. Court filing notifications for Matter 12345 route to that matter's litigation agent. SEC filings by portfolio companies route to the monitoring agent. Routing can be static (predefined rules) or dynamic (classifiers that analyze content and identify topics). For multi-agent architectures, routing determines delegation: an orchestrator receives high-level tasks, classifies them, and routes to specialist agents.
+\textbf{Routing rules} map event attributes to handlers. Court filing notifications for Matter 12345 route to that matter's litigation subsystem. SEC filings by portfolio companies route to the monitoring subsystem. Routing can be static (predefined rules) or dynamic (classifiers that analyze content and identify topics). For multi-agent architectures, routing determines delegation: an orchestrator receives high-level tasks, classifies them, and routes to specialist components.
 
 \textbf{Priority queues} implement tiered processing. Urgent events (emergency motions, margin calls) enter the high-priority queue and are processed immediately, potentially interrupting lower-priority work. Routine tasks enter standard queues. Background work (database updates, model retraining) runs when resources are idle. Priority can be rule-based (certain event types always urgent) or adaptive (priority escalates as deadlines approach).
 
-\textbf{Temporal constraints} require processing within specific windows. Court filings have deadlines, trading must occur during market hours, EOD reports must complete before the next morning. Agents track these constraints, calculate time remaining, and escalate priority as deadlines approach.
+\textbf{Temporal constraints} require processing within specific windows. Court filings have deadlines, trading must occur during market hours, EOD reports must complete before the next morning. Agentic systems track these constraints, calculate time remaining, and escalate priority as deadlines approach.
 
-\textbf{Overload management} prevents cascading failures when events arrive faster than processing capacity. Rate limiting caps how many events agents accept per minute, protecting downstream APIs. Backpressure signals upstream systems to slow down. Load shedding drops low-priority work to preserve capacity for critical tasks during peak demand. During a market crash, trade execution and risk calculations take precedence; routine reporting can wait.
+\textbf{Overload management} prevents cascading failures when events arrive faster than processing capacity. Rate limiting caps how many events agentic systems accept per minute, protecting downstream APIs. Backpressure signals upstream systems to slow down. Load shedding drops low-priority work to preserve capacity for critical tasks during peak demand. During a market crash, trade execution and risk calculations take precedence; routine reporting can wait.
 
 % ----------------------------------------------------------------------------
 % Diagram: Event Routing Architecture
@@ -192,9 +192,9 @@ With events arriving from multiple channels, agents need routing and prioritizat
 \subsection{Surfaces: How Users Experience Agent Systems}
 \label{sec:agents2-surfaces}
 
-The same underlying architecture can manifest through different user interfaces, or \textit{surfaces}. Understanding surfaces matters because the appropriate surface depends on the task, the user's expertise, and how the output will be used. Three primary surfaces serve different purposes. Chat surfaces suit interactive exploration, where the partner thinking through case strategy or the analyst exploring market conditions remains actively engaged, refining direction through dialogue. Automation surfaces suit continuous monitoring such as portfolio surveillance, docket tracking, and compliance alerts, where the agent works in the background and users receive outputs only when relevant. Document surfaces suit defined deliverables like research memos, due diligence reports, and client presentations, where the agent produces work products for human review and editing before distribution.
+The same underlying architecture can manifest through different user interfaces, or \textit{surfaces}. Understanding surfaces matters because the appropriate surface depends on the task, the user's expertise, and how the output will be used. Three primary surfaces serve different purposes. Chat surfaces suit interactive exploration, where the partner thinking through case strategy or the analyst exploring market conditions remains actively engaged, refining direction through dialogue. Automation surfaces suit continuous monitoring such as portfolio surveillance, docket tracking, and compliance alerts, where the agentic system works in the background and users receive outputs only when relevant. Document surfaces suit defined deliverables like research memos, due diligence reports, and client presentations, where the agentic system produces work products for human review and editing before distribution.
 
-Most deployments combine these surfaces in practice: chat for ad hoc queries and exploratory thinking, automation for continuous monitoring and alerting, and document generation for formal deliverables that must be filed, sent to clients, or presented to committees. The underlying agent architecture supports all three; the surface simply determines how users encounter the system in their day-to-day work.
+Most deployments combine these surfaces in practice: chat for ad hoc queries and exploratory thinking, automation for continuous monitoring and alerting, and document generation for formal deliverables that must be filed, sent to clients, or presented to committees. The underlying agentic system architecture supports all three; the surface simply determines how users encounter the system in their day-to-day work.
 
 % ----------------------------------------------------------------------------
 % Evaluating Trigger Systems
@@ -203,17 +203,17 @@ Most deployments combine these surfaces in practice: chat for ad hoc queries and
 \subsection{Evaluating Trigger Systems}
 \label{sec:agents2-evaluating-triggers}
 
-When evaluating agent systems, whether building or buying, assess trigger capabilities against five criteria:
+When evaluating agentic systems, whether building or buying, assess trigger capabilities against five criteria:
 
-\textbf{Coverage}: Does the system receive events from all relevant sources? A litigation agent that monitors CM/ECF but not state court dockets has incomplete coverage.
+\textbf{Coverage}: Does the system receive events from all relevant sources? A litigation agentic system that monitors CM/ECF but not state court dockets has incomplete coverage.
 
-\textbf{Latency}: How quickly do events reach the agent? Real-time market data requires sub-second delivery; docket alerts can tolerate minutes.
+\textbf{Latency}: How quickly do events reach the agentic system? Real-time market data requires sub-second delivery; docket alerts can tolerate minutes.
 
 \textbf{Reliability}: What happens when feeds fail? Systems need retry logic, fallback sources, and alerting when data goes stale.
 
 \textbf{Priority mechanisms}: Can the system distinguish urgent from routine? During a market crash or litigation crisis, the right events must reach the right handlers immediately.
 
-\textbf{Auditability}: Is every trigger logged? When a regulator asks why the agent took action, you need a complete record of the triggering event.
+\textbf{Auditability}: Is every trigger logged? When a regulator asks why the agentic system took action, you need a complete record of the triggering event. The following chapter---\textit{How to Govern an Agent}---provides comprehensive treatment of audit requirements, regulatory compliance frameworks, and governance controls.
 
 % ----------------------------------------------------------------------------
 % Connection to Other Questions
@@ -222,18 +222,18 @@ When evaluating agent systems, whether building or buying, assess trigger capabi
 \subsection{From Triggers to Action}
 \label{sec:agents2-triggers-to-action}
 
-Triggers answer how work reaches the agent, but triggering is only the beginning. Once an event arrives, the agent must:
+Triggers answer how work reaches the agentic system, but triggering is only the beginning. Once an event arrives, the agentic system must:
 
 \begin{itemize}[nosep]
 \item \textbf{Understand intent} (Q2, \Cref{sec:agents2-intent}): What is being asked?
-\item \textbf{Perceive information} (Q3, \Cref{sec:agents2-perception}): What does the agent need to know?
-\item \textbf{Take action} (Q4, \Cref{sec:agents2-action}): What should the agent do?
+\item \textbf{Perceive information} (Q3, \Cref{sec:agents2-perception}): What does the system need to know?
+\item \textbf{Take action} (Q4, \Cref{sec:agents2-action}): What should the system do?
 \item \textbf{Remember context} (Q5, \Cref{sec:agents2-memory}): What should persist across sessions?
 \item \textbf{Plan execution} (Q6, \Cref{sec:agents2-planning}): How should work be decomposed?
 \item \textbf{Recognize completion} (Q7, \Cref{sec:agents2-termination}): When is the task done?
 \item \textbf{Escalate when needed} (Q8, \Cref{sec:agents2-escalation}): When should humans intervene?
 \end{itemize}
 
-The connection between questions is direct. An external feed delivers a court filing notification. The router classifies it as urgent litigation work and dispatches to the litigation agent. The agent retrieves case context from memory, downloads the filed document through PACER, analyzes content, searches for responsive authority, generates deadline calculations, and drafts a response strategy. At each step, the agent might escalate: low confidence in legal analysis triggers escalation to a senior litigator; filing a responsive document requires approval; approaching budget limits prompts a status update.
+The connection between questions is direct. An external feed delivers a court filing notification. The router classifies it as urgent litigation work and dispatches to the litigation agentic system. The system retrieves case context from memory, downloads the filed document through PACER, analyzes content, searches for responsive authority, generates deadline calculations, and drafts a response strategy. At each step, the system might escalate: low confidence in legal analysis triggers escalation to a senior litigator; filing a responsive document requires approval; approaching budget limits prompts a status update.
 
-\Cref{sec:agents2-intent} examines the next question: once work arrives, how does the agent understand what's being asked?
+\Cref{sec:agents2-intent} examines the next question: once work arrives, how does the agentic system understand what's being asked?

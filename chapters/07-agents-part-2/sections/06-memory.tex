@@ -15,7 +15,7 @@ Every experienced legal professional knows that institutional memory makes the d
 
 The same principle applies to portfolio management. When you revisit an equity position, you do not rebuild the investment thesis from scratch. You pull the research file, review your prior DCF model and industry analysis, then update assumptions with recent earnings data and sector trends. The accumulated research---organized and accessible---enables incremental refinement rather than duplicative work.
 
-Memory in agent systems serves the same purpose: context retention across sessions and learning from experience. Without memory, every interaction starts fresh. The agent does not remember what it researched yesterday, what approaches worked, or what the human told it about case strategy. With memory, the agent maintains continuity, much like the case file that follows a matter from initial consultation through trial.
+Memory in agentic systems serves the same purpose: context retention across sessions and learning from experience. Without memory, every interaction starts fresh. The agent does not remember what it researched yesterday, what approaches worked, or what the human told it about case strategy. With memory, the agent maintains continuity, much like the case file that follows a matter from initial consultation through trial.
 
 \begin{definitionbox}[title={Agent Memory}]
 \keyterm{Agent memory} stores and retrieves information across timescales. Short-term memory is the documents spread across an associate's desk during active work. Long-term memory is the firm's knowledge management system with decades of research memos. Episodic memory is the case file that tracks what happened on this specific matter. Semantic memory is the legal principles every attorney internalizes over their career.
@@ -30,7 +30,7 @@ Memory in agent systems serves the same purpose: context retention across sessio
 
 Law firms use layered filing systems, each suited to different timescales and access patterns. The associate's desk holds today's active work, the matter file contains everything related to this engagement, and the firm's precedent database archives decades of institutional knowledge. Each layer trades immediacy for capacity, and effective practice requires knowing which system to consult when.
 
-\textbf{Working Memory (Context Window):} The associate has papers spread across their desk: the documents actively in use right now. This immediate context is \textbf{working memory}. In agent systems, working memory takes the form of the \textit{context window}, the tokens currently loaded in the LLM's attention.
+\textbf{Working Memory (Context Window):} The associate has papers spread across their desk: the documents actively in use right now. This immediate context is \textbf{working memory}. In agentic systems, working memory takes the form of the \textit{context window}, the tokens currently loaded in the LLM's attention.
 
 Just like desk space, context windows have strict limits. The associate can only have so many documents open at once; the agent can only hold so many tokens in active context (as of late 2025, 200K tokens for leading models, though this ceiling continues to rise). When the case involves more documents than fit on the desk, you need other storage systems.
 
@@ -38,13 +38,13 @@ The banker has \textit{market data on the trading screen}: live prices, recent n
 
 \textbf{Episodic Memory:} Beyond the desk sits the matter file for the specific engagement. Every memo, every piece of correspondence, every research result related to this matter goes in the file. The associate does not re-research questions already answered; the file comes first. When the partner asks ``What's our argument on venue?,'' the associate pulls the file and reads the prior research memo rather than starting over.
 
-Agent systems call this \textbf{episodic memory}: the history of actions and outcomes for a specific task or session. The agent remembers: ``I searched for Ninth Circuit venue cases, found three relevant opinions, drafted analysis, partner reviewed and approved.'' When asked a follow-up question, the agent retrieves that prior work.
+Agentic systems call this \textbf{episodic memory}: the history of actions and outcomes for a specific task or session. The agent remembers: ``I searched for Ninth Circuit venue cases, found three relevant opinions, drafted analysis, partner reviewed and approved.'' When asked a follow-up question, the agent retrieves that prior work.
 
 The financial parallel is the research file for each position. When you revisit a stock you analyzed six months ago, you do not rebuild the entire investment thesis. You pull the file, read your prior analysis, and update it with new information. The agent does the same: retrieve prior analysis, check what has changed, update conclusions.
 
 \textbf{Retrieval-Augmented Generation (RAG):} The third layer is the firm's precedent database: institutional knowledge accumulated over decades. Every time the firm handles a particular type of matter, the work product goes into the archive. When you need language for a force majeure clause in a construction contract, the precedent database offers fifty examples from prior deals. When you need briefing on qualified immunity, the database contains the firm's best arguments from the past ten years, organized by circuit and issue.
 
-Agent systems implement this through \textbf{retrieval-augmented generation (RAG)}: dynamically fetching relevant information from a large corpus to augment the agent's reasoning. RAG enables agents to access institutional knowledge beyond what fits in context.
+Agentic systems implement this through \textbf{retrieval-augmented generation (RAG)}: dynamically fetching relevant information from a large corpus to augment the agent's reasoning. RAG enables agents to access institutional knowledge beyond what fits in context.
 
 For the financial analyst, the equivalent is the firm's market research database: historical earnings reports, industry analyses, competitive landscape studies, and valuation models---all searchable and retrievable when analyzing new opportunities.
 
