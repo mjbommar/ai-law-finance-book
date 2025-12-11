@@ -7,48 +7,97 @@
 \section{Introduction}
 \label{sec:agents2-intro}
 
-This chapter answers a practical question: \textit{How do you build an agentic system?}
+The previous chapter answered: \textit{What is an agent?} This chapter answers: \textit{How do you build one?}
 
-The previous chapter established what agentic systems are through the GPA+IAT framework (Goals, Perception, Action plus Iteration, Adaptation, Termination). This chapter shows how to construct them, translating the six theoretical properties into concrete architectural choices: planning mechanisms, tool integrations, memory systems, escalation protocols, and governance controls. The treatment is conceptual rather than code-focused. You will understand how production systems are architected without needing to implement them yourself.
+That shift---from definition to construction---changes what you need to know. The GPA+IAT framework (Goals, Perception, Action, Iteration, Adaptation, Termination) tells you what properties make a system agentic. But properties do not deploy. To evaluate a vendor's claims, participate in procurement, deploy systems effectively, or communicate requirements to technical teams, you need to understand how agents are actually built: what architectural decisions shape their capabilities, what tradeoffs those decisions entail, and what failure modes they introduce.
 
-We organize the chapter around ten fundamental questions that every agentic system must answer. These questions map directly to organizational analogies: how work arrives (inbox and calendar), how instructions are understood (assignment memos), how information is gathered (library access), how actions are taken (filing and execution), how context is preserved (case files), how complex work is decomposed (project plans), how completion is recognized (deliverable criteria), when to escalate (going to the supervisor), how specialists coordinate (co-counsel relationships), and how safety is ensured (compliance and audit). Table~\ref{tab:agents2-framework} provides the complete mapping.
+This chapter provides that architectural understanding through ten fundamental questions. Each question maps to a capability that any useful agent requires. Each capability maps to design decisions with real tradeoffs. And each design decision shapes what the system can do, how it fails, and how it can be controlled.
 
-The chapter supports multiple reading strategies depending on your goals. Sequential readers should begin with the organizational analogy and ten-question framework below, then proceed through Questions 1--10 in order before concluding with the synthesis in \Cref{sec:agents2-synthesis}. Random-access readers can jump directly to any question section, as each stands alone with self-contained explanations. Practitioners evaluating vendors should focus on questions most relevant to their procurement criteria; \Cref{sec:agents2-synthesis} provides complete reference architectures with failure mode analysis that maps directly to vendor evaluation checklists.
+\begin{keybox}[title={The Core Insight}]
+\textbf{Agents are not magic; they are architecture.}
+
+Every capability that makes an agent useful---understanding what you asked, finding relevant information, taking action, remembering context, planning complex work, knowing when to stop, asking for help when stuck---corresponds to a concrete design decision. Those decisions have tradeoffs. Those tradeoffs have consequences.
+
+You do not need to build agents yourself. But you need to know what questions to ask---because architectural decisions made at design time determine what the system can do, how reliably it performs, what can go wrong, and what controls are possible.
+\end{keybox}
 
 % ----------------------------------------------------------------------------
-% Agentic Systems as Organizations
+% The Organizational Analogy
 % ----------------------------------------------------------------------------
 
-\subsection{Agentic Systems as Organizations}
+\subsection{Agents as Professional Teams}
 \label{sec:agents2-org-analogy}
 
-An agentic system functions like a professional organization. This observation serves as more than analogy; it is a design principle. Consider how a law firm operates: it has a mission (goals), gathers intelligence through research and client intake (perception), executes work through filing and communication (action), operates in project cycles and matter lifecycles (iteration), learns from experience and adjusts strategy (adaptation), and completes engagements or escalates beyond authority (termination). The six properties that define agentic systems map directly to how professional organizations function.
+The ten questions in this chapter are not arbitrary. They emerge from what agentic systems are designed to do: augment human professionals, automate routine workflows, or eventually replace entire organizational functions. Whatever the ambition, the system must handle the same work those humans and organizations currently perform. A legal research agent must do what a research associate does. A portfolio monitoring agent must do what an analyst does. The capabilities required are not determined by the technology; they are determined by the work. And the work has structure that any system---human or artificial---must accommodate. This yields the design principle that grounds the entire chapter: \textbf{an agentic system requires the same structural capabilities as a professional team}.
 
-A discretionary portfolio management team follows the same pattern. A mandate or prospectus sets risk/return objectives (goals); the team watches market data, research, and issuer filings (perception); it rebalances portfolios and places orders with compliance checks (action); it works in daily and quarterly review cycles (iteration); it shifts allocations after performance and risk reviews (adaptation); and it closes or cut positions, escalating to an investment committee when limits or mandates are at risk (termination). The organizational logic is identical even though the domain differs.
+Consider how a law firm operates. Work arrives through defined channels: client calls, court filings, internal referrals. Associates must understand what partners actually want, not just what they literally said. Research requires access to the right databases with appropriate search strategies. Actions have consequences---filing a motion, sending a client letter---that require appropriate authorization. Institutional knowledge persists in case files and precedent databases. Complex matters decompose into workstreams with dependencies. Work products have completion criteria. Associates know when to escalate to partners. Teams coordinate across practice groups. And compliance controls ensure the whole operation stays within ethical and regulatory bounds.
 
-This mapping has practical implications. When we design an agentic system, we face the same questions that arise when designing an organization. The system requires specific capabilities, work must be divided among specialists, escalation paths must exist for problems exceeding authority, institutional knowledge must be preserved across matters, and governance controls must ensure safe operation. A partner staffing a complex transaction and an architect designing an agentic system are solving structurally similar problems.
+A discretionary portfolio management team follows the same pattern. Market data and research flow through defined feeds. Analysts must interpret investment committee mandates. Research requires access to financial databases, company filings, and market intelligence. Trades have real-world consequences requiring compliance checks. Position history and investment theses persist across quarters. Portfolio construction decomposes into sector allocation, security selection, and risk management. Rebalancing has completion criteria. Analysts escalate to portfolio managers when positions approach limits. Teams coordinate across asset classes. And regulatory controls ensure fiduciary compliance.
 
-Table~\ref{tab:agents2-framework} makes this correspondence explicit, mapping each GPA+IAT property to the operational questions it generates. The sections that follow address these questions in order, using organizational analogies throughout to ground abstract concepts in familiar professional practice.
+The structural parallels are not coincidental. Both law firms and investment teams are \textit{cognitive work systems}---organizations that process information, make decisions, and take consequential actions under uncertainty. Agentic systems are also cognitive work systems. They face the same architectural challenges and require the same structural capabilities.
+
+This mapping has practical implications. When you evaluate an agentic system, you can ask the same questions you would ask about a professional team. When you design governance for an agentic system, you can draw on the same frameworks that govern professional organizations. When you communicate with technical teams, you can use organizational language they will understand.
+
+% ----------------------------------------------------------------------------
+% The Ten Questions Framework
+% ----------------------------------------------------------------------------
+
+\subsection{Ten Questions Every Agent Must Answer}
+\label{sec:agents2-ten-questions}
+
+Table~\ref{tab:agents2-framework} presents the complete framework. Each row maps a GPA+IAT property to an operational question and its corresponding section. The questions proceed in roughly the order an agent encounters them during execution: work arrives, intent is understood, information is gathered, actions are taken, context is preserved, complex work is planned, completion is recognized, help is requested when needed, coordination happens with other agents, and safety controls govern the whole process.
 
 \begin{table}[htbp]
 \centering
-\caption{From GPA+IAT properties to operational questions}
+\caption{From GPA+IAT properties to architectural questions}
 \label{tab:agents2-framework}
 \small
-\begin{tabular}{lll}
+\begin{tabular}{p{0.18\textwidth}p{0.18\textwidth}p{0.50\textwidth}}
 \toprule
-\textbf{Section} & \textbf{GPA+IAT Property} & \textbf{Operational Question} \\
+\textbf{Section} & \textbf{GPA+IAT Property} & \textbf{Architectural Question} \\
 \midrule
-Triggers & Perception & How does it know when it has work? \\
-Intent & Goal & How does it understand what's being asked? \\
-Perception & Perception & How does it find things out? \\
-Action & Action & How does it make things happen? \\
-Memory & Adaptation & How does it remember things? \\
-Planning & Goal + Iteration & How does it break work into steps? \\
-Termination & Termination & How does it know when it's done? \\
-Escalation & Termination & When does it ask for help? \\
-Delegation & Iteration & How does it work with other agents? \\
-Governance & All & How do we keep it safe? \\
+Triggers & Perception & How does the agent know when it has work to do? \\
+Intent & Goal & How does the agent understand what is being asked? \\
+Perception & Perception & How does the agent find things out? \\
+Action & Action & How does the agent make things happen? \\
+Memory & Adaptation & How does the agent remember things? \\
+Planning & Goal + Iteration & How does the agent break a big job into steps? \\
+Termination & Termination & How does the agent know when it is done? \\
+Escalation & Termination & How does the agent know when to ask for help? \\
+Delegation & Iteration & How does the agent work with other agents? \\
+Governance & All & How do we keep the agent safe? \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+The sections that follow address these questions in order. Each section opens with the organizational analogy, explains the architectural concepts, discusses domain-specific considerations for legal and financial applications, and identifies governance implications. The synthesis in \Cref{sec:agents2-synthesis} demonstrates how the components work together through two reference architectures.
+
+% ----------------------------------------------------------------------------
+% Reading Strategies
+% ----------------------------------------------------------------------------
+
+\subsection{How to Use This Chapter}
+\label{sec:agents2-reading}
+
+The chapter supports multiple reading strategies:
+
+\textbf{Sequential reading}: Start here, proceed through the ten questions in order, conclude with the synthesis. This path builds cumulative understanding of how architectural components interact.
+
+\textbf{Question-focused reading}: Jump directly to whichever question matters most for your current work. Each section is self-contained with necessary context. Cross-references point to related sections when concepts connect.
+
+\textbf{Evaluation-focused reading}: If you are evaluating vendor claims or designing procurement criteria, start with \Cref{sec:agents2-synthesis} for reference architectures and failure modes, then drill into specific questions relevant to your requirements.
+
+\textbf{Governance-focused reading}: If your primary concern is oversight and compliance, pay particular attention to the governance implications noted throughout each section, then read \Cref{sec:agents2-governance} for the complete governance mapping before proceeding to the next chapter.
+
+Whatever your path, the destination is the same: architectural literacy that enables you to ask the right questions, whether you are building, buying, or governing agentic systems.
+
+% ----------------------------------------------------------------------------
+% Bridge to Section 02
+% ----------------------------------------------------------------------------
+
+\subsection{From Framework to Implementation}
+\label{sec:agents2-bridge}
+
+With the framework established, we turn to the first architectural question: \textit{How does an agent know when it has work to do?}
+
+Just as a professional cannot respond to a motion they never received, an agent cannot act on work it does not know exists. Triggers and channels---the mechanisms by which work reaches the agent---are the foundation on which everything else builds. \Cref{sec:agents2-triggers} examines how external feeds, human prompts, scheduled jobs, and escalation events flow into agentic systems, and how different interaction surfaces shape the user experience.

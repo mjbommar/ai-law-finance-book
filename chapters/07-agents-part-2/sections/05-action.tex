@@ -220,7 +220,7 @@ Agents can get stuck in action loops: submitting the same request repeatedly, se
 
 \textbf{Cost limits}: No more than \$1,000 in transaction costs per session.
 
-When limits are reached, the agent pauses and escalates rather than continuing.
+When limits are reached, the agent pauses and escalates instead of pressing forward.
 
 \textbf{Circuit Breakers}: Automatic stops when anomalies are detected:
 
@@ -266,8 +266,6 @@ Action tools are where agentic systems create real-world consequences. The gover
 
 \textbf{Action risks} (Q4) include taking wrong actions that harm clients, violate regulations, or create liability. The consequences are external and may be irreversible.
 
-This section introduced action control concepts at the architectural level: the reversibility framework, approval workflow patterns, and rate limiting mechanisms. The following chapter---\textit{How to Govern an Agent}---provides comprehensive governance treatment, examining the five-layer governance stack, dimensional controls that calibrate oversight to risk, regulatory compliance frameworks specific to legal and financial services, and accountability structures that assign responsibility when things go wrong.
+This section introduced action control concepts at the architectural level: the reversibility framework, approval workflow patterns, and rate limiting mechanisms.
 
-Within this chapter, \Cref{sec:agents2-escalation} examines when agents should \textit{not} act---recognizing situations that require human decision-making rather than autonomous execution. The interplay between action capability and escalation judgment is central to safe agent deployment.
-
-\Cref{sec:agents2-memory} examines the next question: how does an agent remember things? Memory enables agents to maintain context across sessions, learn from experience, and access institutional knowledge.
+Within this chapter, \Cref{sec:agents2-escalation} examines when agents should \textit{not} act---recognizing situations that require human decision-making rather than autonomous execution. The interplay between action capability and escalation judgment is central to safe agent deployment. Beyond action, \Cref{sec:agents2-memory} addresses memory: how agents maintain context across sessions, learn from experience, and access institutional knowledge.

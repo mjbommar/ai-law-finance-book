@@ -11,6 +11,8 @@
 % Opening: Q3 Framing and Organizational Analogy
 % ----------------------------------------------------------------------------
 
+The previous section examined how agents understand what they're being asked---extracting goals from instructions, detecting ambiguity, gathering context. But understanding a task is not the same as completing it. An agent that perfectly understands ``Research Ninth Circuit authority on personal jurisdiction'' still needs access to case law databases. An agent that correctly interprets ``Analyze this credit agreement from the lender's perspective'' still needs the credit agreement.
+
 A junior associate's effectiveness depends not just on reasoning ability but on access. The ability to query Westlaw, access Bloomberg terminals, and search the firm's precedent database determines what problems the associate can actually solve. Without access to information sources, even the most capable professional reasons in a vacuum.
 
 Agentic systems face the same constraint. An LLM can reason about legal and financial concepts, but without \textit{perception tools}---interfaces to external information---it cannot access current case law, market prices, client documents, or regulatory filings. Perception tools are the library card, the database subscription, and the research assistant combined: the mechanisms through which agents observe the world.
@@ -151,9 +153,7 @@ Most critically, perception must respect confidentiality boundaries:
 
 \textbf{Client isolation}: In financial contexts, an agent advising Client X cannot perceive material non-public information from Client Y's engagement.
 
-\textbf{Audit trails}: Every perception must be logged---what was accessed, by which agent, for which matter. This enables compliance review and breach detection.
-
-See \Cref{sec:agents2-memory} for detailed treatment of isolation requirements in memory systems. Implementing these isolation requirements involves governance frameworks detailed in the following chapter---\textit{How to Govern an Agent}---which addresses regulation, controls, and compliance structures for agent deployments in regulated industries.
+\textbf{Audit trails}: Every perception must be logged---what was accessed, by which agent, for which matter. This enables compliance review and breach detection. See \Cref{sec:agents2-memory} for detailed treatment of isolation requirements in memory systems.
 
 % ----------------------------------------------------------------------------
 % Tool Design Principles for Perception
@@ -184,7 +184,7 @@ The first tells you nothing. The second explains what happened and suggests reco
 
 \textbf{Least Privilege}: Perception tools should request only the permissions they need. A legal research tool needs read access to case databases, not write access to the document management system. If a compromised agent gains perception credentials, damage is limited to what those credentials allow.
 
-\textbf{Rate Limiting}: Agents can get stuck in perception loops---searching repeatedly without progress. Tools should track invocation frequency and refuse requests beyond reasonable thresholds. If the agent has searched five times with no results, it should stop and escalate rather than continuing indefinitely.
+\textbf{Rate Limiting}: Agents can get stuck in perception loops---searching repeatedly without progress. Tools should track invocation frequency and refuse requests beyond reasonable thresholds. If the agent has searched five times with no results, it should stop and escalate instead of looping indefinitely.
 
 % ----------------------------------------------------------------------------
 % Evaluating Perception Capabilities
@@ -218,6 +218,4 @@ Perception enables agents to gather information, but agents must also be able to
 
 \textbf{Perception tools are read-only}. They observe without changing the world. If a perception tool fails or returns wrong results, no external state has changed; you can retry or try alternatives.
 
-\textbf{Action tools change state}. They file documents, send emails, and execute trades. Once executed, some actions cannot be undone. The risks are different, and the governance must be different as well.
-
-\Cref{sec:agents2-action} examines the next question: how does an agent make things happen?
+\textbf{Action tools change state}. They file documents, send emails, and execute trades. Once executed, some actions cannot be undone. The risks are different, and the governance must be different as well. \Cref{sec:agents2-action} examines action capabilities in detail.

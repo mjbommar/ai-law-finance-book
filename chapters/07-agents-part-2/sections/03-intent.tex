@@ -17,40 +17,58 @@ Every professional develops this skill over time: reading the assignment memo, c
 
 Agentic systems face the same challenge. The user provides an instruction: natural language, often ambiguous, sometimes contradictory. The agent must extract intent: what goal is being pursued, what constraints apply, what success looks like. This is the second fundamental question: \textit{How does an agent understand what's being asked?}
 
-\begin{definitionbox}[title={Instruction, Intent, Goal, and Task}]
-\keyterm{Instruction}: The words the user provides (e.g., ``Review this credit agreement'').
+Four concepts structure this process: instruction, intent, goal, and task. Understanding how they relate---and where gaps arise---is essential for building and governing agentic systems.
 
-\keyterm{Intent}: The underlying purpose, constraints, and success criteria behind the instruction (e.g., ``identify material risks to the lender by tomorrow'').
-
-\keyterm{Goal}: The desired end state the intent points to (e.g., ``produce a lender-risk memo that meets policy''), as defined in the GPA framework.
-
-\keyterm{Task}: The concrete unit of work the agent will execute to advance the goal (e.g., ``extract covenants and compare to template'').
-
-\textbf{Intent bridges instruction to goal and shapes the tasks the agent will plan.}
+\begin{definitionbox}[title={Instruction}]
+An \keyterm{instruction} is the words the user provides---the raw input that starts the process. ``Review this credit agreement for risks.'' ``Rebalance to reduce tech exposure.'' ``Look into the Johnson matter.''
 \end{definitionbox}
+
+Instructions are where work begins, but they are rarely complete specifications. The word ``risks'' raises immediate questions: risks to whom? The lender or borrower? Material risks or all risks? Legal risks, financial risks, or both? ``Reduce tech exposure'' leaves open the target level, the mechanism (sales, hedges, or both), and tax and timing constraints. ``Look into'' specifies neither depth, urgency, nor deliverable format. Instructions are clear enough to start; they are not clear enough to finish.
+
+Pre-LLM systems handled instructions through rigid parsing: keyword matching, slot filling, decision trees. These systems worked for narrow domains with controlled vocabularies but broke on natural language variation. ``Find cases on personal jurisdiction'' and ``What's the law on where you can sue someone?'' express similar meanings but look nothing alike to a keyword matcher.
+
+\begin{definitionbox}[title={Intent}]
+\keyterm{Intent} is the underlying purpose, constraints, and success criteria behind an instruction. Intent captures what the user actually wants---not just what they said. Where an instruction might be ``review this credit agreement,'' the intent might be ``identify material risks to the lender by tomorrow for the partner's client call.''
+\end{definitionbox}
+
+The gap between instruction and intent has always existed; what has changed is our ability to bridge it. Large language models dramatically improved intent inference from natural language. Where rule-based systems required exact matches, LLMs handle variation, implicit context, and domain-specific jargon. Modern LLMs excel at handling noisy input (misspellings, shorthand, tangential information), resolving references using conversational context, inferring domain-specific meaning, and detecting implicit constraints that professionals take for granted.
+
+Despite these capabilities, intent understanding remains imperfect. As conversations extend, LLMs may lose track of earlier context or constraints. When clarification is needed, LLMs sometimes proceed with a default interpretation rather than asking, resulting in a ``helpful but wrong'' failure: the agent does \textit{something} reasonable rather than confirming it understood correctly. Professionals communicate through implication---``This needs to be right'' signals high stakes; ``When you get a chance'' signals low urgency---and these signals may not be explicitly parsed.
+
+\begin{definitionbox}[title={Goal}]
+A \keyterm{goal} is the desired end state that intent points toward---the outcome that would satisfy the request. Goals connect to the GPA framework introduced in the previous chapter: an agent pursues goals through perception and action. Where intent is ``identify material risks to the lender by tomorrow,'' the goal is ``produce a lender-risk memo that meets firm policy and is ready for partner review.''
+\end{definitionbox}
+
+Goals provide the target for planning and the criterion for termination. An agent that understands the goal can determine whether its work is complete: does this memo identify the material risks? Does it meet firm standards? Is it ready for the partner? Without a clear goal, the agent cannot know when to stop---the ``runaway associate'' problem of endless research without a deliverable.
+
+\begin{definitionbox}[title={Task}]
+A \keyterm{task} is the concrete unit of work the agent executes to advance a goal. A single goal typically decomposes into multiple tasks. For the lender-risk memo, tasks might include: extract financial covenants, compare covenant terms to market standards, identify collateral coverage gaps, flag cross-default provisions, and draft the summary memo.
+\end{definitionbox}
+
+Tasks are where planning meets execution. \Cref{sec:agents2-planning} addresses how agents decompose goals into task sequences; \Cref{sec:agents2-termination} addresses how agents recognize when tasks---and goals---are complete.
+
+The flow from instruction to task is: \textbf{Instruction} $\rightarrow$ \textbf{Intent} $\rightarrow$ \textbf{Goal} $\rightarrow$ \textbf{Tasks}. Intent bridges the gap between what users say and what they mean. Goals give agents targets to aim for. Tasks give agents concrete work to execute. Failures at any stage propagate forward: misunderstood instructions yield wrong intent; wrong intent yields wrong goals; wrong goals yield wasted tasks.
 
 % ----------------------------------------------------------------------------
 % From Instruction to Intent
 % ----------------------------------------------------------------------------
 
-\subsection{From Instruction to Intent}
+\subsection{Bridging the Gap}
 \label{sec:agents2-from-instruction-to-intent}
 
-Consider three real instructions a legal or financial professional might give:
+Traditional enterprise systems handled work classification through explicit \keyterm{routing rules}---deterministic logic that examined message attributes and dispatched to appropriate handlers. A court filing notification with \texttt{matter\_id=12345} routes to the litigation system; an SEC filing by a portfolio company routes to the monitoring system. This pattern dominated middleware architecture for decades: message queues, enterprise service buses, workflow engines.
 
-\begin{itemize}[nosep]
-\item ``Review this credit agreement for risks''
-\item ``Rebalance to reduce tech exposure''
-\item ``Look into the Johnson matter''
-\end{itemize}
+LLM-based agentic systems collapse routing into reasoning. Rather than maintaining explicit rules for every event type, the model \textit{understands} what kind of work this is. ``Review this credit agreement'' and ``Check this loan doc for problems'' express similar intents despite different words; the LLM recognizes both as document review tasks without explicit rules mapping each phrase to a handler.
 
-Each is ambiguous. The word ``risks'' raises immediate questions about perspective (lender or borrower), scope (material risks or all risks), and domain (legal, financial, or both). ``Reduce tech exposure'' leaves open the target level, the mechanism (sales, hedges, or both), and the tax and timing constraints. ``Look into'' specifies neither depth, urgency, nor deliverable format. The instruction is clear enough to start; the intent is not.
+This architectural shift has significant implications for system design:
 
-Pre-LLM systems handled intent through rigid parsing: keyword matching, slot filling, decision trees. These systems worked for narrow domains with controlled vocabularies but broke on natural language variation. ``Find cases on personal jurisdiction'' and ``What's the law on where you can sue someone?'' express similar intents but look nothing alike to a keyword matcher. The gap between instruction and intent has always existed; what has changed is our ability to bridge it.
+\textbf{Flexibility vs.\ predictability.} Rule-based routing is deterministic---the same input always produces the same classification. LLM-based classification is probabilistic and may vary with model updates, prompt phrasing, or context. For regulated applications, this requires additional governance: logging classifications, monitoring for drift, maintaining override rules for critical categories.
 
-Large language models dramatically improved the ability to infer intent from natural language. Where rule-based systems required exact matches, LLMs handle variation, implicit context, and domain-specific jargon. Modern LLMs excel at handling noisy input (misspellings, shorthand, tangential information), resolving references using conversational context, inferring domain-specific intent, and detecting implicit constraints that professionals take for granted.
+\textbf{Explicit vs.\ implicit knowledge.} Routing rules encode domain knowledge explicitly in code; a developer must anticipate every category and write rules to match. LLM classification absorbs domain knowledge implicitly through training; the model ``knows'' that legal research and case analysis are related without explicit rules. But implicit knowledge is harder to audit and may reflect training biases.
 
-Despite these capabilities, intent understanding remains imperfect. As conversations extend, LLMs may lose track of earlier context or constraints. When clarification is needed, LLMs sometimes proceed with a default interpretation rather than asking, resulting in a ``helpful but wrong'' failure: the agent does \textit{something} reasonable rather than confirming it understood correctly. Professionals communicate through implication---``This needs to be right'' signals high stakes; ``When you get a chance'' signals low urgency---and these signals may not be explicitly parsed. Research has shown that LLMs can ``exploit loopholes'' by selectively misunderstanding ambiguous requests in ways that appear helpful but avoid difficult work. Governance must monitor for this failure mode.
+\textbf{Hybrid approaches.} Production systems often combine both patterns. Simple, high-volume, time-sensitive classifications use deterministic rules---a margin call always routes to the trading desk. Complex, ambiguous, or novel requests use LLM reasoning. The rule-based layer handles predictable cases efficiently; the LLM layer handles everything else.
+
+For architects evaluating agentic systems: where must classification be deterministic (regulatory requirements, latency constraints, auditability)? Where does flexibility justify the overhead of LLM reasoning? The answer shapes system design.
 
 \begin{keybox}[title={Intent Inference Is Not Mind Reading}]
 LLMs infer \textit{probable} intent from language patterns; they do not read minds. Inference fails when:
@@ -268,8 +286,10 @@ Effective agents surface these discoveries through clarification rather than pro
 % Transition to Q3
 % ----------------------------------------------------------------------------
 
-Intent understanding connects to other framework questions. Memory (\Cref{sec:agents2-memory}) improves intent extraction over time by preserving user preferences, matter history, and firm norms. Planning (\Cref{sec:agents2-planning}) depends on clear intent; extracted goals feed the planning system, while ambiguous intent propagates through the plan as uncertainty. Governance must address intent misalignment as a core risk, verifying goal alignment before deployment and monitoring for drift during operation; the following chapter---\textit{How to Govern an Agent}---provides comprehensive governance frameworks including accountability structures, compliance monitoring, and regulatory requirements.
+Intent understanding connects to other framework questions. Memory (\Cref{sec:agents2-memory}) improves intent extraction over time by preserving user preferences, matter history, and firm norms. Planning (\Cref{sec:agents2-planning}) depends on clear intent; extracted goals feed the planning system, while ambiguous intent propagates through the plan as uncertainty. Governance must address intent misalignment as a core risk, verifying goal alignment before deployment and monitoring for drift during operation.
 
 Understanding intent bridges the gap between what users say (instruction) and what they mean (intent), shaping the goals and tasks the agent will plan. Clarification beats guessing when ambiguity is significant and stakes are high. Constraints---time, scope, audience, compliance, and budget---matter as much as goals. Validation prevents wasted effort by confirming understanding before significant work begins.
 
-With triggers delivering work (Q1) and intent extraction revealing what's being asked (Q2), the agent needs capabilities to gather information and effect change. \Cref{sec:agents2-perception} examines the next question: how does an agent find things out?
+With triggers delivering work and intent extraction revealing what's being asked, the agent faces a practical problem: extracted goals require information the agent does not yet have. The credit agreement analysis task requires the actual credit agreement. The research question requires access to case law databases. The rebalancing plan requires current portfolio positions and market prices. Understanding what you need to do is not the same as having what you need to do it.
+
+\Cref{sec:agents2-perception} examines the next question: how does an agent find things out? Perception tools---the interfaces to external information sources---bridge the gap between understanding a task and executing it.

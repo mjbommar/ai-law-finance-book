@@ -111,90 +111,60 @@ Four escalation triggers appear most frequently:
 
 \textbf{Approval requirements}: Certain actions require explicit human authorization regardless of the system's confidence: filing court documents, sending client communications, executing large trades.
 
-\textbf{Errors and anomalies}: Tools fail repeatedly, data is inconsistent, or the agentic system detects red flags that require human investigation.
-
-\Cref{sec:agents2-escalation} provides comprehensive treatment of when and how agentic systems should escalate to humans.
+\textbf{Errors and anomalies}: Tools fail repeatedly, data is inconsistent, or the agentic system detects red flags that require human investigation. \Cref{sec:agents2-escalation} addresses when and how agentic systems should escalate to humans.
 
 % ----------------------------------------------------------------------------
-% Event Routing and Prioritization
+% Surfaces: Interaction Modalities
 % ----------------------------------------------------------------------------
 
-\subsection{Event Routing and Prioritization}
-\label{sec:agents2-routing}
-
-With events arriving from multiple channels, agentic systems need routing and prioritization logic. A law firm routes work similarly. Client calls go to appropriate attorneys, court filings route to the litigation coordinator, research requests go to assigned associates. Agentic systems implement the same pattern through a central router that receives events, examines metadata, applies routing rules, and dispatches to appropriate handlers.
-
-\textbf{Routing rules} map event attributes to handlers. Court filing notifications for Matter 12345 route to that matter's litigation subsystem. SEC filings by portfolio companies route to the monitoring subsystem. Routing can be static (predefined rules) or dynamic (classifiers that analyze content and identify topics). For multi-agent architectures, routing determines delegation: an orchestrator receives high-level tasks, classifies them, and routes to specialist components.
-
-\textbf{Priority queues} implement tiered processing. Urgent events (emergency motions, margin calls) enter the high-priority queue and are processed immediately, potentially interrupting lower-priority work. Routine tasks enter standard queues. Background work (database updates, model retraining) runs when resources are idle. Priority can be rule-based (certain event types always urgent) or adaptive (priority escalates as deadlines approach).
-
-\textbf{Temporal constraints} require processing within specific windows. Court filings have deadlines, trading must occur during market hours, EOD reports must complete before the next morning. Agentic systems track these constraints, calculate time remaining, and escalate priority as deadlines approach.
-
-\textbf{Overload management} prevents cascading failures when events arrive faster than processing capacity. Rate limiting caps how many events agentic systems accept per minute, protecting downstream APIs. Backpressure signals upstream systems to slow down. Load shedding drops low-priority work to preserve capacity for critical tasks during peak demand. During a market crash, trade execution and risk calculations take precedence; routine reporting can wait.
-
-% ----------------------------------------------------------------------------
-% Diagram: Event Routing Architecture
-% ----------------------------------------------------------------------------
-
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}[
-  node distance=1.5cm and 2.5cm,
-  box/.style={rectangle, draw=border-definition, fill=bg-definition, thick, minimum width=2.8cm, minimum height=1cm, align=center, rounded corners=2pt, font=\small},
-  source/.style={rectangle, draw=border-example, fill=bg-example, thick, minimum width=2.5cm, minimum height=0.9cm, align=center, rounded corners=2pt, font=\small},
-  handler/.style={rectangle, draw=border-key, fill=bg-key, thick, minimum width=2.5cm, minimum height=0.9cm, align=center, rounded corners=2pt, font=\small},
-  arrow/.style={-Stealth, thick, draw=primary},
-  label/.style={font=\scriptsize\itshape, text=text-secondary}
-]
-
-% Event Sources (Left Column)
-\node[source] (feed) {External Feeds\\{\scriptsize Court, SEC, Markets}};
-\node[source, below=0.8cm of feed] (human) {Human Prompts\\{\scriptsize Chat, Email, Slack}};
-\node[source, below=0.8cm of human] (sched) {Scheduled Jobs\\{\scriptsize EOD, Deadlines}};
-\node[source, below=0.8cm of sched] (esc) {Escalations\\{\scriptsize Budget, Confidence}};
-
-% Router/Dispatcher (Center)
-\node[box, right=of human, yshift=-0.9cm, minimum height=3.5cm] (router) {
-  \textbf{Event Router}\\[0.3em]
-  {\scriptsize Classify}\\
-  {\scriptsize Route}\\
-  {\scriptsize Prioritize}\\
-  {\scriptsize Queue}
-};
-
-% Agent Handlers (Right Column)
-\node[handler, right=of router, yshift=1.5cm] (research) {Research Agent\\{\scriptsize Legal/Financial}};
-\node[handler, below=0.8cm of research] (compliance) {Compliance Agent\\{\scriptsize Checks, Alerts}};
-\node[handler, below=0.8cm of compliance] (report) {Reporting Agent\\{\scriptsize EOD, Dashboards}};
-\node[handler, below=0.8cm of report] (human-handler) {Human Review\\{\scriptsize High-Stakes}};
-
-% Arrows from sources to router
-\draw[arrow] (feed) -- (router) node[midway, above, label] {events};
-\draw[arrow] (human) -- (router);
-\draw[arrow] (sched) -- (router);
-\draw[arrow] (esc) -- (router);
-
-% Arrows from router to handlers
-\draw[arrow] (router.east) -- ++(0.5,0) |- (research.west) node[near start, above, label] {high priority};
-\draw[arrow] (router.east) -- ++(0.5,0) |- (compliance.west) node[near start, above, label] {normal};
-\draw[arrow] (router.east) -- ++(0.5,0) |- (report.west) node[near start, above, label] {low priority};
-\draw[arrow] (router.east) -- ++(0.5,0) |- (human-handler.west) node[near start, above, label] {escalation};
-
-\end{tikzpicture}
-\caption{Event routing architecture showing how events from multiple channels flow through a central router that classifies, prioritizes, and dispatches to appropriate handlers.}
-\label{fig:agents2-event-routing}
-\end{figure}
-
-% ----------------------------------------------------------------------------
-% Surfaces (Brief)
-% ----------------------------------------------------------------------------
-
-\subsection{Surfaces: How Users Experience Agent Systems}
+\subsection{Surfaces: How Users Experience Agentic Systems}
 \label{sec:agents2-surfaces}
 
-The same underlying architecture can manifest through different user interfaces, or \textit{surfaces}. Understanding surfaces matters because the appropriate surface depends on the task, the user's expertise, and how the output will be used. Three primary surfaces serve different purposes. Chat surfaces suit interactive exploration, where the partner thinking through case strategy or the analyst exploring market conditions remains actively engaged, refining direction through dialogue. Automation surfaces suit continuous monitoring such as portfolio surveillance, docket tracking, and compliance alerts, where the agentic system works in the background and users receive outputs only when relevant. Document surfaces suit defined deliverables like research memos, due diligence reports, and client presentations, where the agentic system produces work products for human review and editing before distribution.
+A \keyterm{surface} is the interaction modality through which users encounter an agentic system. The same underlying capabilities---intent understanding, tool use, memory, planning---can manifest through radically different user experiences. Usability researcher Jakob Nielsen argues that generative AI represents the first new user interface paradigm in sixty years: a shift from \textit{command-based interaction} (telling the computer what to do) to \textit{intent-based outcome specification} (telling the computer what you want). But intent-based systems still require interfaces, and those interfaces shape how effectively users can express intent and consume results.
 
-Most deployments combine these surfaces in practice: chat for ad hoc queries and exploratory thinking, automation for continuous monitoring and alerting, and document generation for formal deliverables that must be filed, sent to clients, or presented to committees. The underlying agentic system architecture supports all three; the surface simply determines how users encounter the system in their day-to-day work.
+\begin{definitionbox}[title={Interaction Surfaces}]
+An \keyterm{interaction surface} is the user-facing modality through which humans engage with an agentic system. Surfaces differ along several dimensions:
+
+\textbf{Synchronicity}: Does the user wait for results (synchronous) or receive them later (asynchronous)?
+
+\textbf{Initiative}: Does the user initiate interaction (pull) or does the system (push)?
+
+\textbf{Embodiment}: Is the system a visible participant (chat avatar) or invisible infrastructure (background automation)?
+
+\textbf{Output format}: Does the system produce conversation turns, structured documents, or actions in the world?
+
+The same agentic capabilities can be exposed through different surfaces for different use cases.
+\end{definitionbox}
+
+Three primary surfaces dominate current deployments, each suited to different task types and user contexts:
+
+\textbf{Conversational surfaces} present the agentic system as an interactive dialogue partner. The user types or speaks; the system responds; the user refines. This is the paradigm of ChatGPT, Claude, and embedded copilots. Conversational surfaces excel at \textit{exploratory tasks} where the user refines direction through iteration: the partner thinking through case strategy, the analyst exploring market scenarios, the associate researching an unfamiliar area of law. The interaction is synchronous and user-initiated.
+
+Conversational surfaces have limitations. They require users to articulate intent in natural language---what Nielsen calls the ``articulation barrier.'' They lack the affordances of graphical interfaces: no menus to browse, no buttons to discover capabilities. And they demand attention; the user must remain engaged throughout the interaction.
+
+\textbf{Automation surfaces} present the agentic system as invisible infrastructure. The system monitors, analyzes, and acts in the background; users receive outputs only when relevant. Portfolio surveillance that alerts when positions breach limits. Docket monitoring that flags new filings in active matters. Compliance systems that screen transactions against sanctions lists. The interaction is asynchronous and system-initiated.
+
+Automation surfaces suit \textit{monitoring tasks} where continuous human attention is impractical. A compliance officer cannot manually review every transaction; a litigator cannot check every docket daily. The agentic system handles the routine case, surfacing only exceptions that require human judgment. The user experience is defined by what \textit{doesn't} happen: no alert means no problem.
+
+\textbf{Document surfaces} present the agentic system as a drafting assistant that produces structured work products. Research memos, due diligence reports, contract summaries, client presentations. The user specifies requirements; the system produces a document; the user reviews, edits, and distributes. The interaction is asynchronous (the system works while the user does other things) but user-initiated.
+
+Document surfaces suit \textit{production tasks} with defined deliverables. The associate needs a memo for the partner's review. The analyst needs a report for the investment committee. The output format matters: not a chat transcript, but a polished document that can be filed, sent to clients, or presented to regulators.
+
+\begin{highlightbox}[title={Matching Surface to Task}]
+Surface selection is a design decision, not a technical constraint. The same agentic architecture can expose multiple surfaces:
+
+\begin{itemize}[nosep]
+\item \textbf{Chat} for ad hoc queries and exploratory thinking
+\item \textbf{Automation} for continuous monitoring and alerting
+\item \textbf{Document generation} for formal deliverables
+\end{itemize}
+
+Many deployments combine all three. A litigation support system might offer chat for research queries, automation for docket alerts, and document generation for motion drafts. The underlying intent understanding, tool use, and reasoning remain constant; only the interaction modality changes.
+
+When evaluating or designing agentic systems, ask: which surface fits this workflow? Forcing conversational interaction onto monitoring tasks wastes user attention. Forcing document output onto exploratory tasks prevents iterative refinement.
+\end{highlightbox}
+
+\textbf{Emerging surfaces} extend beyond these three patterns. \textit{Embedded copilots} integrate agentic capabilities directly into existing applications---AI assistance within Word, Excel, or domain-specific software---combining familiar graphical interfaces with intent-based interaction. \textit{Ambient interfaces} use voice or environmental sensors to enable hands-free interaction, though transcription errors and authentication challenges limit high-stakes applications. \textit{Agentic APIs} expose capabilities to other software systems rather than human users, enabling machine-to-machine orchestration.
 
 % ----------------------------------------------------------------------------
 % Evaluating Trigger Systems
@@ -213,7 +183,7 @@ When evaluating agentic systems, whether building or buying, assess trigger capa
 
 \textbf{Priority mechanisms}: Can the system distinguish urgent from routine? During a market crash or litigation crisis, the right events must reach the right handlers immediately.
 
-\textbf{Auditability}: Is every trigger logged? When a regulator asks why the agentic system took action, you need a complete record of the triggering event. The following chapter---\textit{How to Govern an Agent}---provides comprehensive treatment of audit requirements, regulatory compliance frameworks, and governance controls.
+\textbf{Auditability}: Is every trigger logged? When a regulator asks why the agentic system took action, you need a complete record of the triggering event. The following chapter---\textit{How to Govern an Agent}---addresses audit requirements, regulatory compliance frameworks, and governance controls.
 
 % ----------------------------------------------------------------------------
 % Connection to Other Questions
@@ -225,13 +195,13 @@ When evaluating agentic systems, whether building or buying, assess trigger capa
 Triggers answer how work reaches the agentic system, but triggering is only the beginning. Once an event arrives, the agentic system must:
 
 \begin{itemize}[nosep]
-\item \textbf{Understand intent} (Q2, \Cref{sec:agents2-intent}): What is being asked?
-\item \textbf{Perceive information} (Q3, \Cref{sec:agents2-perception}): What does the system need to know?
-\item \textbf{Take action} (Q4, \Cref{sec:agents2-action}): What should the system do?
-\item \textbf{Remember context} (Q5, \Cref{sec:agents2-memory}): What should persist across sessions?
-\item \textbf{Plan execution} (Q6, \Cref{sec:agents2-planning}): How should work be decomposed?
-\item \textbf{Recognize completion} (Q7, \Cref{sec:agents2-termination}): When is the task done?
-\item \textbf{Escalate when needed} (Q8, \Cref{sec:agents2-escalation}): When should humans intervene?
+\item \textbf{Understand intent}: What is being asked?
+\item \textbf{Perceive information}: What does the system need to know?
+\item \textbf{Take action}: What should the system do?
+\item \textbf{Remember context}: What should persist across sessions?
+\item \textbf{Plan execution}: How should work be decomposed?
+\item \textbf{Recognize completion}: When is the task done?
+\item \textbf{Escalate when needed}: When should humans intervene?
 \end{itemize}
 
 The connection between questions is direct. An external feed delivers a court filing notification. The router classifies it as urgent litigation work and dispatches to the litigation agentic system. The system retrieves case context from memory, downloads the filed document through PACER, analyzes content, searches for responsive authority, generates deadline calculations, and drafts a response strategy. At each step, the system might escalate: low confidence in legal analysis triggers escalation to a senior litigator; filing a responsive document requires approval; approaching budget limits prompts a status update.

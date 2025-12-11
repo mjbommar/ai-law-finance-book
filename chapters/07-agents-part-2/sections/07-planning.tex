@@ -63,9 +63,25 @@ Plan-Execute fits workflows with established procedures: due diligence checklist
 \item Draft jury instructions (another agent)
 \end{itemize}
 
-Each specialist may decompose further. This enables parallelization and specialization, mirroring how litigation teams work with multiple associates and paralegals handling different workstreams simultaneously.
+Each specialist may decompose further. This enables parallelization and specialization, mirroring how litigation teams work with multiple associates and paralegals handling different workstreams simultaneously. \Cref{sec:agents2-delegation} provides detailed treatment of multi-agent coordination patterns.
 
-See \Cref{sec:agents2-delegation} for detailed treatment of multi-agent coordination patterns.
+\begin{highlightbox}[title={Dynamic Orchestration vs.\ Static Workflows}]
+Traditional workflow engines used \textit{static orchestration}: predefined graphs specifying which steps follow which, what conditions trigger branches, and how exceptions route to handlers. Business process management (BPM) systems, enterprise service buses, and workflow automation tools all embodied this pattern. The workflow was designed at build time; at runtime, the engine merely executed it.
+
+LLM-based orchestration is \textit{dynamic}: the orchestrator reasons about how to decompose the current task based on its specific characteristics. ``Prepare for trial'' might decompose differently depending on case complexity, available resources, and timeline. The LLM examines the goal, considers available specialist agents, and constructs an appropriate delegation structure on the fly.
+
+This distinction matters for several reasons:
+
+\textbf{Adaptability}: Static workflows handle anticipated scenarios; novel situations fall through to error handlers or human intervention. Dynamic orchestration adapts to the specific task, potentially handling situations the system designer never anticipated.
+
+\textbf{Maintenance}: Static workflows require explicit updates when processes change---new steps, different conditions, additional handlers. Dynamic orchestration absorbs changes through prompt updates or model fine-tuning, potentially reducing maintenance burden.
+
+\textbf{Auditability}: Static workflows produce predictable execution traces; given the same input, the same workflow executes. Dynamic orchestration may produce different decompositions for similar inputs, complicating audit and compliance. For regulated applications, logging the \textit{reasoning} behind orchestration decisions---not just the decisions themselves---becomes essential.
+
+\textbf{Hybrid architectures}: Production systems often combine both. High-volume, well-understood processes use static workflows for efficiency and predictability. Complex, variable, or novel tasks use dynamic orchestration. The static layer handles routine work; the dynamic layer handles everything else.
+
+The planning patterns described above (ReAct, Plan-Execute, Hierarchical) are all forms of dynamic orchestration---the LLM decides what to do based on the task at hand, rather than following a predetermined script.
+\end{highlightbox}
 
 % ----------------------------------------------------------------------------
 % Choosing the Right Pattern
@@ -100,9 +116,7 @@ The autonomy column matters for governance. Higher-autonomy patterns require mor
 
 \textbf{ReAct (Higher autonomy)}: The agent makes decisions about what to search, what to pursue, when to stop. Oversight requires explicit termination mechanisms, confidence thresholds, and reasoning trace review.
 
-\textbf{Hierarchical (Distributed autonomy)}: Multiple agents make decisions. Oversight requires clear delegation contracts, escalation paths between agents, and coordination monitoring.
-
-Match oversight rigor to autonomy level.
+\textbf{Hierarchical (Distributed autonomy)}: Multiple agents make decisions. Oversight requires clear delegation contracts, escalation paths between agents, and coordination monitoring. The principle is simple: match oversight rigor to autonomy level.
 
 % ----------------------------------------------------------------------------
 % Understanding the Task
@@ -128,7 +142,7 @@ Effective planning requires clear inputs. Ambiguous goals produce unfocused plan
 \subsection{Budget Architecture}
 \label{sec:agents2-budgets}
 
-Without explicit resource budgets, agents can run indefinitely. This is the ``runaway associate'' problem: you asked for two cases, the associate gives you fifty because they didn't know when the answer was sufficient.
+Without explicit resource budgets, agents can run indefinitely. This is the ``runaway associate'' problem: you asked for two cases, the associate gives you fifty because they did not know when the answer was sufficient. This subsection examines budget allocation as a planning mechanism; \Cref{sec:agents2-termination} examines what happens when budgets are exhausted---how agents recognize resource limits and terminate gracefully.
 
 \textbf{Budget Types.} Four budget types provide control over agent execution, each addressing a different dimension of resource consumption. Token budgets limit LLM API consumption, preventing expensive runaway reasoning loops where the agent keeps elaborating without making progress. Time budgets enforce deadlines by stopping execution after a fixed duration---perhaps 10 minutes---if no meaningful progress has occurred. Tool call budgets prevent runaway tool loops by capping the number of external calls; after 20 searches without progress, the agent should escalate rather than continuing to search. Cost budgets cap total spending in dollars, particularly important when using expensive models or external APIs where unconstrained execution could generate substantial charges.
 
@@ -155,7 +169,7 @@ Soft limits at 75--80\% of budget warn the agent that resources are running low,
 \subsection{Knowing When to Stop}
 \label{sec:agents2-termination-preview}
 
-Perhaps the most critical planning capability is knowing when to stop. \Cref{sec:agents2-termination} provides comprehensive treatment; for planning purposes, four categories of stopping conditions guide agent behavior.
+Perhaps the most critical planning capability is knowing when to stop. \Cref{sec:agents2-termination} covers termination in detail; for planning purposes, four categories of stopping conditions guide agent behavior.
 
 Success conditions terminate execution when the goal is achieved: the research question is answered, the document is reviewed, the analysis is complete. The agent returns its result and stops. Resource exhaustion terminates execution when budget limits are reached, returning partial results or escalating for additional allocation. Confidence thresholds terminate execution when uncertainty is too high for autonomous action, escalating for human review rather than proceeding with unreliable conclusions. Error conditions terminate execution when repeated failures indicate a problem that retrying will not solve.
 
@@ -168,7 +182,7 @@ Define explicit stopping rules, just as you would instruct an associate: ``If yo
 \subsection{Guardrails and Loop Detection}
 \label{sec:agents2-guardrails}
 
-Even with budgets and termination conditions, agents can get stuck in unproductive loops. Multiple mechanisms detect and prevent these patterns: step limits, reflection checkpoints, external watchdogs, and meta-policies. \Cref{sec:agents2-loop-detection} provides comprehensive treatment of loop detection and guardrail mechanisms in the context of termination.
+Even with budgets and termination conditions, agents can get stuck in unproductive loops. Multiple mechanisms detect and prevent these patterns: step limits, reflection checkpoints, external watchdogs, and meta-policies. \Cref{sec:agents2-loop-detection} examines loop detection and guardrail mechanisms in the context of termination.
 
 % ----------------------------------------------------------------------------
 % Connection to Other Questions
