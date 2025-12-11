@@ -1,0 +1,84 @@
+% When to Clarify: Stakes × Ambiguity Decision Matrix - 2x2 Layout
+
+\begin{figure}[!htb]
+\centering
+\begin{tikzpicture}[
+    base box/.style={
+        rounded corners=6pt,
+        line width=1.5pt,
+        minimum width=6.0cm,
+        minimum height=3.0cm,
+        align=left,
+        inner sep=14pt
+    },
+    box header/.style={
+        font=\small\bfseries\sffamily
+    },
+    box content/.style={
+        font=\scriptsize,
+        text=gray-800,
+        text width=5.2cm
+    },
+    axis label/.style={
+        font=\scriptsize\bfseries\sffamily,
+        text=slate-700
+    }
+]
+
+% Outer frame
+\draw[rounded corners=8pt, draw=slate-700, line width=2pt, fill=slate-100]
+    (-7.0,-4.2) rectangle (7.0,4.5);
+
+% Frame title
+\node[font=\normalsize\bfseries\sffamily, text=white, fill=slate-700,
+      rounded corners=3pt, inner sep=6pt] at (0,4.5) {When to Clarify: Stakes × Ambiguity};
+
+% Axis labels
+\node[axis label] at (-5.0,3.6) {AMBIGUITY};
+\node[axis label] at (-1.5,3.6) {Low};
+\node[axis label] at (4.5,3.6) {High};
+
+\node[axis label, rotate=90] at (-6.5,0) {STAKES};
+\node[axis label, rotate=90] at (-6.5,2.2) {Low};
+\node[axis label, rotate=90] at (-6.5,-2.2) {High};
+
+% Top-left: Low Stakes, Low Ambiguity - PROCEED
+\node[base box, draw=example-dark, fill=example-light] (proceed) at (-3.2,1.65) {};
+\node[box header, text=example-dark, anchor=north west] at ([xshift=2pt, yshift=-2pt]proceed.north west) {PROCEED};
+\node[box content, anchor=north west] at ([xshift=2pt, yshift=-18pt]proceed.north west) {
+    Best interpretation is obvious; cost of error is low\\[6pt]
+    \textit{Example:}\\
+    ``Apple market cap'' → Apple Inc.
+};
+
+% Top-right: Low Stakes, High Ambiguity - CLARIFY BRIEFLY
+\node[base box, draw=key-dark, fill=key-light] (brief) at (3.2,1.65) {};
+\node[box header, text=key-dark, anchor=north west] at ([xshift=2pt, yshift=-2pt]brief.north west) {CLARIFY BRIEFLY};
+\node[box content, anchor=north west] at ([xshift=2pt, yshift=-18pt]brief.north west) {
+    Quick question prevents wasted effort\\[6pt]
+    \textit{Example:}\\
+    ``Research SOL'' → which claim type?
+};
+
+% Bottom-left: High Stakes, Low Ambiguity - CONFIRM
+\node[base box, draw=key-dark, fill=key-light] (confirm) at (-3.2,-2.05) {};
+\node[box header, text=key-dark, anchor=north west] at ([xshift=2pt, yshift=-2pt]confirm.north west) {CONFIRM};
+\node[box content, anchor=north west] at ([xshift=2pt, yshift=-18pt]confirm.north west) {
+    Clear but consequential; confirmation prevents errors\\[6pt]
+    \textit{Example:}\\
+    ``File this motion''
+};
+
+% Bottom-right: High Stakes, High Ambiguity - CLARIFY THOROUGHLY
+\node[base box, draw=caution-dark, fill=caution-light] (thorough) at (3.2,-2.05) {};
+\node[box header, text=caution-dark, anchor=north west] at ([xshift=2pt, yshift=-2pt]thorough.north west) {CLARIFY THOROUGHLY};
+\node[box content, anchor=north west] at ([xshift=2pt, yshift=-18pt]thorough.north west) {
+    Extended dialogue before any action\\[6pt]
+    \textit{Example:}\\
+    ``Handle the regulatory response''
+};
+
+\end{tikzpicture}
+\caption{Decision framework for when agents should clarify user intent. Stakes measure consequence of error; ambiguity measures interpretation confidence. High-stakes or high-ambiguity tasks warrant clarification despite potential for slowing response.}
+\label{fig:agents2-when-to-clarify}
+\end{figure}

@@ -1,0 +1,121 @@
+% Oversight Spectrum: How Reversibility Determines Human Control
+
+\begin{figure}[!htb]
+\centering
+\begin{tikzpicture}[
+    every node/.style={inner sep=0pt}
+]
+
+% Arrow labels above cards
+\node[font=\scriptsize\itshape, text=gray-700, anchor=south] (rev-arrow) at (0, 3.8) {Decreasing Reversibility};
+\draw[->, line width=0.8pt, gray-600] (-4.8, 3.6) -- (4.8, 3.6);
+
+\node[font=\scriptsize\itshape, text=gray-700, anchor=north] (control-arrow) at (0, 3.4) {Increasing Human Control};
+\draw[<-, line width=0.8pt, gray-600] (-4.8, 3.2) -- (4.8, 3.2);
+
+% Card 1: Fully Reversible (Left)
+\node[
+    draw=green-600,
+    line width=1.5pt,
+    fill=white,
+    minimum width=4.5cm,
+    minimum height=3.5cm,
+    rounded corners=4pt
+] (card1) at (-5.2, 0) {};
+
+% Card 1 Header bar
+\fill[green-600, rounded corners=4pt]
+    ([yshift=-0.1cm]card1.north west) -- ([yshift=-0.1cm]card1.north east)
+    [rounded corners=0pt] -- ([yshift=-0.7cm]card1.north east) -- ([yshift=-0.7cm]card1.north west)
+    [rounded corners=4pt] -- cycle;
+
+% Card 1 Header text
+\node[font=\scriptsize\bfseries\sffamily, text=white, anchor=center]
+    at ([yshift=-0.4cm]card1.north) {FULLY REVERSIBLE};
+
+% Card 1 Body
+\node[
+    text width=4.0cm,
+    anchor=north,
+    font=\scriptsize,
+    align=left
+] at ([yshift=-0.9cm]card1.north) {
+\textbf{\textsf{Control:}}\\[2pt]
+\textcolor{green-900}{AUTONOMOUS}\\[2pt]
+\textit{(no pre-check required)}\\[6pt]
+\textbf{\textsf{Example:}}\\[2pt]
+Internal drafts, research notes, preliminary analysis
+};
+
+% Card 2: Partially Reversible (Middle)
+\node[
+    draw=amber-600,
+    line width=1.5pt,
+    fill=white,
+    minimum width=4.5cm,
+    minimum height=3.5cm,
+    rounded corners=4pt
+] (card2) at (0, 0) {};
+
+% Card 2 Header bar
+\fill[amber-600, rounded corners=4pt]
+    ([yshift=-0.1cm]card2.north west) -- ([yshift=-0.1cm]card2.north east)
+    [rounded corners=0pt] -- ([yshift=-0.7cm]card2.north east) -- ([yshift=-0.7cm]card2.north west)
+    [rounded corners=4pt] -- cycle;
+
+% Card 2 Header text
+\node[font=\scriptsize\bfseries\sffamily, text=white, anchor=center]
+    at ([yshift=-0.4cm]card2.north) {PARTIALLY REVERSIBLE};
+
+% Card 2 Body
+\node[
+    text width=4.0cm,
+    anchor=north,
+    font=\scriptsize,
+    align=left
+] at ([yshift=-0.9cm]card2.north) {
+\textbf{\textsf{Control:}}\\[2pt]
+\textcolor{amber-900}{CHECKPOINT REVIEW}\\[2pt]
+\textit{(review before send)}\\[6pt]
+\textbf{\textsf{Example:}}\\[2pt]
+Client communications, internal emails, routine responses
+};
+
+% Card 3: Irreversible (Right)
+\node[
+    draw=caution-dark,
+    line width=1.5pt,
+    fill=white,
+    minimum width=4.5cm,
+    minimum height=3.5cm,
+    rounded corners=4pt
+] (card3) at (5.2, 0) {};
+
+% Card 3 Header bar
+\fill[caution-dark, rounded corners=4pt]
+    ([yshift=-0.1cm]card3.north west) -- ([yshift=-0.1cm]card3.north east)
+    [rounded corners=0pt] -- ([yshift=-0.7cm]card3.north east) -- ([yshift=-0.7cm]card3.north west)
+    [rounded corners=4pt] -- cycle;
+
+% Card 3 Header text
+\node[font=\scriptsize\bfseries\sffamily, text=white, anchor=center]
+    at ([yshift=-0.4cm]card3.north) {IRREVERSIBLE};
+
+% Card 3 Body
+\node[
+    text width=4.0cm,
+    anchor=north,
+    font=\scriptsize,
+    align=left
+] at ([yshift=-0.9cm]card3.north) {
+\textbf{\textsf{Control:}}\\[2pt]
+\textcolor{caution-dark}{PRE-APPROVAL}\\[2pt]
+\textit{(required before action)}\\[6pt]
+\textbf{\textsf{Example:}}\\[2pt]
+Court filings, trade execution, contract signatures
+};
+
+\end{tikzpicture}
+\caption{Oversight spectrum showing how the reversibility of agent actions determines the level of human control required. Fully reversible actions may proceed autonomously, partially reversible actions require checkpoint review, and irreversible actions demand pre-approval before execution.}
+\label{fig:agents2-oversight-spectrum}
+\end{figure}

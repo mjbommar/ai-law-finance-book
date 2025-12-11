@@ -1,0 +1,237 @@
+% ============================================================================
+% 04-perception.tex
+% Q3: How Does an Agent Find Things Out?
+% Part of: Chapter 07 - Agents Part II: How to Build an Agent
+% ============================================================================
+
+\section{How Does an Agent Find Things Out?}
+\label{sec:agents2-perception}
+
+% ----------------------------------------------------------------------------
+% Opening: Q3 Framing and Organizational Analogy
+% ----------------------------------------------------------------------------
+
+A junior associate's effectiveness depends not just on reasoning ability but on access. The ability to query Westlaw, access Bloomberg terminals, and search the firm's precedent database determines what problems the associate can actually solve. Without access to information sources, even the most capable professional reasons in a vacuum.
+
+Agent systems face the same constraint. An LLM can reason about legal and financial concepts, but without \textit{perception tools}---interfaces to external information---it cannot access current case law, market prices, client documents, or regulatory filings. Perception tools are the library card, the database subscription, and the research assistant combined: the mechanisms through which agents observe the world.
+
+\begin{definitionbox}[title={Tools and Perception}]
+A \keyterm{tool} is a function that allows an agent to interact with external systems. \keyterm{Perception tools} are read-only: they observe without changing the world. The agent queries a database, retrieves a document, or fetches market data, while the external system's state remains unchanged.
+
+Perception implements the ``P'' in the GPA framework from Part I; it answers the question of what information the agent can access to inform its reasoning.
+\end{definitionbox}
+
+In this section, we examine perception: the read-only tools that enable agents to gather information. \Cref{sec:agents2-action} then examines action: the write tools that enable agents to effect change. The distinction matters for governance, because read operations carry different risks than write operations.
+
+% ----------------------------------------------------------------------------
+% Perception Tool Categories
+% ----------------------------------------------------------------------------
+
+\subsection{Perception Tool Categories}
+\label{sec:agents2-perception-categories}
+
+Different tasks require different tools for gathering information, and effective perception depends on having the right tool for the purpose at hand.
+
+\subsubsection{Information Retrieval Tools}
+
+For gathering authoritative information, professionals use research platforms. \textbf{Legal research tools} include Westlaw, Lexis, Bloomberg Law, PACER for federal court filings, state court docket systems, and regulatory databases like EDGAR. An agent with these tools can search case law, retrieve opinions, check citator status, and download filings.
+
+\textbf{Financial research tools} include Bloomberg Terminal, Reuters Eikon, FactSet, and proprietary analytics platforms. An agent with these tools can query real-time prices, retrieve fundamentals, access analyst research, and pull historical data.
+
+\textbf{Internal knowledge bases} include the firm's document management system (iManage, NetDocuments), precedent databases, deal archives, and research memo repositories. An agent with access can retrieve prior work product, find template language, and check how the firm handled similar matters.
+
+\subsubsection{Document Processing Tools}
+
+Raw documents need processing before they are useful:
+
+\textbf{Text extraction} converts PDFs, scanned documents, and images into searchable text. OCR tools handle scanned filings; PDF parsers extract text from native documents; table extractors preserve structure from financial statements.
+
+\textbf{Document classification} identifies document types. In due diligence, an agent processing a data room needs to distinguish contracts from correspondence, financial statements from presentations. Classification enables appropriate routing.
+
+\textbf{Entity extraction} identifies parties, dates, amounts, and other structured data from unstructured documents. Extracting the borrower name, facility amount, and maturity date from a credit agreement enables structured analysis.
+
+\subsubsection{Computation Tools}
+
+Some forms of perception require calculation rather than simple lookup:
+
+\textbf{Deadline calculators} determine response dates from rules. Federal Rules require answers within 21 days---but calculating from service date, accounting for holidays, and applying local rules requires computation.
+
+\textbf{Citation formatters} convert case information into proper Bluebook format. Financial equivalents normalize identifiers (CUSIP, ISIN, ticker) across different systems.
+
+\textbf{Risk metrics} calculate exposure, VaR, duration, or other quantitative measures from position data. These computations inform reasoning without changing portfolios.
+
+% ----------------------------------------------------------------------------
+% Model Context Protocol (MCP) for Perception
+% ----------------------------------------------------------------------------
+
+\subsection{Model Context Protocol (MCP)}
+\label{sec:agents2-mcp-perception}
+
+The Model Context Protocol standardizes how agents access tools. Before standardization, every database had different commands and output formats: Westlaw worked one way, Lexis another, Bloomberg a third. MCP creates a common interface: learn the protocol once, access any compatible tool.
+
+\subsubsection{MCP Architecture}
+
+The architecture has three roles:
+
+\textbf{MCP Host}: Manages the agent and controls which tools it can access. Like the firm's IT system determining database subscriptions.
+
+\textbf{MCP Client}: The agent-side component that discovers and uses tools.
+
+\textbf{MCP Server}: A tool exposing capabilities through a standardized interface. The document management system, internal knowledge base, or custom legal research tool each runs as an MCP server.
+
+Communication follows a simple pattern: servers publish manifests declaring capabilities; clients connect through hosts; clients send structured requests; servers return structured results.
+
+\subsubsection{MCP Resources}
+
+For perception, MCP defines \keyterm{Resources}---read-only data access endpoints. Resources let agents:
+
+\begin{itemize}[nosep]
+\item Query case law databases and receive structured results
+\item Retrieve documents from management systems
+\item Access market data feeds
+\item Search internal knowledge bases
+\item Fetch regulatory filings
+\end{itemize}
+
+Resources are explicitly read-only. They implement perception without enabling action. This separation enables fine-grained access control: an agent might have resource access (read documents) without tool access (file documents).
+
+\begin{keybox}[title={MCP Eliminates the M$\times$N Problem}]
+\textbf{Without MCP}: 10 agents $\times$ 10 tools = 100 custom integrations.
+
+\textbf{With MCP}: 10 agents + 10 tools = 20 implementations (each learns the protocol once).
+
+\textbf{Legal}: One agent queries document management systems, internal knowledge bases, and custom research tools through the same protocol.
+
+\textbf{Financial}: One agent accesses portfolio systems, risk engines, and compliance databases through the same protocol.
+
+As of late 2025, over 7,260 MCP servers have been catalogued in community directories. The ecosystem provides ready-made integrations for common tools.
+\end{keybox}
+
+% ----------------------------------------------------------------------------
+% Memory as Perception
+% ----------------------------------------------------------------------------
+
+\subsection{Memory as Perception into Institutional Knowledge}
+\label{sec:agents2-memory-perception}
+
+Memory systems (\Cref{sec:agents2-memory}) serve as perception tools into institutional knowledge. When an agent queries the firm's precedent database, it perceives accumulated expertise:
+
+\textbf{Retrieval-Augmented Generation (RAG)} enables semantic search over document archives. The agent doesn't just keyword-match; it finds conceptually similar content. A search for ``breach of fiduciary duty'' retrieves documents about ``violation of trust obligations'' even if exact words differ.
+
+\textbf{Vector stores} power this semantic search by encoding documents as high-dimensional embeddings. The technology enables perception into large knowledge bases that would be impractical to load into context.
+
+\textbf{Prior work product} becomes accessible through memory. When starting a new registration statement, the agent can perceive prior S-1 filings, SEC comment histories, and successful disclosure language. This institutional knowledge informs current work.
+
+Memory-as-perception distinguishes experienced agents from novices. The junior associate reasons from first principles; the senior associate draws on pattern recognition from hundreds of matters. Memory gives agents access to accumulated experience.
+
+% ----------------------------------------------------------------------------
+% Domain-Specific Perception Requirements
+% ----------------------------------------------------------------------------
+
+\subsection{Domain-Specific Perception Requirements}
+\label{sec:agents2-perception-domain}
+
+Perception for regulated professional services requires specialized enhancements:
+
+\subsubsection{Authority and Provenance}
+
+Not all information is equally authoritative. Perception systems must track provenance:
+
+\textbf{Authority weighting}: Primary authority (statutes, binding precedent) should rank higher than secondary sources. When searching for ``insider trading liability,'' a Supreme Court opinion should outrank a law review note using more similar language.
+
+\textbf{Source verification}: Did this case actually come from Westlaw, or was it hallucinated? Perception tools must return verifiable sources that can be independently checked.
+
+\textbf{Currency validation}: Is this authority still good law? Citator integration validates that retrieved cases haven't been overruled.
+
+\subsubsection{Jurisdiction and Scope}
+
+Legal and regulatory information is bounded by jurisdiction:
+
+\textbf{Jurisdiction awareness}: California precedent doesn't bind Texas courts; SEC rules differ from CFTC rules. Perception must respect jurisdictional boundaries and filter appropriately.
+
+\textbf{Temporal validity}: Law changes. Perception systems must track effective dates. Financial temporal validity varies by context: milliseconds for trading prices, quarters for compliance effective dates.
+
+\textbf{Identifier resolution}: Citations appear in multiple formats (``123 F.3d 456'' and ``123 F3d 456'' are the same case). Financial identifiers proliferate, including ticker symbols, CUSIP numbers, ISIN codes, and Legal Entity Identifiers. Perception must normalize identifiers to enable consistent retrieval.
+
+\subsubsection{Matter and Client Isolation}
+
+Most critically, perception must respect confidentiality boundaries:
+
+\textbf{Matter isolation}: An agent working on Matter A cannot perceive documents from adverse Matter B. Ethical walls must be enforced at the perception layer.
+
+\textbf{Client isolation}: In financial contexts, an agent advising Client X cannot perceive material non-public information from Client Y's engagement.
+
+\textbf{Audit trails}: Every perception must be logged---what was accessed, by which agent, for which matter. This enables compliance review and breach detection.
+
+See \Cref{sec:agents2-memory} for detailed treatment of isolation requirements in memory systems.
+
+% ----------------------------------------------------------------------------
+% Tool Design Principles for Perception
+% ----------------------------------------------------------------------------
+
+\subsection{Tool Design Principles}
+\label{sec:agents2-perception-design}
+
+Good perception tools follow design principles that enable reliable operation:
+
+\subsubsection{Single Responsibility}
+
+Each tool should do one thing well. A poorly designed tool bundles multiple functions:
+
+\texttt{legal\_research(query, format, validate, extract)} searches Westlaw, formats citations, validates authority, and extracts holdings: four functions in one interface. When it fails, you can't tell which step failed.
+
+A better approach separates tools by function. \texttt{search\_cases(query, jurisdiction)} returns citations. \texttt{retrieve\_case(citation)} fetches text. \texttt{shepardize(citation)} checks validity. \texttt{format\_citation(data, style)} converts to Bluebook. The agent composes them; failures are isolated.
+
+\subsubsection{Graceful Failure}
+
+When things go wrong---and in production, things always go wrong---tools should return informative errors:
+
+\textbf{Poor}: \texttt{Exception: NullPointerException at line 847}
+
+\textbf{Good}: \texttt{Error: Case not found for citation ``123 F.3d 456''. Case may not be in database. Suggestion: Check citation manually or try alternative reporter.}
+
+The first tells you nothing. The second explains what happened and suggests recovery. In legal work, graceful failure is how you avoid malpractice: when you cannot find authority, report that explicitly rather than proceeding silently.
+
+\subsubsection{Least Privilege}
+
+Perception tools should request only the permissions they need. A legal research tool needs read access to case databases, not write access to the document management system. If a compromised agent gains perception credentials, damage is limited to what those credentials allow.
+
+\subsubsection{Rate Limiting}
+
+Agents can get stuck in perception loops---searching repeatedly without progress. Tools should track invocation frequency and refuse requests beyond reasonable thresholds. If the agent has searched five times with no results, it should stop and escalate rather than continuing indefinitely.
+
+% ----------------------------------------------------------------------------
+% Evaluating Perception Capabilities
+% ----------------------------------------------------------------------------
+
+\subsection{Evaluating Perception Capabilities}
+\label{sec:agents2-perception-eval}
+
+When evaluating agent systems, assess perception against these criteria:
+
+\textbf{Coverage}: Assess which sources the agent can access. A litigation agent that queries Westlaw but not state-specific databases has incomplete coverage. Map available perception tools against information needs to identify gaps.
+
+\textbf{Retrieval quality}: Verify that the agent finds relevant information by testing with known-good queries where you know what should be retrieved. Measure both precision (relevance of results) and recall (completeness of relevant results).
+
+\textbf{Authority and provenance}: Confirm that the system distinguishes authoritative from secondary sources, that you can trace retrieved information to its source, and that citations are independently verifiable.
+
+\textbf{Access controls}: Verify that permissions are appropriate, that the agent can access only what it should, and that confidentiality boundaries are enforced across matter and client lines.
+
+\textbf{Failure handling}: Assess the agent's behavior when perception fails: whether it retries, tries alternatives, or escalates appropriately rather than crashing or proceeding with incomplete information.
+
+\textbf{Audit capability}: Confirm that every perception is logged and that you can reconstruct what information the agent accessed during a task for compliance review and post-hoc analysis.
+
+% ----------------------------------------------------------------------------
+% Connection to Other Questions
+% ----------------------------------------------------------------------------
+
+\subsection{From Perception to Action}
+\label{sec:agents2-perception-action}
+
+Perception enables agents to gather information, but agents must also be able to effect change---file documents, send communications, execute trades. The critical distinction is simple but important:
+
+\textbf{Perception tools are read-only}. They observe without changing the world. If a perception tool fails or returns wrong results, no external state has changed; you can retry or try alternatives.
+
+\textbf{Action tools change state}. They file documents, send emails, and execute trades. Once executed, some actions cannot be undone. The risks are different, and the governance must be different as well.
+
+\Cref{sec:agents2-action} examines the next question: how does an agent make things happen?

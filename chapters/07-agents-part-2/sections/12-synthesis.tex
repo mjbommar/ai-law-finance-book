@@ -1,0 +1,207 @@
+% ============================================================================
+% 12-synthesis.tex
+% Synthesis: Reference Architectures
+% Part of: Chapter 07 - Agents Part II: How to Build an Agent
+% ============================================================================
+
+\section{Synthesis: Reference Architectures}
+\label{sec:agents2-synthesis}
+
+% ----------------------------------------------------------------------------
+% Opening
+% ----------------------------------------------------------------------------
+
+The previous sections examined each of the ten questions in isolation. This section shows how they work together in complete deployments. Two reference architectures demonstrate the full framework while honestly acknowledging current limitations: one legal, one financial.
+
+\begin{highlightbox}[title={Reference Architectures, Not Production Claims}]
+The architectures below illustrate how components fit together. They represent \textit{design targets}, not claims about what current systems reliably achieve.
+
+Recall the reliability cliff from \Cref{sec:agents2-reliability}: near-perfect success on tasks under 4 minutes, under 10\% success on tasks over 4 hours. These reference architectures describe multi-hour workflows that would require extensive human oversight and intervention with current technology.
+
+Read these as ``how you would design it'' not ``how it works today.'' The failure mode analysis is as important as the architecture itself.
+\end{highlightbox}
+
+% ----------------------------------------------------------------------------
+% Case Study 1: Credit Facility Review
+% ----------------------------------------------------------------------------
+
+\subsection{Case Study: Credit Facility Documentation Review}
+\label{sec:agents2-case-legal}
+
+\subsubsection{The Scenario}
+
+A corporate client is borrowing \$500 million under a senior secured revolving credit facility. The law firm represents the borrower. The partner assigns the matter: ``Review the draft credit agreement and identify provisions that differ materially from market terms or our standard positions.''
+
+This is a document review task that would traditionally require 8--12 hours of senior associate time. The goal is not to replace the associate but to accelerate the review and ensure comprehensive coverage.
+
+\subsubsection{Ten Questions Applied}
+
+\textbf{Q1 (Triggers)}: Work enters via document upload to the deal room and partner assignment through the matter management system. The trigger is explicit: new document plus assignment.
+
+\textbf{Q2 (Intent)}: The agent extracts intent: document review task, borrower perspective, focus on material deviations from market and template. Implicit constraints include confidentiality (privileged work product) and deadline (closing in two weeks).
+
+\textbf{Q3 (Perception)}: The agent uses MCP Resources to access the draft agreement (document management), the firm's template facility agreement (precedent database), and market terms data (external database). Read-only access; no modifications.
+
+\textbf{Q4 (Action)}: Action tools are limited to document annotation (internal markup) and memo generation (work product creation). No external actions: filing, communication, or execution.
+
+\textbf{Q5 (Memory)}: Episodic memory tracks analysis progress (which sections reviewed, what issues identified). RAG provides access to prior credit agreement memos and deal histories. Matter isolation ensures this work doesn't access unrelated client information.
+
+\textbf{Q6 (Planning)}: Plan-Execute pattern. The agent creates a section-by-section review plan based on the table of contents. Systematic execution through financial covenants, events of default, representations, conditions precedent.
+
+\textbf{Q7 (Termination)}: Success criteria: all material sections reviewed, issues identified and categorized, draft memo produced. Budget: token limit, time limit, iteration limit. Checkpoint after initial scan to confirm scope.
+
+\textbf{Q8 (Escalation)}: Escalate on: ambiguous provisions requiring legal judgment, potential conflicts with other client matters, issues that might affect deal viability. Human-as-tool pattern for partner input on materiality thresholds.
+
+\textbf{Q9 (Delegation)}: Single-agent architecture for this task. Multi-agent would be appropriate if combined with separate research (legal issues) or financial modeling (covenant analysis) workstreams.
+
+\textbf{Q10 (Governance)}: Audit logging of all document access and analysis steps. Privilege protection enforced. Work product clearly marked as AI-assisted for attorney review.
+
+\subsubsection{Workflow}
+
+\begin{enumerate}[nosep]
+\item Partner assigns matter; agent receives trigger
+\item Agent retrieves credit agreement, template, market terms
+\item Agent creates review plan: 15 sections, estimated analysis per section
+\item Agent analyzes Section 1 (Definitions): identifies unusual defined terms, compares to template
+\item Agent continues through financial covenants: flags leverage ratio that differs from market
+\item Agent reviews events of default: identifies cross-default threshold below typical market terms
+\item ... [continues through all sections]
+\item Agent compiles findings into issues list and draft memo
+\item Agent presents to associate for review
+\item Associate reviews, adds context, escalates significant issues to partner
+\end{enumerate}
+
+\subsubsection{Failure Modes}
+
+Even well-designed systems fail. Understanding failure modes is crucial:
+
+\textbf{Nuanced definitions}: The agent may miss that a defined term has been subtly modified from the template in ways that affect covenant calculations. Human review catches: ``EBITDA is defined to exclude one-time charges, but the add-back is capped---that's unusual and limits flexibility.''
+
+\textbf{Cross-document dependencies}: The credit agreement references schedules and exhibits. If the agent doesn't trace these references and analyze the schedules, material issues may be missed.
+
+\textbf{Market context}: ``Market terms'' vary by borrower credit quality, industry, and timing. The agent compares to a template, but the template may not reflect current market for this borrower's profile.
+
+\textbf{Omissions}: The most dangerous failures are things the agent doesn't flag because it doesn't recognize their significance. Human expertise identifies: ``There's no limitation on amendments to subordinated debt---that's a significant gap.''
+
+\textbf{Mitigation}: Checkpoint review after initial scan. Associate reviews agent output, not just for correctness but for completeness. Partner review of final work product. The agent accelerates but doesn't replace human judgment.
+
+% ----------------------------------------------------------------------------
+% Case Study 2: Equity Portfolio Management
+% ----------------------------------------------------------------------------
+
+\subsection{Case Study: Equity Portfolio Management}
+\label{sec:agents2-case-financial}
+
+\subsubsection{The Scenario}
+
+An investment adviser manages a \$200 million equity portfolio for institutional clients. The portfolio manager wants continuous monitoring with agent assistance for rebalancing analysis, compliance checking, and research synthesis.
+
+This is a continuous monitoring and advisory task, not a one-time analysis. The goal is to augment the PM's capacity, not to trade autonomously.
+
+\subsubsection{Ten Questions Applied}
+
+\textbf{Q1 (Triggers)}: Multiple trigger types: market data feeds (price movements, earnings releases), scheduled jobs (daily compliance check, weekly rebalancing analysis), human prompts (PM requests analysis), escalation events (position approaching limits).
+
+\textbf{Q2 (Intent)}: Intent varies by trigger. Price alert: assess significance and recommend action. Scheduled rebalance: generate trade list if allocations drift beyond thresholds. PM query: answer specific question about position or strategy.
+
+\textbf{Q3 (Perception)}: MCP Resources access market data (prices, fundamentals), portfolio data (positions, P\&L), research (analyst reports, news), and compliance data (client guidelines, regulatory limits). Read-only access to trading systems.
+
+\textbf{Q4 (Action)}: Agents can generate recommendations and create reports. Trade execution requires PM approval---the execution action tool is behind an approval gate. No autonomous trading.
+
+\textbf{Q5 (Memory)}: Episodic memory tracks recent analysis, PM decisions, and rationales. RAG accesses investment research archive. Client isolation ensures each client's portfolio data is segregated.
+
+\textbf{Q6 (Planning)}: ReAct pattern for ad hoc analysis (exploratory). Plan-Execute for scheduled tasks (systematic). Hierarchical for comprehensive reviews (decompose to specialists).
+
+\textbf{Q7 (Termination)}: Varies by task. Monitoring: continuous (no termination). Analysis: complete when question answered. Rebalancing: complete when trade list generated and approved.
+
+\textbf{Q8 (Escalation)}: Escalate on: positions approaching limits, unusual market conditions, conflicting signals, any trade recommendation (PM approval required). Risk management escalation path for limit breaches.
+
+\textbf{Q9 (Delegation)}: Multi-agent architecture. Monitoring Agent watches market data. Research Agent synthesizes analyst reports. Compliance Agent checks guidelines. Rebalancing Agent generates trade recommendations. PM Agent orchestrates and presents to human PM.
+
+\textbf{Q10 (Governance)}: Comprehensive audit trail. Fiduciary duty documentation (rationale for recommendations). Compliance monitoring. MNPI controls (no access to deal team information).
+
+\subsubsection{Multi-Agent Workflow}
+
+\begin{enumerate}[nosep]
+\item Monitoring Agent detects: ``Tech sector up 3\% today; portfolio tech allocation now 35\% vs. 25\% target''
+\item Monitoring Agent triggers Rebalancing Agent
+\item Rebalancing Agent queries current positions (MCP)
+\item Rebalancing Agent generates trade options: sell \$20M tech, options include [specific positions]
+\item Rebalancing Agent queries Compliance Agent: ``Check proposed trades against guidelines''
+\item Compliance Agent confirms: trades within limits, no restricted securities
+\item Rebalancing Agent queries Research Agent: ``Any recent negative research on proposed sales?''
+\item Research Agent returns: ``No material negative research; one position has earnings next week''
+\item Rebalancing Agent adjusts: defer one sale until after earnings
+\item Rebalancing Agent presents recommendation to PM Agent
+\item PM Agent formats for human review, highlights key considerations
+\item Human PM reviews, approves (or modifies), authorizes execution
+\item Execution Agent (with PM approval) places orders via OMS
+\end{enumerate}
+
+\subsubsection{Multi-Agent Failure Modes}
+
+\textbf{Cascading errors}: Monitoring Agent misinterprets data; Rebalancing Agent acts on bad signal; trades recommended that shouldn't be. \textit{Mitigation}: Validation at each handoff; sanity checks on data before acting.
+
+\textbf{Coordination overhead}: Communication between agents consumes tokens and time. For simple decisions, overhead may exceed value. \textit{Assessment}: Monitor coordination costs; simplify when overhead dominates.
+
+\textbf{Debugging complexity}: When recommendations are wrong, tracing the error through multiple agents is difficult. \textit{Mitigation}: Comprehensive logging; clear attribution at each step; replay capability.
+
+\textbf{Agent disagreement}: Research Agent sees positive signal; Risk Agent sees negative. How is conflict resolved? \textit{Design}: Clear escalation when agents conflict; human resolves material disagreements.
+
+% ----------------------------------------------------------------------------
+% Synthesis Principles
+% ----------------------------------------------------------------------------
+
+\subsection{Synthesis: Principles Across Domains}
+\label{sec:agents2-synthesis-principles}
+
+Both case studies illustrate common principles that apply across legal and financial agent deployments:
+
+\textbf{Decomposition is essential}: Neither workflow attempts end-to-end autonomous completion. The credit facility review breaks into 15 section-by-section analyses rather than attempting one pass; the portfolio rebalancing separates constraint checking from trade generation from execution. Tasks are decomposed into manageable steps with human checkpoints.
+
+\textbf{Human-in-the-loop is the norm}: Both architectures assume human oversight at critical junctures: attorney review of legal analysis before client delivery, PM approval of trade recommendations before execution. Agents augment professional judgment; they do not replace it.
+
+\textbf{Memory enables continuity}: Both rely on episodic memory (what happened in this session) and RAG (institutional knowledge). The legal agent retrieves prior firm precedent on similar provisions; the financial agent accesses historical rebalancing decisions. Without memory, every interaction starts fresh.
+
+\textbf{Isolation is non-negotiable}: Matter isolation (legal) and client isolation (financial) are architectural requirements, not optional features. The agent working on Company A's financing cannot access Company B's confidential terms, even if both are firm clients.
+
+\textbf{Failure modes are predictable}: The same failure patterns appear in both domains: nuanced judgment that exceeds current capabilities, omissions where agents miss non-obvious issues, and cascading errors where early mistakes propagate through analysis. Design for these failures explicitly.
+
+\textbf{Governance is pervasive}: Every architectural choice has governance implications. Audit trails document what the agent accessed and concluded; approval gates ensure human review before irreversible actions; escalation paths route uncertainty to appropriate decision-makers.
+
+\textbf{Current limitations are real}: Neither architecture claims autonomous completion of multi-hour tasks. The reliability cliff constrains what agents can do today; design accordingly.
+
+% ----------------------------------------------------------------------------
+% Framework Completion
+% ----------------------------------------------------------------------------
+
+\subsection{Framework Completion Checklist}
+\label{sec:agents2-checklist}
+
+Before deploying any agent system, verify that all ten questions have been answered:
+
+\begin{highlightbox}[title={Ten-Question Deployment Checklist}]
+\begin{enumerate}[nosep]
+\item[$\square$] \textbf{Triggers}: How does work enter? Are all trigger types covered? Is there audit logging?
+
+\item[$\square$] \textbf{Intent}: How is intent extracted? What happens with ambiguity? Are constraints identified?
+
+\item[$\square$] \textbf{Perception}: What tools provide information? Is access properly controlled? Is provenance tracked?
+
+\item[$\square$] \textbf{Action}: What can the agent do? Are irreversible actions gated? Is rollback possible?
+
+\item[$\square$] \textbf{Memory}: What persists across sessions? Is isolation enforced? What are retention policies?
+
+\item[$\square$] \textbf{Planning}: What pattern applies? Are budgets enforced? Is there loop detection?
+
+\item[$\square$] \textbf{Termination}: How does the agent know when it's done? What are success criteria? How does it handle failure?
+
+\item[$\square$] \textbf{Escalation}: When does the agent ask for help? Who receives escalations? Is context sufficient?
+
+\item[$\square$] \textbf{Delegation}: Does it coordinate with other agents? Are protocols standardized? Are barriers enforced?
+
+\item[$\square$] \textbf{Governance}: Are security controls implemented? Is there audit capability? Are professional duties met?
+\end{enumerate}
+\end{highlightbox}
+
+Any question left unanswered represents a gap in the architecture that will manifest as a failure in production.

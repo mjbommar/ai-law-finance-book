@@ -1,0 +1,336 @@
+% ============================================================================
+% 05-action.tex
+% Q4: How Does an Agent Make Things Happen?
+% Part of: Chapter 07 - Agents Part II: How to Build an Agent
+% ============================================================================
+
+\section{How Does an Agent Make Things Happen?}
+\label{sec:agents2-action}
+
+% ----------------------------------------------------------------------------
+% Opening: Q4 Framing and Organizational Analogy
+% ----------------------------------------------------------------------------
+
+A junior associate's job extends beyond research to producing work product. They draft memos, send emails, file documents, schedule meetings. A trader's job extends beyond analysis to execution. They enter orders, route trades, confirm allocations. The value comes from action, not just observation.
+
+Agent systems face the same imperative. An agent that only reads---searching databases, retrieving documents, analyzing information---produces no deliverable. To complete tasks, agents must \textit{act}: generate documents, send communications, update systems, execute transactions. Action implements the ``A'' in the GPA framework from Part I.
+
+\begin{definitionbox}[title={Action Tools}]
+\keyterm{Action tools} enable agents to change the state of external systems. Unlike perception tools (read-only), action tools \textit{write}: they file documents, send messages, execute trades, update databases. Once executed, some actions cannot be undone.
+
+The distinction between perception and action is fundamental to governance. Perception risks include accessing wrong information or missing relevant data. Action risks include taking wrong actions that harm clients, violate regulations, or create liability.
+\end{definitionbox}
+
+% ----------------------------------------------------------------------------
+% Action Tool Categories
+% ----------------------------------------------------------------------------
+
+\subsection{Action Tool Categories}
+\label{sec:agents2-action-categories}
+
+Action tools vary in consequence. The key dimension is \keyterm{reversibility}: can the action be undone if something goes wrong?
+
+\subsubsection{Communication Tools (Partially Reversible)}
+
+Communication tools send information to others:
+
+\textbf{Internal communications}: Emails to colleagues, messages in collaboration platforms, updates to internal systems. These are partially reversible: you can follow up with corrections, but you cannot unsend.
+
+\textbf{External communications}: Emails to clients, letters to opposing counsel, regulatory notifications. Higher stakes than internal; recipients outside your control. Retractions are possible but create their own problems.
+
+\textbf{Automated alerts}: System-generated notifications, compliance alerts, deadline reminders. Often templated with limited customization.
+
+Governance implication: Internal communications may proceed with post-hoc review; external communications typically require pre-approval.
+
+\subsubsection{Document Management Tools (Largely Reversible)}
+
+Document management tools create and organize work product:
+
+\textbf{Document creation}: Drafting memos, generating reports, producing analysis. The documents exist internally and can be revised before distribution.
+
+\textbf{Document organization}: Filing documents in management systems, tagging and categorizing, maintaining matter files. Generally reversible through re-organization.
+
+\textbf{Template application}: Generating documents from templates, populating forms, producing standard documents. Low-risk if templates are validated.
+
+Governance implication: Document creation is relatively low-risk; documents can be revised before external sharing. Validation before distribution is the key control.
+
+\subsubsection{Filing and Submission Tools (Largely Irreversible)}
+
+Filing tools submit documents to external authorities:
+
+\textbf{Court filings}: E-filing through CM/ECF or state systems. Once filed, documents become part of the public record. Amendments are possible but do not erase the original.
+
+\textbf{Regulatory submissions}: SEC filings through EDGAR, FINRA submissions, state regulatory filings. Subject to regulatory requirements; errors can trigger enforcement.
+
+\textbf{Contract execution}: Signature, execution, delivery of binding agreements. Creates legal obligations that may be difficult or impossible to unwind.
+
+Governance implication: Filing and submission require mandatory pre-approval. The irreversibility demands human verification before execution.
+
+\subsubsection{Transaction Execution Tools (Irreversible or Costly)}
+
+Transaction tools execute binding transactions:
+
+\textbf{Trade execution}: Entering orders, executing trades, confirming allocations. Once executed, trades settle and create positions. Reversal requires offsetting trades at market prices.
+
+\textbf{Payment processing}: Wire transfers, payment initiation, fund disbursements. Once sent, funds are gone. Recovery requires recipient cooperation.
+
+\textbf{System updates}: Modifying production databases, updating client records, changing configurations. May affect downstream systems; reversal may be complex.
+
+Governance implication: Transaction execution requires the strictest controls---multi-factor approval, segregation of duties, real-time monitoring.
+
+% ----------------------------------------------------------------------------
+% The Reversibility Framework
+% ----------------------------------------------------------------------------
+
+\subsection{The Reversibility Framework}
+\label{sec:agents2-reversibility}
+
+\input{figures/fig-reversibility-spectrum}
+
+Reversibility determines required oversight. Consider how you delegate to a junior associate:
+
+\textbf{Fully reversible actions} (research, internal drafts): The associate works independently. If they make mistakes, you catch them in review. No external harm occurs.
+
+\textbf{Partially reversible actions} (internal communications, document organization): Checkpoint review. The associate completes work; you review before it affects others significantly.
+
+\textbf{Largely irreversible actions} (client communications, filings): Pre-approval required. The associate prepares; you approve before execution.
+
+\textbf{Irreversible actions} (trade execution, fund transfers): Multi-party approval with controls. Multiple people must verify before execution.
+
+\begin{table}[htbp]
+\centering
+\caption{Action reversibility and required oversight}
+\label{tab:agents2-reversibility}
+\small
+\begin{tabular}{p{0.20\textwidth}p{0.25\textwidth}p{0.22\textwidth}p{0.20\textwidth}}
+\toprule
+\textbf{Reversibility} & \textbf{Examples} & \textbf{Oversight} & \textbf{Recovery} \\
+\midrule
+Fully reversible & Research, internal drafts, calculations & Post-hoc review & Delete/revise \\
+\midrule
+Partially reversible & Internal emails, document filing, alerts & Checkpoint review & Correction/follow-up \\
+\midrule
+Largely irreversible & Client communications, court filings, regulatory submissions & Pre-approval required & Amendment/retraction (visible) \\
+\midrule
+Irreversible & Trade execution, wire transfers, contract execution & Multi-party approval & Offsetting transaction (costly) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Agent governance should track reversibility. The architecture should enforce appropriate controls based on action classification.
+
+% ----------------------------------------------------------------------------
+% MCP Tools for Action
+% ----------------------------------------------------------------------------
+
+\subsection{MCP Tools and Prompts for Action}
+\label{sec:agents2-mcp-action}
+
+The Model Context Protocol defines two capability types relevant to action:
+
+\subsubsection{MCP Tools}
+
+\keyterm{MCP Tools} are executable functions that may change state. Unlike Resources (read-only), Tools can:
+
+\begin{itemize}[nosep]
+\item Create and modify documents
+\item Send communications
+\item Submit filings
+\item Execute transactions
+\item Update external systems
+\end{itemize}
+
+Tool manifests should include risk metadata: reversibility classification, approval requirements, audit requirements. This enables hosts to enforce appropriate controls.
+
+\subsubsection{MCP Prompts}
+
+\keyterm{MCP Prompts} are reusable templates for common tasks. For action tools, prompts encode standard operating procedures:
+
+\textbf{Legal examples}: Contract review checklist prompts, due diligence workflow prompts, filing preparation prompts.
+
+\textbf{Financial examples}: Trade compliance check prompts, client onboarding prompts, regulatory submission prompts.
+
+Prompts standardize action sequences, reducing variation and error. They are particularly valuable for high-stakes actions where consistency matters.
+
+% ----------------------------------------------------------------------------
+% Action Security
+% ----------------------------------------------------------------------------
+
+\subsection{Action Security}
+\label{sec:agents2-action-security}
+
+Every action interface is a potential security boundary. Actions access external systems, process inputs, and create real-world consequences.
+
+\subsubsection{Core Controls}
+
+All action tools must implement:
+
+\textbf{Authentication}: Verify the agent is who it claims to be. Service accounts with strong credentials; no shared or default passwords.
+
+\textbf{Authorization}: Verify the agent has permission for this specific action. Role-based access control; principle of least privilege.
+
+\textbf{Input validation}: Reject malformed or suspicious requests. Validate all parameters before execution.
+
+\textbf{Output confirmation}: For high-stakes actions, require confirmation before execution completes.
+
+\textbf{Rate limiting}: Cap action frequency to prevent runaway execution. Escalate after repeated actions.
+
+\textbf{Audit logging}: Record every action with full context: agent identifier, action name, parameters, timestamp, result, matter/client context.
+
+\subsubsection{Threat-Specific Mitigations}
+
+\textbf{Prompt injection through action parameters}: Adversaries embed instructions in parameters the agent passes to action tools. \textit{Mitigation}: Sanitize all parameters; never pass raw user input directly to action interfaces; validate parameter formats against strict schemas.
+
+\textbf{Privilege escalation through tool chaining}: An agent chains multiple tools to achieve capabilities no single tool grants. \textit{Mitigation}: Analyze tool combinations for escalation paths; require human approval for tool sequences that span security boundaries.
+
+\textbf{Action replay}: A captured action request is replayed to re-execute the action. \textit{Mitigation}: Implement nonces or timestamps; reject duplicate requests; maintain action logs for detection.
+
+% ----------------------------------------------------------------------------
+% Approval Workflows
+% ----------------------------------------------------------------------------
+
+\subsection{Approval Workflows}
+\label{sec:agents2-approval}
+
+For non-reversible actions, the agent prepares; humans approve. Several patterns implement this:
+
+\subsubsection{Single Approver}
+
+The agent completes preparation and presents to one designated approver. Appropriate for routine actions with clear approval authority.
+
+\textbf{Pattern}: Agent prepares court filing $\rightarrow$ presents to supervising attorney $\rightarrow$ attorney reviews and approves $\rightarrow$ agent submits.
+
+\subsubsection{Multi-Party Approval}
+
+High-stakes actions require multiple independent approvers. Appropriate for actions with significant financial or legal exposure.
+
+\textbf{Pattern}: Agent prepares wire transfer $\rightarrow$ operations reviews amounts and accounts $\rightarrow$ compliance reviews purpose and restrictions $\rightarrow$ manager provides final approval $\rightarrow$ agent executes.
+
+\subsubsection{Escalating Approval}
+
+Approval authority escalates with transaction size or risk. Routine actions have lower approval thresholds; exceptional actions escalate to senior personnel.
+
+\textbf{Pattern}: Trades under \$100K $\rightarrow$ desk manager approval. Trades \$100K-\$1M $\rightarrow$ senior trader approval. Trades over \$1M $\rightarrow$ CIO approval.
+
+\subsubsection{Approval Request Design}
+
+Effective approval requests include:
+
+\begin{itemize}[nosep]
+\item Clear description of the proposed action
+\item Context: why is this action needed?
+\item Risk assessment: what could go wrong?
+\item Reversibility: can this be undone?
+\item Supporting evidence: what analysis supports this action?
+\item Deadline: when is approval needed?
+\end{itemize}
+
+The approver should be able to make an informed decision from the request alone, without needing to investigate further.
+
+% ----------------------------------------------------------------------------
+% Rollback Capabilities
+% ----------------------------------------------------------------------------
+
+\subsection{Rollback Capabilities}
+\label{sec:agents2-rollback}
+
+When actions fail or produce wrong results, rollback capabilities limit damage:
+
+\subsubsection{Fully Reversible Actions}
+
+For actions like document creation or internal system updates:
+
+\textbf{Pattern}: Maintain version history. If the agent creates document version 3 and it is wrong, restore version 2. No external impact.
+
+\subsubsection{Partially Reversible Actions}
+
+For actions like internal communications:
+
+\textbf{Pattern}: Follow-up correction. If the agent sent an incorrect internal alert, send a corrected alert with clear indication that it supersedes the prior message.
+
+\subsubsection{Largely Irreversible Actions}
+
+For actions like court filings:
+
+\textbf{Pattern}: Amendment or correction filing. If the agent filed a document with errors, file an amended version. The original remains visible but is superseded. May require court permission.
+
+\subsubsection{Irreversible Actions}
+
+For actions like trade execution:
+
+\textbf{Pattern}: Offsetting transaction. If the agent executed a wrong trade, execute an offsetting trade to close the position. The offset occurs at current market prices, potentially locking in losses. This is damage mitigation, not reversal.
+
+\textbf{Pattern}: Incident response. Immediately escalate to human control. Stop further automated actions. Begin investigation and remediation.
+
+% ----------------------------------------------------------------------------
+% Rate Limiting and Circuit Breakers
+% ----------------------------------------------------------------------------
+
+\subsection{Rate Limiting and Circuit Breakers}
+\label{sec:agents2-circuit-breakers}
+
+Agents can get stuck in action loops: submitting the same request repeatedly, sending multiple messages, attempting failed transactions again and again. Controls prevent runaway execution:
+
+\subsubsection{Rate Limiting}
+
+Cap how many actions the agent can take per time period:
+
+\textbf{Per-action limits}: No more than 5 emails per minute; no more than 10 trades per hour.
+
+\textbf{Per-matter limits}: No more than 20 actions on any single matter per day without human review.
+
+\textbf{Cost limits}: No more than \$1,000 in transaction costs per session.
+
+When limits are reached, the agent pauses and escalates rather than continuing.
+
+\subsubsection{Circuit Breakers}
+
+Automatic stops when anomalies are detected:
+
+\textbf{Repeated failures}: If the same action fails 3 times, stop and escalate. Do not retry indefinitely.
+
+\textbf{Unusual patterns}: If action rate suddenly spikes, pause for review. May indicate agent malfunction or compromise.
+
+\textbf{Threshold breaches}: If cumulative actions exceed daily limits, stop automatically. Resume requires human authorization.
+
+Circuit breakers transform potential runaway failures into controlled pauses that allow human intervention.
+
+% ----------------------------------------------------------------------------
+% Evaluating Action Capabilities
+% ----------------------------------------------------------------------------
+
+\subsection{Evaluating Action Capabilities}
+\label{sec:agents2-action-eval}
+
+When evaluating agent systems, assess action capabilities against these criteria:
+
+\textbf{Action inventory}: What actions can the agent take? Map available action tools against workflow requirements.
+
+\textbf{Reversibility classification}: Is each action properly classified? Are controls appropriate to reversibility level?
+
+\textbf{Approval workflows}: Are approval gates implemented for non-reversible actions? Do approvers receive sufficient information?
+
+\textbf{Security controls}: Are authentication, authorization, and audit logging implemented? Have penetration tests been conducted?
+
+\textbf{Rate limiting}: Are limits in place? Do they match acceptable risk tolerances?
+
+\textbf{Rollback capability}: What happens when actions fail? Are recovery procedures documented and tested?
+
+% ----------------------------------------------------------------------------
+% Connection to Other Questions
+% ----------------------------------------------------------------------------
+
+\subsection{From Action to Governance}
+\label{sec:agents2-action-governance}
+
+Action tools are where agent systems create real-world consequences. The governance implications are significant:
+
+\textbf{Perception risks} (Q3) include accessing wrong or incomplete information. The agent reasons from bad data, but no external harm has occurred yet.
+
+\textbf{Action risks} (Q4) include taking wrong actions that harm clients, violate regulations, or create liability. The consequences are external and may be irreversible.
+
+Chapter~8 examines action governance in detail: actuation controls that limit what agents can do, approval gates that require human verification, and audit trails that enable accountability.
+
+Within this chapter, \Cref{sec:agents2-escalation} examines when agents should \textit{not} act---recognizing situations that require human decision-making rather than autonomous execution. The interplay between action capability and escalation judgment is central to safe agent deployment.
+
+\Cref{sec:agents2-memory} examines the next question: how does an agent remember things? Memory enables agents to maintain context across sessions, learn from experience, and access institutional knowledge.

@@ -1,0 +1,142 @@
+% ============================================================================
+% 14-conclusion.tex
+% Conclusion: From Architecture to Governance
+% Part of: Chapter 07 - Agents Part II: How to Build an Agent
+% ============================================================================
+
+\section{Conclusion: From Architecture to Governance}
+\label{sec:agents2-conclusion}
+
+% ----------------------------------------------------------------------------
+% Opening: Agents as Professional Teams
+% ----------------------------------------------------------------------------
+
+AI agents are organized like professional teams. Just as a law firm needs infrastructure---library access, case files, project management, supervision, escalation paths---agents need architecture. The ten questions map directly:
+
+\begin{enumerate}[nosep]
+\item How does work arrive? (Inbox, phone, calendar)
+\item What's being asked? (Reading the assignment memo)
+\item How do you find things out? (Library and database access)
+\item How do you make things happen? (Filing, sending, executing)
+\item How do you remember things? (Case file, knowledge base)
+\item How do you break work into steps? (Project plan)
+\item How do you know when you're done? (Deliverable criteria)
+\item When do you ask for help? (Going to the supervisor)
+\item How do you work with specialists? (Coordinating co-counsel)
+\item How do you stay safe? (Compliance, audit, oversight)
+\end{enumerate}
+
+The organizational analogy is a design principle, not merely a metaphor. Agent architecture mirrors professional organization because both solve the same problems: distributing cognitive work, maintaining context, coordinating specialists, ensuring quality, and enabling oversight.
+
+% ----------------------------------------------------------------------------
+% What You Now Understand
+% ----------------------------------------------------------------------------
+
+\subsection{What You Now Understand}
+\label{sec:agents2-conclusion-understand}
+
+The ten questions provide a comprehensive framework for understanding agent architecture. Each question addresses a capability that professional agent systems require.
+
+\textbf{Triggers} initiate execution through structured intake systems---external feeds, human prompts, scheduled jobs, and escalation events. Work reaches agents the same way it reaches professionals: through defined channels that route tasks to the right handlers with appropriate priority.
+
+\textbf{Intent} parsing bridges raw instructions and actionable goals. The agent must extract goals, constraints, and success criteria from natural language, and when ambiguity is high, clarification is preferable to guessing. This capability determines whether agents execute the right task or merely a plausible one.
+
+\textbf{Perception} tools enable agents to gather information: current case law, market prices, client documents, and internal knowledge bases. These tools are read-only by design---they observe the world without changing it, making them relatively safe to use autonomously while still enabling rich situational awareness.
+
+\textbf{Action} tools change external state, from drafting documents to filing submissions to executing trades. Reversibility determines the appropriate level of oversight: irreversible actions like court filings require pre-approval, while reversible actions like internal drafts can proceed autonomously with post-hoc review.
+
+The \textbf{memory} layer provides continuity across sessions, preventing the waste of re-doing work that was already completed. Beyond simple session persistence, memory enables access to institutional knowledge and learning from past experience---the accumulated wisdom that makes senior professionals more effective than novices.
+
+\textbf{Planning} decomposes complex tasks into executable steps, preventing agents from thrashing between actions without strategy. Different patterns suit different tasks: ReAct for iterative exploration, Plan-Execute for structured workflows, Hierarchical for complex matters requiring coordination across multiple workstreams.
+
+\textbf{Termination} conditions define when agents stop executing. Success criteria specify what ``done'' looks like, resource budgets prevent runaway costs, and confidence thresholds trigger escalation when uncertainty is high. These bounds transform potentially unbounded execution into predictable, governable operation.
+
+\textbf{Escalation} transfers control to humans when agents reach their limits---recognizing that asking for help is professionalism, not failure. Effective escalation requires both the judgment to recognize when limits are reached and the mechanisms to transfer context to human decision-makers efficiently.
+
+\textbf{Delegation} distributes work across specialized agents, enabling architectures where each agent has narrow permissions and focused expertise. This specialization improves both capability (experts outperform generalists) and security (compromised agents have limited blast radius).
+
+Finally, \textbf{governance} ensures agents operate within acceptable bounds for regulated professional practice. Professional duties of competence, supervision, and confidentiality are non-delegable; architecture must enable the oversight that these duties require. Trust in agent systems depends on verifiable compliance, not vendor promises.
+
+% ----------------------------------------------------------------------------
+% What This Lets You Do
+% ----------------------------------------------------------------------------
+
+\subsection{What This Lets You Do}
+\label{sec:agents2-conclusion-enables}
+
+\textbf{Evaluate vendor claims critically}: When a vendor says their agent ``handles legal research,'' you know to ask: What triggers initiate research? How does it understand the research question? What tools provide information? How does it know when research is complete? What escalation paths exist? The ten questions provide an evaluation framework.
+
+\textbf{Participate in procurement decisions}: You can assess whether a proposed agent system meets your organization's requirements. Does it enforce matter isolation? Does it maintain audit trails? Does it integrate with your approval workflows? You have vocabulary to specify requirements.
+
+\textbf{Design governance that maps to architecture}: You understand that governance is not separate from architecture; it is enabled by architecture. Audit logging is an architectural choice that enables compliance review. Approval gates are architectural choices that enable human oversight. You can design systems where governance is built in, not bolted on.
+
+\textbf{Communicate with technical teams}: You can describe what you need in terms developers understand. ``I need perception tools for these three databases, action tools behind approval gates for these two operations, escalation triggers when confidence drops below threshold.'' Shared vocabulary enables collaboration.
+
+\begin{keybox}[title={Architecture Enables Governance}]
+Every architectural choice has governance implications:
+
+\begin{itemize}[nosep]
+\item Trigger logging enables audit of what initiated agent action
+\item Intent extraction enables review of what the agent understood
+\item Perception controls enable data governance
+\item Action gates enable approval workflows
+\item Memory isolation enables confidentiality protection
+\item Planning budgets enable bounded operation
+\item Termination criteria enable completion verification
+\item Escalation paths enable human oversight
+\item Delegation contracts enable accountability
+\end{itemize}
+
+\textbf{You cannot govern what you did not architect.}
+\end{keybox}
+
+% ----------------------------------------------------------------------------
+% Current Limitations
+% ----------------------------------------------------------------------------
+
+\subsection{Current Limitations}
+\label{sec:agents2-conclusion-limitations}
+
+Honest assessment of current capabilities:
+
+\textbf{The reliability cliff}: Near-perfect success on tasks under 4 minutes; under 10\% success on tasks over 4 hours. Design for this reality: decompose tasks, insert checkpoints, assume failures will occur.
+
+\textbf{Judgment limitations}: Agents excel at retrieval, pattern matching, and systematic execution. They struggle with nuanced judgment, novel situations, and assessing significance. Human oversight remains essential for professional work.
+
+\textbf{Integration brittleness}: Production systems fail in unpredictable ways. API changes, authentication expiration, rate limits, format variations. Robust error handling is required, not optional.
+
+\textbf{Compounding errors}: Each step introduces error probability. Multi-step workflows compound these probabilities. Validation at checkpoints is essential.
+
+These limitations are not permanent, but they are real today. Design systems that deliver value despite limitations, not systems that assume limitations do not exist.
+
+% ----------------------------------------------------------------------------
+% From Architecture to Governance
+% ----------------------------------------------------------------------------
+
+\subsection{From Architecture to Governance}
+\label{sec:agents2-conclusion-bridge}
+
+This chapter answered: \textit{How do you build an agent?}
+
+The ten questions provide architectural foundations. Each question maps to implementation choices. Each implementation choice enables---or forecloses---governance options.
+
+Chapter~8 answers the next question: \textit{How do you govern an agent?}
+
+Where this chapter focused on \textit{capability}---what agents can do---Chapter~8 focuses on \textit{control}---ensuring agents do what they should, and only what they should. The five-layer governance stack (legal, model, system, process, culture) provides the framework. Dimensional controls (autonomy, persistence, goal dynamics) calibrate oversight. Implementation patterns translate principles into practice.
+
+The three chapters form a coherent arc:
+
+\begin{itemize}[nosep]
+\item \textbf{Part I (Chapter~6)}: What is an agent? The GPA+IAT framework defines the concept.
+\item \textbf{Part II (Chapter~7)}: How do you build one? The ten questions provide architecture.
+\item \textbf{Part III (Chapter~8)}: How do you govern it? The governance stack provides controls.
+\end{itemize}
+
+You understand agent architecture. Now you can govern it.
+
+\vspace{1em}
+\begin{center}
+\textit{You cannot govern what you do not understand.}
+
+\textit{This chapter has provided that understanding.}
+\end{center}

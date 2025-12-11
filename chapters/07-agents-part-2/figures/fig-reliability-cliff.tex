@@ -1,0 +1,115 @@
+% TikZ figure: The Reliability Cliff
+% Shows dramatic drop in agent success rates as task duration increases
+% Based on METR 2024 findings
+% Uses semantic color palette (example-light, key-light, caution-light)
+
+\begin{figure}[!htb]
+  \centering
+  \begin{tikzpicture}[
+    scale=1.0,
+    font=\footnotesize,
+    >=stealth
+  ]
+
+    % Define key x-coordinates for readability
+    \def\xmin{0}
+    \def\xfourmin{2}      % 4 minutes mark
+    \def\xfourhours{8}    % 4 hours mark
+    \def\xmax{10}
+
+    % Define y-coordinates
+    \def\ymin{0}
+    \def\ymax{5}
+    \def\yhigh{4.75}      % ~95% success
+    \def\ylow{0.5}        % ~10% success
+
+    % ZONE 1: Safe Zone (under 4 min) - example-light (green)
+    \fill[example-light, opacity=0.3]
+      (\xmin,\ymin) rectangle (\xfourmin,\ymax);
+
+    % ZONE 2: Transition Zone (4 min to 4 hours) - key-light (amber)
+    \fill[key-light, opacity=0.3]
+      (\xfourmin,\ymin) rectangle (\xfourhours,\ymax);
+
+    % ZONE 3: Unreliable Zone (over 4 hours) - caution-light (red)
+    \fill[caution-light, opacity=0.3]
+      (\xfourhours,\ymin) rectangle (\xmax,\ymax);
+
+    % Draw axes
+    \draw[->, line width=1pt, gray-800]
+      (\xmin,\ymin) -- (\xmax,\ymin) node[right, black] {Task Duration};
+    \draw[->, line width=1pt, gray-800]
+      (\xmin,\ymin) -- (\xmin,\ymax) node[above, black] {Success Rate};
+
+    % Y-axis labels
+    \foreach \y/\label in {0/0\%, 1.25/25\%, 2.5/50\%, 3.75/75\%, 5/100\%} {
+      \draw[gray-800] (\xmin,\y) -- ++(-0.1,0);
+      \node[left, black] at (\xmin,\y) {\label};
+    }
+
+    % X-axis labels
+    \draw[gray-800] (\xfourmin,\ymin) -- ++(0,-0.1);
+    \node[below, black] at (\xfourmin,\ymin) {4 min};
+
+    \draw[gray-800] (\xfourhours,\ymin) -- ++(0,-0.1);
+    \node[below, black] at (\xfourhours,\ymin) {4 hours};
+
+    % Draw the reliability cliff line
+    \draw[line width=2pt, draw=gray-800]
+      (\xmin,\yhigh) -- (\xfourmin,\yhigh)           % Flat high success
+      -- (\xfourhours,\ylow)                          % Sharp drop (the cliff)
+      -- (\xmax,\ylow);                               % Flat low success
+
+    % Add circle markers at key points
+    \fill[gray-800] (\xfourmin,\yhigh) circle (2pt);
+    \fill[gray-800] (\xfourhours,\ylow) circle (2pt);
+
+    % Zone annotations
+    \node[example-dark, font=\small\bfseries] at (1, 4.25) {Safe Zone};
+    \node[example-dark, font=\footnotesize] at (1, 3.75) {$\sim$95\% success};
+
+    \node[caution-dark, font=\small\bfseries] at (9, 4.25) {Unreliable};
+    \node[caution-dark, font=\footnotesize] at (9, 3.75) {$\sim$10\% success};
+
+    % Callout annotation pointing to the cliff
+    \node[
+      draw=gray-800,
+      fill=white,
+      rounded corners=2pt,
+      font=\small\bfseries,
+      align=center,
+      inner sep=4pt
+    ] (callout) at (5.5, 3.5) {
+      The Reliability Cliff\\
+      \footnotesize\normalfont(METR 2024)
+    };
+
+    % Arrow from callout to cliff
+    \draw[->, line width=1pt, gray-600]
+      (callout.south) -- (\xfourhours-0.5,\ylow+1.5);
+
+    % Key insight box at bottom
+    \node[
+      draw=key-dark,
+      fill=key-light,
+      rounded corners=3pt,
+      text width=8cm,
+      align=center,
+      font=\small,
+      inner sep=6pt,
+      opacity=0.9
+    ] at (5, -1.2) {
+      \textbf{Implication:} Decompose tasks to stay under 4 minutes for reliable execution
+    };
+
+  \end{tikzpicture}
+
+  \caption{
+    The Reliability Cliff: Agent success rates drop dramatically as task duration increases.
+    METR (2024) found that agents maintain approximately 95\% success on tasks under 4 minutes,
+    but success rates fall to roughly 10\% for tasks exceeding 4 hours.
+    This sharp transition motivates the decomposition of complex tasks into shorter subtasks
+    and the use of aggressive timeout policies in agent architectures.
+  }
+  \label{fig:agents2-reliability-cliff}
+\end{figure}

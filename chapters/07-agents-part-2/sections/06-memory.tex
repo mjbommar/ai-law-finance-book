@@ -1,0 +1,182 @@
+% ============================================================================
+% 06-memory.tex
+% Q5: How Does an Agent Remember Things?
+% Part of: Chapter 07 - Agents Part II: How to Build an Agent
+% ============================================================================
+
+\section{How Does an Agent Remember Things?}
+\label{sec:agents2-memory}
+
+% ----------------------------------------------------------------------------
+% Opening: Q5 Framing and Organizational Analogy
+% ----------------------------------------------------------------------------
+
+Every experienced legal professional knows that institutional memory makes the difference between efficient work and reinventing the wheel. When you start a new securities registration matter, you do not begin from scratch. You pull the last three S-1 filings the firm completed, review the SEC comment history, and check the precedent database for disclosure language addressing similar risk factors. You do not re-research basic questions like ``What are the disclosure requirements for executive compensation?'' The firm maintains templates and form language that incorporate years of accumulated knowledge.
+
+The same principle applies to portfolio management. When you revisit an equity position, you do not rebuild the investment thesis from scratch. You pull the research file, review your prior DCF model and industry analysis, then update assumptions with recent earnings data and sector trends. The accumulated research---organized and accessible---enables incremental refinement rather than duplicative work.
+
+Memory in agent systems serves the same purpose: context retention across sessions and learning from experience. Without memory, every interaction starts fresh. The agent does not remember what it researched yesterday, what approaches worked, or what the human told it about case strategy. With memory, the agent maintains continuity, much like the case file that follows a matter from initial consultation through trial.
+
+\begin{definitionbox}[title={Agent Memory}]
+\keyterm{Agent memory} stores and retrieves information across timescales. Short-term memory is the documents spread across an associate's desk during active work. Long-term memory is the firm's knowledge management system with decades of research memos. Episodic memory is the case file that tracks what happened on this specific matter. Semantic memory is the legal principles every attorney internalizes over their career.
+\end{definitionbox}
+
+% ----------------------------------------------------------------------------
+% Memory Types
+% ----------------------------------------------------------------------------
+
+\subsection{Memory Types: From Desk to Archive}
+\label{sec:agents2-memory-types}
+
+Law firms use layered filing systems, each suited to different timescales and access patterns. The associate's desk holds today's active work, the matter file contains everything related to this engagement, and the firm's precedent database archives decades of institutional knowledge. Each layer trades immediacy for capacity, and effective practice requires knowing which system to consult when.
+
+\subsubsection{Working Memory (Context Window)}
+
+The associate has papers spread across their desk: the documents actively in use right now. This immediate context is \textbf{working memory}. In agent systems, working memory takes the form of the \textit{context window}, the tokens currently loaded in the LLM's attention.
+
+Just like desk space, context windows have strict limits. The associate can only have so many documents open at once; the agent can only hold so many tokens in active context (as of late 2025, 200K tokens for leading models, though this ceiling continues to rise). When the case involves more documents than fit on the desk, you need other storage systems.
+
+The banker has \textit{market data on the trading screen}: live prices, recent news, positions from today's session. This too is working memory: fresh and immediately accessible but gone when the session ends.
+
+\subsubsection{Episodic Memory}
+
+Beyond the desk sits the matter file for the specific engagement. Every memo, every piece of correspondence, every research result related to this matter goes in the file. The associate does not re-research questions already answered; the file comes first. When the partner asks ``What's our argument on venue?,'' the associate pulls the file and reads the prior research memo rather than starting over.
+
+Agent systems call this \textbf{episodic memory}: the history of actions and outcomes for a specific task or session. The agent remembers: ``I searched for Ninth Circuit venue cases, found three relevant opinions, drafted analysis, partner reviewed and approved.'' When asked a follow-up question, the agent retrieves that prior work.
+
+The financial parallel is the research file for each position. When you revisit a stock you analyzed six months ago, you do not rebuild the entire investment thesis. You pull the file, read your prior analysis, and update it with new information. The agent does the same: retrieve prior analysis, check what has changed, update conclusions.
+
+\subsubsection{Retrieval-Augmented Generation (RAG)}
+
+The third layer is the firm's precedent database: institutional knowledge accumulated over decades. Every time the firm handles a particular type of matter, the work product goes into the archive. When you need language for a force majeure clause in a construction contract, the precedent database offers fifty examples from prior deals. When you need briefing on qualified immunity, the database contains the firm's best arguments from the past ten years, organized by circuit and issue.
+
+Agent systems implement this through \textbf{retrieval-augmented generation (RAG)}: dynamically fetching relevant information from a large corpus to augment the agent's reasoning. RAG enables agents to access institutional knowledge beyond what fits in context.
+
+For the financial analyst, the equivalent is the firm's market research database: historical earnings reports, industry analyses, competitive landscape studies, and valuation models---all searchable and retrievable when analyzing new opportunities.
+
+\subsubsection{Vector Stores}
+
+The fourth layer is the \textbf{vector store} that powers RAG---the underlying technology that makes precedent databases searchable. Rather than just keyword search (which misses synonyms and related concepts), vector stores encode documents as high-dimensional embeddings that capture semantic meaning.
+
+When you search for ``breach of fiduciary duty,'' the system finds not just documents containing that exact phrase but also documents about ``violation of trust obligations'' or ``failure to act in good faith''---concepts that mean similar things even if worded differently.
+
+\begin{keybox}[title={Memory Layers: From Desk to Archive}]
+Agent memory mirrors professional filing systems with four layers:
+
+\textbf{Working Memory (Context Window)}: Immediate task context. Like documents spread on your desk---fast access but limited space. As of late 2025: 200K tokens for leading models, growing but still finite.
+
+\textbf{Episodic Memory}: Session history for this specific task. Like the matter file or research folder---everything related to this engagement. Enables continuity: ``What did I already research?''
+
+\textbf{Retrieval-Augmented Generation (RAG)}: Institutional knowledge base. Like the firm's precedent database or market research archive---decades of accumulated expertise, searchable on demand.
+
+\textbf{Vector Store}: The technology powering RAG. Semantic search that finds conceptually similar content even when exact words differ. Understands that ``breach of fiduciary duty'' relates to ``violation of trust obligations.''
+
+Each layer trades speed for capacity: working memory is fastest but smallest, vector stores are largest but require retrieval latency.
+\end{keybox}
+
+% ----------------------------------------------------------------------------
+% RAG Implementation
+% ----------------------------------------------------------------------------
+
+\subsection{Retrieval-Augmented Generation}
+\label{sec:agents2-rag}
+
+RAG enables agents to access institutional knowledge, the equivalent of asking the firm librarian ``show me our best research on this issue.'' Traditional keyword search works but misses cases discussing the same concept using different language. Semantic search using embeddings finds conceptually similar content even when exact words differ.
+
+\subsubsection{The RAG Pipeline}
+
+The RAG pipeline has four steps, each transforming information to enable semantic retrieval. First, \textbf{chunking} breaks documents into semantic units while preserving metadata, so a 50-page contract becomes many retrievable segments, each maintaining reference to its source location and document context. Second, \textbf{embedding} converts each chunk into a high-dimensional vector that encodes semantic meaning, positioning similar concepts near each other in vector space regardless of the specific words used. Third, \textbf{retrieval} finds chunks similar to the query by embedding the user's question and returning chunks with similar vectors---a question about ``breach of fiduciary duty'' retrieves chunks discussing ``violation of trust obligations'' even though the exact phrase never appears. Finally, \textbf{generation} augments the agent's prompt with retrieved content, so the LLM sees both the question and relevant context from the knowledge base when formulating its response.
+
+\subsubsection{Advanced Patterns}
+
+The best implementations enhance basic RAG with four advanced patterns. \textbf{Hybrid retrieval} combines semantic search (embeddings) with keyword search (BM25, a standard term-frequency ranking algorithm), catching both conceptual similarity and exact term matches that pure semantic search might miss. \textbf{Query rewriting} expands ambiguous queries before retrieval, transforming vague questions like ``What's the rule?'' into specific queries such as ``What is the legal rule governing [topic from context]?'' based on conversational context. \textbf{Reranking} scores results by authority after initial retrieval, ensuring that binding precedent ranks above secondary sources even when secondary sources use more semantically similar language. \textbf{Filtered retrieval} constrains results by jurisdiction, time period, or other metadata, preventing the system from retrieving California cases when researching New York law or outdated regulations when current guidance is required.
+
+\subsubsection{Citation Verification}
+
+The critical requirement: never let fabricated citations reach the user. Hallucinated citations---plausible-sounding but nonexistent cases---are a known failure mode. Before any citation reaches work product, verify that the source actually appeared in retrieved context.
+
+% ----------------------------------------------------------------------------
+% Domain-Specific Memory Considerations
+% ----------------------------------------------------------------------------
+
+\subsection{Domain-Specific Memory Considerations}
+\label{sec:agents2-memory-domain}
+
+Memory for regulated professional services requires specialized enhancements beyond generic RAG implementations. The systems must account for authority hierarchies, jurisdictional boundaries, temporal validity, and identifier normalization---requirements rarely found in consumer applications but critical for professional practice.
+
+\subsubsection{Authority Weighting}
+
+Not all information is equally authoritative. \textbf{Authority weighting} ensures primary authority (statutes, binding precedent) ranks higher than secondary sources. When searching for ``insider trading liability,'' a Supreme Court opinion should outrank a law review note using more similar language.
+
+Financial systems apply similar authority weighting: SEC no-action letters rank above law firm client alerts, official exchange rules above broker-dealer summaries, and Federal Reserve guidance above market commentary.
+
+\subsubsection{Jurisdiction Awareness}
+
+\textbf{Jurisdiction awareness} respects legal boundaries. California precedent doesn't bind Texas courts; SEC rules differ from CFTC rules. Metadata tagging during ingestion enables proper filtering. An agent researching Delaware corporate law must not surface New York case law as controlling authority, even if semantically similar.
+
+\subsubsection{Temporal Validity}
+
+\textbf{Temporal validity} matters because law changes. Citator integration validates that retrieved cases haven't been overruled. A 1985 securities case may have been good law for decades but reversed in 2023; RAG must surface the current state of the law, not historical precedent.
+
+Financial temporal validity varies by context: milliseconds for trading data (stale prices cause losses), days for research reports (quarterly updates suffice), and effective dates for compliance rules (``What are the margin requirements \textit{as of January 15, 2025}?'').
+
+When does memory become stale? For legal research, staleness depends on dynamism: tax law changes annually, constitutional doctrine evolves slowly. For financial data, equity prices are stale in seconds, but industry structure analysis remains valid for quarters. Effective memory systems tag temporal validity and trigger refresh when content ages beyond acceptable bounds.
+
+\subsubsection{Identifier Resolution}
+
+\textbf{Identifier resolution} normalizes citations (``123 F.3d 456'' and ``123 F3d 456'' are the same case) and financial identifiers. Tickers change over time, and companies have multiple identifiers: CUSIP (Committee on Uniform Securities Identification Procedures numbers), ISIN (International Securities Identification Numbers), and LEI (Legal Entity Identifiers). Without normalization, retrieval fragments: half your precedent on \textit{Smith v. Jones} does not surface because some associates cited it with spacing variations.
+
+% ----------------------------------------------------------------------------
+% Matter and Client Isolation (CRITICAL)
+% ----------------------------------------------------------------------------
+
+\subsection{Matter and Client Isolation}
+\label{sec:agents2-memory-isolation}
+
+Most critically, \textbf{matter and client isolation} prevents memory from one matter leaking into another. Law firms maintain ethical walls between conflicted representations; if an agent uses Matter A's privileged information on adverse Matter B, that's a privilege waiver and potential malpractice. Financial isolation prevents material non-public information (MNPI) exposure. An agent advising on Company X's acquisition cannot access research files containing MNPI about Company X from a separate advisory engagement.
+
+Implement separation at the memory layer with:
+
+\textbf{Separate namespaces}: Each matter gets its own isolated memory partition. Retrieval queries are scoped to the current matter's namespace, preventing cross-matter leakage.
+
+\textbf{Access controls}: Role-based permissions determine which humans and agents can access which memory namespaces. Only team members assigned to Matter A can read Matter A's episodic memory or RAG results.
+
+\textbf{Audit trails}: Every memory read and write is logged with timestamp, user/agent identity, matter identifier, and data accessed. Enable post-hoc compliance review and breach detection.
+
+\textbf{Secure deletion}: When a matter closes or a client relationship terminates, memory must be permanently and verifiably deleted, not just logically marked inactive. Financial regulations often mandate retention schedules, but also mandate destruction after expiration.
+
+For legal contexts, matter isolation maps to ethical walls. For financial contexts, information barriers prevent trading on MNPI or front-running client orders. Both domains treat memory isolation as a \textit{regulatory compliance requirement}, not merely an engineering best practice.
+
+See \Cref{sec:agents2-governance} for governance frameworks and Chapter~8 for comprehensive treatment of memory governance controls.
+
+% ----------------------------------------------------------------------------
+% Evaluating Memory Systems
+% ----------------------------------------------------------------------------
+
+\subsection{Evaluating Memory Systems}
+\label{sec:agents2-memory-eval}
+
+How do you know if memory works? Test retrieval quality, isolation integrity, and temporal validity:
+
+\textbf{Retrieval quality}: Measure precision (are retrieved documents relevant?) and recall (did retrieval find all relevant documents?). For legal research, gold-standard test sets come from known-good research memos: given the research question, does RAG retrieve the same primary authorities the human researcher cited? For financial analysis, compare retrieved earnings reports and industry studies to what an analyst would manually pull.
+
+\textbf{Isolation integrity}: Verify that cross-matter queries return zero results. Matter A's agent should never retrieve Matter B's documents, even if semantically similar. Audit logs should show no unauthorized access attempts. Red-team testing deliberately attempts privilege breaches to validate controls.
+
+\textbf{Temporal validity}: Track retrieval freshness. How often does the system surface overruled precedent or stale financial data? Measure lag between legal/regulatory change and knowledge base update. For high-stakes domains, daily or real-time refresh may be required.
+
+\textbf{Performance under scale}: As episodic memory grows (a multi-year litigation generates thousands of documents), does retrieval latency degrade? Can the system handle concurrent queries across hundreds of active matters without contention?
+
+% ----------------------------------------------------------------------------
+% Connection to Other Questions
+% ----------------------------------------------------------------------------
+
+\subsection{From Memory to Planning}
+\label{sec:agents2-memory-planning}
+
+Memory provides the context agents need to plan effectively. Without memory, agents repeat failed strategies because they cannot recall what did not work. Research starts from scratch even when prior work exists. Preferences and constraints must be re-specified each session, and institutional knowledge remains inaccessible.
+
+With memory, agents learn from experience. The agent recalls: ``Last time I searched with broad terms, I got 10,000 results. This time I'll use narrower queries.'' Prior work product is retrieved and built upon rather than duplicated. User preferences persist across sessions, and firm expertise informs every task.
+
+Memory enables adaptation---the ``A'' in the GPA+IAT framework from Part I. The agent's behavior improves over time precisely because it learns from experience.
+
+\Cref{sec:agents2-planning} examines the next question: how does an agent break a big job into steps? Just as the case file enables strategic litigation planning, agent memory enables systematic task decomposition and execution monitoring.
