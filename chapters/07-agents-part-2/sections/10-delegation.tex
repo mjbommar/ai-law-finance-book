@@ -53,9 +53,7 @@ The tradeoffs: coordination overhead (agents must communicate), debugging comple
 
 The Agent-to-Agent Protocol standardizes how agents collaborate, complementing MCP's tool integration. If MCP is how agents access resources, A2A is how agents delegate work to specialists.
 
-\subsubsection{A2A Concepts}
-
-A2A uses familiar professional concepts:
+\textbf{A2A Concepts}: A2A uses familiar professional concepts:
 
 \textbf{Agent Cards}: Capability statements, like a specialist's résumé listing expertise, input requirements, and output formats. Before delegating, the coordinator reviews the Agent Card to confirm the specialist can handle the task.
 
@@ -65,9 +63,7 @@ A2A uses familiar professional concepts:
 
 \textbf{Communication Channels}: Support for asynchronous, long-running work. You assign research Monday; the memo arrives Friday. Channels enable status updates and clarification requests during execution.
 
-\subsubsection{Task Lifecycle}
-
-Agent collaboration follows five phases mirroring professional delegation:
+\textbf{Task Lifecycle}: Agent collaboration follows five phases mirroring professional delegation:
 
 \begin{keybox}[title={A2A Task Delegation}]
 \textbf{1. DISCOVERY}: Find specialist via Agent Card $\rightarrow$ \textit{Like finding co-counsel through a directory}
@@ -84,62 +80,29 @@ Agent collaboration follows five phases mirroring professional delegation:
 \end{keybox}
 
 % ----------------------------------------------------------------------------
-% Multi-Agent Orchestration Patterns
+% Multi-Agent Patterns
 % ----------------------------------------------------------------------------
 
-\subsection{Multi-Agent Orchestration Patterns}
+\subsection{Multi-Agent Patterns}
 \label{sec:agents2-orchestration}
 
 Three patterns organize multi-agent collaboration:
 
-\subsubsection{Sequential Delegation}
+\textbf{Sequential Delegation}: Specialists work in sequence, each building on prior work: Coordinator $\rightarrow$ Research Agent $\rightarrow$ Analysis Agent $\rightarrow$ Drafting Agent $\rightarrow$ Coordinator synthesizes. Simple but slow---each specialist waits for prior completion.
 
-Specialists work in sequence, each building on prior work.
+\textbf{Parallel Delegation}: Independent specialists work simultaneously: Securities, Tax, and Employment Agents analyze an acquisition concurrently; Coordinator integrates findings. Faster, but requires task independence.
 
-\textbf{Pattern}: Coordinator $\rightarrow$ Specialist A $\rightarrow$ Specialist B $\rightarrow$ Specialist C $\rightarrow$ Coordinator synthesizes.
-
-\textbf{Example}: Research Agent finds authorities $\rightarrow$ Analysis Agent applies to facts $\rightarrow$ Drafting Agent produces memo $\rightarrow$ Coordinator reviews and delivers.
-
-Sequential delegation is simple but slow because each specialist waits for the prior one to complete.
-
-\subsubsection{Parallel Delegation}
-
-Independent specialists work simultaneously.
-
-\textbf{Pattern}: Coordinator delegates to Specialists A, B, C in parallel $\rightarrow$ all work concurrently $\rightarrow$ Coordinator synthesizes results.
-
-\textbf{Example}: Securities Agent, Tax Agent, and Employment Agent all analyze an acquisition simultaneously $\rightarrow$ Coordinator integrates findings into comprehensive assessment.
-
-Parallel delegation is faster but requires careful task design because specialists must work independently without dependencies.
-
-\subsubsection{Hierarchical Delegation}
-
-Specialists can delegate to sub-specialists, creating delegation trees.
-
-\textbf{Pattern}: Coordinator $\rightarrow$ Specialist A (delegates to A1, A2) $\rightarrow$ Specialist B (delegates to B1, B2, B3) $\rightarrow$ Coordinator synthesizes.
-
-\textbf{Example}: Lead Due Diligence Agent delegates to Document Review Agent and Legal Research Agent. Document Review Agent further delegates to Contract Agent, Correspondence Agent, and Financial Statement Agent. Each level synthesizes before returning up.
-
-Hierarchical delegation handles complex matters but introduces coordination overhead and potential for cascading failures.
+\textbf{Hierarchical Delegation}: Specialists delegate to sub-specialists: Lead Due Diligence Agent delegates to Document Review and Legal Research agents, each of which may further delegate. Handles complex matters but introduces coordination overhead and cascading failure risk.
 
 \input{figures/fig-orchestration-patterns}
 
-% ----------------------------------------------------------------------------
-% Dual Protocol Strategy
-% ----------------------------------------------------------------------------
-
-\subsection{Dual Protocol Strategy: MCP and A2A Together}
-\label{sec:agents2-dual-protocol}
-
-Production systems typically require both protocols working in concert:
+\textbf{Dual Protocol Strategy}: Production systems typically require both MCP and A2A working in concert:
 
 \textbf{MCP}: Agent-to-tool communication. Each specialist agent uses MCP to access its domain-specific tools (databases, calculators, external systems).
 
 \textbf{A2A}: Agent-to-agent coordination. The orchestrator uses A2A to delegate tasks to specialists and receive artifacts.
 
-\subsubsection{Example: M\&A Due Diligence}
-
-The orchestrator receives ``Conduct due diligence on Target Company acquisition.'' It delegates via A2A:
+\textbf{Example: M\&A Due Diligence}: The orchestrator receives ``Conduct due diligence on Target Company acquisition.'' It delegates via A2A:
 
 \textbf{Document Processing Agent}: Indexes the data room, classifies documents, extracts key terms. Uses MCP to access document management systems and OCR tools.
 
@@ -158,9 +121,7 @@ Throughout: MCP handles tool access; A2A handles coordination. Neither protocol 
 \subsection{Multi-Agent Workflow Examples}
 \label{sec:agents2-workflows}
 
-\subsubsection{Legal: Regulatory Compliance Assessment}
-
-A fintech company asks: ``What regulatory approvals do we need to launch this product?''
+\textbf{Legal: Regulatory Compliance Assessment}: A fintech company asks: ``What regulatory approvals do we need to launch this product?''
 
 \textbf{Orchestrator}: Receives query, decomposes into regulatory domains.
 
@@ -174,9 +135,7 @@ A fintech company asks: ``What regulatory approvals do we need to launch this pr
 
 \textbf{Orchestrator}: Synthesizes into comprehensive regulatory roadmap with prioritized action items.
 
-\subsubsection{Financial: Large Block Trade Execution}
-
-A portfolio manager requests: ``Execute a \$50M block trade in XYZ Corp, minimizing market impact.''
+\textbf{Financial: Large Block Trade Execution}: A portfolio manager requests: ``Execute a \$50M block trade in XYZ Corp, minimizing market impact.''
 
 \textbf{Orchestrator}: Decomposes into analysis and execution phases.
 
@@ -191,28 +150,27 @@ A portfolio manager requests: ``Execute a \$50M block trade in XYZ Corp, minimiz
 \textbf{Orchestrator}: Monitors execution, coordinates any adjustments, reports completion to portfolio manager.
 
 % ----------------------------------------------------------------------------
-% Coordination Failure Patterns
+% Multi-Agent Risks
 % ----------------------------------------------------------------------------
 
-\subsection{Coordination Failure Patterns}
+\subsection{Multi-Agent Risks}
 \label{sec:agents2-coordination-failures}
 
-Multi-agent systems introduce failure modes beyond single-agent problems, each requiring specific prevention strategies.
+Multi-agent systems introduce failure modes and security challenges beyond single-agent problems:
 
-Deadlock occurs when agents wait for each other in a cycle: Agent A waits for Agent B, which waits for Agent A, and neither proceeds. Prevention requires designing clear task dependencies, implementing timeouts, and detecting circular waits before they freeze the system. Divergent conclusions arise when different specialists reach incompatible results: the securities agent says registration is required while the banking agent says it is not. The orchestrator must detect such conflicts and either reconcile the conclusions or escalate to a human who can resolve the disagreement.
+\textbf{Coordination Failure Patterns}:
 
-Cascading errors propagate when Specialist A produces incorrect output that Specialist B relies upon, spreading the error through the system. Prevention requires validation at each handoff and independent verification for critical findings; each agent should validate inputs rather than trusting upstream agents blindly. Coordination overhead is a more subtle problem: communication between agents consumes tokens, time, and cost. For simple tasks, this overhead may exceed the benefit of specialization. Multi-agent is not always better; use it when task complexity justifies coordination cost.
+\textbf{Deadlock}: Agents wait for each other cyclically; neither proceeds. Prevention: clear task dependencies, timeouts, circular-wait detection.
 
-Accountability gaps emerge when something goes wrong and no one knows which agent is responsible. Prevention requires comprehensive logging at every delegation, clear audit trails, and defined accountability for each subtask. When the orchestrator delegates to a specialist, the delegation should be logged; when the specialist returns results, that should be logged too. The audit trail enables post-hoc analysis of what went wrong and where.
+\textbf{Divergent conclusions}: Specialists reach incompatible results. The orchestrator must detect conflicts and either reconcile or escalate.
 
-% ----------------------------------------------------------------------------
-% A2A Security
-% ----------------------------------------------------------------------------
+\textbf{Cascading errors}: Incorrect output from one agent propagates through dependent agents. Prevention: validate inputs at each handoff rather than trusting upstream agents.
 
-\subsection{Security in Multi-Agent Systems}
-\label{sec:agents2-delegation-security}
+\textbf{Coordination overhead}: Communication consumes tokens, time, and cost. For simple tasks, overhead may exceed specialization benefits. Use multi-agent when complexity justifies it.
 
-Multi-agent systems require security controls at the coordination layer:
+\textbf{Accountability gaps}: When something fails, which agent is responsible? Prevention: comprehensive logging at every delegation, clear audit trails, defined accountability per subtask.
+
+\textbf{Security Controls}: Multi-agent systems require security controls at the coordination layer:
 
 \textbf{Agent identity}: Each agent must have verifiable identity. Cryptographic signatures authenticate Agent Cards and task responses. Impersonation attacks must be prevented.
 
@@ -264,8 +222,6 @@ End-to-end workflow with both & MCP + A2A & blended & Due diligence; portfolio r
 \subsection{From Delegation to Governance}
 \label{sec:agents2-delegation-governance}
 
-Delegation distributes work across multiple agents, and this distribution creates governance challenges that single-agent systems do not face.
+Delegation distributes work across agents, creating governance challenges single-agent systems avoid. Accountability becomes complex: when a multi-agent workflow errs, responsibility could lie with the coordinator, the specialist, or the human who approved output. Information barriers applying to human teams must apply to their agents---an agent cannot access data its human principal could not. Audit trails must span the entire delegation tree; when regulators ask what happened, the trail must show every delegation, handoff, and decision point.
 
-Accountability becomes complex when workflows span multiple agents. When a multi-agent workflow produces an error, responsibility could lie with the coordinator that delegated incorrectly, the specialist that executed poorly, or the human who approved the final output. Clear accountability models must assign responsibility at each level of the delegation tree. Information barriers that apply to human teams must also apply to their agents. Information that cannot flow between human teams due to conflicts or Chinese walls must be blocked between agents as well; an agent cannot access data its human principal could not access. Audit trails must span the entire delegation tree, not just individual agents. When the regulator asks what happened, the audit trail must show every delegation, every handoff, every decision point across all agents involved.
-
-\Cref{sec:agents2-governance} previews governance requirements; Chapter~8 provides comprehensive treatment of multi-agent governance, including accountability models, barrier enforcement, and audit architecture.
+\Cref{sec:agents2-governance} previews governance requirements; the following chapter provides comprehensive treatment including accountability models, barrier enforcement, and audit architecture.

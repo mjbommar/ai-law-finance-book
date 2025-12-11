@@ -4,118 +4,15 @@
 % Part of: Chapter 07 - Agents Part II: How to Build an Agent
 % ============================================================================
 
-\section{Essential Resources and Next Steps}
-\label{sec:agents2-resources}
-
-% ----------------------------------------------------------------------------
-% Opening
-% ----------------------------------------------------------------------------
-
-This chapter introduced ten fundamental questions that every agent designer must answer. You now understand how agents receive work (Q1), interpret intent (Q2), perceive information (Q3), take action (Q4), maintain memory (Q5), plan work (Q6), recognize completion (Q7), escalate decisions (Q8), coordinate with other agents (Q9), and operate safely (Q10). This section provides essential resources for deepening that understanding and moving from concepts to deployment, organized by security essentials, protocols and standards, research foundations, and learning paths for different professional roles.
-
-% ----------------------------------------------------------------------------
-% Security Essentials
-% ----------------------------------------------------------------------------
-
-\subsection{Security Essentials}
-\label{sec:agents2-resources-security}
-
-Security is not optional in regulated professional practice. The consequences of security failures extend beyond technical inconvenience to professional liability, regulatory sanctions, and reputational harm. Before implementing any agent system, implement these five foundational controls that map directly to the ten questions framework:
-
-\begin{keybox}[title={Security Controls for Regulated Practice}]
-\begin{enumerate}[nosep]
-\item \textbf{Input separation}: Isolate user inputs from system prompts to prevent prompt injection attacks. Maps to Q2 (Intent).
-
-\item \textbf{Output validation}: Verify agent outputs before execution to detect hallucinations and constraint violations. Maps to Q4 (Action).
-
-\item \textbf{Least privilege}: Grant minimum necessary tool access to limit blast radius of failures. Maps to Q3 (Perception), Q4 (Action).
-
-\item \textbf{Audit logging}: Maintain comprehensive action logs for accountability and investigation. Maps to Q7 (Termination), Q8 (Escalation).
-
-\item \textbf{Matter/client isolation}: Enforce confidentiality boundaries to protect privileged and confidential information. Maps to Q5 (Memory), Q10 (Governance).
-\end{enumerate}
-\end{keybox}
-
-Beyond these five controls, two frameworks provide comprehensive security guidance. The OWASP LLM Top 10 provides vulnerability taxonomy for language model applications, covering prompt injection, insecure output handling, and other attack vectors that emerge specifically in LLM contexts. The NIST AI Risk Management Framework offers lifecycle guidance for identifying and mitigating AI risks, organized into four functions (Govern, Map, Measure, Manage) that align with enterprise risk management practices. Review both frameworks before any production deployment.
-
-% ----------------------------------------------------------------------------
-% Protocols and Standards
-% ----------------------------------------------------------------------------
-
-\subsection{Protocols and Standards}
-\label{sec:agents2-resources-protocols}
-
-Agent systems increasingly need to communicate with external tools and other agents, and two protocols enable this interoperability. The \textbf{Model Context Protocol (MCP)} standardizes agent-to-tool communication (\Cref{sec:agents2-perception}, \Cref{sec:agents2-action}), and as of late 2025, MCP is production-ready with thousands of available servers; if building agents that integrate with multiple data sources, implementing MCP makes architecture modular and tool-agnostic. The \textbf{Agent-to-Agent Protocol (A2A)} standardizes agent-to-agent coordination (\Cref{sec:agents2-delegation}), and as of late 2025, A2A is maturing under the Linux Foundation; the protocol is suitable for internal multi-agent coordination, though cross-vendor interoperability is still emerging. Both protocols continue evolving, so monitor specifications for updates and design fallbacks for protocol failures.
-
-% ----------------------------------------------------------------------------
-% Research Foundations
-% ----------------------------------------------------------------------------
-
-\subsection{Research Foundations}
-\label{sec:agents2-resources-research}
-
-For readers seeking deeper engagement with the research foundations underlying agent design, several papers provide essential theoretical and empirical grounding:
-
-\textbf{Architecture and Design}: Xi et al., ``The Rise and Potential of Large Language Model Based Agents: A Survey'' (2023) offers comprehensive coverage of design patterns, memory, planning, and tool use \parencite{xi2023rise}.
-
-\textbf{Reasoning Patterns}: Yao et al., ``ReAct: Synergizing Reasoning and Acting in Language Models'' (2022) introduced the reasoning-action loop used throughout this chapter \parencite{yao2022react}.
-
-\textbf{Memory Architecture}: Park et al., ``Generative Agents: Interactive Simulacra of Human Behavior'' (2023) introduced memory patterns that inform Q5 \parencite{park2023generative}.
-
-\textbf{Evaluation Benchmarks}: Three benchmarks provide validated evaluation for legal and financial agents:
-
-\begin{itemize}[nosep]
-\item \textbf{LegalBench}: 162 legal reasoning tasks spanning issue spotting, rule application, and conclusion generation \parencite{guha2023legalbench}
-\item \textbf{FinQA}: Financial question answering over earnings reports and disclosures
-\item \textbf{VLAIR}: Compares legal AI performance against lawyer baselines \parencite{bommarito2025vlair}
-\end{itemize}
-
-% ----------------------------------------------------------------------------
-% Learning Paths
-% ----------------------------------------------------------------------------
-
-\subsection{Learning Paths}
-\label{sec:agents2-resources-learning}
-
-Your learning path depends on your role:
-
-\subsubsection{For Legal Professionals}
-
-Focus on evaluation criteria: accuracy on domain tasks, audit trail completeness, fail-safe behaviors. Start with narrowly scoped pilots where quality can be validated, such as contract review.
-
-\textbf{Progression}: Begin with vendor demos focused on legal use cases. Evaluate outputs against your own analysis. Pilot one well-defined workflow with clear success criteria. Scale only after demonstrating consistent accuracy.
-
-\textbf{Validation question}: Would you accept this output from a third-year associate?
-
-\subsubsection{For Financial Professionals}
-
-Focus on integration with existing workflows: Bloomberg terminals, portfolio management systems, compliance databases. Validate agent outputs against your own analysis before relying on them.
-
-\textbf{Progression}: Begin with read-only monitoring tasks. Compare agent analysis with your conclusions on historical data. Gradually introduce advisory workflows where agents recommend and you approve.
-
-\textbf{Validation question}: Does the agent's recommendation match what you would conclude given the same data?
-
-\subsubsection{For Technical Practitioners}
-
-Start with a framework tutorial (LangChain, LlamaIndex, CrewAI), then build a simple research agent. Add memory, implement evaluation, then build an MCP server for a real data source.
-
-\textbf{Progression}: (1) Framework quickstart. (2) Simple retrieval agent. (3) Add episodic memory and RAG. (4) Implement structured evaluation. (5) Build MCP server for production data source. (6) Deploy with monitoring and audit logging.
-
-\textbf{Validation question}: Can you explain every decision the agent makes?
-
-\subsubsection{For Everyone}
-
-Build agents regularly to internalize patterns. Study production code from open-source projects. Implement security controls from the beginning: retrofitting is expensive.
-
-% ----------------------------------------------------------------------------
-% Staying Current
-% ----------------------------------------------------------------------------
-
-\subsection{Staying Current}
-\label{sec:agents2-resources-current}
-
-Technology advances quickly, regulation is emerging, and security risks evolve continuously, requiring ongoing attention across three dimensions. On the \textbf{technology} front, follow protocol specifications on GitHub, subscribe to research updates from key venues like NeurIPS, ICML, and ACL, and monitor framework release notes for breaking changes. On the \textbf{regulation} front, legal practitioners should monitor ABA ethics opinions on AI (particularly Formal Opinion 512 on supervision \parencite{aba-formal-opinion-512}), while financial practitioners should monitor SEC guidance, FINRA communications, and prudential regulators' guidance on model risk management; all practitioners should track EU AI Act implementation as it sets precedents that may influence other jurisdictions. On the \textbf{security} front, subscribe to OWASP LLM Top 10 updates, follow security researchers who specialize in language model vulnerabilities, and implement processes for reviewing and patching vulnerabilities as they are disclosed.
-
-\begin{highlightbox}[title={Temporal Warning}]
-Resources accurate as of late 2025 may not reflect subsequent developments. Protocol specifications evolve, regulatory frameworks develop, security vulnerabilities emerge. Verify currency of all technical and regulatory references before relying on them for production deployment decisions.
-\end{highlightbox}
+% NOTE: This section has been merged into Section 14 (Conclusion) as the
+% "Essential Resources" subsection. The content previously in this file
+% (Security Essentials, Protocols and Standards, Research Foundations,
+% Learning Paths, and Staying Current) has been condensed and integrated
+% into the conclusion to create a more cohesive ending to the chapter.
+%
+% See: /home/mjbommar/projects/personal/ai-law-finance-book/chapters/07-agents-part-2/sections/14-conclusion.tex
+% Subsection: \subsection{Essential Resources} (sec:agents2-conclusion-resources)
+%
+% This file is retained to preserve the section numbering structure but
+% contains no substantive content. If you need to reference resources,
+% refer to Section 14.3 (Essential Resources) in the conclusion.

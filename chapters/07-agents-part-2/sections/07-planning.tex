@@ -38,9 +38,7 @@ Without planning, an agent is like an associate who keeps running searches witho
 
 Three patterns dominate agent planning, each suited to different task types:
 
-\subsubsection{ReAct: Reasoning + Acting}
-
-The most fundamental pattern interleaves reasoning with action \parencite{yao2022react}. The partner asks for authority that a forum selection clause is unenforceable. The associate reasons: ``Key grounds are unconscionability and public policy. Start with \textit{Atlantic Marine}.'' They search, observe results, reason again: ``The unconscionability cases involve consumer adhesion contracts---not our commercial situation. The public policy line is closer.'' They search again, refine based on results.
+\textbf{ReAct: Reasoning + Acting.} The most fundamental pattern interleaves reasoning with action \parencite{yao2022react}. The partner asks for authority that a forum selection clause is unenforceable. The associate reasons: ``Key grounds are unconscionability and public policy. Start with \textit{Atlantic Marine}.'' They search, observe results, reason again: ``The unconscionability cases involve consumer adhesion contracts---not our commercial situation. The public policy line is closer.'' They search again, refine based on results.
 
 Each cycle has three components:
 
@@ -52,15 +50,11 @@ Each cycle has three components:
 
 Reasoning traces make decisions transparent and auditable. ReAct works well for exploratory tasks where you learn as you go---research questions, fact investigation, market analysis.
 
-\subsubsection{Plan-Execute}
-
-This pattern separates planning from execution. For document review (``Review 50 contracts for choice-of-law, forum selection, arbitration, and liquidated damages provisions''), the associate makes a plan: checklist of provisions, open each contract, record findings. Then they execute systematically. The plan does not change because the task is well-defined.
+\textbf{Plan-Execute.} This pattern separates planning from execution. For document review (``Review 50 contracts for choice-of-law, forum selection, arbitration, and liquidated damages provisions''), the associate makes a plan: checklist of provisions, open each contract, record findings. Then they execute systematically. The plan does not change because the task is well-defined.
 
 Plan-Execute fits workflows with established procedures: due diligence checklists, compliance reviews, document assembly. You create the plan upfront and execute methodically. Research variants like ReWOO (which separates reasoning from observation to reduce token usage) and LLMCompiler (which optimizes execution graphs for parallelism) enable parallel tool calling when steps are independent, though the basic pattern remains: plan first, then execute.
 
-\subsubsection{Hierarchical Planning}
-
-Law firms decompose matters into workstreams delegated through layers. A parent agent receives a high-level goal, breaks it into sub-goals, and delegates to specialists.
+\textbf{Hierarchical Planning.} Law firms decompose matters into workstreams delegated through layers. A parent agent receives a high-level goal, breaks it into sub-goals, and delegates to specialists.
 
 ``Prepare for trial'' becomes:
 \begin{itemize}[nosep]
@@ -136,49 +130,21 @@ Effective planning requires clear inputs. Ambiguous goals produce unfocused plan
 
 Without explicit resource budgets, agents can run indefinitely. This is the ``runaway associate'' problem: you asked for two cases, the associate gives you fifty because they didn't know when the answer was sufficient.
 
-\subsubsection{Budget Types}
-
-Four budget types provide control over agent execution, each addressing a different dimension of resource consumption. Token budgets limit LLM API consumption, preventing expensive runaway reasoning loops where the agent keeps elaborating without making progress. Time budgets enforce deadlines by stopping execution after a fixed duration---perhaps 10 minutes---if no meaningful progress has occurred. Tool call budgets prevent runaway tool loops by capping the number of external calls; after 20 searches without progress, the agent should escalate rather than continuing to search. Cost budgets cap total spending in dollars, particularly important when using expensive models or external APIs where unconstrained execution could generate substantial charges.
+\textbf{Budget Types.} Four budget types provide control over agent execution, each addressing a different dimension of resource consumption. Token budgets limit LLM API consumption, preventing expensive runaway reasoning loops where the agent keeps elaborating without making progress. Time budgets enforce deadlines by stopping execution after a fixed duration---perhaps 10 minutes---if no meaningful progress has occurred. Tool call budgets prevent runaway tool loops by capping the number of external calls; after 20 searches without progress, the agent should escalate rather than continuing to search. Cost budgets cap total spending in dollars, particularly important when using expensive models or external APIs where unconstrained execution could generate substantial charges.
 
 These budgets cascade through levels: session budgets constrain entire engagements, task budgets allocate resources to specific work items, and subtask budgets subdivide further. A legal research task might receive a 30-minute time budget and 50,000-token limit; if it spawns subtasks, those subtasks share the parent budget rather than each receiving unlimited resources.
 
-\subsubsection{Cost at Scale}
-
-Token costs compound across agentic workflows. Consider a credit facility review: a 200-page document requires roughly 80,000 tokens to ingest. Each section analysis might consume 10,000--20,000 tokens across reasoning and tool calls. Retrieval from precedent databases adds tokens. Multi-iteration refinement multiplies costs.
+\textbf{Cost at Scale.} Token costs compound across agentic workflows. Consider a credit facility review: a 200-page document requires roughly 80,000 tokens to ingest. Each section analysis might consume 10,000--20,000 tokens across reasoning and tool calls. Retrieval from precedent databases adds tokens. Multi-iteration refinement multiplies costs.
 
 A comprehensive review might consume 500,000--1,000,000 tokens. At illustrative pricing (late 2025: roughly \$3--15 per million input tokens for leading models; verify current rates), that's \$2--15 per review in API costs alone---before infrastructure, storage, or human review time.
 
 For portfolio management running continuously, costs accumulate differently: thousands of small queries per day rather than occasional large tasks. Monitor aggregate daily/weekly costs, not just per-task.
 
-\subsubsection{Break-Even Analysis}
+\textbf{Economic Considerations.} When does agent assistance cost less than human work? Retrieval-heavy tasks (research, document review) show the clearest ROI when agents reduce hours substantially. Judgment-intensive tasks show less clear ROI when extensive human revision is required. The critical variable is human review time: agent output requiring extensive correction may cost more than human-only work.
 
-When does agent assistance cost less than pure human work?
+Billing norms are evolving: some firms pass efficiency gains through as reduced hours, others add technology fees, others use fixed-fee arrangements. ABA Formal Opinion 512 requires competence regardless of tools and reasonable billing \parencite{aba-formal-opinion-512}. Transparency about AI assistance enables clients to evaluate the value proposition.
 
-\textbf{Retrieval-heavy tasks} (legal research, document review) show the clearest ROI: if an agent reduces a research assignment from 15 hours to 5 hours plus \$10 in API costs, the savings are substantial at typical billing rates.
-
-\textbf{Judgment-intensive tasks} show less clear ROI: when the agent produces a first draft that requires 3 hours of senior attorney revision, compared to 4 hours for the senior to draft directly, the marginal savings may not justify added workflow complexity.
-
-\textbf{Workflow automation} (monitoring, alerting, routine compliance) can show strong ROI if it replaces continuous human attention with exception-based review.
-
-The critical variable is often human review time. Agent output that requires extensive correction may cost more than human-only work.
-
-\subsubsection{Billing Models}
-
-The legal and financial professions are developing norms around billing clients for agent-assisted work:
-
-\textbf{Efficiency gains passed through}: Bill fewer hours at standard rates. Treat AI as productivity improvement that benefits clients through reduced time charges.
-
-\textbf{Hybrid billing}: Bill human time at standard rates; add technology fee for agent costs.
-
-\textbf{Fixed-fee arrangements}: Price the outcome, not the process. Use agents to improve margins while providing clients with cost certainty.
-
-\textbf{Transparency}: Disclose AI assistance and let clients evaluate the value proposition.
-
-ABA Formal Opinion 512 addresses ethical dimensions: attorneys must ensure competence regardless of tools used, and billing must be reasonable \parencite{aba-formal-opinion-512}.
-
-\subsubsection{Graceful Degradation}
-
-When budgets tighten, agents should degrade gracefully rather than failing completely. Tiered outputs provide value at every budget level: minimal budget delivers the controlling statute with citation; moderate budget adds key holdings; full budget delivers comprehensive analysis. The user receives something useful regardless of where termination occurs.
+\textbf{Graceful Degradation.} When budgets tighten, agents should degrade gracefully rather than failing completely. Tiered outputs provide value at every budget level: minimal budget delivers the controlling statute with citation; moderate budget adds key holdings; full budget delivers comprehensive analysis. The user receives something useful regardless of where termination occurs.
 
 Soft limits at 75--80\% of budget warn the agent that resources are running low, prompting it to prioritize completion over exploration. If the agent has found adequate authority, it should synthesize rather than searching for more. Hard limits at 100\% terminate execution and return whatever partial results exist. A budget-aware agent that delivers partial results is more useful than one that fails completely, and partial results often suffice for the user's immediate needs.
 
@@ -202,11 +168,7 @@ Define explicit stopping rules, just as you would instruct an associate: ``If yo
 \subsection{Guardrails and Loop Detection}
 \label{sec:agents2-guardrails}
 
-Even with termination conditions, agents can get stuck in unproductive loops---searching repeatedly without progress, rephrasing queries slightly, finding nothing, rephrasing again. Multiple mechanisms detect and prevent these loops.
-
-Step limits provide the simplest guardrail: after 20 steps, stop and require human approval to continue. This prevents unbounded execution regardless of what the agent believes it is accomplishing. Reflection steps build self-assessment into the workflow, periodically checking meta-questions: ``Am I making progress? Have my last five actions produced new information? Am I stuck?'' External watchdogs monitor agent behavior from outside the agent's reasoning; if the same tool is called five times with nearly identical parameters, an external system can recognize the loop and intervene. Meta-policies encode loop detection rules directly, such as: calling the same tool with the same parameters more than three times is probably a loop, so stop and escalate.
-
-Modern frameworks provide these primitives, and production systems should implement them. An agent without loop detection will eventually get stuck in production; the question is not whether it will happen, but whether the system will detect it when it does.
+Even with budgets and termination conditions, agents can get stuck in unproductive loops. Multiple mechanisms detect and prevent these patterns: step limits, reflection checkpoints, external watchdogs, and meta-policies. \Cref{sec:agents2-loop-detection} provides comprehensive treatment of loop detection and guardrail mechanisms in the context of termination.
 
 % ----------------------------------------------------------------------------
 % Connection to Other Questions

@@ -7,7 +7,13 @@
 \section{Introduction}
 \label{sec:agents2-intro}
 
-Chapter~6 established what agentic systems are: entities exhibiting Goal, Perception, Action, Iteration, Adaptation, and Termination. We called this the GPA+IAT framework. This chapter addresses the next question: how do we build such systems? The six theoretical properties must become concrete architectural choices, and those choices determine what the system can do, how it can be governed, and where it will fail.
+This chapter answers a practical question: \textit{How do you build an agentic system?}
+
+The previous chapter established what agentic systems are through the GPA+IAT framework (Goals, Perception, Action plus Iteration, Adaptation, Termination). This chapter shows how to construct them, translating the six theoretical properties into concrete architectural choices: planning mechanisms, tool integrations, memory systems, escalation protocols, and governance controls. The treatment is conceptual rather than code-focused. You will understand how production systems are architected without needing to implement them yourself.
+
+We organize the chapter around ten fundamental questions that every agentic system must answer. These questions map directly to organizational analogies: how work arrives (inbox and calendar), how instructions are understood (assignment memos), how information is gathered (library access), how actions are taken (filing and execution), how context is preserved (case files), how complex work is decomposed (project plans), how completion is recognized (deliverable criteria), when to escalate (going to the supervisor), how specialists coordinate (co-counsel relationships), and how safety is ensured (compliance and audit). Table~\ref{tab:agents2-framework} provides the complete mapping.
+
+The chapter supports multiple reading strategies depending on your goals. Sequential readers should begin with the organizational analogy and ten-question framework below, then proceed through Questions 1--10 in order before concluding with the synthesis in \Cref{sec:agents2-synthesis}. Random-access readers can jump directly to any question section, as each stands alone with self-contained explanations. Practitioners evaluating vendors should focus on questions most relevant to their procurement criteria; \Cref{sec:agents2-synthesis} provides complete reference architectures with failure mode analysis that maps directly to vendor evaluation checklists.
 
 % ----------------------------------------------------------------------------
 % Agentic Systems as Organizations
@@ -18,7 +24,7 @@ Chapter~6 established what agentic systems are: entities exhibiting Goal, Percep
 
 An agentic system functions like a professional organization. This observation serves as more than analogy; it is a design principle. Consider how a law firm operates: it has a mission (goals), gathers intelligence through research and client intake (perception), executes work through filing and communication (action), operates in project cycles and matter lifecycles (iteration), learns from experience and adjusts strategy (adaptation), and completes engagements or escalates beyond authority (termination). The six properties that define agentic systems map directly to how professional organizations function.
 
-A discretionary portfolio management team follows the same pattern. A mandate or prospectus sets risk/return objectives (goals); the team watches market data, research, and issuer filings (perception); it rebalances portfolios and places orders with compliance checks (action); it works in daily and quarterly review cycles (iteration); it shifts allocations after performance and risk reviews (adaptation); and it closes or cuts positions, escalating to an investment committee when limits or mandates are at risk (termination). The organizational logic is identical even though the domain differs.
+A discretionary portfolio management team follows the same pattern. A mandate or prospectus sets risk/return objectives (goals); the team watches market data, research, and issuer filings (perception); it rebalances portfolios and places orders with compliance checks (action); it works in daily and quarterly review cycles (iteration); it shifts allocations after performance and risk reviews (adaptation); and it closes or cut positions, escalating to an investment committee when limits or mandates are at risk (termination). The organizational logic is identical even though the domain differs.
 
 This mapping has practical implications. When we design an agentic system, we face the same questions that arise when designing an organization. The system requires specific capabilities, work must be divided among specialists, escalation paths must exist for problems exceeding authority, institutional knowledge must be preserved across matters, and governance controls must ensure safe operation. A partner staffing a complex transaction and an architect designing an agent system are solving structurally similar problems.
 
@@ -46,14 +52,3 @@ Governance & All & How do we keep it safe? \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-% ----------------------------------------------------------------------------
-% Limitations and Governance
-% ----------------------------------------------------------------------------
-
-\subsection{Current Limitations and What Follows}
-\label{sec:agents2-limitations}
-
-Before proceeding, we must acknowledge current limitations. Research from METR found that agentic systems achieve near-perfect success on tasks requiring under four minutes, but success rates fall below 10\% for tasks exceeding four hours \parencite{metr2024autonomy}. This reliability cliff shapes system design: we decompose tasks into manageable steps, insert validation checkpoints, and assume failures will occur. The goal here is to understand how systems are architected, not to suggest they execute flawlessly.
-
-The architectural choices in this chapter also determine what governance is possible. Decisions that were never logged cannot be audited; privilege boundaries that were never implemented cannot be enforced; agent reasoning that lacks transparency mechanisms cannot be explained. Every design choice either enables or forecloses governance options. Chapter~8 examines governance in depth, covering the five-layer control stack, dimensional calibration, and accountability structures. This chapter provides the architectural foundation; Chapter~8 provides the control framework that builds upon it.

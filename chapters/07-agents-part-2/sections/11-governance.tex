@@ -13,7 +13,7 @@
 
 Every professional organization has compliance programs, audit functions, and oversight structures. The law firm has conflicts committees, billing review, and quality control. The financial institution has risk management, compliance monitoring, and internal audit. These functions do not do the work themselves; they ensure the work is done safely, ethically, and in compliance with applicable rules.
 
-Agent systems require the same infrastructure. Governance is not a single question but a lens through which all other questions must be viewed. Every capability creates governance requirements. Every architectural choice enables or constrains oversight. This section previews governance across all ten questions; Chapter~8 provides comprehensive treatment.
+Agent systems require the same infrastructure. Governance is not a single question but a lens through which all other questions must be viewed. Every capability creates governance requirements. Every architectural choice enables or constrains oversight. This section previews governance across all ten questions; the following chapter provides comprehensive treatment.
 
 \begin{definitionbox}[title={Agent Governance}]
 \keyterm{Agent governance} encompasses the policies, controls, and oversight mechanisms that ensure agents operate safely, ethically, and in compliance with applicable requirements. Governance spans the agent lifecycle: design, deployment, operation, and retirement.
@@ -30,13 +30,9 @@ Governance is not optional for regulated professional services. Professional dut
 
 The architectural choices throughout this chapter are not merely technical decisions. They are the \textit{infrastructure} that makes governance possible.
 
-\begin{keybox}[title={Architecture Enables Governance}]
-You cannot audit what you did not log. You cannot enforce privilege boundaries that were never implemented. You cannot demonstrate bounded operation without termination mechanisms. You cannot explain agent decisions without transparency architecture.
+You cannot audit what you did not log. You cannot enforce privilege boundaries that were never implemented. You cannot demonstrate bounded operation without termination mechanisms. When a regulator asks how the compliance agent detected a breach, when opposing counsel demands production of the agent's reasoning, when a client questions why the agent recommended a particular strategy---architecture determines whether you can answer.
 
-When a regulator asks how the compliance agent detected a breach, when opposing counsel demands production of the agent's reasoning, when a client questions why the agent recommended a particular strategy---architecture determines whether you can answer.
-
-\textbf{Professional duties are non-delegable}: Attorneys remain liable for AI-assisted work product. Fiduciaries remain accountable for AI-informed recommendations. Chapter~8 details those obligations. This chapter provides the architecture to meet them.
-\end{keybox}
+Professional duties are non-delegable: attorneys remain liable for AI-assisted work product, and fiduciaries remain accountable for AI-informed recommendations. The following chapter details those obligations. This chapter provides the architecture to meet them. \Cref{sec:agents2-conclusion-enables} provides a comprehensive mapping of architectural choices to governance implications.
 
 % ----------------------------------------------------------------------------
 % Ten-Question Governance Mapping
@@ -139,7 +135,7 @@ A tension exists between comprehensive logging (for audit) and data minimization
 
 \textbf{Legal hold integration}: Retention schedules must yield to preservation obligations when litigation is anticipated.
 
-Chapter~8 provides detailed retention frameworks for legal and financial contexts.
+The following chapter provides detailed retention frameworks for legal and financial contexts.
 
 % ----------------------------------------------------------------------------
 % Forward to Chapter 8
@@ -148,33 +144,8 @@ Chapter~8 provides detailed retention frameworks for legal and financial context
 \subsection{Forward to Chapter 8}
 \label{sec:agents2-forward-ch8}
 
-This chapter answered \textit{how to build an agent}. The ten questions provide architectural foundations:
+This chapter answered \textit{how to build an agent}. The ten questions (Table~\ref{tab:agents2-governance-mapping}) provide architectural foundations; each creates governance requirements that the architecture must support.
 
-\begin{enumerate}[nosep]
-\item Triggers bring work into the system
-\item Intent extraction understands what's being asked
-\item Perception tools gather information
-\item Action tools effect change
-\item Memory maintains context
-\item Planning decomposes complex tasks
-\item Termination recognizes completion
-\item Escalation knows when to ask for help
-\item Delegation coordinates with specialists
-\item Governance ensures safe operation
-\end{enumerate}
-
-Chapter~8 answers the next question: \textit{how do we govern these systems?} It examines:
-
-\begin{itemize}[nosep]
-\item The five-layer governance stack (legal, model, system, process, culture)
-\item Dimensional controls (autonomy, persistence, goal dynamics)
-\item Implementation patterns for each governance requirement
-\item Accountability structures and liability allocation
-\item Regulatory compliance frameworks
-\item Worked examples in legal, financial, and audit contexts
-\end{itemize}
+The following chapter answers: \textit{how do we govern these systems?} It examines the five-layer governance stack (legal, model, system, process, culture), dimensional controls (autonomy, persistence, goal dynamics), accountability structures, regulatory compliance frameworks, and worked examples in legal, financial, and audit contexts.
 
 Architecture provides the foundation; governance provides the controls. Together, they enable responsible deployment of agentic systems in regulated professional services.
-
-\vspace{1em}
-\noindent\textit{You cannot govern what you do not understand.} This chapter provided the understanding. Chapter~8 provides the governance.

@@ -30,9 +30,7 @@ This reflects professionalism, not failure. Recognizing when you need help and a
 
 Three categories of triggers warrant escalation:
 
-\subsubsection{Mandatory Escalation Triggers}
-
-Some situations \textit{require} human involvement regardless of the agent's confidence:
+\textbf{Mandatory Escalation Triggers}: Some situations \textit{require} human involvement regardless of the agent's confidence:
 
 \textbf{Budget exhaustion}: The agent approaches resource limits (tokens, time, iterations, cost). Rather than stopping silently, escalate with a progress summary: ``I've used 80\% of the research budget. Here's what I found. Options: (a) grant additional budget, (b) conclude with current findings, (c) provide strategic guidance on where to focus remaining effort.''
 
@@ -42,9 +40,7 @@ Some situations \textit{require} human involvement regardless of the agent's con
 
 \textbf{Irreversible actions}: Actions that cannot be undone warrant escalation. Once you file with the court or execute the trade, you cannot take it back. Pre-approval prevents irreversible errors.
 
-\subsubsection{Confidence-Based Escalation}
-
-Uncertainty about the right answer or approach triggers escalation:
+\textbf{Confidence-Based Escalation}: Uncertainty about the right answer or approach triggers escalation:
 
 \textbf{Low confidence on output}: The agent's uncertainty exceeds acceptable thresholds. For legal research: ``I found conflicting circuit authority. I'm not confident which rule applies in our jurisdiction.'' For portfolio analysis: ``Correlations have spiked beyond historical norms---model assumptions may be violated.''
 
@@ -54,9 +50,7 @@ Uncertainty about the right answer or approach triggers escalation:
 
 \textbf{Ambiguous instructions}: Despite clarification attempts (\Cref{sec:agents2-intent}), the agent remains uncertain about what is being asked. Rather than guessing, escalate for clarification.
 
-\subsubsection{Error and Anomaly Detection}
-
-Something has gone wrong and the agent cannot fix it:
+\textbf{Error and Anomaly Detection}: Something has gone wrong and the agent cannot fix it:
 
 \textbf{Repeated tool failures}: If Westlaw times out three times consecutively, escalate: ``Research tool unavailable. Options: (a) wait and retry, (b) use alternative platform, (c) proceed with manual research.''
 
@@ -75,7 +69,7 @@ Something has gone wrong and the agent cannot fix it:
 
 Effective escalation provides the human with everything needed to make a decision:
 
-\subsubsection{Five-Part Escalation Structure}
+\textbf{Five-Part Escalation Structure}:
 
 \textbf{1. Situation summary}: What task is the agent working on? Brief context for a human who may not have been following closely.
 
@@ -87,7 +81,7 @@ Effective escalation provides the human with everything needed to make a decisio
 
 \textbf{5. Options or recommendations}: What are the possible paths forward? If the agent has a recommendation, state it with supporting reasoning.
 
-\subsubsection{Example: Legal Research Escalation}
+\paragraph{Example: Legal Research Escalation}
 
 \begin{quote}
 \textbf{Situation}: Researching statute of limitations for Section 10(b) securities fraud claim.
@@ -103,7 +97,7 @@ Effective escalation provides the human with everything needed to make a decisio
 \textbf{Recommendation}: Option (c): this appears to be a fact-intensive question where partner judgment on the strength of our facts would be valuable.
 \end{quote}
 
-\subsubsection{Example: Financial Escalation}
+\paragraph{Example: Financial Escalation}
 
 \begin{quote}
 \textbf{Situation}: Executing rebalancing trades to reduce tech exposure from 35\% to 25\%.
@@ -128,25 +122,15 @@ Effective escalation provides the human with everything needed to make a decisio
 
 Five patterns integrate human oversight into agent workflows, each suited to different risk profiles and organizational needs.
 
-\subsubsection{Approval Gates}
+\textbf{Approval Gates}: The agent prepares work product; the human authorizes execution. Essential for irreversible or high-stakes actions. A litigation agent drafts the court filing, presents it for review, receives approval, then submits. The agent handles preparation; the human controls execution.
 
-In the approval gate pattern, the agent prepares work product and the human authorizes execution. This pattern is essential for irreversible or high-stakes actions where the cost of error justifies the overhead of human review. The agent completes its work, presents it for approval, waits for human review and authorization, and only then executes. A litigation agent drafting a court filing would complete the draft, present it to the attorney for review, receive approval, and only then submit via e-filing. The agent handles preparation; the human retains control over execution.
+\textbf{Checkpoint Reviews}: Human verification at milestones prevents error propagation. A research agent completes legal research, presents authorities, receives confirmation of direction, then proceeds to drafting. Each checkpoint catches misalignment before significant effort is wasted.
 
-\subsubsection{Checkpoint Reviews}
+\textbf{Confidence-Based Escalation}: High confidence triggers autonomous execution; low confidence triggers escalation. A compliance agent processes clear-pass cases automatically while escalating ambiguous situations. Balances efficiency with safety.
 
-Checkpoint reviews insert human verification at milestones, confirming direction before proceeding to the next phase. This pattern prevents error propagation by catching misalignment early, before the agent has invested significant effort in the wrong direction. After completing a phase, the agent presents its findings, the human confirms the approach is correct, and the agent proceeds to the next phase. A research agent might complete its legal research, present the authorities it found, receive confirmation that it has identified the right legal theory, and only then proceed to draft the memo. Each checkpoint prevents wasted effort.
+\textbf{Human-as-Tool}: The agent invokes human expertise like any other tool. When encountering questions beyond its capabilities, it queries the relevant expert, incorporates the response, and proceeds. Human expertise becomes a resource invoked when needed, not a bottleneck for all decisions.
 
-\subsubsection{Confidence-Based Escalation}
-
-Confidence-based escalation allows agents to proceed autonomously when confident while escalating to humans when uncertain. The agent assesses its own confidence on each decision: high confidence triggers autonomous execution; low confidence triggers escalation for human input. A compliance agent performing routine checks might process clear pass cases automatically while escalating ambiguous situations to the compliance officer. This pattern balances efficiency (no human review for routine work) with safety (human review for uncertain situations).
-
-\subsubsection{Human-as-Tool}
-
-In the human-as-tool pattern, the agent can invoke human expertise like any other tool in its toolkit. When the agent encounters a question requiring judgment beyond its capabilities, it ``calls'' the human with a specific question, receives a response, incorporates the answer, and proceeds. An agent researching a novel legal issue might ask the practice group expert: ``Is this situation analogous to insider trading or market manipulation?'' The expert responds, and the agent continues research in the indicated direction. This pattern treats human expertise as a resource to be invoked when needed, not a bottleneck for all decisions.
-
-\subsubsection{Reversibility Classification}
-
-Reversibility classification ties oversight level to action consequences. The agent classifies each action by its reversibility and applies corresponding oversight. Fully reversible actions---internal drafts, research queries, analysis---proceed autonomously because mistakes can be corrected without external consequences. Partially reversible actions---client communications, internal emails---receive checkpoint review because they can be clarified but not unsent. Irreversible actions---court filings, executed trades, regulatory submissions---require pre-approval because the consequences cannot be undone. This pattern ensures oversight is proportional to risk.
+\textbf{Reversibility Classification}: Oversight level tracks action consequences. Fully reversible actions (drafts, research) proceed autonomously. Partially reversible actions (communications) receive checkpoint review. Irreversible actions (filings, trades) require pre-approval. Oversight proportional to risk.
 
 \input{figures/fig-oversight-spectrum}
 
@@ -157,13 +141,13 @@ Reversibility classification ties oversight level to action consequences. The ag
 \subsection{Domain-Specific Escalation Requirements}
 \label{sec:agents2-escalation-domain}
 
-\subsubsection{Legal Practice}
+\paragraph{Legal Practice}
 
 Legal practice imposes domain-specific escalation requirements rooted in professional responsibility rules. ABA Model Rule 1.1 requires competent representation, which means agents must escalate when matters exceed their training or the supervising attorney's oversight capacity. Novel legal questions, complex strategic decisions, and matters outside the firm's expertise all warrant escalation---not because the agent failed, but because competence requires recognizing the limits of one's capabilities.
 
 Privilege protection demands particular vigilance. Attorney-client privilege can be waived by disclosure, and any action that might expose privileged information to third parties requires attorney review before execution. Similarly, conflicts of interest require human judgment because agents cannot assess conflicts without access to the full picture of firm relationships; potential conflict situations must escalate to conflicts counsel. Candor to tribunal creates another mandatory escalation trigger: if the agent discovers authority adverse to the client's position that the attorney may have an obligation to disclose, it must escalate immediately rather than suppressing the finding.
 
-\subsubsection{Financial Services}
+\paragraph{Financial Services}
 
 Financial services escalation requirements arise from regulatory obligations and fiduciary duties. Suitability and fiduciary duty require that investment recommendations be suitable for the client, but agents cannot fully assess suitability without understanding client circumstances, risk tolerance, and investment objectives. Recommendations therefore escalate for adviser review before reaching the client.
 

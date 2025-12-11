@@ -44,21 +44,9 @@ Before an agent can reason or act, it must first notice that work exists. Channe
 
 External feeds deliver events from systems outside the agent's direct control. The external system pushes notifications when events occur, much like receiving service of process rather than checking the courthouse daily to see if you have been sued.
 
-\subsubsection{Legal and Regulatory Feeds}
+\textbf{Legal and Regulatory Feeds}: Court docket systems (CM/ECF, state e-filing) send notifications when documents are filed; an agent receives these alerts, retrieves filed documents via PACER, analyzes contents, and triggers appropriate responses. The SEC's EDGAR system publishes corporate filings with programmatic access, enabling agents to monitor competitors' 10-Ks and flag material differences from your company's disclosures. Regulatory agencies publish through the Federal Register and agency websites. Citator alerts from Westlaw and Lexis notify when monitored cases are cited or overruled.
 
-Court docket systems like CM/ECF send email notifications when documents are filed. An agent monitoring litigation can receive these alerts, retrieve filed documents via PACER, analyze contents, and trigger appropriate responses. When opposing counsel files a motion, the agent alerts the litigation team, extracts key arguments, searches for responsive authority, and calculates response deadlines.
-
-The SEC's EDGAR system publishes corporate filings with API access for programmatic retrieval. For corporate counsel, EDGAR feeds trigger review workflows: when a competitor files a 10-K, an agent retrieves the filing, extracts financial data and risk factors, compares them to your company's disclosures, and flags material differences. Regulatory agencies publish rules and guidance through the Federal Register and agency websites, enabling agents to monitor for changes that affect compliance obligations.
-
-Legal research platforms like Westlaw and Lexis offer citator alerts when monitored cases are cited, distinguished, or overruled. An agent can subscribe to these alerts, retrieve and analyze citing opinions, and notify attorneys of developments affecting their arguments.
-
-\subsubsection{Financial Market Feeds}
-
-Financial institutions receive real-time market data through providers like Bloomberg and Reuters. These feeds push price updates and market events continuously. A portfolio management agent can subscribe to price alerts, receive notifications when thresholds are crossed, evaluate rebalancing rules, and either execute trades within risk limits or escalate to a portfolio manager.
-
-Position and P\&L updates cascade through financial systems: when trades execute, position systems update holdings, risk agents recalculate exposure, compliance agents check concentration limits, and reporting agents update dashboards. This architecture treats agents as event processors that consume upstream events, reason about implications, and produce downstream events.
-
-News feeds deliver breaking headlines, earnings announcements, and sentiment analytics in machine-readable format. When material news hits, agents can retrieve the content, assess sentiment, compare to historical patterns, and alert portfolio managers if the news appears significant.
+\textbf{Financial Market Feeds}: Financial institutions receive real-time market data through Bloomberg, Reuters, and similar providers. A portfolio management agent subscribes to price alerts, receives notifications when thresholds are crossed, evaluates rebalancing rules, and either executes trades within risk limits or escalates to a portfolio manager. Position and P\&L updates cascade through financial systems: trades trigger position updates, which trigger risk recalculation, compliance checks, and dashboard updates. News feeds deliver headlines, earnings, and sentiment analytics; agents assess materiality and alert managers when news appears significant.
 
 \begin{highlightbox}[title={Speed vs. Reasoning: A Critical Distinction}]
 Market data arrives at millisecond granularity. LLM-based reasoning operates at second-to-minute timescales. This fundamental mismatch determines where agents add value in financial workflows.
@@ -72,9 +60,7 @@ Market data arrives at millisecond granularity. LLM-based reasoning operates at 
 Match agent capabilities to task requirements. Speed-critical tasks need traditional algorithms; reasoning-critical tasks need agents.
 \end{highlightbox}
 
-\subsubsection{Integration Patterns}
-
-External feeds reach agents through \keyterm{webhooks} (HTTP callbacks for immediate notification) or \keyterm{message queues} (durable event streams with delivery guarantees). Webhooks work well for low-volume, time-sensitive events where immediate delivery matters and occasional missed events are acceptable. Message queues provide ordering, durability, and replay capabilities essential for regulated applications requiring audit trails. In practice, many systems use both: a portfolio management system might use webhooks to receive immediate notification when a stock price crosses a stop-loss threshold, while using message queues to process daily trade confirmations that require guaranteed delivery and audit logging.
+\textbf{Integration Patterns}: External feeds reach agents through \keyterm{webhooks} (HTTP callbacks for immediate notification) or \keyterm{message queues} (durable event streams with delivery guarantees). Webhooks work well for low-volume, time-sensitive events where immediate delivery matters and occasional missed events are acceptable. Message queues provide ordering, durability, and replay capabilities essential for regulated applications requiring audit trails. In practice, many systems use both: a portfolio management system might use webhooks to receive immediate notification when a stock price crosses a stop-loss threshold, while using message queues to process daily trade confirmations that require guaranteed delivery and audit logging.
 
 % ----------------------------------------------------------------------------
 % Human Prompts as Events

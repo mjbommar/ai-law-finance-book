@@ -14,11 +14,7 @@
 The previous sections examined each of the ten questions in isolation. This section shows how they work together in complete deployments. Two reference architectures demonstrate the full framework while honestly acknowledging current limitations: one legal, one financial.
 
 \begin{highlightbox}[title={Reference Architectures, Not Production Claims}]
-The architectures below illustrate how components fit together. They represent \textit{design targets}, not claims about what current systems reliably achieve.
-
-Recall the reliability cliff from \Cref{sec:agents2-reliability}: near-perfect success on tasks under 4 minutes, under 10\% success on tasks over 4 hours. These reference architectures describe multi-hour workflows that would require extensive human oversight and intervention with current technology.
-
-Read these as ``how you would design it'' not ``how it works today.'' The failure mode analysis is as important as the architecture itself.
+These architectures illustrate how components fit together as \textit{design targets}, not claims about current reliability. The reliability cliff (\Cref{sec:agents2-reliability}) constrains what agents achieve today; these multi-hour workflows require extensive human oversight. Read as ``how you would design it'' not ``how it works today.''
 \end{highlightbox}
 
 % ----------------------------------------------------------------------------
@@ -28,13 +24,11 @@ Read these as ``how you would design it'' not ``how it works today.'' The failur
 \subsection{Case Study: Credit Facility Documentation Review}
 \label{sec:agents2-case-legal}
 
-\subsubsection{The Scenario}
-
-A corporate client is borrowing \$500 million under a senior secured revolving credit facility. The law firm represents the borrower. The partner assigns the matter: ``Review the draft credit agreement and identify provisions that differ materially from market terms or our standard positions.''
+\textbf{The Scenario}: A corporate client is borrowing \$500 million under a senior secured revolving credit facility. The law firm represents the borrower. The partner assigns the matter: ``Review the draft credit agreement and identify provisions that differ materially from market terms or our standard positions.''
 
 This is a document review task that would traditionally require 8--12 hours of senior associate time. The goal is not to replace the associate but to accelerate the review and ensure comprehensive coverage.
 
-\subsubsection{Ten Questions Applied}
+\textbf{Ten Questions Applied}: The framework guides every design choice in this architecture.
 
 \textbf{Q1 (Triggers)}: Work enters via document upload to the deal room and partner assignment through the matter management system. The trigger is explicit: new document plus assignment.
 
@@ -56,7 +50,7 @@ This is a document review task that would traditionally require 8--12 hours of s
 
 \textbf{Q10 (Governance)}: Audit logging of all document access and analysis steps. Privilege protection enforced. Work product clearly marked as AI-assisted for attorney review.
 
-\subsubsection{Workflow}
+\textbf{Workflow}: The agent proceeds systematically through the review process:
 
 \begin{enumerate}[nosep]
 \item Partner assigns matter; agent receives trigger
@@ -71,9 +65,7 @@ This is a document review task that would traditionally require 8--12 hours of s
 \item Associate reviews, adds context, escalates significant issues to partner
 \end{enumerate}
 
-\subsubsection{Failure Modes}
-
-Even well-designed systems fail. Understanding failure modes is crucial:
+\textbf{Failure Modes}: Even well-designed systems fail. Understanding failure modes is crucial:
 
 \textbf{Nuanced definitions}: The agent may miss that a defined term has been subtly modified from the template in ways that affect covenant calculations. Human review catches: ``EBITDA is defined to exclude one-time charges, but the add-back is capped---that's unusual and limits flexibility.''
 
@@ -92,13 +84,11 @@ Even well-designed systems fail. Understanding failure modes is crucial:
 \subsection{Case Study: Equity Portfolio Management}
 \label{sec:agents2-case-financial}
 
-\subsubsection{The Scenario}
-
-An investment adviser manages a \$200 million equity portfolio for institutional clients. The portfolio manager wants continuous monitoring with agent assistance for rebalancing analysis, compliance checking, and research synthesis.
+\textbf{The Scenario}: An investment adviser manages a \$200 million equity portfolio for institutional clients. The portfolio manager wants continuous monitoring with agent assistance for rebalancing analysis, compliance checking, and research synthesis.
 
 This is a continuous monitoring and advisory task, not a one-time analysis. The goal is to augment the PM's capacity, not to trade autonomously.
 
-\subsubsection{Ten Questions Applied}
+\textbf{Ten Questions Applied}: The framework shapes this more complex, multi-agent architecture.
 
 \textbf{Q1 (Triggers)}: Multiple trigger types: market data feeds (price movements, earnings releases), scheduled jobs (daily compliance check, weekly rebalancing analysis), human prompts (PM requests analysis), escalation events (position approaching limits).
 
@@ -120,7 +110,7 @@ This is a continuous monitoring and advisory task, not a one-time analysis. The 
 
 \textbf{Q10 (Governance)}: Comprehensive audit trail. Fiduciary duty documentation (rationale for recommendations). Compliance monitoring. MNPI controls (no access to deal team information).
 
-\subsubsection{Multi-Agent Workflow}
+\textbf{Multi-Agent Workflow}: Multiple agents coordinate to generate and validate recommendations:
 
 \begin{enumerate}[nosep]
 \item Monitoring Agent detects: ``Tech sector up 3\% today; portfolio tech allocation now 35\% vs. 25\% target''
@@ -138,7 +128,7 @@ This is a continuous monitoring and advisory task, not a one-time analysis. The 
 \item Execution Agent (with PM approval) places orders via OMS
 \end{enumerate}
 
-\subsubsection{Multi-Agent Failure Modes}
+\textbf{Multi-Agent Failure Modes}: Coordination introduces additional failure vectors beyond single-agent systems.
 
 \textbf{Cascading errors}: Monitoring Agent misinterprets data; Rebalancing Agent acts on bad signal; trades recommended that shouldn't be. \textit{Mitigation}: Validation at each handoff; sanity checks on data before acting.
 
