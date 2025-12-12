@@ -77,9 +77,7 @@ A credit card fraud detection system that automatically blocks transactions meet
 \end{figure}
 
 \paragraph{The Autonomy-Auditability Trade-off}
-As autonomy increases, the burden of governance shifts from ex-ante (pre-approval) to ex-post (logging, monitoring, audit). HITL systems rely on human review as the primary control; HIC systems rely on comprehensive logging and statistical monitoring. Organizations must invest in monitoring infrastructure proportionate to autonomy: high-autonomy systems cannot rely on ``we'll review it if someone complains.''
-
-Table~\ref{tab:agents3-autonomy-calibration} summarizes autonomy calibration.
+As summarized in Table~\ref{tab:agents3-autonomy-calibration}, as autonomy increases, the burden of governance shifts from ex-ante (pre-approval) to ex-post (logging, monitoring, audit). HITL systems rely on human review as the primary control; HIC systems rely on comprehensive logging and statistical monitoring. Organizations must invest in monitoring infrastructure proportionate to autonomy: high-autonomy systems cannot rely on ``we'll review it if someone complains.''
 
 \begin{table}[htbp]
 \centering
@@ -102,7 +100,7 @@ Table~\ref{tab:agents3-autonomy-calibration} summarizes autonomy calibration.
 \subsection{Entity Frame Calibration}
 \label{sec:agents3-entity-frame-calibration}
 
-Entity frame determines how the system presents itself and how users perceive its role. Entity frame affects trust, liability allocation, and user expectations. Mismatches between entity frame and governance create risk.
+Entity frame determines how the system presents itself and how users perceive its role. Entity frame affects trust, liability allocation, and user expectations. Mismatches between entity frame and governance create risk. Table~\ref{tab:agents3-entity-frame-calibration} summarizes entity frame calibration.
 
 \paragraph{Human Entity Frame}
 The system represents a specific human professional (e.g., ``your attorney,'' ``your financial adviser''). Users may not distinguish between the professional and the AI tool.
@@ -144,7 +142,6 @@ The system acts on behalf of the organization (e.g., ``XYZ Bank's credit decisio
 A bank's credit pre-screening system that evaluates mortgage applications under institutional policies, with oversight by the Chief Risk Officer and compliance with ECOA.
 \end{highlightbox}
 
-Table~\ref{tab:agents3-entity-frame-calibration} summarizes entity frame calibration.
 
 \begin{table}[htbp]
 \centering
@@ -169,7 +166,7 @@ Table~\ref{tab:agents3-entity-frame-calibration} summarizes entity frame calibra
 \subsection{Goal Dynamics Calibration}
 \label{sec:agents3-goal-dynamics-calibration}
 
-Goal dynamics determine how the system's objectives change over time. Static goals are easiest to govern; negotiated goals create the highest misalignment risk.
+Goal dynamics determine how the system's objectives change over time. Static goals are easiest to govern; negotiated goals create the highest misalignment risk. Table~\ref{tab:agents3-goal-dynamics-calibration} summarizes goal dynamics calibration.
 
 \paragraph{Static Goals}
 The system pursues a fixed objective defined at deployment. The goal does not change without explicit redeployment.
@@ -183,33 +180,19 @@ A legal research tool with the static goal: ``Identify cases cited in the brief 
 \paragraph{Adaptive Goals}
 The system refines its objectives within predefined boundaries based on feedback, but cannot change goals fundamentally. For example, a fraud detection system might adjust risk weights based on observed fraud patterns, but cannot change its core objective (detect fraud) or operate outside defined risk parameters.
 
-\textbf{Governance implications}: Adaptive goals require continuous monitoring to ensure the system remains within boundaries. Organizations must define:
-\begin{itemize}
-\item \textbf{Boundaries}: What aspects of the goal can adapt? What constraints are inviolable?
-\item \textbf{Monitoring}: How frequently are adaptations reviewed? What triggers revalidation?
-\item \textbf{Rollback}: If adaptation degrades performance or violates constraints, can the system revert to a prior known-good state?
-\end{itemize}
+Adaptive goals can drift within their permitted boundaries, and subtle drift may escape notice until it causes harm. Detecting drift requires both a clear standard and active surveillance. The standard comes from explicitly defining which aspects of the goal may adapt and which constraints are inviolable—without this distinction, there is nothing to measure against. Surveillance comes from a monitoring framework that specifies review frequency and revalidation triggers, catching deviation before it compounds. Detection alone is insufficient, however; organizations also need rollback capability, enabling the system to revert to a validated state when adaptation degrades performance or violates constraints.
 
 \begin{highlightbox}[title={Example: Adaptive Goals}]
 A credit scoring model that adapts feature weights based on performance feedback but cannot introduce new features, change fairness constraints, or operate outside regulatory compliance boundaries.
 \end{highlightbox}
 
 \paragraph{Negotiated Goals}
-The system proposes changes to its objectives and requests human approval before implementation. This is the highest governance burden because each goal change requires validation.
-
-\textbf{Governance implications}: Negotiated goals require human-in-the-loop approval for every proposed change. Organizations must establish:
-\begin{itemize}
-\item \textbf{Approval Authority}: Who can approve goal changes? (Typically requires senior leadership or governance committee.)
-\item \textbf{Change Justification}: Why is the system proposing the change? What evidence supports it?
-\item \textbf{Impact Assessment}: What are the consequences of the proposed goal change?
-\item \textbf{Revalidation}: After goal change, the system must be revalidated for safety, fairness, and compliance.
-\end{itemize}
+When a system proposes changes to its own objectives, every proposal requires human validation before implementation—the system cannot autonomously alter its goals. This creates the highest governance burden of any goal dynamics category. Organizations must designate approval authority, typically reserving this role for senior leadership or a governance committee given the stakes involved. The approval process demands rigorous documentation: why is the system proposing this change, what evidence supports it, and what are the potential consequences? Even after approval, governance is not complete; the modified system must undergo revalidation to confirm it remains safe, fair, and compliant. This cumulative overhead explains why negotiated goals appear only in the most sophisticated agentic deployments.
 
 \begin{highlightbox}[title={Example: Negotiated Goals}]
 An AI strategic planning assistant that proposes: ``Based on market analysis, I recommend shifting investment focus from Technology to Healthcare.'' This goal change requires executive approval, risk assessment, and fiduciary duty review.
 \end{highlightbox}
 
-Table~\ref{tab:agents3-goal-dynamics-calibration} summarizes goal dynamics calibration.
 
 \begin{table}[htbp]
 \centering
@@ -232,7 +215,7 @@ Table~\ref{tab:agents3-goal-dynamics-calibration} summarizes goal dynamics calib
 \subsection{Persistence Calibration}
 \label{sec:agents3-persistence-calibration}
 
-Persistence determines whether the system maintains state across interactions. Stateful systems create compounding error risk and require state integrity controls.
+Persistence determines whether the system maintains state across interactions. Stateful systems create compounding error risk and require state integrity controls. Table~\ref{tab:agents3-persistence-calibration} summarizes persistence calibration.
 
 \paragraph{Stateless Systems}
 Each interaction is independent. The system does not retain information from prior interactions.
@@ -244,21 +227,12 @@ A legal citation verification tool that checks each citation independently. An e
 \end{highlightbox}
 
 \paragraph{Stateful Systems}
-The system accumulates information across interactions. Decisions depend on prior state.
-
-\textbf{Governance implications}: Stateful systems require state management controls:
-\begin{itemize}
-\item \textbf{State Integrity}: Protect state from tampering, corruption, or adversarial manipulation.
-\item \textbf{State Logging}: Capture state changes to enable decision reconstruction.
-\item \textbf{Error Compounding}: Monitor for cases where an initial error propagates through subsequent decisions.
-\item \textbf{State Reset}: Define conditions under which state should be reset (e.g., user logout, policy change, detected anomaly).
-\end{itemize}
+Stateful systems accumulate information across interactions, meaning each decision builds on prior context. This creates a distinctive governance challenge: errors compound. A misunderstanding in one session can propagate through subsequent decisions, corrupting an entire chain of reasoning. Governance must therefore protect state integrity against tampering, corruption, and adversarial manipulation. Comprehensive logging is essential to enable reconstruction of how state evolved—without it, diagnosing problems becomes nearly impossible. Monitoring must specifically watch for error compounding, catching cases where an early mistake ripples through later decisions. Organizations also need clear criteria for state resets: when should the system discard accumulated context and start fresh? Common triggers include user logout, policy changes, and detected anomalies, though the right criteria depend on deployment context.
 
 \begin{highlightbox}[title={Example: Stateful System}, breakable=false]
 A financial planning chatbot that builds a profile of the client's financial situation across multiple conversations. If the system misunderstands the client's risk tolerance in Session 1, all subsequent recommendations may be inappropriate. Governance must include periodic state validation (``Let me confirm: your risk tolerance is Moderate, correct?'') and state logging to reconstruct how the profile evolved.
 \end{highlightbox}
 
-Table~\ref{tab:agents3-persistence-calibration} summarizes persistence calibration.
 
 \begin{table}[htbp]
 \centering

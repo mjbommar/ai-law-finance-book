@@ -35,7 +35,17 @@ A registered investment adviser deploys an agentic financial planning system tha
 
 The system iterates through analysis-recommendation-feedback loops over days or weeks, adapts its strategy based on client responses and market changes, and terminates when confidence thresholds are met or escalation is required. \textit{Dimensional profile: HITL + hybrid frame + adaptive goals + stateful.}
 
-The risk assessment identifies five primary concerns. \emph{Compliance risk} (high likelihood, high impact) arises because the system may recommend unsuitable investments violating Advisers Act fiduciary duty; unlike a simple Q\&A chatbot, iteration and adaptation create compounding risk across multiple cycles. \emph{Accuracy risk} (moderate likelihood, high impact) stems from potential hallucination of market data or misinterpretation of client constraints across iterative cycles, leading to compounding errors. \emph{Adaptation risk} (moderate likelihood, high impact) occurs when the system adapts its strategy in ways that drift from regulatory compliance—for example, learning to recommend higher-fee products based on firm incentives rather than client best interest. \emph{Iteration risk} (low likelihood, high impact) manifests as either excessive iteration (analysis paralysis) or premature termination (incomplete analysis). \emph{Security risk} (low likelihood, very high impact) involves prompt injection across iterative cycles that could manipulate accumulated state, causing disclosure of other clients' information. Table~\ref{tab:agents3-financial-planning-risk} summarizes the risk assessment and key mitigations.
+The risk assessment identifies five primary concerns, summarized in Table~\ref{tab:agents3-financial-planning-risk}.
+
+\emph{Compliance risk} ranks highest: the system may recommend unsuitable investments, violating Advisers Act fiduciary duty. Unlike a simple Q\&A chatbot, iteration and adaptation create compounding risk—a flawed recommendation in cycle one shapes subsequent analysis.
+
+\emph{Accuracy risk} stems from potential hallucination of market data or misinterpretation of client constraints. Across iterative cycles, these errors compound rather than self-correct.
+
+\emph{Adaptation risk} arises when the system drifts from regulatory compliance—for example, learning to recommend higher-fee products based on firm incentives rather than client best interest.
+
+\emph{Iteration risk} manifests as either excessive iteration (analysis paralysis) or premature termination (incomplete analysis).
+
+\emph{Security risk}, though less likely, carries the highest impact: prompt injection across iterative cycles could manipulate accumulated state, potentially disclosing other clients' information.
 
 \begin{table}[htbp]
 \centering
@@ -82,7 +92,11 @@ Effective audit logging captures:
 Logs must be stored in \emph{tamper-evident} formats (e.g., append-only databases, cryptographic hashing) with access controls limiting who can read or delete logs. Retention periods must satisfy regulatory requirements: 7-10 years for financial services, 25 months minimum for ECOA adverse action records, potentially longer for litigation hold purposes.
 
 \paragraph{Example: Agentic Credit Underwriting Audit Logging (ECOA Compliance)}
-A bank deploys an agentic mortgage underwriting system that \emph{iteratively} investigates applications by requesting additional documentation, querying third-party data sources (employment verification, asset verification), and analyzing trends across multiple applicants. The system adapts its investigation strategy based on discovered risk patterns and terminates when sufficient information is gathered or escalation is required. \textbf{Agentic properties}: Goal (approve qualified applicants while managing credit risk and satisfying ECOA requirements), Perception (observes application data, third-party verification responses, historical default patterns), Action (requests documents, queries APIs, generates preliminary assessments), Iteration (operates across 3-7 investigation cycles over 5-15 days), Adaptation (adjusts investigation depth based on risk indicators and application complexity), Termination (explicit conditions: confidence >0.90, maximum 7 cycles, or red-flag escalation to senior underwriter). \textit{Dimensional profile: HIC + institutional frame + adaptive goals + stateful.}
+A bank deploys an agentic mortgage underwriting system that \emph{iteratively} investigates applications by requesting additional documentation, querying third-party data sources (employment verification, asset verification), and analyzing trends across multiple applicants. The system adapts its investigation strategy based on discovered risk patterns and terminates when sufficient information is gathered or escalation is required.
+
+\textit{Dimensional profile: HIC + institutional frame + adaptive goals + stateful.}
+
+The system's agentic properties shape its governance requirements. Its \textbf{goal} is to approve qualified applicants while managing credit risk and satisfying ECOA requirements. Its \textbf{perception} draws on application data, third-party verification responses, and historical default patterns. Its \textbf{actions} include requesting documents, querying APIs, and generating preliminary assessments. \textbf{Iteration} operates across 3--7 investigation cycles over 5--15 days. \textbf{Adaptation} adjusts investigation depth based on risk indicators and application complexity. \textbf{Termination} occurs under explicit conditions: confidence exceeds 0.90, the maximum of 7 cycles is reached, or red flags trigger escalation to a senior underwriter.
 
 Equal Credit Opportunity Act Regulation B requires lenders to provide ``principal reasons'' for adverse credit decisions \parencite{ecoa-reg-b}. For agentic systems that iterate across multiple cycles and adapt their investigation strategy, the logging architecture must capture \emph{cross-cycle decision evolution} to enable reconstruction of how the system's assessment changed over time.
 
@@ -148,7 +162,7 @@ Equal Credit Opportunity Act Regulation B requires lenders to provide ``principa
 
 \textbf{Security}: Logs are encrypted at rest, with access restricted to compliance officers, auditors, and authorized investigators. The system uses append-only storage with cryptographic integrity verification (tamper-evident) and per-cycle hash chains to detect any alteration.
 
-\textbf{Retrievability}: Indexed by application ID, applicant (hashed identifier to protect PII), decision date, termination reason, and number of cycles. Enables compliance officers to query: ``Show all adverse decisions where the system terminated due to timeout rather than confidence'' or ``Identify applications where preliminary assessment changed from LIKELY\_APPROVE to ADVERSE between cycles.''
+\textbf{Retrievability}: Indexed by application ID, applicant (hashed identifier to protect PII), decision date, termination reason, and number of cycles. Enables compliance officers to query: ``Show all adverse decisions where the system terminated due to timeout rather than confidence'' or ``Identify applications where preliminary assessment changed from \texttt{LIKELY\_APPROVE} to \texttt{ADVERSE} between cycles.''
 
 \textbf{Validation}: Quarterly audit sampling verifies logs enable reconstruction of iterative decision evolution; test whether system's cross-cycle adaptations comply with fair lending principles; validate termination conditions are consistently applied.
 
@@ -196,7 +210,7 @@ HITL systems require human pre-approval before executing high-consequence action
 \item \textbf{Notification}: Alert the reviewer (email, dashboard notification, SMS for time-sensitive actions).
 \item \textbf{Review Interface}: Present the recommendation, supporting evidence, system confidence, and options (approve, reject, modify, request more information).
 \item \textbf{Accountability}: Log who approved, when, and any modifications made.
-\item \textbf{Automation Bias Mitigation}: To prevent rubber-stamping, randomize the presentation order of recommendations, periodically inject known-incorrect recommendations as controls, and track approval/rejection rates per reviewer (flag reviewers with suspiciously high approval rates).
+\item \textbf{Automation Bias Mitigation}: To prevent rubber stamping, randomize the presentation order of recommendations, periodically inject known-incorrect recommendations as controls, and track approval/rejection rates per reviewer (flag reviewers with suspiciously high approval rates).
 \end{itemize}
 
 \paragraph{HOTL (Human-on-the-Loop): Monitoring and Intervention}
