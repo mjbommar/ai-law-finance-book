@@ -16,14 +16,9 @@ Every professional learns to recognize completion. The research memo is done whe
 Agents face the same challenge. Without explicit termination conditions, agents can run indefinitely: searching one more database, trying one more approach, refining one more time. We call this the ``runaway associate'' problem: you asked for two relevant cases, the associate gives you fifty because they did not know when enough was enough.
 
 \begin{definitionbox}[title={Termination}]
-\keyterm{Termination} conditions define when an agent should stop executing. Three outcomes are possible:
+\keyterm{Termination} conditions define when an agent should stop executing. Three outcomes are possible. Success means the goal is achieved and the agent delivers the result. Failure means the goal cannot be achieved, so the agent reports why and stops. Escalation means the agent cannot determine success or failure, transferring the decision to human judgment.
 
-\textbf{Success}: The goal is achieved. Deliver the result.
-
-\textbf{Failure}: The goal cannot be achieved. Report why and stop.
-
-\textbf{Escalation}: The agent cannot determine success or failure. Transfer to human judgment.
-
+\vspace{0.5em}
 Termination implements the ``T'' in the GPA+IAT framework. Without termination, agents lack the sixth property that distinguishes agentic systems from runaway processes.
 \end{definitionbox}
 
@@ -34,29 +29,17 @@ Termination implements the ``T'' in the GPA+IAT framework. Without termination, 
 \subsection{Termination Condition Categories}
 \label{sec:agents2-termination-categories}
 
-Five categories of termination conditions bound agent execution:
+Five categories of termination conditions bound agent execution: success conditions, resource budgets, confidence thresholds, error conditions, and escalation triggers.
 
-\textbf{Success Conditions}: The most obvious termination is when the goal is achieved and the agent can return the result.
+The most obvious termination is when the goal is achieved and the agent can return the result. Success conditions take several forms. Completeness criteria ask whether all required elements have been produced. For document review, this means all provisions on the checklist have been analyzed. For research, the legal question has been answered with supporting authority. For portfolio rebalancing, allocations match targets within tolerance. Quality thresholds ask whether the output is good enough. For a research memo, are conclusions supported by binding authority? For a risk assessment, have material risks been identified and analyzed? Quality thresholds often require human judgment because the agent can check completeness but may not assess quality reliably. Convergence criteria ask whether the agent has stopped learning new information. If the last three searches returned no new relevant authority, the research may be saturated. If the last five portfolio adjustments produced diminishing improvement, optimization may have converged.
 
-\textbf{Completeness criteria}: Have all required elements been produced? For document review: all provisions on the checklist have been analyzed. For research: the legal question has been answered with supporting authority. For portfolio rebalancing: allocations match targets within tolerance.
+Resource budgets provide hard limits that prevent runaway execution by capping consumption across multiple dimensions. \Cref{sec:agents2-budgets} examines budget architecture as a planning mechanism; here we focus on budgets as termination triggers. Token budgets stop execution after a specified threshold, say 50,000 tokens, preventing expensive reasoning loops that would otherwise continue indefinitely. Time budgets enforce deadlines by terminating after a fixed duration, ensuring that research tasks do not consume an entire day when an hour was expected. Iteration budgets cap tool calls, stopping after twenty searches to prevent infinite loops where the agent keeps trying slightly different queries without progress. Cost budgets provide the most direct control, halting execution after spending a dollar amount (perhaps \$5 in API calls) to limit financial exposure. These budgets cascade and interact: a task might hit its time limit before exhausting its token budget, or vice versa. Budget exhaustion does not mean failure; partial results may still be valuable. But the agent must stop and report instead of running indefinitely.
 
-\textbf{Quality thresholds}: Is the output good enough? For a research memo: are conclusions supported by binding authority? For a risk assessment: have material risks been identified and analyzed? Quality thresholds often require human judgment---the agent can check completeness but may not assess quality reliably.
+Confidence thresholds gate actions on certainty, creating a decision boundary between autonomous execution and human review. When confidence is high, the agent delivers its answer. When confidence drops below a calibrated threshold, perhaps 80\%, the agent stops and escalates rather than proceeding with uncertain information. This mirrors how associates should work: ``I'm not confident this is right. Let me ask the partner before proceeding.'' Calibrating these thresholds is challenging. Research suggests that language models can often predict their own accuracy but require careful prompting \parencite{kadavath2022calibration}. Agents may be overconfident, proceeding when they should escalate, or underconfident, escalating unnecessarily and providing no value. Effective calibration requires testing against known outcomes, comparing agent confidence to actual accuracy, and adjusting thresholds until the agent escalates at appropriate uncertainty levels.
 
-\textbf{Convergence criteria}: Has the agent stopped learning new information? If the last three searches returned no new relevant authority, the research may be saturated. If the last five portfolio adjustments produced diminishing improvement, optimization may have converged.
+Error conditions require agents to recognize when things are going wrong and terminate rather than compounding errors. Repeated tool failures signal infrastructure problems: if Westlaw times out three times consecutively, the agent should stop rather than retrying indefinitely while consuming budget. Inconsistent data, such as a revenue figure in the 10-K that does not match the earnings release, requires human investigation, not agent guesswork about which source is correct. Constraint violations demand immediate termination: if the planned action would exceed position limits or breach confidentiality, the agent must stop before acting, not after. Some tasks prove impossible as specified. Analysis may reveal conflicting requirements, missing prerequisites, or logical impossibilities. In these cases, the agent should report the impossibility honestly rather than proceeding with a compromised approach that satisfies the letter of the instruction while violating its spirit.
 
-\textbf{Resource Budgets}: Hard limits prevent runaway execution by capping consumption across multiple dimensions. \Cref{sec:agents2-budgets} examines budget architecture as a planning mechanism; here we focus on budgets as termination triggers. Token budgets stop execution after a specified threshold---say, 50,000 tokens---preventing expensive reasoning loops that would otherwise continue indefinitely. Time budgets enforce deadlines by terminating after a fixed duration, ensuring that research tasks do not consume an entire day when an hour was expected. Iteration budgets cap tool calls, stopping after twenty searches to prevent infinite loops where the agent keeps trying slightly different queries without progress. Cost budgets provide the most direct control, halting execution after spending a dollar amount (perhaps \$5 in API calls) to limit financial exposure.
-
-These budgets cascade and interact: a task might hit its time limit before exhausting its token budget, or vice versa. Budget exhaustion does not mean failure; partial results may still be valuable. But the agent must stop and report instead of running indefinitely.
-
-\textbf{Confidence Thresholds}: Confidence thresholds gate actions on certainty, creating a decision boundary between autonomous execution and human review. When confidence is high, the agent delivers its answer. When confidence drops below a calibrated threshold---perhaps 80\%---the agent stops and escalates rather than proceeding with uncertain information. This mirrors how associates should work: ``I'm not confident this is right. Let me ask the partner before proceeding.''
-
-Calibrating these thresholds is challenging. Agents may be overconfident, proceeding when they should escalate, or underconfident, escalating unnecessarily and providing no value. Effective calibration requires testing against known outcomes, comparing agent confidence to actual accuracy, and adjusting thresholds until the agent escalates at appropriate uncertainty levels.
-
-\textbf{Error Conditions}: Agents must recognize when things are going wrong and terminate rather than compounding errors. Repeated tool failures signal infrastructure problems: if Westlaw times out three times consecutively, the agent should stop rather than retrying indefinitely while consuming budget. Inconsistent data---a revenue figure in the 10-K that does not match the earnings release---requires human investigation, not agent guesswork about which source is correct. Constraint violations demand immediate termination: if the planned action would exceed position limits or breach confidentiality, the agent must stop before acting, not after.
-
-Some tasks prove impossible as specified. Analysis may reveal conflicting requirements, missing prerequisites, or logical impossibilities. In these cases, the agent should report the impossibility honestly rather than proceeding with a compromised approach that satisfies the letter of the instruction while violating its spirit.
-
-\textbf{Escalation Triggers}: Some situations require human judgment regardless of whether the task has succeeded, failed, or consumed its budget. Novel situations that do not match training patterns need human expertise to navigate. High-stakes decisions warrant human approval even when the agent is confident, because the consequences of error justify the overhead of review. Authority boundaries define what the agent can do autonomously; actions beyond those boundaries require escalation by design, not because something went wrong. \Cref{sec:agents2-escalation} examines escalation patterns in detail.
+Escalation triggers require human judgment regardless of whether the task has succeeded, failed, or consumed its budget. Novel situations that do not match training patterns need human expertise to navigate. High-stakes decisions warrant human approval even when the agent is confident, because the consequences of error justify the overhead of review. Authority boundaries define what the agent can do autonomously; actions beyond those boundaries require escalation by design, not because something went wrong. \Cref{sec:agents2-escalation} examines escalation patterns in detail.
 
 % ----------------------------------------------------------------------------
 % Explicit Success Criteria
@@ -111,18 +94,17 @@ Without loop detection, agents will eventually get stuck in production. The ques
 Independent benchmarking reveals a sharp reliability boundary. METR (Model Evaluation and Threat Research) tested agents across standardized task suites varying in duration and complexity. The results:
 
 \begin{keybox}[title={The Four-Minute Cliff}]
-METR's 2025 study found that agents achieve \textbf{near-perfect success on tasks under 4 minutes}, but \textbf{under 10\% success on tasks over 4 hours} \parencite{metr2024autonomy}.
+METR's 2025 study found that agents achieve \textbf{near-perfect success on tasks under 4 minutes}, but \textbf{under 10\% success on tasks over 4 hours} \parencite{metr-agent-capability-2025}.
 
-This gap---from near-100\% to under-10\%---defines the current boundary between reliable and unreliable agent deployment.
-
-\textbf{Implication}: Decompose tasks aggressively. Keep individual agent tasks short. Insert human checkpoints between phases. Don't expect autonomous completion of multi-hour workflows.
+\vspace{0.5em}
+This gap, from near-100\% to under-10\%, defines the current boundary between reliable and unreliable agent deployment. The implication is clear: decompose tasks aggressively, keep individual agent tasks short, insert human checkpoints between phases, and do not expect autonomous completion of multi-hour workflows.
 \end{keybox}
 
 \input{figures/fig-reliability-cliff}
 
 The reliability cliff has several causes, each contributing to the dramatic drop in success rates as task duration increases. Compounding errors are perhaps the most fundamental: each step introduces error probability, and these probabilities multiply. A 95\%-accurate retrieval step followed by 90\%-accurate reasoning followed by 85\%-accurate action yields roughly 73\% end-to-end accuracy, before accounting for sequencing decisions. Over a four-hour task with dozens of steps, these compounding errors accumulate into near-certain failure.
 
-Planning fragility compounds the problem. Agents frequently select suboptimal tool sequences, get stuck in loops, or fail to recognize when their approach is not working. A human would step back and reconsider; agents often persist with failing strategies. Integration brittleness adds another failure mode: tool APIs return unexpected formats, authentication tokens expire, rate limits trigger. Each integration point is a potential failure mode, and complex tasks touch many integration points.
+Planning fragility compounds the problem \parencite{yao2022react}. Agents frequently select suboptimal tool sequences, get stuck in loops, or fail to recognize when their approach is not working. A human would step back and reconsider; agents often persist with failing strategies. Integration brittleness adds another failure mode: tool APIs return unexpected formats, authentication tokens expire, rate limits trigger. Each integration point is a potential failure mode, and complex tasks touch many integration points.
 
 Design for this reality. Decompose aggressively. Validate at checkpoints. Assume agents will fail and design for graceful degradation.
 
@@ -148,9 +130,9 @@ Beyond reporting status, agents should recommend next steps when possible. ``Rec
 
 When evaluating agentic systems, assess termination capabilities against six criteria that distinguish robust systems from fragile ones.
 
-Success criteria clarity determines whether termination is predictable. Are termination conditions explicit? Can you predict when the agent will stop? Systems with vague or implicit termination conditions produce unpredictable behavior. Budget enforcement determines whether limits actually constrain execution. Test by setting tight budgets and verifying the agent actually stops; some systems log budget exhaustion but continue anyway. Loop detection determines whether the agent recognizes when it is stuck. Test with impossible tasks or unavailable tools; a system without loop detection will spin indefinitely.
+Start with success criteria clarity. Are termination conditions explicit? Can you predict when the agent will stop? Systems with vague or implicit termination conditions produce unpredictable behavior. Test budget enforcement by setting tight budgets and verifying the agent actually stops; some systems log budget exhaustion but continue anyway. Assess loop detection by presenting impossible tasks or unavailable tools; a system without loop detection will spin indefinitely.
 
-Failure reporting determines whether failures are actionable. When tasks fail, does the agent explain why? A bare ``task failed'' message forces the human to investigate; a detailed explanation enables informed response. Graceful degradation determines whether early termination preserves value. When stopped early, does the agent preserve partial results? Is status clearly reported? Escalation integration determines whether handoffs work smoothly. When termination requires human judgment, does the human receive sufficient context to decide? A handoff that requires the human to start from scratch is a handoff that failed.
+Examine failure reporting to see whether failures are actionable. When tasks fail, does the agent explain why? A bare ``task failed'' message forces the human to investigate; a detailed explanation enables informed response. Check graceful degradation by observing what happens when termination occurs early. Does the agent preserve partial results? Is status clearly reported? Finally, test escalation integration to see whether handoffs work smoothly. When termination requires human judgment, does the human receive sufficient context to decide? A handoff that requires the human to start from scratch is a handoff that failed.
 
 % ----------------------------------------------------------------------------
 % Connection to Other Questions

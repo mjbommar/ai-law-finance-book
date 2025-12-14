@@ -135,7 +135,25 @@
 % BOXES AND VISUAL ELEMENTS
 % ============================================================================
 \usepackage{tcolorbox}
-\tcbuselibrary{breakable,skins,theorems}
+\tcbuselibrary{breakable,skins,theorems,listings}
+
+% Listings package for code formatting
+\usepackage{listings}
+\lstset{
+  basicstyle=\small\ttfamily\color{gray-900},
+  breaklines=true,
+  breakatwhitespace=false,
+  columns=flexible,
+  keepspaces=true,
+  showstringspaces=false,
+  tabsize=2,
+  xleftmargin=0pt,
+  framexleftmargin=0pt,
+  keywordstyle=\color{slate-700}\bfseries,
+  stringstyle=\color{green-900},
+  commentstyle=\color{gray-600}\itshape,
+  emphstyle=\color{amber-900},
+}
 
 \tcbset{
   importance/.is choice,
@@ -154,6 +172,9 @@
 \newtcolorbox{questionbox}[1][]{enhanced,colback=gray-100,colframe=gray-600,fonttitle=\bfseries,coltitle=white,boxrule=1.5pt,arc=2pt,left=10pt,right=10pt,top=8pt,bottom=8pt,breakable,borderline west={4pt}{0pt}{slate-700},attach boxed title to top left={yshift=-2mm, xshift=4mm},boxed title style={colback=slate-700,colframe=slate-700,arc=2pt,boxrule=0pt},#1}
 
 \newtcolorbox{theorembox}[1][]{enhanced,colback=bg-theorem,colframe=border-theorem,fonttitle=\bfseries\large,coltitle=white,boxrule=1.5pt,arc=3pt,left=12pt,right=12pt,top=10pt,bottom=10pt,breakable,drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.08},attach boxed title to top left={yshift=-2mm, xshift=4mm},boxed title style={colback=theorem-dark,colframe=theorem-dark,arc=2pt,boxrule=0pt},#1}
+
+% Listing box style - For code examples, API signatures, and technical content
+\newtcblisting{listingbox}[1][]{enhanced,colback=gray-100,colframe=gray-400,fonttitle=\bfseries\sffamily,coltitle=gray-800,boxrule=1pt,arc=2pt,left=8pt,right=8pt,top=6pt,bottom=6pt,breakable,listing only,listing options={basicstyle=\small\ttfamily\color{gray-900},breaklines=true,columns=flexible,keepspaces=true},attach boxed title to top left={yshift=-2mm, xshift=4mm},boxed title style={colback=gray-500,colframe=gray-500,arc=2pt,boxrule=0pt},#1}
 
 % ============================================================================
 % LISTS

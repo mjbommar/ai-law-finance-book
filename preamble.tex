@@ -292,7 +292,21 @@
 % BOXES AND VISUAL ELEMENTS
 % ============================================================================
 \usepackage{tcolorbox}
-\tcbuselibrary{breakable,skins,theorems}
+\tcbuselibrary{breakable,skins,theorems,listings}
+
+% Listings package for code formatting
+\usepackage{listings}
+\lstset{
+  basicstyle=\small\ttfamily,
+  breaklines=true,
+  breakatwhitespace=false,
+  columns=flexible,
+  keepspaces=true,
+  showstringspaces=false,
+  tabsize=2,
+  xleftmargin=0pt,
+  framexleftmargin=0pt,
+}
 
 % Importance scaling for tcolorbox environments (book-wide)
 % Usage in any box: [importance=low|medium|high]
@@ -428,6 +442,37 @@
   boxed title style={
     colback=theorem-dark,
     colframe=theorem-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% Listing box style - For code examples, API signatures, and technical content
+\newtcblisting{listingbox}[1][]{
+  enhanced,
+  colback=gray-100,
+  colframe=gray-400,
+  fonttitle=\bfseries\sffamily,
+  coltitle=gray-800,
+  boxrule=1pt,
+  arc=2pt,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  breakable,
+  listing only,
+  listing options={
+    basicstyle=\small\ttfamily\color{gray-900},
+    breaklines=true,
+    columns=flexible,
+    keepspaces=true,
+  },
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=gray-500,
+    colframe=gray-500,
     arc=2pt,
     boxrule=0pt
   },

@@ -30,19 +30,17 @@ Delegation enables parallelization (multiple specialists work simultaneously), s
 \subsection{Why Multi-Agent Architectures?}
 \label{sec:agents2-why-multi-agent}
 
-Several factors drive multi-agent designs:
+Several factors drive multi-agent designs \parencite{wu2023autogen,guo2024multiagent}.
 
-\textbf{Specialization}: A securities law agent can be optimized for SEC regulations, loaded with relevant precedent, and equipped with EDGAR tools. A separate tax agent handles tax implications with different tools and knowledge. Neither needs to be expert in the other's domain.
+Specialization allows each agent to excel in a narrow domain. A securities law agent can be optimized for SEC regulations, loaded with relevant precedent, and equipped with EDGAR tools. A separate tax agent handles tax implications with different tools and knowledge. Neither needs to be expert in the other's domain.
 
-\textbf{Security isolation}: Each agent gets minimum necessary permissions. The research agent can read legal databases but cannot file documents. The filing agent can submit to CM/ECF but cannot access client financial data. If one agent is compromised, damage is contained.
+Security isolation gives each agent minimum necessary permissions. The research agent can read legal databases but cannot file documents. The filing agent can submit to CM/ECF but cannot access client financial data. If one agent is compromised, damage is contained.
 
-\textbf{Parallel execution}: Independent workstreams proceed simultaneously. The document review agent analyzes contracts while the research agent investigates legal issues. Neither waits for the other.
+Parallel execution lets independent workstreams proceed simultaneously. The document review agent analyzes contracts while the research agent investigates legal issues. Neither waits for the other. Vendor diversity allows different agents to use different models or providers: a specialized legal model for research, a general model for drafting, a fast model for classification. Multi-agent enables best-of-breed selection.
 
-\textbf{Vendor diversity}: Different agents can use different models or providers. Use a specialized legal model for research, a general model for drafting, a fast model for classification. Multi-agent enables best-of-breed selection.
+Scale management addresses context window limits. Rather than cramming everything into one context, you can decompose across agents, each with focused context.
 
-\textbf{Scale management}: Context windows have limits. Rather than cramming everything into one context, decompose across agents, each with focused context.
-
-The tradeoffs: coordination overhead (agents must communicate), debugging complexity (failures span multiple agents), and additional security surface (more agents means more potential attack vectors).
+The tradeoffs are coordination overhead (agents must communicate), debugging complexity (failures span multiple agents), and additional security surface (more agents means more potential attack vectors).
 
 % ----------------------------------------------------------------------------
 % Agent-to-Agent Protocol (A2A)
@@ -51,32 +49,21 @@ The tradeoffs: coordination overhead (agents must communicate), debugging comple
 \subsection{Agent-to-Agent Protocol (A2A)}
 \label{sec:agents2-a2a}
 
-The Agent-to-Agent Protocol standardizes how agents collaborate, complementing MCP's tool integration. If MCP is how agents access resources, A2A is how agents delegate work to specialists.
+The Agent-to-Agent Protocol (A2A) standardizes how agents collaborate, complementing MCP's tool integration \parencite{google-a2a,anthropic-mcp}. If MCP is how agents access resources, A2A is how agents delegate work to specialists.
 
-\textbf{A2A Concepts}: A2A uses familiar professional concepts:
+A2A uses familiar professional concepts. Agent Cards are capability statements, like a specialist's résumé listing expertise, input requirements, and output formats. Before delegating, the coordinator reviews the Agent Card to confirm the specialist can handle the task.
 
-\textbf{Agent Cards}: Capability statements, like a specialist's résumé listing expertise, input requirements, and output formats. Before delegating, the coordinator reviews the Agent Card to confirm the specialist can handle the task.
+Tasks are units of delegated work, like engagement letters specifying scope, constraints, and deadlines. The coordinator creates a Task; the specialist accepts and executes. Upon completion, specialists return Artifacts: draft memos, analysis reports, structured data. The coordinator integrates these work products into the final deliverable.
 
-\textbf{Tasks}: Units of delegated work, like engagement letters specifying scope, constraints, and deadlines. The coordinator creates a Task; the specialist accepts and executes.
+Communication Channels support asynchronous, long-running work. You assign research Monday; the memo arrives Friday. Channels enable status updates and clarification requests during execution.
 
-\textbf{Artifacts}: Work products returned upon completion. Draft memos, analysis reports, structured data. The specialist produces Artifacts; the coordinator integrates them.
-
-\textbf{Communication Channels}: Support for asynchronous, long-running work. You assign research Monday; the memo arrives Friday. Channels enable status updates and clarification requests during execution.
-
-\textbf{Task Lifecycle}: Agent collaboration follows five phases mirroring professional delegation:
+Agent collaboration follows five phases mirroring professional delegation:
 
 \begin{keybox}[title={A2A Task Delegation}]
-\textbf{1. DISCOVERY}: Find specialist via Agent Card $\rightarrow$ \textit{Like finding co-counsel through a directory}
+The task lifecycle begins with \textbf{discovery}: finding the right specialist via Agent Card, much like finding co-counsel through a directory. Next comes \textbf{delegation}: creating a Task with goals, constraints, and deadline, analogous to drafting an engagement letter. During \textbf{execution}, the specialist works independently and may request clarification, like an associate researching a legal question. Upon \textbf{delivery}, the specialist returns Artifacts, submitting a draft memo for review. Finally, \textbf{completion} occurs when the coordinator reviews, approves, or requests revision---the partner review that ensures quality.
 
-\textbf{2. DELEGATION}: Create Task with goals, constraints, deadline $\rightarrow$ \textit{Like an engagement letter}
-
-\textbf{3. EXECUTION}: Specialist works independently, may request clarification $\rightarrow$ \textit{Like an associate researching}
-
-\textbf{4. DELIVERY}: Specialist returns Artifacts $\rightarrow$ \textit{Like submitting a draft memo}
-
-\textbf{5. COMPLETION}: Coordinator reviews, approves, or requests revision $\rightarrow$ \textit{Like partner review}
-
-\textbf{Key insight}: A2A enables delegation without micromanagement: you define WHAT, the specialist decides HOW.
+\vspace{0.5em}
+The key insight is that A2A enables delegation without micromanagement: you define \textit{what} needs to be done; the specialist decides \textit{how}.
 \end{keybox}
 
 % ----------------------------------------------------------------------------
@@ -86,33 +73,21 @@ The Agent-to-Agent Protocol standardizes how agents collaborate, complementing M
 \subsection{Multi-Agent Patterns}
 \label{sec:agents2-orchestration}
 
-Three patterns organize multi-agent collaboration:
+Three patterns organize multi-agent collaboration \parencite{wang2024tdag}.
 
-\textbf{Sequential Delegation}: Specialists work in sequence, each building on prior work: Coordinator $\rightarrow$ Research Agent $\rightarrow$ Analysis Agent $\rightarrow$ Drafting Agent $\rightarrow$ Coordinator synthesizes. Simple but slow---each specialist waits for prior completion.
+In sequential delegation, specialists work in sequence, each building on prior work: the Coordinator delegates to a Research Agent, whose output flows to an Analysis Agent, then to a Drafting Agent, before the Coordinator synthesizes the final result. This pattern is simple but slow because each specialist waits for prior completion.
 
-\textbf{Parallel Delegation}: Independent specialists work simultaneously: Securities, Tax, and Employment Agents analyze an acquisition concurrently; Coordinator integrates findings. Faster, but requires task independence.
+Parallel delegation allows independent specialists to work simultaneously. Securities, Tax, and Employment Agents can analyze an acquisition concurrently while the Coordinator integrates their findings. This approach is faster but requires task independence.
 
-\textbf{Hierarchical Delegation}: Specialists delegate to sub-specialists: Lead Due Diligence Agent delegates to Document Review and Legal Research agents, each of which may further delegate. Handles complex matters but introduces coordination overhead and cascading failure risk.
+Hierarchical delegation enables specialists to delegate to sub-specialists. A Lead Due Diligence Agent might delegate to Document Review and Legal Research agents, each of which may further delegate. This pattern handles complex matters but introduces coordination overhead and cascading failure risk.
 
 \input{figures/fig-orchestration-patterns}
 
-\textbf{Dual Protocol Strategy}: Production systems typically require both MCP and A2A working in concert:
+Production systems typically require both MCP and A2A working in concert. MCP handles agent-to-tool communication: each specialist agent uses MCP to access its domain-specific tools, including databases, calculators, and external systems. A2A handles agent-to-agent coordination: the orchestrator uses A2A to delegate tasks to specialists and receive artifacts.
 
-\textbf{MCP}: Agent-to-tool communication. Each specialist agent uses MCP to access its domain-specific tools (databases, calculators, external systems).
+Consider an M\&A due diligence example. The orchestrator receives the instruction to conduct due diligence on a target company acquisition and delegates via A2A to three specialists. The Document Processing Agent indexes the data room, classifies documents, and extracts key terms, using MCP to access document management systems and OCR tools. The Financial Analysis Agent analyzes financial statements, builds models, and identifies risks, using MCP to access financial databases and calculation tools. The Legal Risk Agent reviews contracts for problematic provisions and researches legal issues, using MCP to access legal research platforms and precedent databases.
 
-\textbf{A2A}: Agent-to-agent coordination. The orchestrator uses A2A to delegate tasks to specialists and receive artifacts.
-
-\textbf{Example: M\&A Due Diligence}: The orchestrator receives ``Conduct due diligence on Target Company acquisition.'' It delegates via A2A:
-
-\textbf{Document Processing Agent}: Indexes the data room, classifies documents, extracts key terms. Uses MCP to access document management systems and OCR tools.
-
-\textbf{Financial Analysis Agent}: Analyzes financial statements, builds models, identifies risks. Uses MCP to access financial databases and calculation tools.
-
-\textbf{Legal Risk Agent}: Reviews contracts for problematic provisions, researches legal issues. Uses MCP to access legal research platforms and precedent databases.
-
-Each specialist returns Artifacts via A2A. The orchestrator synthesizes into a comprehensive due diligence report.
-
-Throughout: MCP handles tool access; A2A handles coordination. Neither protocol alone suffices.
+Each specialist returns Artifacts via A2A. The orchestrator synthesizes these into a comprehensive due diligence report. Throughout, MCP handles tool access while A2A handles coordination. Neither protocol alone suffices.
 
 % ----------------------------------------------------------------------------
 % Multi-Agent Workflows
@@ -121,33 +96,21 @@ Throughout: MCP handles tool access; A2A handles coordination. Neither protocol 
 \subsection{Multi-Agent Workflow Examples}
 \label{sec:agents2-workflows}
 
-\textbf{Legal: Regulatory Compliance Assessment}: A fintech company asks: ``What regulatory approvals do we need to launch this product?''
+Consider a legal workflow for regulatory compliance assessment. A fintech company asks what regulatory approvals it needs to launch a new product. The Orchestrator receives this query and decomposes it into regulatory domains.
 
-\textbf{Orchestrator}: Receives query, decomposes into regulatory domains.
+The Securities Agent analyzes whether the product involves securities, using MCP to search SEC guidance, no-action letters, and case law. It concludes that the product likely constitutes a security under the Howey test and that registration or an exemption is required. The Banking Agent analyzes banking law implications, searching OCC, FDIC, and state banking guidance. It determines that no bank charter is required but that state money transmitter licenses may apply.
 
-\textbf{Securities Agent}: Analyzes whether the product involves securities. Uses MCP to search SEC guidance, no-action letters, case law. Returns: ``Product likely constitutes a security under Howey. Registration or exemption required.''
+The Consumer Protection Agent analyzes CFPB jurisdiction and state consumer laws, identifying UDAP exposure and recommending clear disclosures and complaint handling procedures. The AML Agent analyzes Bank Secrecy Act obligations and determines that FinCEN registration is required along with a KYC/AML program.
 
-\textbf{Banking Agent}: Analyzes banking law implications. Uses MCP to search OCC, FDIC, state banking guidance. Returns: ``No bank charter required, but state money transmitter licenses may apply.''
+The Orchestrator synthesizes these findings into a comprehensive regulatory roadmap with prioritized action items.
 
-\textbf{Consumer Protection Agent}: Analyzes CFPB jurisdiction and state consumer laws. Returns: ``UDAP exposure; recommend clear disclosures and complaint handling procedures.''
+A financial workflow illustrates large block trade execution. A portfolio manager requests execution of a \$50M block trade in XYZ Corp while minimizing market impact. The Orchestrator decomposes this into analysis and execution phases.
 
-\textbf{AML Agent}: Analyzes Bank Secrecy Act obligations. Returns: ``FinCEN registration required; implement KYC/AML program.''
+The Market Agent analyzes current liquidity, trading patterns, and optimal execution windows using MCP for market data feeds. It recommends VWAP execution over two days given average daily volume of \$200M. The Compliance Agent verifies that the trade does not breach limits or create reporting obligations, using MCP for compliance databases. It confirms the trade is within limits but notes that a 13F amendment will be required at quarter-end.
 
-\textbf{Orchestrator}: Synthesizes into comprehensive regulatory roadmap with prioritized action items.
+The Risk Agent assesses the impact on portfolio risk metrics using MCP for the risk engine. It finds that the trade increases sector concentration by 2\%, which remains within policy limits. The Execution Agent implements the execution strategy using MCP for order management systems and confirms that the order has been placed.
 
-\textbf{Financial: Large Block Trade Execution}: A portfolio manager requests: ``Execute a \$50M block trade in XYZ Corp, minimizing market impact.''
-
-\textbf{Orchestrator}: Decomposes into analysis and execution phases.
-
-\textbf{Market Agent}: Analyzes current liquidity, trading patterns, optimal execution windows. Uses MCP for market data feeds. Returns: ``Average daily volume \$200M. Recommend VWAP execution over 2 days.''
-
-\textbf{Compliance Agent}: Verifies trade doesn't breach limits or create reporting obligations. Uses MCP for compliance databases. Returns: ``Trade within limits. 13F amendment will be required at quarter-end.''
-
-\textbf{Risk Agent}: Assesses impact on portfolio risk metrics. Uses MCP for risk engine. Returns: ``Trade increases sector concentration by 2\%. Within policy limits.''
-
-\textbf{Execution Agent}: Implements the execution strategy. Uses MCP for order management systems. Returns: ``Order placed. Will report execution quality upon completion.''
-
-\textbf{Orchestrator}: Monitors execution, coordinates any adjustments, reports completion to portfolio manager.
+The Orchestrator monitors execution, coordinates any necessary adjustments, and reports completion to the portfolio manager.
 
 % ----------------------------------------------------------------------------
 % Multi-Agent Risks
@@ -156,31 +119,19 @@ Throughout: MCP handles tool access; A2A handles coordination. Neither protocol 
 \subsection{Multi-Agent Risks}
 \label{sec:agents2-coordination-failures}
 
-Multi-agent systems introduce failure modes and security challenges beyond single-agent problems:
+Multi-agent systems introduce failure modes and security challenges beyond single-agent problems.
 
-\textbf{Coordination Failure Patterns}:
+Several coordination failure patterns can emerge. Deadlock occurs when agents wait for each other cyclically and neither proceeds; prevention requires clear task dependencies, timeouts, and circular-wait detection. Divergent conclusions arise when specialists reach incompatible results; the orchestrator must detect conflicts and either reconcile them or escalate to human judgment.
 
-\textbf{Deadlock}: Agents wait for each other cyclically; neither proceeds. Prevention: clear task dependencies, timeouts, circular-wait detection.
+Cascading errors occur when incorrect output from one agent propagates through dependent agents. Prevention requires validating inputs at each handoff rather than trusting upstream agents. Coordination overhead presents a different challenge: communication consumes tokens, time, and cost, so for simple tasks, the overhead may exceed specialization benefits. Use multi-agent architectures when complexity justifies the coordination cost.
 
-\textbf{Divergent conclusions}: Specialists reach incompatible results. The orchestrator must detect conflicts and either reconcile or escalate.
+Accountability gaps emerge when something fails and it is unclear which agent is responsible. Prevention requires comprehensive logging at every delegation, clear audit trails, and defined accountability for each subtask.
 
-\textbf{Cascading errors}: Incorrect output from one agent propagates through dependent agents. Prevention: validate inputs at each handoff rather than trusting upstream agents.
+Multi-agent systems also require security controls at the coordination layer \parencite{openid-ai-identity-2024}. Agent identity is fundamental: each agent must have verifiable identity, with cryptographic signatures authenticating Agent Cards and task responses to prevent impersonation attacks.
 
-\textbf{Coordination overhead}: Communication consumes tokens, time, and cost. For simple tasks, overhead may exceed specialization benefits. Use multi-agent when complexity justifies it.
+Authorization controls restrict delegation relationships. Not every agent can delegate to every specialist; access control policies define which delegation paths are valid. Information barriers enforce legal conflicts and financial Chinese walls across agent boundaries. An agent working on Company A's acquisition cannot delegate to agents with access to Company A's confidential information from other engagements.
 
-\textbf{Accountability gaps}: When something fails, which agent is responsible? Prevention: comprehensive logging at every delegation, clear audit trails, defined accountability per subtask.
-
-\textbf{Security Controls}: Multi-agent systems require security controls at the coordination layer:
-
-\textbf{Agent identity}: Each agent must have verifiable identity. Cryptographic signatures authenticate Agent Cards and task responses. Impersonation attacks must be prevented.
-
-\textbf{Authorization controls}: Not every agent can delegate to every specialist. Access control policies define valid delegation relationships.
-
-\textbf{Information barriers}: Legal conflicts and financial Chinese walls must be enforced across agent boundaries. The agent working on Company A's acquisition cannot delegate to agents with access to Company A's confidential information from other engagements.
-
-\textbf{Audit trails}: Every delegation must be logged: who delegated what to whom, when, with what constraints, and what was returned. Enable post-hoc analysis and compliance review.
-
-\textbf{Task validation}: Specialists should validate that tasks fall within their authorized scope. Reject tasks that would require accessing forbidden data or taking unauthorized actions.
+Audit trails must capture every delegation: who delegated what to whom, when, with what constraints, and what was returned. This enables post-hoc analysis and compliance review. Finally, task validation requires specialists to verify that tasks fall within their authorized scope and to reject tasks that would require accessing forbidden data or taking unauthorized actions.
 
 % ----------------------------------------------------------------------------
 % Protocol Selection
@@ -207,13 +158,9 @@ End-to-end workflow with both & MCP + A2A & blended & Due diligence; portfolio r
 \end{tabular}
 \end{table}
 
-\textbf{Use MCP when}: You need immediate tool access---database queries, document retrieval, calculations.
+Use MCP when you need immediate tool access: database queries, document retrieval, and calculations. Use A2A when you need to delegate work that requires judgment, iteration, or extended execution time. Use both when complex workflows combine tool access (each specialist uses MCP) with coordination (the orchestrator uses A2A).
 
-\textbf{Use A2A when}: You need to delegate work that requires judgment, iteration, or extended execution time.
-
-\textbf{Use both when}: Complex workflows combine tool access (each specialist uses MCP) with coordination (orchestrator uses A2A).
-
-\textbf{Maturity (late 2025)}: MCP is production-ready for tool integration. A2A is maturing---stable spec, active pilots, but cross-vendor reliability remains uneven. Design fallbacks to human coordination where A2A would ideally apply.
+As of late 2025, MCP is production-ready for tool integration \parencite{mcp-spec}. A2A is maturing with a stable specification and active pilots \parencite{a2a-spec}, but cross-vendor reliability remains uneven. Design fallbacks to human coordination where A2A would ideally apply.
 
 % ----------------------------------------------------------------------------
 % Connection to Other Questions

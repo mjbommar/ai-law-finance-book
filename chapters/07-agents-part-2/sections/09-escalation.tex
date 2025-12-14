@@ -28,37 +28,13 @@ This reflects professionalism, not failure. Recognizing when you need help and a
 \subsection{When to Escalate}
 \label{sec:agents2-when-escalate}
 
-Three categories of triggers warrant escalation:
+Three categories of triggers warrant escalation: mandatory triggers, confidence-based triggers, and error detection \parencite{hitl-survey-2022,human-ai-taxonomy-2024}.
 
-\textbf{Mandatory Escalation Triggers}: Some situations \textit{require} human involvement regardless of the agent's confidence:
+Some situations require human involvement regardless of the agent's confidence. Budget exhaustion is a clear mandatory trigger. When the agent approaches resource limits (tokens, time, iterations, cost), it should escalate with a progress summary rather than stopping silently: ``I've used 80\% of the research budget. Here's what I found. Options: (a) grant additional budget, (b) conclude with current findings, (c) provide strategic guidance on where to focus remaining effort.'' High-stakes actions require human approval regardless of agent confidence: filing court documents, sending client communications, executing large trades, making regulatory submissions. These are approval gates where the agent prepares and the human authorizes. Authority boundaries trigger escalation when the action exceeds what the agent is authorized to do autonomously; even if the agent is confident in its recommendation, organizational policy may require human sign-off above certain thresholds. Irreversible actions warrant escalation because once you file with the court or execute the trade, you cannot take it back.
 
-\textbf{Budget exhaustion}: The agent approaches resource limits (tokens, time, iterations, cost). Rather than stopping silently, escalate with a progress summary: ``I've used 80\% of the research budget. Here's what I found. Options: (a) grant additional budget, (b) conclude with current findings, (c) provide strategic guidance on where to focus remaining effort.''
+Confidence-based escalation occurs when uncertainty about the right answer or approach exceeds acceptable thresholds \parencite{ai-uncertainty-2023}. Low confidence on output might manifest as: ``I found conflicting circuit authority. I'm not confident which rule applies in our jurisdiction'' for legal research, or ``Correlations have spiked beyond historical norms and model assumptions may be violated'' for portfolio analysis. Conflicting information triggers escalation when data sources disagree: the 10-K revenue does not match the earnings release, or two authoritative sources give different answers. Novel situations that do not match patterns the agent has seen warrant human expertise: novel legal questions, unusual market conditions, unprecedented fact patterns. Ambiguous instructions should trigger escalation when, despite clarification attempts (\Cref{sec:agents2-intent}), the agent remains uncertain about what is being asked.
 
-\textbf{High-stakes actions}: Certain actions require human approval regardless of agent confidence: filing court documents, sending client communications, executing large trades, making regulatory submissions. These are \textit{approval gates}---the agent prepares, the human authorizes.
-
-\textbf{Authority boundaries}: The action exceeds what the agent is authorized to do autonomously. Even if the agent is confident in its recommendation, organizational policy may require human sign-off above certain thresholds.
-
-\textbf{Irreversible actions}: Actions that cannot be undone warrant escalation. Once you file with the court or execute the trade, you cannot take it back. Pre-approval prevents irreversible errors.
-
-\textbf{Confidence-Based Escalation}: Uncertainty about the right answer or approach triggers escalation:
-
-\textbf{Low confidence on output}: The agent's uncertainty exceeds acceptable thresholds. For legal research: ``I found conflicting circuit authority. I'm not confident which rule applies in our jurisdiction.'' For portfolio analysis: ``Correlations have spiked beyond historical norms---model assumptions may be violated.''
-
-\textbf{Conflicting information}: Data sources disagree. The 10-K revenue does not match the earnings release. Two authoritative sources give different answers. Human judgment is needed to resolve the conflict.
-
-\textbf{Novel situations}: The scenario does not match patterns the agent has seen. Novel legal questions, unusual market conditions, unprecedented fact patterns---these warrant human expertise.
-
-\textbf{Ambiguous instructions}: Despite clarification attempts (\Cref{sec:agents2-intent}), the agent remains uncertain about what is being asked. Rather than guessing, escalate for clarification.
-
-\textbf{Error and Anomaly Detection}: Something has gone wrong and the agent cannot fix it:
-
-\textbf{Repeated tool failures}: If Westlaw times out three times consecutively, escalate: ``Research tool unavailable. Options: (a) wait and retry, (b) use alternative platform, (c) proceed with manual research.''
-
-\textbf{Data anomalies}: Red flags in the data warrant human investigation. Revenue figures that do not reconcile, filing dates that seem wrong, parties that appear on multiple sides of a transaction.
-
-\textbf{Constraint violations}: The task as specified would violate a policy or constraint. ``Executing this trade would exceed the position limit. Please confirm override or adjust the order.''
-
-\textbf{Impossible requirements}: Analysis reveals the task cannot be completed as specified. Conflicting requirements, missing prerequisites, logical impossibilities. Report the problem rather than proceeding with a compromised approach.
+Error and anomaly detection triggers escalation when something has gone wrong and the agent cannot fix it. Repeated tool failures warrant escalation: if Westlaw times out three times consecutively, the agent should report ``Research tool unavailable'' with options to wait, use alternatives, or proceed manually. Data anomalies, such as revenue figures that do not reconcile or filing dates that seem wrong or parties that appear on multiple sides of a transaction, warrant human investigation. Constraint violations occur when the task as specified would violate a policy, and the agent should report: ``Executing this trade would exceed the position limit. Please confirm override or adjust the order.'' Impossible requirements should be reported when analysis reveals the task cannot be completed as specified due to conflicting requirements, missing prerequisites, or logical impossibilities.
 
 % ----------------------------------------------------------------------------
 % How to Escalate: Information Handoff
@@ -67,19 +43,9 @@ Three categories of triggers warrant escalation:
 \subsection{How to Escalate}
 \label{sec:agents2-how-escalate}
 
-Effective escalation provides the human with everything needed to make a decision:
+Effective escalation provides the human with everything needed to make a decision. A five-part structure ensures completeness.
 
-\textbf{Five-Part Escalation Structure}:
-
-\textbf{1. Situation summary}: What task is the agent working on? Brief context for a human who may not have been following closely.
-
-\textbf{2. Progress to date}: What has been accomplished? What remains? Do not make the human start from scratch.
-
-\textbf{3. Escalation trigger}: Why is the agent escalating now? What specific condition triggered the handoff?
-
-\textbf{4. Information gathered}: What relevant information has the agent found? Even if incomplete, partial findings are valuable.
-
-\textbf{5. Options or recommendations}: What are the possible paths forward? If the agent has a recommendation, state it with supporting reasoning.
+The escalation should begin with a situation summary that provides brief context for a human who may not have been following closely. Progress to date explains what has been accomplished and what remains, ensuring the human does not have to start from scratch. The escalation trigger explains why the agent is escalating now and what specific condition triggered the handoff. Information gathered presents what relevant information the agent has found; even if incomplete, partial findings are valuable. Options or recommendations describe the possible paths forward; if the agent has a recommendation, it should state it with supporting reasoning.
 
 \paragraph{Example: Legal Research Escalation}
 
@@ -122,15 +88,15 @@ Effective escalation provides the human with everything needed to make a decisio
 
 Five patterns integrate human oversight into agent workflows, each suited to different risk profiles and organizational needs.
 
-\textbf{Approval Gates}: The agent prepares work product; the human authorizes execution. Essential for irreversible or high-stakes actions. A litigation agent drafts the court filing, presents it for review, receives approval, then submits. The agent handles preparation; the human controls execution.
+Approval gates separate preparation from authorization. The agent prepares work product; the human authorizes execution. This pattern is essential for irreversible or high-stakes actions. A litigation agent drafts the court filing, presents it for review, receives approval, then submits. The agent handles preparation; the human controls execution.
 
-\textbf{Checkpoint Reviews}: Human verification at milestones prevents error propagation. A research agent completes legal research, presents authorities, receives confirmation of direction, then proceeds to drafting. Each checkpoint catches misalignment before significant effort is wasted.
+Checkpoint reviews provide human verification at milestones to prevent error propagation. A research agent completes legal research, presents authorities, receives confirmation of direction, then proceeds to drafting. Each checkpoint catches misalignment before significant effort is wasted.
 
-\textbf{Confidence-Based Escalation}: High confidence triggers autonomous execution; low confidence triggers escalation. A compliance agent processes clear-pass cases automatically while escalating ambiguous situations. Balances efficiency with safety.
+Confidence-based escalation ties autonomy to certainty. High confidence triggers autonomous execution; low confidence triggers escalation. A compliance agent processes clear-pass cases automatically while escalating ambiguous situations, balancing efficiency with safety.
 
-\textbf{Human-as-Tool}: The agent invokes human expertise like any other tool. When encountering questions beyond its capabilities, it queries the relevant expert, incorporates the response, and proceeds. Human expertise becomes a resource invoked when needed, not a bottleneck for all decisions.
+The human-as-tool pattern treats human expertise like any other tool. When encountering questions beyond its capabilities, the agent queries the relevant expert, incorporates the response, and proceeds. Human expertise becomes a resource invoked when needed, not a bottleneck for all decisions.
 
-\textbf{Reversibility Classification}: Oversight level tracks action consequences. Fully reversible actions (drafts, research) proceed autonomously. Partially reversible actions (communications) receive checkpoint review. Irreversible actions (filings, trades) require pre-approval. Oversight proportional to risk.
+Reversibility classification matches oversight level to action consequences. Fully reversible actions like drafts and research proceed autonomously. Partially reversible actions like communications receive checkpoint review. Irreversible actions like filings and trades require pre-approval. Oversight is proportional to risk.
 
 \input{figures/fig-oversight-spectrum}
 
@@ -145,7 +111,7 @@ Legal and financial services impose domain-specific escalation requirements root
 
 \paragraph{Legal Practice}
 
-Legal practice escalation requirements arise from professional responsibility rules:
+Legal practice escalation requirements arise from professional responsibility rules \parencite{aba-model-rule-1-1,aba-formal-opinion-512}:
 
 \begin{itemize}[nosep]
 \item \textbf{Competence limits}: Escalate when matters exceed agent training or supervising attorney capacity (ABA Model Rule 1.1)
@@ -156,7 +122,7 @@ Legal practice escalation requirements arise from professional responsibility ru
 
 \paragraph{Financial Services}
 
-Financial services escalation requirements arise from regulatory obligations and fiduciary duties:
+Financial services escalation requirements arise from regulatory obligations and fiduciary duties \parencite{finra-notice-24-09,fed-sr11-7}:
 
 \begin{itemize}[nosep]
 \item \textbf{Suitability and fiduciary duty}: Escalate investment recommendations for adviser review before client delivery

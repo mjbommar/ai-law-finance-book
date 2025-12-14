@@ -24,11 +24,9 @@ These architectures illustrate how components fit together as \textit{design tar
 \subsection{Case Study: Credit Facility Documentation Review}
 \label{sec:agents2-case-legal}
 
-\textbf{The Scenario}: A corporate client is borrowing \$500 million under a senior secured revolving credit facility. The law firm represents the borrower. The partner assigns the matter: ``Review the draft credit agreement and identify provisions that differ materially from market terms or our standard positions.''
+A corporate client is borrowing \$500 million under a senior secured revolving credit facility. The law firm represents the borrower. The partner assigns the matter: ``Review the draft credit agreement and identify provisions that differ materially from market terms or our standard positions.''
 
-This is a document review task that would traditionally require 8--12 hours of senior associate time. The goal is not to replace the associate but to accelerate the review and ensure comprehensive coverage.
-
-\textbf{Ten Questions Applied}: The framework guides every design choice in this architecture.
+This is a document review task that would traditionally require 8--12 hours of senior associate time. The goal is not to replace the associate but to accelerate the review and ensure comprehensive coverage. The ten-question framework guides every design choice.
 
 \textbf{Q1 (Triggers)}: Work enters via document upload to the deal room and partner assignment through the matter management system. The trigger is explicit: new document plus assignment.
 
@@ -50,7 +48,7 @@ This is a document review task that would traditionally require 8--12 hours of s
 
 \textbf{Q10 (Governance)}: Audit logging of all document access and analysis steps. Privilege protection enforced. Work product clearly marked as AI-assisted for attorney review.
 
-\textbf{Workflow}: The agentic system proceeds systematically through the review process:
+The agentic system proceeds systematically through the review process:
 
 \begin{enumerate}[nosep]
 \item Partner assigns matter; agentic system receives trigger
@@ -65,17 +63,13 @@ This is a document review task that would traditionally require 8--12 hours of s
 \item Associate reviews, adds context, escalates significant issues to partner
 \end{enumerate}
 
-\textbf{Failure Modes}: Even well-designed agentic systems fail. Understanding failure modes is crucial:
+Even well-designed agentic systems fail. Understanding failure modes is crucial. The agentic system may miss nuanced definitions where a defined term has been subtly modified from the template in ways that affect covenant calculations. Human review catches subtleties like: ``EBITDA is defined to exclude one-time charges, but the add-back is capped---that's unusual and limits flexibility.''
 
-\textbf{Nuanced definitions}: The agentic system may miss that a defined term has been subtly modified from the template in ways that affect covenant calculations. Human review catches: ``EBITDA is defined to exclude one-time charges, but the add-back is capped---that's unusual and limits flexibility.''
+Cross-document dependencies present another risk. The credit agreement references schedules and exhibits; if the agentic system does not trace these references and analyze the schedules, material issues may be missed. Market context adds complexity because ``market terms'' vary by borrower credit quality, industry, and timing. The agentic system compares to a template, but the template may not reflect current market conditions for this borrower's profile.
 
-\textbf{Cross-document dependencies}: The credit agreement references schedules and exhibits. If the agentic system doesn't trace these references and analyze the schedules, material issues may be missed.
+The most dangerous failures are omissions: things the agentic system does not flag because it does not recognize their significance. Human expertise identifies gaps like: ``There's no limitation on amendments to subordinated debt---that's a significant gap.''
 
-\textbf{Market context}: ``Market terms'' vary by borrower credit quality, industry, and timing. The agentic system compares to a template, but the template may not reflect current market for this borrower's profile.
-
-\textbf{Omissions}: The most dangerous failures are things the agentic system doesn't flag because it doesn't recognize their significance. Human expertise identifies: ``There's no limitation on amendments to subordinated debt---that's a significant gap.''
-
-\textbf{Mitigation}: Checkpoint review after initial scan. Associate reviews agentic system output, not just for correctness but for completeness. Partner review of final work product. The agentic system accelerates but doesn't replace human judgment.
+Mitigation requires checkpoint review after initial scan. The associate reviews agentic system output not just for correctness but for completeness. Partner review of final work product ensures quality. The agentic system accelerates but does not replace human judgment.
 
 % ----------------------------------------------------------------------------
 % Case Study 2: Equity Portfolio Management
@@ -84,11 +78,9 @@ This is a document review task that would traditionally require 8--12 hours of s
 \subsection{Case Study: Equity Portfolio Management}
 \label{sec:agents2-case-financial}
 
-\textbf{The Scenario}: An investment adviser manages a \$200 million equity portfolio for institutional clients. The portfolio manager wants continuous monitoring with agent assistance for rebalancing analysis, compliance checking, and research synthesis.
+An investment adviser manages a \$200 million equity portfolio for institutional clients. The portfolio manager wants continuous monitoring with agent assistance for rebalancing analysis, compliance checking, and research synthesis.
 
-This is a continuous monitoring and advisory task, not a one-time analysis. The goal is to augment the PM's capacity, not to trade autonomously.
-
-\textbf{Ten Questions Applied}: The framework shapes this more complex, multi-agent architecture.
+This is a continuous monitoring and advisory task, not a one-time analysis. The goal is to augment the PM's capacity, not to trade autonomously. The ten-question framework shapes this more complex, multi-agent architecture.
 
 \textbf{Q1 (Triggers)}: Multiple trigger types: market data feeds (price movements, earnings releases), scheduled jobs (daily compliance check, weekly rebalancing analysis), human prompts (PM requests analysis), escalation events (position approaching limits).
 
@@ -110,7 +102,7 @@ This is a continuous monitoring and advisory task, not a one-time analysis. The 
 
 \textbf{Q10 (Governance)}: Comprehensive audit trail. Fiduciary duty documentation (rationale for recommendations). Compliance monitoring. MNPI controls (no access to deal team information).
 
-\textbf{Multi-Agent Workflow}: Multiple agents coordinate to generate and validate recommendations:
+Multiple agents coordinate to generate and validate recommendations:
 
 \begin{enumerate}[nosep]
 \item Monitoring agent detects: ``Tech sector up 3\% today; portfolio tech allocation now 35\% vs. 25\% target''
@@ -128,15 +120,11 @@ This is a continuous monitoring and advisory task, not a one-time analysis. The 
 \item Execution agent (with PM approval) places orders via OMS
 \end{enumerate}
 
-\textbf{Multi-Agent Failure Modes}: Coordination introduces additional failure vectors beyond single-agent agentic systems.
+Coordination introduces additional failure vectors beyond single-agent systems.
 
-\textbf{Cascading errors}: Monitoring agent misinterprets data; Rebalancing agent acts on bad signal; trades recommended that shouldn't be. \textit{Mitigation}: Validation at each handoff; sanity checks on data before acting.
+Cascading errors occur when the Monitoring agent misinterprets data, the Rebalancing agent acts on a bad signal, and trades are recommended that should not be. Mitigation requires validation at each handoff and sanity checks on data before acting. Coordination overhead presents a different challenge: communication between agents consumes tokens and time, so for simple decisions, the overhead may exceed the value. Monitor coordination costs and simplify the architecture when overhead dominates.
 
-\textbf{Coordination overhead}: Communication between agents consumes tokens and time. For simple decisions, overhead may exceed value. \textit{Assessment}: Monitor coordination costs; simplify when overhead dominates.
-
-\textbf{Debugging complexity}: When recommendations are wrong, tracing the error through multiple agents is difficult. \textit{Mitigation}: Comprehensive logging; clear attribution at each step; replay capability.
-
-\textbf{Agent disagreement}: Research agent sees positive signal; Risk agent sees negative. How is conflict resolved? \textit{Design}: Clear escalation when agents conflict; human resolves material disagreements.
+Debugging complexity increases with multi-agent systems. When recommendations are wrong, tracing the error through multiple agents is difficult. Mitigation requires comprehensive logging, clear attribution at each step, and replay capability. Agent disagreement occurs when the Research agent sees a positive signal while the Risk agent sees a negative one. Clear escalation protocols determine what happens when agents conflict; humans resolve material disagreements.
 
 % ----------------------------------------------------------------------------
 % Synthesis Principles
@@ -145,21 +133,21 @@ This is a continuous monitoring and advisory task, not a one-time analysis. The 
 \subsection{Synthesis: Principles Across Domains}
 \label{sec:agents2-synthesis-principles}
 
-Both case studies illustrate common principles that apply across legal and financial agent deployments:
+Both case studies illustrate common principles that apply across legal and financial agent deployments.
 
-\textbf{Decomposition is essential}: Neither workflow attempts end-to-end autonomous completion. The credit facility review breaks into 15 section-by-section analyses rather than attempting one pass; the portfolio rebalancing separates constraint checking from trade generation from execution. Tasks are decomposed into manageable steps with human checkpoints.
+Decomposition is essential. Neither workflow attempts end-to-end autonomous completion. The credit facility review breaks into 15 section-by-section analyses rather than attempting one pass; the portfolio rebalancing separates constraint checking from trade generation from execution. Tasks are decomposed into manageable steps with human checkpoints.
 
-\textbf{Human-in-the-loop is the norm}: Both architectures assume human oversight at critical junctures: attorney review of legal analysis before client delivery, PM approval of trade recommendations before execution. Agents augment professional judgment; they do not replace it.
+Human-in-the-loop oversight is the norm. Both architectures assume human oversight at critical junctures: attorney review of legal analysis before client delivery, PM approval of trade recommendations before execution. Agents augment professional judgment; they do not replace it.
 
-\textbf{Memory enables continuity}: Both rely on episodic memory (what happened in this session) and RAG (institutional knowledge). The legal agentic system retrieves prior firm precedent on similar provisions; the financial agentic system accesses historical rebalancing decisions. Without memory, every interaction starts fresh.
+Memory enables continuity. Both rely on episodic memory (what happened in this session) and RAG (institutional knowledge). The legal agentic system retrieves prior firm precedent on similar provisions; the financial agentic system accesses historical rebalancing decisions. Without memory, every interaction starts fresh.
 
-\textbf{Isolation is non-negotiable}: Matter isolation (legal) and client isolation (financial) are architectural requirements, not optional features. The agentic system working on Company A's financing cannot access Company B's confidential terms, even if both are firm clients.
+Isolation is non-negotiable. Matter isolation (legal) and client isolation (financial) are architectural requirements, not optional features. The agentic system working on Company A's financing cannot access Company B's confidential terms, even if both are firm clients.
 
-\textbf{Failure modes are predictable}: The same failure patterns appear in both domains: nuanced judgment that exceeds current capabilities, omissions where agentic systems miss non-obvious issues, and cascading errors where early mistakes propagate through analysis. Design for these failures explicitly.
+Failure modes are predictable. The same failure patterns appear in both domains: nuanced judgment that exceeds current capabilities, omissions where agentic systems miss non-obvious issues, and cascading errors where early mistakes propagate through analysis. Design for these failures explicitly.
 
-\textbf{Governance is pervasive}: Every architectural choice has governance implications. Audit trails document what the agentic system accessed and concluded; approval gates ensure human review before irreversible actions; escalation paths route uncertainty to appropriate decision-makers. These reference architectures establish the \textit{capability} foundations; the following chapter---\textit{How to Govern an Agent}---provides the \textit{control} frameworks: the five-layer governance stack, dimensional calibration, regulatory compliance structures, and accountability mechanisms required for deployment in regulated industries.
+Governance is pervasive. Every architectural choice has governance implications. Audit trails document what the agentic system accessed and concluded; approval gates ensure human review before irreversible actions; escalation paths route uncertainty to appropriate decision-makers. These reference architectures establish the \textit{capability} foundations; the following chapter---\textit{How to Govern an Agent}---provides the \textit{control} frameworks: the five-layer governance stack, dimensional calibration, regulatory compliance structures, and accountability mechanisms required for deployment in regulated industries.
 
-\textbf{Current limitations are real}: Neither architecture claims autonomous completion of multi-hour tasks. The reliability cliff constrains what these agentic systems can do today; design accordingly.
+Current limitations are real. Neither architecture claims autonomous completion of multi-hour tasks. The reliability cliff constrains what these agentic systems can do today; design accordingly.
 
 % ----------------------------------------------------------------------------
 % Framework Completion
@@ -170,7 +158,7 @@ Both case studies illustrate common principles that apply across legal and finan
 
 Before deploying any agentic system, verify that all ten questions have been answered:
 
-\begin{highlightbox}[title={Ten-Question Deployment Checklist}]
+\begin{highlightbox}[title={Ten-Question Deployment Checklist}, breakable=false]
 \begin{enumerate}[nosep]
 \item[$\square$] \textbf{Triggers}: How does work enter? Are all trigger types covered? Is there audit logging?
 

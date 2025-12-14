@@ -18,7 +18,8 @@ Agentic systems require the same infrastructure. Governance is not a single ques
 \begin{definitionbox}[title={Agentic System Governance}]
 \keyterm{Agentic system governance} encompasses the policies, controls, and oversight mechanisms that ensure agentic systems operate safely, ethically, and in compliance with applicable requirements. Governance spans the agentic system lifecycle: design, deployment, operation, and retirement.
 
-Governance is not optional for regulated professional services. Professional duties are non-delegable: attorneys remain liable for AI-assisted work product, and fiduciaries remain accountable for AI-informed recommendations.
+\vspace{0.5em}
+Governance is not optional for regulated professional services \parencite{aba-formal-opinion-512,finra-notice-24-09}. Professional duties are non-delegable: attorneys remain liable for AI-assisted work product, and fiduciaries remain accountable for AI-informed recommendations.
 \end{definitionbox}
 
 % ----------------------------------------------------------------------------
@@ -73,7 +74,7 @@ Each of the ten questions creates specific governance requirements:
 \subsection{Security Essentials}
 \label{sec:agents2-security-essentials}
 
-Five security controls are essential for any agentic system deployment in regulated contexts:
+Five security controls are essential for any agentic system deployment in regulated contexts \parencite{owasp-llm-top10,iso-iec-42001}:
 
 \begin{keybox}[title={Security Controls for Regulated Practice}]
 \begin{enumerate}[nosep]
@@ -106,15 +107,15 @@ These controls map to the ten-question framework:
 \subsection{Transparency and Explainability}
 \label{sec:agents2-transparency-preview}
 
-Regulators and clients increasingly require explanations for agentic system decisions. Four levels of transparency serve different audiences, illustrated here with a breach detection agentic system:
+Regulators and clients increasingly require explanations for agentic system decisions \parencite{zhong2024xai-auditing,ai-auditing-systematic-review-2024}. Four levels of transparency serve different audiences, illustrated here with a breach detection agentic system:
 
-\textbf{Level 0 (Output only)}: Just the answer---``Suspicious transaction flagged.'' Sufficient for routine, low-stakes queries where the consumer trusts the system.
+Level 0 provides output only: just the answer, such as ``Suspicious transaction flagged.'' This level suffices for routine, low-stakes queries where the consumer trusts the system.
 
-\textbf{Level 1 (Summary with sources)}: Conclusion plus citations---``Transaction \#45921 flagged; exceeds threshold in Rule 203(b)(1).'' Enables verification without full reasoning.
+Level 1 adds a summary with sources: the conclusion plus citations, such as ``Transaction \#45921 flagged; exceeds threshold in Rule 203(b)(1).'' This enables verification without requiring full reasoning.
 
-\textbf{Level 2 (Reasoning outline)}: Key analytical steps plus sources---``Flagged because: (1) \$150K exceeds \$100K threshold, (2) counterparty on watchlist, (3) timing matches known pattern.'' Appropriate for substantive work product requiring review.
+Level 2 provides a reasoning outline: key analytical steps plus sources, such as ``Flagged because: (1) \$150K exceeds \$100K threshold, (2) counterparty on watchlist, (3) timing matches known pattern.'' This level is appropriate for substantive work product requiring review.
 
-\textbf{Level 3 (Execution trace)}: Structured record of tool calls, retrieved documents, and decision points---full database queries, rule evaluation steps, and confidence scores. Enables audit and debugging.
+Level 3 provides a full execution trace: a structured record of tool calls, retrieved documents, and decision points, including database queries, rule evaluation steps, and confidence scores. This level enables audit and debugging.
 
 The architecture should capture Level 3 traces for all operations, then generate audience-appropriate summaries (Levels 0--2) on demand.
 
@@ -125,15 +126,11 @@ The architecture should capture Level 3 traces for all operations, then generate
 \subsection{Auditability vs. Retention}
 \label{sec:agents2-retention-preview}
 
-A tension exists between comprehensive logging (for audit) and data minimization (for privacy and compliance). The resolution is \textit{not} ``log everything forever.'' Instead:
+A tension exists between comprehensive logging (for audit) and data minimization (for privacy and compliance). The resolution is \textit{not} ``log everything forever.'' Instead, four practices balance these competing demands.
 
-\textbf{Structured logging}: Log structured decisions, not raw chain-of-thought. Structure enables selective retention.
+Structured logging captures structured decisions rather than raw chain-of-thought. Structure enables selective retention because decision points can be preserved while ephemeral reasoning is discarded. Tiered retention implements different periods for different purposes: short-term operational logs with full detail retained for days to weeks, medium-term audit logs with structured decisions retained for months to years, and long-term compliance archives containing minimal but sufficient information as required by regulation.
 
-\textbf{Tiered retention}: Short-term operational logs (full detail, days to weeks); medium-term audit logs (structured decisions, months to years); long-term compliance archives (minimal but sufficient, as required).
-
-\textbf{Redaction at capture}: Apply privacy and confidentiality filters before logging, not after.
-
-\textbf{Legal hold integration}: Retention schedules must yield to preservation obligations when litigation is anticipated.
+Redaction at capture applies privacy and confidentiality filters before logging, not after; once sensitive information enters logs, it becomes difficult to remove systematically. Finally, legal hold integration ensures that retention schedules yield to preservation obligations when litigation is anticipated.
 
 The following chapter provides detailed retention frameworks for legal and financial contexts.
 
@@ -146,6 +143,6 @@ The following chapter provides detailed retention frameworks for legal and finan
 
 This chapter answered \textit{how to build an agentic system}. The ten questions (Table~\ref{tab:agents2-governance-mapping}) provide architectural foundations; each creates governance requirements that the architecture must support.
 
-The following chapter answers: \textit{how do we govern these systems?} It examines the five-layer governance stack (legal, model, system, process, culture), dimensional controls (autonomy, persistence, goal dynamics), accountability structures, regulatory compliance frameworks, and worked examples in legal, financial, and audit contexts.
+The following chapter answers: \textit{how do we govern these systems?} It examines the five-layer governance stack (legal, model, system, process, culture), dimensional controls (autonomy, persistence, goal dynamics), accountability structures, and regulatory compliance frameworks---including Federal Reserve model risk management guidance \parencite{fed-sr11-7}, the NIST AI Risk Management Framework \parencite{nist-ai-rmf}, and GAO findings on AI oversight in financial services \parencite{gao-ai-financial-services-2025}---with worked examples in legal, financial, and audit contexts.
 
 Architecture provides the foundation; governance provides the controls. Together, they enable responsible deployment of agentic systems in regulated professional services.

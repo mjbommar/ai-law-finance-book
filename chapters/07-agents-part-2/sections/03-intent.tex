@@ -33,7 +33,7 @@ Pre-LLM systems handled instructions through rigid parsing: keyword matching, sl
 
 The gap between instruction and intent has always existed; what has changed is our ability to bridge it. Large language models dramatically improved intent inference from natural language. Where rule-based systems required exact matches, LLMs handle variation, implicit context, and domain-specific jargon. Modern LLMs excel at handling noisy input (misspellings, shorthand, tangential information), resolving references using conversational context, inferring domain-specific meaning, and detecting implicit constraints that professionals take for granted.
 
-Despite these capabilities, intent understanding remains imperfect. As conversations extend, LLMs may lose track of earlier context or constraints. When clarification is needed, LLMs sometimes proceed with a default interpretation rather than asking, resulting in a ``helpful but wrong'' failure: the agent does \textit{something} reasonable rather than confirming it understood correctly. Professionals communicate through implication---``This needs to be right'' signals high stakes; ``When you get a chance'' signals low urgency---and these signals may not be explicitly parsed.
+Despite these capabilities, intent understanding remains imperfect. As conversations extend, LLMs may lose track of earlier context or constraints. When clarification is needed, LLMs sometimes proceed with a default interpretation rather than asking, resulting in a ``helpful but wrong'' failure: the agent does \textit{something} reasonable rather than confirming it understood correctly. Professionals also communicate through implication. Phrases like ``This needs to be right'' signal high stakes, while ``When you get a chance'' signals low urgency. These signals may not be explicitly parsed by current models.
 
 \begin{definitionbox}[title={Goal}]
 A \keyterm{goal} is the desired end state that intent points toward---the outcome that would satisfy the request. Goals connect to the GPA framework introduced in the previous chapter: an agent pursues goals through perception and action. Where intent is ``identify material risks to the lender by tomorrow,'' the goal is ``produce a lender-risk memo that meets firm policy and is ready for partner review.''
@@ -62,15 +62,15 @@ LLM-based agentic systems collapse routing into reasoning. Rather than maintaini
 
 This architectural shift has significant implications for system design:
 
-\textbf{Flexibility vs.\ predictability.} Rule-based routing is deterministic---the same input always produces the same classification. LLM-based classification is probabilistic and may vary with model updates, prompt phrasing, or context. For regulated applications, this requires additional governance: logging classifications, monitoring for drift, maintaining override rules for critical categories.
+The first tension is between flexibility and predictability. Rule-based routing is deterministic: the same input always produces the same classification. LLM-based classification is probabilistic and may vary with model updates, prompt phrasing, or context. For regulated applications, this requires additional governance through logging classifications, monitoring for drift, and maintaining override rules for critical categories.
 
-\textbf{Explicit vs.\ implicit knowledge.} Routing rules encode domain knowledge explicitly in code; a developer must anticipate every category and write rules to match. LLM classification absorbs domain knowledge implicitly through training; the model ``knows'' that legal research and case analysis are related without explicit rules. But implicit knowledge is harder to audit and may reflect training biases.
+The second tension involves explicit versus implicit knowledge. Routing rules encode domain knowledge explicitly in code, requiring developers to anticipate every category and write rules to match. LLM classification absorbs domain knowledge implicitly through training, recognizing that legal research and case analysis are related without explicit rules. But implicit knowledge is harder to audit and may reflect training biases.
 
-\textbf{Hybrid approaches.} Production systems often combine both patterns. Simple, high-volume, time-sensitive classifications use deterministic rules---a margin call always routes to the trading desk. Complex, ambiguous, or novel requests use LLM reasoning. The rule-based layer handles predictable cases efficiently; the LLM layer handles everything else.
+Production systems often combine both patterns. Simple, high-volume, time-sensitive classifications use deterministic rules, so a margin call always routes to the trading desk. Complex, ambiguous, or novel requests use LLM reasoning. The rule-based layer handles predictable cases efficiently while the LLM layer handles everything else.
 
 For architects evaluating agentic systems: where must classification be deterministic (regulatory requirements, latency constraints, auditability)? Where does flexibility justify the overhead of LLM reasoning? The answer shapes system design.
 
-\begin{keybox}[title={Intent Inference Is Not Mind Reading}]
+\begin{keybox}[title={Intent Inference Is Not Mind Reading}, breakable=false]
 LLMs infer \textit{probable} intent from language patterns; they do not read minds. Inference fails when:
 
 \begin{itemize}[nosep]
@@ -90,9 +90,9 @@ LLMs infer \textit{probable} intent from language patterns; they do not read min
 \subsection{Goal Extraction from Natural Language}
 \label{sec:agents2-goal-extraction}
 
-Once the agent receives an instruction, it must extract structured goals that can guide execution. This extraction transforms natural language into actionable specifications.
+Once the agent receives an instruction, it must extract structured goals that can guide execution. This extraction transforms natural language into actionable specifications through two main processes: intent classification and constraint recognition.
 
-\textbf{Intent classification}: The first step classifies the instruction into task types that determine workflow. This translates raw words into candidate \textbf{tasks} that can advance the underlying \textbf{goal}.
+The first step, intent classification, translates the instruction into task types that determine workflow. This step converts raw words into candidate tasks that can advance the underlying goal:
 
 \begin{itemize}[nosep]
 \item \textbf{Information retrieval}: ``What's the current NAV?'' ``Find the latest 10-K''
@@ -105,35 +105,30 @@ Once the agent receives an instruction, it must extract structured goals that ca
 
 Different task types invoke different tools, planning patterns, and success criteria. A research task requires search and synthesis; a calculation task requires structured computation; a monitoring task requires continuous observation.
 
-\textbf{Entity and constraint recognition}: Beyond classification, the agent must extract entities (what the task concerns) and constraints (what bounds apply):
+Beyond classification, the agent must also recognize entities and constraints. Entity recognition identifies what the task concerns: matters, clients, securities, parties, documents, and jurisdictions. When someone says ``Review the Smith acquisition agreement,'' the agent must recognize a reference to a specific document; ``Research Delaware fiduciary duties'' references a jurisdiction that shapes which law applies.
 
-\textbf{Entities}: Matters, clients, securities, parties, documents, jurisdictions. ``Review the Smith acquisition agreement'' references a specific document; ``Research Delaware fiduciary duties'' references a jurisdiction.
+Constraint recognition identifies what bounds apply to execution. Temporal constraints include deadlines, as-of dates, and time windows. ``By Friday'' sets a deadline; ``as of year-end 2024'' sets a reference date; ``over the past quarter'' defines a window for analysis. Resource constraints set budget and effort limits, with phrases like ``Spend no more than 2 hours'' or ``focus on Articles 3 and 4'' bounding scope. Format constraints specify how deliverables should appear: ``Summarize in one page'' constrains length, ``prepare a memo for the file'' specifies format, and ``I need something to show the client'' signals an external audience requiring different tone and detail.
 
-\textbf{Temporal constraints}: Deadlines, as-of dates, time windows. ``By Friday'' sets a deadline; ``as of year-end 2024'' sets a reference date; ``over the past quarter'' defines a window.
+Two additional constraint types often remain unstated. Audience and privilege constraints determine who will see the output and what confidentiality must be preserved. Risk and compliance constraints set limits that professionals internalize but rarely articulate: a compliance review implicitly requires flagging violations, and a client communication implicitly requires privilege protection.
 
-\textbf{Resource constraints}: Budget limits, scope bounds. ``Spend no more than 2 hours'' limits effort; ``focus on Articles 3 and 4'' limits scope.
+Once extracted, these components can be organized into structured goal representations that guide execution. These representations resemble short assignment memos that the planning system can act on (\Cref{sec:agents2-planning}) and the termination system can measure against (\Cref{sec:agents2-termination}).
 
-\textbf{Format constraints}: Deliverable specifications. ``Summarize in one page'' constrains length; ``prepare a memo for the file'' specifies format; ``I need something to show the client'' signals external audience.
-
-\textbf{Audience and privilege constraints}: Who will see the output (internal team, client, regulator) and what privilege or confidentiality must be preserved.
-
-\textbf{Risk and compliance constraints}: Limits that may not be stated but must be inferred. A compliance review implicitly requires flagging violations; a client communication implicitly requires privilege protection.
-
-\textbf{Structured goal representation}: Extracted components can be organized into structured representations that guide execution. This structured representation resembles a short assignment memo that the planning system can act on (\Cref{sec:agents2-planning}) and the termination system can measure against (\Cref{sec:agents2-termination}):
-
-\begin{verbatim}
-task_type: document_review
-document: Smith Acquisition Agreement
-objective: identify change-of-control provisions
-constraints:
-  deadline: 2025-01-15
-  scope: sections 5-8
-  deliverable: summary memo
-success_criteria:
-  - all CoC provisions identified
-  - triggering events listed
-  - consent requirements noted
-\end{verbatim}
+\begin{highlightbox}[title={Structured Goal Representation: Document Review}]
+\small
+\begin{tabular}{@{}ll@{}}
+\textbf{Task type} & Document review \\
+\textbf{Document} & Smith Acquisition Agreement \\
+\textbf{Objective} & Identify change-of-control provisions \\[0.3em]
+\textbf{Constraints} & \\
+\quad Deadline & January 15, 2025 \\
+\quad Scope & Sections 5--8 \\
+\quad Deliverable & Summary memo \\[0.3em]
+\textbf{Success criteria} & \\
+\quad \textbullet & All CoC provisions identified \\
+\quad \textbullet & Triggering events listed \\
+\quad \textbullet & Consent requirements noted \\
+\end{tabular}
+\end{highlightbox}
 
 % ----------------------------------------------------------------------------
 % Ambiguity Detection and Clarification
@@ -142,29 +137,15 @@ success_criteria:
 \subsection{Ambiguity Detection and Clarification}
 \label{sec:agents2-clarification}
 
-Not all instructions can be unambiguously interpreted. The agent must detect ambiguity and decide whether to clarify or proceed.
+Not all instructions can be unambiguously interpreted. The agent must detect ambiguity and decide whether to clarify or proceed. The decision depends on two factors: ambiguity severity and action stakes.
 
-\textbf{When to clarify}: The decision to clarify depends on ambiguity severity and action stakes:
+When both stakes and ambiguity are low, the agent should proceed with its best interpretation. If someone asks ``What's Apple's market cap?'' and there is slight uncertainty about whether they mean Apple Inc. or Apple Hospitality REIT, the dominant interpretation is obvious and the cost of being wrong is low since correction is easy. When stakes remain low but ambiguity is high, a brief clarification prevents wasted effort. If someone asks ``Research the statute of limitations'' without specifying the claim type, a quick question saves hours of potentially misdirected work.
 
-\textbf{Low stakes, low ambiguity}: Proceed with best interpretation. If the user asks ``What's Apple's market cap?'' and you're unsure whether they mean Apple Inc. or Apple Hospitality REIT, the dominant interpretation is obvious and the cost of being wrong is low (easy to correct).
-
-\textbf{Low stakes, high ambiguity}: Clarify briefly. If the user asks ``Research the statute of limitations'' without specifying the claim type, a quick clarification prevents wasted effort.
-
-\textbf{High stakes, low ambiguity}: Confirm before acting. If the instruction is clear but consequential (``File this motion''), confirmation prevents irreversible errors.
-
-\textbf{High stakes, high ambiguity}: Clarify thoroughly. If the user says ``Handle the regulatory response'' for a complex matter, extended clarification is appropriate before taking any action.
+When stakes are high but ambiguity is low, the agent should confirm before acting. If the instruction is clear but consequential, such as ``File this motion,'' confirmation prevents irreversible errors even when the agent is confident it understood correctly. When both stakes and ambiguity are high, thorough clarification is essential. If someone says ``Handle the regulatory response'' for a complex matter, extended clarification is appropriate before taking any action.
 
 \input{figures/fig-when-to-clarify}
 
-\textbf{How to clarify}: Effective clarification is specific, contextual, and actionable:
-
-\textbf{Specific}: ``Which jurisdiction's statute of limitations---Delaware or New York?'' not ``Can you clarify?''
-
-\textbf{Contextual}: Reference what the agent already understands. ``I understand you want me to review the credit agreement. Should I focus on lender protections, borrower obligations, or both?''
-
-\textbf{Actionable}: Offer options rather than open-ended questions. ``Should I (a) provide a comprehensive review of all provisions, (b) focus on the financial covenants, or (c) flag only provisions that differ from our standard template?''
-
-\textbf{Bounded}: Limit clarification rounds. If the agent needs extensive clarification, it may be the wrong tool for the task, or the user may need to think through requirements before delegating.
+Effective clarification has four characteristics. It is specific, asking ``Which jurisdiction's statute of limitations: Delaware or New York?'' rather than ``Can you clarify?'' It is contextual, referencing what the agent already understands: ``I understand you want me to review the credit agreement. Should I focus on lender protections, borrower obligations, or both?'' It is actionable, offering options rather than open-ended questions: ``Should I (a) provide a comprehensive review of all provisions, (b) focus on the financial covenants, or (c) flag only provisions that differ from our standard template?'' And it is bounded, limiting clarification rounds. If the agent needs extensive clarification, it may be the wrong tool for the task, or the user may need to think through requirements before delegating.
 
 \begin{quote}
 \textit{Poor clarification}: ``Can you clarify?'' \\
@@ -172,21 +153,9 @@ Not all instructions can be unambiguously interpreted. The agent must detect amb
 \textit{Best}: ``You asked to reduce tech exposure. Should I (a) sell tech to 25\% target, (b) hedge with options, or (c) add non-tech positions? Which deadline matters—this week or month-end reporting?''
 \end{quote}
 
-\begin{highlightbox}[title={The Default Interpretation Risk}]
-Research has documented that LLMs sometimes select a default interpretation rather than asking for clarification, even when ambiguity is significant. This ``proceed without asking'' behavior can be problematic:
+Research has documented that LLMs sometimes select a default interpretation rather than asking for clarification, even when ambiguity is significant \parencite{zhang2024clarifying,wang2024askwhenneed}. This ``proceed without asking'' behavior creates real risk: the agent interprets ``review the contract'' as a surface-level summary when the user expected deep issue-spotting, delivering work product that is technically responsive but wrong.
 
-\textbf{The risk}: The agent interprets ``review the contract'' as a surface-level summary when the user expected deep issue-spotting. Work product is delivered, but it is wrong.
-
-\textbf{Mitigation strategies}:
-\begin{itemize}[nosep]
-\item Prompt engineering that emphasizes clarification for ambiguous requests
-\item Confidence thresholds that trigger clarification below a certainty level
-\item User training to provide detailed initial instructions
-\item Checkpoint reviews before significant work begins
-\end{itemize}
-
-\textbf{Governance implication}: Monitor for cases where the agent proceeded confidently but delivered unexpected results. These may indicate calibration problems in ambiguity detection.
-\end{highlightbox}
+Several strategies can mitigate this tendency: prompt engineering that emphasizes clarification for ambiguous requests, confidence thresholds that trigger clarification below a certainty level, user training to provide detailed initial instructions, and checkpoint reviews before significant work begins. From a governance perspective, teams should monitor for cases where the agent proceeded confidently but delivered unexpected results. These cases may indicate calibration problems in ambiguity detection.
 
 % ----------------------------------------------------------------------------
 % Constraint Identification
@@ -195,17 +164,13 @@ Research has documented that LLMs sometimes select a default interpretation rath
 \subsection{Constraint Identification}
 \label{sec:agents2-constraints}
 
-Beyond explicit instructions, agents must identify constraints that bound acceptable execution. \textbf{Temporal constraints}: Deadlines and time windows. Some are explicit (``by Friday''); others are implicit (court filing deadlines calculated from rules); still others are contextual (``before the board meeting'' requires knowing when the meeting is).
+Beyond explicit instructions, agents must identify constraints that bound acceptable execution. These constraints fall into several categories that often interact.
 
-\textbf{Resource constraints}: Budget and effort limits. Token budgets limit API costs; time budgets limit calendar impact; scope constraints focus effort on high-value areas.
+Temporal constraints include deadlines and time windows. Some are explicit, like ``by Friday.'' Others are implicit, such as court filing deadlines calculated from procedural rules. Still others are contextual: ``before the board meeting'' requires knowing when the meeting is scheduled. Resource constraints set budget and effort limits. Token budgets limit API costs; time budgets limit calendar impact; scope constraints focus effort on high-value areas.
 
-\textbf{Scope constraints}: What is in and out of bounds. ``Focus on Articles 3 and 4'' excludes other articles; ``just the Delaware analysis'' excludes other jurisdictions.
+Scope constraints define what is in and out of bounds. ``Focus on Articles 3 and 4'' excludes other articles; ``just the Delaware analysis'' excludes other jurisdictions. Format and style constraints specify how deliverables should appear: memo versus email versus presentation, formal versus casual tone, internal versus client-facing audience. Risk and compliance constraints specify what must be avoided: privilege protection, conflicts of interest, regulatory restrictions, and confidentiality obligations. These constraints often apply implicitly based on context.
 
-\textbf{Format and style constraints}: How deliverables should appear. Memo versus email versus presentation; formal versus casual tone; internal versus client-facing.
-
-\textbf{Risk and compliance constraints}: What must be avoided. Privilege protection, conflicts of interest, regulatory restrictions, confidentiality obligations. These constraints often apply implicitly based on context.
-
-\textbf{Inferring implicit constraints}: Professionals operate under constraints they rarely state explicitly. When a partner says ``research Section 10(b) liability,'' implicit constraints include:
+Professionals operate under many constraints they rarely state explicitly. When a partner says ``research Section 10(b) liability,'' implicit constraints include:
 
 \begin{itemize}[nosep]
 \item Use authoritative sources (binding precedent, not blog posts)
@@ -224,48 +189,46 @@ Agents must infer these constraints from context, domain knowledge, and organiza
 \subsection{Validation and Domain Examples}
 \label{sec:agents2-validation-examples}
 
-Before executing, agents should validate their understanding of intent. Several patterns support validation:
+Before executing, agents should validate their understanding of intent. Several patterns support this validation.
 
-\textbf{Reflection and summarization}: The agent restates its understanding before proceeding, giving the user an opportunity to correct misunderstandings before work begins.
+Reflection and summarization involves the agent restating its understanding before proceeding, giving the user an opportunity to correct misunderstandings before work begins. Chunked validation breaks complex tasks into phases rather than validating all at once. After completing research, the agent summarizes findings and confirms direction before drafting. After drafting, it confirms the approach before finalizing. Each checkpoint prevents error propagation.
 
-\textbf{Chunked validation}: For complex tasks, validate in phases rather than all at once. After completing research, summarize findings and confirm direction before drafting. After drafting, confirm the approach before finalizing. Each checkpoint prevents error propagation.
+Confidence signaling requires the agent to indicate how confident it is in its own understanding. When confidence is high, the agent can proceed with light oversight; when confidence is low, the right move is to pause and ask for clarification rather than press ahead. Clear confidence signaling helps users decide how much review is needed and whether to treat the output as a draft, a starting point, or a near-final product.
 
-\textbf{Confidence signaling}: The agent should indicate how confident it is in its own understanding. When confidence is high, the agent can proceed with light oversight; when confidence is low, the right move is to pause and ask for clarification rather than press ahead. Clear confidence signaling helps users decide how much review is needed and whether to treat the output as a draft, a starting point, or a near-final product.
+Consider how intent extraction and validation work together for a legal task. Given the instruction ``Review this credit agreement for risks,'' the agent classifies this as a document review task and detects that ``risks'' is ambiguous (risks to whom? what types?). Context gathering reveals this is a lender-side engagement for a senior secured facility. The agent infers implicit constraints (focus on lender risks, prioritize material issues, assume current market terms as baseline) and clarifies: ``I'll review from the lender's perspective, focusing on credit risk, collateral coverage, and covenant adequacy. Should I also flag documentation risks (drafting issues, missing provisions) or focus only on substantive credit terms?''
 
-\textbf{Legal example---credit agreement review}: Consider how intent extraction and validation work together for a legal task. Given the instruction ``Review this credit agreement for risks,'' the agent classifies this as a document review task and detects that ``risks'' is ambiguous (risks to whom? what types?). Context gathering reveals this is a lender-side engagement for a senior secured facility. The agent infers implicit constraints (focus on lender risks, prioritize material issues, assume current market terms as baseline) and clarifies: ``I'll review from the lender's perspective, focusing on credit risk, collateral coverage, and covenant adequacy. Should I also flag documentation risks (drafting issues, missing provisions) or focus only on substantive credit terms?'' The extracted goal:
-
-\begin{verbatim}
-{
-  "task_type": "document_review",
-  "perspective": "lender",
-  "document": "[attached credit agreement]",
-  "focus_areas": ["credit_risk", "collateral", "covenants"],
-  "deliverable": "risk_summary_memo",
-  "success_criteria": [
-    "material_risks_identified",
-    "comparison_to_market_terms",
-    "recommendations_provided"
-  ]
-}
-\end{verbatim}
+\begin{highlightbox}[title={Extracted Goal: Credit Agreement Review}]
+\small
+\begin{tabular}{@{}ll@{}}
+\textbf{Task type} & Document review \\
+\textbf{Perspective} & Lender \\
+\textbf{Document} & Attached credit agreement \\
+\textbf{Focus areas} & Credit risk, collateral, covenants \\
+\textbf{Deliverable} & Risk summary memo \\[0.3em]
+\textbf{Success criteria} & \\
+\quad \textbullet & Material risks identified \\
+\quad \textbullet & Comparison to market terms \\
+\quad \textbullet & Recommendations provided \\
+\end{tabular}
+\end{highlightbox}
 
 The agent validates: ``I'll prepare a memo identifying material risks to the lender, comparing key terms to market standards, and recommending negotiation points. I'll have a draft for your review by tomorrow afternoon.''
 
-\textbf{Financial example---portfolio rebalancing}: The same pattern applies to financial tasks. Given the instruction ``Rebalance to reduce tech exposure,'' the agent classifies this as a portfolio action task and immediately detects multiple ambiguities: how much reduction? through what mechanism? with what constraints? Context gathering reveals current tech exposure at 35\% against a 25\% target. Through clarification dialogue, the agent confirms the user wants to reach target through sales while minimizing tax impact (preferring loss harvesting and long-term gains over short-term). The extracted goal:
+The same pattern applies to financial tasks. Given the instruction ``Rebalance to reduce tech exposure,'' the agent classifies this as a portfolio action task and immediately detects multiple ambiguities: how much reduction? through what mechanism? with what constraints? Context gathering reveals current tech exposure at 35\% against a 25\% target. Through clarification dialogue, the agent confirms the user wants to reach target through sales while minimizing tax impact (preferring loss harvesting and long-term gains over short-term).
 
-\begin{verbatim}
-{
-  "task_type": "portfolio_rebalancing",
-  "objective": "reduce_tech_exposure",
-  "target": "25%",
-  "mechanism": "sales",
-  "constraints": {
-    "tax_optimization": true,
-    "prefer_loss_harvesting": true
-  },
-  "approval_required": true
-}
-\end{verbatim}
+\begin{highlightbox}[title={Extracted Goal: Portfolio Rebalancing}]
+\small
+\begin{tabular}{@{}ll@{}}
+\textbf{Task type} & Portfolio rebalancing \\
+\textbf{Objective} & Reduce tech exposure \\
+\textbf{Target} & 25\% \\
+\textbf{Mechanism} & Sales \\[0.3em]
+\textbf{Constraints} & \\
+\quad \textbullet & Tax optimization enabled \\
+\quad \textbullet & Prefer loss harvesting \\[0.3em]
+\textbf{Approval required} & Yes \\
+\end{tabular}
+\end{highlightbox}
 
 The agent validates: ``I'll prepare a rebalancing plan to reduce tech from 35\% to 25\% through sales, optimized for tax efficiency. I'll present the plan for your approval before executing any trades.''
 

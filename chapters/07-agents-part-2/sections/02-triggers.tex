@@ -19,17 +19,27 @@ Agentic systems operate in the same way. A system with tools, memory, and planni
 \keyterm{Triggers} are the events that start agent execution. In practice, a trigger might be a docket alert, a price crossing a threshold, a calendar deadline coming due, or an internal ``I can't proceed safely'' signal from the agent itself. Without a trigger, even a highly capable system sits idle.
 \end{definitionbox}
 
+The distinction between triggers and channels matters for system design. A trigger is the \textit{what}---the event that demands attention. A channel is the \textit{how}---the pathway through which that event reaches the agent. The same trigger (a deadline approaching) might arrive through different channels (a calendar system, an email reminder, a human prompt asking ``what's due this week?''). Understanding this separation helps you design systems that can receive work from multiple sources while maintaining consistent processing logic.
+
+For governance, triggers create the audit trail. Every action an agent takes traces back to the trigger that initiated it. When a regulator asks why the system flagged a transaction, or when opposing counsel demands production of the agent's reasoning, you need to show what event started the chain of analysis. Systems that cannot trace actions back to triggers cannot be audited---and in regulated practice, what cannot be audited cannot be deployed.
+
 \begin{definitionbox}[title={Channels}]
 \keyterm{Channels} are how triggers reach the agent. In professional practice, four channels cover almost all work intake:
 
+\vspace{0.5em}
 \textbf{External feeds}: The world pushes work to you (court filings, market data, regulatory updates).
 
+\vspace{0.3em}
 \textbf{Human prompts}: People request work directly (chat, email, collaboration platforms).
 
+\vspace{0.3em}
 \textbf{Scheduled jobs}: Time itself triggers execution (deadlines, periodic checks, end-of-day).
 
+\vspace{0.3em}
 \textbf{Escalation events}: Internal signals that ask for human help (budget exhaustion, low confidence).
 \end{definitionbox}
+
+The four channel types serve different operational needs. External feeds enable reactive monitoring, allowing the system to respond to events as they occur in the world. Human prompts enable interactive collaboration, letting the system work alongside professionals who direct its attention. Scheduled jobs enable proactive workflows that ensure routine tasks happen without requiring someone to remember to initiate them. And escalation events close the loop on human oversight by ensuring the system asks for help when it reaches its limits, a topic we explore in depth in \Cref{sec:agents2-escalation}.
 
 Before an agentic system can reason or act, it must first notice that work exists. Channels are the sensory apparatus of the system: the ways it becomes aware of its environment and the tasks it must accomplish—just as a lawyer cannot respond to a motion they never received.
 
@@ -44,23 +54,34 @@ Before an agentic system can reason or act, it must first notice that work exist
 
 External feeds deliver events from systems outside the agentic system's direct control. The external system pushes notifications when events occur, much like receiving service of process rather than checking the courthouse daily to see if you have been sued.
 
-\textbf{Legal and Regulatory Feeds}: Court docket systems (CM/ECF, state e-filing) send notifications when documents are filed; an agentic system receives these alerts, retrieves filed documents via PACER, analyzes contents, and triggers appropriate responses. The SEC's EDGAR system publishes corporate filings with programmatic access, enabling agentic systems to monitor competitors' 10-Ks and flag material differences from your company's disclosures. Regulatory agencies publish through the Federal Register and agency websites. Citator alerts from Westlaw and Lexis notify when monitored cases are cited or overruled.
+\textbf{Legal and Regulatory Feeds}: Court docket systems like CM/ECF and state e-filing platforms send notifications whenever documents are filed in cases you are monitoring \parencite{pacer-system,cmecf-system}. When an alert arrives, an agentic system can retrieve the filed document through PACER, analyze its contents, and trigger the appropriate response---whether that means flagging a motion for attorney review or updating a case timeline. The SEC's EDGAR system offers similar capabilities for corporate filings, with RESTful APIs providing real-time access to submissions with sub-second processing delays \parencite{sec-edgar-api}, allowing agentic systems to monitor competitors' 10-Ks and flag material differences from your company's disclosures. Regulatory agencies publish updates through the Federal Register and agency websites, while citator services like Westlaw and Lexis can notify the system whenever monitored cases are cited or overruled.
 
-\textbf{Financial Market Feeds}: Financial institutions receive real-time market data through Bloomberg, Reuters, and similar providers. A portfolio management agentic system subscribes to price alerts, receives notifications when thresholds are crossed, evaluates rebalancing rules, and either executes trades within risk limits or escalates to a portfolio manager. Position and P\&L updates cascade through financial systems: trades trigger position updates, which trigger risk recalculation, compliance checks, and dashboard updates. News feeds deliver headlines, earnings, and sentiment analytics; agentic systems assess materiality and alert managers when news appears significant.
+\textbf{Financial Market Feeds}: Financial institutions receive real-time market data through providers like Bloomberg and Reuters. A portfolio management agentic system can subscribe to price alerts and receive notifications when thresholds are crossed, then evaluate rebalancing rules and either execute trades within risk limits or escalate to a portfolio manager for approval. These events cascade through financial systems as trades trigger position updates, which in turn trigger risk recalculation, compliance checks, and dashboard refreshes. News feeds add another layer by delivering headlines, earnings announcements, and sentiment analytics, allowing agentic systems to assess materiality and alert managers when developments appear significant.
 
-\begin{highlightbox}[title={Speed vs. Reasoning: A Critical Distinction}]
+\begin{keybox}[title={Speed vs. Reasoning: A Critical Distinction}]
 Market data arrives at millisecond granularity. LLM-based reasoning operates at second-to-minute timescales. This fundamental mismatch determines where agentic systems add value in financial workflows.
 
-\textbf{Agentic systems are not suited for:} High-frequency trading, market-making, latency-sensitive execution. These domains require deterministic algorithms operating at microsecond latencies. An LLM reasoning loop, even a fast one, cannot compete.
+\vspace{0.8em}
+\textbf{Not suited for agentic systems:}
+\begin{itemize}[nosep,leftmargin=1.5em]
+\item High-frequency trading and market-making
+\item Latency-sensitive execution
+\item Any task requiring microsecond response times
+\end{itemize}
 
-\textbf{Agentic systems are suited for:} Strategic portfolio decisions, investment thesis development, rebalancing analysis, compliance monitoring, research synthesis. These tasks operate on timescales of minutes to hours, where reasoning quality matters more than latency.
+\vspace{0.5em}
+\textbf{Well suited for agentic systems:}
+\begin{itemize}[nosep,leftmargin=1.5em]
+\item Strategic portfolio decisions and rebalancing analysis
+\item Investment thesis development and research synthesis
+\item Compliance monitoring
+\end{itemize}
 
-\textbf{The architecture pattern:} Fast deterministic systems handle real-time data capture and threshold detection. When thresholds trigger (position approaching limit, price target hit, anomaly detected), they generate events that agentic systems process. The agentic system's role is strategic reasoning and recommendation, not execution speed. This complements latency-sensitive pipelines: keep the microsecond path deterministic, hand off to the agentic system only once an alert is raised.
+\vspace{0.8em}
+\textbf{The architecture pattern:} Fast deterministic systems handle real-time data capture and threshold detection. When a threshold triggers---a position approaching its limit, a price target hit, an anomaly detected---it generates an event that the agentic system processes. Keep the microsecond path deterministic; hand off to the agentic system only once an alert is raised.
+\end{keybox}
 
-Match agentic system capabilities to task requirements. Speed-critical tasks need traditional algorithms; reasoning-critical tasks need agentic systems.
-\end{highlightbox}
-
-\textbf{Integration Patterns}: External feeds reach agentic systems through \keyterm{webhooks} (HTTP callbacks for immediate notification) or \keyterm{message queues} (durable event streams with delivery guarantees). Webhooks work well for low-volume, time-sensitive events where immediate delivery matters and occasional missed events are acceptable. Message queues provide ordering, durability, and replay capabilities essential for regulated applications requiring audit trails. In practice, many systems use both: a portfolio management system might use webhooks to receive immediate notification when a stock price crosses a stop-loss threshold, while using message queues to process daily trade confirmations that require guaranteed delivery and audit logging.
+\textbf{Integration Patterns}: External feeds reach agentic systems through \keyterm{webhooks} (HTTP callbacks for immediate notification) or \keyterm{message queues} (durable event streams with delivery guarantees) \parencite{courtlistener-webhooks}. Webhooks work well for low-volume, time-sensitive events where immediate delivery matters and occasional missed events are acceptable. Message queues provide ordering, durability, and replay capabilities essential for regulated applications requiring audit trails \parencite{cqrs-event-sourcing-2019}. In practice, many systems use both: a portfolio management system might use webhooks to receive immediate notification when a stock price crosses a stop-loss threshold, while using message queues to process daily trade confirmations that require guaranteed delivery and audit logging. Research on event-driven architectures demonstrates measurable performance benefits over monolithic approaches for such event-processing workflows \parencite{eda-performance-2023}.
 
 % ----------------------------------------------------------------------------
 % Human Prompts as Events
@@ -69,15 +90,19 @@ Match agentic system capabilities to task requirements. Speed-critical tasks nee
 \subsection{Human Prompts as Events}
 \label{sec:agents2-human-events}
 
-Human prompts feel different from external feeds because they are interactive and synchronous. However, at the architectural level a human prompt is still just another event type: the user generates an event, the agentic system receives it through a channel, processes it, and responds. Treating prompts this way simplifies design, because all events can flow through common routing and prioritization logic rather than requiring separate code paths for ``chat'' versus ``background'' work.
+Human prompts feel different from external feeds because they are interactive and synchronous. You type something and expect a response. But at the architectural level, a human prompt is just another event type. The user generates an event, the system receives it through a channel, processes it, and responds. Treating prompts this way actually simplifies design, because all events can flow through the same routing and prioritization logic rather than requiring separate code paths for ``chat'' versus ``background'' work.
 
-\textbf{Chat interfaces} are the most direct channel. The associate types ``Find Fifth Circuit authority on personal jurisdiction for e-commerce defendants,'' the agentic system searches and presents summaries, and the associate follows up with refinements. The analyst asks for revenue growth comparisons across portfolio companies, receives a table, and requests additional filtering. Chat enables iterative clarification while maintaining architectural consistency: each message is simply an event processed through the standard loop, with tighter latency expectations than background tasks.
+\textbf{Chat interfaces} offer the most direct channel for human interaction. An associate might type ``Find Fifth Circuit authority on personal jurisdiction for e-commerce defendants,'' and the system searches relevant databases, presents summaries, and waits for follow-up refinements. An analyst asks for revenue growth comparisons across portfolio companies, receives a table, and requests additional filtering. What makes chat powerful is its support for iterative clarification. Each message is simply another event processed through the standard loop, just with tighter latency expectations than background tasks.
 
-\textbf{Email routing} enables agentic systems to process work arriving through existing communication channels. A general counsel forwards a business unit's compliance question to a monitored mailbox; the agentic system extracts the question, searches relevant guidance, and emails back an assessment. The challenge is intent classification: email bodies are unstructured and may include forwarded threads with multiple topics.
+Synchronous interfaces like chat create design constraints that asynchronous channels do not. When a user is waiting for a response, every second of silence feels like something has gone wrong. Systems designed for direct interaction need to prioritize lower latency and provide transparent, regular feedback about what is happening. This might mean streaming partial responses as they are generated, displaying progress indicators that show which tools the system is invoking, or breaking complex tasks into visible steps so users can see the work unfolding. Without this feedback, a blank screen followed by a complete response thirty seconds later leaves users uncertain whether the system is working, stuck, or has crashed. Good conversational design treats feedback as a feature, not an afterthought. Acknowledge the request immediately, show progress throughout, and deliver results incrementally when possible.
 
-\textbf{Collaboration platforms} like Slack and Teams allow agentic systems to appear as team members. Users @mention the system in channels, send direct messages, or use slash commands. The litigation team discussing strategy can invoke research directly in their coordination channel. Security requires authorization checks at the system layer, since collaboration platforms may log responses and channels may include unauthorized viewers.
+\textbf{Email routing} lets agentic systems process work that arrives through existing communication channels. A general counsel might forward a business unit's compliance question to a monitored mailbox, and the system extracts the question, searches relevant guidance, and emails back an assessment. The main challenge here is intent classification, since email bodies tend to be unstructured and often include forwarded threads with multiple topics buried in the conversation.
 
-\textbf{Voice interfaces} work best for short, urgent requests where typing is impractical. They introduce transcription errors (legal jargon like ``Chevron deference'' may transcribe incorrectly) and authentication challenges. High-stakes voice requests should require explicit confirmation before execution.
+\textbf{Collaboration platforms} like Slack and Teams allow agentic systems to appear as team members in the workflow. Users can @mention the system in channels, send direct messages, or invoke capabilities through slash commands. A litigation team discussing strategy can request research directly in their coordination channel without switching applications. Security becomes important here because collaboration platforms typically log all responses, and channels may include viewers who should not have access to certain information.
+
+\textbf{Voice interfaces} work best for short, urgent requests where typing is impractical. Think of a portfolio manager checking a position while walking between meetings, or a lawyer needing a quick case citation during a call. The tradeoffs are real. Transcription errors can mangle legal jargon, turning ``Chevron deference'' into something unrecognizable, and authentication is harder without a keyboard. For high-stakes requests, voice interfaces should require explicit confirmation before the system takes action.
+
+In contrast, asynchronous channels like email and background automation do not require the same real-time feedback, but they introduce different design challenges. When users are not watching, systems still need observability through logs, dashboards, and notifications that let operators understand what the system did and why. And because asynchronous requests lack the back-and-forth of conversation, getting intent right on the first pass becomes critical. A user who submits a request and walks away cannot clarify a misunderstood instruction until they see the wrong output hours later. This is why intent understanding (\Cref{sec:agents2-intent}) and perception design (\Cref{sec:agents2-perception}) matter even more for asynchronous workflows. The system must extract what the user actually wants from a single message, gather the right information without guidance, and produce results that match expectations without iterative correction.
 
 % ----------------------------------------------------------------------------
 % Scheduled Jobs
@@ -86,13 +111,13 @@ Human prompts feel different from external feeds because they are interactive an
 \subsection{Scheduled Jobs: Time as Trigger}
 \label{sec:agents2-scheduled}
 
-Some work follows predictable schedules rather than arriving from external events or human prompts: end-of-day reconciliation, monthly compliance reporting, quarterly reviews, annual filings. For these recurring tasks, time itself triggers execution.
+Some work follows predictable schedules rather than arriving from external events or human prompts. End-of-day reconciliation, monthly compliance reporting, quarterly reviews, and annual filings all happen on a calendar rather than in response to some triggering event. For these recurring tasks, time itself becomes the trigger.
 
-\textbf{Calendar-driven deadlines} govern legal practice. Answer the complaint within 21 days. File motions 30 days before hearings. Respond to discovery within 30 days. Agentic systems can monitor litigation calendars, calculate deadlines accounting for court holidays, schedule reminders as deadlines approach, and escalate if work remains incomplete. Sophisticated deadline systems go further, retrieving the complaint, extracting claims, generating draft answers with standard defenses, and presenting drafts for attorney review before filing. Financial institutions face similar deadline-driven work, from SEC reporting deadlines to tax filings to contractual obligations to lenders.
+\textbf{Calendar-driven deadlines} govern much of legal practice. You must answer the complaint within 21 days, file motions 30 days before hearings, and respond to discovery within 30 days. Agentic systems can monitor litigation calendars, calculate deadlines while accounting for court holidays, schedule reminders as deadlines approach, and escalate if work remains incomplete. More sophisticated deadline systems go further by retrieving the complaint, extracting claims, generating draft answers with standard defenses, and presenting those drafts for attorney review before filing. Financial institutions face similar deadline-driven work that spans SEC reporting deadlines, tax filings, and contractual obligations to lenders.
 
-\textbf{Periodic compliance checks} run even when no external event triggers review. An investment compliance agentic system runs nightly to check portfolios against client guidelines and flag violations. A law firm conflicts system retrieves new docket entries, extracts party names, and checks them against the conflicts database. These scheduled checks enable continuous monitoring that would be impractical manually across thousands of matters or client accounts.
+\textbf{Periodic compliance checks} run even when no external event triggers a review. An investment compliance system might run nightly to check portfolios against client guidelines and flag any violations it finds. A law firm conflicts system retrieves new docket entries each day, extracts party names, and checks them against the conflicts database. These scheduled checks enable continuous monitoring that would be impractical to perform manually across thousands of matters or client accounts.
 
-\textbf{End-of-day workflows} in financial institutions reconcile trades, calculate valuations at market close, generate P\&L reports, and prepare risk reports for the next morning. At market close, an EOD agentic system retrieves final prices, marks positions to market, calculates P\&L, and identifies unexplained variances. The system then distributes reports to stakeholders. If any step fails, the system escalates rather than proceeding with incomplete data. Law firms run similar periodic workflows, reminding attorneys to enter time, generating draft invoices at month-end, and flagging anomalies for partner review.
+\textbf{End-of-day workflows} are particularly important in financial institutions, where teams need to reconcile trades, calculate valuations at market close, generate P\&L reports, and prepare risk reports for the next morning. When the market closes, an EOD system retrieves final prices, marks positions to market, calculates P\&L, and identifies any unexplained variances. The system then distributes reports to stakeholders, and if any step fails, it escalates rather than proceeding with incomplete data. Law firms run similar periodic workflows that remind attorneys to enter time, generate draft invoices at month-end, and flag anomalies for partner review.
 
 % ----------------------------------------------------------------------------
 % Escalation Events (Brief - Full Treatment in Section 09)
@@ -101,17 +126,9 @@ Some work follows predictable schedules rather than arriving from external event
 \subsection{Escalation Events: When Agents Reach Their Limits}
 \label{sec:agents2-escalation-brief}
 
-The previous three channel types bring work into the agentic system from outside. Escalation events operate internally: the agentic system generates an event signaling it has reached a limit and requires human intervention, transferring control to human decision-makers when the system cannot proceed autonomously.
+The previous three channel types bring work into the agentic system from outside, but escalation events operate internally. When an agentic system reaches a limit and cannot proceed autonomously, it generates an event signaling that it requires human intervention. This transfers control to human decision-makers at precisely the moments when human judgment matters most.
 
-Four escalation triggers appear most frequently:
-
-\textbf{Budget exhaustion}: The agentic system approaches resource limits (token consumption, iteration counts, time limits, or cost caps) and must decide whether to stop or request additional budget.
-
-\textbf{Low confidence}: Uncertainty is too high for autonomous action. Conflicting authority, novel situations, or results that seem implausible warrant human review.
-
-\textbf{Approval requirements}: Certain actions require explicit human authorization regardless of the system's confidence: filing court documents, sending client communications, executing large trades.
-
-\textbf{Errors and anomalies}: Tools fail repeatedly, data is inconsistent, or the agentic system detects red flags that require human investigation. \Cref{sec:agents2-escalation} addresses when and how agentic systems should escalate to humans.
+Four escalation triggers appear most frequently. \textbf{Budget exhaustion} occurs when the system approaches resource limits such as token consumption, iteration counts, time limits, or cost caps, and must decide whether to stop or request additional budget. \textbf{Low confidence} triggers escalation when uncertainty is too high for autonomous action, whether due to conflicting authority, novel situations, or results that seem implausible. \textbf{Approval requirements} force escalation for certain actions that require explicit human authorization regardless of the system's confidence, such as filing court documents, sending client communications, or executing large trades. Finally, \textbf{errors and anomalies} trigger escalation when tools fail repeatedly, data is inconsistent, or the system detects red flags that require human investigation. \Cref{sec:agents2-escalation} addresses when and how agentic systems should escalate to humans in greater detail.
 
 % ----------------------------------------------------------------------------
 % Surfaces: Interaction Modalities
@@ -120,51 +137,54 @@ Four escalation triggers appear most frequently:
 \subsection{Surfaces: How Users Experience Agentic Systems}
 \label{sec:agents2-surfaces}
 
-A \keyterm{surface} is the interaction modality through which users encounter an agentic system. The same underlying capabilities---intent understanding, tool use, memory, planning---can manifest through radically different user experiences. Usability researcher Jakob Nielsen argues that generative AI represents the first new user interface paradigm in sixty years: a shift from \textit{command-based interaction} (telling the computer what to do) to \textit{intent-based outcome specification} (telling the computer what you want). But intent-based systems still require interfaces, and those interfaces shape how effectively users can express intent and consume results.
+A \keyterm{surface} is the interaction modality through which users encounter an agentic system. The same underlying capabilities, including intent understanding, tool use, memory, and planning, can manifest through radically different user experiences. Usability researcher Jakob Nielsen argues that generative AI represents the first new user interface paradigm in sixty years, marking a shift from \textit{command-based interaction} where you tell the computer what to do, to \textit{intent-based outcome specification} where you tell the computer what you want \parencite{nielsen-ai-ui-paradigm}. But intent-based systems still require interfaces, and those interfaces shape how effectively users can express intent and consume results.
 
 \begin{definitionbox}[title={Interaction Surfaces}]
-An \keyterm{interaction surface} is the user-facing modality through which humans engage with an agentic system. Surfaces differ along several dimensions:
-
-\textbf{Synchronicity}: Does the user wait for results (synchronous) or receive them later (asynchronous)?
-
-\textbf{Initiative}: Does the user initiate interaction (pull) or does the system (push)?
-
-\textbf{Embodiment}: Is the system a visible participant (chat avatar) or invisible infrastructure (background automation)?
-
-\textbf{Output format}: Does the system produce conversation turns, structured documents, or actions in the world?
-
-The same agentic capabilities can be exposed through different surfaces for different use cases.
+An \keyterm{interaction surface} is the user-facing modality through which humans engage with an agentic system. The same underlying capabilities can manifest through radically different user experiences depending on four key dimensions: synchronicity, initiative, embodiment, and output format.
 \end{definitionbox}
 
-Three primary surfaces dominate current deployments, each suited to different task types and user contexts:
+\textbf{Synchronicity} determines when results arrive. Synchronous interactions deliver results while the user waits, as with chat interfaces where you ask a question and watch the response stream in. This suits exploratory work where you refine direction based on what you see. Asynchronous interactions deliver results later through notifications or reports, as with document generation where you specify requirements, do other work, and return when the draft is ready. This suits production tasks where waiting would waste billable time.
 
-\textbf{Conversational surfaces} present the agentic system as an interactive dialogue partner. The user types or speaks; the system responds; the user refines. This is the paradigm of ChatGPT, Claude, and embedded copilots. Conversational surfaces excel at \textit{exploratory tasks} where the user refines direction through iteration: the partner thinking through case strategy, the analyst exploring market scenarios, the associate researching an unfamiliar area of law. The interaction is synchronous and user-initiated.
+\textbf{Initiative} captures who starts the conversation. In pull models, the system waits for the user to initiate. A research assistant that answers questions when asked operates this way, giving the user control over when and whether to engage. In push models, the system reaches out when something needs attention. A docket monitor that alerts you to new filings operates this way, deciding when to interrupt based on relevance and urgency.
 
-Conversational surfaces have limitations. They require users to articulate intent in natural language---what Nielsen calls the ``articulation barrier.'' They lack the affordances of graphical interfaces: no menus to browse, no buttons to discover capabilities. And they demand attention; the user must remain engaged throughout the interaction.
+\textbf{Embodiment} refers to whether the system is visible in the workflow. Visible systems appear as explicit participants, like a chat avatar or copilot sidebar that makes the agentic system's presence clear. Users know they are interacting with AI and can direct it consciously. Invisible systems operate as infrastructure, like a compliance screening system that flags suspicious transactions in the background. Users experience the outputs without seeing the system that produced them.
 
-\textbf{Automation surfaces} present the agentic system as invisible infrastructure. The system monitors, analyzes, and acts in the background; users receive outputs only when relevant. Portfolio surveillance that alerts when positions breach limits. Docket monitoring that flags new filings in active matters. Compliance systems that screen transactions against sanctions lists. The interaction is asynchronous and system-initiated.
+\textbf{Output format} determines what the system produces. Conversation turns suit iterative exploration where direction emerges through dialogue, producing chat transcripts from research queries, brainstorming, and strategy discussions. Structured documents suit formal deliverables with defined formats, producing research memos, due diligence reports, and contract summaries ready for distribution. Actions in the world suit automation workflows, where filing a document, sending an alert, or executing a trade produces effects rather than text.
 
-Automation surfaces suit \textit{monitoring tasks} where continuous human attention is impractical. A compliance officer cannot manually review every transaction; a litigator cannot check every docket daily. The agentic system handles the routine case, surfacing only exceptions that require human judgment. The user experience is defined by what \textit{doesn't} happen: no alert means no problem.
+Three primary surfaces dominate current deployments, each suited to different task types and user contexts.
 
-\textbf{Document surfaces} present the agentic system as a drafting assistant that produces structured work products. Research memos, due diligence reports, contract summaries, client presentations. The user specifies requirements; the system produces a document; the user reviews, edits, and distributes. The interaction is asynchronous (the system works while the user does other things) but user-initiated.
+\textbf{Conversational surfaces} present the agentic system as an interactive dialogue partner. The user types or speaks, the system responds, and the user refines based on what they see. This is the paradigm of ChatGPT, Claude, and embedded copilots. Conversational surfaces excel at \textit{exploratory tasks} where users refine direction through iteration, such as a partner thinking through case strategy, an analyst exploring market scenarios, or an associate researching an unfamiliar area of law. The interaction is synchronous and user-initiated.
 
-Document surfaces suit \textit{production tasks} with defined deliverables. The associate needs a memo for the partner's review. The analyst needs a report for the investment committee. The output format matters: not a chat transcript, but a polished document that can be filed, sent to clients, or presented to regulators.
+Conversational surfaces have limitations, however. They require users to articulate intent in natural language, which Nielsen calls the ``articulation barrier.'' They lack the affordances of graphical interfaces, offering no menus to browse and no buttons to discover capabilities. And they demand attention, since the user must remain engaged throughout the interaction.
 
-\begin{highlightbox}[title={Matching Surface to Task}]
-Surface selection is a design decision, not a technical constraint. The same agentic architecture can expose multiple surfaces:
+\textbf{Automation surfaces} present the agentic system as invisible infrastructure that monitors, analyzes, and acts in the background. Users receive outputs only when something relevant happens. Examples include portfolio surveillance that alerts when positions breach limits, docket monitoring that flags new filings in active matters, and compliance systems that screen transactions against sanctions lists. The interaction is asynchronous and system-initiated.
 
-\begin{itemize}[nosep]
-\item \textbf{Chat} for ad hoc queries and exploratory thinking
-\item \textbf{Automation} for continuous monitoring and alerting
-\item \textbf{Document generation} for formal deliverables
-\end{itemize}
+Automation surfaces suit \textit{monitoring tasks} where continuous human attention is impractical. A compliance officer cannot manually review every transaction, and a litigator cannot check every docket daily. The agentic system handles the routine cases, surfacing only exceptions that require human judgment. The user experience is defined by what \textit{does not} happen, since no alert means no problem.
 
-Many deployments combine all three. A litigation support system might offer chat for research queries, automation for docket alerts, and document generation for motion drafts. The underlying intent understanding, tool use, and reasoning remain constant; only the interaction modality changes.
+\textbf{Document surfaces} present the agentic system as a drafting assistant that produces structured work products such as research memos, due diligence reports, contract summaries, and client presentations. The user specifies requirements, the system produces a document, and the user reviews, edits, and distributes. The interaction is asynchronous because the system works while the user does other things, but it remains user-initiated.
 
-When evaluating or designing agentic systems, ask: which surface fits this workflow? Forcing conversational interaction onto monitoring tasks wastes user attention. Forcing document output onto exploratory tasks prevents iterative refinement.
-\end{highlightbox}
+Document surfaces suit \textit{production tasks} with defined deliverables. The associate needs a memo for the partner's review, and the analyst needs a report for the investment committee. The output format matters here because you need a polished document that can be filed, sent to clients, or presented to regulators, not a chat transcript.
 
-\textbf{Emerging surfaces} extend beyond these three patterns. \textit{Embedded copilots} integrate agentic capabilities directly into existing applications---AI assistance within Word, Excel, or domain-specific software---combining familiar graphical interfaces with intent-based interaction. \textit{Ambient interfaces} use voice or environmental sensors to enable hands-free interaction, though transcription errors and authentication challenges limit high-stakes applications. \textit{Agentic APIs} expose capabilities to other software systems rather than human users, enabling machine-to-machine orchestration.
+\begin{keybox}[title={Matching Surface to Task}]
+Surface selection is a design decision, not a technical constraint. When choosing how users will interact with an agentic system, match the surface to the task type.
+
+\vspace{0.5em}
+\textbf{Exploratory tasks} like research questions, strategy discussions, and ad hoc analysis work best through \textbf{chat surfaces} that support iterative refinement.
+
+\vspace{0.3em}
+\textbf{Monitoring tasks} like docket surveillance, compliance screening, and portfolio alerts work best through \textbf{automation surfaces} that operate in the background.
+
+\vspace{0.3em}
+\textbf{Production tasks} like research memos, due diligence reports, and regulatory filings work best through \textbf{document surfaces} that generate formal deliverables.
+
+\vspace{0.5em}
+Many deployments combine all three. A litigation support system might offer chat for research, automation for alerts, and document generation for motion drafts. The underlying reasoning capabilities remain constant while only the interaction modality changes.
+
+\vspace{0.5em}
+\textbf{Mismatches waste effort.} Forcing chat onto monitoring tasks demands attention no one can sustain. Forcing documents onto exploratory tasks prevents the iteration that produces good results.
+\end{keybox}
+
+\textbf{Emerging surfaces} extend beyond these three patterns. \textit{Embedded copilots} integrate agentic capabilities directly into existing applications like Word, Excel, or domain-specific software, combining familiar graphical interfaces with intent-based interaction. \textit{Ambient interfaces} use voice or environmental sensors to enable hands-free interaction, though transcription errors and authentication challenges limit their use in high-stakes applications. \textit{Agentic APIs} expose capabilities to other software systems rather than human users, enabling machine-to-machine orchestration.
 
 % ----------------------------------------------------------------------------
 % Evaluating Trigger Systems
@@ -173,17 +193,9 @@ When evaluating or designing agentic systems, ask: which surface fits this workf
 \subsection{Evaluating Trigger Systems}
 \label{sec:agents2-evaluating-triggers}
 
-When evaluating agentic systems, whether building or buying, assess trigger capabilities against five criteria:
+When evaluating agentic systems, whether you are building or buying, you should assess trigger capabilities against five criteria.
 
-\textbf{Coverage}: Does the system receive events from all relevant sources? A litigation agentic system that monitors CM/ECF but not state court dockets has incomplete coverage.
-
-\textbf{Latency}: How quickly do events reach the agentic system? Real-time market data requires sub-second delivery; docket alerts can tolerate minutes.
-
-\textbf{Reliability}: What happens when feeds fail? Systems need retry logic, fallback sources, and alerting when data goes stale.
-
-\textbf{Priority mechanisms}: Can the system distinguish urgent from routine? During a market crash or litigation crisis, the right events must reach the right handlers immediately.
-
-\textbf{Auditability}: Is every trigger logged? When a regulator asks why the agentic system took action, you need a complete record of the triggering event. The following chapter---\textit{How to Govern an Agent}---addresses audit requirements, regulatory compliance frameworks, and governance controls.
+\textbf{Coverage} asks whether the system receives events from all relevant sources. A litigation system that monitors CM/ECF but not state court dockets has incomplete coverage that could miss critical filings. \textbf{Latency} measures how quickly events reach the system. Real-time market data requires sub-second delivery, while docket alerts can tolerate delays of several minutes. \textbf{Reliability} addresses what happens when feeds fail. Robust systems need retry logic, fallback sources, and alerting when data goes stale. \textbf{Priority mechanisms} determine whether the system can distinguish urgent events from routine ones. During a market crash or litigation crisis, the right events must reach the right handlers immediately. Finally, \textbf{auditability} ensures that every trigger is logged. When a regulator asks why the system took action, you need a complete record of the triggering event. The following chapter on governance addresses audit requirements, regulatory compliance frameworks, and governance controls in detail.
 
 % ----------------------------------------------------------------------------
 % Connection to Other Questions
