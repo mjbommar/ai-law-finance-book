@@ -11,14 +11,14 @@
 % Opening: Q8 Framing and Organizational Analogy
 % ----------------------------------------------------------------------------
 
-The best junior associates know when to go to the supervisor. They don't interrupt the partner with every question, but they also don't proceed confidently into territory beyond their expertise. They recognize authority boundaries: ``I can draft this motion, but I need partner review before filing.'' They recognize competence limits: ``I've researched for two hours and can't find clear authority---I should ask someone with more experience.'' They recognize high-stakes situations: ``The client is asking about strategy, not just research---this needs partner involvement.''
+The best junior associates know when to go to the supervisor. They do not interrupt the partner with every question, but they also do not proceed confidently into territory beyond their expertise. They recognize authority boundaries: ``I can draft this motion, but I need partner review before filing.'' They recognize competence limits: ``I have researched for two hours and cannot find clear authority---I should ask someone with more experience.'' They recognize high-stakes situations: ``The client is asking about strategy, not just research---this needs partner involvement.''
 
-Agentic systems need the same judgment. An agent that never escalates will eventually exceed its competence, authority, or the bounds of safe autonomous operation. An agent that escalates everything provides no value: it becomes a complicated way to route work to humans. The challenge is knowing where to draw the line.
+Agentic systems require the same judgment. An agent that never escalates will eventually exceed its competence, authority, or the bounds of safe autonomous operation. An agent that escalates everything provides no value: it becomes a complicated way to route work to humans. The challenge is drawing the line.
 
 \begin{definitionbox}[title={Escalation}]
 \keyterm{Escalation} transfers control from the agent to a human when autonomous execution should stop. Unlike termination, which ends the task (success or failure), escalation pauses the task and requests human input before continuing.
 
-This reflects professionalism, not failure. Recognizing when you need help and asking for it is exactly what we want from junior professionals. Agents should do the same.
+This reflects professionalism, not failure. Recognizing when you need help and asking for it is exactly what we expect from junior professionals. Agents should do the same.
 \end{definitionbox}
 
 % ----------------------------------------------------------------------------
@@ -30,11 +30,29 @@ This reflects professionalism, not failure. Recognizing when you need help and a
 
 Three categories of triggers warrant escalation: mandatory triggers, confidence-based triggers, and error detection \parencite{hitl-survey-2022,human-ai-taxonomy-2024}.
 
-Some situations require human involvement regardless of the agent's confidence. Budget exhaustion is a clear mandatory trigger. When the agent approaches resource limits (tokens, time, iterations, cost), it should escalate with a progress summary rather than stopping silently: ``I've used 80\% of the research budget. Here's what I found. Options: (a) grant additional budget, (b) conclude with current findings, (c) provide strategic guidance on where to focus remaining effort.'' High-stakes actions require human approval regardless of agent confidence: filing court documents, sending client communications, executing large trades, making regulatory submissions. These are approval gates where the agent prepares and the human authorizes. Authority boundaries trigger escalation when the action exceeds what the agent is authorized to do autonomously; even if the agent is confident in its recommendation, organizational policy may require human sign-off above certain thresholds. Irreversible actions warrant escalation because once you file with the court or execute the trade, you cannot take it back.
+\textbf{Mandatory triggers} require human involvement regardless of the agent's confidence.
+\begin{itemize}[nosep]
+    \item \textbf{Budget Exhaustion:} When resource limits approach, escalate with a progress summary rather than stopping silently.
+    \item \textbf{High-Stakes Actions:} Court filings, client communications, and large trades require human approval (approval gates).
+    \item \textbf{Authority Boundaries:} Actions exceeding authorized thresholds require human sign-off.
+    \item \textbf{Irreversibility:} Actions that cannot be undone (filing, trading) warrant pre-execution review.
+\end{itemize}
 
-Confidence-based escalation occurs when uncertainty about the right answer or approach exceeds acceptable thresholds \parencite{ai-uncertainty-2023}. Low confidence on output might manifest as: ``I found conflicting circuit authority. I'm not confident which rule applies in our jurisdiction'' for legal research, or ``Correlations have spiked beyond historical norms and model assumptions may be violated'' for portfolio analysis. Conflicting information triggers escalation when data sources disagree: the 10-K revenue does not match the earnings release, or two authoritative sources give different answers. Novel situations that do not match patterns the agent has seen warrant human expertise: novel legal questions, unusual market conditions, unprecedented fact patterns. Ambiguous instructions should trigger escalation when, despite clarification attempts (\Cref{sec:agents2-intent}), the agent remains uncertain about what is being asked.
+\textbf{Confidence-based triggers} occur when uncertainty exceeds acceptable thresholds \parencite{ai-uncertainty-2023}.
+\begin{itemize}[nosep]
+    \item \textbf{Low Output Confidence:} ``I found conflicting circuit authority and cannot determine the rule.''
+    \item \textbf{Conflicting Information:} Data sources disagree (e.g., 10-K vs. earnings release).
+    \item \textbf{Novel Situations:} Unprecedented fact patterns or market conditions require human expertise.
+    \item \textbf{Ambiguity:} The agent remains uncertain about instructions despite clarification attempts.
+\end{itemize}
 
-Error and anomaly detection triggers escalation when something has gone wrong and the agent cannot fix it. Repeated tool failures warrant escalation: if Westlaw times out three times consecutively, the agent should report ``Research tool unavailable'' with options to wait, use alternatives, or proceed manually. Data anomalies, such as revenue figures that do not reconcile or filing dates that seem wrong or parties that appear on multiple sides of a transaction, warrant human investigation. Constraint violations occur when the task as specified would violate a policy, and the agent should report: ``Executing this trade would exceed the position limit. Please confirm override or adjust the order.'' Impossible requirements should be reported when analysis reveals the task cannot be completed as specified due to conflicting requirements, missing prerequisites, or logical impossibilities.
+\textbf{Error and anomaly detection} triggers escalation when the agent cannot fix the problem.
+\begin{itemize}[nosep]
+    \item \textbf{Repeated Failures:} If a tool fails three times, report unavailability rather than retrying.
+    \item \textbf{Data Anomalies:} Figures that do not reconcile or suspicious filing dates warrant investigation.
+    \item \textbf{Constraint Violations:} If an action would violate policy (e.g., position limits), escalate for confirmation.
+    \item \textbf{Impossibility:} Report when the task cannot be completed as specified.
+\end{itemize}
 
 % ----------------------------------------------------------------------------
 % How to Escalate: Information Handoff
@@ -43,24 +61,29 @@ Error and anomaly detection triggers escalation when something has gone wrong an
 \subsection{How to Escalate}
 \label{sec:agents2-how-escalate}
 
-Effective escalation provides the human with everything needed to make a decision. A five-part structure ensures completeness.
-
-The escalation should begin with a situation summary that provides brief context for a human who may not have been following closely. Progress to date explains what has been accomplished and what remains, ensuring the human does not have to start from scratch. The escalation trigger explains why the agent is escalating now and what specific condition triggered the handoff. Information gathered presents what relevant information the agent has found; even if incomplete, partial findings are valuable. Options or recommendations describe the possible paths forward; if the agent has a recommendation, it should state it with supporting reasoning.
+Effective escalation provides the human with everything needed to make a decision. A complete handoff includes five parts:
+\begin{enumerate}
+    \item \textbf{Situation Summary:} Brief context for the human.
+    \item \textbf{Progress to Date:} What has been done and what remains.
+    \item \textbf{Trigger:} Why the agent is escalating now.
+    \item \textbf{Information Gathered:} Relevant findings (even if partial).
+    \item \textbf{Recommendation:} A proposed path forward with reasoning.
+\end{enumerate}
 
 \paragraph{Example: Legal Research Escalation}
 
 \begin{quote}
 \textbf{Situation}: Researching statute of limitations for Section 10(b) securities fraud claim.
 
-\textbf{Progress}: Searched Westlaw and Lexis. Found clear authority on the 2-year discovery period. Found conflicting circuit authority on when discovery is triggered.
+\textbf{Progress}: Searched Westlaw and Lexis. Found clear authority on the 2-year discovery period but conflicting authority on the trigger event.
 
-\textbf{Trigger}: Low confidence. The Ninth Circuit and Second Circuit apply different tests for inquiry notice. I cannot determine which applies to our facts.
+\textbf{Trigger}: Low confidence. The Ninth and Second Circuits apply different tests for inquiry notice. I cannot determine which applies to our facts.
 
 \textbf{Findings}: [Summary of key cases with citations]
 
-\textbf{Options}: (a) Apply the more conservative test and note the split; (b) research district court authority in our jurisdiction; (c) seek partner guidance on which test likely applies.
+\textbf{Options}: (a) Apply the conservative test; (b) research district court authority; (c) seek partner guidance on the fact pattern.
 
-\textbf{Recommendation}: Option (c): this appears to be a fact-intensive question where partner judgment on the strength of our facts would be valuable.
+\textbf{Recommendation}: Option (c). The question is fact-intensive, and partner judgment is required.
 \end{quote}
 
 \paragraph{Example: Financial Escalation}
@@ -70,13 +93,13 @@ The escalation should begin with a situation summary that provides brief context
 
 \textbf{Progress}: Generated trade list. Compliance check passed. Ready to execute.
 
-\textbf{Trigger}: Trade size exceeds single-approver threshold (\$500K total).
+\textbf{Trigger}: Trade size (\$500K) exceeds single-approver threshold.
 
-\textbf{Findings}: Recommended trades would realize \$45K in short-term gains and \$12K in losses. Net tax impact: approximately \$8K additional liability.
+\textbf{Findings}: Trades realize \$45K in short-term gains and \$12K in losses. Net tax impact: \$8K liability.
 
-\textbf{Options}: (a) Approve full trade list; (b) modify to prioritize tax-loss positions; (c) execute in tranches over multiple days.
+\textbf{Options}: (a) Approve full list; (b) prioritize tax-loss positions; (c) execute in tranches.
 
-\textbf{Recommendation}: Option (a) preferred if reducing exposure is urgent; Option (b) if tax optimization is priority.
+\textbf{Recommendation}: Option (a) if reducing exposure is urgent; Option (b) if tax optimization is priority.
 \end{quote}
 
 % ----------------------------------------------------------------------------
@@ -86,17 +109,17 @@ The escalation should begin with a situation summary that provides brief context
 \subsection{Human-in-the-Loop Patterns}
 \label{sec:agents2-hitl}
 
-Five patterns integrate human oversight into agent workflows, each suited to different risk profiles and organizational needs.
+We define five patterns for integrating human oversight, suited to different risk profiles.
 
-Approval gates separate preparation from authorization. The agent prepares work product; the human authorizes execution. This pattern is essential for irreversible or high-stakes actions. A litigation agent drafts the court filing, presents it for review, receives approval, then submits. The agent handles preparation; the human controls execution.
+\textbf{Approval Gates} separate preparation from authorization. The agent drafts; the human approves. This is essential for irreversible actions (filings, trades).
 
-Checkpoint reviews provide human verification at milestones to prevent error propagation. A research agent completes legal research, presents authorities, receives confirmation of direction, then proceeds to drafting. Each checkpoint catches misalignment before significant effort is wasted.
+\textbf{Checkpoint Reviews} verify direction at milestones. A research agent presents authorities before drafting, preventing wasted effort.
 
-Confidence-based escalation ties autonomy to certainty. High confidence triggers autonomous execution; low confidence triggers escalation. A compliance agent processes clear-pass cases automatically while escalating ambiguous situations, balancing efficiency with safety.
+\textbf{Confidence-Based Escalation} ties autonomy to certainty. High confidence triggers autonomous execution; low confidence triggers escalation.
 
-The human-as-tool pattern treats human expertise like any other tool. When encountering questions beyond its capabilities, the agent queries the relevant expert, incorporates the response, and proceeds. Human expertise becomes a resource invoked when needed, not a bottleneck for all decisions.
+\textbf{Human-as-Tool} treats human expertise like any other resource. The agent queries an expert when needed, incorporates the response, and proceeds.
 
-Reversibility classification matches oversight level to action consequences. Fully reversible actions like drafts and research proceed autonomously. Partially reversible actions like communications receive checkpoint review. Irreversible actions like filings and trades require pre-approval. Oversight is proportional to risk.
+\textbf{Reversibility Classification} matches oversight to risk. Fully reversible actions proceed autonomously; irreversible actions require pre-approval.
 
 \input{figures/fig-oversight-spectrum}
 
@@ -107,28 +130,24 @@ Reversibility classification matches oversight level to action consequences. Ful
 \subsection{Domain-Specific Escalation Requirements}
 \label{sec:agents2-escalation-domain}
 
-Legal and financial services impose domain-specific escalation requirements rooted in professional responsibility rules and regulatory obligations.
+Regulated industries impose specific escalation duties based on professional responsibility and compliance rules.
 
 \paragraph{Legal Practice}
-
-Legal practice escalation requirements arise from professional responsibility rules \parencite{aba-model-rule-1-1,aba-formal-opinion-512}:
-
+Escalation requirements arise from professional responsibility rules \parencite{aba-model-rule-1-1,aba-formal-opinion-512}:
 \begin{itemize}[nosep]
-\item \textbf{Competence limits}: Escalate when matters exceed agent training or supervising attorney capacity (ABA Model Rule 1.1)
-\item \textbf{Privilege protection}: Escalate any action that might expose privileged information to third parties
-\item \textbf{Conflicts of interest}: Escalate potential conflict situations to conflicts counsel
-\item \textbf{Candor to tribunal}: Escalate immediately if adverse authority is discovered that may require disclosure
+\item \textbf{Competence Limits:} Escalate when matters exceed agent training (ABA Model Rule 1.1).
+\item \textbf{Privilege Protection:} Escalate any action that might expose privileged information.
+\item \textbf{Conflicts of Interest:} Escalate potential conflicts to counsel.
+\item \textbf{Candor to Tribunal:} Escalate immediately if adverse authority requires disclosure.
 \end{itemize}
 
 \paragraph{Financial Services}
-
-Financial services escalation requirements arise from regulatory obligations and fiduciary duties \parencite{finra-notice-24-09,fed-sr11-7}:
-
+Requirements arise from regulatory obligations and fiduciary duties \parencite{finra-notice-24-09,fed-sr11-7}:
 \begin{itemize}[nosep]
-\item \textbf{Suitability and fiduciary duty}: Escalate investment recommendations for adviser review before client delivery
-\item \textbf{Regulatory thresholds}: Escalate when trades approach reporting thresholds or disclosure requirements
-\item \textbf{Material non-public information}: Escalate immediately if potential MNPI is encountered
-\item \textbf{Risk limits}: Escalate when proposed actions would breach position limits or risk thresholds
+\item \textbf{Suitability:} Escalate investment recommendations for adviser review.
+\item \textbf{Regulatory Thresholds:} Escalate when trades approach reporting limits.
+\item \textbf{MNPI:} Escalate immediately if potential Material Non-Public Information is encountered.
+\item \textbf{Risk Limits:} Escalate actions that would breach position limits.
 \end{itemize}
 
 % ----------------------------------------------------------------------------
@@ -138,13 +157,19 @@ Financial services escalation requirements arise from regulatory obligations and
 \subsection{Evaluating Escalation Mechanisms}
 \label{sec:agents2-escalation-eval}
 
-When evaluating agentic systems, assess escalation mechanisms against six criteria that distinguish effective systems from those that either escalate too much or too little.
+Assess escalation mechanisms against six criteria:
 
-Coverage determines whether all appropriate situations trigger escalation. Test with edge cases: novel situations that should clearly require human judgment, conflicting data that the agent cannot resolve, near-threshold conditions that might slip through. A system with coverage gaps will occasionally proceed autonomously when it should not. Calibration determines whether thresholds are set appropriately. Too sensitive and the agent escalates everything, providing no value; too loose and it proceeds when it should not. Calibrate thresholds against real scenarios, adjusting until the agent escalates when practitioners agree it should.
+\textbf{Coverage:} Do all appropriate situations trigger escalation? Test edge cases and conflicting data.
 
-Latency determines how quickly escalation reaches the right human. For urgent matters---a margin call, a filing deadline, a client emergency---escalation must be immediate. For routine matters, queued escalation may suffice. Routing determines whether escalation reaches the right person. Complex legal questions should reach senior attorneys, not paralegals; risk limit breaches should reach risk managers, not operations staff. Misrouted escalation wastes time and may produce inadequate responses.
+\textbf{Calibration:} Are thresholds set correctly? Avoid escalating everything (low value) or nothing (high risk).
 
-Context quality determines whether the human can actually decide. Test by reviewing escalation messages and asking: could you make a decision from this information alone? If the human must investigate further before responding, the escalation is incomplete. Response handling determines whether the agent correctly incorporates human guidance. Test the full cycle, not just escalation initiation; an agent that escalates well but ignores responses provides only the illusion of human oversight.
+\textbf{Latency:} Does escalation reach the human quickly enough? Urgent matters require immediate notification.
+
+\textbf{Routing:} Does it reach the \textit{right} person? Legal questions go to attorneys; risk breaches go to managers.
+
+\textbf{Context Quality:} Can the human decide based on the message alone? If they must investigate from scratch, the handoff failed.
+
+\textbf{Response Handling:} Does the agent correctly incorporate the human's guidance? Test the full cycle.
 
 % ----------------------------------------------------------------------------
 % Connection to Other Questions
@@ -153,8 +178,7 @@ Context quality determines whether the human can actually decide. Test by review
 \subsection{From Escalation to Delegation}
 \label{sec:agents2-escalation-delegation}
 
-Escalation moves control \textit{up}: from agent to human supervisor. But agents can also move control \textit{sideways} by delegating subtasks to other agents. Where escalation says ``I need human help,'' delegation says ``I need specialist help.''
+Escalation moves control \textit{up} (vertical) to a supervisor. Agents can also move control \textit{sideways} (horizontal) by delegating to specialists.
 
-\Cref{sec:agents2-delegation} examines the next question: how does an agent work with other agents? Delegation patterns enable complex workflows where multiple specialized agents collaborate, each with its own escalation paths back to human oversight. A coordinating agent might delegate research to a legal research specialist, analysis to a financial modeling specialist, and drafting to a document generation specialist---while each specialist retains the ability to escalate to humans when it reaches its own limits.
+\Cref{sec:agents2-delegation} examines this next question: how does an agent work with other agents? Delegation patterns enable complex workflows where coordinating agents assign tasks to specialists (research, drafting, modeling), while each retains the ability to escalate vertically when needed. Together, escalation and delegation define the full topology of human-agent collaboration.
 
-The combination of escalation (vertical) and delegation (horizontal) defines the full topology of human-agent collaboration. Escalation ensures human oversight. Delegation enables specialization and scale. Together, they make complex agentic workflows possible while maintaining the human control that regulated professions require.

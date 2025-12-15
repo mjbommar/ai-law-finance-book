@@ -7,11 +7,9 @@
 \section{Introduction}
 \label{sec:agents2-intro}
 
-The previous chapter answered: \textit{What is an agent?} This chapter answers: \textit{How do you build one?}
+\href{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5806982}{\textit{What is an Agent?}}---Part I of this series \parencite{bommarito2025whatisanagent}---gave you the GPA+IAT framework for recognizing agentic systems: Goals, Perception, Action, Iteration, Adaptation, and Termination. This chapter answers the next question: \textit{How do you build one?}
 
-Moving from ``what is an agent?'' to ``how do you build one?'' changes what you need to know. The GPA+IAT framework from the previous chapter---Goals, Perception, Action, Iteration, Adaptation, Termination---gives you the vocabulary to recognize agentic systems and evaluate whether something truly qualifies as an agent \parencite{russell2020artificial,wooldridge1995intelligent}. But recognizing a system is not the same as deploying it, governing it, or knowing when a vendor is overselling it. For that, you need to understand how agents are actually built: what architectural decisions shape capabilities, what tradeoffs those decisions create, and where things go wrong.
-
-This chapter provides that understanding through ten questions---the questions you should ask when evaluating, deploying, or governing any agentic system. Each question maps to a capability every useful agent needs, each capability involves design choices with real consequences, and those choices determine not just what the system can do but how reliably it performs, how it fails, and what controls are possible.
+Ten architectural questions frame this chapter---questions you should ask when evaluating, deploying, or governing any agentic system. Each corresponds to a capability every useful agent needs: receiving work, understanding requests, finding information, taking action, maintaining context, planning complex work, recognizing completion, escalating when stuck, coordinating with other agents, and operating safely. Behind each capability lie design decisions with real tradeoffs---tradeoffs that determine not just what the system can do, but how reliably it performs, how it fails, and what controls are possible.
 
 \begin{keybox}[title={The Core Insight}]
 \textbf{Agents are not magic; they are architecture.}
@@ -45,29 +43,29 @@ This mapping has practical implications. When you evaluate an agentic system, yo
 \subsection{The Ten Questions}
 \label{sec:agents2-ten-questions}
 
-These organizational parallels yield ten questions that any agentic system must answer---the same questions you would ask when onboarding a new professional or evaluating a team's capabilities. Table~\ref{tab:agents2-framework} maps each question to its corresponding GPA+IAT property, following the order an agent encounters them during execution.
+These organizational parallels yield ten questions that any agentic system must answer---the same questions you would ask when onboarding a new professional or evaluating a team's capabilities. Table~\ref{tab:agents2-framework} lists those questions in the order an agent encounters them during execution.
 
 \begin{table}[H]
 \centering
-\caption{From GPA+IAT properties to architectural questions}
+\caption{Architectural questions for agentic systems}
 \label{tab:agents2-framework}
 \small
-\begin{tabular}{p{0.13\textwidth}p{0.24\textwidth}p{0.51\textwidth}}
+\begin{tabular}{p{0.18\textwidth}p{0.70\textwidth}}
 \toprule
-\textbf{Section} & \textbf{GPA+IAT Property} & \textbf{Architectural Question} \\
+\textbf{Section} & \textbf{Architectural Question} \\
 \midrule
-\Cref{sec:agents2-triggers} & Perception & How does the agent know when it has work to do? \\
-\Cref{sec:agents2-intent} & Goal & How does the agent understand what is being asked? \\
-\Cref{sec:agents2-perception} & Perception & How does the agent find things out? \\
-\Cref{sec:agents2-action} & Action & How does the agent make things happen? \\
-\Cref{sec:agents2-memory} & Adaptation & How does the agent remember things? \\
-\Cref{sec:agents2-planning} & Goal + Iteration & How does the agent break a big job into steps? \\
-\Cref{sec:agents2-termination} & Termination & How does the agent know when it is done? \\
-\Cref{sec:agents2-escalation} & Termination & How does the agent know when to ask for help? \\
-\Cref{sec:agents2-delegation} & Iteration & How does the agent work with other agents? \\
-\Cref{sec:agents2-governance} & All & How do we keep the agent safe? \\
+\hyperref[sec:agents2-triggers]{2: Triggers} & How does the agent know when it has work to do? \\
+\hyperref[sec:agents2-intent]{3: Intent} & How does the agent understand what is being asked? \\
+\hyperref[sec:agents2-perception]{4: Perception} & How does the agent find things out? \\
+\hyperref[sec:agents2-action]{5: Action} & How does the agent make things happen? \\
+\hyperref[sec:agents2-memory]{6: Memory} & How does the agent remember things? \\
+\hyperref[sec:agents2-planning]{7: Planning} & How does the agent break a big job into steps? \\
+\hyperref[sec:agents2-termination]{8: Termination} & How does the agent know when it is done? \\
+\hyperref[sec:agents2-escalation]{9: Escalation} & How does the agent know when to ask for help? \\
+\hyperref[sec:agents2-delegation]{10: Delegation} & How does the agent work with other agents? \\
+\hyperref[sec:agents2-governance]{11: Governance} & How do we keep the agent safe? \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Each section addresses one question through organizational analogies, architectural concepts, domain-specific considerations for law and finance, and governance implications. You can read sequentially for cumulative understanding, jump directly to whichever question matters most, or start with \Cref{sec:agents2-synthesis} if you are evaluating vendor claims. We begin with the first question: how does work reach the agent?
+Each section addresses one question through organizational analogies, architectural concepts, domain-specific considerations for law and finance, and governance implications. You can read sequentially for cumulative understanding, jump directly to whichever question matters most, or (if you are evaluating vendor claims) skip to the end and start with \Cref{sec:agents2-synthesis}. We begin with the first question: how does work reach the agent?

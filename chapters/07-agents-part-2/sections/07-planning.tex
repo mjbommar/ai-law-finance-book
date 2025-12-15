@@ -11,22 +11,21 @@
 % Opening: Q6 Framing and Organizational Analogy
 % ----------------------------------------------------------------------------
 
-A litigation partner approaching a new matter does not start by drafting motions. The partner develops a strategy: discovery first (what facts do we need?), then dispositive motions if the law clearly favors us, settlement discussions in parallel, trial prep as a backstop. Discovery breaks into phases: initial disclosures, document requests, interrogatories, depositions. Tasks distribute across the team: senior associate handles briefing, junior associate does document review, paralegal manages scheduling and filings. Throughout, the partner monitors progress: are we on track for deadlines? Are discovery responses revealing helpful facts or should we adjust our theory?
+A litigation partner approaching a new matter does not start by drafting motions. The partner develops a strategy: discovery first (identifying needed facts), then dispositive motions if the law favors the client, followed by settlement discussions or trial preparation. Discovery breaks into phases: initial disclosures, document requests, interrogatories, and depositions. Tasks distribute across the team: a senior associate handles briefing, a junior associate reviews documents, and a paralegal manages scheduling. Throughout, the partner monitors progress against deadlines and adjusts strategy based on new facts.
 
-This is \keyterm{planning}: decomposing complex goals into action sequences, much like the litigation roadmap or deal timeline that guides execution. Without planning, agents react to immediate observations without strategy. With planning, they work systematically toward objectives, adapt when circumstances change, and know when they're done.
+This is \keyterm{planning}: decomposing complex goals into action sequences. It mirrors the litigation roadmap or deal timeline that guides execution. Without planning, agents react to immediate observations without strategy. With planning, they work systematically toward objectives, adapt when circumstances change, and recognize completion.
 
 \begin{definitionbox}[title={Planning}]
 \keyterm{Planning} decomposes complex goals into sequences of actions. It encompasses:
-
 \begin{itemize}[nosep]
-\item \textbf{Decomposition}: Breaking large tasks into manageable steps
-\item \textbf{Sequencing}: Ordering steps logically (what depends on what?)
-\item \textbf{Allocation}: Assigning steps to tools or agents
-\item \textbf{Monitoring}: Tracking progress toward the goal
-\item \textbf{Adaptation}: Adjusting the plan when circumstances change
+\item \textbf{Decomposition}: Breaking large tasks into manageable steps.
+\item \textbf{Sequencing}: Ordering steps logically based on dependencies.
+\item \textbf{Allocation}: Assigning steps to specific tools or sub-agents.
+\item \textbf{Monitoring}: Tracking progress toward the goal.
+\item \textbf{Adaptation}: Adjusting the plan when circumstances change.
 \end{itemize}
 
-Without planning, an agent is like an associate who keeps running searches without a research strategy, busy but not progressing toward a deliverable.
+Without planning, an agent resembles an associate running searches without a strategy---busy but not progressing toward a deliverable.
 \end{definitionbox}
 
 % ----------------------------------------------------------------------------
@@ -36,53 +35,48 @@ Without planning, an agent is like an associate who keeps running searches witho
 \subsection{Planning Patterns}
 \label{sec:agents2-planning-patterns}
 
-Three patterns dominate agent planning, each suited to different task types:
+Three patterns dominate agent planning, each suited to different task types.
 
-\textbf{ReAct: Reasoning + Acting.} The most fundamental pattern interleaves reasoning with action \parencite{yao2022react}. The partner asks for authority that a forum selection clause is unenforceable. The associate reasons: ``Key grounds are unconscionability and public policy. Start with \textit{Atlantic Marine}.'' They search, observe results, reason again: ``The unconscionability cases involve consumer adhesion contracts---not our commercial situation. The public policy line is closer.'' They search again, refine based on results.
+\textbf{ReAct (Reasoning + Acting).} The most fundamental pattern interleaves reasoning with action \parencite{yao2022react}. Consider a partner asking for authority on an unenforceable forum selection clause. The associate reasons: ``Key grounds are unconscionability and public policy. I will start with \textit{Atlantic Marine}.'' They search, observe results, and reason again: ``Unconscionability cases involve consumer contracts, not our commercial context. The public policy line is stronger.'' They search again, refining based on results.
 
 Each cycle has three components:
-
 \begin{itemize}[nosep]
-\item \textbf{Thought}: Explicit reasoning about what to do next
-\item \textbf{Action}: Tool call to gather information or effect change
-\item \textbf{Observation}: Tool output that informs the next thought
+\item \textbf{Thought}: Explicit reasoning about what to do next.
+\item \textbf{Action}: A tool call to gather information or effect change.
+\item \textbf{Observation}: The tool output that informs the next thought.
 \end{itemize}
+Reasoning traces make decisions transparent and auditable. ReAct works well for exploratory tasks where you learn as you go---legal research, fact investigation, and market analysis.
 
-Reasoning traces make decisions transparent and auditable. ReAct works well for exploratory tasks where you learn as you go---research questions, fact investigation, market analysis.
+\textbf{Plan-Execute.} This pattern separates planning from execution. For a document review task (``Review 50 contracts for choice-of-law provisions''), the associate creates a plan: list the contracts, open each one, extract the provision, and record findings. Then they execute systematically. The plan remains static because the task is well-defined.
 
-\textbf{Plan-Execute.} This pattern separates planning from execution. For document review (``Review 50 contracts for choice-of-law, forum selection, arbitration, and liquidated damages provisions''), the associate makes a plan: checklist of provisions, open each contract, record findings. Then they execute systematically. The plan does not change because the task is well-defined.
+Plan-Execute fits established workflows: due diligence checklists, compliance reviews, and document assembly. You create the plan upfront and execute methodically. Research variants like ReWOO \parencite{xu2023rewoo} (separating reasoning from observation) and LLMCompiler \parencite{kim2024llmcompiler} (optimizing execution graphs) enable parallel tool calling. However, the core pattern remains: plan first, then execute.
 
-Plan-Execute fits workflows with established procedures: due diligence checklists, compliance reviews, document assembly. You create the plan upfront and execute methodically. Research variants like ReWOO \parencite{xu2023rewoo}, which separates reasoning from observation to reduce token usage, and LLMCompiler \parencite{kim2024llmcompiler}, which optimizes execution graphs for parallelism, enable parallel tool calling when steps are independent, though the basic pattern remains: plan first, then execute.
-
-\textbf{Hierarchical Planning.} Law firms decompose matters into workstreams delegated through layers. A parent agent receives a high-level goal, breaks it into sub-goals, and delegates to specialists.
-
-``Prepare for trial'' becomes:
+\textbf{Hierarchical Planning.} Law firms decompose matters into workstreams delegated through layers. A parent agent receives a high-level goal, breaks it into sub-goals, and delegates to specialists. ``Prepare for trial'' becomes:
 \begin{itemize}[nosep]
-\item Finalize witness list (delegated to one agent)
-\item Prepare exhibits (another agent)
-\item Draft jury instructions (another agent)
+\item Finalize witness list (delegated to Agent A).
+\item Prepare exhibits (delegated to Agent B).
+\item Draft jury instructions (delegated to Agent C).
 \end{itemize}
+Each specialist may decompose further. This enables parallelization and specialization, mirroring how litigation teams work. \Cref{sec:agents2-delegation} details these coordination patterns.
 
-Each specialist may decompose further. This enables parallelization and specialization, mirroring how litigation teams work with multiple associates and paralegals handling different workstreams simultaneously. \Cref{sec:agents2-delegation} provides detailed treatment of multi-agent coordination patterns.
-
-The planning patterns above represent a fundamental shift from traditional workflow automation. Traditional workflow engines used \textit{static orchestration}: predefined graphs specifying which steps follow which, what conditions trigger branches, and how exceptions route to handlers. Business process management (BPM) systems, enterprise service buses, and workflow automation tools all embodied this pattern. The workflow was designed at build time; at runtime, the engine merely executed it.
+These patterns represent a shift from traditional workflow automation. Traditional engines used \textbf{static orchestration}: predefined graphs specifying exact steps and branches (BPM systems). The workflow was designed at build time; the engine merely executed it.
 
 \begin{definitionbox}[title={Static vs.\ Dynamic Orchestration}, breakable=false]
-\textbf{Static orchestration} executes predefined workflow graphs. The same input always produces the same execution path. Predictable, auditable, but inflexible.
+\textbf{Static orchestration} executes predefined workflow graphs. The same input always produces the same execution path. It is predictable and auditable but inflexible.
 
 \vspace{0.5em}
-\textbf{Dynamic orchestration} reasons about task decomposition at runtime. The LLM examines the goal, considers available resources, and constructs an appropriate plan on the fly. Adaptive, but less predictable.
+\textbf{Dynamic orchestration} reasons about task decomposition at runtime. The LLM examines the goal, considers available resources, and constructs a plan on the fly. It is adaptive but less predictable.
 \end{definitionbox}
 
-LLM-based orchestration is inherently dynamic. ``Prepare for trial'' might decompose differently depending on case complexity, available resources, and timeline. The LLM examines the goal, considers available specialist agents, and constructs an appropriate delegation structure on the fly. This adaptability is both the promise and the challenge of agentic planning.
+LLM-based orchestration is inherently dynamic. ``Prepare for trial'' decomposes differently depending on case complexity. The LLM constructs a delegation structure based on the specific context. This adaptability is both the promise and the challenge.
 
-The distinction has practical implications. Static workflows handle anticipated scenarios well, but novel situations fall through to error handlers or human intervention. Dynamic orchestration adapts to the specific task, potentially handling situations the system designer never anticipated. Maintenance costs also differ: static workflows require explicit updates when processes change, while dynamic orchestration absorbs changes through prompt updates or model fine-tuning.
+Static workflows handle anticipated scenarios. Dynamic orchestration handles novel situations. Maintenance costs also differ: static workflows require explicit updates, while dynamic orchestration absorbs changes through prompt updates.
 
 \begin{keybox}[title={Auditability Challenge}, breakable=false]
-Static workflows produce predictable execution traces; given the same input, the same workflow executes. Dynamic orchestration may produce different decompositions for similar inputs, complicating audit and compliance. For regulated applications, log the \textit{reasoning} behind orchestration decisions, not just the decisions themselves.
+Static workflows produce predictable execution traces. Dynamic orchestration may produce different decompositions for similar inputs, complicating audit. For regulated applications, you must log the \textit{reasoning} behind orchestration decisions, not just the decisions themselves.
 \end{keybox}
 
-Production systems often combine both approaches. High-volume, well-understood processes use static workflows for efficiency and predictability. Complex, variable, or novel tasks use dynamic orchestration. The static layer handles routine work; the dynamic layer handles everything else. The planning patterns described above---ReAct, Plan-Execute, Hierarchical---are all forms of dynamic orchestration: the LLM decides what to do based on the task at hand, rather than following a predetermined script.
+Production systems often combine both. High-volume, well-understood processes use static workflows. Complex, novel tasks use dynamic orchestration. The planning patterns described above---ReAct, Plan-Execute, Hierarchical---are forms of dynamic orchestration.
 
 % ----------------------------------------------------------------------------
 % Choosing the Right Pattern
@@ -91,7 +85,7 @@ Production systems often combine both approaches. High-volume, well-understood p
 \subsection{Choosing the Right Planning Pattern}
 \label{sec:agents2-planner-selection}
 
-Selecting the right pattern depends on task structure and required autonomy level:
+Selecting the right pattern depends on task structure and required autonomy.
 
 \begin{table}[htbp]
 \centering
@@ -111,9 +105,9 @@ Complex, parallel workstreams & Hierarchical & Distributed & M\&A transaction, p
 \end{tabular}
 \end{table}
 
-The autonomy column matters for governance. Higher-autonomy patterns require more sophisticated oversight.
+Higher autonomy requires more sophisticated oversight.
 
-Plan-Execute patterns operate with moderate autonomy. The agent works within tight bounds defined by the plan. Oversight focuses on plan validation and output review. ReAct patterns involve higher autonomy because the agent makes decisions about what to search, what to pursue, and when to stop. Oversight requires explicit termination mechanisms, confidence thresholds, and reasoning trace review. Hierarchical patterns distribute autonomy across multiple agents making decisions. Oversight requires clear delegation contracts, escalation paths between agents, and coordination monitoring. The principle is simple: match oversight rigor to autonomy level.
+Plan-Execute operates with moderate autonomy. The agent works within bounds defined by the plan. Oversight focuses on plan validation. ReAct involves higher autonomy because the agent decides what to search and when to stop. Oversight requires explicit termination mechanisms and confidence thresholds. Hierarchical patterns distribute autonomy. Oversight requires clear delegation contracts and escalation paths. You must match oversight rigor to autonomy level.
 
 % ----------------------------------------------------------------------------
 % Understanding the Task
@@ -122,11 +116,11 @@ Plan-Execute patterns operate with moderate autonomy. The agent works within tig
 \subsection{Understanding the Task Before Planning}
 \label{sec:agents2-pre-planning}
 
-Before planning, agents must understand what they're being asked to do. \Cref{sec:agents2-intent} covers intent extraction in detail. For planning purposes, the key outputs are task classification, constraints, and success criteria.
+Before planning, agents must understand the request. \Cref{sec:agents2-intent} covers intent extraction. For planning, the key outputs are task classification, constraints, and success criteria.
 
-Task classification determines which planning pattern to use: is this exploratory (ReAct), structured (Plan-Execute), or complex (Hierarchical)? Constraints define what bounds the work: deadlines, budgets, and scope limitations. Success criteria answer the question of how the agent will know when it's done and what deliverable is expected.
+Task classification determines the planning pattern: exploratory (ReAct), structured (Plan-Execute), or complex (Hierarchical). Constraints define the bounds: deadlines, budgets, and scope. Success criteria define how the agent recognizes completion.
 
-Effective planning requires clear inputs. Ambiguous goals produce unfocused plans; unclear success criteria make termination difficult.
+Effective planning requires clear inputs. Ambiguous goals produce unfocused plans. Unclear success criteria make termination difficult.
 
 % ----------------------------------------------------------------------------
 % Budget Architecture
@@ -135,17 +129,23 @@ Effective planning requires clear inputs. Ambiguous goals produce unfocused plan
 \subsection{Budget Architecture}
 \label{sec:agents2-budgets}
 
-Without explicit resource budgets, agents can run indefinitely. This is the ``runaway associate'' problem: you asked for two cases, the associate gives you fifty because they did not know when the answer was sufficient. This subsection examines budget allocation as a planning mechanism; \Cref{sec:agents2-termination} examines what happens when budgets are exhausted and how agents recognize resource limits and terminate gracefully.
+Without resource budgets, agents can run indefinitely. This is the ``runaway associate'' problem: asking for two cases and receiving fifty. We allocate budgets as a planning mechanism to control execution.
 
-Four budget types provide control over agent execution, each addressing a different dimension of resource consumption. Token budgets limit LLM API consumption, preventing expensive runaway reasoning loops where the agent keeps elaborating without making progress. Time budgets enforce deadlines by stopping execution after a fixed duration, perhaps 10 minutes, if no meaningful progress has occurred. Tool call budgets prevent runaway tool loops by capping the number of external calls; after 20 searches without progress, the agent should escalate rather than continuing to search. Cost budgets cap total spending in dollars, particularly important when using expensive models or external APIs where unconstrained execution could generate substantial charges.
+Four budget types control consumption:
+\begin{itemize}[nosep]
+    \item \textbf{Token Budgets:} Limit LLM API consumption to prevent expensive reasoning loops.
+    \item \textbf{Time Budgets:} Enforce deadlines by stopping execution after a fixed duration (e.g., 10 minutes).
+    \item \textbf{Tool Call Budgets:} Cap external interactions (e.g., max 20 searches).
+    \item \textbf{Cost Budgets:} Cap total spending in dollars.
+\end{itemize}
 
-These budgets cascade through levels: session budgets constrain entire engagements, task budgets allocate resources to specific work items, and subtask budgets subdivide further. A legal research task might receive a 30-minute time budget and 50,000-token limit; if it spawns subtasks, those subtasks share the parent budget rather than each receiving unlimited resources.
+Budgets cascade. A session budget constrains the engagement; a task budget allocates resources to items; subtask budgets subdivide further. A research task might receive 30 minutes and 50,000 tokens. Subtasks share this pool rather than receiving unlimited resources.
 
-Token costs compound across agentic workflows. Consider a credit facility review: a 200-page document requires roughly 80,000 tokens to ingest. Each section analysis might consume 10,000--20,000 tokens across reasoning and tool calls. Retrieval from precedent databases adds tokens. Multi-iteration refinement multiplies costs. A comprehensive review might consume 500,000--1,000,000 tokens. At illustrative pricing (late 2025: roughly \$3--15 per million input tokens for leading models; verify current rates), that's \$2--15 per review in API costs alone, before infrastructure, storage, or human review time. For portfolio management running continuously, costs accumulate differently: thousands of small queries per day rather than occasional large tasks. Monitor aggregate daily and weekly costs, not just per-task.
+Token costs compound. A 200-page credit facility requires roughly 80,000 tokens to ingest. Analysis consumes more. A comprehensive review might reach 1,000,000 tokens. You must monitor aggregate costs, not just per-task.
 
-The economics of agent assistance depend on task type. Retrieval-heavy tasks like research and document review show the clearest ROI when agents reduce hours substantially. Judgment-intensive tasks show less clear ROI when extensive human revision is required. The critical variable is human review time: agent output requiring extensive correction may cost more than human-only work. Billing norms are evolving: some firms pass efficiency gains through as reduced hours, others add technology fees, others use fixed-fee arrangements. ABA Formal Opinion 512 requires competence regardless of tools and reasonable billing \parencite{aba-formal-opinion-512}. Transparency about AI assistance enables clients to evaluate the value proposition.
+The economics depend on the task. Retrieval-heavy tasks (document review) show clear ROI. Judgment-intensive tasks require extensive human review, potentially reducing ROI. Transparency about AI assistance enables clients to evaluate value \parencite{aba-formal-opinion-512}.
 
-When budgets tighten, agents should degrade gracefully rather than failing completely. Tiered outputs provide value at every budget level: minimal budget delivers the controlling statute with citation; moderate budget adds key holdings; full budget delivers comprehensive analysis. The user receives something useful regardless of where termination occurs. Soft limits at 75--80\% of budget warn the agent that resources are running low, prompting it to prioritize completion over exploration. If the agent has found adequate authority, it should synthesize rather than searching for more. Hard limits at 100\% terminate execution and return whatever partial results exist. A budget-aware agent that delivers partial results is more useful than one that fails completely, and partial results often suffice for the user's immediate needs.
+Agents should degrade gracefully when budgets tighten. Tiered outputs provide value at every level. A minimal budget returns the statute. A moderate budget adds holdings. A full budget delivers analysis. Soft limits (80\% of budget) warn the agent to prioritize completion. Hard limits (100\%) terminate execution. A budget-aware agent that delivers partial results is superior to one that fails completely.
 
 % ----------------------------------------------------------------------------
 % Knowing When to Stop
@@ -154,11 +154,15 @@ When budgets tighten, agents should degrade gracefully rather than failing compl
 \subsection{Knowing When to Stop}
 \label{sec:agents2-termination-preview}
 
-Perhaps the most critical planning capability is knowing when to stop. \Cref{sec:agents2-termination} covers termination in detail; for planning purposes, four categories of stopping conditions guide agent behavior.
+Knowing when to stop is a critical planning capability. We define four stopping conditions:
+\begin{enumerate}
+    \item \textbf{Success:} The goal is achieved (question answered, document reviewed).
+    \item \textbf{Resource Exhaustion:} Budgets are hit. The agent returns partial results or escalates.
+    \item \textbf{Confidence Thresholds:} Uncertainty is too high. The task routes to human review.
+    \item \textbf{Error Conditions:} Repeated failures indicate a problem retrying won't solve.
+\end{enumerate}
 
-Success conditions apply when the goal is achieved: the research question is answered, the document is reviewed, the analysis is complete. The agent returns its result and stops. Resource exhaustion occurs when budget limits are reached; the agent returns partial results or escalates for additional allocation. Confidence thresholds trigger escalation when uncertainty is too high for autonomous action, routing the task to human review rather than proceeding with unreliable conclusions. Error conditions indicate that repeated failures suggest a problem that retrying will not solve.
-
-Define explicit stopping rules, just as you would instruct an associate: ``If you find three on-point circuit opinions that all agree, you're done. If you've searched for two hours and found nothing, come talk to me.'' Agents need the same clarity about when their work is complete.
+You must define explicit stopping rules. Instruct the agent as you would an associate: ``If you find three consistent opinions, stop. If you find nothing after two hours, escalate.''
 
 % ----------------------------------------------------------------------------
 % Guardrails and Loop Detection
@@ -167,7 +171,7 @@ Define explicit stopping rules, just as you would instruct an associate: ``If yo
 \subsection{Guardrails and Loop Detection}
 \label{sec:agents2-guardrails}
 
-Even with budgets and termination conditions, agents can get stuck in unproductive loops. Multiple mechanisms detect and prevent these patterns: step limits, reflection checkpoints, external watchdogs, and meta-policies. \Cref{sec:agents2-loop-detection} examines loop detection and guardrail mechanisms in the context of termination.
+Agents can get stuck in loops despite budgets. Mechanisms like step limits, reflection checkpoints, and external watchdogs prevent this. \Cref{sec:agents2-loop-detection} examines these in detail.
 
 % ----------------------------------------------------------------------------
 % Connection to Other Questions
@@ -176,8 +180,9 @@ Even with budgets and termination conditions, agents can get stuck in unproducti
 \subsection{From Planning to Termination}
 \label{sec:agents2-planning-termination}
 
-Planning answers how agents decompose work, but every plan must end. The next two questions address the boundaries that contain autonomous execution.
+Planning decomposes work, but every plan must end. The next two questions address the boundaries of autonomous execution.
 
-Termination (Q7, \Cref{sec:agents2-termination}) answers the question of how an agent knows when it is done. This requires defining success criteria so the agent can recognize completion, establishing budget limits so the agent cannot run indefinitely, and implementing completion recognition so the agent delivers results rather than continuing to refine. Escalation (Q8, \Cref{sec:agents2-escalation}) answers the question of how an agent knows when to ask for help. This requires confidence thresholds that trigger human review when uncertainty is high, authority boundaries that prevent agents from exceeding their mandate, and human-in-the-loop integration that makes escalation smooth rather than disruptive.
+\Cref{sec:agents2-termination} (Termination) addresses how an agent knows it is done. This requires defining success criteria and budget limits. \Cref{sec:agents2-escalation} (Escalation) addresses how an agent knows when to ask for help. This requires confidence thresholds and authority boundaries.
 
-Without clear termination, agents run forever. Without escalation, agents exceed authority. These boundaries define the safe operating envelope for autonomous execution, ensuring that agents remain useful tools rather than becoming uncontrolled processes.
+Without clear termination, agents run forever. Without escalation, they exceed authority. These boundaries define the safe operating envelope for autonomous systems.
+

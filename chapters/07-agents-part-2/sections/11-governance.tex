@@ -11,15 +11,14 @@
 % Opening: Q10 Framing and Organizational Analogy
 % ----------------------------------------------------------------------------
 
-Every professional organization has compliance programs, audit functions, and oversight structures. The law firm has conflicts committees, billing review, and quality control. The financial institution has risk management, compliance monitoring, and internal audit. These functions do not do the work themselves; they ensure the work is done safely, ethically, and in compliance with applicable rules.
+Every professional organization relies on infrastructure to ensure safety. A law firm does not rely solely on an associate's ethics; it has conflicts committees, billing review systems, and opinion committees. A bank does not rely solely on a trader's judgment; it has risk management engines, compliance monitoring, and internal audit functions. These structures do not do the work; they ensure the work is done safely.
 
-Agentic systems require the same infrastructure. Governance is not a single question but a lens through which all other questions must be viewed. Every capability creates governance requirements. Every architectural choice enables or constrains oversight. This section previews governance across all ten questions; the following chapter explores these requirements in depth.
+Agentic systems require the same infrastructure. Governance is not a single question but a lens through which all other questions must be viewed. Every capability creates a governance requirement. Every architectural choice enables or constrains oversight. This section synthesizes the governance implications of the ten questions.
 
 \begin{definitionbox}[title={Agentic System Governance}]
-\keyterm{Agentic system governance} encompasses the policies, controls, and oversight mechanisms that ensure agentic systems operate safely, ethically, and in compliance with applicable requirements. Governance spans the agentic system lifecycle: design, deployment, operation, and retirement.
+\keyterm{Agentic system governance} encompasses the policies, controls, and oversight mechanisms that ensure agents operate safely, ethically, and in compliance with applicable requirements.
 
-\vspace{0.5em}
-Governance is not optional for regulated professional services \parencite{aba-formal-opinion-512,finra-notice-24-09}. Professional duties are non-delegable: attorneys remain liable for AI-assisted work product, and fiduciaries remain accountable for AI-informed recommendations.
+Governance is not optional for regulated services \parencite{aba-formal-opinion-512,finra-notice-24-09}. Professional duties are non-delegable: attorneys remain liable for AI-assisted work product, and fiduciaries remain accountable for AI-informed recommendations.
 \end{definitionbox}
 
 % ----------------------------------------------------------------------------
@@ -29,11 +28,11 @@ Governance is not optional for regulated professional services \parencite{aba-fo
 \subsection{Architecture Enables Governance}
 \label{sec:agents2-arch-enables-gov}
 
-The architectural choices throughout this chapter are not merely technical decisions. They are the \textit{infrastructure} that makes governance possible.
+The architectural choices in this chapter are not merely technical decisions; they are the \textit{infrastructure} that makes governance possible.
 
-You cannot audit what you did not log. You cannot enforce privilege boundaries that were never implemented. You cannot demonstrate bounded operation without termination mechanisms. When a regulator asks how the compliance agent detected a breach, when opposing counsel demands production of the agent's reasoning, when a client questions why the agent recommended a particular strategy---architecture determines whether you can answer.
+You cannot audit what you did not log. You cannot enforce privilege boundaries that were never implemented. You cannot demonstrate bounded operation without termination mechanisms. When a regulator asks how the compliance agent detected a breach, or when opposing counsel demands the agent's reasoning, architecture determines whether you can answer.
 
-Professional duties are non-delegable: attorneys remain liable for AI-assisted work product, and fiduciaries remain accountable for AI-informed recommendations. The following chapter details those obligations. This chapter provides the architecture to meet them. \Cref{sec:agents2-conclusion-enables} provides a comprehensive mapping of architectural choices to governance implications.
+This chapter provided the technical architecture. The following chapter details the policy obligations. \Cref{sec:agents2-conclusion-enables} maps these choices to their governance implications.
 
 % ----------------------------------------------------------------------------
 % Ten-Question Governance Mapping
@@ -74,31 +73,19 @@ Each of the ten questions creates specific governance requirements:
 \subsection{Security Essentials}
 \label{sec:agents2-security-essentials}
 
-Five security controls are essential for any agentic system deployment in regulated contexts \parencite{owasp-llm-top10,iso-iec-42001}:
+Five security controls are essential for regulated agentic systems \parencite{owasp-llm-top10,iso-iec-42001}:
 
 \begin{keybox}[title={Security Controls for Regulated Practice}]
 \begin{enumerate}[nosep]
-\item \textbf{Input separation}: Isolate user inputs from system prompts to prevent prompt injection attacks
-
-\item \textbf{Output validation}: Verify agent outputs before execution to detect hallucinations and constraint violations
-
-\item \textbf{Least privilege}: Grant minimum necessary tool access to limit the scope and impact of failures
-
-\item \textbf{Audit logging}: Maintain comprehensive action logs for accountability and investigation
-
-\item \textbf{Matter/client isolation}: Enforce confidentiality boundaries to protect privileged and confidential information
+\item \textbf{Input Separation:} Isolate user inputs from system prompts to prevent prompt injection attacks.
+\item \textbf{Output Validation:} Verify agent outputs before execution to detect hallucinations and policy violations.
+\item \textbf{Least Privilege:} Grant minimum necessary tool access to limit the blast radius of failures.
+\item \textbf{Audit Logging:} Maintain comprehensive action logs for accountability and investigation.
+\item \textbf{Matter/Client Isolation:} Enforce confidentiality boundaries to protect privileged information.
 \end{enumerate}
 \end{keybox}
 
-These controls map to the ten-question framework:
-
-\begin{itemize}[nosep]
-\item Input separation protects Q2 (Intent) from manipulation
-\item Output validation governs Q4 (Action)
-\item Least privilege limits Q3 (Perception) and Q4 (Action)
-\item Audit logging enables Q7 (Termination) review and Q8 (Escalation) tracking
-\item Matter/client isolation enforces Q5 (Memory) boundaries
-\end{itemize}
+These controls map directly to the framework: Input Separation protects Intent (Q2). Output Validation governs Action (Q4). Least Privilege limits Perception (Q3) and Action (Q4). Audit Logging enables review of Termination (Q7) and Escalation (Q8). Isolation enforces Memory (Q5) boundaries.
 
 % ----------------------------------------------------------------------------
 % Transparency and Explainability
@@ -107,17 +94,17 @@ These controls map to the ten-question framework:
 \subsection{Transparency and Explainability}
 \label{sec:agents2-transparency-preview}
 
-Regulators and clients increasingly require explanations for agentic system decisions \parencite{zhong2024xai-auditing,ai-auditing-systematic-review-2024}. Four levels of transparency serve different audiences, illustrated here with a breach detection agentic system:
+Regulators and clients require explanations for agent decisions \parencite{zhong2024xai-auditing}. We define four transparency levels serving different audiences:
 
-Level 0 provides output only: just the answer, such as ``Suspicious transaction flagged.'' This level suffices for routine, low-stakes queries where the consumer trusts the system.
+\textbf{Level 0 (Output Only):} The answer alone (``Suspicious transaction flagged''). Sufficient for low-stakes, high-trust contexts.
 
-Level 1 adds a summary with sources: the conclusion plus citations, such as ``Transaction \#45921 flagged; exceeds threshold in Rule 203(b)(1).'' This enables verification without requiring full reasoning.
+\textbf{Level 1 (Summary + Sources):} Conclusion with citations (``Flagged transaction \#45921; exceeds Rule 203(b)(1)''). Enables verification.
 
-Level 2 provides a reasoning outline: key analytical steps plus sources, such as ``Flagged because: (1) \$150K exceeds \$100K threshold, (2) counterparty on watchlist, (3) timing matches known pattern.'' This level is appropriate for substantive work product requiring review.
+\textbf{Level 2 (Reasoning Outline):} Key analytical steps (``Flagged because: (1) \$150K > \$100K threshold, (2) counterparty on watchlist''). Appropriate for substantive work product.
 
-Level 3 provides a full execution trace: a structured record of tool calls, retrieved documents, and decision points, including database queries, rule evaluation steps, and confidence scores. This level enables audit and debugging.
+\textbf{Level 3 (Execution Trace):} Full structured record of tool calls, retrieval, and reasoning. Essential for audit and debugging.
 
-The architecture should capture Level 3 traces for all operations, then generate audience-appropriate summaries (Levels 0--2) on demand.
+The architecture must capture Level 3 traces for all operations, then generate audience-appropriate summaries (Levels 0--2) on demand.
 
 % ----------------------------------------------------------------------------
 % Auditability vs. Retention
@@ -126,13 +113,20 @@ The architecture should capture Level 3 traces for all operations, then generate
 \subsection{Auditability vs. Retention}
 \label{sec:agents2-retention-preview}
 
-A tension exists between comprehensive logging (for audit) and data minimization (for privacy and compliance). The resolution is \textit{not} ``log everything forever.'' Instead, four practices balance these competing demands.
+Tension exists between comprehensive logging (audit) and data minimization (privacy). The solution is not ``log everything forever.'' We apply four practices:
 
-Structured logging captures structured decisions rather than raw chain-of-thought. Structure enables selective retention because decision points can be preserved while ephemeral reasoning is discarded. Tiered retention implements different periods for different purposes: short-term operational logs with full detail retained for days to weeks, medium-term audit logs with structured decisions retained for months to years, and long-term compliance archives containing minimal but sufficient information as required by regulation.
+\textbf{Structured Logging} captures decisions rather than raw chain-of-thought. This enables selective retention of decision points while discarding ephemeral reasoning.
 
-Redaction at capture applies privacy and confidentiality filters before logging, not after; once sensitive information enters logs, it becomes difficult to remove systematically. Finally, legal hold integration ensures that retention schedules yield to preservation obligations when litigation is anticipated.
+\textbf{Tiered Retention} implements purpose-specific periods:
+\begin{itemize}[nosep]
+    \item \textbf{Short-term (days):} Full operational logs for debugging.
+    \item \textbf{Medium-term (months):} Structured decision logs for audit.
+    \item \textbf{Long-term (years):} Minimal compliance archives as required by regulation.
+\end{itemize}
 
-The following chapter provides detailed retention frameworks for legal and financial contexts.
+\textbf{Redaction at Capture} applies privacy filters before logging. Once sensitive data enters logs, systematic removal is difficult.
+
+\textbf{Legal Hold Integration} ensures retention schedules yield to preservation obligations when litigation is anticipated.
 
 % ----------------------------------------------------------------------------
 % Forward to Chapter 8
@@ -141,8 +135,8 @@ The following chapter provides detailed retention frameworks for legal and finan
 \subsection{Forward to Chapter 8}
 \label{sec:agents2-forward-ch8}
 
-This chapter answered \textit{how to build an agentic system}. The ten questions (Table~\ref{tab:agents2-governance-mapping}) provide architectural foundations; each creates governance requirements that the architecture must support.
+This chapter answered \textit{how to build an agentic system}. The ten questions provided the architectural foundations; each created governance requirements the system must support.
 
-The following chapter answers: \textit{how do we govern these systems?} It examines the five-layer governance stack (legal, model, system, process, culture), dimensional controls (autonomy, persistence, goal dynamics), accountability structures, and regulatory compliance frameworks---including Federal Reserve model risk management guidance \parencite{fed-sr11-7}, the NIST AI Risk Management Framework \parencite{nist-ai-rmf}, and GAO findings on AI oversight in financial services \parencite{gao-ai-financial-services-2025}---with worked examples in legal, financial, and audit contexts.
+The following chapter answers: \textit{how do we govern these systems?} It examines the five-layer governance stack (legal, model, system, process, culture), dimensional controls, and compliance frameworks---including Federal Reserve guidance \parencite{fed-sr11-7} and the NIST AI RMF \parencite{nist-ai-rmf}.
 
-Architecture provides the foundation; governance provides the controls. Together, they enable responsible deployment of agentic systems in regulated professional services.
+Architecture provides the foundation. Governance provides the controls. Together, they enable responsible deployment.

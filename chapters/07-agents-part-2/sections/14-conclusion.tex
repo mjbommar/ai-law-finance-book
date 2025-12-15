@@ -8,16 +8,16 @@
 \label{sec:agents2-conclusion}
 
 % ----------------------------------------------------------------------------
-% The Framework Complete
+% Opening
 % ----------------------------------------------------------------------------
 
 This chapter opened with a claim: \textbf{agents are not magic; they are architecture}. Ten sections later, that claim should feel concrete.
 
-You now know how work reaches an agent (triggers and channels), how instructions become goals (intent extraction), how agents gather information (perception tools) and take action (action tools with approval gates), how context persists across sessions (memory architecture), how complex work decomposes into manageable steps (planning patterns), how agents recognize completion (termination criteria), when they hand off to humans (escalation logic), how they coordinate with other agents (delegation protocols), and what controls keep them safe (governance infrastructure).
+You now know how work reaches an agent (triggers), how instructions become goals (intent), how agents gather information (perception) and take action (action), how context persists (memory), how complex work decomposes (planning), how agents recognize completion (termination), when they hand off to humans (escalation), how they coordinate (delegation), and what controls keep them safe (governance).
 
-Each of these capabilities corresponds to design decisions with real tradeoffs. Richer memory improves context but increases cost and latency. More aggressive escalation improves safety but reduces autonomy. Tighter approval gates reduce risk but slow execution. There are no free lunches in agent architecture, only tradeoffs that must be calibrated to your specific context, risk tolerance, and regulatory environment.
+Each capability involves tradeoffs. Richer memory improves context but increases latency. Aggressive escalation improves safety but reduces autonomy. Tighter approval gates reduce risk but slow execution. There are no free lunches, only choices that must be calibrated to your context, risk tolerance, and professional obligations. Chapter~8 (Agents Part III: Governing Agents) provides a risk-based calibration approach rather than a one-size-fits-all checklist.
 
-The organizational analogy that structured this chapter is not merely pedagogical. Law firms and investment teams are cognitive work systems that have evolved sophisticated infrastructure for exactly the challenges agents face: distributing cognitive work, maintaining context, coordinating specialists, ensuring quality, and enabling oversight. When you evaluate an agentic system, you can ask the same questions you would ask about a professional team. When you design governance, you can draw on the same frameworks.
+The organizational analogy is not merely pedagogical. Law firms and investment teams are cognitive work systems that have evolved infrastructure for exactly these challenges: distributing work, maintaining context, and ensuring quality. When you evaluate an agentic system, ask the same questions you would ask about a professional team.
 
 % ----------------------------------------------------------------------------
 % What You Can Now Do
@@ -26,13 +26,15 @@ The organizational analogy that structured this chapter is not merely pedagogica
 \subsection{What This Understanding Enables}
 \label{sec:agents2-conclusion-enables}
 
-With architectural literacy, you can evaluate vendor claims critically. When a vendor says their agent ``handles legal research,'' you know to ask: What triggers initiate research? How does it understand the research question? What databases does it access? How does it know when research is complete? What happens when confidence is low? The ten questions provide a systematic evaluation framework.
+With architectural literacy, you can evaluate vendor claims. When a vendor says their agent ``handles legal research,'' ask: What triggers it? How does it understand the question? What databases does it access? How does it know when it is done? What happens when confidence is low? The ten questions provide your evaluation framework.
 
-You can also participate meaningfully in procurement. You can assess whether a proposed system meets your organization's requirements. Does it enforce matter isolation? Does it maintain audit trails? Does it integrate with your approval workflows? Can it escalate appropriately? You have vocabulary to specify requirements in terms developers understand.
+You can participate meaningfully in procurement. Assess whether a system meets requirements: Does it enforce matter isolation? Maintain audit trails? Integrate with approval workflows? Escalate appropriately? You have the vocabulary to specify requirements.
 
-This understanding lets you design governance that maps to architecture. Governance is not separate from architecture---it is enabled by architecture. If you want audit trails, the system must log its reasoning. If you want approval gates, the system must pause before consequential actions. If you want confidentiality, the system must isolate matter context. You can design systems where governance is built in, not bolted on.
+You can demand governance artifacts, not promises. Ask vendors to demonstrate action gating, escalation behavior under low confidence, and reconstruction via logs. If a system cannot show you what it accessed, what it did, and why it stopped, it is not deployable in regulated practice.
 
-Finally, you can communicate with technical teams. You can describe requirements precisely: ``I need perception tools for these three databases, action tools behind approval gates for these two operations, escalation triggers when confidence drops below threshold, and memory isolation between client matters.'' Shared vocabulary enables collaboration.
+You can design governance that maps to architecture. Governance is enabled by architecture. If you want audit trails, the system must log reasoning. If you want approval gates, the system must pause before action. If you want confidentiality, the system must isolate context. You can design systems where governance is built in, not bolted on.
+
+Finally, you can communicate with technical teams. Describe requirements precisely: ``I need perception tools for these databases, action tools behind approval gates, escalation triggers for low confidence, and memory isolation between matters.'' Shared vocabulary enables collaboration.
 
 % ----------------------------------------------------------------------------
 % Current Limitations
@@ -41,17 +43,15 @@ Finally, you can communicate with technical teams. You can describe requirements
 \subsection{Honest Assessment of Current Capabilities}
 \label{sec:agents2-conclusion-limitations}
 
-Architectural understanding should include honest acknowledgment of current limitations.
+Architectural understanding requires honest acknowledgment of limitations.
 
-The reliability cliff is perhaps the most significant constraint. As discussed in \Cref{sec:agents2-reliability}, agents exhibit near-perfect success on tasks under four minutes but under 10\% success on tasks exceeding four hours. This is not a minor limitation---it fundamentally shapes what agents can reliably do today. Design systems that decompose work aggressively, that checkpoint progress frequently, and that escalate before reliability degrades.
+\textbf{The reliability cliff} (\Cref{sec:agents2-reliability}) is the most significant constraint. Agents exhibit near-perfect success on short tasks but fail frequently on multi-hour workflows. Design systems that decompose work aggressively and checkpoint progress frequently.
 
-Judgment limitations constrain where agents add value. Agents excel at retrieval, systematic execution, and pattern matching, but they struggle with nuanced judgment, novel situations, and tasks requiring deep domain expertise. The most effective deployments pair agent capabilities with human judgment rather than attempting to replace it.
+\textbf{Judgment limitations} constrain value. Agents excel at retrieval and pattern matching but struggle with nuance and novelty. The effective deployments pair agent capabilities with human judgment.
 
-Brittleness causes production systems to fail unpredictably due to API changes, authentication expiration, format variations, and edge cases that deterministic systems would handle gracefully. Build monitoring, alerting, and graceful degradation into every production deployment.
+\textbf{Brittleness} causes failures due to API changes or edge cases. Build monitoring and graceful degradation into every deployment.
 
-Compounding errors affect multi-step workflows. Error probabilities multiply at each step, so a workflow with ten steps that are each 95\% reliable succeeds only 60\% of the time end-to-end. Shorter workflows with human checkpoints outperform longer autonomous chains.
-
-These limitations are not permanent, but they are real today. Design systems that deliver value despite limitations, not systems that assume limitations away.
+\textbf{Compounding errors} affect multi-step workflows. Error probabilities multiply, so long autonomous chains fail. Shorter workflows with human checkpoints perform better.
 
 % ----------------------------------------------------------------------------
 % Essential Resources
@@ -60,19 +60,19 @@ These limitations are not permanent, but they are real today. Design systems tha
 \subsection{Essential Resources}
 \label{sec:agents2-conclusion-resources}
 
-For practitioners moving from concepts to deployment, four resource categories provide essential guidance.
+Four resource categories guide practitioners from concept to deployment.
 
-Security fundamentals should be addressed before any production deployment. Implement the five controls from \Cref{sec:agents2-security-essentials}: input separation, output validation, least privilege, audit logging, and matter/client isolation. The OWASP LLM Top 10 provides vulnerability taxonomy; the NIST AI Risk Management Framework offers lifecycle guidance.
+\textbf{Security fundamentals} must be addressed before deployment. Implement the five controls from \Cref{sec:agents2-security-essentials}: input separation, output validation, least privilege, audit logging, and isolation. The OWASP LLM Top 10 provides vulnerability taxonomy.
 
-Protocols and standards define interoperability. The Model Context Protocol (MCP) standardizes agent-to-tool communication and is production-ready with thousands of available servers. The Agent-to-Agent Protocol (A2A) standardizes multi-agent coordination and is maturing under the Linux Foundation.
+\textbf{Protocols and standards} define interoperability. The Model Context Protocol (MCP) standardizes tool communication. The Agent-to-Agent Protocol (A2A) standardizes coordination.
 
-Research foundations provide theoretical grounding. Key works include Xi et al.\ on agent architecture \parencite{xi2023rise}, Yao et al.\ on ReAct \parencite{yao2022react}, and Park et al.\ on memory \parencite{park2023generative}. For evaluation, LegalBench addresses legal reasoning \parencite{guha2023legalbench} and VLAIR measures legal AI performance against lawyer baselines \parencite{vlair2025}.
+\textbf{Research foundations} provide theoretical grounding. Key works include Xi et al.\ on architecture \parencite{xi2023rise}, Yao et al.\ on ReAct \parencite{yao2022react}, and Park et al.\ on memory \parencite{park2023generative}.
 
-Regulatory guidance varies by domain. Legal practitioners should monitor ABA ethics opinions, particularly Formal Opinion 512 on supervision \parencite{aba-formal-opinion-512}. Financial practitioners should monitor SEC guidance, FINRA communications, and prudential regulators on model risk management.
+\textbf{Regulatory guidance} varies by domain. Legal practitioners should monitor ABA ethics opinions (especially 512). Financial practitioners should monitor SEC, FINRA, and Federal Reserve guidance.
 
-\begin{highlightbox}[title={Temporal Warning}]
-Resources accurate as of late 2025 may not reflect subsequent developments. Protocol specifications evolve, regulatory frameworks develop, security vulnerabilities emerge. Verify currency before relying on any reference for production decisions.
-\end{highlightbox}
+\begin{keybox}[title={Temporal Warning}]
+Resources accurate as of late 2025 may not reflect subsequent developments. Protocols evolve, regulations change, and vulnerabilities emerge. Verify currency before relying on any reference.
+\end{keybox}
 
 % ----------------------------------------------------------------------------
 % Bridge to Next Chapter
@@ -82,26 +82,24 @@ Resources accurate as of late 2025 may not reflect subsequent developments. Prot
 \label{sec:agents2-conclusion-bridge}
 
 This chapter answered: \textit{How do you build an agent?}
-
 The next chapter answers: \textit{How do you govern one?}
 
-These questions are deeply connected. Every architectural decision in this chapter has governance implications:
-
+These questions are connected. Every architectural decision has governance implications:
 \begin{itemize}[nosep]
-\item Trigger logging creates audit trails of what initiated agent action
-\item Intent extraction allows review of what the agent understood
-\item Perception controls enforce data governance and access restrictions
-\item Action gates require approval workflows and human oversight
-\item Memory isolation protects confidentiality and privilege
-\item Planning budgets ensure bounded, predictable operation
-\item Termination criteria verify task completion
-\item Escalation paths route uncertainty to human judgment
-\item Delegation contracts establish accountability across agent teams
+    \item Trigger logging creates audit trails.
+    \item Intent extraction allows review of understanding.
+    \item Perception controls enforce data governance.
+    \item Action gates require approval workflows.
+    \item Memory isolation protects privilege.
+    \item Planning budgets ensure bounded operation.
+    \item Termination criteria verify completion.
+    \item Escalation paths route uncertainty to humans.
+    \item Delegation contracts establish accountability.
 \end{itemize}
 
-The relationship is not incidental. \textbf{Architecture enables governance.} If you did not architect for logging, you cannot audit. If you did not architect for approval gates, you cannot require sign-off. If you did not architect for isolation, you cannot enforce confidentiality boundaries. Governance is not bolted onto architecture after the fact; it emerges from architectural decisions made at design time.
+\textbf{Architecture enables governance.} If you did not architect for logging, you cannot audit. If you did not architect for isolation, you cannot enforce boundaries. Governance emerges from design decisions.
 
-The next chapter builds on this foundation. Where this chapter focused on \textit{capability}---what agents can do and how they do it---the next focuses on \textit{control}---ensuring agents do what they should, only what they should, and nothing they should not. The governance frameworks, oversight mechanisms, and compliance strategies in that chapter assume the architectural understanding developed here.
+The governance imperative is that agents are not just tools. They interpret goals, select what to perceive, and take actions that can create liability. That shift introduces predictable accountability problems: purpose drift (misaligned goals), perceptual opacity (bad or manipulated inputs), and actuation risk (high-consequence actions). Chapter~8 builds on this foundation, translating these challenges into concrete controls: calibrated autonomy, input and action constraints, auditability, retention, escalation and override mechanisms, and accountability structures.
 
 \vspace{1.5em}
 \begin{center}

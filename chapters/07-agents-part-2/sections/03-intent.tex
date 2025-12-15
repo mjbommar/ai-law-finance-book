@@ -25,10 +25,10 @@ An \keyterm{instruction} is the words the user provides---the raw input that sta
 
 Instructions are where work begins, but they are rarely complete specifications. The word ``risks'' raises immediate questions: risks to whom? The lender or borrower? Material risks or all risks? Legal risks, financial risks, or both? ``Reduce tech exposure'' leaves open the target level, the mechanism (sales, hedges, or both), and tax and timing constraints. ``Look into'' specifies neither depth, urgency, nor deliverable format. Instructions are clear enough to start; they are not clear enough to finish.
 
-Pre-LLM systems handled instructions through rigid parsing: keyword matching, slot filling, decision trees. These systems worked for narrow domains with controlled vocabularies but broke on natural language variation. ``Find cases on personal jurisdiction'' and ``What's the law on where you can sue someone?'' express similar meanings but look nothing alike to a keyword matcher.
+Pre-LLM systems handled instructions through rigid steps: matching exact words, filling forms, simple if-then checklists. These systems worked for narrow domains with controlled vocabularies but broke on natural language variation. ``Find cases on personal jurisdiction'' and ``What's the law on where you can sue someone?'' express similar meanings but look nothing alike to a keyword matcher.
 
 \begin{definitionbox}[title={Intent}]
-\keyterm{Intent} is the underlying purpose, constraints, and success criteria behind an instruction. Intent captures what the user actually wants---not just what they said. Where an instruction might be ``review this credit agreement,'' the intent might be ``identify material risks to the lender by tomorrow for the partner's client call.''
+\keyterm{Intent} is the underlying purpose, constraints, and success criteria behind an instruction. Intent captures the human meaning---what the user actually wants, not just what they said. Where an instruction might be ``review this credit agreement,'' the intent might be ``identify material risks to the lender by tomorrow for the partner's client call.''
 \end{definitionbox}
 
 The gap between instruction and intent has always existed; what has changed is our ability to bridge it. Large language models dramatically improved intent inference from natural language. Where rule-based systems required exact matches, LLMs handle variation, implicit context, and domain-specific jargon. Modern LLMs excel at handling noisy input (misspellings, shorthand, tangential information), resolving references using conversational context, inferring domain-specific meaning, and detecting implicit constraints that professionals take for granted.
@@ -36,7 +36,7 @@ The gap between instruction and intent has always existed; what has changed is o
 Despite these capabilities, intent understanding remains imperfect. As conversations extend, LLMs may lose track of earlier context or constraints. When clarification is needed, LLMs sometimes proceed with a default interpretation rather than asking, resulting in a ``helpful but wrong'' failure: the agent does \textit{something} reasonable rather than confirming it understood correctly. Professionals also communicate through implication. Phrases like ``This needs to be right'' signal high stakes, while ``When you get a chance'' signals low urgency. These signals may not be explicitly parsed by current models.
 
 \begin{definitionbox}[title={Goal}]
-A \keyterm{goal} is the desired end state that intent points toward---the outcome that would satisfy the request. Goals connect to the GPA framework introduced in the previous chapter: an agent pursues goals through perception and action. Where intent is ``identify material risks to the lender by tomorrow,'' the goal is ``produce a lender-risk memo that meets firm policy and is ready for partner review.''
+A \keyterm{goal} is the machine-readable specification that intent points toward---the structured outcome that would satisfy the request. Goals connect to the GPA+IAT framework introduced in the previous chapter: an agent pursues goals through perception and action. Where intent is ``identify material risks to the lender by tomorrow,'' the goal is ``produce a lender-risk memo that meets firm policy and is ready for partner review.''
 \end{definitionbox}
 
 Goals provide the target for planning and the criterion for termination. An agent that understands the goal can determine whether its work is complete: does this memo identify the material risks? Does it meet firm standards? Is it ready for the partner? Without a clear goal, the agent cannot know when to stop---the ``runaway associate'' problem of endless research without a deliverable.
@@ -56,19 +56,19 @@ The flow from instruction to task is: \textbf{Instruction} $\rightarrow$ \textbf
 \subsection{Bridging the Gap}
 \label{sec:agents2-from-instruction-to-intent}
 
-Traditional enterprise systems handled work classification through explicit \keyterm{routing rules}---deterministic logic that examined message attributes and dispatched to appropriate handlers. A court filing notification with \texttt{matter\_id=12345} routes to the litigation system; an SEC filing by a portfolio company routes to the monitoring system. This pattern dominated middleware architecture for decades: message queues, enterprise service buses, workflow engines.
+Traditional enterprise systems classified work using explicit \keyterm{routing rules}: fixed logic that checked message details and forwarded them to the right handler. A court filing tagged \texttt{matter\_id=12345} goes straight to litigation monitoring; a portfolio company's SEC filing routes to compliance review. This pattern dominated middleware architecture for decades: message queues, \keyterm{enterprise service buses (ESBs)}, and workflow engines functioned like a mailroom sorting notices to the right department.
 
-LLM-based agentic systems collapse routing into reasoning. Rather than maintaining explicit rules for every event type, the model \textit{understands} what kind of work this is. ``Review this credit agreement'' and ``Check this loan doc for problems'' express similar intents despite different words; the LLM recognizes both as document review tasks without explicit rules mapping each phrase to a handler.
+LLM-based agentic systems replace explicit routing logic with semantic reasoning. Rather than maintaining explicit rules for every event type, the model \textit{understands} what kind of work this is. ``Review this credit agreement'' and ``Check this loan doc for problems'' express similar intents despite different words; the LLM recognizes both as document review tasks without explicit rules mapping each phrase to a handler.
 
-This architectural shift has significant implications for system design:
+This architectural shift creates two primary tensions in system design.
 
-The first tension is between flexibility and predictability. Rule-based routing is deterministic: the same input always produces the same classification. LLM-based classification is probabilistic and may vary with model updates, prompt phrasing, or context. For regulated applications, this requires additional governance through logging classifications, monitoring for drift, and maintaining override rules for critical categories.
+The first tension is between flexibility and predictability. Rule-based routing is deterministic: the same input always produces the same classification. LLM-based classification relies on likelihoods and may shift slightly with model updates, prompt phrasing, or context. For regulated applications, this requires additional governance through logging classifications, monitoring for drift, and maintaining override rules for critical categories.
 
-The second tension involves explicit versus implicit knowledge. Routing rules encode domain knowledge explicitly in code, requiring developers to anticipate every category and write rules to match. LLM classification absorbs domain knowledge implicitly through training, recognizing that legal research and case analysis are related without explicit rules. But implicit knowledge is harder to audit and may reflect training biases.
+The second tension involves explicit versus implicit knowledge. Routing rules encode domain knowledge explicitly in code, requiring developers to anticipate every category and write rules to match. LLM classification absorbs domain knowledge implicitly through training, recognizing that legal research and case analysis are related without explicit rules. But implicit knowledge is harder to audit because there is no specific rule to inspect, and it may reflect training biases.
 
 Production systems often combine both patterns. Simple, high-volume, time-sensitive classifications use deterministic rules, so a margin call always routes to the trading desk. Complex, ambiguous, or novel requests use LLM reasoning. The rule-based layer handles predictable cases efficiently while the LLM layer handles everything else.
 
-For architects evaluating agentic systems: where must classification be deterministic (regulatory requirements, latency constraints, auditability)? Where does flexibility justify the overhead of LLM reasoning? The answer shapes system design.
+For architects evaluating agentic systems: where must classification be deterministic (regulatory requirements, latency/speed constraints, auditability)? Where does flexibility justify the overhead of LLM reasoning? The answer shapes system design.
 
 \begin{keybox}[title={Intent Inference Is Not Mind Reading}, breakable=false]
 LLMs infer \textit{probable} intent from language patterns; they do not read minds. Inference fails when:
@@ -95,11 +95,11 @@ Once the agent receives an instruction, it must extract structured goals that ca
 The first step, intent classification, translates the instruction into task types that determine workflow. This step converts raw words into candidate tasks that can advance the underlying goal:
 
 \begin{itemize}[nosep]
-\item \textbf{Information retrieval}: ``What's the current NAV?'' ``Find the latest 10-K''
-\item \textbf{Research and analysis}: ``Research whether we can pierce the corporate veil''
+\item \textbf{Information retrieval}: ``What's the current NAV (Net Asset Value)?'' ``Find the latest 10-K''
+\item \textbf{Research and analysis}: ``Research whether we can pierce the corporate veil (hold shareholders liable)''
 \item \textbf{Document review}: ``Review the acquisition agreement for change-of-control provisions''
 \item \textbf{Document generation}: ``Draft an engagement letter for the Smith matter''
-\item \textbf{Calculation}: ``Calculate the IRR assuming a 5-year hold''
+\item \textbf{Calculation}: ``Calculate the IRR (Internal Rate of Return) assuming a 5-year hold''
 \item \textbf{Monitoring}: ``Alert me if tech exposure exceeds 30\%''
 \end{itemize}
 
@@ -191,7 +191,7 @@ Agents must infer these constraints from context, domain knowledge, and organiza
 
 Before executing, agents should validate their understanding of intent. Several patterns support this validation.
 
-Reflection and summarization involves the agent restating its understanding before proceeding, giving the user an opportunity to correct misunderstandings before work begins. Chunked validation breaks complex tasks into phases rather than validating all at once. After completing research, the agent summarizes findings and confirms direction before drafting. After drafting, it confirms the approach before finalizing. Each checkpoint prevents error propagation.
+\keyterm{reflection} and summarization involve the agent pausing—much like an associate double-checking their notes—to restate its understanding before proceeding, giving the user an opportunity to correct misunderstandings before work begins. \keyterm{chunked validation}, like partner check-ins after each memo section, breaks complex tasks into phases rather than validating all at once. After completing research, the agent summarizes findings and confirms direction before drafting. After drafting, it confirms the approach before finalizing. Each checkpoint prevents error propagation.
 
 Confidence signaling requires the agent to indicate how confident it is in its own understanding. When confidence is high, the agent can proceed with light oversight; when confidence is low, the right move is to pause and ask for clarification rather than press ahead. Clear confidence signaling helps users decide how much review is needed and whether to treat the output as a draft, a starting point, or a near-final product.
 
@@ -214,7 +214,7 @@ Consider how intent extraction and validation work together for a legal task. Gi
 
 The agent validates: ``I'll prepare a memo identifying material risks to the lender, comparing key terms to market standards, and recommending negotiation points. I'll have a draft for your review by tomorrow afternoon.''
 
-The same pattern applies to financial tasks. Given the instruction ``Rebalance to reduce tech exposure,'' the agent classifies this as a portfolio action task and immediately detects multiple ambiguities: how much reduction? through what mechanism? with what constraints? Context gathering reveals current tech exposure at 35\% against a 25\% target. Through clarification dialogue, the agent confirms the user wants to reach target through sales while minimizing tax impact (preferring loss harvesting and long-term gains over short-term).
+The same pattern applies to financial tasks. Given the instruction ``Rebalance to reduce tech exposure,'' the agent classifies this as a portfolio action task and immediately detects multiple ambiguities: how much reduction? through what mechanism? with what constraints? Context gathering reveals current tech exposure at 35\% against a 25\% target. Through clarification dialogue, the agent confirms the user wants to reach target through sales while minimizing tax impact (preferring loss harvesting—selling assets at a loss to offset gains—and long-term gains over short-term).
 
 \begin{highlightbox}[title={Extracted Goal: Portfolio Rebalancing}]
 \small
@@ -225,7 +225,7 @@ The same pattern applies to financial tasks. Given the instruction ``Rebalance t
 \textbf{Mechanism} & Sales \\[0.3em]
 \textbf{Constraints} & \\
 \quad \textbullet & Tax optimization enabled \\
-\quad \textbullet & Prefer loss harvesting \\[0.3em]
+\quad \textbullet & Prefer loss harvesting (offset gains) \\[0.3em]
 \textbf{Approval required} & Yes \\
 \end{tabular}
 \end{highlightbox}

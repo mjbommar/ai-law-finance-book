@@ -13,9 +13,9 @@
 
 The previous sections examined each of the ten questions in isolation. This section shows how they work together in complete deployments. Two reference architectures demonstrate the full framework while honestly acknowledging current limitations: one legal, one financial.
 
-\begin{highlightbox}[title={Reference Architectures, Not Production Claims}]
+\begin{keybox}[title={Reference Architectures, Not Production Claims}]
 These architectures illustrate how components fit together as \textit{design targets}, not claims about current reliability. The reliability cliff (\Cref{sec:agents2-reliability}) constrains what agentic systems achieve today; these multi-hour workflows require extensive human oversight. Read as ``how you would design it'' not ``how it works today.''
-\end{highlightbox}
+\end{keybox}
 
 % ----------------------------------------------------------------------------
 % Case Study 1: Credit Facility Review
@@ -28,48 +28,40 @@ A corporate client is borrowing \$500 million under a senior secured revolving c
 
 This is a document review task that would traditionally require 8--12 hours of senior associate time. The goal is not to replace the associate but to accelerate the review and ensure comprehensive coverage. The ten-question framework guides every design choice.
 
-\textbf{Q1 (Triggers)}: Work enters via document upload to the deal room and partner assignment through the matter management system. The trigger is explicit: new document plus assignment.
+\textbf{Q1 (Triggers):} Work enters via document upload to the deal room and partner assignment. The trigger is explicit: new document plus assignment.
 
-\textbf{Q2 (Intent)}: The agentic system extracts intent: document review task, borrower perspective, focus on material deviations from market and template. Implicit constraints include confidentiality (privileged work product) and deadline (closing in two weeks).
+\textbf{Q2 (Intent):} The agent extracts intent: document review task, borrower perspective, focus on material deviations. Implicit constraints include confidentiality (privileged work product) and deadline (closing in two weeks).
 
-\textbf{Q3 (Perception)}: The agentic system uses MCP Resources to access the draft agreement (document management), the firm's template facility agreement (precedent database), and market terms data (external database). Read-only access; no modifications.
+\textbf{Q3 (Perception):} The agent uses MCP Resources to access the draft agreement (document management), the firm's template (precedent database), and market terms data (external database). Access is read-only.
 
-\textbf{Q4 (Action)}: Action tools are limited to document annotation (internal markup) and memo generation (work product creation). No external actions: filing, communication, or execution.
+\textbf{Q4 (Action):} Action tools are limited to document annotation (internal markup) and memo generation (work product creation). No external actions like filing or communication are permitted.
 
-\textbf{Q5 (Memory)}: Episodic memory tracks analysis progress (which sections reviewed, what issues identified). RAG provides access to prior credit agreement memos and deal histories. Matter isolation ensures this work doesn't access unrelated client information.
+\textbf{Q5 (Memory):} Episodic memory tracks analysis progress (sections reviewed, issues identified). RAG provides access to prior credit agreement memos. Matter isolation ensures this work doesn't access unrelated client information.
 
-\textbf{Q6 (Planning)}: Plan-Execute pattern. The agentic system creates a section-by-section review plan based on the table of contents. Systematic execution through financial covenants, events of default, representations, conditions precedent.
+\textbf{Q6 (Planning):} Plan-Execute pattern. The agent creates a section-by-section review plan based on the table of contents. It executes systematically through financial covenants, events of default, and representations.
 
-\textbf{Q7 (Termination)}: Success criteria: all material sections reviewed, issues identified and categorized, draft memo produced. Budget: token limit, time limit, iteration limit. Checkpoint after initial scan to confirm scope.
+\textbf{Q7 (Termination):} Success criteria: all material sections reviewed, issues identified, draft memo produced. Budget: token limit, time limit, iteration limit. Checkpoint after initial scan to confirm scope.
 
-\textbf{Q8 (Escalation)}: Escalate on: ambiguous provisions requiring legal judgment, potential conflicts with other client matters, issues that might affect deal viability. Human-as-tool pattern for partner input on materiality thresholds.
+\textbf{Q8 (Escalation):} Escalate on ambiguous provisions requiring legal judgment, potential conflicts, or issues affecting deal viability. Use the Human-as-Tool pattern for partner input on materiality thresholds.
 
-\textbf{Q9 (Delegation)}: Single-agent architecture for this task. Multi-agent would be appropriate if combined with separate research (legal issues) or financial modeling (covenant analysis) workstreams.
+\textbf{Q9 (Delegation):} Single-agent architecture. Multi-agent would be appropriate if combined with separate research or financial modeling workstreams.
 
-\textbf{Q10 (Governance)}: Audit logging of all document access and analysis steps. Privilege protection enforced. Work product clearly marked as AI-assisted for attorney review.
+\textbf{Q10 (Governance):} Audit logging of all document access and analysis steps. Privilege protection enforced. Work product clearly marked as AI-assisted for attorney review.
 
-The agentic system proceeds systematically through the review process:
-
+The agent proceeds systematically:
 \begin{enumerate}[nosep]
-\item Partner assigns matter; agentic system receives trigger
-\item Agentic system retrieves credit agreement, template, market terms
-\item Agentic system creates review plan: 15 sections, estimated analysis per section
-\item Agentic system analyzes Section 1 (Definitions): identifies unusual defined terms, compares to template
-\item Agentic system continues through financial covenants: flags leverage ratio that differs from market
-\item Agentic system reviews events of default: identifies cross-default threshold below typical market terms
-\item ... [continues through all sections]
-\item Agentic system compiles findings into issues list and draft memo
-\item Agentic system presents to associate for review
-\item Associate reviews, adds context, escalates significant issues to partner
+    \item Partner assigns matter; agent receives trigger.
+    \item Agent retrieves credit agreement, template, market terms.
+    \item Agent creates review plan: 15 sections.
+    \item Agent analyzes Section 1 (Definitions): identifies unusual defined terms.
+    \item Agent continues through financial covenants: flags leverage ratio differing from market.
+    \item ... [continues through all sections]
+    \item Agent compiles findings into issues list and draft memo.
+    \item Agent presents to associate for review.
+    \item Associate reviews, adds context, and escalates significant issues to partner.
 \end{enumerate}
 
-Even well-designed agentic systems fail. Understanding failure modes is crucial. The agentic system may miss nuanced definitions where a defined term has been subtly modified from the template in ways that affect covenant calculations. Human review catches subtleties like: ``EBITDA is defined to exclude one-time charges, but the add-back is capped---that's unusual and limits flexibility.''
-
-Cross-document dependencies present another risk. The credit agreement references schedules and exhibits; if the agentic system does not trace these references and analyze the schedules, material issues may be missed. Market context adds complexity because ``market terms'' vary by borrower credit quality, industry, and timing. The agentic system compares to a template, but the template may not reflect current market conditions for this borrower's profile.
-
-The most dangerous failures are omissions: things the agentic system does not flag because it does not recognize their significance. Human expertise identifies gaps like: ``There's no limitation on amendments to subordinated debt---that's a significant gap.''
-
-Mitigation requires checkpoint review after initial scan. The associate reviews agentic system output not just for correctness but for completeness. Partner review of final work product ensures quality. The agentic system accelerates but does not replace human judgment.
+Even well-designed agents fail. The agent may miss nuanced definitions where a term has been subtly modified. Human review catches these subtleties. Cross-document dependencies present another risk; if the agent does not analyze referenced schedules, issues may be missed. The most dangerous failures are omissions. Mitigation requires checkpoint review and partner validation.
 
 % ----------------------------------------------------------------------------
 % Case Study 2: Equity Portfolio Management
@@ -78,53 +70,46 @@ Mitigation requires checkpoint review after initial scan. The associate reviews 
 \subsection{Case Study: Equity Portfolio Management}
 \label{sec:agents2-case-financial}
 
-An investment adviser manages a \$200 million equity portfolio for institutional clients. The portfolio manager wants continuous monitoring with agent assistance for rebalancing analysis, compliance checking, and research synthesis.
+An investment adviser manages a \$200 million equity portfolio for institutional clients. The portfolio manager (PM) wants continuous monitoring with agent assistance for rebalancing analysis, compliance checking, and research synthesis.
 
-This is a continuous monitoring and advisory task, not a one-time analysis. The goal is to augment the PM's capacity, not to trade autonomously. The ten-question framework shapes this more complex, multi-agent architecture.
+This is a continuous monitoring task, not a one-time analysis. The goal is augmentation, not autonomous trading. The ten-question framework shapes this multi-agent architecture.
 
-\textbf{Q1 (Triggers)}: Multiple trigger types: market data feeds (price movements, earnings releases), scheduled jobs (daily compliance check, weekly rebalancing analysis), human prompts (PM requests analysis), escalation events (position approaching limits).
+\textbf{Q1 (Triggers):} Multiple triggers: market data feeds (price movements), scheduled jobs (daily compliance check), human prompts (PM requests), and escalation events (limit breaches).
 
-\textbf{Q2 (Intent)}: Intent varies by trigger. Price alert: assess significance and recommend action. Scheduled rebalance: generate trade list if allocations drift beyond thresholds. PM query: answer specific question about position or strategy.
+\textbf{Q2 (Intent):} Varies by trigger. Price alert: assess significance. Scheduled rebalance: generate trade list if needed. PM query: answer specific question.
 
-\textbf{Q3 (Perception)}: MCP Resources access market data (prices, fundamentals), portfolio data (positions, P\&L), research (analyst reports, news), and compliance data (client guidelines, regulatory limits). Read-only access to trading systems.
+\textbf{Q3 (Perception):} MCP Resources access market data, portfolio data, research, and compliance data. Read-only access to trading systems.
 
-\textbf{Q4 (Action)}: The agentic system can generate recommendations and create reports. Trade execution requires PM approval---the execution action tool is behind an approval gate. No autonomous trading.
+\textbf{Q4 (Action):} The agent generates recommendations and reports. Trade execution requires PM approval (approval gate). No autonomous trading.
 
-\textbf{Q5 (Memory)}: Episodic memory tracks recent analysis, PM decisions, and rationales. RAG accesses investment research archive. Client isolation ensures each client's portfolio data is segregated.
+\textbf{Q5 (Memory):} Episodic memory tracks recent analysis and PM decisions. RAG accesses research archive. Client isolation ensures segregation.
 
-\textbf{Q6 (Planning)}: ReAct pattern for ad hoc analysis (exploratory). Plan-Execute for scheduled tasks (systematic). Hierarchical for comprehensive reviews (decompose to specialists).
+\textbf{Q6 (Planning):} ReAct pattern for ad hoc analysis. Plan-Execute for scheduled tasks. Hierarchical for comprehensive reviews.
 
-\textbf{Q7 (Termination)}: Varies by task. Monitoring: continuous (no termination). Analysis: complete when question answered. Rebalancing: complete when trade list generated and approved.
+\textbf{Q7 (Termination):} Monitoring is continuous. Analysis completes when the question is answered. Rebalancing completes when the trade list is generated and approved.
 
-\textbf{Q8 (Escalation)}: Escalate on: positions approaching limits, unusual market conditions, conflicting signals, any trade recommendation (PM approval required). Risk management escalation path for limit breaches.
+\textbf{Q8 (Escalation):} Escalate on positions approaching limits, unusual market conditions, conflicting signals, or any trade recommendation.
 
-\textbf{Q9 (Delegation)}: Multi-agent architecture. Monitoring agent watches market data. Research agent synthesizes analyst reports. Compliance agent checks guidelines. Rebalancing agent generates trade recommendations. PM agent orchestrates and presents to human PM.
+\textbf{Q9 (Delegation):} Multi-agent architecture. Monitoring Agent watches market data. Research Agent synthesizes reports. Compliance Agent checks guidelines. Rebalancing Agent generates recommendations. PM Agent orchestrates.
 
-\textbf{Q10 (Governance)}: Comprehensive audit trail. Fiduciary duty documentation (rationale for recommendations). Compliance monitoring. MNPI controls (no access to deal team information).
+\textbf{Q10 (Governance):} Comprehensive audit trail. Fiduciary duty documentation. Compliance monitoring. MNPI controls.
 
-Multiple agents coordinate to generate and validate recommendations:
-
+Multiple agents coordinate:
 \begin{enumerate}[nosep]
-\item Monitoring agent detects: ``Tech sector up 3\% today; portfolio tech allocation now 35\% vs. 25\% target''
-\item Monitoring agent triggers Rebalancing agent
-\item Rebalancing agent queries current positions (MCP)
-\item Rebalancing agent generates trade options: sell \$20M tech, options include [specific positions]
-\item Rebalancing agent queries Compliance agent: ``Check proposed trades against guidelines''
-\item Compliance agent confirms: trades within limits, no restricted securities
-\item Rebalancing agent queries Research agent: ``Any recent negative research on proposed sales?''
-\item Research agent returns: ``No material negative research; one position has earnings next week''
-\item Rebalancing agent adjusts: defer one sale until after earnings
-\item Rebalancing agent presents recommendation to PM agent
-\item PM agent formats for human review, highlights key considerations
-\item Human PM reviews, approves (or modifies), authorizes execution
-\item Execution agent (with PM approval) places orders via OMS
+    \item Monitoring Agent detects: ``Tech sector up 3\%; allocation 35\% vs 25\% target.''
+    \item Monitoring Agent triggers Rebalancing Agent.
+    \item Rebalancing Agent queries Compliance Agent: ``Check proposed sales against guidelines.''
+    \item Compliance Agent confirms: trades within limits.
+    \item Rebalancing Agent queries Research Agent: ``Any negative research?''
+    \item Research Agent returns: ``One position has earnings next week.''
+    \item Rebalancing Agent adjusts: defer that sale.
+    \item Rebalancing Agent presents recommendation to PM Agent.
+    \item PM Agent formats for human review.
+    \item Human PM reviews, approves, and authorizes execution.
+    \item Execution Agent places orders via OMS.
 \end{enumerate}
 
-Coordination introduces additional failure vectors beyond single-agent systems.
-
-Cascading errors occur when the Monitoring agent misinterprets data, the Rebalancing agent acts on a bad signal, and trades are recommended that should not be. Mitigation requires validation at each handoff and sanity checks on data before acting. Coordination overhead presents a different challenge: communication between agents consumes tokens and time, so for simple decisions, the overhead may exceed the value. Monitor coordination costs and simplify the architecture when overhead dominates.
-
-Debugging complexity increases with multi-agent systems. When recommendations are wrong, tracing the error through multiple agents is difficult. Mitigation requires comprehensive logging, clear attribution at each step, and replay capability. Agent disagreement occurs when the Research agent sees a positive signal while the Risk agent sees a negative one. Clear escalation protocols determine what happens when agents conflict; humans resolve material disagreements.
+Coordination introduces failure vectors. Cascading errors occur if the Monitoring Agent misinterprets data. Debugging complexity increases with multiple agents. Mitigation requires comprehensive logging and clear escalation protocols.
 
 % ----------------------------------------------------------------------------
 % Synthesis Principles
@@ -133,21 +118,25 @@ Debugging complexity increases with multi-agent systems. When recommendations ar
 \subsection{Synthesis: Principles Across Domains}
 \label{sec:agents2-synthesis-principles}
 
-Both case studies illustrate common principles that apply across legal and financial agent deployments.
+Both case studies illustrate common principles:
 
-Decomposition is essential. Neither workflow attempts end-to-end autonomous completion. The credit facility review breaks into 15 section-by-section analyses rather than attempting one pass; the portfolio rebalancing separates constraint checking from trade generation from execution. Tasks are decomposed into manageable steps with human checkpoints.
+\textbf{Decomposition is essential.} Neither workflow attempts end-to-end autonomous completion. Tasks are broken into manageable steps with human checkpoints.
 
-Human-in-the-loop oversight is the norm. Both architectures assume human oversight at critical junctures: attorney review of legal analysis before client delivery, PM approval of trade recommendations before execution. Agents augment professional judgment; they do not replace it.
+\textbf{Human-in-the-loop oversight is the norm.} Attorney review and PM approval are structural requirements. Agents augment professional judgment; they do not replace it.
 
-Memory enables continuity. Both rely on episodic memory (what happened in this session) and RAG (institutional knowledge). The legal agentic system retrieves prior firm precedent on similar provisions; the financial agentic system accesses historical rebalancing decisions. Without memory, every interaction starts fresh.
+\textbf{Memory enables continuity.} Both rely on episodic memory and RAG. Without memory, every interaction starts fresh.
 
-Isolation is non-negotiable. Matter isolation (legal) and client isolation (financial) are architectural requirements, not optional features. The agentic system working on Company A's financing cannot access Company B's confidential terms, even if both are firm clients.
+\textbf{Isolation is non-negotiable.} Matter isolation (legal) and client isolation (financial) are architectural requirements.
 
-Failure modes are predictable. The same failure patterns appear in both domains: nuanced judgment that exceeds current capabilities, omissions where agentic systems miss non-obvious issues, and cascading errors where early mistakes propagate through analysis. Design for these failures explicitly.
+\textbf{Failure modes are predictable.} Nuanced judgment failures, omissions, and cascading errors appear in both domains. Design for these failures explicitly.
 
-Governance is pervasive. Every architectural choice has governance implications. Audit trails document what the agentic system accessed and concluded; approval gates ensure human review before irreversible actions; escalation paths route uncertainty to appropriate decision-makers. These reference architectures establish the \textit{capability} foundations; the following chapter---\textit{How to Govern an Agent}---provides the \textit{control} frameworks: the five-layer governance stack, dimensional calibration, regulatory compliance structures, and accountability mechanisms required for deployment in regulated industries.
+\textbf{Governance is pervasive.} Every architectural choice has governance implications. Audit trails, approval gates, and escalation paths are foundational.
 
-Current limitations are real. Neither architecture claims autonomous completion of multi-hour tasks. The reliability cliff constrains what these agentic systems can do today; design accordingly.
+\textbf{Expectation setting is part of the work.} In regulated professional services, it is not enough for an agent to be helpful; stakeholders must understand what it did, what it did not do, and what remains uncertain. Treat this as a deliverable requirement: outputs should clearly state scope, as-of dates, sources accessed, and any confidence caveats. Where outputs may be relied on externally (clients, counterparties, regulators), require explicit human review and use the system's logs to support disclosure and defensible documentation.
+
+\textbf{The reliability cliff remains binding.} Even well-designed systems degrade sharply as tasks extend from minutes to hours (\Cref{sec:agents2-reliability}). Architect for short, check-pointed work with graceful partial completion and escalation, not for uninterrupted autonomy.
+
+Chapter~8 (Agents Part III: Governing Agents) takes these themes from principles to controls: how to calibrate control intensity, implement audit and retention, and define accountability and disclosure practices that match professional obligations.
 
 % ----------------------------------------------------------------------------
 % Framework Completion
@@ -158,28 +147,19 @@ Current limitations are real. Neither architecture claims autonomous completion 
 
 Before deploying any agentic system, verify that all ten questions have been answered:
 
-\begin{highlightbox}[title={Ten-Question Deployment Checklist}, breakable=false]
+\begin{keybox}[title={Ten-Question Deployment Checklist}, breakable=false]
 \begin{enumerate}[nosep]
-\item[$\square$] \textbf{Triggers}: How does work enter? Are all trigger types covered? Is there audit logging?
-
-\item[$\square$] \textbf{Intent}: How is intent extracted? What happens with ambiguity? Are constraints identified?
-
-\item[$\square$] \textbf{Perception}: What tools provide information? Is access properly controlled? Is provenance tracked?
-
-\item[$\square$] \textbf{Action}: What can the agentic system do? Are irreversible actions gated? Is rollback possible?
-
-\item[$\square$] \textbf{Memory}: What persists across sessions? Is isolation enforced? What are retention policies?
-
-\item[$\square$] \textbf{Planning}: What pattern applies? Are budgets enforced? Is there loop detection?
-
-\item[$\square$] \textbf{Termination}: How does the agentic system know when it's done? What are success criteria? How does it handle failure?
-
-\item[$\square$] \textbf{Escalation}: When does the agentic system ask for help? Who receives escalations? Is context sufficient?
-
-\item[$\square$] \textbf{Delegation}: Does it coordinate with other agents? Are protocols standardized? Are barriers enforced?
-
-\item[$\square$] \textbf{Governance}: Are security controls implemented? Is there audit capability? Are professional duties met?
+\item[$\square$] \textbf{Triggers:} How does work enter? Are all trigger types covered? Is there audit logging?
+\item[$\square$] \textbf{Intent:} How is intent extracted? What happens with ambiguity? Are constraints identified?
+\item[$\square$] \textbf{Perception:} What tools provide information? Is access controlled? Is provenance tracked?
+\item[$\square$] \textbf{Action:} What can the agent do? Are irreversible actions gated? Is rollback possible?
+\item[$\square$] \textbf{Memory:} What persists? Is isolation enforced? What are retention policies?
+\item[$\square$] \textbf{Planning:} What pattern applies? Are budgets enforced? Is there loop detection?
+\item[$\square$] \textbf{Termination:} How does it know when it's done? What are success criteria?
+\item[$\square$] \textbf{Escalation:} When does it ask for help? Who receives escalations? Is context sufficient?
+\item[$\square$] \textbf{Delegation:} Does it coordinate? Are protocols standardized? Are barriers enforced?
+\item[$\square$] \textbf{Governance:} Are security controls implemented? Is there audit capability?
 \end{enumerate}
-\end{highlightbox}
+\end{keybox}
 
 Any question left unanswered represents a gap in the architecture that will manifest as a failure in production.
