@@ -45,13 +45,7 @@ These benefits come with tradeoffs: coordination overhead increases communicatio
 \subsection{Agent-to-Agent Protocol (A2A)}
 \label{sec:agents2-a2a}
 
-Just as MCP standardizes how agents access tools and data (see \Cref{sec:agents2-mcp-perception}), the Agent-to-Agent Protocol (A2A) standardizes how agents delegate work to each other \parencite{google-a2a,anthropic-mcp}. The distinction is straightforward: MCP handles agent-to-tool communication, A2A handles agent-to-agent coordination.
-
-A2A uses familiar professional concepts. \textbf{Agent Cards} function as capability statements---digital résumés listing expertise, accepted inputs, and expected outputs. \textbf{Tasks} are units of delegated work, analogous to engagement letters, that specify scope, constraints, and deadlines. \textbf{Artifacts} are deliverables returned upon completion: memos, analyses, or structured data. And \textbf{Channels} provide communication streams for status updates and clarification during execution.
-
-\begin{keybox}[title={Delegation Lifecycle}]
-The A2A task lifecycle mirrors professional delegation: (1) \textit{discovery}---finding the right specialist via Agent Card, like identifying co-counsel with relevant expertise; (2) \textit{delegation}---creating a Task with goals and constraints, like drafting an engagement letter; (3) \textit{execution}---the specialist works independently, requesting clarification if needed; (4) \textit{delivery}---the specialist returns Artifacts; and (5) \textit{completion}---the coordinator reviews and approves the work. This structure ensures that delegated work is scoped, tracked, and auditable.
-\end{keybox}
+Just as MCP standardizes how agents access tools (\Cref{sec:agents2-mcp-perception}), the Agent-to-Agent Protocol (A2A) standardizes how agents delegate work to each other \parencite{google-a2a}. A2A uses familiar professional concepts: \textbf{Agent Cards} list capabilities (like a specialist's credentials), \textbf{Tasks} define delegated work (like engagement letters specifying scope and constraints), and \textbf{Artifacts} are deliverables returned upon completion. The lifecycle mirrors professional delegation: discovery (finding the right specialist), delegation (scoping the work), execution, delivery, and completion. This structure ensures delegated work is scoped, tracked, and auditable.
 
 % ----------------------------------------------------------------------------
 % Multi-Agent Patterns
@@ -81,11 +75,8 @@ Consider M\&A due diligence as an example. The Orchestrator delegates to special
 \subsection{Multi-Agent Workflow Examples}
 \label{sec:agents2-workflows}
 
-\paragraph{Legal: Regulatory Assessment}
-A fintech company asks about regulatory approvals for a new product. The Orchestrator decomposes the request across four specialists working in parallel. A \textbf{Securities Agent} analyzes SEC guidance and identifies potential registration requirements. A \textbf{Banking Agent} checks OCC and FDIC rules, flagging money transmitter licensing needs. A \textbf{Consumer Agent} reviews CFPB regulations and highlights disclosure requirements. An \textbf{AML Agent} analyzes Bank Secrecy Act obligations and determines KYC needs. Each specialist accesses relevant regulatory databases through the tool integrations discussed in \Cref{sec:agents2-mcp-perception}. The Orchestrator synthesizes these parallel findings into a prioritized regulatory roadmap, identifying which approvals are prerequisites for others.
-
-\paragraph{Finance: Block Trade Execution}
-A portfolio manager requests a \$50M block trade. The Orchestrator coordinates four specialists with different responsibilities. A \textbf{Market Agent} analyzes liquidity conditions and recommends VWAP execution over two days to minimize market impact. A \textbf{Compliance Agent} verifies position limits and notes 13F reporting requirements. A \textbf{Risk Agent} assesses portfolio impact, confirming that the trade keeps exposure within policy bounds. An \textbf{Execution Agent} interfaces with the order management system to place and monitor orders. The Orchestrator tracks progress across all specialists, escalating if any specialist encounters problems that require human judgment (see \Cref{sec:agents2-escalation}).
+\paragraph{Example: Regulatory Assessment for Financial Product Launch}
+A fintech company asks about regulatory approvals for a new product---a scenario that spans both legal and financial domains. The Orchestrator decomposes the request across four specialists working in parallel. A \textbf{Securities Agent} analyzes SEC guidance and identifies potential registration requirements. A \textbf{Banking Agent} checks OCC and FDIC rules, flagging money transmitter licensing needs. A \textbf{Consumer Agent} reviews CFPB regulations and highlights disclosure requirements. An \textbf{AML Agent} analyzes Bank Secrecy Act obligations and determines KYC needs. Each specialist accesses relevant regulatory databases through the tool integrations discussed in \Cref{sec:agents2-mcp-perception}. The Orchestrator synthesizes these parallel findings into a prioritized regulatory roadmap, identifying which approvals are prerequisites for others, and escalates if any specialist encounters problems requiring human judgment (see \Cref{sec:agents2-escalation}).
 
 % ----------------------------------------------------------------------------
 % Multi-Agent Risks
@@ -94,11 +85,9 @@ A portfolio manager requests a \$50M block trade. The Orchestrator coordinates f
 \subsection{Multi-Agent Risks}
 \label{sec:agents2-coordination-failures}
 
-Multi-agent systems introduce failure modes beyond those of single-agent systems \parencite{cemri2025multiagentfail}.
+Multi-agent systems introduce failure modes beyond single-agent systems \parencite{cemri2025multiagentfail}. \textbf{Coordination failures} include deadlock (agents waiting cyclically), divergence (incompatible conclusions requiring reconciliation), and cascading errors (incorrect output propagating through the system). Prevention requires timeouts, validation at handoffs, and clear escalation paths.
 
-\textbf{Coordination failures} manifest in three primary ways. \textit{Deadlock} occurs when agents wait cyclically for each other---Agent A waits for B, B waits for C, and C waits for A---requiring timeouts and dependency analysis to prevent. \textit{Divergence} results when specialists reach incompatible conclusions, such as conflicting legal interpretations or inconsistent financial projections; the orchestrator must reconcile these differences or escalate to human judgment. \textit{Cascading errors} propagate when incorrect output from one specialist becomes flawed input for another, compounding the original mistake; prevention requires validation at each handoff, applying the input validation principles discussed in \Cref{sec:agents2-action-security}.
-
-\textbf{Security risks} in multi-agent systems require the same rigor applied to human teams \parencite{openid-ai-identity-2024}. Agents must have verifiable, auditable identities to prevent impersonation and enable compliance tracking. Access policies must restrict which agents can delegate to whom, preventing unauthorized capability escalation. Ethical walls must enforce conflict rules across agent boundaries just as they do across human teams---an agent working on one side of a transaction cannot delegate to specialists with access to the other side's confidential information. And every delegation must be logged (who delegated, what was delegated, when, and with what result) to support the audit requirements discussed in \Cref{sec:agents2-memory-isolation}.
+\textbf{Security risks} require the same rigor applied to human teams: verifiable agent identities, access policies restricting delegation authority, ethical walls enforced across agent boundaries (an agent on one side of a transaction cannot delegate to specialists with access to the other side's confidential information), and complete delegation logging for audit \parencite{openid-ai-identity-2024}.
 
 % ----------------------------------------------------------------------------
 % Protocol Selection

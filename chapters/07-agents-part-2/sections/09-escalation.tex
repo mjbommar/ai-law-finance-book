@@ -45,39 +45,11 @@ Three categories of triggers warrant escalation, each reflecting a different rea
 
 Effective escalation provides the human with everything needed to make a decision without starting from scratch. The difference between good and poor escalation is the difference between receiving a well-organized file from a colleague and inheriting an unexplained mess.
 
-A complete handoff weaves together five elements. The \textbf{situation summary} orients the human quickly: what is the matter, what was the agent trying to accomplish, and why does it matter? The \textbf{progress report} explains what has been done and what remains, so the human understands where in the workflow the escalation occurred. The \textbf{trigger explanation} clarifies why the agent is escalating \textit{now}---what specific condition or finding prompted the handoff. The \textbf{gathered information} presents the relevant findings, even if partial or uncertain; the agent should not withhold work product just because it is incomplete. Finally, the \textbf{recommendation} proposes a path forward with supporting reasoning, giving the human a starting point for their decision rather than a blank slate.
+A complete handoff weaves together five elements: a \textbf{situation summary} that orients the human quickly; a \textbf{progress report} explaining what has been done and what remains; a \textbf{trigger explanation} clarifying why the agent is escalating \textit{now}; the \textbf{gathered information} presenting relevant findings even if partial; and a \textbf{recommendation} proposing a path forward with supporting reasoning.
 
-\paragraph{Example: Legal Research Escalation}
+Consider a legal research agent investigating the statute of limitations for a Section 10(b) securities fraud claim. After searching Westlaw and Lexis, it finds clear authority on the two-year discovery period but conflicting circuit authority on the trigger event---the Ninth and Second Circuits apply different tests for inquiry notice. The agent cannot determine which test applies to the client's facts. Rather than guessing, it escalates with a summary of the key cases, explains the circuit split, and recommends seeking partner guidance because the question is fact-intensive and requires judgment beyond the agent's competence.
 
-\begin{quote}
-	\textbf{Situation}: Researching statute of limitations for Section 10(b) securities fraud claim.
-
-	\textbf{Progress}: Searched Westlaw and Lexis. Found clear authority on the 2-year discovery period but conflicting authority on the trigger event.
-
-	\textbf{Trigger}: Low confidence. The Ninth and Second Circuits apply different tests for inquiry notice. I cannot determine which applies to our facts.
-
-	\textbf{Findings}: [Summary of key cases with citations]
-
-	\textbf{Options}: (a) Apply the conservative test; (b) research district court authority; (c) seek partner guidance on the fact pattern.
-
-	\textbf{Recommendation}: Option (c). The question is fact-intensive, and partner judgment is required.
-\end{quote}
-
-\paragraph{Example: Financial Escalation}
-
-\begin{quote}
-	\textbf{Situation}: Executing rebalancing trades to reduce tech exposure from 35\% to 25\%.
-
-	\textbf{Progress}: Generated trade list. Compliance check passed. Ready to execute.
-
-	\textbf{Trigger}: Trade size (\$500K) exceeds single-approver threshold.
-
-	\textbf{Findings}: Trades realize \$45K in short-term gains and \$12K in losses. Net tax impact: \$8K liability.
-
-	\textbf{Options}: (a) Approve full list; (b) prioritize tax-loss positions; (c) execute in tranches.
-
-	\textbf{Recommendation}: Option (a) if reducing exposure is urgent; Option (b) if tax optimization is priority.
-\end{quote}
+A financial agent faces a different escalation pattern. After generating a trade list to reduce tech exposure from 35\% to 25\%, the agent completes its compliance check and is ready to execute---but the \$500K trade size exceeds the single-approver threshold. The agent escalates with the tax implications (\$45K in short-term gains, \$12K in losses, \$8K net liability), presents options (approve the full list, prioritize tax-loss positions, or execute in tranches), and notes which option serves which priority. The human can approve immediately rather than reconstructing the analysis.
 
 % ----------------------------------------------------------------------------
 % Human-in-the-Loop Patterns
@@ -124,19 +96,7 @@ Regulatory obligations and fiduciary duties impose parallel requirements on fina
 \subsection{Evaluating Escalation Mechanisms}
 \label{sec:agents2-escalation-eval}
 
-Assessing whether escalation mechanisms work correctly requires testing across multiple dimensions, each probing a different failure mode.
-
-\textbf{Coverage} asks whether all situations that \textit{should} trigger escalation actually do. Testing should deliberately construct edge cases: conflicting data that falls just below obvious thresholds, novel situations that differ subtly from training examples, and compound conditions where no single factor would trigger escalation but the combination should. Gaps in coverage mean that situations requiring human judgment will instead receive autonomous action---precisely the failure mode escalation is designed to prevent.
-
-\textbf{Calibration} asks whether thresholds are set correctly. Escalating too aggressively wastes human attention on decisions the agent could handle, eventually training humans to approve without review. Escalating too rarely exposes the organization to risks that should have received oversight. The goal is a calibrated system where escalation signals genuinely require human judgment, maintaining the value of human attention as a scarce resource.
-
-\textbf{Latency} measures whether escalation reaches the human quickly enough to be useful. For time-sensitive matters---a filing deadline approaching, a market moving, a client waiting---escalation that arrives too late is equivalent to no escalation at all. Urgent matters require immediate notification through appropriate channels, not a queue that will be reviewed tomorrow.
-
-\textbf{Routing} ensures escalation reaches the \textit{right} person, not just any person. Legal questions should route to attorneys with relevant expertise; risk limit breaches should reach risk managers with authority to approve exceptions; client-facing decisions should involve relationship managers who understand the context. Misrouted escalation creates delay and frustration while failing to bring appropriate expertise to bear.
-
-\textbf{Context quality} determines whether the human can actually make a decision based on the escalation message alone. If the recipient must investigate from scratch to understand what the agent was doing and why it stopped, the handoff has failed. The escalation should read like a well-prepared briefing, not a cryptic alert requiring interpretation.
-
-\textbf{Response handling} closes the loop by verifying that the agent correctly incorporates human guidance. When the human provides direction---approve this action, reject that recommendation, try a different approach---does the agent actually follow through? Testing should cover the full escalation cycle from trigger through human response through resumed agent action, not just the outbound notification.
+Escalation evaluation requires six assessments: \textit{coverage} (do all situations that should trigger escalation actually do so?), \textit{calibration} (are thresholds set to balance false positives against missed escalations?), \textit{latency} (does escalation reach humans quickly enough for time-sensitive matters?), \textit{routing} (does it reach the right person with relevant expertise?), \textit{context quality} (can the human decide based on the message alone?), and \textit{response handling} (does the agent correctly incorporate human guidance?). See the consolidated Evaluation Checklist in \Cref{sec:agents2-evaluation-checklist}.
 
 % ----------------------------------------------------------------------------
 % Connection to Other Questions

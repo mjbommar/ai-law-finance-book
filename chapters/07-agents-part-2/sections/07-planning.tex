@@ -146,35 +146,16 @@ Understanding how costs compound is essential for realistic budgeting. Ingesting
 
 The economics of agent assistance vary significantly by task type. Retrieval-heavy work like document review often shows clear return on investment: the agent processes material faster and more consistently than a human reviewer, and the cost savings are straightforward to calculate. Judgment-intensive tasks present a more complex picture, since extensive human review of the agent's output may be required, potentially reducing the net benefit. Transparency about AI assistance---as encouraged by recent ethics guidance \parencite{aba-formal-opinion-512}---enables clients to evaluate this value proposition for themselves.
 
-Well-designed agents degrade gracefully as budgets tighten rather than failing abruptly. The key is tiered output that provides value at every resource level. With a minimal budget, the agent might return only the controlling statute. A moderate budget allows it to add key holdings from relevant cases. A full budget enables comprehensive analysis with supporting citations and counterarguments. Soft limits---triggered at perhaps eighty percent of the allocated budget---warn the agent to prioritize completion over thoroughness. Hard limits at one hundred percent terminate execution and return whatever results have been assembled. An agent that delivers useful partial results within budget is far more valuable than one that produces nothing when resources run short.
+Well-designed agents degrade gracefully as budgets tighten rather than failing abruptly. The key is tiered output that provides value at every resource level. With a minimal budget, the agent might return only the controlling statute. A moderate budget allows it to add key holdings from relevant cases. A full budget enables comprehensive analysis with supporting citations and counterarguments. Soft limits---triggered at perhaps eighty percent of the allocated budget---warn the agent to prioritize completion over thoroughness. Hard limits at one hundred percent terminate execution and return whatever results have been assembled. An agent that delivers useful partial results within budget is far more valuable than one that produces nothing when resources run short. When budgets are exhausted, the agent must terminate---see \Cref{sec:agents2-termination} for how termination conditions interact with budget limits.
 
 % ----------------------------------------------------------------------------
-% Knowing When to Stop
+% Knowing When to Stop (Forward Reference)
 % ----------------------------------------------------------------------------
 
-\subsection{Knowing When to Stop}
+\subsection{Stopping Conditions}
 \label{sec:agents2-termination-preview}
 
-Knowing when to stop is among the most critical capabilities a planning system must possess. An agent that cannot recognize completion will either terminate prematurely, leaving work unfinished, or continue indefinitely, consuming resources without adding value. Effective termination requires explicit conditions that the agent can evaluate during execution.
-
-The most straightforward stopping condition is success: the agent has achieved its goal. A research question has been answered with adequate support. A document has been reviewed against all required criteria. A filing has been prepared and validated. Recognition of success requires clear criteria established during the planning phase---without them, the agent cannot distinguish ``done'' from ``still working.''
-
-Resource exhaustion provides a harder boundary. When budgets are depleted---whether measured in tokens, time, tool calls, or dollars---the agent must stop regardless of task completion. The appropriate response depends on what has been accomplished: if meaningful partial results exist, the agent should return them with a clear indication of what remains unfinished. If the task cannot be meaningfully decomposed, escalation to human oversight may be the only viable path.
-
-Confidence thresholds trigger a different kind of stopping. Some tasks push agents into territory where their uncertainty becomes too high for autonomous action. A contract clause may be ambiguous in ways the agent cannot resolve. Contradictory authorities may require judgment the agent cannot reliably provide. When confidence drops below acceptable levels, the appropriate response is not to guess but to route the decision to human review, presenting the relevant information and explaining the source of uncertainty.
-
-Error conditions represent the final category. Repeated failures---a database that consistently times out, an API that returns malformed responses, a reasoning loop that circles without progress---indicate problems that additional attempts will not solve. Recognizing these patterns and stopping gracefully, rather than retrying indefinitely, preserves resources for productive work.
-
-Defining these stopping rules explicitly is essential. The instruction should read like guidance to a junior associate: ``If you find three consistent opinions from controlling jurisdictions, you have enough support---stop searching. If two hours pass without finding relevant authority, escalate to me rather than continuing to search.'' Agents, like associates, benefit from clear expectations about when their work is complete.
-
-% ----------------------------------------------------------------------------
-% Guardrails and Loop Detection
-% ----------------------------------------------------------------------------
-
-\subsection{Guardrails and Loop Detection}
-\label{sec:agents2-guardrails}
-
-Agents can get stuck in loops despite budgets. Mechanisms like step limits, reflection checkpoints, and external watchdogs prevent this. \Cref{sec:agents2-loop-detection} examines these in detail.
+Planning must include stopping conditions. Success criteria, resource limits, and confidence thresholds all determine when an agent should stop. \Cref{sec:agents2-termination} addresses termination in depth; here we note that the planning phase is when these conditions must be defined. A plan without stopping rules is incomplete---the agent will either terminate prematurely or continue indefinitely, consuming resources without adding value.
 
 % ----------------------------------------------------------------------------
 % Connection to Other Questions

@@ -13,11 +13,7 @@
 
 The previous two sections examined how agents gather information (perception) and effect change (action). However, these capabilities operate in the moment: the agent perceives the current state, reasons about it, and acts. Without memory, every interaction resets. The agent cannot recall prior research, successful strategies, or case history. Memory transforms an agent from a stateless tool into a system that learns and adapts.
 
-Every experienced professional knows that institutional memory distinguishes efficient work from reinventing the wheel. When you start a new securities registration, you do not begin from scratch. You pull prior S-1 filings (IPO registrations), review SEC comment history, and check the precedent database for disclosure language. You do not re-research basic questions. The firm maintains templates that incorporate years of accumulated knowledge.
-
-The same principle applies to portfolio management. When you revisit an equity position, you do not rebuild the investment thesis. You retrieve the research file, review prior models, and update assumptions with new data. Accumulated research enables incremental refinement rather than duplicative work.
-
-Memory in agentic systems serves a parallel function: context retention across sessions and learning from experience. With memory, the agent maintains continuity---building on prior work rather than starting over.
+Every experienced professional knows that institutional memory distinguishes efficient work from reinventing the wheel. When starting a new securities registration or revisiting an investment thesis, you do not begin from scratch. You pull prior filings, review comment history, check precedent databases, and update existing models with new data. The firm maintains templates and research files that incorporate years of accumulated knowledge. Memory in agentic systems serves this same function: context retention across sessions and learning from experience, building on prior work rather than starting over.
 
 \begin{definitionbox}[title={Agent Memory}]
 	\keyterm{Agent memory} stores and retrieves information across timescales \parencite{park2023generative,wang2024llmagents}.
@@ -122,15 +118,7 @@ Retention and deletion policies add a temporal dimension to isolation. Organizat
 \subsection{Evaluating Memory Systems}
 \label{sec:agents2-memory-eval}
 
-Evaluating memory systems for professional practice requires metrics that go beyond generic information retrieval benchmarks. The stakes are too high for abstract measurements; testing must reflect the actual demands of legal and financial work.
-
-Retrieval quality remains foundational, but measurement must be grounded in professional standards. The classic metrics of \textit{precision} (what fraction of retrieved documents are actually relevant?) and \textit{recall} (what fraction of relevant documents did we successfully retrieve?) provide a starting point. For legal applications, the gold standard test is comparison against expert work product: given a research question, does the agent find the same authorities that a skilled attorney cited in their research memo? Missing a controlling case is not merely a statistical shortfall---it could mean missing the argument that wins or loses the matter.
-
-Isolation integrity demands its own testing regime. The goal is simple to state: queries executed in the context of Matter A should never return documents from Matter B. Verification requires adversarial testing that deliberately attempts to breach these walls, probing for edge cases where namespace boundaries might leak. Red-team exercises should try cross-matter queries, test whether embedding similarities can surface isolated documents, and verify that access controls hold even when users attempt to escalate privileges.
-
-Temporal validity measures how well the system maintains currency. In legal contexts, this means tracking how often retrieval surfaces precedent that has been overruled, limited, or superseded---and how quickly new developments propagate into the knowledge base after a court issues a significant opinion or a regulator announces a rule change. Financial applications face even tighter requirements: stale pricing data can render analysis worthless or worse, and the lag between a market event and its reflection in the knowledge base may need to be measured in seconds rather than days.
-
-Finally, scale performance ensures that the system remains responsive as data volumes grow. Episodic memory expands rapidly in professional practice---a single complex litigation matter can generate tens of thousands of documents, and a busy practice accumulates matters over years. Retrieval latency must remain low enough for interactive use even as the underlying corpus grows, which requires careful attention to indexing strategies, hardware provisioning, and architectural choices that allow the system to scale horizontally.
+Memory evaluation requires four assessments: \textit{retrieval quality} (precision and recall against expert work product---does it find the authorities a skilled attorney would cite?), \textit{isolation integrity} (adversarial testing to verify matter/client boundaries hold), \textit{temporal validity} (tracking whether retrieved precedent remains good law and how quickly updates propagate), and \textit{scale performance} (latency as corpus grows to tens of thousands of documents). See the consolidated Evaluation Checklist in \Cref{sec:agents2-evaluation-checklist}.
 
 % ----------------------------------------------------------------------------
 % Adaptation: In-Context Learning as a System Design Element

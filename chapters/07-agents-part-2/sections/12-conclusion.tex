@@ -37,6 +37,37 @@ You can design governance that maps to architecture. Governance is enabled by ar
 Finally, you can communicate with technical teams. Describe requirements precisely: ``I need perception tools for these databases, action tools behind approval gates, escalation triggers for low confidence, and memory isolation between matters.'' Shared vocabulary enables collaboration.
 
 % ----------------------------------------------------------------------------
+% Evaluation Checklist
+% ----------------------------------------------------------------------------
+
+\subsection{Evaluation Checklist}
+\label{sec:agents2-evaluation-checklist}
+
+Table~\ref{tab:agents2-eval-checklist} consolidates evaluation criteria across all ten architectural questions. Use this checklist when assessing vendor systems, designing your own, or conducting due diligence on agentic deployments.
+
+\begin{table}[htbp]
+\centering
+\caption{Evaluation checklist by architectural component}
+\label{tab:agents2-eval-checklist}
+\small
+\begin{tabular}{ll}
+\toprule
+\textbf{Component} & \textbf{Key Topics} \\
+\midrule
+Triggers & Source coverage; latency; failure detection; audit logging \\
+Intent & Ambiguity detection; constraint validation; clarification requests \\
+Perception & Data source access; access controls; provenance; jurisdictional filtering \\
+Action & Approval gates; reversibility classification; circuit breakers \\
+Memory & Matter/client isolation; retention policies; state reconstruction; ethical walls \\
+Planning & Budget enforcement; pattern selection; plan validation \\
+Termination & Success criteria; failure recognition; graceful degradation \\
+Escalation & Confidence thresholds; handoff context; routing accuracy \\
+Delegation & Agent identity; delegation contracts; cross-agent ethical walls \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ----------------------------------------------------------------------------
 % Current Limitations
 % ----------------------------------------------------------------------------
 
@@ -65,13 +96,6 @@ The next chapter answers: \textit{How do you govern one?}
 
 As \Cref{sec:agents2-governance} demonstrated, every architectural decision has governance implications. Architecture enables governance: if you did not architect for logging, you cannot audit; if you did not architect for isolation, you cannot enforce boundaries.
 
-The governance imperative is that agents are not just tools. They interpret goals, select what to perceive, and take actions that can create liability. That shift introduces predictable accountability problems: purpose drift (misaligned goals), perceptual opacity (bad or manipulated inputs), and actuation risk (high-consequence actions). \Cref{sec:agents3-dimensional} provides dimensional calibration for matching controls to risk, while \Cref{sec:agents3-governance-stack} presents a five-layer framework that translates these challenges into concrete controls: calibrated autonomy, input and action constraints, auditability, retention, escalation and override mechanisms, and accountability structures.
+The governance imperative is that agents are not just tools. They interpret goals, select what to perceive, and take actions that can create liability. That shift introduces predictable accountability problems: purpose drift (misaligned goals), perceptual opacity (bad or manipulated inputs), and actuation risk (high-consequence actions). \href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}} provides dimensional calibration for matching controls to risk and presents a five-layer framework that translates these challenges into concrete controls: calibrated autonomy, input and action constraints, auditability, retention, escalation and override mechanisms, and accountability structures.
 
-\vspace{1.5em}
-\begin{center}
-\textit{You cannot govern what you do not understand.}
-
-\textit{You cannot control what you did not architect.}
-
-\textit{Now you can do both.}
-\end{center}
+With the architectural literacy developed in this chapter, you can engage meaningfully with the governance frameworks that follow---specifying requirements precisely, evaluating vendor claims critically, and ensuring that controls are built into systems from the start rather than retrofitted after deployment. Agents are not magic; they are architecture. And architecture, once understood, can be governed.

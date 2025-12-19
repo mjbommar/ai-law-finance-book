@@ -63,26 +63,7 @@ External feeds deliver events from systems outside the agentic system's direct c
 \textbf{Financial Market Feeds}: Financial institutions receive real-time market data through providers like Bloomberg and Reuters. A portfolio management agent can subscribe to price alerts and receive notifications when thresholds are crossed, then evaluate whether rebalancing is warranted and either execute trades within pre-approved limits or escalate to a portfolio manager for approval. News feeds add another layer, delivering headlines, earnings announcements, and analyst ratings that the agent can assess for materiality and surface to managers when developments warrant attention.
 
 \begin{keybox}[title={Speed vs. Reasoning: A Critical Distinction}]
-	Market data arrives at millisecond granularity. LLM-based reasoning operates at second-to-minute timescales. This fundamental mismatch determines where agentic systems add value in financial workflows.
-
-	\vspace{0.8em}
-	\textbf{Not suited for agentic systems:}
-	\begin{itemize}[nosep,leftmargin=1.5em]
-		\item High-frequency trading and market-making
-		\item Latency-sensitive execution
-		\item Any task requiring microsecond response times
-	\end{itemize}
-
-	\vspace{0.5em}
-	\textbf{Well suited for agentic systems:}
-	\begin{itemize}[nosep,leftmargin=1.5em]
-		\item Strategic portfolio decisions and rebalancing analysis
-		\item Investment thesis development and research synthesis
-		\item Compliance monitoring
-	\end{itemize}
-
-	\vspace{0.8em}
-	\textbf{The architecture pattern:} Fast deterministic systems handle real-time data capture and threshold detection. When a threshold triggers---a position approaching its limit, a price target hit, an anomaly detected---it generates an event that the agentic system processes. Keep the microsecond path deterministic; hand off to the agentic system only once an alert is raised.
+Market data arrives at millisecond granularity. LLM-based reasoning operates at second-to-minute timescales. This mismatch means agentic systems are unsuited for high-frequency trading or latency-sensitive execution, but well suited for strategic decisions, research synthesis, and compliance monitoring. The architecture pattern: fast deterministic systems handle real-time capture and threshold detection; the agentic system processes only after an alert is raised.
 \end{keybox}
 
 \textbf{Reliability Matters}: How external feeds connect to agentic systems has real consequences for governance. Some integration approaches prioritize speed but may occasionally miss events; others guarantee delivery and maintain complete logs but add latency. For regulated applications, you generally want the latter: systems that ensure every event is recorded, processed in order, and available for later audit. When evaluating vendor systems, ask whether the integration approach guarantees delivery and maintains audit trails, or whether events can be lost without detection.
@@ -175,9 +156,7 @@ Surface choice matters because it shapes workflow integration. An agentic system
 
 Three primary surfaces dominate current deployments, each suited to different task types and user contexts.
 
-\textbf{Conversational surfaces} present the agentic system as an interactive dialogue partner. The user types or speaks, the system responds, and the user refines based on what they see. This is the paradigm of ChatGPT, Claude, and embedded copilots. Conversational surfaces excel at \textit{exploratory tasks} where users refine direction through iteration, such as a partner thinking through case strategy, an analyst exploring market scenarios, or an associate researching an unfamiliar area of law. The interaction is synchronous and user-initiated.
-
-Conversational surfaces have limitations, however. They require users to articulate intent in natural language, which Nielsen calls the ``articulation barrier.'' They lack the \keyterm{affordances} (design cues suggesting possible interactions) of graphical interfaces, offering no menus to browse and no buttons to discover capabilities. And they demand attention, since the user must remain engaged throughout the interaction.
+\textbf{Conversational surfaces} present the agentic system as an interactive dialogue partner, best suited for exploratory tasks where users refine direction through iteration---researching unfamiliar areas, exploring scenarios, thinking through strategy. The interaction is synchronous and user-initiated. Limitations include the ``articulation barrier'' (users must express intent in natural language) and lack of visual \keyterm{affordances} (no menus to browse or buttons to discover capabilities).
 
 \textbf{Automation surfaces} present the agentic system as invisible infrastructure that monitors, analyzes, and acts in the background. Users receive outputs only when something relevant happens. Examples include portfolio surveillance that alerts when positions breach limits, docket monitoring that flags new filings in active matters, and compliance systems that screen transactions against sanctions lists. The interaction is asynchronous and system-initiated.
 
@@ -231,9 +210,9 @@ The interplay between triggers, channels, and surfaces creates the complete huma
 	\end{tabular}
 \end{table}
 
-\textbf{Emerging surfaces} extend beyond these three primary patterns. \textit{Embedded copilots} integrate agentic capabilities directly into existing applications---word processors, spreadsheets, or domain-specific software---combining familiar graphical interfaces with intent-based interaction. Users remain in their primary workflow while accessing agent capabilities through sidebars or inline suggestions. \textit{Ambient interfaces} use voice or environmental sensors to enable hands-free interaction, though transcription errors and authentication challenges currently limit their use in high-stakes professional contexts. \textit{Agentic APIs} expose capabilities to other software systems rather than human users, enabling machine-to-machine orchestration where the ``user'' is another system---a pattern we revisit in \Cref{sec:agents2-delegation}.
+\textbf{Emerging surfaces} include embedded copilots (agentic capabilities integrated into existing applications via sidebars or inline suggestions), ambient interfaces (voice-based interaction, though currently limited by transcription errors in professional contexts), and agentic APIs (machine-to-machine orchestration where the ``user'' is another system---see \Cref{sec:agents2-delegation}).
 
-Effective surface design draws on decades of human-computer interaction research, from direct manipulation interfaces to conversational design patterns. A full treatment of interaction design principles belongs to UX practice and extends beyond our scope here. What architects need to understand is that surface selection has architectural consequences: conversational surfaces require low-latency response paths, automation surfaces require robust background processing, and document surfaces require generation pipelines that can produce polished output. The disciplines must collaborate---UX designers choose surfaces based on user needs, and architects build the infrastructure those surfaces require.
+Surface design draws on decades of human-computer interaction research. What architects need to understand is that surface selection has architectural consequences: conversational surfaces require low-latency response paths, automation surfaces require robust background processing, and document surfaces require generation pipelines. UX designers choose surfaces based on user needs; architects build the infrastructure those surfaces require.
 
 % ----------------------------------------------------------------------------
 % Evaluating Trigger Systems
@@ -242,9 +221,7 @@ Effective surface design draws on decades of human-computer interaction research
 \subsection{Evaluating Trigger Systems}
 \label{sec:agents2-evaluating-triggers}
 
-When evaluating agentic systems, whether you are building or buying, you should assess trigger capabilities against five criteria.
-
-\textbf{Coverage} asks whether the system receives events from all relevant sources. A litigation system that monitors CM/ECF but not state court dockets has incomplete coverage that could miss critical filings. \textbf{Latency} measures how quickly events reach the system. Real-time market data requires sub-second delivery, while docket alerts can tolerate delays of several minutes. \textbf{Reliability} addresses what happens when feeds fail. Robust systems need retry logic, fallback sources, and alerting when data goes stale. \textbf{Priority mechanisms} determine whether the system can distinguish urgent events from routine ones. During a market crash or litigation crisis, the right events must reach the right handlers immediately. Finally, \textbf{auditability} ensures that every trigger is logged. When a regulator asks why the system took action, you need a complete record of the triggering event. The following chapter on governance addresses audit requirements, regulatory compliance frameworks, and governance controls in detail.
+When evaluating trigger systems, assess five criteria: \textit{coverage} (all relevant event sources), \textit{latency} (acceptable delay for the use case), \textit{reliability} (failure handling and fallbacks), \textit{priority} (distinguishing urgent from routine), and \textit{auditability} (complete trigger logs). See the consolidated Evaluation Checklist in \Cref{sec:agents2-evaluation-checklist}.
 
 % ----------------------------------------------------------------------------
 % Connection to Other Questions
