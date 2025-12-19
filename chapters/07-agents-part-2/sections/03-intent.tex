@@ -31,7 +31,7 @@ Pre-LLM systems handled instructions through rigid steps: matching exact words, 
 \keyterm{Intent} is the underlying purpose, constraints, and success criteria behind an instruction. Intent captures the human meaning---what the user actually wants, not just what they said. Where an instruction might be ``review this credit agreement,'' the intent might be ``identify material risks to the lender by tomorrow for the partner's client call.''
 \end{definitionbox}
 
-The gap between instruction and intent has always existed; what has changed is our ability to bridge it. Large language models dramatically improved intent inference from natural language. Where rule-based systems required exact matches, LLMs handle variation, implicit context, and domain-specific jargon. Modern LLMs excel at handling noisy input (misspellings, shorthand, tangential information), resolving references using conversational context, inferring domain-specific meaning, and detecting implicit constraints that professionals take for granted.
+The gap between instruction and intent has always existed; what has changed is our ability to bridge that gap with technological systems. Large language models dramatically improved intent inference from natural language. Where rule-based systems required exact matches, LLMs handle variation, implicit context, and domain-specific jargon. Modern LLMs excel at handling noisy input (misspellings, shorthand, tangential information), resolving references using conversational context, inferring domain-specific meaning, and detecting implicit constraints that professionals take for granted.
 
 Despite these capabilities, intent understanding remains imperfect. As conversations extend, LLMs may lose track of earlier context or constraints. When clarification is needed, LLMs sometimes proceed with a default interpretation rather than asking, resulting in a ``helpful but wrong'' failure: the agent does \textit{something} reasonable rather than confirming it understood correctly. Professionals also communicate through implication. Phrases like ``This needs to be right'' signal high stakes, while ``When you get a chance'' signals low urgency. These signals may not be explicitly parsed by current models.
 
@@ -80,7 +80,7 @@ LLMs infer \textit{probable} intent from language patterns; they do not read min
 \item The user themselves is unclear about what they want
 \end{itemize}
 
-\textbf{Design for clarification, not guessing.} The aim is an agent that surfaces uncertainty and asks, not one that pretends certainty.
+\textbf{Design for clarification, not guessing.} The aim is an agent that surfaces uncertainty and asks, not one that pretends it possesses certainty regarding intent.
 \end{keybox}
 
 % ----------------------------------------------------------------------------
@@ -191,7 +191,7 @@ Agents must infer these constraints from context, domain knowledge, and organiza
 
 Before executing, agents should validate their understanding of intent. Several patterns support this validation.
 
-\keyterm{reflection} and summarization involve the agent pausing—much like an associate double-checking their notes—to restate its understanding before proceeding, giving the user an opportunity to correct misunderstandings before work begins. \keyterm{chunked validation}, like partner check-ins after each memo section, breaks complex tasks into phases rather than validating all at once. After completing research, the agent summarizes findings and confirms direction before drafting. After drafting, it confirms the approach before finalizing. Each checkpoint prevents error propagation.
+\keyterm{Reflection} and summarization involve the agent pausing—much like an associate double-checking their notes—to restate its understanding before proceeding, giving the user an opportunity to correct misunderstandings before work begins. \keyterm{Chunked validation}, like partner check-ins after each memo section, breaks complex tasks into phases rather than validating all at once. After completing research, the agent summarizes findings and confirms direction before drafting. After drafting, it confirms the approach before finalizing. Each checkpoint prevents error propagation.
 
 Confidence signaling requires the agent to indicate how confident it is in its own understanding. When confidence is high, the agent can proceed with light oversight; when confidence is low, the right move is to pause and ask for clarification rather than press ahead. Clear confidence signaling helps users decide how much review is needed and whether to treat the output as a draft, a starting point, or a near-final product.
 

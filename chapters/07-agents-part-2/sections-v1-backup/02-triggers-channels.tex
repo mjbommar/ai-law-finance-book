@@ -1,0 +1,232 @@
+% ============================================================================
+% 02-triggers-channels.tex
+% Triggers and Channels: How Work Enters Agent Systems
+% Part of: Chapter 07 - Agents Part II: How to Build an Agent
+% ============================================================================
+
+\section{Triggers and Channels}
+\label{sec:agents2-triggers}
+
+% ----------------------------------------------------------------------------
+% Opening and Context
+% ----------------------------------------------------------------------------
+
+An agent with tools, memory, and planning capabilities remains idle until work arrives. The question is fundamental: \textit{How does work reach an agent?} Or more precisely: through what channels do tasks enter the system, and what events trigger agent execution?
+
+Think about how work reaches a law firm or financial institution. A client calls with an urgent question; that is a \keyterm{human prompt channel}, a synchronous interaction where a person initiates work. The court docket updates with a new filing; that is an \keyterm{external feed}, an asynchronous event that requires response. The calendar reminds the associate that a motion is due tomorrow; that is a \keyterm{scheduled job}, a time-based trigger for predetermined work. The partner reviews a draft memo and finds a section that exceeds the associate's expertise; that is an \keyterm{escalation event}, where execution pauses and control transfers to higher authority.
+
+These four channel types (external feeds, human prompts, scheduled jobs, and escalation events) define how work enters agent systems. Understanding these channels and designing routing mechanisms determines whether agents receive the right work at the right time with the right priority.
+
+Before an agent can reason or act, it must perceive that work exists. Channels are the sensory apparatus, the mechanisms through which the agent becomes aware of its environment and the tasks it must accomplish. Just as associates cannot research issues they do not know exist, agents cannot execute tasks they never receive.
+
+% ----------------------------------------------------------------------------
+% External Feeds
+% ----------------------------------------------------------------------------
+
+\subsection{External Feeds: The World Pushes Work to You}
+\label{sec:agents2-external-feeds}
+
+External feeds deliver events from systems outside the agent's direct control. The external system pushes notifications when events occur, like receiving service of process rather than checking the courthouse daily to see if you have been sued.
+
+\subsubsection{Legal and Regulatory Feeds}
+
+Court docket systems like CM/ECF send email notifications when documents are filed. An agent monitoring litigation can receive these alerts, retrieve filed documents via PACER, analyze contents, and trigger appropriate responses. When opposing counsel files a motion, the agent alerts the litigation team, extracts key arguments, searches for responsive authority, and calculates response deadlines.
+
+The SEC's EDGAR system publishes corporate filings with API access for programmatic retrieval. For corporate counsel, EDGAR feeds trigger review workflows: when a competitor files a 10-K, an agent retrieves the filing, extracts financial data and risk factors, compares them to your company's disclosures, and flags material differences. Regulatory agencies publish rules and guidance through the Federal Register and agency websites, enabling agents to monitor for changes that affect compliance obligations.
+
+Legal research platforms like Westlaw and Lexis offer citator alerts when monitored cases are cited, distinguished, or overruled. An agent can subscribe to these alerts, retrieve and analyze citing opinions, and notify attorneys of developments affecting their arguments.
+
+\subsubsection{Financial Market Feeds}
+
+Financial institutions receive real-time market data through providers like Bloomberg and Reuters. These feeds push price updates and market events continuously. A portfolio management agent can subscribe to price alerts, receive notifications when thresholds are crossed, evaluate rebalancing rules, and either execute trades within risk limits or escalate to a portfolio manager.
+
+Position and P\&L updates cascade through financial systems: when trades execute, position systems update holdings, risk agents recalculate exposure, compliance agents check concentration limits, and reporting agents update dashboards. This architecture treats agents as event processors that consume upstream events, reason about implications, and produce downstream events.
+
+News feeds deliver breaking headlines, earnings announcements, and sentiment analytics in machine-readable format. When material news hits, agents can retrieve the content, assess sentiment, compare to historical patterns, and alert portfolio managers if the news appears significant.
+
+\begin{highlightbox}[title={Speed vs. Reasoning: A Critical Distinction}]
+Market data arrives at millisecond granularity. LLM-based reasoning operates at second-to-minute timescales. This fundamental mismatch determines where agents add value in financial workflows.
+
+\textbf{Agents are not suited for:} High-frequency trading, market-making, latency-sensitive execution. These domains require deterministic algorithms operating at microsecond latencies. An LLM reasoning loop, even a fast one, cannot compete.
+
+\textbf{Agents are suited for:} Strategic portfolio decisions, investment thesis development, rebalancing analysis, compliance monitoring, research synthesis. These tasks operate on timescales of minutes to hours, where reasoning quality matters more than latency.
+
+\textbf{The architecture pattern:} Fast deterministic systems handle real-time data capture and threshold detection. When thresholds trigger (position approaching limit, price target hit, anomaly detected), they generate events that LLM agents process. The agent's role is strategic reasoning and recommendation, not execution speed. This complements latency-sensitive pipelines: keep the microsecond path deterministic, hand off to the agent only once an alert is raised.
+
+In the portfolio management reference architecture (Section~\ref{sec:agents2-case-financial}), the Monitoring Agent detects threshold breaches in near-real-time using fast deterministic logic. The Rebalancing Agent receives these alerts and performs multi-step reasoning to generate recommendations, a process that might take 30 seconds to several minutes. The PM reviews and approves. Trade execution then flows back to fast deterministic systems.
+
+Match agent capabilities to task requirements. Speed-critical tasks need traditional algorithms; reasoning-critical tasks need agents.
+\end{highlightbox}
+
+\subsubsection{Integration Patterns}
+
+External feeds reach agents through \keyterm{webhooks} (HTTP callbacks for immediate notification) or \keyterm{message queues} (durable event streams with delivery guarantees). Webhooks work well for low-volume, time-sensitive events where immediate delivery matters and occasional missed events are acceptable. Message queues provide ordering, durability, and replay capabilities essential for regulated applications requiring audit trails.
+
+In practice, many systems use both: webhooks for urgent notifications requiring immediate response, message queues for systematic high-volume processing.
+
+% ----------------------------------------------------------------------------
+% Human Prompts as Events
+% ----------------------------------------------------------------------------
+
+\subsection{Human Prompts as Events}
+\label{sec:agents2-human-events}
+
+Human prompts feel different from external feeds because they are interactive and synchronous. But architecturally, a human prompt is just another event type: the user generates an event, the agent receives it through a channel, processes it, and responds. This unification simplifies agent design by routing all event types through common logic rather than building separate code paths for chat versus background processing.
+
+\textbf{Chat interfaces} are the most direct channel. The associate types ``Find Fifth Circuit authority on personal jurisdiction for e-commerce defendants,'' the agent searches and presents summaries, and the associate follows up with refinements. The analyst asks for revenue growth comparisons across portfolio companies, receives a table, and requests additional filtering. Chat enables iterative clarification, but architecturally each message is simply an event processed through the standard agent loop with tighter latency expectations.
+
+\textbf{Email routing} enables agents to process work arriving through existing communication channels. A general counsel forwards a business unit's compliance question to an agent mailbox; the agent extracts the question, searches relevant guidance, and emails back an assessment. The challenge is intent classification: email bodies are unstructured and may include forwarded threads with multiple topics.
+
+\textbf{Collaboration platforms} like Slack and Teams allow agents to appear as team members. Users @mention the agent in channels, send direct messages, or use slash commands. The litigation team discussing strategy can invoke research directly in their coordination channel. Security requires authorization checks at the agent layer, since collaboration platforms may log responses and channels may include unauthorized viewers.
+
+\textbf{Voice interfaces} work best for short, urgent requests where typing is impractical. They introduce transcription errors (legal jargon like ``Chevron deference'' may transcribe incorrectly) and authentication challenges. High-stakes voice requests should require explicit confirmation before execution.
+
+% ----------------------------------------------------------------------------
+% Scheduled Jobs
+% ----------------------------------------------------------------------------
+
+\subsection{Scheduled Jobs: Time as Trigger}
+\label{sec:agents2-scheduled}
+
+Some work follows predictable schedules rather than arriving from external events or human prompts: end-of-day reconciliation, monthly compliance reporting, quarterly reviews, annual filings. For these recurring tasks, time itself triggers execution.
+
+\textbf{Calendar-driven deadlines} govern legal practice: answer the complaint within 21 days, file motions 30 days before hearings, respond to discovery within 30 days. Agents can monitor litigation calendars, calculate deadlines accounting for court holidays, schedule reminders as deadlines approach, and escalate if work remains incomplete. Sophisticated deadline agents go further: retrieving the complaint, extracting claims, generating draft answers with standard defenses, and presenting drafts for attorney review before filing. Financial institutions face similar deadline-driven work: SEC reporting deadlines, tax filings, and contractual obligations to lenders all follow predictable schedules.
+
+\textbf{Periodic compliance checks} run even when no external event triggers review. An investment compliance agent runs nightly to check portfolios against client guidelines and flag violations. A law firm conflicts agent retrieves new docket entries, extracts party names, and checks them against the conflicts database. These scheduled checks enable continuous monitoring that would be impractical manually across thousands of matters or client accounts.
+
+\textbf{End-of-day workflows} in financial institutions reconcile trades, calculate valuations at market close, generate P\&L reports, and prepare risk reports for the next morning. At market close, an EOD agent retrieves final prices, marks positions to market, calculates P\&L, identifies unexplained variances, and distributes reports. If any step fails, the agent escalates rather than proceeding with incomplete data. Law firms run similar periodic workflows: reminding attorneys to enter time, generating draft invoices at month-end, and flagging anomalies for partner review.
+
+% ----------------------------------------------------------------------------
+% Escalation Events
+% ----------------------------------------------------------------------------
+
+\subsection{Escalation Events: When Agents Reach Their Limits}
+\label{sec:agents2-escalation}
+
+The previous three channel types bring work into the agent system from outside. Escalation events operate internally: the agent generates an event signaling it has reached a limit and requires human intervention, transferring control to human decision-makers when the agent cannot proceed autonomously.
+
+\textbf{Budget exhaustion} triggers escalation when agents approach resource limits: token consumption, iteration counts, time limits, or cost caps. A research agent nearing its 20-call limit should escalate with a progress summary and options (grant additional budget, conclude with current findings, or escalate for strategic guidance) rather than stopping silently. Financial agents face similar budget constraints on position sizes, capital allocation, and risk limits.
+
+\textbf{Low confidence} triggers escalation when uncertainty is too high for autonomous action. A litigation research agent encountering conflicting circuit authority on a statute of limitations issue should escalate rather than guessing which rule applies. A portfolio optimization agent finding that correlations have spiked well beyond historical norms should flag that model assumptions are violated. These judgment calls belong with humans who can assess risk and apply professional experience.
+
+\textbf{Approval requirements} trigger escalation for actions that require explicit human authorization regardless of the agent's confidence. Filing court documents, sending client communications, executing large trades, and making public disclosures all warrant approval gates. A contract drafting agent completes a purchase agreement and generates an approval request summarizing the draft and changes from template before sending to the client. A trading agent generates an approval request for trades exceeding policy thresholds.
+
+\textbf{Errors and anomalies} trigger escalation when tools fail repeatedly, data is inconsistent, or the agent detects red flags. A due diligence agent finding that revenue in a 10-K does not match the earnings press release should escalate for human investigation rather than proceeding with potentially incorrect data. If Westlaw times out repeatedly, the agent escalates with options: wait and retry, use an alternative platform, or proceed manually.
+
+% ----------------------------------------------------------------------------
+% Event Routing and Prioritization
+% ----------------------------------------------------------------------------
+
+\subsection{Event Routing and Prioritization}
+\label{sec:agents2-routing}
+
+With events arriving from multiple channels, agents need routing and prioritization logic. A law firm routes work similarly: client calls go to appropriate attorneys, court filings route to the litigation coordinator, research requests go to assigned associates. Agent systems implement the same pattern: a central router receives events, examines metadata, applies routing rules, and dispatches to appropriate handlers.
+
+\textbf{Routing rules} map event attributes to handlers. Court filing notifications for Matter 12345 route to that matter's litigation agent. SEC filings by portfolio companies route to the monitoring agent. Routing can be static (predefined rules) or dynamic (classifiers that analyze content and identify topics). For multi-agent architectures, routing determines delegation: an orchestrator receives high-level tasks, classifies them, and routes to specialist agents.
+
+\textbf{Priority queues} implement tiered processing. Urgent events (emergency motions, margin calls) enter the high-priority queue and are processed immediately, potentially interrupting lower-priority work. Routine tasks enter standard queues. Background work (database updates, model retraining) runs when resources are idle. Priority can be rule-based (certain event types always urgent) or adaptive (priority escalates as deadlines approach).
+
+\textbf{Temporal constraints} require processing within specific windows. Court filings have deadlines, trading must occur during market hours, EOD reports must complete before the next morning. Agents track these constraints, calculate time remaining, and escalate priority as deadlines approach.
+
+\textbf{Overload management} prevents cascading failures when events arrive faster than processing capacity. Rate limiting caps how many events agents accept per minute, protecting downstream APIs. Backpressure signals upstream systems to slow down. Load shedding drops low-priority work to preserve capacity for critical tasks during peak demand. During a market crash, trade execution and risk calculations take precedence; routine reporting can wait.
+
+% ----------------------------------------------------------------------------
+% Diagram: Event Routing Architecture
+% ----------------------------------------------------------------------------
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  node distance=1.5cm and 2.5cm,
+  box/.style={rectangle, draw=border-definition, fill=bg-definition, thick, minimum width=2.8cm, minimum height=1cm, align=center, rounded corners=2pt, font=\small},
+  source/.style={rectangle, draw=border-example, fill=bg-example, thick, minimum width=2.5cm, minimum height=0.9cm, align=center, rounded corners=2pt, font=\small},
+  handler/.style={rectangle, draw=border-key, fill=bg-key, thick, minimum width=2.5cm, minimum height=0.9cm, align=center, rounded corners=2pt, font=\small},
+  arrow/.style={-Stealth, thick, draw=primary},
+  label/.style={font=\scriptsize\itshape, text=text-secondary}
+]
+
+% Event Sources (Left Column)
+\node[source] (feed) {External Feeds\\{\scriptsize Court, SEC, Markets}};
+\node[source, below=0.8cm of feed] (human) {Human Prompts\\{\scriptsize Chat, Email, Slack}};
+\node[source, below=0.8cm of human] (sched) {Scheduled Jobs\\{\scriptsize EOD, Deadlines}};
+\node[source, below=0.8cm of sched] (esc) {Escalations\\{\scriptsize Budget, Confidence}};
+
+% Router/Dispatcher (Center)
+\node[box, right=of human, yshift=-0.9cm, minimum height=3.5cm] (router) {
+  \textbf{Event Router}\\[0.3em]
+  {\scriptsize Classify}\\
+  {\scriptsize Route}\\
+  {\scriptsize Prioritize}\\
+  {\scriptsize Queue}
+};
+
+% Agent Handlers (Right Column)
+\node[handler, right=of router, yshift=1.5cm] (research) {Research Agent\\{\scriptsize Legal/Financial}};
+\node[handler, below=0.8cm of research] (compliance) {Compliance Agent\\{\scriptsize Checks, Alerts}};
+\node[handler, below=0.8cm of compliance] (report) {Reporting Agent\\{\scriptsize EOD, Dashboards}};
+\node[handler, below=0.8cm of report] (human-handler) {Human Review\\{\scriptsize High-Stakes}};
+
+% Arrows from sources to router
+\draw[arrow] (feed) -- (router) node[midway, above, label] {events};
+\draw[arrow] (human) -- (router);
+\draw[arrow] (sched) -- (router);
+\draw[arrow] (esc) -- (router);
+
+% Arrows from router to handlers
+\draw[arrow] (router.east) -- ++(0.5,0) |- (research.west) node[near start, above, label] {high priority};
+\draw[arrow] (router.east) -- ++(0.5,0) |- (compliance.west) node[near start, above, label] {normal};
+\draw[arrow] (router.east) -- ++(0.5,0) |- (report.west) node[near start, above, label] {low priority};
+\draw[arrow] (router.east) -- ++(0.5,0) |- (human-handler.west) node[near start, above, label] {escalation};
+
+\end{tikzpicture}
+\caption{Event routing architecture showing how events from multiple channels flow through a central router that classifies, prioritizes, and dispatches to appropriate handlers (specialist agents or humans).}
+\label{fig:agents2-event-routing}
+\end{figure}
+
+% ----------------------------------------------------------------------------
+% Surfaces: How Users Interact with Agents
+% ----------------------------------------------------------------------------
+
+\subsection{Surfaces: How Users Experience Agent Systems}
+\label{sec:agents2-surfaces}
+
+The same underlying architecture can manifest through different user interfaces, or \textit{surfaces}. Understanding surfaces matters because the appropriate surface depends on the task, the user's expertise, and how the output will be used.
+
+\paragraph{Chat Surfaces} The most familiar interface: a conversation where the user asks questions and the agent responds. Chat works well for exploration and ideation, such as when a partner thinks through case strategy or an analyst explores market conditions. The agent can clarify ambiguous requests, present intermediate findings, and iterate based on feedback.
+
+Chat surfaces suit tasks where the user wants to direct the process interactively. ``Find me cases on personal jurisdiction in e-commerce'' followed by ``focus on the Ninth Circuit'' followed by ``what about cases where the defendant won?'' Each exchange refines the direction. The user remains actively engaged.
+
+The limitation: chat requires user attention throughout. It doesn't work for tasks that should proceed autonomously, like monitoring a portfolio overnight or tracking a docket for new filings.
+
+\paragraph{Automation Surfaces} Many agent tasks should run without user involvement until results are ready or action is required. The portfolio monitoring agent from Section~\ref{sec:agents2-case-financial} doesn't need a chat interface; it monitors continuously, calculates exposures, and only surfaces when something requires human attention.
+
+Automation surfaces include alerts (``Position approaching limit''), dashboards (real-time compliance status), and notification systems (email or message when action is needed). The user doesn't interact with the agent during normal operation; they receive outputs when relevant.
+
+Automation suits continuous monitoring, scheduled reporting, and background processing. The agent works; the human reviews results. This is how associates handle routine deadline tracking or analysts run overnight portfolio reconciliation.
+
+\paragraph{Document Surfaces} Some agent outputs are work products intended for human consumption: research memos, due diligence reports, client presentations, compliance filings. These aren't conversations or alerts but structured documents that the agent produces and the human reviews, edits, and delivers.
+
+Document surfaces suit tasks with defined deliverables. The credit facility review (Section~\ref{sec:agents2-case-legal}) produces an issues list and summary memo. The agent generates a first draft; the associate reviews and refines; the partner approves for delivery. The interface is the document itself, with the agent as author and the human as editor.
+
+\paragraph{Matching Surface to Task} The underlying components remain constant across surfaces. What changes is how the user engages with the system:
+
+\begin{itemize}[nosep]
+\item \textbf{Interactive exploration}: Chat surface, ReAct planning, immediate feedback
+\item \textbf{Continuous monitoring}: Automation surface, event-triggered execution, alerts on exception
+\item \textbf{Defined deliverables}: Document surface, Plan-Execute pattern, review-and-approve workflow
+\end{itemize}
+
+Most deployments combine surfaces. A portfolio management system might offer a chat interface for ad hoc queries (``What's our tech exposure?''), automation for continuous monitoring, and document output for quarterly client reports. The agent architecture supports all three; the surface determines how users experience it.
+
+% ----------------------------------------------------------------------------
+% Synthesis and Connection to Architecture
+% ----------------------------------------------------------------------------
+
+\subsection{From Triggers to Action}
+\label{sec:agents2-triggers-to-action}
+
+Triggers and channels answer how work reaches the agent, but triggering is only the beginning. Once an event arrives, the agent perceives it (parsing the event, retrieving context from memory), reasons about it (classifying intent, planning actions), acts (calling tools, generating outputs), and iterates until termination conditions are met.
+
+The connection between sections is direct. An external feed delivers a court filing notification. The router classifies it as urgent litigation work and dispatches to the litigation agent. The agent retrieves case context from memory, downloads the filed document through PACER, analyzes content, searches for responsive authority, generates deadline calculations, and drafts a response strategy. At each step, the agent might escalate: low confidence in legal analysis triggers escalation to a senior litigator; filing a responsive document requires approval; approaching budget limits prompts a status update.
+
+Section~\ref{sec:agents2-architecture} describes what happens after triggering: how tools enable perception and action, how memory provides context and learning, and how planning decomposes complex goals and determines when to stop.

@@ -28,7 +28,7 @@ The distinction between perception and action is fundamental to governance. Perc
 \subsection{Action Tool Categories}
 \label{sec:agents2-action-categories}
 
-Action tools vary in consequence. The critical dimension is \keyterm{reversibility}: the cost and feasibility of undoing an action. Research on rollback-augmented systems demonstrates that selective state rollback reduces catastrophic failures in safety-sensitive environments \parencite{rollback-rl-2024}. We categorize action tools along a spectrum from easily undone to permanent.
+Action tools vary in consequence. The critical dimension is \keyterm{reversibility}: the cost and feasibility of undoing an action. Research on rollback-augmented systems demonstrates that selective state rollback reduces catastrophic failures in safety-sensitive environments \parencite{rollback-rl-2024}. In Figure \ref{fig:agents2-reversibility-spectrum}, we categorize action tools along a spectrum from easily undone to permanent.
 
 \textbf{Communication tools} send information to others. Internal communications (emails to colleagues, Slack messages) are \textit{partially reversible}. You can follow up with corrections, though you cannot unsend. External communications (emails to clients, letters to counsel) carry higher stakes because recipients are outside your control. Retractions are possible but damage professional reputation. Automated alerts (compliance notifications, reminders) are generally low-risk if templated. Governance typically relies on post-hoc review for internal actions and pre-approval for external ones.
 
@@ -62,17 +62,22 @@ For \textbf{irreversible} actions (trades, wires), you implement multi-party app
 \caption{Action reversibility and required oversight}
 \label{tab:agents2-reversibility}
 \small
-\begin{tabular}{p{0.20\textwidth}p{0.25\textwidth}p{0.22\textwidth}p{0.20\textwidth}}
+\begin{tabular}{
+  >{\raggedright\arraybackslash}p{0.20\textwidth}
+  >{\raggedright\arraybackslash}p{0.25\textwidth}
+  >{\raggedright\arraybackslash}p{0.22\textwidth}
+  >{\raggedright\arraybackslash}p{0.20\textwidth}
+}
 \toprule
 \textbf{Reversibility} & \textbf{Examples} & \textbf{Oversight} & \textbf{Recovery} \\
 \midrule
-Fully reversible & Research, internal drafts, calculations & Post-hoc review & Delete/revise \\
+Fully reversible & Research; internal drafts; calculations & Post-hoc review & Delete/revise \\
 \midrule
-Partially reversible & Internal emails, document filing, alerts & Checkpoint review & Correction/follow-up \\
+Partially reversible & Internal emails; document filing; alerts & Checkpoint review & Correction/\allowbreak follow-up \\
 \midrule
-Largely irreversible & Client communications, court filings, regulatory submissions & Pre-approval required & Amendment/retraction (visible) \\
+Largely irreversible & Client communications; court filings; regulatory submissions & Pre-approval required & Amendment/\\retraction (visible) \\
 \midrule
-Irreversible & Trade execution, wire transfers, contract execution & Multi-party approval & Offsetting transaction (costly) \\
+Irreversible & Trade execution; wire transfers; contract execution & Multi-party approval & Offsetting transaction (costly) \\
 \bottomrule
 \end{tabular}
 \end{table}

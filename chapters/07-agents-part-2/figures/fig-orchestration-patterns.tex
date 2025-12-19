@@ -5,6 +5,7 @@
 
 \begin{figure}[!htb]
 \centering
+\resizebox{\textwidth}{!}{%
 \begin{tikzpicture}[
     % Card styles
     card/.style={
@@ -57,11 +58,11 @@
 \node[card header, fill=definition-dark] at (seq-card.north) [yshift=-0.4cm] {SEQUENTIAL};
 
 % Mini-flowchart (vertical chain)
-\node[flow box, fill=bg-definition, draw=border-definition] (seq-coord) at (-5.5, 2.2) {Coordinator};
+\node[flow box, fill=bg-definition, draw=border-definition] (seq-coord) at (-5.5, 2.2) {Coord.};
 \node[flow box, fill=bg-definition, draw=border-definition] (seq-a) at (-5.5, 1.3) {Agent A};
 \node[flow box, fill=bg-definition, draw=border-definition] (seq-b) at (-5.5, 0.4) {Agent B};
 \node[flow box, fill=bg-definition, draw=border-definition] (seq-c) at (-5.5, -0.5) {Agent C};
-\node[flow box, fill=bg-definition, draw=border-definition] (seq-synth) at (-5.5, -1.4) {Synthesize};
+\node[flow box, fill=bg-definition, draw=border-definition] (seq-synth) at (-5.5, -1.4) {Synth\\esize};
 
 \draw[flow arrow] (seq-coord) -- (seq-a);
 \draw[flow arrow] (seq-a) -- (seq-b);
@@ -87,11 +88,11 @@
 \node[card header, fill=key-dark] at (par-card.north) [yshift=-0.4cm] {PARALLEL};
 
 % Mini-flowchart (fan-out, fan-in)
-\node[flow box, fill=bg-key, draw=border-key] (par-coord) at (0, 2.2) {Coordinator};
+\node[flow box, fill=bg-key, draw=border-key] (par-coord) at (0, 2.2) {Coord.};
 \node[flow box, fill=bg-key, draw=border-key] (par-a) at (-1.3, 0.9) {Agent A};
 \node[flow box, fill=bg-key, draw=border-key] (par-b) at (0, 0.9) {Agent B};
 \node[flow box, fill=bg-key, draw=border-key] (par-c) at (1.3, 0.9) {Agent C};
-\node[flow box, fill=bg-key, draw=border-key] (par-synth) at (0, -0.4) {Synthesize};
+\node[flow box, fill=bg-key, draw=border-key] (par-synth) at (0, -0.4) {Synth\\esize};
 
 \draw[flow arrow] (par-coord) -- (par-a);
 \draw[flow arrow] (par-coord) -- (par-b);
@@ -119,7 +120,7 @@
 \node[card header, fill=example-dark] at (hier-card.north) [yshift=-0.4cm] {HIERARCHICAL};
 
 % Mini-flowchart (tree with sub-agents)
-\node[flow box, fill=bg-example, draw=border-example] (hier-coord) at (5.5, 2.2) {Coordinator};
+\node[flow box, fill=bg-example, draw=border-example] (hier-coord) at (5.5, 2.2) {Coord.};
 \node[flow box, fill=bg-example, draw=border-example] (hier-a) at (5.0, 1.1) {Agent A};
 \node[flow box, fill=bg-example, draw=border-example, font=\tiny, text width=1.2cm] (hier-a1) at (6.3, 1.5) {A1};
 \node[flow box, fill=bg-example, draw=border-example, font=\tiny, text width=1.2cm] (hier-a2) at (6.3, 0.8) {A2};
@@ -127,7 +128,7 @@
 \node[flow box, fill=bg-example, draw=border-example, font=\tiny, text width=1.0cm] (hier-b1) at (6.5, 0.4) {B1};
 \node[flow box, fill=bg-example, draw=border-example, font=\tiny, text width=1.0cm] (hier-b2) at (6.5, -0.1) {B2};
 \node[flow box, fill=bg-example, draw=border-example, font=\tiny, text width=1.0cm] (hier-b3) at (6.5, -0.6) {B3};
-\node[flow box, fill=bg-example, draw=border-example] (hier-synth) at (5.5, -1.2) {Synthesize};
+\node[flow box, fill=bg-example, draw=border-example] (hier-synth) at (5.5, -1.2) {Synth\\esize};
 
 \draw[flow arrow] (hier-coord) -- (hier-a);
 \draw[flow arrow] (hier-a) -- (hier-a1);
@@ -152,6 +153,7 @@
 };
 
 \end{tikzpicture}
+}%
 \caption{Three multi-agent orchestration patterns. Sequential delegation chains agents in order, ideal for dependent tasks but vulnerable to bottlenecks. Parallel delegation runs agents concurrently, maximizing throughput for independent work but requiring coordination. Hierarchical delegation enables sub-agents to handle specialized sub-tasks, providing flexibility for complex workflows at the cost of debugging complexity.}
 \label{fig:agents2-orchestration-patterns}
 \end{figure}

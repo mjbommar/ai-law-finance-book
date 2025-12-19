@@ -2,10 +2,11 @@
 
 \begin{figure}[!htb]
 \centering
+\resizebox{\textwidth}{!}{%
 \begin{tikzpicture}[
     remember picture,
     level circle/.style={circle, minimum size=2.0cm, inner sep=0pt, draw=#1, line width=1.5pt, font=\bfseries\small, align=center},
-    level box/.style={rounded corners=4pt, draw=#1, line width=1pt, inner sep=8pt, text width=3.2cm, font=\small, align=left}
+    level box/.style={rounded corners=4pt, draw=#1, line width=1pt, inner sep=8pt, text width=3.2cm, font=\small\raggedright, align=left}
 ]
 
 % Horizontal connecting line at top
@@ -19,11 +20,11 @@
 \node[level circle={green-900}, fill=green-100, text=green-900] (level1) at (0,0) {Fully\\Reversible};
 
 \node[level box={green-900}, fill=green-100, below=0.8cm of level1] (box1) {%
-\textbf{\textcolor{green-900}{Oversight}}\\
-Post-hoc review\\[4pt]
-\textbf{\textcolor{green-900}{Examples}}\\
-Research, internal drafts\\[4pt]
-\textbf{\textcolor{green-900}{Recovery}}\\
+\textbf{\textcolor{green-900}{Oversight}}\par
+Post-hoc review\par\vspace{4pt}
+\textbf{\textcolor{green-900}{Examples}}\par
+Research; internal drafts\par\vspace{4pt}
+\textbf{\textcolor{green-900}{Recovery}}\par
 Delete/revise
 };
 
@@ -31,11 +32,11 @@ Delete/revise
 \node[level circle={amber-900}, fill=amber-100, text=amber-900] (level2) at (4.67,0) {Partially\\Reversible};
 
 \node[level box={amber-900}, fill=amber-100, below=0.8cm of level2] (box2) {%
-\textbf{\textcolor{amber-900}{Oversight}}\\
-Checkpoint review\\[4pt]
-\textbf{\textcolor{amber-900}{Examples}}\\
-Internal emails\\[4pt]
-\textbf{\textcolor{amber-900}{Recovery}}\\
+\textbf{\textcolor{amber-900}{Oversight}}\par
+Checkpoint review\par\vspace{4pt}
+\textbf{\textcolor{amber-900}{Examples}}\par
+Internal emails\par\vspace{4pt}
+\textbf{\textcolor{amber-900}{Recovery}}\par
 Correction message
 };
 
@@ -43,27 +44,28 @@ Correction message
 \node[level circle={key-dark}, fill=key-light, text=key-dark] (level3) at (9.33,0) {Largely\\Irreversible};
 
 \node[level box={key-dark}, fill=key-light, below=0.8cm of level3] (box3) {%
-\textbf{\textcolor{key-dark}{Oversight}}\\
-Pre-approval required\\[4pt]
-\textbf{\textcolor{key-dark}{Examples}}\\
-Client communications\\[4pt]
-\textbf{\textcolor{key-dark}{Recovery}}\\
-Amendment filing
+\textbf{\textcolor{key-dark}{Oversight}}\par
+Pre-approval required\par\vspace{4pt}
+\textbf{\textcolor{key-dark}{Examples}}\par
+Client communications\par\vspace{4pt}
+\textbf{\textcolor{key-dark}{Recovery}}\par
+Amendment/\\retraction
 };
 
 % Level 4: Irreversible (rightmost)
 \node[level circle={red-900}, fill=red-100, text=red-900] (level4) at (14,0) {Irreversible};
 
 \node[level box={red-900}, fill=red-100, below=0.8cm of level4] (box4) {%
-\textbf{\textcolor{red-900}{Oversight}}\\
-Multi-party approval\\[4pt]
-\textbf{\textcolor{red-900}{Examples}}\\
-Court filings, trades, wires\\[4pt]
-\textbf{\textcolor{red-900}{Recovery}}\\
+\textbf{\textcolor{red-900}{Oversight}}\par
+Multi-party approval\par\vspace{4pt}
+\textbf{\textcolor{red-900}{Examples}}\par
+Court filings; trades; wires\par\vspace{4pt}
+\textbf{\textcolor{red-900}{Recovery}}\par
 Offsetting transaction
 };
 
 \end{tikzpicture}
+}%
 \caption{Action reversibility spectrum and corresponding governance requirements. As actions become less reversible, oversight shifts from post-hoc review to pre-approval and multi-party authorization. Recovery mechanisms range from simple deletion for fully reversible actions to complex offsetting transactions for irreversible ones.}
 \label{fig:agents2-reversibility-spectrum}
 \end{figure}

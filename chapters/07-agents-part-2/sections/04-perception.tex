@@ -35,7 +35,7 @@ In this section, we examine perception: the read-only tools that enable agents t
 
 Effective perception requires selecting the correct tool for the information type. Perception tools generally fall into three categories: information retrieval, document processing, and computation.
 
-Information retrieval tools query authoritative platforms. Legal research tools connect to services like Westlaw, Lexis, or PACER (Public Access to Court Electronic Records) \parencite{pacer-system}. These tools allow agents to search case law, retrieve opinions, and download federal court filings. Financial research tools connect to platforms like Bloomberg, FactSet, or Refinitiv. These enable agents to query real-time prices, retrieve fundamentals, and access analyst research. Internal knowledge bases include document management systems (DMS) and deal archives. Accessing these allows the agent to retrieve prior work product and precedent.
+Information retrieval tools query authoritative platforms. Legal research tools could connect to services like Westlaw, Lexis, Beck-Online (Germany), LawNet (Singapore) or a variety of other type systems available around the world. These tools could allow agents to search case law, retrieve opinions, and download court filings. Financial research tools connect to platforms like Bloomberg, FactSet, or Refinitiv. These enable agents to query real-time prices, retrieve fundamentals, and access analyst research. Internal knowledge bases include document management systems (DMS) and deal archives. Accessing these allows the agent to retrieve prior work product and precedent.
 
 Document processing tools transform raw files into structured data. Text extraction converts PDFs and images into machine-readable text. OCR (Optical Character Recognition) handles scanned filings, while table extractors preserve the structure of financial statements. Document classification identifies file types, which is essential during due diligence. An agent must distinguish contracts from correspondence to organize a data room effectively. Entity extraction pulls structured data from unstructured text. Extracting a borrower's name, facility amount, and maturity date from a credit agreement enables analysis that otherwise requires manual review.
 
@@ -73,7 +73,7 @@ Without MCP, connecting 10 agents to 10 tools requires 100 custom integrations. 
 In legal practice, a single agent queries document management systems, internal knowledge bases, and custom research tools through one protocol. In financial services, one agent accesses portfolio systems, risk engines, and compliance databases through the same standard.
 
 \vspace{0.5em}
-By mid-2025, research benchmarks note that the ecosystem already included \textit{over ten thousand} MCP servers, illustrating the scale and volatility of the integration surface area \parencite{livemcpbench-2025}.
+Recent research benchmarks noted that the ecosystem already included \textit{over ten thousand} MCP servers, illustrating the scale and volatility of the integration surface area \parencite{livemcpbench-2025}.  Many more such servers are likely to be created in the years ahead. 
 \end{keybox}
 
 % ----------------------------------------------------------------------------
@@ -110,7 +110,8 @@ Legal and regulatory information is bounded by jurisdiction. California preceden
 
 \paragraph{Matter and Client Isolation}
 
-Critically, perception must respect confidentiality boundaries. An agent working on Matter A cannot perceive documents from adverse Matter B. This enforcement of \keyterm{ethical walls} must occur at the perception layer. In financial contexts, an agent advising Client X cannot perceive material non-public information (MNPI) from Client Y's engagement. Every perception event must be logged, capturing the agent, the query, and the matter context. This audit trail enables compliance review and breach detection. See \Cref{sec:agents2-memory} for detailed treatment of isolation requirements.
+\mbox{}\\[-0.3em]
+Critically, perception must respect confidentiality boundaries. Whether a human or AI, an agent working on Matter A cannot perceive documents from adverse Matter B. This enforcement of \keyterm{ethical walls} arguably must occur at the perception layer. In financial contexts, an agent advising Client X cannot perceive material non-public information (MNPI) from Client Y's engagement. Every perception event must be logged, capturing the agent, the query, and the matter context. This audit trail enables compliance review and breach detection. See \Cref{sec:agents2-memory} for detailed treatment of isolation requirements.
 
 % ----------------------------------------------------------------------------
 % Tool Design Principles for Perception
