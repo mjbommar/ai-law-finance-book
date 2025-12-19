@@ -46,7 +46,7 @@
 
 @article{livemcpbench-2025,
   title        = {{LiveMCPBench}: Can Agents Navigate an Ocean of {MCP} Tools?},
-  author       = {Wang, Qingyun and others},
+  author       = {Mo, Guozhao and Zhong, Wenliang and Chen, Jiawei and Chen, Xuanang and Lu, Yaojie and Lin, Hongyu and He, Ben and Han, Xianpei and Sun, Le},
   journal      = {arXiv preprint arXiv:2508.01780},
   year         = {2025},
   doi          = {10.48550/arXiv.2508.01780},
@@ -157,12 +157,16 @@
   note         = {Tree-structured exploration for complex reasoning}
 }
 
-@article{xi2023rise,
-  author       = {Xi, Zhiheng and Chen, Wenxiang and Guo, Xin and He, Wei and Ding, Yiwen and Hong, Boyang and Zhang, Ming and Wang, Junzhe and Jin, Senjie and Zhou, Enyu and others},
+@misc{xi2023rise,
+  author       = {Xi, Zhiheng and Chen, Wenxiang and Guo, Xin and He, Wei and Ding, Yiwen and Hong, Boyang and Zhang, Ming and Wang, Junzhe and Jin, Senjie and Zhou, Enyu and Zheng, Rui and Fan, Xiaoran and Wang, Xiao and Xiong, Limao and Zhou, Yuhao and Wang, Weiran and Jiang, Changhao and Zou, Yicheng and Liu, Xiangyang and Yin, Zhangyue and Dou, Shihan and Weng, Rongxiang and Cheng, Wensen and Zhang, Qi and Qin, Wenjuan and Zheng, Yongyan and Qiu, Xipeng and Huang, Xuanjing and Gui, Tao},
   title        = {The Rise and Potential of Large Language Model Based Agents: A Survey},
-  journal      = {arXiv preprint arXiv:2309.07864},
   year         = {2023},
-  note         = {Comprehensive survey of LLM-based agents}
+  eprint       = {2309.07864},
+  archiveprefix = {arXiv},
+  primaryclass = {cs.AI},
+  url          = {https://arxiv.org/abs/2309.07864},
+  urldate      = {2025-12-19},
+  note         = {Comprehensive survey of LLM-based agents; covers architecture, capabilities, and applications}
 }
 
 @inproceedings{park2023generative,
@@ -178,26 +182,6 @@
 % ----------------------------------------------------------------------------
 % Industry References
 % ----------------------------------------------------------------------------
-
-@online{harvey-agentic,
-  title        = {Harvey to Roll Out Agentic Workflows},
-  author       = {{Artificial Lawyer}},
-  year         = {2025},
-  month        = mar,
-  url          = {https://www.artificiallawyer.com/2025/03/17/harvey-to-roll-out-agentic-workflows/},
-  urldate      = {2025-11-27},
-  note         = {Harvey announces multi-step agentic workflows for complex legal tasks}
-}
-
-@online{cocounsel-legal,
-  title        = {Thomson Reuters Launches CoCounsel Legal with Agentic {AI} and Deep Research Capabilities},
-  author       = {{Legal Technology}},
-  year         = {2025},
-  month        = aug,
-  url          = {https://legaltechnology.com/2025/08/05/thomson-reuters-launches-cocounsel-legal-with-agentic-ai-and-deep-research-capabilities/},
-  urldate      = {2025-11-27},
-  note         = {CoCounsel Legal launch with Deep Research; integration with Westlaw and Practical Law}
-}
 
 @online{bedrock-agentcore,
   title        = {Amazon Bedrock AgentCore},
@@ -289,14 +273,6 @@
   note         = {Predicts 40\%+ of agentic AI projects canceled by end of 2027 due to costs, unclear value, or inadequate risk controls; 33\% of enterprise applications to include agentic AI by 2028}
 }
 
-@online{gartner-hype-cycle-2025,
-  author       = {{Gartner}},
-  title        = {Gartner Hype Cycle for Artificial Intelligence, 2025},
-  year         = {2025},
-  url          = {https://www.gartner.com/en/documents/},
-  urldate      = {2025-11-27},
-  note         = {Places Agentic AI at Peak of Inflated Expectations}
-}
 
 % ----------------------------------------------------------------------------
 % Financial Benchmarks and Evaluation
@@ -328,14 +304,6 @@
   note         = {CourtListener webhook API for real-time PACER docket updates, search alerts, and RECAP fetch notifications; enables event-driven legal monitoring workflows}
 }
 
-@online{risingwave-cqrs-event-sourcing,
-  author       = {{RisingWave Labs}},
-  title        = {Mastering {CQRS} and Event Sourcing for Modern Database Architecture},
-  year         = {2024},
-  url          = {https://risingwave.com/blog/mastering-cqrs-and-event-sourcing-for-modern-database-architecture/},
-  urldate      = {2025-12-04},
-  note         = {Technical overview of CQRS and event sourcing patterns for financial systems; emphasizes audit trail requirements, regulatory compliance, and temporal query capabilities for determining entity state at any point in time}
-}
 
 % ----------------------------------------------------------------------------
 % Foundational RAG and Embeddings
@@ -379,6 +347,45 @@
 }
 
 % ----------------------------------------------------------------------------
+% Advanced RAG Techniques (Section 06)
+% ----------------------------------------------------------------------------
+
+@inproceedings{ma2023queryrewriting,
+  author       = {Ma, Xinbei and Gong, Yeyun and He, Pengcheng and Zhao, Hai and Duan, Nan},
+  title        = {Query Rewriting for Retrieval-Augmented Large Language Models},
+  booktitle    = {Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
+  year         = {2023},
+  publisher    = {Association for Computational Linguistics},
+  url          = {https://aclanthology.org/2023.emnlp-main.322/},
+  urldate      = {2025-12-19},
+  note         = {Introduces Rewrite-Retrieve-Read framework; uses trainable rewriter to transform queries for better retrieval; demonstrates improved QA accuracy through query adaptation}
+}
+
+@misc{yu2024rankrag,
+  author       = {Yu, Yue and Ping, Wei and Liu, Zihan and Wang, Boxin and You, Jiaxuan and Zhang, Chao and Shoeybi, Mohammad and Catanzaro, Bryan},
+  title        = {{RankRAG}: Unifying Context Ranking with Retrieval-Augmented Generation in {LLMs}},
+  year         = {2024},
+  eprint       = {2407.02485},
+  archiveprefix = {arXiv},
+  primaryclass = {cs.CL},
+  url          = {https://arxiv.org/abs/2407.02485},
+  urldate      = {2025-12-19},
+  note         = {Instruction-tunes single LLM for both context ranking and answer generation; outperforms GPT-4 on knowledge-intensive benchmarks; demonstrates reranking integrated into generation}
+}
+
+@misc{clop2024ragpoisoning,
+  author       = {Clop, Cody and Teglia, Yannick},
+  title        = {Backdoored Retrievers for Prompt Injection Attacks on Retrieval Augmented Generation of Large Language Models},
+  year         = {2024},
+  eprint       = {2410.14479},
+  archiveprefix = {arXiv},
+  primaryclass = {cs.CR},
+  url          = {https://arxiv.org/abs/2410.14479},
+  urldate      = {2025-12-19},
+  note         = {Demonstrates corpus poisoning and backdoor attacks on RAG systems; achieves high attack success rates with minimal poisoned documents; security implications for memory-based agents}
+}
+
+% ----------------------------------------------------------------------------
 % Advanced Planning Patterns
 % ----------------------------------------------------------------------------
 
@@ -407,18 +414,6 @@
 % ----------------------------------------------------------------------------
 % Legal AI Reliability Studies
 % ----------------------------------------------------------------------------
-
-@misc{dahl2024legal,
-  author       = {Dahl, Matthew and Magesh, Varun and Suzgun, Mirac and Ho, Daniel E.},
-  title        = {Large Legal Fictions: Profiling Legal Hallucinations in Large Language Models},
-  year         = {2024},
-  eprint       = {2401.01301},
-  archiveprefix = {arXiv},
-  primaryclass = {cs.CL},
-  url          = {https://arxiv.org/abs/2401.01301},
-  urldate      = {2025-12-13},
-  note         = {Stanford study finding 58--88\% hallucination rates when LLMs answer legal queries; develops typology of legal hallucinations including fabricated citations}
-}
 
 @article{dahl2024hallucinations,
   author       = {Dahl, Matthew and Magesh, Varun and Suzgun, Mirac and Ho, Daniel E.},
@@ -531,6 +526,52 @@
 }
 
 % ----------------------------------------------------------------------------
+% In-Context Learning and Few-Shot Learning (Section 04)
+% ----------------------------------------------------------------------------
+
+@inproceedings{brown2020gpt3,
+  author       = {Brown, Tom and Mann, Benjamin and Ryder, Nick and Subbiah, Melanie and Kaplan, Jared D. and Dhariwal, Prafulla and Neelakantan, Arvind and Shyam, Pranav and Sastry, Girish and Askell, Amanda and Agarwal, Sandhini and Herbert-Voss, Ariel and Krueger, Gretchen and Henighan, Tom and Child, Rewon and Ramesh, Aditya and Ziegler, Daniel and Wu, Jeffrey and Winter, Clemens and Hesse, Chris and Chen, Mark and Sigler, Eric and Litwin, Mateusz and Gray, Scott and Chess, Benjamin and Clark, Jack and Berner, Christopher and McCandlish, Sam and Radford, Alec and Sutskever, Ilya and Amodei, Dario},
+  title        = {Language Models are Few-Shot Learners},
+  booktitle    = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year         = {2020},
+  volume       = {33},
+  pages        = {1877--1901},
+  url          = {https://papers.nips.cc/paper/2020/hash/1457c0d6bfcb4967418bfb8ac142f64a-Abstract.html},
+  urldate      = {2025-12-19},
+  note         = {Seminal paper introducing GPT-3 (175B parameters) and establishing in-context learning: the ability of large language models to adapt to new tasks from examples provided in the prompt without parameter updates}
+}
+
+% ----------------------------------------------------------------------------
+% Intent Understanding and Instruction Following (Section 03)
+% ----------------------------------------------------------------------------
+
+@article{allen1980intention,
+  author       = {Allen, James F. and Perrault, C. Raymond},
+  title        = {Analyzing Intention in Utterances},
+  journal      = {Artificial Intelligence},
+  year         = {1980},
+  volume       = {15},
+  number       = {3},
+  pages        = {143--178},
+  doi          = {10.1016/0004-3702(80)90042-9},
+  url          = {https://doi.org/10.1016/0004-3702(80)90042-9},
+  urldate      = {2025-12-19},
+  note         = {Foundational paper on plan-based inference of speaker intentions in cooperative dialogue; establishes framework for understanding how listeners infer goals from utterances}
+}
+
+@misc{ouyang2022instructgpt,
+  author       = {Ouyang, Long and Wu, Jeff and Jiang, Xu and Almeida, Diogo and Wainwright, Carroll L. and Mishkin, Pamela and Zhang, Chong and Agarwal, Sandhini and Slama, Katarina and Ray, Alex and Schulman, John and Hilton, Jacob and Kelton, Fraser and Miller, Luke and Simens, Maddie and Askell, Amanda and Welinder, Peter and Christiano, Paul and Leike, Jan and Lowe, Ryan},
+  title        = {Training Language Models to Follow Instructions with Human Feedback},
+  year         = {2022},
+  eprint       = {2203.02155},
+  archiveprefix = {arXiv},
+  primaryclass = {cs.CL},
+  url          = {https://arxiv.org/abs/2203.02155},
+  urldate      = {2025-12-19},
+  note         = {Introduces InstructGPT and RLHF methodology; explicitly frames alignment as following user intent across diverse tasks; foundational for modern instruction-following LLMs}
+}
+
+% ----------------------------------------------------------------------------
 % LLM Clarification Behavior
 % ----------------------------------------------------------------------------
 
@@ -619,6 +660,36 @@
 }
 
 % ----------------------------------------------------------------------------
+% Cognitive Work Systems and Distributed Cognition (Section 01)
+% ----------------------------------------------------------------------------
+
+@book{hollnagel2005joint,
+  author       = {Hollnagel, Erik and Woods, David D.},
+  title        = {Joint Cognitive Systems: Foundations of Cognitive Systems Engineering},
+  year         = {2005},
+  publisher    = {CRC Press},
+  address      = {Boca Raton, FL},
+  doi          = {10.1201/9781420038194},
+  url          = {https://doi.org/10.1201/9781420038194},
+  urldate      = {2025-12-19},
+  note         = {Foundational text establishing cognitive systems engineering framework; introduces joint cognitive systems as units of analysis for human-technology interaction}
+}
+
+@article{hollan2000distributed,
+  author       = {Hollan, James and Hutchins, Edwin and Kirsh, David},
+  title        = {Distributed Cognition: Toward a New Foundation for Human-Computer Interaction Research},
+  journal      = {ACM Transactions on Computer-Human Interaction},
+  year         = {2000},
+  volume       = {7},
+  number       = {2},
+  pages        = {174--196},
+  doi          = {10.1145/353485.353487},
+  url          = {https://doi.org/10.1145/353485.353487},
+  urldate      = {2025-12-19},
+  note         = {Seminal paper proposing distributed cognition as framework for HCI; cognition extends beyond individuals to include artifacts, environment, and social structures}
+}
+
+% ----------------------------------------------------------------------------
 % Foundational Agent Theory (Section 01)
 % ----------------------------------------------------------------------------
 
@@ -633,14 +704,19 @@
   note         = {Foundational textbook establishing agent architecture: perception-action loop, rational agents, and agent type taxonomy (simple reflex, model-based reflex, goal-based, utility-based)}
 }
 
-@article{wang2023llmagents,
+@article{wang2024llmagents,
   author       = {Wang, Lei and Ma, Chen and Feng, Xueyang and Zhang, Zeyu and Yang, Hao and Zhang, Jingsen and Chen, Zhiyuan and Tang, Jiakai and Chen, Xu and Lin, Yankai and Zhao, Wayne Xin and Wei, Zhewei and Wen, Ji-Rong},
   title        = {A Survey on Large Language Model based Autonomous Agents},
-  journal      = {arXiv preprint arXiv:2308.11432},
-  year         = {2023},
-  url          = {https://arxiv.org/abs/2308.11432},
-  urldate      = {2025-12-13},
-  note         = {Comprehensive survey of LLM-based agents covering profile, memory, planning, and action modules with unified framework}
+  journal      = {Frontiers of Computer Science},
+  year         = {2024},
+  volume       = {18},
+  number       = {6},
+  pages        = {186345},
+  publisher    = {Springer},
+  doi          = {10.1007/s11704-024-40231-1},
+  url          = {https://link.springer.com/article/10.1007/s11704-024-40231-1},
+  urldate      = {2025-12-19},
+  note         = {Peer-reviewed survey proposing unified framework for LLM-based agents covering profile, memory, planning, and action modules}
 }
 
 @article{wooldridge1995intelligent,
@@ -707,30 +783,80 @@
 % Agent Action and Tool Use (Section 05)
 % ----------------------------------------------------------------------------
 
-@article{rollback-rl-2024,
-  title        = {Learning to Undo: Rollback-Augmented Reinforcement Learning with Reversibility Signals},
-  journal      = {arXiv preprint arXiv:2510.14503},
-  year         = {2024},
-  url          = {https://arxiv.org/abs/2510.14503},
-  urldate      = {2025-12-13},
-  note         = {Framework for reversibility and rollback in safety-sensitive AI systems; achieved 99.8\% reduction in catastrophic failures through selective state rollback}
+@incollection{mccarthy1969frame,
+  author       = {McCarthy, John and Hayes, Patrick J.},
+  title        = {Some Philosophical Problems from the Standpoint of Artificial Intelligence},
+  booktitle    = {Machine Intelligence 4},
+  editor       = {Meltzer, B. and Michie, D.},
+  year         = {1969},
+  pages        = {463--502},
+  publisher    = {Edinburgh University Press},
+  address      = {Edinburgh},
+  url          = {https://www-formal.stanford.edu/jmc/mcchay69.pdf},
+  urldate      = {2025-12-19},
+  note         = {Foundational paper introducing the frame problem in AI: when an action occurs, what changes and what stays the same? Also introduces situation calculus for reasoning about actions and their effects}
 }
 
-@misc{agent-security-bench-2024,
-  title        = {Agent Security Bench ({ASB}): Formalizing and Benchmarking Attacks and Defenses in {LLM}-based Agents},
-  year         = {2024},
-  url          = {https://openreview.net/forum?id=V4y0CpX4hK},
-  urldate      = {2025-12-13},
-  note         = {Benchmark framework for agent security across 10 scenarios, 400+ tools, 27 attack/defense methods; includes prompt injection, memory poisoning, and backdoor attacks}
+@book{austin1962speech,
+  author       = {Austin, J. L.},
+  title        = {How to Do Things with Words},
+  year         = {1962},
+  publisher    = {Oxford University Press},
+  address      = {Oxford},
+  note         = {Posthumously published William James Lectures (Harvard, 1955) establishing speech act theory; introduces performative utterances---utterances that constitute actions rather than describe them (e.g., ``I promise,'' ``I sentence you''). Second edition edited by J. O. Urmson and Marina Sbis\`{a}, Harvard University Press, 1975, ISBN 978-0-674-41152-4}
 }
 
-@article{human-ai-collaboration-2024,
-  title        = {Evaluating Human-{AI} Collaboration: A Review and Methodological Framework},
-  journal      = {arXiv preprint arXiv:2407.19098},
+@inproceedings{grinsztajn2021reversibility,
+  author       = {Grinsztajn, Nathan and Ferret, Johan and Pietquin, Olivier and Preux, Philippe and Geist, Matthieu},
+  title        = {There Is No Turning Back: A Self-Supervised Approach for Reversibility-Aware Reinforcement Learning},
+  booktitle    = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year         = {2021},
+  volume       = {34},
+  pages        = {1898--1911},
+  url          = {https://papers.nips.cc/paper_files/paper/2021/hash/0e98aeeb54acf612b9eb4e48a269814c-Abstract.html},
+  urldate      = {2025-12-19},
+  note         = {Self-supervised approach for learning reversibility in RL; agents learn to distinguish reversible from irreversible actions without explicit labels; foundational for safety-aware autonomous systems}
+}
+
+@inproceedings{liu2024promptinjection,
+  author       = {Liu, Yupei and Jia, Yuqi and Geng, Runpeng and Jia, Jinyuan and Gong, Neil Zhenqiang},
+  title        = {Formalizing and Benchmarking Prompt Injection Attacks and Defenses},
+  booktitle    = {Proceedings of the 33rd USENIX Security Symposium},
   year         = {2024},
-  url          = {https://arxiv.org/abs/2407.19098},
-  urldate      = {2025-12-13},
-  note         = {Framework for understanding approval gates and human oversight in AI systems; addresses goals, interaction, and task allocation factors}
+  publisher    = {USENIX Association},
+  url          = {https://www.usenix.org/conference/usenixsecurity24/presentation/liu-yupei},
+  urldate      = {2025-12-19},
+  note         = {First formal framework for prompt injection attacks; comprehensive benchmark of attack vectors and defense mechanisms; peer-reviewed security venue}
+}
+
+@article{parasuraman2000automation,
+  author       = {Parasuraman, Raja and Sheridan, Thomas B. and Wickens, Christopher D.},
+  title        = {A Model for Types and Levels of Human Interaction with Automation},
+  journal      = {IEEE Transactions on Systems, Man, and Cybernetics---Part A: Systems and Humans},
+  year         = {2000},
+  volume       = {30},
+  number       = {3},
+  pages        = {286--297},
+  doi          = {10.1109/3468.844354},
+  url          = {https://ieeexplore.ieee.org/document/844354},
+  urldate      = {2025-12-19},
+  note         = {Foundational framework defining 10 levels of automation across four information-processing stages; canonical reference for human-automation interaction and approval gate design}
+}
+
+% ----------------------------------------------------------------------------
+% Abstention and "I Don't Know" (Section 09)
+% ----------------------------------------------------------------------------
+
+@misc{abbasiyadkori2024conformal,
+  author       = {Abbasi Yadkori, Yasin and Kuzborskij, Ilja and Stutz, David and Gy{\"o}rgy, Andr{\'a}s and Fisch, Adam and Doucet, Arnaud and Beloshapka, Iuliya and Weng, Wei-Hung and Yang, Yao-Yuan and Szepesv{\'a}ri, Csaba and Cemgil, Ali Taylan and Tomasev, Nenad},
+  title        = {Mitigating {LLM} Hallucinations via Conformal Abstention},
+  year         = {2024},
+  eprint       = {2405.01563},
+  archiveprefix = {arXiv},
+  primaryclass = {cs.LG},
+  url          = {https://arxiv.org/abs/2405.01563},
+  urldate      = {2025-12-19},
+  note         = {Develops principled procedure for determining when LLMs should abstain (say ``I don't know'') instead of hallucinating; uses conformal prediction to provide theoretical guarantees on hallucination rates}
 }
 
 % ----------------------------------------------------------------------------
@@ -757,39 +883,59 @@
   note         = {Official guidance establishing supervision and governance requirements for AI in financial services under Rule 3110}
 }
 
-@article{hitl-survey-2022,
+@article{mosqueira-rey2023hitl,
+  author       = {Mosqueira-Rey, Eduardo and Hern{\'a}ndez-Pereira, Elena and Alonso-R{\'i}os, David and Bobes-Bascar{\'a}n, Jos{\'e} and Fern{\'a}ndez-Leal, {\'A}ngel},
   title        = {Human-in-the-loop machine learning: a state of the art},
   journal      = {Artificial Intelligence Review},
-  year         = {2022},
+  year         = {2023},
+  volume       = {56},
+  pages        = {3005--3054},
   publisher    = {Springer},
   doi          = {10.1007/s10462-022-10246-w},
   url          = {https://link.springer.com/article/10.1007/s10462-022-10246-w},
-  urldate      = {2025-12-13},
-  note         = {Survey covering confidence-based escalation approaches: least confidence, margin of confidence, ratio of confidence, and entropy-based methods}
+  urldate      = {2025-12-19},
+  note         = {Comprehensive survey of HITL-ML covering active learning, interactive ML, machine teaching, curriculum learning, and explainable AI; includes confidence-based escalation approaches}
 }
 
-@article{ai-uncertainty-2023,
-  title        = {Using {AI} Uncertainty Quantification to Improve Human Decision-Making},
-  journal      = {arXiv preprint arXiv:2309.10852},
-  year         = {2023},
-  url          = {https://arxiv.org/abs/2309.10852},
-  urldate      = {2025-12-13},
-  note         = {Research on how uncertainty estimates guide autonomous vs. human-deferral decisions; addresses confidence calibration challenges}
+@inproceedings{madras2018defer,
+  author       = {Madras, David and Pitassi, Toniann and Zemel, Richard},
+  title        = {Predict Responsibly: Improving Fairness and Accuracy by Learning to Defer},
+  booktitle    = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year         = {2018},
+  volume       = {31},
+  url          = {https://proceedings.neurips.cc/paper/2018/hash/09d37c08f7b129e96277388757530c72-Abstract.html},
+  urldate      = {2025-12-19},
+  note         = {Foundational work on learning when AI should defer to human decision-makers; frames deferral as joint optimization of accuracy and fairness; basis for confidence-based escalation}
 }
 
-@article{human-ai-taxonomy-2024,
+@article{gomez2025taxonomy,
+  author       = {Gomez, Camilo and Cho, Seong Mi and Ke, Sue and Huang, Chien-Ming and Unberath, Mathias},
   title        = {Human-{AI} collaboration is not very collaborative yet: a taxonomy of interaction patterns in {AI}-assisted decision making from a systematic review},
   journal      = {Frontiers in Computer Science},
-  year         = {2024},
+  year         = {2025},
+  volume       = {6},
+  pages        = {1521066},
   doi          = {10.3389/fcomp.2024.1521066},
   url          = {https://www.frontiersin.org/journals/computer-science/articles/10.3389/fcomp.2024.1521066/full},
-  urldate      = {2025-12-13},
-  note         = {Systematic review of 105 articles developing taxonomy of human-AI interaction patterns and handoff protocols}
+  urldate      = {2025-12-19},
+  note         = {Systematic review of 105 articles developing taxonomy of human-AI interaction patterns; identifies limited bidirectional collaboration in current AI-assisted decision systems}
 }
 
 % ----------------------------------------------------------------------------
 % Multi-Agent Systems (Section 10)
 % ----------------------------------------------------------------------------
+
+@misc{cemri2025multiagentfail,
+  author       = {Cemri, Mert and Pan, Melissa Z. and Yang, Shuyi and Agrawal, Lakshya A. and Chopra, Bhavya and Tiwari, Rishabh and Keutzer, Kurt and Parameswaran, Aditya and Klein, Dan and Ramchandran, Kannan and Zaharia, Matei and Gonzalez, Joseph E. and Stoica, Ion},
+  title        = {Why Do Multi-Agent {LLM} Systems Fail?},
+  year         = {2025},
+  eprint       = {2503.13657},
+  archiveprefix = {arXiv},
+  primaryclass = {cs.AI},
+  url          = {https://arxiv.org/abs/2503.13657},
+  urldate      = {2025-12-19},
+  note         = {Introduces MAST taxonomy with 14 failure modes in 3 categories (system design, inter-agent misalignment, task verification); analyzes 1600+ annotated traces across 7 MAS frameworks; high inter-annotator agreement ($\kappa = 0.88$)}
+}
 
 @article{wu2023autogen,
   author       = {Wu, Qingyun and Bansal, Gagan and Zhang, Jieyu and Wu, Yiran and Zhang, Shaokun and Zhu, Erkang and Li, Beibin and Jiang, Li and Zhang, Xiaoyun and Wang, Chi},
@@ -832,6 +978,55 @@
 }
 
 % ----------------------------------------------------------------------------
+% Loop Detection and Agent Monitoring (Section 08)
+% ----------------------------------------------------------------------------
+
+@inproceedings{zou2024circuitbreakers,
+  author       = {Zou, Andy and Phan, Long and Wang, Justin and Duenas, Derek and Lin, Maxwell and Andriushchenko, Maksym and Wang, Rowan and Kolter, Zico and Fredrikson, Matt and Hendrycks, Dan},
+  title        = {Improving Alignment and Robustness with Circuit Breakers},
+  booktitle    = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year         = {2024},
+  volume       = {37},
+  eprint       = {2406.04313},
+  archiveprefix = {arXiv},
+  url          = {https://arxiv.org/abs/2406.04313},
+  urldate      = {2025-12-19},
+  note         = {Introduces circuit breakers as interrupt mechanisms for AI agents; demonstrates reductions in harmful actions under attack; extends to agent function-calling safety}
+}
+
+@inproceedings{ma2024agentboard,
+  author       = {Ma, Chang and Zhang, Junlei and Zhu, Zhihao and Yang, Cheng and Yang, Yujiu and Jin, Yaohui and Lan, Zhenzhong and Kong, Lingpeng and He, Junxian},
+  title        = {{AgentBoard}: An Analytical Evaluation Board of Multi-turn {LLM} Agents},
+  booktitle    = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year         = {2024},
+  volume       = {37},
+  eprint       = {2401.13178},
+  archiveprefix = {arXiv},
+  url          = {https://arxiv.org/abs/2401.13178},
+  urldate      = {2025-12-19},
+  note         = {NeurIPS 2024 Oral; introduces fine-grained progress rate metric that captures incremental advancements in multi-turn agent tasks}
+}
+
+% ----------------------------------------------------------------------------
+% Compounding Errors and Multi-Step Reliability (Section 08)
+% ----------------------------------------------------------------------------
+
+@inproceedings{press2023compositionality,
+  author       = {Press, Ofir and Zhang, Muru and Min, Sewon and Schmidt, Ludwig and Smith, Noah A. and Lewis, Mike},
+  title        = {Measuring and Narrowing the Compositionality Gap in Language Models},
+  booktitle    = {Findings of the Association for Computational Linguistics: EMNLP 2023},
+  year         = {2023},
+  pages        = {5687--5711},
+  publisher    = {Association for Computational Linguistics},
+  address      = {Singapore},
+  eprint       = {2210.03350},
+  archiveprefix = {arXiv},
+  url          = {https://arxiv.org/abs/2210.03350},
+  urldate      = {2025-12-19},
+  note         = {Quantifies compositionality gap where models correctly solve sub-problems but fail on overall compositional tasks; demonstrates performance degradation as composition steps increase; gap remains constant at ~40\% across model sizes}
+}
+
+% ----------------------------------------------------------------------------
 % Governance and Compliance (Section 11)
 % ----------------------------------------------------------------------------
 
@@ -858,15 +1053,19 @@
   note         = {Review of AI oversight by OCC, FDIC, Federal Reserve, CFPB, and NCUA; documents application of model risk management frameworks to AI systems}
 }
 
-@article{ai-auditing-systematic-review-2024,
+@article{li2025aiaudit,
+  author       = {Li, Yueqi and Goel, Sanjay},
   title        = {Making It Possible for the Auditing of {AI}: A Systematic Review of {AI} Audits and {AI} Auditability},
   journal      = {Information Systems Frontiers},
-  year         = {2024},
+  year         = {2025},
+  volume       = {27},
+  number       = {3},
+  pages        = {1121--1151},
   publisher    = {Springer},
   doi          = {10.1007/s10796-024-10508-8},
   url          = {https://link.springer.com/article/10.1007/s10796-024-10508-8},
-  urldate      = {2025-12-13},
-  note         = {Systematic review addressing AI auditability challenges including vulnerabilities, biases, and transparency requirements}
+  urldate      = {2025-12-19},
+  note         = {Systematic review addressing AI auditability challenges including vulnerabilities, biases, and transparency requirements for compliance}
 }
 
 @article{zhong2024xai-auditing,

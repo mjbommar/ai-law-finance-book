@@ -1,6 +1,6 @@
 % ============================================================================
 % 11-governance.tex
-% Q10: How Do We Keep the Agent Safe?
+% Governance: How Do We Keep the Agent Safe?
 % Part of: Chapter 07 - Agents Part II: How to Build an Agent
 % ============================================================================
 
@@ -11,9 +11,9 @@
 % Opening: Q10 Framing and Organizational Analogy
 % ----------------------------------------------------------------------------
 
-Every professional organization relies on infrastructure to ensure safety. A law firm does not rely solely on an associate's ethics; it has conflicts committees, billing review systems, and opinion committees. A bank does not rely solely on a trader's judgment; it has risk management engines, compliance monitoring, and internal audit functions. These structures do not do the work; they ensure the work is done safely.
+Every professional organization relies on infrastructure to ensure safety. A law firm does not rely solely on an associate's ethics; it maintains conflicts committees, billing review systems, and opinion committees. A bank does not rely solely on a trader's judgment; it deploys risk management engines, compliance monitoring, and internal audit functions. These structures do not perform the work---they ensure the work is done safely.
 
-Agentic systems require the same infrastructure. Governance is not a single question but a lens through which all other questions must be viewed. Every capability creates a governance requirement. Every architectural choice enables or constrains oversight. This section synthesizes the governance implications of the ten questions.
+Agentic systems require equivalent infrastructure. Governance is not a single question but a lens through which every capability must be viewed. Each architectural choice either enables or constrains oversight. This section synthesizes the governance implications across all ten framework questions.
 
 \begin{definitionbox}[title={Agentic System Governance}]
 \keyterm{Agentic system governance} encompasses the policies, controls, and oversight mechanisms that ensure agents operate safely, ethically, and in compliance with applicable requirements.
@@ -76,16 +76,16 @@ Each of the ten questions creates specific governance requirements:
 Five security controls are essential for regulated agentic systems \parencite{owasp-llm-top10,iso-iec-42001}:
 
 \begin{keybox}[title={Security Controls for Regulated Practice}]
-\begin{enumerate}[nosep]
-\item \textbf{Input Separation:} Isolate user inputs from system prompts to prevent prompt injection attacks.
-\item \textbf{Output Validation:} Verify agent outputs before execution to detect hallucinations and policy violations.
-\item \textbf{Least Privilege:} Grant minimum necessary tool access to limit the blast radius of failures.
-\item \textbf{Audit Logging:} Maintain comprehensive action logs for accountability and investigation.
-\item \textbf{Matter/Client Isolation:} Enforce confidentiality boundaries to protect privileged information.
-\end{enumerate}
-\end{keybox}
+\textbf{Input Separation} isolates user inputs from system prompts to prevent prompt injection attacks. By maintaining strict boundaries between instructions and data, systems can resist adversarial manipulation that attempts to override safety constraints. This control directly protects the intent determination process described in \Cref{sec:agents2-intent}.
 
-These controls map directly to the framework: Input Separation protects Intent (Q2). Output Validation governs Action (Q4). Least Privilege limits Perception (Q3) and Action (Q4). Audit Logging enables review of Termination (Q7) and Escalation (Q8). Isolation enforces Memory (Q5) boundaries.
+\textbf{Output Validation} verifies agent outputs before execution to detect hallucinations and policy violations. Every proposed action must pass validation gates that check both factual accuracy and compliance with operational boundaries. This control governs the action execution mechanisms detailed in \Cref{sec:agents2-action}.
+
+\textbf{Least Privilege} grants only the minimum necessary tool access to limit the blast radius of failures. Rather than providing agents with unrestricted capabilities, we expose only those tools required for legitimate tasks. This principle constrains both perception (\Cref{sec:agents2-perception}) and action (\Cref{sec:agents2-action}) subsystems.
+
+\textbf{Audit Logging} maintains comprehensive action logs for accountability and investigation. Every trigger, decision, and tool invocation must generate structured records that support retrospective analysis. This enables effective review of termination decisions (\Cref{sec:agents2-termination}) and escalation events (\Cref{sec:agents2-escalation}).
+
+\textbf{Matter and Client Isolation} enforces confidentiality boundaries to protect privileged information. Agents must respect the same ethical walls that govern human professionals, preventing information leakage across matters or clients. This control enforces the memory isolation requirements described in \Cref{sec:agents2-memory}.
+\end{keybox}
 
 % ----------------------------------------------------------------------------
 % Transparency and Explainability
@@ -94,17 +94,11 @@ These controls map directly to the framework: Input Separation protects Intent (
 \subsection{Transparency and Explainability}
 \label{sec:agents2-transparency-preview}
 
-Regulators and clients require explanations for agent decisions \parencite{zhong2024xai-auditing}. We define four transparency levels serving different audiences:
+Regulators and clients require explanations for agent decisions \parencite{zhong2024xai-auditing}. We define four transparency levels serving different audiences and purposes. At Level 0, users receive only the output itself---for example, ``Suspicious transaction flagged.'' This minimal disclosure suffices for low-stakes, high-trust contexts where the user needs only the conclusion. Level 1 adds supporting evidence: ``Flagged transaction \#45921; exceeds Rule 203(b)(1).'' By including specific citations and identifiers, this level enables independent verification of the agent's reasoning without exposing internal deliberations.
 
-\textbf{Level 0 (Output Only):} The answer alone (``Suspicious transaction flagged''). Sufficient for low-stakes, high-trust contexts.
+Level 2 provides a reasoning outline that articulates the key analytical steps: ``Flagged because: (1) \$150K exceeds \$100K threshold under Rule 203(b)(1), (2) counterparty appears on sanctions watchlist.'' This structured explanation is appropriate for substantive work product where stakeholders must understand not just the conclusion but the logical path that led there. Finally, Level 3 captures a complete execution trace---a full structured record of tool calls, retrieval operations, planning steps, and reasoning chains. This comprehensive audit trail is essential for debugging, regulatory examination, and post-incident investigation.
 
-\textbf{Level 1 (Summary + Sources):} Conclusion with citations (``Flagged transaction \#45921; exceeds Rule 203(b)(1)''). Enables verification.
-
-\textbf{Level 2 (Reasoning Outline):} Key analytical steps (``Flagged because: (1) \$150K > \$100K threshold, (2) counterparty on watchlist''). Appropriate for substantive work product.
-
-\textbf{Level 3 (Execution Trace):} Full structured record of tool calls, retrieval, and reasoning. Essential for audit and debugging.
-
-The architecture must capture Level 3 traces for all operations, then generate audience-appropriate summaries (Levels 0--2) on demand.
+The architecture must capture Level 3 traces for all operations, then generate audience-appropriate summaries at Levels 0--2 on demand. This approach balances transparency obligations with operational efficiency and confidentiality constraints.
 
 % ----------------------------------------------------------------------------
 % Auditability vs. Retention
@@ -113,20 +107,15 @@ The architecture must capture Level 3 traces for all operations, then generate a
 \subsection{Auditability vs. Retention}
 \label{sec:agents2-retention-preview}
 
-Tension exists between comprehensive logging (audit) and data minimization (privacy). The solution is not ``log everything forever.'' We apply four practices:
+Tension exists between comprehensive logging for audit and data minimization for privacy. The solution is not ``log everything forever.'' We apply four practices to balance these competing demands.
 
-\textbf{Structured Logging} captures decisions rather than raw chain-of-thought. This enables selective retention of decision points while discarding ephemeral reasoning.
+\textbf{Structured Logging} captures decisions rather than raw chain-of-thought. This enables selective retention of decision points while discarding ephemeral reasoning. By focusing on \textit{what} the agent decided and \textit{why}, rather than every intermediate reasoning step, we preserve auditability without drowning in data.
 
-\textbf{Tiered Retention} implements purpose-specific periods:
-\begin{itemize}[nosep]
-    \item \textbf{Short-term (days):} Full operational logs for debugging.
-    \item \textbf{Medium-term (months):} Structured decision logs for audit.
-    \item \textbf{Long-term (years):} Minimal compliance archives as required by regulation.
-\end{itemize}
+\textbf{Tiered Retention} implements purpose-specific periods tailored to operational needs. Short-term retention (measured in days) maintains full operational logs for debugging and immediate issue resolution. Medium-term retention (measured in months) preserves structured decision logs sufficient for audit and quality review. Long-term retention (measured in years) archives only the minimal compliance records required by regulation or professional standards. This tiered approach ensures that data persists only as long as it serves a defined purpose.
 
-\textbf{Redaction at Capture} applies privacy filters before logging. Once sensitive data enters logs, systematic removal is difficult.
+\textbf{Redaction at Capture} applies privacy filters before logging. Once sensitive data enters logs, systematic removal becomes difficult and error-prone. By redacting protected information---such as personally identifiable information or attorney-client privileged material---at the point of capture, we prevent downstream exposure.
 
-\textbf{Legal Hold Integration} ensures retention schedules yield to preservation obligations when litigation is anticipated.
+\textbf{Legal Hold Integration} ensures retention schedules yield to preservation obligations when litigation is reasonably anticipated. Automated destruction must halt when legal hold triggers activate, preventing spoliation while maintaining routine hygiene for non-preserved materials.
 
 % ----------------------------------------------------------------------------
 % Forward to Chapter 8
@@ -137,6 +126,6 @@ Tension exists between comprehensive logging (audit) and data minimization (priv
 
 This chapter answered \textit{how to build an agentic system}. The ten questions provided the architectural foundations; each created governance requirements the system must support.
 
-The following chapter answers: \textit{how do we govern these systems?} It examines the five-layer governance stack (legal, model, system, process, culture), dimensional controls, and compliance frameworks---including Federal Reserve guidance \parencite{fed-sr11-7} and the NIST AI RMF \parencite{nist-ai-rmf}.
+The following chapter answers: \textit{how do we govern these systems?} \Cref{sec:agents3-dimensional} introduces dimensional calibration for scaling governance controls based on system capabilities and risk profiles. \Cref{sec:agents3-governance-stack} examines the five-layer governance stack---legal, model, system, process, and culture---that translates regulatory obligations into operational controls. \Cref{sec:agents3-audit-logging} details audit logging requirements for compliance and investigation. \Cref{sec:agents3-human-oversight} explores human oversight patterns that balance automation with accountability. Finally, \Cref{sec:agents3-accountability} establishes accountability structures for when agents fail or cause harm, including Federal Reserve guidance \parencite{fed-sr11-7} and the NIST AI RMF \parencite{nist-ai-rmf}.
 
 Architecture provides the foundation. Governance provides the controls. Together, they enable responsible deployment.

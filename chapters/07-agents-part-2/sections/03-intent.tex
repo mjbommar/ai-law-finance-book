@@ -11,43 +11,48 @@
 % Opening: Q2 Framing and Organizational Analogy
 % ----------------------------------------------------------------------------
 
-When a partner walks into your office and says ``look into the Johnson matter,'' your first job is understanding what that actually means. You must determine whether this is a quick status check or a request for deep analysis, whether you should answer a specific question or identify all issues, and whether this is urgent work for today's call or background work for next week's meeting. The words you hear are the \textbf{instruction}; the underlying purpose that those words point toward is the \textbf{intent}.
+When a partner walks into your office and says ``get me up to speed on the Acme acquisition,'' your first job is understanding what that actually means. You must determine whether this is a quick status check or a request for deep analysis, whether you should answer a specific question or identify all issues, and whether this is urgent work for today's call or background work for next week's meeting. The words you hear are the \textbf{instruction}; the underlying purpose that those words point toward is the \textbf{intent}.
 
-Every professional develops this skill over time: reading the assignment memo, clarifying ambiguous instructions, and understanding not just what was said but what was meant. Junior associates tend to over-clarify; senior associates internalize firm norms and client expectations and infer appropriately. The best professionals know when to ask and when to proceed.
+Every professional develops this skill over time: reading the assignment memo, clarifying ambiguous instructions, and understanding not just what was said but what was meant. Junior associates tend to over-clarify, whereas senior associates internalize firm norms and client expectations and infer appropriately. The best professionals know when to ask and when to proceed.
 
-Agentic systems face the same challenge. The user provides an instruction: natural language, often ambiguous, sometimes contradictory. The agent must extract intent: what goal is being pursued, what constraints apply, what success looks like. This is the second fundamental question: \textit{How does an agent understand what's being asked?}
+Agentic systems face the same challenge. The user provides an instruction in natural language, which is inherently ambiguous and sometimes contradictory. Despite this, the agent must extract the user's intent to determine what goal is being pursued, what constraints apply, and what success looks like. This illustrates the second fundamental question: \textit{How does an agent understand what's being asked?}
 
 Four concepts structure this process: instruction, intent, goal, and task. Understanding how they relate---and where gaps arise---is essential for building and governing agentic systems.
 
 \begin{definitionbox}[title={Instruction}]
-An \keyterm{instruction} is the words the user provides---the raw input that starts the process. ``Review this credit agreement for risks.'' ``Rebalance to reduce tech exposure.'' ``Look into the Johnson matter.''
+	An \keyterm{instruction} is the words the user provides---the raw input that starts the process.\\
+	``Review this credit agreement for risks.''\\
+	``Rebalance to reduce tech exposure.''\\
+	``Get me up to speed on the Acme acquisition.''
 \end{definitionbox}
 
-Instructions are where work begins, but they are rarely complete specifications. The word ``risks'' raises immediate questions: risks to whom? The lender or borrower? Material risks or all risks? Legal risks, financial risks, or both? ``Reduce tech exposure'' leaves open the target level, the mechanism (sales, hedges, or both), and tax and timing constraints. ``Look into'' specifies neither depth, urgency, nor deliverable format. Instructions are clear enough to start; they are not clear enough to finish.
+Instructions are where work begins, but they are rarely complete specifications. The word ``risks'' raises immediate questions: risks to whom? The lender or borrower? Material risks or all risks? Legal risks, financial risks, or both? ``Reduce tech exposure'' leaves open the target level, the mechanism (sales, hedges, or both), and tax and timing constraints. ``Get me up to speed'' specifies neither depth, urgency, nor deliverable format. Instructions are clear enough to start; they are not clear enough to finish.
 
 Pre-LLM systems handled instructions through rigid steps: matching exact words, filling forms, simple if-then checklists. These systems worked for narrow domains with controlled vocabularies but broke on natural language variation. ``Find cases on personal jurisdiction'' and ``What's the law on where you can sue someone?'' express similar meanings but look nothing alike to a keyword matcher.
 
 \begin{definitionbox}[title={Intent}]
-\keyterm{Intent} is the underlying purpose, constraints, and success criteria behind an instruction. Intent captures the human meaning---what the user actually wants, not just what they said. Where an instruction might be ``review this credit agreement,'' the intent might be ``identify material risks to the lender by tomorrow for the partner's client call.''
+	\keyterm{Intent} is the underlying purpose, constraints, and success criteria behind an instruction. Intent captures the human meaning---what the user actually wants, not just what they said. Where an instruction might be ``review this credit agreement,'' the intent might be ``identify material risks to the lender by tomorrow for the partner's client call.''
 \end{definitionbox}
 
-The gap between instruction and intent has always existed; what has changed is our ability to bridge that gap with technological systems. Large language models dramatically improved intent inference from natural language. Where rule-based systems required exact matches, LLMs handle variation, implicit context, and domain-specific jargon. Modern LLMs excel at handling noisy input (misspellings, shorthand, tangential information), resolving references using conversational context, inferring domain-specific meaning, and detecting implicit constraints that professionals take for granted.
+This framing assumes the user has clear intent that merely needs to be extracted. Often, they do not. A general counsel asking for ``a quick overview of the regulatory landscape'' may not understand the domain well enough to know what a useful overview would contain or how comprehensive it needs to be. A partner requesting ``a one-page memo on the indemnification issues'' may be asking for something impossible if the issues genuinely require five pages to explain competently. A portfolio manager who wants ``maximum returns with minimal risk'' is expressing a preference, not a coherent goal. Users operate under their own constraints---time pressure, cognitive load, incomplete domain knowledge---that shape requests in ways that may conflict with the realities of the underlying work. Intent inference must contend not only with unclear expression but with intent that is itself incomplete, conflicted, or impossible to satisfy.
+
+The gap between instruction and intent has always existed; what has changed is our ability to bridge that gap with technological systems. Early AI research on dialogue established that understanding utterances requires inferring the speaker's underlying plans and goals \parencite{allen1980intention}. Large language models dramatically improved intent inference from natural language, particularly after techniques like reinforcement learning from human feedback (RLHF) explicitly optimized models to follow user intent \parencite{ouyang2022instructgpt}. Where rule-based systems required exact matches, LLMs handle variation, implicit context, and domain-specific jargon. Modern LLMs excel at handling noisy input (misspellings, shorthand, tangential information), resolving references using conversational context, inferring domain-specific meaning, and detecting implicit constraints that professionals take for granted.
 
 Despite these capabilities, intent understanding remains imperfect. As conversations extend, LLMs may lose track of earlier context or constraints. When clarification is needed, LLMs sometimes proceed with a default interpretation rather than asking, resulting in a ``helpful but wrong'' failure: the agent does \textit{something} reasonable rather than confirming it understood correctly. Professionals also communicate through implication. Phrases like ``This needs to be right'' signal high stakes, while ``When you get a chance'' signals low urgency. These signals may not be explicitly parsed by current models.
 
 \begin{definitionbox}[title={Goal}]
-A \keyterm{goal} is the machine-readable specification that intent points toward---the structured outcome that would satisfy the request. Goals connect to the GPA+IAT framework introduced in the previous chapter: an agent pursues goals through perception and action. Where intent is ``identify material risks to the lender by tomorrow,'' the goal is ``produce a lender-risk memo that meets firm policy and is ready for partner review.''
+	A \keyterm{goal} is the machine-readable specification that intent points toward---the structured outcome that would satisfy the request. Goals connect to the GPA+IAT framework introduced in the previous chapter: an agent pursues goals through perception and action. Where intent is ``identify material risks to the lender by tomorrow,'' the goal is ``produce a lender-risk memo that meets firm policy and is ready for partner review.''
 \end{definitionbox}
 
 Goals provide the target for planning and the criterion for termination. An agent that understands the goal can determine whether its work is complete: does this memo identify the material risks? Does it meet firm standards? Is it ready for the partner? Without a clear goal, the agent cannot know when to stop---the ``runaway associate'' problem of endless research without a deliverable.
 
 \begin{definitionbox}[title={Task}]
-A \keyterm{task} is the concrete unit of work the agent executes to advance a goal. A single goal typically decomposes into multiple tasks. For the lender-risk memo, tasks might include: extract financial covenants, compare covenant terms to market standards, identify collateral coverage gaps, flag cross-default provisions, and draft the summary memo.
+	A \keyterm{task} is the concrete unit of work the agent executes to advance a goal. A single goal typically decomposes into multiple tasks. For the lender-risk memo, tasks might include extracting financial covenants, comparing covenant terms to market standards, identifying collateral coverage gaps, flagging cross-default provisions, and drafting the summary memo.
 \end{definitionbox}
 
 Tasks are where planning meets execution. \Cref{sec:agents2-planning} addresses how agents decompose goals into task sequences; \Cref{sec:agents2-termination} addresses how agents recognize when tasks---and goals---are complete.
 
-The flow from instruction to task is: \textbf{Instruction} $\rightarrow$ \textbf{Intent} $\rightarrow$ \textbf{Goal} $\rightarrow$ \textbf{Tasks}. Intent bridges the gap between what users say and what they mean. Goals give agents targets to aim for. Tasks give agents concrete work to execute. Failures at any stage propagate forward: misunderstood instructions yield wrong intent; wrong intent yields wrong goals; wrong goals yield wasted tasks.
+The flow from instruction to task is: \textbf{Instruction} $\rightarrow$ \textbf{Intent} $\rightarrow$ \textbf{Goal} $\rightarrow$ \textbf{Tasks}. Inferring intent bridges the gap between what users say and what they mean. Goals give agents targets to aim for. Tasks give agents concrete work to execute. Failures at any stage propagate forward: misunderstood instructions yield wrong intent; wrong intent yields wrong goals; wrong goals yield wasted tasks.
 
 % ----------------------------------------------------------------------------
 % From Instruction to Intent
@@ -71,16 +76,15 @@ Production systems often combine both patterns. Simple, high-volume, time-sensit
 For architects evaluating agentic systems: where must classification be deterministic (regulatory requirements, latency/speed constraints, auditability)? Where does flexibility justify the overhead of LLM reasoning? The answer shapes system design.
 
 \begin{keybox}[title={Intent Inference Is Not Mind Reading}, breakable=false]
-LLMs infer \textit{probable} intent from language patterns; they do not read minds. Inference fails when:
+	LLMs infer \textit{probable} intent from language patterns; they do not read minds. Inference fails when:
 
-\begin{itemize}[nosep]
-\item The instruction is genuinely ambiguous (multiple reasonable interpretations)
-\item The user's intent differs from typical patterns for similar language
-\item Critical context exists outside the conversation (prior meetings, firm norms)
-\item The user themselves is unclear about what they want
-\end{itemize}
-
-\textbf{Design for clarification, not guessing.} The aim is an agent that surfaces uncertainty and asks, not one that pretends it possesses certainty regarding intent.
+	\begin{itemize}[nosep]
+		\item The instruction is genuinely ambiguous (multiple reasonable interpretations)
+		\item The user's intent differs from typical patterns for similar language
+		\item Critical context exists outside the conversation (prior meetings, firm norms)
+		\item The user themselves is unclear about what they want\\
+	\end{itemize}
+	\textbf{Design for clarification, not guessing.} The aim is an agent that surfaces uncertainty and asks, not one that pretends it possesses certainty regarding intent.
 \end{keybox}
 
 % ----------------------------------------------------------------------------
@@ -95,12 +99,12 @@ Once the agent receives an instruction, it must extract structured goals that ca
 The first step, intent classification, translates the instruction into task types that determine workflow. This step converts raw words into candidate tasks that can advance the underlying goal:
 
 \begin{itemize}[nosep]
-\item \textbf{Information retrieval}: ``What's the current NAV (Net Asset Value)?'' ``Find the latest 10-K''
-\item \textbf{Research and analysis}: ``Research whether we can pierce the corporate veil (hold shareholders liable)''
-\item \textbf{Document review}: ``Review the acquisition agreement for change-of-control provisions''
-\item \textbf{Document generation}: ``Draft an engagement letter for the Smith matter''
-\item \textbf{Calculation}: ``Calculate the IRR (Internal Rate of Return) assuming a 5-year hold''
-\item \textbf{Monitoring}: ``Alert me if tech exposure exceeds 30\%''
+	\item \textbf{Information retrieval}: ``What's the current NAV (Net Asset Value)?'' ``Find the latest 10-K''
+	\item \textbf{Research and analysis}: ``Research whether we can pierce the corporate veil (hold shareholders liable)''
+	\item \textbf{Document review}: ``Review the acquisition agreement for change-of-control provisions''
+	\item \textbf{Document generation}: ``Draft an engagement letter for the Smith matter''
+	\item \textbf{Calculation}: ``Calculate the IRR (Internal Rate of Return) assuming a 5-year hold''
+	\item \textbf{Monitoring}: ``Alert me if tech exposure exceeds 30\%''
 \end{itemize}
 
 Different task types invoke different tools, planning patterns, and success criteria. A research task requires search and synthesis; a calculation task requires structured computation; a monitoring task requires continuous observation.
@@ -114,20 +118,20 @@ Two additional constraint types often remain unstated. Audience and privilege co
 Once extracted, these components can be organized into structured goal representations that guide execution. These representations resemble short assignment memos that the planning system can act on (\Cref{sec:agents2-planning}) and the termination system can measure against (\Cref{sec:agents2-termination}).
 
 \begin{highlightbox}[title={Structured Goal Representation: Document Review}]
-\small
-\begin{tabular}{@{}ll@{}}
-\textbf{Task type} & Document review \\
-\textbf{Document} & Smith Acquisition Agreement \\
-\textbf{Objective} & Identify change-of-control provisions \\[0.3em]
-\textbf{Constraints} & \\
-\quad Deadline & January 15, 2025 \\
-\quad Scope & Sections 5--8 \\
-\quad Deliverable & Summary memo \\[0.3em]
-\textbf{Success criteria} & \\
-\quad \textbullet & All CoC provisions identified \\
-\quad \textbullet & Triggering events listed \\
-\quad \textbullet & Consent requirements noted \\
-\end{tabular}
+	\small
+	\begin{tabular}{@{}ll@{}}
+		\textbf{Task type}        & Document review                       \\
+		\textbf{Document}         & Smith Acquisition Agreement           \\
+		\textbf{Objective}        & Identify change-of-control provisions \\[0.3em]
+		\textbf{Constraints}      &                                       \\
+		\quad Deadline            & January 15, 2025                      \\
+		\quad Scope               & Sections 5--8                         \\
+		\quad Deliverable         & Summary memo                          \\[0.3em]
+		\textbf{Success criteria} &                                       \\
+		\quad \textbullet         & All CoC provisions identified         \\
+		\quad \textbullet         & Triggering events listed              \\
+		\quad \textbullet         & Consent requirements noted            \\
+	\end{tabular}
 \end{highlightbox}
 
 % ----------------------------------------------------------------------------
@@ -148,14 +152,33 @@ When stakes are high but ambiguity is low, the agent should confirm before actin
 Effective clarification has four characteristics. It is specific, asking ``Which jurisdiction's statute of limitations: Delaware or New York?'' rather than ``Can you clarify?'' It is contextual, referencing what the agent already understands: ``I understand you want me to review the credit agreement. Should I focus on lender protections, borrower obligations, or both?'' It is actionable, offering options rather than open-ended questions: ``Should I (a) provide a comprehensive review of all provisions, (b) focus on the financial covenants, or (c) flag only provisions that differ from our standard template?'' And it is bounded, limiting clarification rounds. If the agent needs extensive clarification, it may be the wrong tool for the task, or the user may need to think through requirements before delegating.
 
 \begin{quote}
-\textit{Poor clarification}: ``Can you clarify?'' \\
-\textit{Better}: ``Should I assess lender risks, borrower risks, or both?'' \\
-\textit{Best}: ``You asked to reduce tech exposure. Should I (a) sell tech to 25\% target, (b) hedge with options, or (c) add non-tech positions? Which deadline matters—this week or month-end reporting?''
+	\textit{Poor clarification}: ``Can you clarify?'' \\
+	\textit{Better}: ``Should I assess lender risks, borrower risks, or both?'' \\
+	\textit{Best}: ``You asked to reduce tech exposure. Should I (a) sell tech to 25\% target, (b) hedge with options, or (c) add non-tech positions? Which deadline matters—this week or month-end reporting?''
 \end{quote}
 
 Research has documented that LLMs sometimes select a default interpretation rather than asking for clarification, even when ambiguity is significant \parencite{zhang2024clarifying,wang2024askwhenneed}. This ``proceed without asking'' behavior creates real risk: the agent interprets ``review the contract'' as a surface-level summary when the user expected deep issue-spotting, delivering work product that is technically responsive but wrong.
 
 Several strategies can mitigate this tendency: prompt engineering that emphasizes clarification for ambiguous requests, confidence thresholds that trigger clarification below a certainty level, user training to provide detailed initial instructions, and checkpoint reviews before significant work begins. From a governance perspective, teams should monitor for cases where the agent proceeded confidently but delivered unexpected results. These cases may indicate calibration problems in ambiguity detection.
+
+\begin{keybox}[title={When Intent Itself Is Unclear or Conflicted}]
+	Ambiguity detection assumes the user has clear intent that was merely expressed unclearly. Sometimes the problem runs deeper:
+
+	\vspace{0.5em}
+	\textbf{Domain expertise gaps}: The user may not understand the subject well enough to specify what they need. ``Give me the key issues'' presumes the user knows what issues exist and which matter most---knowledge they may be asking the agent to provide.
+
+	\vspace{0.3em}
+	\textbf{Conflicted constraints}: The user may want contradictory things. A one-page memo on a complex acquisition may be impossible without sacrificing the accuracy or completeness that makes the memo useful.
+
+	\vspace{0.3em}
+	\textbf{Unexamined tradeoffs}: The user may not have considered tradeoffs they would care about if surfaced---speed versus thoroughness, cost versus quality, brevity versus nuance.
+
+	\vspace{0.5em}
+	When an agent detects these deeper problems, it should surface the conflict rather than silently resolving it: ``You asked for a one-page summary, but covering the indemnification, representations, and covenant issues adequately would require three to four pages. Would you prefer (a) a one-page overview that flags issues without detailed analysis, (b) a longer memo with full analysis, or (c) detailed treatment of just one area?''
+
+	\vspace{0.5em}
+	This is harder than detecting ambiguous expression because it requires recognizing when the user's own mental model is incomplete or conflicted---and surfacing that recognition without appearing to second-guess or condescend.
+\end{keybox}
 
 % ----------------------------------------------------------------------------
 % Constraint Identification
@@ -173,11 +196,11 @@ Scope constraints define what is in and out of bounds. ``Focus on Articles 3 and
 Professionals operate under many constraints they rarely state explicitly. When a partner says ``research Section 10(b) liability,'' implicit constraints include:
 
 \begin{itemize}[nosep]
-\item Use authoritative sources (binding precedent, not blog posts)
-\item Focus on the relevant jurisdiction (probably the circuit where the case is filed)
-\item Assume current law (not historical analysis unless specified)
-\item Protect privilege (don't disclose strategy in external searches)
-\item Operate within budget norms (don't spend 40 hours on a 2-hour task)
+	\item Use authoritative sources (binding precedent, not blog posts)
+	\item Focus on the relevant jurisdiction (probably the circuit where the case is filed)
+	\item Assume current law (not historical analysis unless specified)
+	\item Protect privilege (don't disclose strategy in external searches)
+	\item Operate within budget norms (don't spend 40 hours on a 2-hour task)
 \end{itemize}
 
 Agents must infer these constraints from context, domain knowledge, and organizational norms. Memory systems (\Cref{sec:agents2-memory}) help by preserving firm-specific expectations; user profiles track individual preferences; matter context provides case-specific constraints.
@@ -198,18 +221,18 @@ Confidence signaling requires the agent to indicate how confident it is in its o
 Consider how intent extraction and validation work together for a legal task. Given the instruction ``Review this credit agreement for risks,'' the agent classifies this as a document review task and detects that ``risks'' is ambiguous (risks to whom? what types?). Context gathering reveals this is a lender-side engagement for a senior secured facility. The agent infers implicit constraints (focus on lender risks, prioritize material issues, assume current market terms as baseline) and clarifies: ``I'll review from the lender's perspective, focusing on credit risk, collateral coverage, and covenant adequacy. Should I also flag documentation risks (drafting issues, missing provisions) or focus only on substantive credit terms?''
 
 \begin{highlightbox}[title={Extracted Goal: Credit Agreement Review}]
-\small
-\begin{tabular}{@{}ll@{}}
-\textbf{Task type} & Document review \\
-\textbf{Perspective} & Lender \\
-\textbf{Document} & Attached credit agreement \\
-\textbf{Focus areas} & Credit risk, collateral, covenants \\
-\textbf{Deliverable} & Risk summary memo \\[0.3em]
-\textbf{Success criteria} & \\
-\quad \textbullet & Material risks identified \\
-\quad \textbullet & Comparison to market terms \\
-\quad \textbullet & Recommendations provided \\
-\end{tabular}
+	\small
+	\begin{tabular}{@{}ll@{}}
+		\textbf{Task type}        & Document review                    \\
+		\textbf{Perspective}      & Lender                             \\
+		\textbf{Document}         & Attached credit agreement          \\
+		\textbf{Focus areas}      & Credit risk, collateral, covenants \\
+		\textbf{Deliverable}      & Risk summary memo                  \\[0.3em]
+		\textbf{Success criteria} &                                    \\
+		\quad \textbullet         & Material risks identified          \\
+		\quad \textbullet         & Comparison to market terms         \\
+		\quad \textbullet         & Recommendations provided           \\
+	\end{tabular}
 \end{highlightbox}
 
 The agent validates: ``I'll prepare a memo identifying material risks to the lender, comparing key terms to market standards, and recommending negotiation points. I'll have a draft for your review by tomorrow afternoon.''
@@ -217,39 +240,40 @@ The agent validates: ``I'll prepare a memo identifying material risks to the len
 The same pattern applies to financial tasks. Given the instruction ``Rebalance to reduce tech exposure,'' the agent classifies this as a portfolio action task and immediately detects multiple ambiguities: how much reduction? through what mechanism? with what constraints? Context gathering reveals current tech exposure at 35\% against a 25\% target. Through clarification dialogue, the agent confirms the user wants to reach target through sales while minimizing tax impact (preferring loss harvesting—selling assets at a loss to offset gains—and long-term gains over short-term).
 
 \begin{highlightbox}[title={Extracted Goal: Portfolio Rebalancing}]
-\small
-\begin{tabular}{@{}ll@{}}
-\textbf{Task type} & Portfolio rebalancing \\
-\textbf{Objective} & Reduce tech exposure \\
-\textbf{Target} & 25\% \\
-\textbf{Mechanism} & Sales \\[0.3em]
-\textbf{Constraints} & \\
-\quad \textbullet & Tax optimization enabled \\
-\quad \textbullet & Prefer loss harvesting (offset gains) \\[0.3em]
-\textbf{Approval required} & Yes \\
-\end{tabular}
+	\small
+	\begin{tabular}{@{}ll@{}}
+		\textbf{Task type}         & Portfolio rebalancing                 \\
+		\textbf{Objective}         & Reduce tech exposure                  \\
+		\textbf{Target}            & 25\%                                  \\
+		\textbf{Mechanism}         & Sales                                 \\[0.3em]
+		\textbf{Constraints}       &                                       \\
+		\quad \textbullet          & Tax optimization enabled              \\
+		\quad \textbullet          & Prefer loss harvesting (offset gains) \\[0.3em]
+		\textbf{Approval required} & Yes                                   \\
+	\end{tabular}
 \end{highlightbox}
 
 The agent validates: ``I'll prepare a rebalancing plan to reduce tech from 35\% to 25\% through sales, optimized for tax efficiency. I'll present the plan for your approval before executing any trades.''
 
 \begin{keybox}[title={Intent Understanding Is Continuous}]
-Intent extraction is not a one-time step at task initiation. As the agent works, it may discover:
+	Intent extraction is not a one-time step at task initiation. As the agent works, it may discover:
 
-\begin{itemize}[nosep]
-\item The original understanding was incomplete (new constraints emerge)
-\item The user's intent has evolved (priorities shift mid-task)
-\item Implicit constraints conflict (cannot optimize for both)
-\item The task is impossible as specified (constraints are mutually exclusive)
-\end{itemize}
+	\begin{itemize}[nosep]
+		\item The original understanding was incomplete (new constraints emerge)
+		\item The user's intent has evolved (priorities shift mid-task)
+		\item Implicit constraints conflict (cannot optimize for both)
+		\item The task is impossible as specified (constraints are mutually exclusive)
+	\end{itemize}
 
-Effective agents surface these discoveries through clarification rather than proceeding with outdated or impossible goals. Intent understanding is iterative, not instantaneous.
+	\vspace{0.5em}
+	Effective agents surface these discoveries through clarification rather than proceeding with outdated or impossible goals. Intent understanding is iterative, not instantaneous.
 \end{keybox}
 
 % ----------------------------------------------------------------------------
 % Transition to Q3
 % ----------------------------------------------------------------------------
 
-Intent understanding connects to other framework questions. Memory (\Cref{sec:agents2-memory}) improves intent extraction over time by preserving user preferences, matter history, and firm norms. Planning (\Cref{sec:agents2-planning}) depends on clear intent; extracted goals feed the planning system, while ambiguous intent propagates through the plan as uncertainty. Governance must address intent misalignment as a core risk, verifying goal alignment before deployment and monitoring for drift during operation.
+Intent understanding connects to other framework questions. Memory (\Cref{sec:agents2-memory}) improves intent extraction over time by preserving user preferences, matter history, and firm norms. Planning (\Cref{sec:agents2-planning}) depends on clear intent; extracted goals feed the planning system, while ambiguous intent propagates through the plan as uncertainty. Governance must address intent misalignment as a core risk, verifying goal alignment before deployment and monitoring for drift during operation. Part III examines these controls through the lens of goal dynamics calibration, distinguishing static, adaptive, and negotiated goals and specifying appropriate oversight for each.
 
 Understanding intent bridges the gap between what users say (instruction) and what they mean (intent), shaping the goals and tasks the agent will plan. Clarification beats guessing when ambiguity is significant and stakes are high. Constraints---time, scope, audience, compliance, and budget---matter as much as goals. Validation prevents wasted effort by confirming understanding before significant work begins.
 

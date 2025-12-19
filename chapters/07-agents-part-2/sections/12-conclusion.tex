@@ -1,5 +1,5 @@
 % ============================================================================
-% 14-conclusion.tex
+% 12-conclusion.tex
 % Conclusion: From Architecture to Governance
 % Part of: Chapter 07 - Agents Part II: How to Build an Agent
 % ============================================================================
@@ -15,7 +15,7 @@ This chapter opened with a claim: \textbf{agents are not magic; they are archite
 
 You now know how work reaches an agent (triggers), how instructions become goals (intent), how agents gather information (perception) and take action (action), how context persists (memory), how complex work decomposes (planning), how agents recognize completion (termination), when they hand off to humans (escalation), how they coordinate (delegation), and what controls keep them safe (governance).
 
-Each capability involves tradeoffs. Richer memory improves context but increases latency. Aggressive escalation improves safety but reduces autonomy. Tighter approval gates reduce risk but slow execution. There are no free lunches, only choices that must be calibrated to your context, risk tolerance, and professional obligations. Chapter~8 (Agents Part III: Governing Agents) provides a risk-based calibration approach rather than a one-size-fits-all checklist.
+Each capability involves tradeoffs. Richer memory improves context but increases latency. Aggressive escalation improves safety but reduces autonomy. Tighter approval gates reduce risk but slow execution. There are no free lunches, only choices that must be calibrated to your context, risk tolerance, and professional obligations. Additional resources, including protocol specifications, regulatory guidance links, and research references, are available on the book's companion website. Chapter~8 (Agents Part III: Governing Agents) provides a risk-based calibration approach rather than a one-size-fits-all checklist.
 
 The organizational analogy is not merely pedagogical. Law firms and investment teams are cognitive work systems that have evolved infrastructure for exactly these challenges: distributing work, maintaining context, and ensuring quality. When you evaluate an agentic system, ask the same questions you would ask about a professional team.
 
@@ -54,27 +54,6 @@ Architectural understanding requires honest acknowledgment of limitations.
 \textbf{Compounding errors} affect multi-step workflows. Error probabilities multiply, so long autonomous chains fail. Shorter workflows with human checkpoints perform better.
 
 % ----------------------------------------------------------------------------
-% Essential Resources
-% ----------------------------------------------------------------------------
-
-\subsection{Essential Resources}
-\label{sec:agents2-conclusion-resources}
-
-Four resource categories guide practitioners from concept to deployment.
-
-\textbf{Security fundamentals} must be addressed before deployment. Implement the five controls from \Cref{sec:agents2-security-essentials}: input separation, output validation, least privilege, audit logging, and isolation. The OWASP LLM Top 10 provides vulnerability taxonomy.
-
-\textbf{Protocols and standards} define interoperability. The Model Context Protocol (MCP) standardizes tool communication. The Agent-to-Agent Protocol (A2A) standardizes coordination.
-
-\textbf{Research foundations} provide theoretical grounding. Key works include Xi et al.\ on architecture \parencite{xi2023rise}, Yao et al.\ on ReAct \parencite{yao2022react}, and Park et al.\ on memory \parencite{park2023generative}.
-
-\textbf{Regulatory guidance} varies by domain. Legal practitioners should monitor ABA ethics opinions (especially 512). Financial practitioners should monitor SEC, FINRA, and Federal Reserve guidance.
-
-\begin{keybox}[title={Temporal Warning}]
-Resources accurate as of late 2025 may not reflect subsequent developments. Protocols evolve, regulations change, and vulnerabilities emerge. Verify currency before relying on any reference.
-\end{keybox}
-
-% ----------------------------------------------------------------------------
 % Bridge to Next Chapter
 % ----------------------------------------------------------------------------
 
@@ -84,22 +63,9 @@ Resources accurate as of late 2025 may not reflect subsequent developments. Prot
 This chapter answered: \textit{How do you build an agent?}
 The next chapter answers: \textit{How do you govern one?}
 
-These questions are connected. Every architectural decision has governance implications:
-\begin{itemize}[nosep]
-    \item Trigger logging creates audit trails.
-    \item Intent extraction allows review of understanding.
-    \item Perception controls enforce data governance.
-    \item Action gates require approval workflows.
-    \item Memory isolation protects privilege.
-    \item Planning budgets ensure bounded operation.
-    \item Termination criteria verify completion.
-    \item Escalation paths route uncertainty to humans.
-    \item Delegation contracts establish accountability.
-\end{itemize}
+As \Cref{sec:agents2-governance} demonstrated, every architectural decision has governance implications. Architecture enables governance: if you did not architect for logging, you cannot audit; if you did not architect for isolation, you cannot enforce boundaries.
 
-\textbf{Architecture enables governance.} If you did not architect for logging, you cannot audit. If you did not architect for isolation, you cannot enforce boundaries. Governance emerges from design decisions.
-
-The governance imperative is that agents are not just tools. They interpret goals, select what to perceive, and take actions that can create liability. That shift introduces predictable accountability problems: purpose drift (misaligned goals), perceptual opacity (bad or manipulated inputs), and actuation risk (high-consequence actions). Chapter~8 builds on this foundation, translating these challenges into concrete controls: calibrated autonomy, input and action constraints, auditability, retention, escalation and override mechanisms, and accountability structures.
+The governance imperative is that agents are not just tools. They interpret goals, select what to perceive, and take actions that can create liability. That shift introduces predictable accountability problems: purpose drift (misaligned goals), perceptual opacity (bad or manipulated inputs), and actuation risk (high-consequence actions). \Cref{sec:agents3-dimensional} provides dimensional calibration for matching controls to risk, while \Cref{sec:agents3-governance-stack} presents a five-layer framework that translates these challenges into concrete controls: calibrated autonomy, input and action constraints, auditability, retention, escalation and override mechanisms, and accountability structures.
 
 \vspace{1.5em}
 \begin{center}

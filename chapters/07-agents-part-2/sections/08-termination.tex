@@ -16,14 +16,14 @@ Every professional learns to recognize completion. The research memo is done whe
 Agents face the same challenge. Without explicit termination conditions, agents can run indefinitely: searching one more database, trying one more approach, refining one more time. We call this the ``runaway associate'' problem: you ask for two relevant cases, and the associate gives you fifty because they did not know when to stop.
 
 \begin{definitionbox}[title={Termination}]
-\keyterm{Termination} conditions define when an agent should stop executing. Three outcomes are possible:
-\begin{itemize}[nosep]
-    \item \textbf{Success:} The goal is achieved, and the agent delivers the result.
-    \item \textbf{Failure:} The goal cannot be achieved; the agent reports why and stops.
-    \item \textbf{Escalation:} The agent cannot determine success or failure, transferring the decision to human judgment.
-\end{itemize}
+	\keyterm{Termination} conditions define when an agent should stop executing. Three outcomes are possible:
+	\begin{itemize}[nosep]
+		\item \textbf{Success:} The goal is achieved, and the agent delivers the result.
+		\item \textbf{Failure:} The goal cannot be achieved; the agent reports why and stops.
+		\item \textbf{Escalation:} The agent cannot determine success or failure, transferring the decision to human judgment.
+	\end{itemize}
 
-Termination implements the ``T'' in the GPA+IAT framework. Without it, agentic systems lack the property that distinguishes systems from runaway processes.
+	Termination implements the ``T'' in the GPA+IAT framework. Without it, agentic systems lack the property that distinguishes systems from runaway processes.
 \end{definitionbox}
 
 % ----------------------------------------------------------------------------
@@ -33,35 +33,17 @@ Termination implements the ``T'' in the GPA+IAT framework. Without it, agentic s
 \subsection{Termination Condition Categories}
 \label{sec:agents2-termination-categories}
 
-Five categories of termination conditions bound agent execution: success conditions, resource budgets, confidence thresholds, error conditions, and escalation triggers.
+Five categories of termination conditions bound agent execution, each addressing a different aspect of when and why an agent should stop working autonomously.
 
-\textbf{Success conditions} trigger when the goal is achieved.
-\begin{itemize}[nosep]
-    \item \textbf{Completeness:} Have all checklist items been addressed? (e.g., all 50 contracts reviewed).
-    \item \textbf{Quality:} Is the output sufficient? (e.g., conclusions supported by binding authority). This often requires human validation.
-    \item \textbf{Convergence:} Has the agent stopped learning? If three consecutive searches yield no new authority, the research is likely saturated.
-\end{itemize}
+\textbf{Success conditions} represent the ideal outcome: the agent terminates because it has achieved its goal. But recognizing success requires clear criteria. \textit{Completeness} asks whether all required items have been addressed---have all fifty contracts in the review queue been analyzed? \textit{Quality} asks whether the output meets the required standard---are conclusions supported by binding authority rather than secondary sources? \textit{Convergence} recognizes when continued effort yields diminishing returns---if three consecutive searches produce no new relevant authority, the research space is likely saturated. Quality assessment often requires human validation, but completeness and convergence can frequently be evaluated programmatically.
 
-\textbf{Resource budgets} provide hard limits to prevent runaway execution. \Cref{sec:agents2-budgets} details budget architecture; here we focus on termination.
-\begin{itemize}[nosep]
-    \item \textbf{Token budgets:} Stop after 50,000 tokens to prevent expensive reasoning loops.
-    \item \textbf{Time budgets:} Enforce deadlines (e.g., stop after 10 minutes).
-    \item \textbf{Iteration budgets:} Cap tool calls (e.g., max 20 searches).
-    \item \textbf{Cost budgets:} Halt after spending a fixed dollar amount.
-\end{itemize}
-Budgets cascade. A task might hit a time limit before exhausting tokens. Budget exhaustion is not necessarily failure; partial results are often valuable.
+\textbf{Resource budgets} provide hard limits that prevent runaway execution. While \Cref{sec:agents2-budgets} details budget architecture in depth, the termination implications are straightforward: when any budget is exhausted, the agent must stop. \textit{Token budgets} halt execution after a specified number of API tokens to prevent expensive reasoning loops. \textit{Time budgets} enforce deadlines, stopping execution after a fixed duration regardless of progress. \textit{Iteration budgets} cap tool calls, preventing an agent from issuing dozens of database queries when a more focused approach would suffice. \textit{Cost budgets} provide the most direct control, halting execution after spending a specified dollar amount. These budgets interact and cascade---a task might hit its time limit before exhausting its token allocation, or vice versa. Crucially, budget exhaustion is not necessarily failure; partial results assembled before the limit was reached are often valuable and should be preserved and returned.
 
-\textbf{Confidence thresholds} gate actions on certainty. When confidence is high, the agent delivers the answer. When confidence drops below a threshold (e.g., 80\%), the agent stops and escalates. This mirrors associate behavior: ``I'm not confident. Let me ask the partner.'' Calibrating these thresholds is challenging \parencite{kadavath2022calibration}. Agents can be overconfident. Effective calibration requires testing against known outcomes.
+\textbf{Confidence thresholds} gate autonomous action on the agent's certainty about its conclusions. When confidence is high, the agent delivers its answer and terminates normally. When confidence drops below a specified threshold---perhaps eighty percent for routine matters, higher for consequential decisions---the agent should stop and escalate rather than proceeding with uncertain conclusions. This mirrors the behavior expected of a well-trained associate: ``I've found relevant authority, but I'm not confident it controls here. Let me ask the partner before we rely on this.'' Calibrating these thresholds presents a genuine challenge, as research has shown that language models can be systematically overconfident in their outputs \parencite{kadavath2022calibration}. Effective calibration requires testing against known outcomes and adjusting thresholds based on observed reliability.
 
-\textbf{Error conditions} require agents to recognize failure modes.
-\begin{itemize}[nosep]
-    \item \textbf{Repeated failures:} If Westlaw times out three times, stop rather than retrying indefinitely.
-    \item \textbf{Inconsistent data:} If the 10-K revenue differs from the earnings release, stop and flag for human review.
-    \item \textbf{Constraint violations:} If a planned action exceeds position limits, stop immediately.
-    \item \textbf{Impossibility:} If requirements conflict, report the impossibility rather than compromising.
-\end{itemize}
+\textbf{Error conditions} require agents to recognize when something has gone wrong and continued execution is unlikely to help. \textit{Repeated failures}---a database that times out on three consecutive attempts, an API that returns malformed responses---indicate problems that retrying will not solve. \textit{Inconsistent data}, such as revenue figures in a 10-K that conflict with the earnings release, suggests either an error in the source documents or a parsing problem that requires human investigation. \textit{Constraint violations} demand immediate termination: if a planned trade would exceed position limits or a proposed filing would miss a regulatory deadline, the agent must stop before taking the problematic action. Perhaps most important is recognizing \textit{impossibility}---when requirements genuinely conflict or the requested task cannot be completed as specified, the agent should report this finding rather than compromising on some requirements to satisfy others.
 
-\textbf{Escalation triggers} require human judgment regardless of success or failure. Novel situations, high-stakes decisions, and actions exceeding authority boundaries must trigger termination and handoff. \Cref{sec:agents2-escalation} examines these patterns.
+\textbf{Escalation triggers} require human judgment regardless of whether the agent has succeeded or failed at its immediate task. Novel situations without clear precedent, high-stakes decisions with significant consequences, and actions that would exceed the agent's authority boundaries must all trigger termination and handoff to human oversight. \Cref{sec:agents2-escalation} examines these escalation patterns in detail.
 
 % ----------------------------------------------------------------------------
 % Explicit Success Criteria
@@ -70,17 +52,21 @@ Budgets cascade. A task might hit a time limit before exhausting tokens. Budget 
 \subsection{Defining Success Criteria}
 \label{sec:agents2-success-criteria}
 
-Vague goals produce unclear termination. ``Research the statute of limitations'' is ambiguous. Effective success criteria provide clear signals.
+Vague goals produce unclear termination. An instruction to ``research the statute of limitations'' leaves the agent uncertain about scope, depth, and format. Which statute of limitations---for what claims, in which jurisdiction? How many sources are enough? What form should the output take? Without answers to these questions, the agent cannot recognize when its work is complete.
 
-\textbf{Completeness checklists} enumerate deliverables. For a credit agreement review, the checklist requires identifying financial covenants, comparing them to market terms, and summarizing risks. The agent terminates only when all items are complete.
+Effective success criteria take several forms, often used in combination. \textbf{Completeness checklists} enumerate the specific deliverables required. A credit agreement review might specify that the agent must identify all financial covenants, compare each to market terms from a reference database, and summarize material risks in a structured format. The agent terminates only when every item on the checklist has been addressed, providing a clear and verifiable completion signal.
 
-\textbf{Sufficiency thresholds} define ``enough.'' For case research, sufficiency might mean finding three on-point circuit opinions. The agent stops upon reaching this count, without searching every database.
+\textbf{Sufficiency thresholds} define what ``enough'' means for tasks without exhaustive requirements. Legal research rarely requires finding every case ever decided on an issue; instead, sufficiency might mean identifying three on-point opinions from the controlling circuit, or finding both the majority rule and any significant minority positions. Once the threshold is reached, the agent stops rather than continuing to search every available database. This prevents over-research while ensuring adequate coverage.
 
-\textbf{Convergence criteria} recognize diminishing returns. If consecutive searches yield no new results, the task is likely done.
+\textbf{Convergence criteria} recognize when continued effort produces diminishing returns. If three consecutive searches using varied query strategies yield no new relevant results, the research space is likely saturated. The agent can terminate with confidence that additional searching would not materially improve the analysis. This approach works particularly well for exploratory tasks where the scope cannot be fully specified in advance.
 
-\textbf{Deliverable specifications} define output format. ``A two-page memo with executive summary'' tells the agent exactly what success looks like.
+\textbf{Deliverable specifications} define the expected output format, which itself signals completion. ``Produce a two-page memorandum with an executive summary, statement of facts, analysis, and conclusion'' tells the agent exactly what success looks like. When the document matches the specification, the task is done.
 
-Instruct agents as you would an associate: ``If you find clear Ninth Circuit authority, you are done. If circuits split, map the split. If you find nothing after two hours, stop.''
+The most effective approach combines these criteria in instructions that read like guidance to a junior associate:
+
+\begin{quote}
+	\textit{``Research the statute of limitations for breach of fiduciary duty claims in Delaware. If you find clear Court of Chancery authority, you are done. If the courts have split or the issue is unsettled, map the competing positions. If you find nothing on point after searching for two hours, stop and report that the issue may be novel. Deliver your findings in a one-page summary with citations.''}
+\end{quote}
 
 % ----------------------------------------------------------------------------
 % Failure Recognition
@@ -89,13 +75,19 @@ Instruct agents as you would an associate: ``If you find clear Ninth Circuit aut
 \subsection{Recognizing Failure}
 \label{sec:agents2-failure-recognition}
 
-Agents must recognize and report failure honestly. Negative results are valuable information. ``I searched all databases and found no authority'' is a valid finding.
+Agents must recognize and report failure honestly, resisting any tendency to mask problems or present incomplete work as complete. This requires a cultural shift in how we think about agent outputs: \textit{negative results are valuable information}, not embarrassing admissions. ``I searched all available databases using multiple query strategies and found no authority on point'' is a legitimate and useful finding---it suggests the issue may be novel, the search terms may need refinement, or the legal theory may lack support.
 
-\textbf{Diagnostic reporting} explains the failure. Instead of ``Task failed,'' the agent should report: ``I searched Westlaw and Lexis using [queries]. Zero results suggest the issue is novel or terms are wrong. Recommend manual review.'' This is actionable.
+The difference between useful and useless failure reports lies in \textbf{diagnostic detail}. ``Task failed'' tells the human supervisor nothing actionable. A proper failure report explains what was attempted and why it did not succeed:
 
-\textbf{Partial completion} must be preserved. If an agent analyzed 4 of 10 articles before failure, it should report: ``Articles 1-4 analyzed. Articles 5-10 remain.'' Preserving partial work prevents wasted effort.
+\begin{quote}
+	\textit{``I searched Westlaw and Lexis using the following queries: [list]. Westlaw returned twelve results, none addressing the specific issue of whether the duty extends to indirect subsidiaries. Lexis returned zero results. The absence of authority suggests either that the issue is novel, that practitioners use different terminology, or that the question is typically resolved through contract rather than litigation. I recommend manual review with an expanded search strategy.''}
+\end{quote}
 
-\textbf{Root cause identification} aids the human response. Was it a tool failure (transient) or impossible requirements (structural)? The agent's diagnosis informs the next step.
+\noindent This report enables the supervisor to decide whether to try different approaches, consult additional resources, or conclude that the absence of authority is itself the answer.
+
+\textbf{Partial completion} must be preserved and clearly reported. If an agent was reviewing ten articles in a contract and encountered a failure after completing four, it should not discard its work. Instead, it should report: ``Analysis complete for Articles 1 through 4; results attached. Articles 5 through 10 remain unanalyzed due to [reason for failure].'' This preserves the value already created and gives the supervisor a clear picture of what remains.
+
+\textbf{Root cause identification} aids the human response by distinguishing between \textit{transient} and \textit{structural} problems. A database timeout is likely transient---waiting and retrying may succeed. A parsing error on a malformed document may require human intervention to obtain a clean copy. Fundamentally conflicting requirements are structural---no amount of retrying will resolve them. The agent's diagnosis of the failure mode directly informs what the supervisor should do next.
 
 % ----------------------------------------------------------------------------
 % Guardrails and Loop Detection
@@ -104,15 +96,15 @@ Agents must recognize and report failure honestly. Negative results are valuable
 \subsection{Guardrails and Loop Detection}
 \label{sec:agents2-loop-detection}
 
-Agents can get stuck in unproductive loops despite termination conditions. We use three mechanisms to prevent this.
+Even well-designed termination conditions cannot prevent every failure mode. Agents can become trapped in unproductive loops---repeating the same actions, cycling through equivalent states, or making nominal progress that adds no real value \parencite{zou2024circuitbreakers,ma2024agentboard}. Production systems require explicit guardrails to detect and interrupt these patterns.
 
-\textbf{Step limits} serve as a final backstop: after $N$ steps, stop and require approval. This prevents unbounded execution.
+\textbf{Step limits} provide the simplest and most reliable backstop. Regardless of other conditions, after $N$ total steps the agent must stop and require human approval before continuing. This prevents unbounded execution even when other detection mechanisms fail. The appropriate limit depends on the task: a simple lookup might warrant only ten steps, while complex research might allow a hundred. The key is that \textit{some} limit exists and is enforced.
 
-\textbf{Progress detection} monitors value. If the last five actions produced no new information, the agent is likely stuck. This should trigger reflection or escalation.
+\textbf{Progress detection} monitors whether recent actions have produced value. If the last five tool calls returned no new information---the same documents retrieved, the same search results, the same analysis repeated---the agent is likely stuck in a loop or has exhausted productive avenues. This pattern should trigger either a reflection step (if the agent has that capability) or escalation to human oversight. Progress detection requires defining what ``new information'' means for each task type, which can be as simple as tracking whether retrieved documents have been seen before.
 
-\textbf{Reflection steps} build self-assessment. The agent asks: ``Am I making progress? Should I change approach?''
+\textbf{Reflection steps} give agents the opportunity to assess their own behavior. Periodically, or when triggered by apparent lack of progress, the agent pauses to ask itself: ``Am I making progress toward the goal? Have my recent actions been productive? Should I try a different approach, or is it time to stop and report what I've found?'' This metacognitive capability is not yet reliable in all models, but when it works, it can catch problems that simple pattern matching would miss.
 
-\textbf{External watchdogs} monitor from outside. If the same tool is called repeatedly with identical parameters, the watchdog intervenes. Without loop detection, agents will eventually get stuck in production.
+\textbf{External watchdogs} monitor agent behavior from outside the agent's own reasoning process. A watchdog might detect that the same tool has been called repeatedly with identical or near-identical parameters---a clear sign of a loop---and intervene to halt execution. Watchdogs can also enforce patterns that would be difficult to specify within the agent's instructions, such as rate limits on expensive operations or detection of oscillating behavior where the agent alternates between two states without progressing. Without some form of loop detection, agents deployed in production will eventually get stuck, potentially consuming significant resources before anyone notices.
 
 % ----------------------------------------------------------------------------
 % The Reliability Cliff
@@ -121,18 +113,22 @@ Agents can get stuck in unproductive loops despite termination conditions. We us
 \subsection{The Reliability Cliff}
 \label{sec:agents2-reliability}
 
-Benchmarking reveals a sharp reliability boundary. METR (Model Evaluation and Threat Research) tested agents across standardized tasks.
+Empirical benchmarking reveals a striking pattern in agent reliability: performance does not degrade gradually as tasks become more complex, but instead \textit{falls off a cliff}. Research by METR (Model Evaluation and Threat Research), which tests agents across standardized task suites, has quantified this boundary.
 
 \begin{keybox}[title={The Four-Minute Cliff}]
-METR's 2025 study found that agents achieve \textbf{near-perfect success on tasks under 4 minutes}, but \textbf{under 10\% success on tasks over 4 hours} \parencite{metr-agent-capability-2025}.
+	METR's 2025 study found that agents achieve \textbf{near-perfect success on tasks under 4 minutes}, but \textbf{under 10\% success on tasks over 4 hours} \parencite{metr-agent-capability-2025}.
 
-\vspace{0.5em}
-This gap defines the current boundary for reliable deployment. You must decompose tasks aggressively, keep agent tasks short, and insert human checkpoints. Do not expect autonomous completion of multi-hour workflows.
+	\vspace{0.5em}
+	This gap defines the current boundary for reliable deployment. You must decompose tasks aggressively, keep agent tasks short, and insert human checkpoints. Do not expect autonomous completion of multi-hour workflows.
 \end{keybox}
 
 \input{figures/fig-reliability-cliff}
 
-This cliff stems from \textbf{compounding errors}. A 95\% accurate step followed by a 90\% accurate step yields 85\% reliability. Over dozens of steps, failure becomes a statistical certainty. \textbf{Planning fragility} and \textbf{integration brittleness} (API failures) further degrade long-running tasks. Design for this reality: decompose, validate, and assume failure.
+Understanding why this cliff exists is essential for designing systems that work within current limitations. The fundamental problem is \textbf{compounding errors} \parencite{press2023compositionality}: each step in an agent's execution has some probability of failure, and these probabilities \textit{multiply} rather than add. A step that succeeds 95\% of the time followed by a step that succeeds 90\% of the time yields only 85.5\% end-to-end reliability. Extend this chain to dozens of steps---as complex tasks require---and failure becomes not just possible but statistically certain.
+
+Two additional factors steepen the cliff. \textbf{Planning fragility} means that errors in early steps propagate forward, leading the agent down paths that cannot reach the goal regardless of how well subsequent steps execute. \textbf{Integration brittleness}---API timeouts, rate limits, malformed responses---introduces failure modes that have nothing to do with the agent's reasoning capabilities but become increasingly likely as execution time extends.
+
+The practical implications are clear: design for this reality rather than hoping it will improve. Decompose complex workflows into subtasks that can complete in minutes rather than hours. Validate intermediate results before proceeding to dependent steps. Insert human checkpoints at natural boundaries. And always assume that any sufficiently long autonomous execution will eventually fail, building systems that preserve partial progress and enable graceful recovery.
 
 % ----------------------------------------------------------------------------
 % Graceful Degradation
@@ -141,19 +137,13 @@ This cliff stems from \textbf{compounding errors}. A 95\% accurate step followed
 \subsection{Graceful Degradation}
 \label{sec:agents2-graceful-degradation}
 
-When termination occurs early, agents should degrade gracefully.
+When termination occurs before task completion---whether due to budget exhaustion, confidence drops, or error conditions---the agent should not simply stop and report failure. Instead, it should \textit{degrade gracefully}, delivering whatever value it has accumulated and positioning the human supervisor to continue effectively.
 
-\textbf{Tiered outputs} provide value at any budget.
-\begin{itemize}[nosep]
-    \item \textbf{Low Budget:} Deliver controlling statute and citation.
-    \item \textbf{Medium Budget:} Add key holdings.
-    \item \textbf{Full Budget:} Deliver comprehensive analysis.
-\end{itemize}
-Partial results allow the user to decide if further investment is warranted.
+The key to graceful degradation is \textbf{tiered output design}. Rather than treating tasks as all-or-nothing, effective agents structure their work to provide value at multiple levels of completion. Consider a legal research task: with minimal resources, the agent might deliver only the controlling statute and its citation---a modest but genuinely useful result. With moderate resources, it adds the key holdings from relevant cases, providing context for how courts have interpreted the statute. With full resources, it delivers comprehensive analysis including counterarguments, circuit splits, and practical implications. Each tier represents a complete, usable work product rather than a fragment of an unfinished whole. This structure allows the user to assess whether the partial result suffices or whether additional investment is warranted.
 
-\textbf{Progress preservation} saves state. If an agent stops mid-review, the human should be able to resume without restarting.
+\textbf{Progress preservation} ensures that early termination does not waste the work already completed. If an agent stops mid-way through a contract review, it should save its state in a form that allows either itself or a human to resume without starting over. The four articles already analyzed should not require re-analysis; the search queries already executed should not need re-running. This requires deliberate architectural choices---checkpointing intermediate state, maintaining audit trails of completed steps, and structuring tasks as resumable sequences rather than monolithic operations.
 
-\textbf{Clear status reporting} is essential: ``Completed 60\% of task. Remaining: Articles 5-8. Findings so far: [summary].'' The agent should recommend next steps: ``Recommend allocating 30 more minutes to complete.'' This enables informed human decision-making.
+\textbf{Clear status reporting} transforms an incomplete result into an actionable handoff. Rather than a bare ``Task incomplete,'' the agent should report its progress precisely: ``Completed analysis of Articles 1 through 4 (60\% of task). Remaining: Articles 5 through 8. Findings so far: two material deviations from market terms identified in covenant structure.'' Critically, the agent should also provide a \textit{recommendation} for next steps: ``Recommend allocating 30 additional minutes to complete the remaining articles, or proceed with partial findings if timeline requires.'' This enables informed human decision-making about whether to invest additional resources, proceed with partial information, or reassign the task entirely.
 
 % ----------------------------------------------------------------------------
 % Evaluating Termination
@@ -162,15 +152,19 @@ Partial results allow the user to decide if further investment is warranted.
 \subsection{Evaluating Termination Capabilities}
 \label{sec:agents2-termination-eval}
 
-Assess termination against six criteria:
-\begin{itemize}[nosep]
-    \item \textbf{Success Clarity:} Are termination conditions explicit? Can you predict when it stops?
-    \item \textbf{Budget Enforcement:} Does the agent actually stop at the limit?
-    \item \textbf{Loop Detection:} Does it detect and break infinite loops?
-    \item \textbf{Failure Reporting:} Are error messages actionable?
-    \item \textbf{Graceful Degradation:} Does it return useful partial results?
-    \item \textbf{Escalation Handoff:} Does the human receive sufficient context to take over?
-\end{itemize}
+Assessing whether an agent terminates appropriately requires testing across multiple dimensions, each probing a different aspect of the termination system.
+
+\textbf{Success clarity} asks whether termination conditions are explicit and predictable. Given a task specification, can you anticipate when the agent will stop? If termination feels arbitrary or surprising, the conditions are not sufficiently well-defined. Testing should include edge cases: tasks that barely meet success criteria, tasks that fall just short, and tasks with ambiguous completion states.
+
+\textbf{Budget enforcement} verifies that limits are actually respected. An agent configured to stop after 50,000 tokens or ten minutes should stop at those boundaries, not run 20\% over before noticing. Testing should deliberately push agents toward their limits and verify that enforcement is reliable rather than approximate.
+
+\textbf{Loop detection} probes whether the agent recognizes unproductive patterns. Construct test cases designed to induce loops---queries that return the same results repeatedly, tasks with circular dependencies, or prompts that trigger oscillating behavior---and verify that the agent detects and escapes these traps rather than continuing indefinitely.
+
+\textbf{Failure reporting} evaluates whether error messages enable effective human response. When the agent fails, does it explain \textit{why} in terms that inform next steps? A message like ``Unable to complete research'' is nearly useless; a message explaining which sources were searched, what was found, and why the agent concluded it could not proceed further provides a foundation for human follow-up.
+
+\textbf{Graceful degradation} tests whether partial results are useful. When an agent terminates early, does it return work product that has standalone value, or does early termination mean total loss? Deliberately trigger early termination at various points and assess the quality of what comes back.
+
+\textbf{Escalation handoff} examines whether humans receive sufficient context to take over effectively. When an agent escalates, can the human understand the current state, the work completed, and the reason for escalation without extensive investigation? The handoff should feel like receiving a file from a colleague, not inheriting a mystery.
 
 % ----------------------------------------------------------------------------
 % Connection to Other Questions
@@ -179,8 +173,8 @@ Assess termination against six criteria:
 \subsection{From Termination to Escalation}
 \label{sec:agents2-termination-escalation}
 
-Termination defines when agents stop. Success means the task is done. Failure means it is impossible. Escalation means the agent needs help.
+Termination and escalation are closely related but distinct concepts. Termination defines \textit{when} an agent stops; escalation defines \textit{what happens next} when stopping requires human involvement. An agent that terminates successfully has completed its task and can deliver results. An agent that terminates due to failure has determined that the task cannot be completed and reports why. But an agent that \textit{escalates} has reached a different conclusion: not ``I'm done'' or ``This is impossible,'' but rather ``I need help to proceed.''
 
-The third category is critical. An agent finding conflicting authority or exceeding authorization must stop and ask for input. This is not failure; it is safety.
+This third category is critical for safe deployment in professional contexts. An agent researching a legal question might find genuinely conflicting authority that requires judgment to reconcile. An agent reviewing a contract might encounter a provision outside its training distribution that it cannot confidently interpret. An agent executing a financial transaction might face a decision that exceeds its authorization limits. In each case, the correct response is neither to forge ahead (risking error) nor to report failure (abandoning recoverable work), but to pause and request human input. This is not failure---it is \textit{safety}.
 
-\Cref{sec:agents2-escalation} examines this question: when should an agent stop autonomous operation and ask for help? Termination and escalation together define the boundaries of autonomous execution. Without them, agents run forever or exceed authority.
+\Cref{sec:agents2-escalation} examines escalation in depth: when should an agent stop autonomous operation and ask for help? What information should it provide to the human taking over? How should escalation thresholds be calibrated for different risk levels? Together, termination and escalation define the complete boundary of autonomous execution. Without robust termination, agents run indefinitely. Without appropriate escalation, they exceed their authority or make decisions they are not qualified to make. Both capabilities are essential for trustworthy deployment.
