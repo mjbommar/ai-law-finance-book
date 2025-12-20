@@ -1,7 +1,7 @@
 % ============================================================================
 % 09-escalation.tex
 % Q8: How Does an Agent Know When to Ask for Help?
-% Part of: Chapter 07 - Agents Part II: How to Build an Agent
+% Part of: Chapter 07 - Agents Part II: How to Design an Agent
 % ============================================================================
 
 \section{How Does an Agent Know When to Ask for Help?}
@@ -33,6 +33,38 @@ Three categories of triggers warrant escalation, each reflecting a different rea
 \textbf{Mandatory triggers} require human involvement regardless of the agent's confidence or the apparent simplicity of the decision. Some situations demand human judgment by their nature, not because the agent is uncertain. When resource limits approach exhaustion, the agent should escalate with a progress summary rather than stopping silently---the human needs to decide whether to allocate additional resources or accept partial results. High-stakes actions like court filings, client communications, and large trades require human approval before execution; these are \textit{approval gates} where the agent prepares but does not act. Actions that would exceed the agent's authorized thresholds---a trade above a certain size, a commitment beyond a certain value---require human sign-off even if the agent is confident the action is correct. And irreversible actions warrant particular caution: once a motion is filed or a trade is executed, the consequences cannot be undone, making pre-execution review essential. This principle aligns with the reversibility framework in \Cref{sec:agents2-reversibility}, which maps oversight intensity to action consequences.
 
 \textbf{Confidence-based triggers} occur when the agent's uncertainty exceeds acceptable thresholds for autonomous action \parencite{madras2018defer,abbasiyadkori2024conformal}. An agent researching a legal question might find genuinely conflicting circuit authority and be unable to determine which rule applies---``I found three circuits supporting one approach and two supporting another, and I cannot determine which controls here.'' Data sources might disagree in ways the agent cannot reconcile: the revenue figure in the 10-K differs from the earnings release, and the agent cannot determine which is correct or whether both are valid in different contexts. Novel situations---unprecedented fact patterns, unusual market conditions, first-impression legal questions---push beyond the agent's training distribution, where its confidence estimates become unreliable. And sometimes ambiguity persists despite the agent's attempts to clarify: the instructions can be read multiple ways, and the agent remains uncertain which interpretation the human intended.
+
+A critical implementation challenge: LLM-reported confidence scores are notoriously unreliable---models often express high confidence in incorrect answers \parencite{kadavath2022calibration}. Rather than trusting model ``vibes,'' production systems should use \textit{system-level confidence signals} derived from observable properties of the agent's work.
+
+\begin{table}[htbp]
+	\centering
+	\caption{Operational confidence signals for escalation decisions}
+	\label{tab:agents2-confidence-signals}
+	\small
+	\begin{tabular}{
+		>{\raggedright\arraybackslash}p{0.18\textwidth}
+		>{\raggedright\arraybackslash}p{0.36\textwidth}
+		>{\raggedright\arraybackslash}p{0.36\textwidth}
+		}
+		\toprule
+		\textbf{Signal Type}       & \textbf{What to Measure}                                                     & \textbf{Escalation Trigger}                                   \\
+		\midrule
+		Retrieval quality          & Source authority, recency, topical coverage                                  & Fewer than $N$ authoritative sources found                    \\
+		\midrule
+		Source agreement           & Cross-reference consistency across retrieved documents                       & Contradictory information from comparable sources             \\
+		\midrule
+		Validation success         & Schema validation, citation verification, data reconciliation                & Citator shows ``overruled'' or ``questioned''; figures do not reconcile \\
+		\midrule
+		Tool reliability           & API response codes, timeout rates, structured error returns                  & Tool calls failed or returned malformed data                  \\
+		\midrule
+		Self-consistency           & Agreement across multiple independent samples                                & High variance in answers when sampling the same question      \\
+		\midrule
+		Boundary detection         & Pattern matching against known edge cases or out-of-scope indicators         & Query matches escalation rules (e.g., mentions privilege, MNPI) \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+These signals are architectural, not learned---they derive from the structure of the agent's perception and action systems rather than from the model's internal states. A legal research agent that finds only two cases on point, both from trial courts, has low retrieval quality regardless of how confidently the model phrases its summary. A financial agent whose data sources show a 15\% discrepancy in reported revenue has detected source disagreement that warrants human review. These signals are measurable, auditable, and far more reliable than asking the model ``how sure are you?''
 
 \textbf{Error and anomaly detection} triggers escalation when the agent encounters problems it cannot resolve through retrying or alternative approaches. Repeated failures---a database that times out on three consecutive attempts, an API that returns errors despite varied request formats---indicate systemic problems that further attempts will not solve. Data anomalies, such as financial figures that do not reconcile or filing dates that seem implausible, warrant human investigation rather than silent acceptance or rejection. Constraint violations require immediate escalation: if executing a planned action would breach position limits, exceed authorization thresholds, or violate compliance rules, the agent must stop and confirm rather than proceed. And when a task proves genuinely impossible---requirements conflict, necessary data does not exist, or the goal cannot be achieved as specified---the agent should report this finding rather than struggling indefinitely.
 
