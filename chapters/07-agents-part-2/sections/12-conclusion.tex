@@ -11,7 +11,7 @@
 % Opening
 % ----------------------------------------------------------------------------
 
-This chapter opened with a claim: \textbf{agents are not magic; they are architecture}. Ten sections later, that claim should feel concrete.
+This chapter opened with a claim: \textbf{agents are not magic; they are architecture}. Ten sections later, that claim should feel concrete. The ten-question framework from \Cref{sec:agents2-ten-questions} has provided the spine for understanding how agents receive work, understand intent, gather information, take action, maintain context, plan, terminate, escalate, coordinate, and operate under governance.
 
 You now know how work reaches an agent (triggers), how instructions become goals (intent), how agents gather information (perception) and take action (action), how context persists (memory), how complex work decomposes (planning), how agents recognize completion (termination), when they hand off to humans (escalation), how they coordinate (delegation), and what controls keep them safe (governance).
 
@@ -26,7 +26,7 @@ The organizational analogy is not merely pedagogical. Law firms and investment t
 \subsection{What This Understanding Enables}
 \label{sec:agents2-conclusion-enables}
 
-With architectural literacy, you can evaluate vendor claims. When a vendor says their agent ``handles legal research,'' ask: What triggers it? How does it understand the question? What databases does it access? How does it know when it is done? What happens when confidence is low? The ten questions provide your evaluation framework.
+With architectural literacy, you can evaluate vendor claims. When a vendor says their agent ``handles legal research,'' ask: What triggers it (\Cref{sec:agents2-triggers})? How does it understand the question (\Cref{sec:agents2-intent})? What databases does it access (\Cref{sec:agents2-perception})? How does it know when it is done (\Cref{sec:agents2-termination})? What happens when confidence is low (\Cref{sec:agents2-escalation})? The ten questions from \Cref{sec:agents2-ten-questions} provide your evaluation framework.
 
 You can participate meaningfully in procurement. Assess whether a system meets requirements: Does it enforce matter isolation? Maintain audit trails? Integrate with approval workflows? Escalate appropriately? You have the vocabulary to specify requirements.
 
@@ -63,6 +63,7 @@ Planning & Budget enforcement; pattern selection; plan validation \\
 Termination & Success criteria; failure recognition; graceful degradation \\
 Escalation & Confidence thresholds; handoff context; routing accuracy \\
 Delegation & Agent identity; delegation contracts; cross-agent ethical walls \\
+Governance & Logging infrastructure; override mechanisms; state snapshots; least privilege \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -94,7 +95,7 @@ Architectural understanding requires honest acknowledgment of limitations.
 This chapter answered: \textit{How do you build an agent?}
 The next chapter answers: \textit{How do you govern one?}
 
-As \Cref{sec:agents2-governance} demonstrated, every architectural decision has governance implications. Architecture enables governance: if you did not architect for logging, you cannot audit; if you did not architect for isolation, you cannot enforce boundaries.
+As \Cref{sec:agents2-governance} demonstrated, five architectural patterns enable governance: logging across all components, override and circuit breaker mechanisms, state snapshots and checkpoints, least privilege enforcement, and escalation hooks. These patterns form the \textit{governance surface}---the interface through which governance systems interact with agents. If you did not architect for logging, you cannot audit; if you did not architect for isolation, you cannot enforce boundaries; if you did not architect for override, you cannot intervene.
 
 The governance imperative is that agents are not just tools. They interpret goals, select what to perceive, and take actions that can create liability. That shift introduces predictable accountability problems: purpose drift (misaligned goals), perceptual opacity (bad or manipulated inputs), and actuation risk (high-consequence actions). \href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}} provides dimensional calibration for matching controls to risk and presents a five-layer framework that translates these challenges into concrete controls: calibrated autonomy, input and action constraints, auditability, retention, escalation and override mechanisms, and accountability structures.
 

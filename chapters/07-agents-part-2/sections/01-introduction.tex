@@ -9,24 +9,24 @@
 
 In \href{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5806982}{\textit{What is an Agent?}}, the first part of this series \parencite{bommarito2025whatisanagent}, we introduced the GPA+IAT framework---a way to recognize agentic systems through Goals, Perception, Action, Iteration, Adaptation, and Termination. Now, we turn to the practical: \textit{How do you actually build one?}
 
-This chapter is organized around ten architectural questions---the kind you should be asking whenever you're evaluating, deploying, or governing an agentic system. Each question maps to a core capability that any useful agent needs: receiving work, understanding requests, finding information, taking action, maintaining context, planning complex work, recognizing when it's done, escalating when it's stuck, coordinating with other agents, and operating safely. And behind each of these capabilities are design decisions with real tradeoffs---choices that shape not just what the system can do, but how reliably it performs, how it fails, and what controls you have over it.
+This chapter is organized around ten architectural questions---the kind you should be asking whenever you're evaluating, deploying, or governing an agentic system. Behind each question is a design decision with real tradeoffs---choices that shape not just what the system can do, but how reliably it performs, how it fails, and what controls you have over it.
 
 \begin{keybox}[title={The Core Insight}]
 	\textbf{Agents are not magic; they are architecture.}
 
-	Every capability that makes an agent useful---understanding what you asked, finding relevant information, taking action, remembering context, planning complex work, knowing when to stop, asking for help when stuck---corresponds to a concrete design decision. Those decisions have tradeoffs. Those tradeoffs have consequences.\\
+	Every capability that makes an agent useful corresponds to a concrete design decision. Those decisions have tradeoffs. Those tradeoffs have consequences.\\
 
 	You do not need to build agents yourself. But you need to know what questions to ask---because architectural decisions made at design time determine what the system can do, how reliably it performs, what can go wrong, and what controls are possible.
 \end{keybox}
 
 % ----------------------------------------------------------------------------
-% The Organizational Analogy
+% The Ten Questions Framework
 % ----------------------------------------------------------------------------
 
-\subsection{Agents as Professional Teams}
-\label{sec:agents2-org-analogy}
+\subsection{The Ten Questions}
+\label{sec:agents2-ten-questions}
 
-These ten questions are not arbitrary. They emerge from what agentic systems are designed to do: augment human professionals, automate routine workflows, or even eventually replace entire organizational functions. Whatever the ambition, the system must handle the same work those humans and organizations currently perform.  For a contract negotiation agent to be successful, it must be able to do what a transactional lawyer does. Similarly, a portfolio monitoring agent must be able to ``act like'' an analyst.
+These ten questions are not arbitrary. They emerge from what agentic systems are designed to do: augment human professionals, automate routine workflows, or even eventually replace entire organizational functions. Whatever the ambition, the system must handle the same work those humans and organizations currently perform. A contract negotiation agent must do what a transactional lawyer does; a portfolio monitoring agent must ``act like'' an analyst.
 
 The capabilities an agent needs are not determined by the technology; they are determined by the work. And work has structure that any system, human or artificial, must accommodate. This yields the design principle that grounds the entire chapter: \textbf{an agentic system requires the same structural capabilities as a professional team}.
 
@@ -38,14 +38,7 @@ These structural parallels are not coincidental. Law firms and investment teams 
 
 This mapping has practical implications. When you evaluate an agentic system, you can ask the same questions you would ask about a professional team. When you design governance for an agentic system, you can draw on the same frameworks that govern professional organizations. When you communicate with technical teams, you can use organizational language they will understand.
 
-% ----------------------------------------------------------------------------
-% The Ten Questions Framework
-% ----------------------------------------------------------------------------
-
-\subsection{The Ten Questions}
-\label{sec:agents2-ten-questions}
-
-These organizational parallels yield ten questions that any agentic system must answer---the same questions you would ask when onboarding a new professional or evaluating a team's capabilities. Table~\ref{tab:agents2-framework} lists those questions in the order an agent encounters them during execution.
+Table~\ref{tab:agents2-framework} lists these ten questions in the order an agent encounters them during execution.
 
 \begin{table}[H]
 	\centering
@@ -65,7 +58,7 @@ These organizational parallels yield ten questions that any agentic system must 
 		\hyperref[sec:agents2-termination]{Termination} & How does the agent know when it is done?           \\
 		\hyperref[sec:agents2-escalation]{Escalation}   & How does the agent know when to ask for help?      \\
 		\hyperref[sec:agents2-delegation]{Delegation}   & How does the agent work with other agents?         \\
-		\hyperref[sec:agents2-governance]{Governance}   & How do we keep the agent safe?                     \\
+		\hyperref[sec:agents2-governance]{Governance}   & How do we build systems that can be governed?      \\
 		\bottomrule
 	\end{tabular}
 \end{table}

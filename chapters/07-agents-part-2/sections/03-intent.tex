@@ -50,7 +50,7 @@ Goals provide the target for planning and the criterion for termination. An agen
 	A \keyterm{task} is the concrete unit of work the agent executes to advance a goal. A single goal typically decomposes into multiple tasks. For the lender-risk memo, tasks might include extracting financial covenants, comparing covenant terms to market standards, identifying collateral coverage gaps, flagging cross-default provisions, and drafting the summary memo.
 \end{definitionbox}
 
-Tasks are where planning meets execution. \Cref{sec:agents2-planning} addresses how agents decompose goals into task sequences; \Cref{sec:agents2-termination} addresses how agents recognize when tasks---and goals---are complete.
+Tasks are where planning meets execution. \Cref{sec:agents2-planning} addresses how agents decompose goals into task sequences; \Cref{sec:agents2-termination} addresses how agents recognize when tasks---and goals---are complete. Both capabilities depend on clear intent: ambiguous goals yield uncertain plans and unreliable termination criteria.
 
 The flow from instruction to task is: \textbf{Instruction} $\rightarrow$ \textbf{Intent} $\rightarrow$ \textbf{Goal} $\rightarrow$ \textbf{Tasks}. Inferring intent bridges the gap between what users say and what they mean. Goals give agents targets to aim for. Tasks give agents concrete work to execute. Failures at any stage propagate forward: misunderstood instructions yield wrong intent; wrong intent yields wrong goals; wrong goals yield wasted tasks.
 
@@ -117,22 +117,60 @@ Two additional constraint types often remain unstated. Audience and privilege co
 
 Once extracted, these components can be organized into structured goal representations that guide execution. These representations resemble short assignment memos that the planning system can act on (\Cref{sec:agents2-planning}) and the termination system can measure against (\Cref{sec:agents2-termination}).
 
-\begin{highlightbox}[title={Structured Goal Representation: Document Review}]
-	\small
-	\begin{tabular}{@{}ll@{}}
-		\textbf{Task type}        & Document review                       \\
-		\textbf{Document}         & Smith Acquisition Agreement           \\
-		\textbf{Objective}        & Identify change-of-control provisions \\[0.3em]
-		\textbf{Constraints}      &                                       \\
-		\quad Deadline            & January 15, 2025                      \\
-		\quad Scope               & Sections 5--8                         \\
-		\quad Deliverable         & Summary memo                          \\[0.3em]
-		\textbf{Success criteria} &                                       \\
-		\quad \textbullet         & All CoC provisions identified         \\
-		\quad \textbullet         & Triggering events listed              \\
-		\quad \textbullet         & Consent requirements noted            \\
-	\end{tabular}
-\end{highlightbox}
+\begin{center}
+\begin{tikzpicture}[
+    inbox/.style={
+        rectangle,
+        rounded corners=3pt,
+        draw=gray-300,
+        fill=gray-100,
+        minimum width=4cm,
+        minimum height=4cm,
+        align=center,
+        inner sep=8pt
+    },
+    goalbox/.style={
+        rectangle,
+        rounded corners=3pt,
+        draw=example-base,
+        fill=example-light,
+        minimum width=8.5cm,
+        minimum height=4cm,
+        align=left,
+        inner sep=10pt
+    },
+    arrow/.style={->, >=stealth, line width=1.5pt, gray-400}
+]
+
+% Left: User instruction
+\node[inbox] (input) at (-2.6, 0) {
+    \textcolor{gray-500}{\scriptsize\sffamily\bfseries USER INSTRUCTION}\\[6pt]
+    \large\textit{``Review the Smith}\\
+    \large\textit{acquisition agreement}\\
+    \large\textit{for change-of-control}\\
+    \large\textit{provisions''}
+};
+
+% Arrow
+\draw[arrow] (input.east) -- ++(0.6, 0);
+
+% Right: Extracted goal
+\node[goalbox, right=1cm of input] (goal) {
+    \textcolor{example-dark}{\sffamily\bfseries Structured Goal Representation}\\[4pt]
+    \small
+    \begin{tabular}{@{}l@{\hspace{0.5em}}l@{}}
+    \textcolor{gray-600}{Task:} & Document review\\
+    \textcolor{gray-600}{Document:} & Smith Acquisition Agreement\\
+    \textcolor{gray-600}{Objective:} & Identify change-of-control provisions\\[2pt]
+    \textcolor{gray-600}{Deadline:} & January 15, 2025\\
+    \textcolor{gray-600}{Scope:} & Sections 5--8\\
+    \textcolor{gray-600}{Deliverable:} & Summary memo\\[2pt]
+    \textcolor{gray-600}{Success:} & \parbox[t]{6.5cm}{All CoC provisions identified, triggering events listed, consent requirements noted}\\
+    \end{tabular}
+};
+
+\end{tikzpicture}
+\end{center}
 
 % ----------------------------------------------------------------------------
 % Ambiguity Detection and Clarification
@@ -203,7 +241,7 @@ Professionals operate under many constraints they rarely state explicitly. When 
 	\item Operate within budget norms (don't spend 40 hours on a 2-hour task)
 \end{itemize}
 
-Agents must infer these constraints from context, domain knowledge, and organizational norms. Memory systems (\Cref{sec:agents2-memory}) help by preserving firm-specific expectations; user profiles track individual preferences; matter context provides case-specific constraints.
+Agents must infer these constraints from context, domain knowledge, and organizational norms. Memory systems (\Cref{sec:agents2-memory}) are essential here: they preserve firm-specific expectations across tasks, user profiles accumulate individual preferences, and matter context provides case-specific constraints that sharpen future intent interpretations.
 
 % ----------------------------------------------------------------------------
 % Validation and Domain Examples
@@ -220,40 +258,138 @@ Confidence signaling requires the agent to indicate how confident it is in its o
 
 Consider how intent extraction and validation work together for a legal task. Given the instruction ``Review this credit agreement for risks,'' the agent classifies this as a document review task and detects that ``risks'' is ambiguous (risks to whom? what types?). Context gathering reveals this is a lender-side engagement for a senior secured facility. The agent infers implicit constraints (focus on lender risks, prioritize material issues, assume current market terms as baseline) and clarifies: ``I'll review from the lender's perspective, focusing on credit risk, collateral coverage, and covenant adequacy. Should I also flag documentation risks (drafting issues, missing provisions) or focus only on substantive credit terms?''
 
-\begin{highlightbox}[title={Extracted Goal: Credit Agreement Review}]
-	\small
-	\begin{tabular}{@{}ll@{}}
-		\textbf{Task type}        & Document review                    \\
-		\textbf{Perspective}      & Lender                             \\
-		\textbf{Document}         & Attached credit agreement          \\
-		\textbf{Focus areas}      & Credit risk, collateral, covenants \\
-		\textbf{Deliverable}      & Risk summary memo                  \\[0.3em]
-		\textbf{Success criteria} &                                    \\
-		\quad \textbullet         & Material risks identified          \\
-		\quad \textbullet         & Comparison to market terms         \\
-		\quad \textbullet         & Recommendations provided           \\
-	\end{tabular}
-\end{highlightbox}
+\begin{center}
+\begin{tikzpicture}[
+    inbox/.style={
+        rectangle,
+        rounded corners=3pt,
+        draw=gray-300,
+        fill=gray-100,
+        minimum width=4cm,
+        minimum height=3.2cm,
+        align=center,
+        inner sep=8pt
+    },
+    goalbox/.style={
+        rectangle,
+        rounded corners=3pt,
+        draw=example-base,
+        fill=example-light,
+        minimum width=7.8cm,
+        minimum height=3.2cm,
+        align=left,
+        inner sep=10pt
+    },
+    arrow/.style={->, >=stealth, line width=1.5pt, gray-400}
+]
+
+% Left: User instruction
+\node[inbox] (input) at (-2.2, 0) {
+    \textcolor{gray-500}{\scriptsize\sffamily\bfseries USER INSTRUCTION}\\[6pt]
+    \large\textit{``Review this credit}\\
+    \large\textit{agreement for risks''}
+};
+
+% Arrow
+\draw[arrow] (input.east) -- ++(0.8, 0);
+
+% Right: Extracted goal
+\node[goalbox, right=1.2cm of input] (goal) {
+    \textcolor{example-dark}{\sffamily\bfseries Extracted Goal}\\[4pt]
+    \small
+    \begin{tabular}{@{}l@{\hspace{0.5em}}l@{}}
+    \textcolor{gray-600}{Task:} & Document review\\
+    \textcolor{gray-600}{Perspective:} & Lender\\
+    \textcolor{gray-600}{Focus:} & Credit risk, collateral, covenants\\
+    \textcolor{gray-600}{Deliverable:} & Risk summary memo\\[2pt]
+    \textcolor{gray-600}{Success:} & \parbox[t]{6cm}{Material risks identified, comparison to market terms, recommendations provided}\\
+    \end{tabular}
+};
+
+\end{tikzpicture}
+\end{center}
 
 The agent validates: ``I'll prepare a memo identifying material risks to the lender, comparing key terms to market standards, and recommending negotiation points. I'll have a draft for your review by tomorrow afternoon.''
 
 The same pattern applies to financial tasks. Given the instruction ``Rebalance to reduce tech exposure,'' the agent classifies this as a portfolio action task and immediately detects multiple ambiguities: how much reduction? through what mechanism? with what constraints? Context gathering reveals current tech exposure at 35\% against a 25\% target. Through clarification dialogue, the agent confirms the user wants to reach target through sales while minimizing tax impact (preferring loss harvesting—selling assets at a loss to offset gains—and long-term gains over short-term).
 
-\begin{highlightbox}[title={Extracted Goal: Portfolio Rebalancing}]
-	\small
-	\begin{tabular}{@{}ll@{}}
-		\textbf{Task type}         & Portfolio rebalancing                 \\
-		\textbf{Objective}         & Reduce tech exposure                  \\
-		\textbf{Target}            & 25\%                                  \\
-		\textbf{Mechanism}         & Sales                                 \\[0.3em]
-		\textbf{Constraints}       &                                       \\
-		\quad \textbullet          & Tax optimization enabled              \\
-		\quad \textbullet          & Prefer loss harvesting (offset gains) \\[0.3em]
-		\textbf{Approval required} & Yes                                   \\
-	\end{tabular}
-\end{highlightbox}
+\begin{center}
+\begin{tikzpicture}[
+    userbubble/.style={
+        rectangle,
+        rounded corners=8pt,
+        fill=definition-light,
+        align=right,
+        inner sep=8pt,
+        font=\small,
+        anchor=north east
+    },
+    agentbubble/.style={
+        rectangle,
+        rounded corners=8pt,
+        fill=gray-100,
+        align=left,
+        inner sep=8pt,
+        font=\small,
+        anchor=north west
+    },
+    goalbox/.style={
+        rectangle,
+        rounded corners=3pt,
+        draw=example-base,
+        fill=example-light,
+        align=left,
+        inner sep=8pt,
+        font=\small
+    }
+]
 
-The agent validates: ``I'll prepare a rebalancing plan to reduce tech from 35\% to 25\% through sales, optimized for tax efficiency. I'll present the plan for your approval before executing any trades.''
+% Chat container background
+\fill[white, rounded corners=4pt] (-6.2, 0.8) rectangle (5.2, -9.2);
+\draw[gray-300, rounded corners=4pt] (-6.2, 0.8) rectangle (5.2, -9.2);
+
+% Chat header bar
+\fill[gray-200, rounded corners=4pt] (-6.2, 0.8) rectangle (5.2, 0.2);
+\node[font=\scriptsize\sffamily\bfseries, text=gray-600] at (-0.5, 0.5) {Portfolio Assistant};
+
+% User message 1 (right aligned)
+\node[userbubble] (u1) at (4.5, -0.3) {
+    \parbox{7cm}{\raggedleft Rebalance to reduce tech exposure}
+};
+
+% Agent clarification (left aligned)
+\node[agentbubble] (a1) at (-5.5, -2.1) {
+    \parbox{8cm}{Current tech exposure is 35\%. What's your target? Should I reduce through sales or reallocation? Any tax considerations?}
+};
+
+% User response (right aligned)
+\node[userbubble] (u2) at (4.5, -4.3) {
+    \parbox{7cm}{\raggedleft Get to 25\% through sales. Minimize taxes---use loss harvesting.}
+};
+
+% Agent validation (left aligned)
+\node[agentbubble] (a2) at (-5.5, -6.0) {
+    \parbox{8cm}{I'll prepare a plan to reduce tech from 35\% to 25\% via sales, optimized for tax efficiency. I'll need your approval before executing.}
+};
+
+% Extracted goal box (to the right, showing internal state)
+\node[goalbox, anchor=north west] (goal) at (6.0, -1.5) {
+    \textcolor{example-dark}{\scriptsize\sffamily\bfseries EXTRACTED GOAL}\\[3pt]
+    \scriptsize
+    \begin{tabular}{@{}l@{\hspace{0.4em}}l@{}}
+    \textcolor{gray-600}{Task:} & Rebalancing\\
+    \textcolor{gray-600}{Target:} & 25\% tech\\
+    \textcolor{gray-600}{Method:} & Sales\\
+    \textcolor{gray-600}{Constraints:} & Tax-optimized\\
+    \textcolor{gray-600}{Approval:} & Required\\
+    \end{tabular}
+};
+
+% Dashed line connecting chat to goal
+\draw[gray-300, dashed, thick] (u2.east) -- (goal.south west);
+
+\end{tikzpicture}
+\end{center}
 
 \begin{keybox}[title={Intent Understanding Is Continuous}]
 	Intent extraction is not a one-time step at task initiation. As the agent works, it may discover:
@@ -273,7 +409,7 @@ The agent validates: ``I'll prepare a rebalancing plan to reduce tech from 35\% 
 % Transition to Q3
 % ----------------------------------------------------------------------------
 
-Intent understanding connects to other framework questions. Memory (\Cref{sec:agents2-memory}) improves intent extraction over time by preserving user preferences, matter history, and firm norms. Planning (\Cref{sec:agents2-planning}) depends on clear intent; extracted goals feed the planning system, while ambiguous intent propagates through the plan as uncertainty. Governance must address intent misalignment as a core risk, verifying goal alignment before deployment and monitoring for drift during operation. Part III examines these controls through the lens of goal dynamics calibration, distinguishing static, adaptive, and negotiated goals and specifying appropriate oversight for each.
+Intent understanding connects to other framework questions. Memory (\Cref{sec:agents2-memory}) improves intent extraction over time by preserving user preferences, matter history, and firm norms. Planning (\Cref{sec:agents2-planning}) depends on clear intent; extracted goals feed the planning system, while ambiguous intent propagates through the plan as uncertainty. Governance must address intent misalignment as a core risk, verifying goal alignment before deployment and monitoring for drift during operation. \href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}} examines these controls through the lens of goal dynamics calibration, distinguishing static, adaptive, and negotiated goals and specifying appropriate oversight for each.
 
 Understanding intent bridges the gap between what users say (instruction) and what they mean (intent), shaping the goals and tasks the agent will plan. Clarification beats guessing when ambiguity is significant and stakes are high. Constraints---time, scope, audience, compliance, and budget---matter as much as goals. Validation prevents wasted effort by confirming understanding before significant work begins.
 

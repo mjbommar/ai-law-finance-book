@@ -47,6 +47,8 @@ Each cycle has three components:
 \end{itemize}
 Reasoning traces make decisions transparent and auditable. ReAct works well for exploratory tasks where you learn as you go---legal research, fact investigation, and market analysis.
 
+\input{figures/fig-react-cycle}
+
 \textbf{Plan-Execute.} This pattern separates planning from execution. For a document review task (``Review 50 contracts for choice-of-law provisions''), the associate creates a plan: list the contracts, open each one, extract the provision, and record findings. Then they execute systematically. The plan remains static because the task is well-defined.
 
 Plan-Execute fits established workflows: due diligence checklists, compliance reviews, and document assembly. You create the plan upfront and execute methodically. Research variants like ReWOO \parencite{xu2023rewoo} (separating reasoning from observation) and LLMCompiler \parencite{kim2024llmcompiler} (optimizing execution graphs) enable parallel tool calling. However, the core pattern remains: plan first, then execute.
@@ -58,6 +60,8 @@ Plan-Execute fits established workflows: due diligence checklists, compliance re
 	\item Draft witness questions (delegated to Agent C).
 \end{itemize}
 Each specialist may decompose further. This enables parallelization and specialization, mirroring how litigation teams work. \Cref{sec:agents2-delegation} details these coordination patterns.
+
+\input{figures/fig-hierarchical-planning}
 
 These patterns represent a shift from traditional workflow automation. Traditional engines used \textbf{static orchestration}: predefined graphs specifying exact steps and branches (BPM systems). The workflow was designed at build time; the engine merely executed it.
 
@@ -112,7 +116,7 @@ Selecting the right pattern depends on task structure and required autonomy.
 
 Higher autonomy requires more sophisticated oversight.
 
-Plan-Execute operates with moderate autonomy. The agent works within bounds defined by the plan. Oversight focuses on plan validation. ReAct involves higher autonomy because the agent decides what to search and when to stop. Oversight requires explicit termination mechanisms and confidence thresholds. Hierarchical patterns distribute autonomy. Oversight requires clear delegation contracts and escalation paths. You must match oversight rigor to autonomy level.
+Plan-Execute operates with moderate autonomy. The agent works within bounds defined by the plan. Oversight focuses on plan validation. ReAct involves higher autonomy because the agent decides what to search and when to stop. Oversight requires explicit termination mechanisms and confidence thresholds; these thresholds also feed into escalation decisions (\Cref{sec:agents2-escalation}) that determine when uncertain decisions should transfer to humans. Hierarchical patterns distribute autonomy. Oversight requires clear delegation contracts and escalation paths. You must match oversight rigor to autonomy level.
 
 % ----------------------------------------------------------------------------
 % Understanding the Task
@@ -136,6 +140,8 @@ Success criteria complete the picture by defining how the agent recognizes that 
 \subsection{Budget Architecture}
 \label{sec:agents2-budgets}
 
+Before examining resource budgets, note that memory constraints shape planning from the start. Working memory---the agent's context window---has strict limits, currently around 200,000 tokens for leading models (\Cref{sec:agents2-memory-types}). A plan that assumes unlimited context will fail when the agent cannot hold all relevant information simultaneously. Similarly, if the agent must retrieve information from episodic or semantic memory, retrieval cost and latency become part of the plan's resource budget. Memory is not merely storage; it is a planning constraint.
+
 Without resource constraints, agents can run indefinitely---the computational equivalent of asking a junior associate for two relevant cases and receiving fifty, along with a bill for the hours spent finding them. Budget architecture provides the planning mechanism that prevents this outcome, giving agents explicit limits that shape how they allocate effort across tasks.
 
 Resource consumption in agent systems takes several forms, each requiring its own type of constraint. Token budgets limit consumption of LLM API calls, preventing expensive reasoning loops where the agent repeatedly processes the same information or explores unproductive tangents. Time budgets enforce deadlines by halting execution after a specified duration, ensuring that a task expected to take ten minutes does not silently expand to consume an hour. Tool call budgets cap external interactions---limiting an agent to twenty database searches, for instance, forces it to formulate queries carefully rather than issuing dozens of slightly varied requests. Cost budgets provide the most direct control, capping total spending in dollars regardless of how that spending is distributed across tokens, tools, and time.
@@ -146,7 +152,7 @@ Understanding how costs compound is essential for realistic budgeting. Ingesting
 
 The economics of agent assistance vary significantly by task type. Retrieval-heavy work like document review often shows clear return on investment: the agent processes material faster and more consistently than a human reviewer, and the cost savings are straightforward to calculate. Judgment-intensive tasks present a more complex picture, since extensive human review of the agent's output may be required, potentially reducing the net benefit. Transparency about AI assistance---as encouraged by recent ethics guidance \parencite{aba-formal-opinion-512}---enables clients to evaluate this value proposition for themselves.
 
-Well-designed agents degrade gracefully as budgets tighten rather than failing abruptly. The key is tiered output that provides value at every resource level. With a minimal budget, the agent might return only the controlling statute. A moderate budget allows it to add key holdings from relevant cases. A full budget enables comprehensive analysis with supporting citations and counterarguments. Soft limits---triggered at perhaps eighty percent of the allocated budget---warn the agent to prioritize completion over thoroughness. Hard limits at one hundred percent terminate execution and return whatever results have been assembled. An agent that delivers useful partial results within budget is far more valuable than one that produces nothing when resources run short. When budgets are exhausted, the agent must terminate---see \Cref{sec:agents2-termination} for how termination conditions interact with budget limits.
+Well-designed agents degrade gracefully as budgets tighten rather than failing abruptly. The key is tiered output that provides value at every resource level. With a minimal budget, the agent might return only the controlling statute. A moderate budget allows it to add key holdings from relevant cases. A full budget enables comprehensive analysis with supporting citations and counterarguments. Soft limits---triggered at perhaps eighty percent of the allocated budget---warn the agent to prioritize completion over thoroughness. Hard limits at one hundred percent terminate execution and return whatever results have been assembled. An agent that delivers useful partial results within budget is far more valuable than one that produces nothing when resources run short. When budgets are exhausted, the agent must terminate. The critical design principle is that termination under budget pressure should still produce value: the agent delivers what it has discovered rather than nothing. \Cref{sec:agents2-termination} addresses how termination conditions interact with budget limits, including how to define success for partial results.
 
 % ----------------------------------------------------------------------------
 % Knowing When to Stop (Forward Reference)

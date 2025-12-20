@@ -11,28 +11,25 @@
     card/.style={
         rounded corners=6pt,
         line width=1.5pt,
-        minimum width=5.0cm,
+        minimum width=5.2cm,
         minimum height=8.0cm,
         align=center,
         inner sep=0pt
     },
     card header/.style={
-        font=\small\bfseries\sffamily,
+        font=\small\bfseries,
         text=white,
         minimum height=0.8cm,
-        text width=4.6cm,
-        align=center
-    },
-    section label/.style={
-        font=\scriptsize\bfseries,
-        text=slate-900,
-        anchor=west
+        text width=4.8cm,
+        align=center,
+        rounded corners=4pt
     },
     section text/.style={
         font=\scriptsize,
         text=gray-800,
-        text width=4.2cm,
-        align=left
+        text width=4.4cm,
+        align=left,
+        anchor=north west
     },
     % Mini-flowchart styles (from agent-loop.tex)
     flow box/.style={
@@ -55,44 +52,35 @@
 \node[card, draw=definition-dark, fill=white] (seq-card) at (-5.5, 0) {};
 
 % Header
-\node[card header, fill=definition-dark] at (seq-card.north) [yshift=-0.4cm] {SEQUENTIAL};
+\node[card header, fill=definition-dark] at (seq-card.north) [yshift=0.13cm] {\textbf{Sequential}};
 
 % Mini-flowchart (vertical chain)
-\node[flow box, fill=bg-definition, draw=border-definition] (seq-coord) at (-5.5, 2.2) {Coord.};
-\node[flow box, fill=bg-definition, draw=border-definition] (seq-a) at (-5.5, 1.3) {Agent A};
-\node[flow box, fill=bg-definition, draw=border-definition] (seq-b) at (-5.5, 0.4) {Agent B};
-\node[flow box, fill=bg-definition, draw=border-definition] (seq-c) at (-5.5, -0.5) {Agent C};
-\node[flow box, fill=bg-definition, draw=border-definition] (seq-synth) at (-5.5, -1.4) {Synth\\esize};
+\node[flow box, fill=bg-definition, draw=border-definition, text width=2.0cm] (seq-coord) at (-5.5, 3.1) {Coordinator};
+\node[flow box, fill=bg-definition, draw=border-definition] (seq-a) at (-5.5, 2.2) {Agent A};
+\node[flow box, fill=bg-definition, draw=border-definition] (seq-b) at (-5.5, 1.3) {Agent B};
+\node[flow box, fill=bg-definition, draw=border-definition] (seq-c) at (-5.5, 0.4) {Agent C};
+\node[flow box, fill=bg-definition, draw=border-definition, text width=2.0cm] (seq-synth) at (-5.5, -0.5) {Synthesize};
 
 \draw[flow arrow] (seq-coord) -- (seq-a);
 \draw[flow arrow] (seq-a) -- (seq-b);
 \draw[flow arrow] (seq-b) -- (seq-c);
 \draw[flow arrow] (seq-c) -- (seq-synth);
 
-% Best for section
-\node[section label] at (-7.5, -2.3) {Best for:};
-\node[section text, anchor=north west] at (-7.5, -2.6) {
-    Tasks with dependencies between steps
-};
-
-% Trade-off section
-\node[section label] at (-7.5, -3.4) {Trade-off:};
-\node[section text, anchor=north west] at (-7.5, -3.7) {
-    Slower; blocked by bottlenecks
-};
+% Best for and Trade-off
+\node[section text] at (-7.7, -1.6) {\textbf{Best for:} Tasks with dependencies between steps\\[0.3em]\textbf{Trade-off:} Slower; blocked by bottlenecks};
 
 % ========== MIDDLE CARD: PARALLEL ==========
 \node[card, draw=key-dark, fill=white] (par-card) at (0, 0) {};
 
 % Header
-\node[card header, fill=key-dark] at (par-card.north) [yshift=-0.4cm] {PARALLEL};
+\node[card header, fill=key-dark] at (par-card.north) [yshift=0.13cm] {\textbf{Parallel}};
 
 % Mini-flowchart (fan-out, fan-in)
-\node[flow box, fill=bg-key, draw=border-key] (par-coord) at (0, 2.2) {Coord.};
-\node[flow box, fill=bg-key, draw=border-key] (par-a) at (-1.3, 0.9) {Agent A};
-\node[flow box, fill=bg-key, draw=border-key] (par-b) at (0, 0.9) {Agent B};
-\node[flow box, fill=bg-key, draw=border-key] (par-c) at (1.3, 0.9) {Agent C};
-\node[flow box, fill=bg-key, draw=border-key] (par-synth) at (0, -0.4) {Synth\\esize};
+\node[flow box, fill=bg-key, draw=border-key, text width=2.0cm] (par-coord) at (0, 3.1) {Coordinator};
+\node[flow box, fill=bg-key, draw=border-key, text width=1.0cm] (par-a) at (-1.3, 1.8) {Agent\\A};
+\node[flow box, fill=bg-key, draw=border-key, text width=1.0cm] (par-b) at (0, 1.8) {Agent\\B};
+\node[flow box, fill=bg-key, draw=border-key, text width=1.0cm] (par-c) at (1.3, 1.8) {Agent\\C};
+\node[flow box, fill=bg-key, draw=border-key, text width=2.0cm] (par-synth) at (0, 0.5) {Synthesize};
 
 \draw[flow arrow] (par-coord) -- (par-a);
 \draw[flow arrow] (par-coord) -- (par-b);
@@ -101,56 +89,38 @@
 \draw[flow arrow] (par-b) -- (par-synth);
 \draw[flow arrow] (par-c) -- (par-synth);
 
-% Best for section
-\node[section label] at (-2.0, -2.3) {Best for:};
-\node[section text, anchor=north west] at (-2.0, -2.6) {
-    Independent parallel work
-};
-
-% Trade-off section
-\node[section label] at (-2.0, -3.4) {Trade-off:};
-\node[section text, anchor=north west] at (-2.0, -3.7) {
-    Coordination overhead
-};
+% Best for and Trade-off
+\node[section text] at (-2.2, -1.6) {\textbf{Best for:} Independent parallel work\\[0.3em]\textbf{Trade-off:} Coordination overhead};
 
 % ========== RIGHT CARD: HIERARCHICAL ==========
 \node[card, draw=example-dark, fill=white] (hier-card) at (5.5, 0) {};
 
 % Header
-\node[card header, fill=example-dark] at (hier-card.north) [yshift=-0.4cm] {HIERARCHICAL};
+\node[card header, fill=example-dark] at (hier-card.north) [yshift=0.13cm] {\textbf{Hierarchical}};
 
 % Mini-flowchart (tree with sub-agents)
-\node[flow box, fill=bg-example, draw=border-example] (hier-coord) at (5.5, 2.2) {Coord.};
-\node[flow box, fill=bg-example, draw=border-example] (hier-a) at (5.0, 1.1) {Agent A};
-\node[flow box, fill=bg-example, draw=border-example, font=\tiny, text width=1.2cm] (hier-a1) at (6.3, 1.5) {A1};
-\node[flow box, fill=bg-example, draw=border-example, font=\tiny, text width=1.2cm] (hier-a2) at (6.3, 0.8) {A2};
-\node[flow box, fill=bg-example, draw=border-example] (hier-b) at (5.0, -0.1) {Agent B};
-\node[flow box, fill=bg-example, draw=border-example, font=\tiny, text width=1.0cm] (hier-b1) at (6.5, 0.4) {B1};
-\node[flow box, fill=bg-example, draw=border-example, font=\tiny, text width=1.0cm] (hier-b2) at (6.5, -0.1) {B2};
-\node[flow box, fill=bg-example, draw=border-example, font=\tiny, text width=1.0cm] (hier-b3) at (6.5, -0.6) {B3};
-\node[flow box, fill=bg-example, draw=border-example] (hier-synth) at (5.5, -1.2) {Synth\\esize};
+\node[flow box, fill=bg-example, draw=border-example, text width=2.0cm] (hier-coord) at (5.5, 3.1) {Coordinator};
+\node[flow box, fill=bg-example, draw=border-example] (hier-a) at (4.4, 1.9) {Agent A};
+\node[flow box, fill=bg-example, draw=border-example, font=\tiny, text width=0.8cm] (hier-a1) at (6.6, 2.2) {A1};
+\node[flow box, fill=bg-example, draw=border-example, font=\tiny, text width=0.8cm] (hier-a2) at (6.6, 1.6) {A2};
+\node[flow box, fill=bg-example, draw=border-example] (hier-b) at (4.4, 0.5) {Agent B};
+\node[flow box, fill=bg-example, draw=border-example, font=\tiny, text width=0.8cm] (hier-b1) at (6.6, 0.9) {B1};
+\node[flow box, fill=bg-example, draw=border-example, font=\tiny, text width=0.8cm] (hier-b2) at (6.6, 0.35) {B2};
+\node[flow box, fill=bg-example, draw=border-example, font=\tiny, text width=0.8cm] (hier-b3) at (6.6, -0.2) {B3};
+\node[flow box, fill=bg-example, draw=border-example, text width=2.0cm] (hier-synth) at (5.5, -0.9) {Synthesize};
 
-\draw[flow arrow] (hier-coord) -- (hier-a);
-\draw[flow arrow] (hier-a) -- (hier-a1);
-\draw[flow arrow] (hier-a) -- (hier-a2);
-\draw[flow arrow] (hier-coord) -- (hier-b);
-\draw[flow arrow] (hier-b) -- (hier-b1);
-\draw[flow arrow] (hier-b) -- (hier-b2);
-\draw[flow arrow] (hier-b) -- (hier-b3);
-\draw[flow arrow] (hier-a) -- (hier-synth);
-\draw[flow arrow] (hier-b) -- (hier-synth);
+\draw[flow arrow] (hier-coord.south west) -- (hier-a.north);
+\draw[flow arrow] (hier-a.east) -- (hier-a1.west);
+\draw[flow arrow] (hier-a.east) -- (hier-a2.west);
+\draw[flow arrow] (hier-coord.south) -- (hier-b.north);
+\draw[flow arrow] (hier-b.east) -- (hier-b1.west);
+\draw[flow arrow] (hier-b.east) -- (hier-b2.west);
+\draw[flow arrow] (hier-b.east) -- (hier-b3.west);
+\draw[flow arrow] (hier-a.south) -- (hier-synth.north west);
+\draw[flow arrow] (hier-b.south) -- (hier-synth.north);
 
-% Best for section
-\node[section label] at (3.5, -2.3) {Best for:};
-\node[section text, anchor=north west] at (3.5, -2.6) {
-    Complex tasks with sub-delegation
-};
-
-% Trade-off section
-\node[section label] at (3.5, -3.4) {Trade-off:};
-\node[section text, anchor=north west] at (3.5, -3.7) {
-    Complexity; harder to debug
-};
+% Best for and Trade-off
+\node[section text] at (3.3, -1.6) {\textbf{Best for:} Complex tasks with sub-delegation\\[0.3em]\textbf{Trade-off:} Complexity; harder to debug};
 
 \end{tikzpicture}
 }%

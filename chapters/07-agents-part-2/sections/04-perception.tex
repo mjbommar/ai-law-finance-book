@@ -24,7 +24,7 @@ Agentic systems face exactly the same constraint. A large language model can rea
 	Perception implements the ``P'' in the GPA+IAT framework from Part I. It defines the boundary of what information the agent can access, and that boundary matters enormously. An agent with access to public filings reasons differently than one with access to internal deal documents. An agent that can query real-time market data operates differently than one limited to end-of-day prices.
 \end{definitionbox}
 
-This section examines perception: the read-only tools that let agents gather the information they need. The next section, on action, examines write tools that let agents change things in the world. The distinction matters for governance. Reading a document and sending an email carry fundamentally different risks, and your controls should reflect that difference.
+This section examines perception: the read-only tools that let agents gather the information they need. The next section, on action, examines write tools that let agents change things in the world. The distinction matters for governance: reading a document and sending an email carry fundamentally different risks, and your controls should reflect that difference. \Cref{sec:agents2-action} develops these distinctions and the different oversight mechanisms each requires.
 
 % ----------------------------------------------------------------------------
 % Perception Tool Categories
@@ -63,7 +63,7 @@ In-context learning explains why agents can work with information far newer than
 	The practical limits of context windows explain much of the value of agentic systems. Rather than attempting to process an entire knowledge base in a single prompt---which would exceed limits and degrade quality regardless---an agent decomposes work into focused steps, retrieves only what is relevant to each step, and reasons over smaller, manageable contexts.
 
 	\vspace{0.5em}
-	This is not merely automation; it is an architectural solution to a fundamental constraint. Planning (\Cref{sec:agents2-planning}) breaks complex tasks into subtasks. Retrieval fetches specific information for each subtask. The LLM operates within its effective range on each step, even when the overall task would be impossible to handle monolithically.
+	This is not merely automation; it is an architectural solution to a fundamental constraint. Planning (\Cref{sec:agents2-planning}) breaks complex tasks into subtasks, ensuring each retrieval step is targeted rather than overwhelming. Retrieval fetches specific information for each subtask. The LLM operates within its effective range on each step, even when the overall task would be impossible to handle monolithically.
 
 	\vspace{0.5em}
 	This decomposition explains both why agentic systems are powerful and why they fail in predictable ways. The reliability cliff (\Cref{sec:agents2-termination}) shows that short, focused tasks succeed while long tasks fail---precisely because decomposition keeps individual steps within the model's effective operating range, but errors compound across many steps.
@@ -166,7 +166,7 @@ This mechanism enables perception into knowledge bases far too large to fit in a
 
 Institutional memory provides access to prior work product. When drafting a new registration statement, an agent can perceive prior S-1 filings (IPO registrations), SEC comment histories, and successful disclosure language. This access allows current work to build on verified precedents rather than starting from first principles.
 
-Memory-as-perception distinguishes experienced agents from novices. A junior associate reasons from what they learned in law school; a senior associate draws on pattern recognition from hundreds of matters. Memory provides agents with this accumulated experience---but only if the retrieval infrastructure connects them to the right knowledge at the right time.
+Memory-as-perception distinguishes experienced agents from novices. A junior associate reasons from what they learned in law school; a senior associate draws on pattern recognition from hundreds of matters. Memory provides agents with this accumulated experience---but only if the retrieval infrastructure connects them to the right knowledge at the right time. \Cref{sec:agents2-memory} develops these requirements in detail, including how memory systems must enforce the authority, temporal validity, and isolation constraints introduced above.
 
 % ----------------------------------------------------------------------------
 % Domain-Specific Perception Requirements
@@ -188,7 +188,7 @@ Legal and regulatory information is bounded by jurisdiction. California preceden
 \paragraph{Matter and Client Isolation}
 
 \mbox{}\\[-0.3em]
-Critically, perception must respect confidentiality boundaries. Whether a human or AI, an agent working on Matter A cannot perceive documents from adverse Matter B. This enforcement of \keyterm{ethical walls} arguably must occur at the perception layer. In financial contexts, an agent advising Client X cannot perceive material non-public information (MNPI) from Client Y's engagement. Every perception event must be logged, capturing the agent, the query, and the matter context. This audit trail enables compliance review and breach detection. See \Cref{sec:agents2-memory} for detailed treatment of isolation requirements; Part III addresses the professional responsibility obligations---including attorney confidentiality duties and fiduciary obligations---that mandate these controls.
+Critically, perception must respect confidentiality boundaries. Whether a human or AI, an agent working on Matter A cannot perceive documents from adverse Matter B. This enforcement of \keyterm{ethical walls} arguably must occur at the perception layer. In financial contexts, an agent advising Client X cannot perceive material non-public information (MNPI) from Client Y's engagement. Every perception event must be logged, capturing the agent, the query, and the matter context. This audit trail enables compliance review and breach detection. See \Cref{sec:agents2-memory} for detailed treatment of isolation requirements; \href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}} addresses the professional responsibility obligations---including attorney confidentiality duties and fiduciary obligations---that mandate these controls.
 
 % ----------------------------------------------------------------------------
 % Tool Design Principles for Perception
@@ -258,7 +258,7 @@ In professional practice, graceful failure prevents malpractice. When an agent c
 
 \paragraph{Least Privilege and Rate Limiting}
 
-Perception tools should request minimum necessary permissions. A legal research tool requires read access to case databases, not write access to the document management system. If a compromised agent gains perception credentials, damage is limited to information disclosure rather than destruction. Rate limiting addresses a common failure mode: infinite search loops. Tools should track invocation frequency and refuse requests beyond reasonable thresholds. If an agent searches five times without results, the tool should force a stop and escalation.
+Perception tools should request minimum necessary permissions. A legal research tool requires read access to case databases, not write access to the document management system. If a compromised agent gains perception credentials, damage is limited to information disclosure rather than destruction. Rate limiting addresses a common failure mode: infinite search loops. Tools should track invocation frequency and refuse requests beyond reasonable thresholds. If an agent searches five times without results, the tool should force a stop and escalation (\Cref{sec:agents2-escalation}).
 
 % ----------------------------------------------------------------------------
 % Evaluating Perception Capabilities
@@ -271,7 +271,7 @@ When evaluating agentic systems, you should assess perception against criteria t
 
 \textbf{Coverage} determines which sources the agent can access. A litigation agent that queries Westlaw but not state-specific databases has incomplete coverage. You must map available perception tools against information needs to identify gaps.
 
-\textbf{Retrieval quality} measures whether the agent finds relevant information. Test with known-good queries where the correct result is established. Measure both precision (relevance of results) and recall (completeness of relevant results).
+\textbf{Retrieval quality} measures whether the agent finds relevant information. Test with known-good queries where the correct result is established. Measure both \keyterm{precision} (the fraction of retrieved documents that are actually relevant) and \keyterm{recall} (the fraction of all relevant documents that the system successfully retrieves). These metrics will be familiar to legal professionals from technology-assisted review (TAR) in e-discovery, where courts have recognized precision and recall as the standard measures of retrieval effectiveness \parencite{grossman2011tar}. The same framework applies to agent perception: high precision means the agent does not waste time on irrelevant results; high recall means the agent does not miss important authorities. The tradeoff between them---casting a wider net improves recall but may reduce precision---is a design decision that should be calibrated to the task's risk profile.
 
 \textbf{Verification} confirms that the system distinguishes authoritative from secondary sources. You must ensure that retrieved information is traceable to its source and that citations are independently verifiable.
 

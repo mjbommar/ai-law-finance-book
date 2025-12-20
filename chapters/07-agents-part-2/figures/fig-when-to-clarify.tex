@@ -29,36 +29,32 @@
 \node[axis label] at (3.1, 2.4) {High Ambiguity};
 
 % Row headers
-\node[axis label, rotate=90, anchor=south, align=center] at (-6.5, 0.95) {Low\\Stakes};
-\node[axis label, rotate=90, anchor=south, align=center] at (-6.5, -0.95) {High\\Stakes};
+\node[axis label, rotate=90, anchor=south, align=center] at (-6.5, 1.1) {Low\\Stakes};
+\node[axis label, rotate=90, anchor=south, align=center] at (-6.5, -1.1) {High\\Stakes};
 
 % Top-left: Low Stakes, Low Ambiguity
-\node[cell, draw=green-600, fill=green-100] (tl) at (-3.1, 0.95) {
+\node[cell, draw=green-600, fill=green-100] (tl) at (-3.1, 1.1) {
     \textcolor{green-900}{\textsf{\textbf{PROCEED}}}\\[2pt]
     \textcolor{gray-600}{\scriptsize\itshape ``Apple market cap'' → Apple Inc.}
 };
 
 % Top-right: Low Stakes, High Ambiguity
-\node[cell, draw=amber-600, fill=amber-100] (tr) at (3.1, 0.95) {
+\node[cell, draw=amber-600, fill=amber-100] (tr) at (3.1, 1.1) {
     \textcolor{amber-900}{\textsf{\textbf{CLARIFY BRIEFLY}}}\\[2pt]
     \textcolor{gray-600}{\scriptsize\itshape ``Research SOL'' → which claim type?}
 };
 
 % Bottom-left: High Stakes, Low Ambiguity
-\node[cell, draw=amber-600, fill=amber-100] (bl) at (-3.1, -0.95) {
+\node[cell, draw=amber-600, fill=amber-100] (bl) at (-3.1, -1.1) {
     \textcolor{amber-900}{\textsf{\textbf{CONFIRM}}}\\[2pt]
     \textcolor{gray-600}{\scriptsize\itshape ``File this motion'' → verify before acting}
 };
 
 % Bottom-right: High Stakes, High Ambiguity
-\node[cell, draw=red-600, fill=red-100] (br) at (3.1, -0.95) {
+\node[cell, draw=red-600, fill=red-100] (br) at (3.1, -1.1) {
     \textcolor{red-900}{\textsf{\textbf{CLARIFY THOROUGHLY}}}\\[2pt]
     \textcolor{gray-600}{\scriptsize\itshape ``Handle the regulatory response''}
 };
-
-% Subtle grid lines
-\draw[gray-300, line width=0.5pt] (0, 2.0) -- (0, -1.9);
-\draw[gray-300, line width=0.5pt] (-6.2, 0) -- (6.2, 0);
 
 \end{tikzpicture}
 \caption{Decision matrix for when agents should clarify user intent. Stakes measure consequence of error; ambiguity measures interpretation confidence.}

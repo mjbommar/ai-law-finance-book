@@ -60,6 +60,8 @@ A typical implementation has four stages:
 	\item \textbf{Augmentation and Generation:} Injects retrieved chunks into the prompt and generates a response. The model's in-context learning capability allows it to reason about the retrieved content.
 \end{enumerate}
 
+\input{figures/fig-rag-pipeline}
+
 \paragraph{Advanced RAG Patterns}
 
 Robust implementations enhance basic RAG with patterns that improve precision and authority:
@@ -105,11 +107,11 @@ Perhaps no aspect of memory architecture matters more for professional services 
 
 Implementing effective separation requires a layered approach that begins with architectural isolation. Each matter should occupy its own namespace within the memory system, creating a logical partition that separates its documents, notes, and work product from all other matters. Retrieval operations must be scoped to respect these boundaries: when an agent queries memory in the context of a particular matter, the system should only search within that matter's namespace, never reaching across into other partitions regardless of how relevant the results might appear.
 
-Access controls provide the next layer of protection. Role-based permissions determine which agents and human users can access each namespace, mirroring the ethical wall policies that law firms and financial institutions already maintain for their human professionals. An associate staffed on a merger transaction should have access to that deal's namespace but not to the namespace for litigation against the same company being handled by a different team.
+Access controls provide the next layer of protection. Role-based permissions determine which agents and human users can access each namespace, mirroring the ethical wall policies that law firms and financial institutions already maintain for their human professionals. An associate staffed on a merger transaction should have access to that deal's namespace but not to the namespace for litigation against the same company being handled by a different team. When delegation introduces multiple agents accessing the same matter namespace (\Cref{sec:agents2-delegation}), isolation becomes even more critical: coordination among agents must not inadvertently leak information across matter boundaries.
 
 Audit trails complete the picture by creating a verifiable record of every interaction with the memory system. Each read and write operation should be logged with a timestamp, the identity of the requesting agent or user, and the matter identifier. These logs serve multiple purposes: they enable compliance review, support investigations if a breach is suspected, and provide documentation that the organization maintained appropriate controls.
 
-Retention and deletion policies add a temporal dimension to isolation. Organizational policy often requires that matter files be retained for specified periods and then destroyed; legal and regulatory requirements may impose additional constraints depending on the engagement type, jurisdiction, and applicable rules. When a matter closes or a client relationship ends, the associated memory namespace should be archived or deleted according to a documented retention schedule. Critically, deletion must be verifiable---the organization needs confidence that purged data is truly gone, not merely hidden from normal retrieval.
+Retention and deletion policies add a temporal dimension to isolation. Organizational policy often requires that matter files be retained for specified periods and then destroyed; legal and regulatory requirements may impose additional constraints depending on the engagement type, jurisdiction, and applicable rules. When a matter closes or a client relationship ends, the associated memory namespace should be archived or deleted according to a documented retention schedule. Critically, deletion must be verifiable---the organization needs confidence that purged data is truly gone, not merely hidden from normal retrieval. These isolation and audit requirements exemplify the architectural patterns for privilege enforcement and logging detailed in \Cref{sec:agents2-logging-arch}.
 
 % ----------------------------------------------------------------------------
 % Evaluating Memory Systems
@@ -118,7 +120,7 @@ Retention and deletion policies add a temporal dimension to isolation. Organizat
 \subsection{Evaluating Memory Systems}
 \label{sec:agents2-memory-eval}
 
-Memory evaluation requires four assessments: \textit{retrieval quality} (precision and recall against expert work product---does it find the authorities a skilled attorney would cite?), \textit{isolation integrity} (adversarial testing to verify matter/client boundaries hold), \textit{temporal validity} (tracking whether retrieved precedent remains good law and how quickly updates propagate), and \textit{scale performance} (latency as corpus grows to tens of thousands of documents). See the consolidated Evaluation Checklist in \Cref{sec:agents2-evaluation-checklist}.
+Memory evaluation requires four assessments: \textit{retrieval quality} (precision and recall against expert work product---does it find the authorities a skilled attorney would cite?), \textit{isolation integrity} (adversarial testing to verify matter/client boundaries hold), \textit{temporal validity} (tracking whether retrieved precedent remains good law and how quickly updates propagate), and \textit{scale performance} (latency as corpus grows to tens of thousands of documents). See the consolidated Evaluation Checklist in \Cref{sec:agents2-evaluation-checklist} for memory-specific assessment criteria including isolation integrity testing, retention policy verification, and temporal validity checks.
 
 % ----------------------------------------------------------------------------
 % Adaptation: In-Context Learning as a System Design Element
@@ -127,7 +129,7 @@ Memory evaluation requires four assessments: \textit{retrieval quality} (precisi
 \subsection{Adaptation: Learning and Its Consequences}
 \label{sec:agents2-adaptation}
 
-Memory enables \keyterm{adaptation}---the ``A'' in the GPA+IAT framework from Part I. An agent that adapts changes its behavior based on experience, ideally improving over time. This capability transforms agents from static tools into systems that learn. But adaptation also introduces risks that static systems avoid.
+Memory enables \keyterm{adaptation}---the ``A'' in the GPA+IAT framework from \href{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5806982}{\textit{What is an Agent?}}. An agent that adapts changes its behavior based on experience, ideally improving over time. This capability transforms agents from static tools into systems that learn. But adaptation also introduces risks that static systems avoid.
 
 \begin{definitionbox}[title={Adaptation}, breakable=false]
 	\keyterm{Adaptation} is behavioral change based on experience. In agentic systems, adaptation occurs through three mechanisms:
@@ -166,6 +168,8 @@ The same mechanisms that enable adaptation create risks that require governance:
 
 \textbf{Governance: Accountability gaps.} When behavior depends on memory state, accountability becomes complex. Which version of the agent produced this output? What was in its memory at the time? If the agent's behavior changes based on accumulated experience, audit trails must capture not just inputs and outputs but memory state.
 
+Detecting and responding to these risks---particularly drift and leakage---requires escalation triggers and monitoring mechanisms explored in \Cref{sec:agents2-escalation}, which addresses when anomalies warrant human review.
+
 \textbf{Cost: Storage and retrieval overhead.} Memory consumes resources. Episodic memory for a complex litigation matter can grow to millions of tokens. Semantic memory for a precedent database can require terabytes of embeddings. Every retrieval operation has latency and cost. These costs compound as memory grows.
 
 \textbf{Latency: Retrieval time.} RAG adds latency to every query. The agent must embed the query, search the vector store, retrieve results, and inject them into the prompt before generation begins. For real-time applications---trading, live client calls---this latency may be unacceptable.
@@ -183,6 +187,8 @@ The same mechanisms that enable adaptation create risks that require governance:
 		\item \textbf{How is drift detected?} Monitor behavior changes over time.
 	\end{itemize}
 \end{keybox}
+
+These governance questions are not abstract---they map directly to architectural controls developed in \Cref{sec:agents2-governance}, which synthesizes logging, override mechanisms, and isolation patterns specifically designed to manage adaptation risks.
 
 % ----------------------------------------------------------------------------
 % Connection to Other Questions
