@@ -90,12 +90,12 @@ Reversibility dictates oversight structure. Consider how you delegate to a junio
 		>{\raggedright\arraybackslash}p{0.18\textwidth}
 		}
 		\toprule
-		\textbf{Reversibility} & \textbf{Examples} & \textbf{Oversight} & \textbf{Recovery} \\
+		\textbf{Reversibility} & \textbf{Examples}       & \textbf{Oversight} & \textbf{Recovery} \\
 		\midrule
-		Fully & Research; drafts & Post-hoc & Delete/revise \\
-		Partially & Internal emails; alerts & Checkpoint & Correction \\
-		Largely irreversible & Filings; client emails & Pre-approval & Amend/retract \\
-		Irreversible & Trades; wires & Multi-party & Offset (costly) \\
+		Fully                  & Research; drafts        & Post-hoc           & Delete/revise     \\
+		Partially              & Internal emails; alerts & Checkpoint         & Correction        \\
+		Largely irreversible   & Filings; client emails  & Pre-approval       & Amend/retract     \\
+		Irreversible           & Trades; wires           & Multi-party        & Offset (costly)   \\
 		\bottomrule
 	\end{tabular}
 \end{table}
@@ -226,3 +226,5 @@ Action tools are where agentic systems create real-world consequences. Governanc
 Perception risks (accessing wrong data) are internal. Action risks (sending wrong emails, executing wrong trades) are external and potentially irreversible. This section established the architectural controls: the Reversibility Framework, approval workflows, and circuit breakers.
 
 \Cref{sec:agents2-memory} addresses memory: how agents maintain context across sessions and learn from experience. Later, \Cref{sec:agents2-escalation} examines when agents should \textit{not} act---recognizing situations that require human decision-making. The interplay between action capability and escalation judgment is central to safety. These capabilities---action controls, memory, and escalation judgment---are then integrated into the governance architecture developed in \Cref{sec:agents2-governance}. As \href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}} emphasizes, governance policy without governance-aware architecture is unenforceable; the controls established in this section provide the foundation that policy requires.
+
+\pagebreak

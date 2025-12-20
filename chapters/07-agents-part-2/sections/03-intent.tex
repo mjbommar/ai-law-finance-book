@@ -84,8 +84,9 @@ For architects evaluating agentic systems: where must classification be determin
 		\item Critical context exists outside the conversation (prior meetings, firm norms)
 		\item The user themselves is unclear about what they want\\
 	\end{itemize}
-	\textbf{Design for clarification, not guessing.} The aim is an agent that surfaces uncertainty and asks, not one that pretends it possesses certainty regarding intent.
 \end{keybox}
+
+\textbf{Design for clarification, not guessing.} The aim is an agent that surfaces uncertainty and asks, not one that pretends it possesses certainty regarding intent.
 
 % ----------------------------------------------------------------------------
 % Goal Extraction from Natural Language
@@ -118,58 +119,58 @@ Two additional constraint types often remain unstated. Audience and privilege co
 Once extracted, these components can be organized into structured goal representations that guide execution. These representations resemble short assignment memos that the planning system can act on (\Cref{sec:agents2-planning}) and the termination system can measure against (\Cref{sec:agents2-termination}).
 
 \begin{center}
-\begin{tikzpicture}[
-    inbox/.style={
-        rectangle,
-        rounded corners=3pt,
-        draw=gray-300,
-        fill=gray-100,
-        minimum width=4cm,
-        minimum height=4cm,
-        align=center,
-        inner sep=8pt
-    },
-    goalbox/.style={
-        rectangle,
-        rounded corners=3pt,
-        draw=example-base,
-        fill=example-light,
-        minimum width=8.5cm,
-        minimum height=4cm,
-        align=left,
-        inner sep=10pt
-    },
-    arrow/.style={->, >=stealth, line width=1.5pt, gray-400}
-]
+	\begin{tikzpicture}[
+			inbox/.style={
+					rectangle,
+					rounded corners=3pt,
+					draw=gray-300,
+					fill=gray-100,
+					minimum width=4cm,
+					minimum height=4cm,
+					align=center,
+					inner sep=8pt
+				},
+			goalbox/.style={
+					rectangle,
+					rounded corners=3pt,
+					draw=example-base,
+					fill=example-light,
+					minimum width=8.5cm,
+					minimum height=4cm,
+					align=left,
+					inner sep=10pt
+				},
+			arrow/.style={->, >=stealth, line width=1.5pt, gray-400}
+		]
 
-% Left: User instruction
-\node[inbox] (input) at (-2.6, 0) {
-    \textcolor{gray-500}{\scriptsize\sffamily\bfseries USER INSTRUCTION}\\[6pt]
-    \large\textit{``Review the Smith}\\
-    \large\textit{acquisition agreement}\\
-    \large\textit{for change-of-control}\\
-    \large\textit{provisions''}
-};
+		% Left: User instruction
+		\node[inbox] (input) at (-2.6, 0) {
+			\textcolor{gray-500}{\scriptsize\sffamily\bfseries USER INSTRUCTION}\\[6pt]
+			\large\textit{``Review the Smith}\\
+			\large\textit{acquisition agreement}\\
+			\large\textit{for change-of-control}\\
+			\large\textit{provisions''}
+		};
 
-% Arrow
-\draw[arrow] (input.east) -- ++(0.6, 0);
+		% Arrow
+		\draw[arrow] (input.east) -- ++(0.6, 0);
 
-% Right: Extracted goal
-\node[goalbox, right=1cm of input] (goal) {
-    \textcolor{example-dark}{\sffamily\bfseries Structured Goal Representation}\\[4pt]
-    \small
-    \begin{tabular}{@{}l@{\hspace{0.5em}}l@{}}
-    \textcolor{gray-600}{Task:} & Document review\\
-    \textcolor{gray-600}{Document:} & Smith Acquisition Agreement\\
-    \textcolor{gray-600}{Objective:} & Identify change-of-control provisions\\[2pt]
-    \textcolor{gray-600}{Deadline:} & January 15, 2025\\
-    \textcolor{gray-600}{Scope:} & Sections 5--8\\
-    \textcolor{gray-600}{Deliverable:} & Summary memo\\[2pt]
-    \textcolor{gray-600}{Success:} & \parbox[t]{6.5cm}{All CoC provisions identified, triggering events listed, consent requirements noted}\\
-    \end{tabular}
-};
+		% Right: Extracted goal
+		\node[goalbox, right=1cm of input] (goal) {
+			\textcolor{example-dark}{\sffamily\bfseries Structured Goal Representation}\\[4pt]
+			\small
+			\begin{tabular}{@{}l@{\hspace{0.5em}}l@{}}
+				\textcolor{gray-600}{Task:}        & Document review                                                                                        \\
+				\textcolor{gray-600}{Document:}    & Smith Acquisition Agreement                                                                            \\
+				\textcolor{gray-600}{Objective:}   & Identify change-of-control provisions                                                                  \\[2pt]
+				\textcolor{gray-600}{Deadline:}    & January 15, 2025                                                                                       \\
+				\textcolor{gray-600}{Scope:}       & Sections 5--8                                                                                          \\
+				\textcolor{gray-600}{Deliverable:} & Summary memo                                                                                           \\[2pt]
+				\textcolor{gray-600}{Success:}     & \parbox[t]{6.5cm}{All CoC provisions identified, triggering events listed, consent requirements noted} \\
+			\end{tabular}
+		};
 
-\end{tikzpicture}
+	\end{tikzpicture}
 \end{center}
 
 % ----------------------------------------------------------------------------
@@ -254,54 +255,54 @@ Confidence signaling requires the agent to indicate how confident it is in its o
 Consider how intent extraction and validation work together for a legal task. Given the instruction ``Review this credit agreement for risks,'' the agent classifies this as a document review task and detects that ``risks'' is ambiguous (risks to whom? what types?). Context gathering reveals this is a lender-side engagement for a senior secured facility. The agent infers implicit constraints (focus on lender risks, prioritize material issues, assume current market terms as baseline) and clarifies: ``I'll review from the lender's perspective, focusing on credit risk, collateral coverage, and covenant adequacy. Should I also flag documentation risks (drafting issues, missing provisions) or focus only on substantive credit terms?''
 
 \begin{center}
-\begin{tikzpicture}[
-    inbox/.style={
-        rectangle,
-        rounded corners=3pt,
-        draw=gray-300,
-        fill=gray-100,
-        minimum width=4cm,
-        minimum height=3.2cm,
-        align=center,
-        inner sep=8pt
-    },
-    goalbox/.style={
-        rectangle,
-        rounded corners=3pt,
-        draw=example-base,
-        fill=example-light,
-        minimum width=7.8cm,
-        minimum height=3.2cm,
-        align=left,
-        inner sep=10pt
-    },
-    arrow/.style={->, >=stealth, line width=1.5pt, gray-400}
-]
+	\begin{tikzpicture}[
+			inbox/.style={
+					rectangle,
+					rounded corners=3pt,
+					draw=gray-300,
+					fill=gray-100,
+					minimum width=4cm,
+					minimum height=3.2cm,
+					align=center,
+					inner sep=8pt
+				},
+			goalbox/.style={
+					rectangle,
+					rounded corners=3pt,
+					draw=example-base,
+					fill=example-light,
+					minimum width=7.8cm,
+					minimum height=3.2cm,
+					align=left,
+					inner sep=10pt
+				},
+			arrow/.style={->, >=stealth, line width=1.5pt, gray-400}
+		]
 
-% Left: User instruction
-\node[inbox] (input) at (-2.2, 0) {
-    \textcolor{gray-500}{\scriptsize\sffamily\bfseries USER INSTRUCTION}\\[6pt]
-    \large\textit{``Review this credit}\\
-    \large\textit{agreement for risks''}
-};
+		% Left: User instruction
+		\node[inbox] (input) at (-2.2, 0) {
+			\textcolor{gray-500}{\scriptsize\sffamily\bfseries USER INSTRUCTION}\\[6pt]
+			\large\textit{``Review this credit}\\
+			\large\textit{agreement for risks''}
+		};
 
-% Arrow
-\draw[arrow] (input.east) -- ++(0.8, 0);
+		% Arrow
+		\draw[arrow] (input.east) -- ++(0.8, 0);
 
-% Right: Extracted goal
-\node[goalbox, right=1.2cm of input] (goal) {
-    \textcolor{example-dark}{\sffamily\bfseries Extracted Goal}\\[4pt]
-    \small
-    \begin{tabular}{@{}l@{\hspace{0.5em}}l@{}}
-    \textcolor{gray-600}{Task:} & Document review\\
-    \textcolor{gray-600}{Perspective:} & Lender\\
-    \textcolor{gray-600}{Focus:} & Credit risk, collateral, covenants\\
-    \textcolor{gray-600}{Deliverable:} & Risk summary memo\\[2pt]
-    \textcolor{gray-600}{Success:} & \parbox[t]{6cm}{Material risks identified, comparison to market terms, recommendations provided}\\
-    \end{tabular}
-};
+		% Right: Extracted goal
+		\node[goalbox, right=1.2cm of input] (goal) {
+			\textcolor{example-dark}{\sffamily\bfseries Extracted Goal}\\[4pt]
+			\small
+			\begin{tabular}{@{}l@{\hspace{0.5em}}l@{}}
+				\textcolor{gray-600}{Task:}        & Document review                                                                                  \\
+				\textcolor{gray-600}{Perspective:} & Lender                                                                                           \\
+				\textcolor{gray-600}{Focus:}       & Credit risk, collateral, covenants                                                               \\
+				\textcolor{gray-600}{Deliverable:} & Risk summary memo                                                                                \\[2pt]
+				\textcolor{gray-600}{Success:}     & \parbox[t]{6cm}{Material risks identified, comparison to market terms, recommendations provided} \\
+			\end{tabular}
+		};
 
-\end{tikzpicture}
+	\end{tikzpicture}
 \end{center}
 
 The agent validates: ``I'll prepare a memo identifying material risks to the lender, comparing key terms to market standards, and recommending negotiation points. I'll have a draft for your review by tomorrow afternoon.''
@@ -309,84 +310,84 @@ The agent validates: ``I'll prepare a memo identifying material risks to the len
 The same pattern applies to financial tasks. Given the instruction ``Rebalance to reduce tech exposure,'' the agent classifies this as a portfolio action task and immediately detects multiple ambiguities: how much reduction? through what mechanism? with what constraints? Context gathering reveals current tech exposure at 35\% against a 25\% target. Through clarification dialogue, the agent confirms the user wants to reach target through sales while minimizing tax impact (preferring loss harvesting—selling assets at a loss to offset gains—and long-term gains over short-term).
 
 \begin{figure}[htbp]
-\centering
-\begin{tikzpicture}[
-    userbubble/.style={
-        rectangle,
-        rounded corners=8pt,
-        fill=definition-light,
-        align=right,
-        inner sep=8pt,
-        font=\small,
-        anchor=north east
-    },
-    agentbubble/.style={
-        rectangle,
-        rounded corners=8pt,
-        fill=gray-100,
-        align=left,
-        inner sep=8pt,
-        font=\small,
-        anchor=north west
-    },
-    goalbox/.style={
-        rectangle,
-        rounded corners=3pt,
-        draw=example-base,
-        fill=example-light,
-        align=left,
-        inner sep=8pt,
-        font=\small
-    }
-]
+	\centering
+	\begin{tikzpicture}[
+			userbubble/.style={
+					rectangle,
+					rounded corners=8pt,
+					fill=definition-light,
+					align=right,
+					inner sep=8pt,
+					font=\small,
+					anchor=north east
+				},
+			agentbubble/.style={
+					rectangle,
+					rounded corners=8pt,
+					fill=gray-100,
+					align=left,
+					inner sep=8pt,
+					font=\small,
+					anchor=north west
+				},
+			goalbox/.style={
+					rectangle,
+					rounded corners=3pt,
+					draw=example-base,
+					fill=example-light,
+					align=left,
+					inner sep=8pt,
+					font=\small
+				}
+		]
 
-% Chat container background
-\fill[white, rounded corners=4pt] (-6.2, 0.8) rectangle (5.2, -9.2);
-\draw[gray-300, rounded corners=4pt] (-6.2, 0.8) rectangle (5.2, -9.2);
+		% Chat container background
+		\fill[white, rounded corners=4pt] (-6.2, 0.8) rectangle (5.2, -9.2);
+		\draw[gray-300, rounded corners=4pt] (-6.2, 0.8) rectangle (5.2, -9.2);
 
-% Chat header bar
-\fill[gray-200, rounded corners=4pt] (-6.2, 0.8) rectangle (5.2, 0.2);
-\node[font=\scriptsize\sffamily\bfseries, text=gray-600] at (-0.5, 0.5) {Portfolio Assistant};
+		% Chat header bar
+		\fill[gray-200, rounded corners=4pt] (-6.2, 0.8) rectangle (5.2, 0.2);
+		\node[font=\scriptsize\sffamily\bfseries, text=gray-600] at (-0.5, 0.5) {Portfolio Assistant};
 
-% User message 1 (right aligned)
-\node[userbubble] (u1) at (4.5, -0.3) {
-    \parbox{7cm}{\raggedleft Rebalance to reduce tech exposure}
-};
+		% User message 1 (right aligned)
+		\node[userbubble] (u1) at (4.5, -0.3) {
+			\parbox{7cm}{\raggedleft Rebalance to reduce tech exposure}
+		};
 
-% Agent clarification (left aligned)
-\node[agentbubble] (a1) at (-5.5, -2.1) {
-    \parbox{8cm}{Current tech exposure is 35\%. What's your target? Should I reduce through sales or reallocation? Any tax considerations?}
-};
+		% Agent clarification (left aligned)
+		\node[agentbubble] (a1) at (-5.5, -2.1) {
+			\parbox{8cm}{Current tech exposure is 35\%. What's your target? Should I reduce through sales or reallocation? Any tax considerations?}
+		};
 
-% User response (right aligned)
-\node[userbubble] (u2) at (4.5, -4.3) {
-    \parbox{7cm}{\raggedleft Get to 25\% through sales. Minimize taxes---use loss harvesting.}
-};
+		% User response (right aligned)
+		\node[userbubble] (u2) at (4.5, -4.3) {
+			\parbox{7cm}{\raggedleft Get to 25\% through sales. Minimize taxes---use loss harvesting.}
+		};
 
-% Agent validation (left aligned)
-\node[agentbubble] (a2) at (-5.5, -6.0) {
-    \parbox{8cm}{I'll prepare a plan to reduce tech from 35\% to 25\% via sales, optimized for tax efficiency. I'll need your approval before executing.}
-};
+		% Agent validation (left aligned)
+		\node[agentbubble] (a2) at (-5.5, -6.0) {
+			\parbox{8cm}{I'll prepare a plan to reduce tech from 35\% to 25\% via sales, optimized for tax efficiency. I'll need your approval before executing.}
+		};
 
-% Extracted goal box (to the right, showing internal state)
-\node[goalbox, anchor=north west] (goal) at (6.0, -1.5) {
-    \textcolor{example-dark}{\scriptsize\sffamily\bfseries EXTRACTED GOAL}\\[3pt]
-    \scriptsize
-    \begin{tabular}{@{}l@{\hspace{0.4em}}l@{}}
-    \textcolor{gray-600}{Task:} & Rebalancing\\
-    \textcolor{gray-600}{Target:} & 25\% tech\\
-    \textcolor{gray-600}{Method:} & Sales\\
-    \textcolor{gray-600}{Constraints:} & Tax-optimized\\
-    \textcolor{gray-600}{Approval:} & Required\\
-    \end{tabular}
-};
+		% Extracted goal box (to the right, showing internal state)
+		\node[goalbox, anchor=north west] (goal) at (6.0, -1.5) {
+			\textcolor{example-dark}{\scriptsize\sffamily\bfseries EXTRACTED GOAL}\\[3pt]
+			\scriptsize
+			\begin{tabular}{@{}l@{\hspace{0.4em}}l@{}}
+				\textcolor{gray-600}{Task:}        & Rebalancing   \\
+				\textcolor{gray-600}{Target:}      & 25\% tech     \\
+				\textcolor{gray-600}{Method:}      & Sales         \\
+				\textcolor{gray-600}{Constraints:} & Tax-optimized \\
+				\textcolor{gray-600}{Approval:}    & Required      \\
+			\end{tabular}
+		};
 
-% Dashed line connecting chat to goal
-\draw[gray-300, dashed, thick] (u2.east) -- (goal.south west);
+		% Dashed line connecting chat to goal
+		\draw[gray-300, dashed, thick] (u2.east) -- (goal.south west);
 
-\end{tikzpicture}
-\caption{Clarification dialogue for a portfolio rebalancing task. The agent detects ambiguity, gathers constraints through targeted questions, and extracts a validated goal before proceeding.}
-\label{fig:agents2-portfolio-clarification}
+	\end{tikzpicture}
+	\caption{Clarification dialogue for a portfolio rebalancing task. The agent detects ambiguity, gathers constraints through targeted questions, and extracts a validated goal before proceeding.}
+	\label{fig:agents2-portfolio-clarification}
 \end{figure}
 
 \begin{keybox}[title={Intent Understanding Is Continuous}, breakable=false]

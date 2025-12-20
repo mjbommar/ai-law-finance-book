@@ -17,9 +17,9 @@ Agentic systems require the same judgment. An agent that never escalates will ev
 
 \begin{definitionbox}[title={Escalation}]
 	\keyterm{Escalation} transfers control from the agent to a human when autonomous execution should stop. Unlike termination, which ends the task (success or failure), escalation pauses the task and requests human input before continuing.
-
-	This reflects professionalism, not failure. Recognizing when you need help and asking for it is exactly what we expect from junior professionals. Agents should do the same. Escalation operationalizes the ``T'' (Termination) element of the GPA+IAT framework from \href{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5806982}{\textit{What is an Agent?}}, representing the third outcome---alongside success and failure---when autonomous execution should stop.
 \end{definitionbox}
+
+This reflects professionalism, not failure. Recognizing when you need help and asking for it is exactly what we expect from junior professionals. Agents should do the same. Escalation operationalizes the ``T'' (Termination) element of the GPA+IAT framework from \href{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5806982}{\textit{What is an Agent?}}, representing the third outcome---alongside success and failure---when autonomous execution should stop.
 
 % ----------------------------------------------------------------------------
 % When to Escalate: Decision Framework
@@ -47,19 +47,19 @@ A critical implementation challenge: LLM-reported confidence scores are notoriou
 		>{\raggedright\arraybackslash}p{0.36\textwidth}
 		}
 		\toprule
-		\textbf{Signal Type}       & \textbf{What to Measure}                                                     & \textbf{Escalation Trigger}                                   \\
+		\textbf{Signal Type} & \textbf{What to Measure}                                             & \textbf{Escalation Trigger}                                             \\
 		\midrule
-		Retrieval quality          & Source authority, recency, topical coverage                                  & Fewer than $N$ authoritative sources found                    \\
+		Retrieval quality    & Source authority, recency, topical coverage                          & Fewer than $N$ authoritative sources found                              \\
 		\midrule
-		Source agreement           & Cross-reference consistency across retrieved documents                       & Contradictory information from comparable sources             \\
+		Source agreement     & Cross-reference consistency across retrieved documents               & Contradictory information from comparable sources                       \\
 		\midrule
-		Validation success         & Schema validation, citation verification, data reconciliation                & Citator shows ``overruled'' or ``questioned''; figures do not reconcile \\
+		Validation success   & Schema validation, citation verification, data reconciliation        & Citator shows ``overruled'' or ``questioned''; figures do not reconcile \\
 		\midrule
-		Tool reliability           & API response codes, timeout rates, structured error returns                  & Tool calls failed or returned malformed data                  \\
+		Tool reliability     & API response codes, timeout rates, structured error returns          & Tool calls failed or returned malformed data                            \\
 		\midrule
-		Self-consistency           & Agreement across multiple independent samples                                & High variance in answers when sampling the same question      \\
+		Self-consistency     & Agreement across multiple independent samples                        & High variance in answers when sampling the same question                \\
 		\midrule
-		Boundary detection         & Pattern matching against known edge cases or out-of-scope indicators         & Query matches escalation rules (e.g., mentions privilege, MNPI) \\
+		Boundary detection   & Pattern matching against known edge cases or out-of-scope indicators & Query matches escalation rules (e.g., mentions privilege, MNPI)         \\
 		\bottomrule
 	\end{tabular}
 \end{table}

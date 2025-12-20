@@ -9,15 +9,19 @@
 
 In \href{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5806982}{\textit{What is an Agent?}}, the first part of this series \parencite{bommarito2025whatisanagent}, we introduced the GPA+IAT framework---a way to recognize agentic systems through Goals, Perception, Action, Iteration, Adaptation, and Termination. Now, we turn to the practical: \textit{How do you design one?}
 
-This chapter is organized around ten architectural questions---the kind you should be asking whenever you're evaluating, deploying, or governing an agentic system. Behind each question is a design decision with real tradeoffs---choices that shape not just what the system can do, but how reliably it performs, how it fails, and what controls you have over it.
+The answer starts with a simple observation: agentic systems are meant to do real work---augmenting human professionals, automating routine workflows, or even replacing entire organizational functions. Whatever the ambition, the system must handle the same work those humans and organizations currently perform. A contract negotiation agent must do what a transactional lawyer does; a portfolio monitoring agent must ``act like'' an analyst. This means an agentic system requires the same structural capabilities as a professional team---from receiving and understanding work to coordinating action and operating under governance controls.
 
 \begin{keybox}[title={The Core Insight}]
 	\textbf{Agents are not magic; they are architecture.}
 
-	Every capability that makes an agent useful corresponds to a concrete design decision. Those decisions have tradeoffs. Those tradeoffs have consequences.\\
+	Behind each architectural question is a design decision with real tradeoffs. Every capability that makes an agent useful corresponds to a concrete choice about how the system should work, and those choices shape what the system can do, how reliably it performs, how it fails, and what controls you have over it.\\
 
-	You do not need to build agents yourself. But you need to know what questions to ask---because architectural decisions made at design time determine what the system can do, how reliably it performs, what can go wrong, and what controls are possible.
+	Notably, agents are also more than any single agentic framework, programming language, or foundation model.  While the implementation of an agentic architecture does require choosing between languages like Python or C\# and models like GPT or Claude, the design decisions transcend these details.\\
+
+	While we encourage you to learn by doing, we also encourage you to begin by focusing on the core concepts and design decisions in this chapter first.  Many commercial software providers and even open source libraries obscure or confuse the key design decisions that underlie agents, and you will likely learn best by building your own foundation before learning the language of any particular vendor or framework.
 \end{keybox}
+
+This chapter organizes those architectural decisions into ten questions---the kind you should be asking whether you're building, evaluating, deploying, or governing an agentic system.
 
 % ----------------------------------------------------------------------------
 % The Ten Questions Framework
@@ -26,9 +30,7 @@ This chapter is organized around ten architectural questions---the kind you shou
 \subsection{The Ten Questions}
 \label{sec:agents2-ten-questions}
 
-These ten questions are not arbitrary. They emerge from what agentic systems are designed to do: augment human professionals, automate routine workflows, or even eventually replace entire organizational functions. Whatever the ambition, the system must handle the same work those humans and organizations currently perform. A contract negotiation agent must do what a transactional lawyer does; a portfolio monitoring agent must ``act like'' an analyst.
-
-The capabilities an agent needs are not determined by the technology; they are determined by the work. And work has structure that any system, human or artificial, must accommodate. This yields the design principle that grounds the entire chapter: \textbf{an agentic system requires the same structural capabilities as a professional team}.
+Designing an agent means answering these ten questions. The capabilities an agent needs are not determined by the technology; they are determined by the work. And work has structure that any system, human or artificial, must accommodate.
 
 Consider how a law firm operates. Work arrives through defined channels: a client calls, court filings appear on the docket, or an originating attorney refers a matter to a specialist. That work typically arrives as instructions that need clarification, and associates quickly learn to read between the lines, developing heuristics for what partners actually want rather than what they literally said. Research demands access to the right databases and thoughtful search strategies. Actions like filing motions or sending client letters have real consequences and require appropriate authorization. Institutional knowledge accumulates in case files and precedent databases. Complex matters break down into workstreams with dependencies, and work products have clear completion criteria. Associates know when to escalate to partners, teams coordinate across practice groups, and compliance controls keep the whole operation within ethical and regulatory bounds.
 
