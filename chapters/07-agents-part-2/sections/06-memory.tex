@@ -48,27 +48,47 @@ The retrieval infrastructure powering semantic memory---embeddings and vector st
 \subsection{Implementing the RAG Pattern}
 \label{sec:agents2-rag}
 
-The RAG pattern (\Cref{sec:agents2-icl-retrieval}) requires careful implementation to work reliably in professional contexts. The basic pattern---retrieve, augment, generate---becomes a pipeline with several stages, each introducing design decisions that affect quality, latency, and cost.
+The RAG pattern (\Cref{sec:agents2-icl-retrieval}) requires careful implementation to work reliably in professional contexts. The core pattern---retrieve, augment, generate---is simple, but the retrieval step admits many implementations with different tradeoffs.
 
-\paragraph{The RAG Pipeline}
+\paragraph{The Core Pattern}
 
-A typical implementation has four stages:
+RAG has three essential steps:
+\begin{enumerate}
+	\item \textbf{Retrieve}: Find relevant content from your knowledge base.
+	\item \textbf{Augment}: Insert that content into the model's prompt.
+	\item \textbf{Generate}: Produce a response informed by the retrieved content.
+\end{enumerate}
+
+\noindent The retrieval step is where implementations diverge. As discussed in \Cref{sec:agents2-icl-retrieval}, retrieval can use keyword search, BM25, embeddings, database queries, API calls, or hybrid combinations. The choice depends on your content, your queries, and your infrastructure.
+
+\paragraph{The Embedding-Based Pipeline}
+
+When using embedding-based semantic search---the approach that dominates RAG tutorials---the retrieval step expands into a multi-stage pipeline:
 \begin{enumerate}
 	\item \textbf{Chunking:} Breaks documents into semantic units (sentences, paragraphs, sections, or sliding windows) while preserving metadata (source, date, jurisdiction). Chunk size affects retrieval: too small loses context; too large dilutes relevance.
 	\item \textbf{Embedding:} Converts each chunk into a vector using an embedding model. Different models have different strengths; legal-specific embeddings may outperform general-purpose ones for professional content.
-	\item \textbf{Retrieval:} Finds chunks similar to the query by comparing vectors (using cosine similarity or similar metrics). Returns the top-$k$ most similar chunks.
-	\item \textbf{Augmentation and Generation:} Injects retrieved chunks into the prompt and generates a response. The model's in-context learning capability allows it to reason about the retrieved content.
+	\item \textbf{Similarity Search:} Finds chunks similar to the query by comparing vectors (using cosine similarity or similar metrics). Returns the top-$k$ most similar chunks.
 \end{enumerate}
+
+This pipeline works well for unstructured text where semantic matching matters---finding documents about ``materiality'' when the query says ``significance.'' But it is not the only approach, and for some use cases it is not the best.
 
 \input{figures/fig-rag-pipeline}
 
-\paragraph{Advanced RAG Patterns}
+\paragraph{Alternative Retrieval Approaches}
 
-Robust implementations enhance basic RAG with patterns that improve precision and authority:
+Many production systems use simpler or hybrid approaches:
 \begin{itemize}[nosep]
-	\item \textbf{Hybrid retrieval} combines semantic search (embeddings) with keyword search (BM25) \parencite{robertson2009bm25}, catching both conceptual matches and exact terms (like specific case citations that must match precisely).
+	\item \textbf{Keyword and BM25 search} requires no chunking or embedding infrastructure. Existing search systems---Westlaw, Lexis, internal document search---can power RAG directly. This works well when exact terms matter (case citations, statutory references) and vocabulary is consistent.
+	\item \textbf{Structured queries} retrieve from databases or APIs. An agent checking SEC filings queries EDGAR; an agent researching court records queries PACER. No chunking or embedding required---the data source returns structured results.
+	\item \textbf{Hybrid retrieval} combines keyword search (fast, catches exact matches) with semantic search (slower, catches conceptual matches) \parencite{robertson2009bm25}. A common pattern uses BM25 for initial retrieval and embedding-based reranking to surface the most relevant results.
+\end{itemize}
+
+\paragraph{Enhancing Retrieval Quality}
+
+Regardless of retrieval method, several techniques improve precision and authority:
+\begin{itemize}[nosep]
 	\item \textbf{Query rewriting} transforms vague questions (``What's the rule?'') into specific search queries based on conversation history and domain knowledge \parencite{ma2023queryrewriting}.
-	\item \textbf{Reranking} scores initial results by authority or relevance, ensuring binding precedent ranks above secondary sources \parencite{yu2024rankrag}. A Supreme Court opinion should outrank a blog post, even if both are semantically similar to the query.
+	\item \textbf{Reranking} scores initial results by authority or relevance, ensuring binding precedent ranks above secondary sources \parencite{yu2024rankrag}. A Supreme Court opinion should outrank a blog post, even if both match the query.
 	\item \textbf{Filtered retrieval} constrains results by metadata---jurisdiction, date, document type---preventing agents from citing inapplicable authority.
 \end{itemize}
 

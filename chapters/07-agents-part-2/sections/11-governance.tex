@@ -44,7 +44,7 @@ Comprehensive logging is the foundation of all governance. Without logs, there i
 
 \textbf{Delegation logs} capture agent-to-agent interactions (\Cref{sec:agents2-delegation}). When a coordinator delegates to specialists, the log must record the delegation contract, the specialist's identity, and the returned artifacts. Complete delegation logging enables audit trails that span the entire delegation tree.
 
-\begin{highlightbox}[title={Structured Logging Schema}]
+\begin{highlightbox}[title={Structured Logging Schema}, breakable=false]
 Effective governance requires structured logs, not free-form text. A minimal schema includes:
 \begin{itemize}[nosep]
 \item \textbf{Timestamp}: ISO 8601 with timezone
@@ -156,19 +156,15 @@ Together, these five patterns define the \keyterm{governance surface}---the inte
 \caption{Governance surface requirements by capability}
 \label{tab:agents2-governance-surface}
 \small
-\begin{tabular}{>{\raggedright\arraybackslash}p{3cm}>{\raggedright\arraybackslash}p{4.5cm}>{\raggedright\arraybackslash}p{5cm}}
+\begin{tabular}{@{}ll@{}}
 \toprule
-\textbf{Capability} & \textbf{Architectural Requirement} & \textbf{Chapter Cross-References} \\
+\textbf{Capability} & \textbf{Requirement} \\
 \midrule
-Logging & Structured event capture across all components & Triggers, Intent, Perception, Action, Memory, Planning, Delegation \\
-\addlinespace
-Override & External control plane with pause/abort/redirect & Action (\Cref{sec:agents2-circuit-breakers}), Termination (\Cref{sec:agents2-loop-detection}) \\
-\addlinespace
-State Management & Periodic snapshots, checkpoint serialization, rollback support & Action (\Cref{sec:agents2-reversibility}), Termination (\Cref{sec:agents2-graceful-degradation}) \\
-\addlinespace
-Least Privilege & RBAC at tool/resource/namespace levels & Action (\Cref{sec:agents2-action-security}), Perception (\Cref{sec:agents2-mcp-perception}), Memory (\Cref{sec:agents2-memory-isolation}) \\
-\addlinespace
-Escalation Hooks & Configurable triggers with reliable routing & Escalation (\Cref{sec:agents2-escalation}), Planning (\Cref{sec:agents2-budgets}) \\
+Logging & Structured events from every component \\
+Override & Pause, abort, and redirect controls \\
+State Management & Checkpoints with rollback support \\
+Least Privilege & RBAC at tool, resource, and namespace levels \\
+Escalation Hooks & Configurable triggers with reliable routing \\
 \bottomrule
 \end{tabular}
 \end{table}

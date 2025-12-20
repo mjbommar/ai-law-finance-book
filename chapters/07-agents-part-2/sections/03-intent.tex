@@ -199,10 +199,9 @@ Research has documented that LLMs sometimes select a default interpretation rath
 
 Several strategies can mitigate this tendency: prompt engineering that emphasizes clarification for ambiguous requests, confidence thresholds that trigger clarification below a certainty level, user training to provide detailed initial instructions, and checkpoint reviews before significant work begins. From a governance perspective, teams should monitor for cases where the agent proceeded confidently but delivered unexpected results. These cases may indicate calibration problems in ambiguity detection.
 
-\begin{keybox}[title={When Intent Itself Is Unclear or Conflicted}]
-	Ambiguity detection assumes the user has clear intent that was merely expressed unclearly. Sometimes the problem runs deeper:
+Ambiguity detection assumes the user has clear intent that was merely expressed unclearly. Sometimes the problem runs deeper.
 
-	\vspace{0.5em}
+\begin{keybox}[title={When Intent Itself Is Unclear or Conflicted}, breakable=false]
 	\textbf{Domain expertise gaps}: The user may not understand the subject well enough to specify what they need. ``Give me the key issues'' presumes the user knows what issues exist and which matter most---knowledge they may be asking the agent to provide.
 
 	\vspace{0.3em}
@@ -210,13 +209,9 @@ Several strategies can mitigate this tendency: prompt engineering that emphasize
 
 	\vspace{0.3em}
 	\textbf{Unexamined tradeoffs}: The user may not have considered tradeoffs they would care about if surfaced---speed versus thoroughness, cost versus quality, brevity versus nuance.
-
-	\vspace{0.5em}
-	When an agent detects these deeper problems, it should surface the conflict rather than silently resolving it: ``You asked for a one-page summary, but covering the indemnification, representations, and covenant issues adequately would require three to four pages. Would you prefer (a) a one-page overview that flags issues without detailed analysis, (b) a longer memo with full analysis, or (c) detailed treatment of just one area?''
-
-	\vspace{0.5em}
-	This is harder than detecting ambiguous expression because it requires recognizing when the user's own mental model is incomplete or conflicted---and surfacing that recognition without appearing to second-guess or condescend.
 \end{keybox}
+
+When an agent detects these deeper problems, it should surface the conflict rather than silently resolving it: ``You asked for a one-page summary, but covering the indemnification, representations, and covenant issues adequately would require three to four pages. Would you prefer (a) a one-page overview that flags issues without detailed analysis, (b) a longer memo with full analysis, or (c) detailed treatment of just one area?'' This is harder than detecting ambiguous expression because it requires recognizing when the user's own mental model is incomplete or conflicted---and surfacing that recognition without appearing to second-guess or condescend.
 
 % ----------------------------------------------------------------------------
 % Constraint Identification
@@ -313,7 +308,8 @@ The agent validates: ``I'll prepare a memo identifying material risks to the len
 
 The same pattern applies to financial tasks. Given the instruction ``Rebalance to reduce tech exposure,'' the agent classifies this as a portfolio action task and immediately detects multiple ambiguities: how much reduction? through what mechanism? with what constraints? Context gathering reveals current tech exposure at 35\% against a 25\% target. Through clarification dialogue, the agent confirms the user wants to reach target through sales while minimizing tax impact (preferring loss harvesting—selling assets at a loss to offset gains—and long-term gains over short-term).
 
-\begin{center}
+\begin{figure}[htbp]
+\centering
 \begin{tikzpicture}[
     userbubble/.style={
         rectangle,
@@ -389,9 +385,11 @@ The same pattern applies to financial tasks. Given the instruction ``Rebalance t
 \draw[gray-300, dashed, thick] (u2.east) -- (goal.south west);
 
 \end{tikzpicture}
-\end{center}
+\caption{Clarification dialogue for a portfolio rebalancing task. The agent detects ambiguity, gathers constraints through targeted questions, and extracts a validated goal before proceeding.}
+\label{fig:agents2-portfolio-clarification}
+\end{figure}
 
-\begin{keybox}[title={Intent Understanding Is Continuous}]
+\begin{keybox}[title={Intent Understanding Is Continuous}, breakable=false]
 	Intent extraction is not a one-time step at task initiation. As the agent works, it may discover:
 
 	\begin{itemize}[nosep]

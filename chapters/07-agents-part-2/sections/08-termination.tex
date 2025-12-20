@@ -115,7 +115,7 @@ Even well-designed termination conditions cannot prevent every failure mode. Age
 
 Benchmarking reveals a striking pattern: agent performance does not degrade gradually as tasks become more complex, but instead \textit{falls off a cliff}. METR's 2025 research found near-perfect success on tasks completable in minutes, but under ten percent success on multi-hour tasks \parencite{metr-agent-capability-2025}. The exact boundary shifts as models improve, but the underlying design challenge persists.
 
-\begin{keybox}[title={The Reliability Cliff}]
+\begin{keybox}[title={The Reliability Cliff}, breakable=false]
 This cliff reflects \textbf{compounding errors} \parencite{press2023compositionality}: each step has some probability of failure, and these probabilities \textit{multiply}. A chain of twenty steps at 95\% per-step reliability yields only 36\% end-to-end success. Two factors steepen the cliff: \textbf{planning fragility} (early errors propagate forward and invalidate subsequent work) and \textbf{integration brittleness} (API timeouts and rate limits accumulate over time).
 
 \vspace{0.5em}

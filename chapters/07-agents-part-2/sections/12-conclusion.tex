@@ -4,18 +4,18 @@
 % Part of: Chapter 07 - Agents Part II: How to Design an Agent
 % ============================================================================
 
-\section{Conclusion: From Architecture to Governance}
+\section{Conclusion}
 \label{sec:agents2-conclusion}
 
 % ----------------------------------------------------------------------------
 % Opening
 % ----------------------------------------------------------------------------
 
-This chapter opened with a claim: \textbf{agents are not magic; they are architecture}. Ten sections later, that claim should feel concrete. The ten-question framework from \Cref{sec:agents2-ten-questions} has provided the spine for understanding how agents receive work, understand intent, gather information, take action, maintain context, plan, terminate, escalate, coordinate, and operate under governance.
+This chapter opened with a claim: \textbf{agents are not magic; they are architecture}. Eleven sections later, that claim should feel concrete. The ten-question framework from \Cref{sec:agents2-ten-questions} has provided the spine for understanding how agents receive work, understand intent, gather information, take action, maintain context, plan, terminate, escalate, coordinate, and operate under governance.
 
 You now know how work reaches an agent (triggers), how instructions become goals (intent), how agents gather information (perception) and take action (action), how context persists (memory), how complex work decomposes (planning), how agents recognize completion (termination), when they hand off to humans (escalation), how they coordinate (delegation), and what controls keep them safe (governance).
 
-Each capability involves tradeoffs. Richer memory improves context but increases latency. Aggressive escalation improves safety but reduces autonomy. Tighter approval gates reduce risk but slow execution. There are no free lunches, only choices that must be calibrated to your context, risk tolerance, and professional obligations. Additional resources, including protocol specifications, regulatory guidance links, and research references, are available on the book's companion website. Chapter~8 (Agents Part III: Governing Agents) provides a risk-based calibration approach rather than a one-size-fits-all checklist.
+Each capability involves tradeoffs. Richer memory improves context but increases latency. Aggressive escalation improves safety but reduces autonomy. Tighter approval gates reduce risk but slow execution. There are no free lunches, only choices that must be calibrated to your context, risk tolerance, and professional obligations. Additional resources, including protocol specifications, regulatory guidance links, and research references, are available on the book's companion website. \href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}} provides a risk-based calibration approach rather than a one-size-fits-all checklist.
 
 The organizational analogy is not merely pedagogical. Law firms and investment teams are cognitive work systems that have evolved infrastructure for exactly these challenges: distributing work, maintaining context, and ensuring quality. When you evaluate an agentic system, ask the same questions you would ask about a professional team.
 
@@ -75,28 +75,27 @@ Governance & Logging infrastructure; override mechanisms; state snapshots; least
 \subsection{Honest Assessment of Current Capabilities}
 \label{sec:agents2-conclusion-limitations}
 
-Architectural understanding requires honest acknowledgment of limitations.
+Architectural understanding requires honest acknowledgment of current limitations.
 
-\textbf{The reliability cliff} (\Cref{sec:agents2-reliability}) is the most significant constraint. Agents exhibit near-perfect success on short tasks but fail frequently on multi-hour workflows. Design systems that decompose work aggressively and checkpoint progress frequently.
+\textbf{The reliability cliff} (\Cref{sec:agents2-reliability}) remains a significant constraint. Success rates tend to degrade as task complexity and duration increase. Systems that decompose work into smaller steps and checkpoint progress frequently tend to perform more reliably.
 
-\textbf{Judgment limitations} constrain value. Agents excel at retrieval and pattern matching but struggle with nuance and novelty. The effective deployments pair agent capabilities with human judgment.
+\textbf{Judgment limitations} constrain where agents add value. Current models perform better at retrieval and pattern matching than at tasks requiring nuance or handling novel situations. Effective deployments tend to pair agent capabilities with human judgment rather than replacing it entirely.
 
-\textbf{Brittleness} causes failures due to API changes or edge cases. Build monitoring and graceful degradation into every deployment.
+\textbf{Brittleness} can cause unexpected failures when APIs change or edge cases arise. Monitoring and graceful degradation help mitigate these risks.
 
-\textbf{Compounding errors} affect multi-step workflows. Error probabilities multiply, so long autonomous chains fail. Shorter workflows with human checkpoints perform better.
+\textbf{Compounding errors} affect multi-step workflows. When each step has some probability of error, longer autonomous chains become less reliable. Shorter workflows with human checkpoints often perform better in practice.
 
 % ----------------------------------------------------------------------------
-% Bridge to Next Chapter
+% Closing: The Core Insight Revisited
 % ----------------------------------------------------------------------------
 
-\subsection{From Architecture to Governance}
+\subsection{The Core Insight Revisited}
 \label{sec:agents2-conclusion-bridge}
 
-This chapter answered: \textit{How do you design an agent?}
-The next chapter answers: \textit{How do you govern one?}
+The ten questions framework demystifies agentic systems by mapping them to something you already understand: how professional teams work. Law firms and investment teams are cognitive work systems that receive work through defined channels, interpret ambiguous instructions, gather information from specialized sources, take consequential actions under constraints, maintain institutional memory, decompose complex problems, recognize completion, escalate appropriately, coordinate across specialists, and operate within compliance frameworks. Agentic systems face the same challenges and require the same structural capabilities.
 
-As \Cref{sec:agents2-governance} demonstrated, five architectural patterns enable governance: logging across all components, override and circuit breaker mechanisms, state snapshots and checkpoints, least privilege enforcement, and escalation hooks. These patterns form the \textit{governance surface}---the interface through which governance systems interact with agents. If you did not architect for logging, you cannot audit; if you did not architect for isolation, you cannot enforce boundaries; if you did not architect for override, you cannot intervene.
+That mapping is the source of your architectural literacy. When evaluating a vendor's agent, you do not need to understand transformer architectures or embedding spaces. You need to ask the questions you would ask about a new team member: How does work reach them? Can they access the right databases? What happens when they are uncertain? Who reviews their output before it goes to clients? The ten questions give you a framework for asking---and a vocabulary for specifying what you need.
 
-The governance imperative is that agents are not just tools. They interpret goals, select what to perceive, and take actions that can create liability. That shift introduces predictable accountability problems: purpose drift (misaligned goals), perceptual opacity (bad or manipulated inputs), and actuation risk (high-consequence actions). \href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}} provides dimensional calibration for matching controls to risk and presents a five-layer framework that translates these challenges into concrete controls: calibrated autonomy, input and action constraints, auditability, retention, escalation and override mechanisms, and accountability structures.
+Architectural literacy also enables governance. You cannot audit what is not logged, enforce boundaries without isolation, or intervene without override mechanisms. These are not afterthoughts; they are design decisions that must be made at architecture time. The governance surface---the interface through which controls interact with agents---is determined by architectural choices. \href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}}, the next chapter in this series, provides frameworks for calibrating those controls to your specific context, risk tolerance, and professional obligations. But you can only engage with governance frameworks meaningfully if you understand the architecture they govern.
 
-With the architectural literacy developed in this chapter, you can engage meaningfully with the governance frameworks that follow---specifying requirements precisely, evaluating vendor claims critically, and ensuring that controls are built into systems from the start rather than retrofitted after deployment. Agents are not magic; they are architecture. And architecture, once understood, can be governed.
+Agents are not magic. They are triggers, intent extraction, perception tools, action controls, memory systems, planning mechanisms, termination conditions, escalation protocols, delegation patterns, and governance surfaces. They are architecture. And architecture, once understood, can be evaluated, specified, deployed, and governed.

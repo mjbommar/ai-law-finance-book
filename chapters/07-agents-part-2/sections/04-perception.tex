@@ -69,26 +69,34 @@ In-context learning explains why agents can work with information far newer than
 	This decomposition explains both why agentic systems are powerful and why they fail in predictable ways. The reliability cliff (\Cref{sec:agents2-termination}) shows that short, focused tasks succeed while long tasks fail---precisely because decomposition keeps individual steps within the model's effective operating range, but errors compound across many steps.
 \end{keybox}
 
-\paragraph{Embeddings and Semantic Similarity}
+\paragraph{Retrieval Methods}
 
-To retrieve relevant information from large collections, we need a way to measure what ``relevant'' means. \keyterm{Embeddings} provide this capability.
+To retrieve relevant information from large collections, we need a way to find what matters. Several approaches exist, each with distinct strengths:
 
-\begin{definitionbox}[title={Embeddings}, breakable=false]
-	An \keyterm{embedding} is a numerical representation of content as a vector---a list of numbers that encodes semantic meaning. Similar concepts produce similar vectors; different concepts produce distant vectors. The sentence ``breach of fiduciary duty'' and ``violation of trust obligations'' should have embeddings close together in vector space, even though they share no words.
+\textbf{Keyword and boolean search} is the oldest and most familiar approach. Platforms like Westlaw, Lexis, and Bloomberg have offered sophisticated keyword search for decades. Boolean operators (AND, OR, NOT), proximity searches, and field-specific queries give users precise control. When you need documents containing exact terms---a specific case citation, a statutory section, a company name---keyword search excels. Its limitation is vocabulary mismatch: a search for ``breach of fiduciary duty'' will not find documents discussing ``violation of trust obligations'' unless both phrases happen to appear.
 
-	\vspace{0.5em}
-	Similarity between embeddings is typically measured using \keyterm{cosine similarity} (the angle between vectors) or \keyterm{Euclidean distance} (the straight-line distance between points). These mathematical operations are fast, enabling search across millions of documents in milliseconds.
-\end{definitionbox}
+\textbf{BM25 and probabilistic search} extends keyword matching with statistical weighting \parencite{robertson2009bm25}. Terms that appear rarely in the corpus but frequently in a document signal relevance more strongly than common terms. BM25 powers many production search systems, including Elasticsearch and the baseline retrievers in academic benchmarks. It requires no machine learning infrastructure---just an inverted index---making it fast, interpretable, and cheap to operate.
 
-Embedding models vary significantly in quality, size, and design goals. Some optimize for speed and compactness; others prioritize semantic precision at higher computational cost. Domain-specific models trained on legal or financial text may outperform general-purpose models for professional applications. The choice of embedding model affects retrieval quality, latency, and infrastructure costs---tradeoffs we discuss in detail in our treatment of embeddings and retrieval techniques elsewhere in this book.
+\textbf{Embedding-based semantic search} uses machine learning to encode meaning numerically. An \keyterm{embedding} is a vector---a list of numbers---that represents semantic content. Similar concepts produce similar vectors; different concepts produce distant vectors. The phrases ``breach of fiduciary duty'' and ``violation of trust obligations'' have embeddings close together in vector space, even though they share no words. This enables \textit{meaning matching} rather than vocabulary matching. Embedding models vary in quality and domain fit; legal-specific models may outperform general-purpose ones for professional content. The infrastructure cost is higher: you need embedding models, vector storage, and similarity search capabilities.
 
-While we focus on text embeddings here, the same principles apply to other content types. Images, audio, and video can all be encoded as embeddings, enabling similarity search across modalities. A scanned contract can be embedded alongside its text; a recorded deposition can be searched by semantic content rather than transcript keywords. Some embedding models are explicitly multimodal, encoding text and images into the same vector space so that a text query can retrieve relevant images and vice versa. The retrieval infrastructure---vector stores and similarity search---works identically regardless of what the embeddings represent.
+\textbf{Structured queries} retrieve from databases and APIs. An agent checking a company's SEC filings queries EDGAR; an agent researching a case retrieves from a court's electronic filing system. These are not ``search'' in the traditional sense---they are direct data access---but they serve the same function in RAG: finding relevant information to inject into context.
 
-For text, embeddings transform the problem of finding relevant documents from keyword matching to meaning matching. A search for ``material adverse change'' can find documents discussing ``MAC clauses'' or ``significant negative developments'' because their embeddings are close, even without shared vocabulary.
+\textbf{Hybrid approaches} combine methods. A common pattern uses BM25 for initial retrieval (fast, cheap, catches exact matches) followed by semantic reranking (slower, more expensive, captures meaning). Many production systems blend keyword and semantic scores, getting the best of both approaches.
 
-\paragraph{Vector Stores}
+\begin{keybox}[title={Choosing Retrieval Methods}, breakable=false]
+	No single retrieval method dominates. The right choice depends on your content, queries, and constraints:
+	\begin{itemize}[nosep]
+		\item \textbf{Exact terms matter}: Keyword or BM25. Case citations, statutory references, and party names must match precisely.
+		\item \textbf{Conceptual similarity matters}: Embeddings. Finding documents about ``materiality'' when the query says ``significance'' requires semantic matching.
+		\item \textbf{Structured data}: Database queries or APIs. Retrieving a specific filing from EDGAR or a price from Bloomberg.
+		\item \textbf{Production constraints}: BM25 is cheaper and faster; embeddings require more infrastructure but capture meaning better.
+	\end{itemize}
+	Most professional systems use hybrid approaches, combining methods to balance precision, recall, and cost.
+\end{keybox}
 
-Embeddings enable semantic search, but storing and searching millions of embeddings efficiently requires specialized infrastructure.
+\paragraph{Vector Stores for Embedding-Based Search}
+
+When using embeddings, storing and searching millions of vectors efficiently requires specialized infrastructure.
 
 \begin{definitionbox}[title={Vector Stores}, breakable=false]
 	A \keyterm{vector store} (or vector database) is a system optimized for storing embeddings and performing similarity search. Given a query embedding, a vector store returns the most similar document embeddings from its collection. Vector stores use specialized indexing structures (like HNSW or IVF) that make approximate nearest-neighbor search practical at scale.
@@ -99,31 +107,32 @@ Embeddings enable semantic search, but storing and searching millions of embeddi
 
 \paragraph{Retrieval-Augmented Generation (RAG)}
 
-With these foundations in place, we can now define RAG precisely.
+With these retrieval methods in hand, we can now define RAG precisely.
 
 \begin{definitionbox}[title={Retrieval-Augmented Generation (RAG)}, breakable=false]
 	\keyterm{Retrieval-Augmented Generation (RAG)} is a \textit{prompt pattern}---not a software system or mathematical technique \parencite{lewis2020rag}. RAG augments a model's context with retrieved information before generation. The pattern has three steps:
 	\begin{enumerate}[nosep]
-		\item \textbf{Retrieve}: Given a query, find relevant documents using semantic search (embeddings + vector store) or keyword search.
+		\item \textbf{Retrieve}: Given a query, find relevant content using \textit{any} retrieval method---keyword search, BM25, embeddings, database queries, API calls, or combinations thereof.
 		\item \textbf{Augment}: Insert the retrieved content into the model's prompt as additional context.
 		\item \textbf{Generate}: The model produces a response informed by both its training and the retrieved content.
 	\end{enumerate}
 
 	\vspace{0.5em}
-	RAG works because of in-context learning. The retrieved documents appear in the prompt, and the model adapts its response to incorporate that specific information. RAG is a pattern for \textit{using} retrieval infrastructure, not the infrastructure itself.
+	RAG works because of in-context learning. The retrieved content appears in the prompt, and the model adapts its response to incorporate that specific information. The retrieval step is completely method-agnostic: what matters is getting relevant content into context, not how you find it.
 \end{definitionbox}
 
-The distinction matters. When evaluating a system, you should ask: What retrieval infrastructure does it use? (Vector store, keyword index, hybrid?) What RAG pattern does it implement? (Basic retrieval, multi-step, with reranking?) These are separate architectural decisions with different tradeoffs.
+The distinction matters. When evaluating a system, you should ask: What retrieval infrastructure does it use? (Keyword index, vector store, database, external API, hybrid?) What RAG pattern does it implement? (Single-stage, multi-stage, with reranking?) These are separate architectural decisions with different tradeoffs.
 
-\begin{keybox}[title={Why Precision Matters}, breakable=false]
-	Conflating RAG with vector stores or treating RAG as a ``system'' obscures important design choices. RAG is a prompt pattern that can use various retrieval backends. A RAG implementation might use:
+\begin{keybox}[title={RAG Is Retrieval-Agnostic}, breakable=false]
+	A common misconception equates RAG with embeddings and vector stores. In practice, RAG implementations vary widely:
 	\begin{itemize}[nosep]
-		\item Pure semantic search (embeddings + vector store)
-		\item Pure keyword search (BM25, traditional search engines)
-		\item Hybrid search (combining both)
-		\item Multi-stage retrieval (coarse retrieval followed by reranking)
+		\item \textbf{Keyword search}: Westlaw, Lexis, or internal full-text search---no embeddings required.
+		\item \textbf{BM25}: Fast probabilistic retrieval powering many production systems.
+		\item \textbf{Semantic search}: Embeddings and vector stores for meaning-based matching.
+		\item \textbf{Structured queries}: SQL databases, EDGAR filings, court record APIs.
+		\item \textbf{Hybrid}: Combining methods to balance precision, recall, and cost.
 	\end{itemize}
-	Each choice has implications for precision, recall, latency, and cost. Understanding RAG as a pattern rather than a monolithic system helps you evaluate these tradeoffs.
+	The ``embedding plus vector store'' pattern dominates tutorials because it is general-purpose and handles semantic similarity well. But many production systems---especially those leveraging existing search infrastructure---use simpler approaches that work well for their specific needs.
 \end{keybox}
 
 % ----------------------------------------------------------------------------
@@ -211,7 +220,7 @@ def legal_research(query: str) -> dict:
 
 When such a tool fails, diagnosing the error is difficult. A better approach separates tools by function with typed returns. This allows the agent to compose them and isolates failures.
 
-\begin{listingbox}[title={Better Design: Single Responsibility, Typed Returns}, listing options={language=Python}]
+\begin{listingbox}[title={Better Design: Single Responsibility, Typed Returns}, listing options={language=Python}, breakable=false]
 def search_cases(query: str, jurisdiction: str) -> list[Citation]:
   """Returns matching citations from case law database."""
 

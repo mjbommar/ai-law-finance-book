@@ -1,5 +1,5 @@
 % fig-rag-pipeline.tex
-% RAG Pipeline: Four Steps
+% RAG Pipeline: Embedding-Based Implementation
 % Part of: Chapter 07 - Agents Part II: How to Design an Agent
 % Section: 06-memory (RAG)
 
@@ -76,6 +76,6 @@
 
 \end{tikzpicture}
 }%
-\caption{The RAG pipeline transforms documents into retrievable knowledge. Documents are chunked into semantic units, embedded as vectors, retrieved by similarity to queries, and injected into the LLM's context for generation.}
+\caption{An embedding-based RAG pipeline---one common implementation pattern. Documents are chunked into semantic units, embedded as vectors, and retrieved by semantic similarity. Alternative implementations may skip chunking and embedding entirely, using keyword search, BM25, database queries, or hybrid approaches to retrieve relevant content.}
 \label{fig:agents2-rag-pipeline}
 \end{figure}
