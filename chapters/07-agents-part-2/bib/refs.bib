@@ -56,72 +56,8 @@
 }
 
 % ----------------------------------------------------------------------------
-% Security References
-% ----------------------------------------------------------------------------
-
-@online{aws-agentic-security,
-  author       = {{Amazon Web Services}},
-  title        = {The Agentic {AI} Security Scoping Matrix: A Framework for Securing Autonomous {AI} Systems},
-  year         = {2025},
-  url          = {https://aws.amazon.com/blogs/security/the-agentic-ai-security-scoping-matrix-a-framework-for-securing-autonomous-ai-systems/},
-  urldate      = {2025-11-27},
-  note         = {Framework categorizing four agentic architectures based on connectivity and autonomy levels; key principle: graceful degradation when security events detected}
-}
-
-@online{microsoft-agent-factory,
-  author       = {{Microsoft Azure}},
-  title        = {Agent Factory: Creating a Blueprint for Safe and Secure {AI} Agents},
-  year         = {2025},
-  url          = {https://azure.microsoft.com/en-us/blog/agent-factory-creating-a-blueprint-for-safe-and-secure-ai-agents/},
-  urldate      = {2025-11-27},
-  note         = {Zero Trust principles for AI agents: assume breach, never implicitly trust, explicit verification, least privilege}
-}
-
-% ----------------------------------------------------------------------------
-% Regulatory References
-% ----------------------------------------------------------------------------
-
-@techreport{eu-ai-act-agents,
-  author       = {{The Future Society}},
-  title        = {{AI} Agents in the {EU}: A Focused Discussion on {AI} Agents Under the {AI} Act},
-  year         = {2025},
-  url          = {https://thefuturesociety.org/aiagentsintheeu/},
-  urldate      = {2025-11-27},
-  note         = {Identifies 10 measures for GPAI providers and agent deployers; addresses four-pillar framework: risk assessment, transparency tools, technical deployment controls, human oversight}
-}
-
-@online{eu-ai-act-timeline,
-  title        = {{EU AI Act} Implementation Timeline},
-  year         = {2025},
-  url          = {https://artificialintelligenceact.eu/implementation-timeline/},
-  urldate      = {2025-11-27},
-  note         = {Official timeline: prohibited practices Feb 2025, GPAI obligations Aug 2025, full applicability Aug 2026, high-risk products Aug 2027}
-}
-
-@online{eu-ai-act-official,
-  title        = {Regulatory Framework on {AI}},
-  author       = {{European Commission}},
-  year         = {2024},
-  url          = {https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai},
-  urldate      = {2025-11-27},
-  note         = {Official EU AI Act regulatory framework page}
-}
-
-% ----------------------------------------------------------------------------
 % Research References
 % ----------------------------------------------------------------------------
-
-@article{jarvelin2002cumulated,
-  author       = {Järvelin, Kalervo and Kekäläinen, Jaana},
-  title        = {Cumulated Gain-Based Evaluation of {IR} Techniques},
-  journal      = {ACM Transactions on Information Systems},
-  year         = {2002},
-  volume       = {20},
-  number       = {4},
-  pages        = {422--446},
-  doi          = {10.1145/582415.582418},
-  note         = {Foundational paper defining Discounted Cumulative Gain (DCG) and Normalized DCG (nDCG) for graded relevance evaluation}
-}
 
 @online{metr-agent-capability-2025,
   author       = {{METR}},
@@ -138,35 +74,9 @@
   title        = {{ReAct}: Synergizing Reasoning and Acting in Language Models},
   journal      = {arXiv preprint arXiv:2210.03629},
   year         = {2022},
-  note         = {Introduces ReAct pattern: alternating reasoning and acting in language models}
-}
-
-@article{schick2023toolformer,
-  author       = {Schick, Timo and Dwivedi-Yu, Jane and Dess\`{i}, Roberto and Raileanu, Roberta and Lomeli, Maria and Zettlemoyer, Luke and Cancedda, Nicola and Scialom, Thomas},
-  title        = {Toolformer: Language Models Can Teach Themselves to Use Tools},
-  journal      = {arXiv preprint arXiv:2302.04761},
-  year         = {2023},
-  note         = {Demonstrates LLMs learning to use external tools}
-}
-
-@article{yao2023tree,
-  author       = {Yao, Shunyu and Yu, Dian and Zhao, Jeffrey and Shafran, Izhak and Griffiths, Thomas L. and Cao, Yuan and Narasimhan, Karthik},
-  title        = {Tree of Thoughts: Deliberate Problem Solving with Large Language Models},
-  journal      = {arXiv preprint arXiv:2305.10601},
-  year         = {2023},
-  note         = {Tree-structured exploration for complex reasoning}
-}
-
-@misc{xi2023rise,
-  author       = {Xi, Zhiheng and Chen, Wenxiang and Guo, Xin and He, Wei and Ding, Yiwen and Hong, Boyang and Zhang, Ming and Wang, Junzhe and Jin, Senjie and Zhou, Enyu and Zheng, Rui and Fan, Xiaoran and Wang, Xiao and Xiong, Limao and Zhou, Yuhao and Wang, Weiran and Jiang, Changhao and Zou, Yicheng and Liu, Xiangyang and Yin, Zhangyue and Dou, Shihan and Weng, Rongxiang and Cheng, Wensen and Zhang, Qi and Qin, Wenjuan and Zheng, Yongyan and Qiu, Xipeng and Huang, Xuanjing and Gui, Tao},
-  title        = {The Rise and Potential of Large Language Model Based Agents: A Survey},
-  year         = {2023},
-  eprint       = {2309.07864},
-  archiveprefix = {arXiv},
-  primaryclass = {cs.AI},
-  url          = {https://arxiv.org/abs/2309.07864},
+  url          = {https://arxiv.org/abs/2210.03629},
   urldate      = {2025-12-19},
-  note         = {Comprehensive survey of LLM-based agents; covers architecture, capabilities, and applications}
+  note         = {Introduces ReAct pattern: alternating reasoning and acting in language models}
 }
 
 @inproceedings{park2023generative,
@@ -176,41 +86,9 @@
   year         = {2023},
   publisher    = {ACM},
   doi          = {10.1145/3586183.3606763},
+  url          = {https://arxiv.org/abs/2304.03442},
+  urldate      = {2025-12-19},
   note         = {Introduces memory stream architecture with reflection for long-term agent behavior; foundational for episodic memory and learning in agent systems}
-}
-
-% ----------------------------------------------------------------------------
-% Industry References
-% ----------------------------------------------------------------------------
-
-@online{bedrock-agentcore,
-  title        = {Amazon Bedrock AgentCore},
-  author       = {{Amazon Web Services}},
-  year         = {2025},
-  month        = nov,
-  url          = {https://aws.amazon.com/bedrock/agentcore/},
-  urldate      = {2025-11-27},
-  note         = {Managed infrastructure for agent deployment with A2A support}
-}
-
-% ----------------------------------------------------------------------------
-% Framework References
-% ----------------------------------------------------------------------------
-
-@online{langchain-docs,
-  title        = {LangChain Documentation},
-  year         = {2025},
-  url          = {https://python.langchain.com/},
-  urldate      = {2025-11-27},
-  note         = {Comprehensive documentation for LangChain framework}
-}
-
-@online{llamaindex-docs,
-  title        = {LlamaIndex Documentation},
-  year         = {2025},
-  url          = {https://docs.llamaindex.ai/},
-  urldate      = {2025-11-27},
-  note         = {Documentation for LlamaIndex framework}
 }
 
 % ----------------------------------------------------------------------------
@@ -228,24 +106,6 @@
   note         = {Addresses ethical obligations when using generative AI; covers competence, confidentiality, supervision, and billing}
 }
 
-@article{guha2023legalbench,
-  author       = {Guha, Neel and Nyarko, Julian and Ho, Daniel E. and R\'{e}, Christopher and Chilton, Adam and Chohlas-Wood, Alex and Peters, Austin and Walber, Brandon and Haghtalab, Nika and others},
-  title        = {{LegalBench}: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-  journal      = {arXiv preprint arXiv:2308.11462},
-  year         = {2023},
-  note         = {162 tasks from 40 contributors covering six types of legal reasoning; developed by Stanford and HazyResearch}
-}
-
-@online{vlair2025,
-  author       = {{Vals AI}},
-  title        = {{VLAIR}: A Benchmark for Evaluating Legal {AI} Against Lawyers},
-  year         = {2025},
-  month        = oct,
-  url          = {https://www.vals.ai/vlair},
-  urldate      = {2025-12-13},
-  note         = {First benchmark comparing legal AI systems against lawyer control groups across seven tasks; AI scored 7 points above lawyer baseline (71\% accuracy), outperforming on routine tasks but underperforming on complex judgment-intensive work}
-}
-
 @article{grossman2011tar,
   author       = {Grossman, Maura R. and Cormack, Gordon V.},
   title        = {Technology-Assisted Review in E-Discovery Can Be More Effective and More Efficient Than Exhaustive Manual Review},
@@ -260,7 +120,7 @@
 }
 
 % ----------------------------------------------------------------------------
-% Security References (Additional)
+% Security References
 % ----------------------------------------------------------------------------
 
 @online{owasp-llm-top10,
@@ -271,52 +131,6 @@
   urldate      = {2025-11-27},
   note         = {Security vulnerabilities in LLM applications; ranks prompt injection as critical vulnerability \#1}
 }
-
-% ----------------------------------------------------------------------------
-% Industry Analysis References
-% ----------------------------------------------------------------------------
-
-@online{gartner-agentic-2025,
-  author       = {{Gartner}},
-  title        = {Gartner Predicts 40\%+ of Agentic {AI} Projects Will Be Canceled by End of 2027},
-  year         = {2025},
-  month        = jun,
-  url          = {https://www.gartner.com/en/newsroom/press-releases/2025-06-25-gartner-predicts-over-40-percent-of-agentic-ai-projects-will-be-canceled-by-end-of-2027},
-  urldate      = {2025-12-13},
-  note         = {Predicts 40\%+ of agentic AI projects canceled by end of 2027 due to costs, unclear value, or inadequate risk controls; 33\% of enterprise applications to include agentic AI by 2028}
-}
-
-
-% ----------------------------------------------------------------------------
-% Financial Benchmarks and Evaluation
-% ----------------------------------------------------------------------------
-
-@inproceedings{finqa2021,
-  author       = {Chen, Zhiyu and Chen, Wenhu and Smiley, Charese and Shah, Sameena and Borova, Iana and Langdon, Dylan and Moussa, Reema and Beane, Matt and Huang, Ting-Hao and Routledge, Bryan and Wang, William Yang},
-  title        = {{FinQA}: A Dataset of Numerical Reasoning over Financial Data},
-  booktitle    = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
-  year         = {2021},
-  pages        = {3697--3711},
-  publisher    = {Association for Computational Linguistics},
-  url          = {https://aclanthology.org/2021.emnlp-main.300/},
-  urldate      = {2025-11-27},
-  note         = {Financial question answering benchmark requiring multi-step numerical reasoning over earnings reports and financial statements; tests calculation accuracy and extraction of financial metrics}
-}
-
-% ----------------------------------------------------------------------------
-% Event-Driven Architecture and Legal Tech References
-% ----------------------------------------------------------------------------
-
-@online{courtlistener-webhooks,
-  author       = {{Free Law Project}},
-  title        = {Launching Webhooks to Finally Automate Legal Data},
-  year         = {2023},
-  month        = feb,
-  url          = {https://free.law/2023/02/16/webhooks-for-legal-data},
-  urldate      = {2025-12-04},
-  note         = {CourtListener webhook API for real-time PACER docket updates, search alerts, and RECAP fetch notifications; enables event-driven legal monitoring workflows}
-}
-
 
 % ----------------------------------------------------------------------------
 % Foundational RAG and Embeddings
@@ -332,17 +146,6 @@
   url          = {https://arxiv.org/abs/2005.11401},
   urldate      = {2025-12-13},
   note         = {Original RAG paper introducing the paradigm of combining parametric (LLM) and non-parametric (retrieval) memory for generation tasks}
-}
-
-@inproceedings{reimers2019sbert,
-  author       = {Reimers, Nils and Gurevych, Iryna},
-  title        = {Sentence-{BERT}: Sentence Embeddings using Siamese {BERT}-Networks},
-  booktitle    = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
-  year         = {2019},
-  publisher    = {Association for Computational Linguistics},
-  url          = {https://arxiv.org/abs/1908.10084},
-  urldate      = {2025-12-13},
-  note         = {Foundational work on sentence embeddings for semantic similarity and retrieval; basis for modern vector search in RAG systems}
 }
 
 @incollection{robertson2009bm25,
@@ -443,33 +246,6 @@
 % Legal Systems and Procedures
 % ----------------------------------------------------------------------------
 
-@online{pacer-system,
-  author       = {{Administrative Office of the U.S. Courts}},
-  title        = {Public Access to Court Electronic Records ({PACER})},
-  year         = {2024},
-  url          = {https://pacer.uscourts.gov/},
-  urldate      = {2025-12-13},
-  note         = {Official PACER system providing electronic public access to federal appellate, district, and bankruptcy court records}
-}
-
-@online{cmecf-system,
-  author       = {{Administrative Office of the U.S. Courts}},
-  title        = {Electronic Filing ({CM/ECF})},
-  year         = {2024},
-  url          = {https://www.uscourts.gov/court-records/electronic-filing-cm-ecf},
-  urldate      = {2025-12-13},
-  note         = {Case Management/Electronic Case Files system for filing federal court documents online; mandatory for most federal court filings}
-}
-
-@online{sec-edgar,
-  author       = {{U.S. Securities and Exchange Commission}},
-  title        = {About {EDGAR}},
-  year         = {2024},
-  url          = {https://www.sec.gov/submit-filings/about-edgar},
-  urldate      = {2025-12-13},
-  note         = {Electronic Data Gathering, Analysis, and Retrieval system for SEC filings; provides free public access to company filings}
-}
-
 @online{frcp-rule-12,
   author       = {{Legal Information Institute}},
   title        = {Rule 12. Defenses and Objections: When and How Presented},
@@ -477,49 +253,6 @@
   url          = {https://www.law.cornell.edu/rules/frcp/rule_12},
   urldate      = {2025-12-13},
   note         = {Federal rule establishing 21-day deadline for responsive pleadings; critical for deadline calculation in litigation agents}
-}
-
-@book{bluebook-21st,
-  title        = {The Bluebook: A Uniform System of Citation},
-  edition      = {21st},
-  year         = {2020},
-  publisher    = {Harvard Law Review Association},
-  note         = {Standard citation manual for legal documents in the United States}
-}
-
-% ----------------------------------------------------------------------------
-% Financial Identifiers and Standards
-% ----------------------------------------------------------------------------
-
-@online{cusip-identifiers,
-  author       = {{CUSIP Global Services}},
-  title        = {About {CGS} Identifiers},
-  year         = {2024},
-  url          = {https://www.cusip.com/identifiers.html},
-  urldate      = {2025-12-13},
-  note         = {CUSIP (Committee on Uniform Securities Identification Procedures) 9-character identifiers for North American securities; system owned by ABA, operated by FactSet}
-}
-
-@techreport{iso6166-isin,
-  type         = {Standard},
-  key          = {ISO 6166:2021},
-  year         = {2021},
-  title        = {Securities and related financial instruments --- International securities identification number ({ISIN})},
-  institution  = {International Organization for Standardization},
-  url          = {https://www.iso.org/standard/78502.html},
-  urldate      = {2025-12-13},
-  note         = {ISO standard for 12-character alphanumeric ISIN codes identifying securities globally; adopted by G30 countries 1989}
-}
-
-@techreport{iso17442-lei,
-  type         = {Standard},
-  key          = {ISO 17442-1:2020},
-  year         = {2020},
-  title        = {Financial services --- Legal entity identifier ({LEI}) --- Part 1: Assignment},
-  institution  = {International Organization for Standardization},
-  url          = {https://www.iso.org/standard/78829.html},
-  urldate      = {2025-12-13},
-  note         = {ISO standard for 20-character LEI identifying legal entities in financial transactions; introduced post-2008 crisis, managed by GLEIF}
 }
 
 % ----------------------------------------------------------------------------
@@ -642,18 +375,6 @@
   note         = {Foundational guidance on model risk management for financial institutions; defines model risk, validation requirements, and governance standards; increasingly relevant to AI/ML models}
 }
 
-@techreport{nist-ai-rmf,
-  author       = {{National Institute of Standards and Technology}},
-  title        = {Artificial Intelligence Risk Management Framework ({AI RMF} 1.0)},
-  number       = {NIST AI 100-1},
-  year         = {2023},
-  month        = jan,
-  institution  = {U.S. Department of Commerce},
-  url          = {https://www.nist.gov/itl/ai-risk-management-framework},
-  urldate      = {2025-12-13},
-  note         = {Voluntary framework for managing AI risks; organized around governance, mapping, measuring, and managing AI risks; referenced by EU AI Act and other regulatory frameworks}
-}
-
 % ----------------------------------------------------------------------------
 % Chapter Cross-References
 % ----------------------------------------------------------------------------
@@ -732,18 +453,6 @@
   note         = {Peer-reviewed survey proposing unified framework for LLM-based agents covering profile, memory, planning, and action modules}
 }
 
-@article{wooldridge1995intelligent,
-  author       = {Wooldridge, Michael and Jennings, Nicholas R.},
-  title        = {Intelligent Agents: Theory and Practice},
-  journal      = {Knowledge Engineering Review},
-  year         = {1995},
-  volume       = {10},
-  number       = {2},
-  pages        = {115--152},
-  doi          = {10.1017/S0269888900008122},
-  note         = {Seminal paper defining agent properties: autonomy, social ability, reactivity, and proactivity}
-}
-
 @inproceedings{rao1995bdi,
   author       = {Rao, Anand S. and Georgeff, Michael P.},
   title        = {{BDI} Agents: From Theory to Practice},
@@ -754,42 +463,6 @@
   url          = {https://cdn.aaai.org/ICMAS/1995/ICMAS95-042.pdf},
   urldate      = {2025-12-13},
   note         = {Foundational work on Belief-Desire-Intention cognitive architecture for agents}
-}
-
-% ----------------------------------------------------------------------------
-% Event-Driven Architecture (Section 02)
-% ----------------------------------------------------------------------------
-
-@online{sec-edgar-api,
-  author       = {{U.S. Securities and Exchange Commission}},
-  title        = {{EDGAR} Application Programming Interfaces ({APIs})},
-  year         = {2024},
-  url          = {https://www.sec.gov/search-filings/edgar-application-programming-interfaces},
-  urldate      = {2025-12-13},
-  note         = {Official RESTful APIs for EDGAR submissions and XBRL data; real-time updates with sub-second processing delay; no authentication required for public APIs}
-}
-
-@article{eda-performance-2023,
-  title        = {On the Impact of Event-Driven Architecture on Performance: An Exploratory Study},
-  journal      = {Future Generation Computer Systems},
-  volume       = {153},
-  year         = {2023},
-  pages        = {1--15},
-  doi          = {10.1016/j.future.2023.10.021},
-  url          = {https://dl.acm.org/doi/10.1016/j.future.2023.10.021},
-  urldate      = {2025-12-13},
-  note         = {Comparative study evaluating event-driven vs. monolithic architecture on CPU, RAM, response time, and throughput metrics}
-}
-
-@inproceedings{cqrs-event-sourcing-2019,
-  title        = {Using Event Sourcing and {CQRS} to Build a High Performance Point Trading System},
-  booktitle    = {Proceedings of the 2019 5th International Conference on E-Business and Applications},
-  year         = {2019},
-  publisher    = {ACM},
-  doi          = {10.1145/3317614.3317632},
-  url          = {https://dl.acm.org/doi/10.1145/3317614.3317632},
-  urldate      = {2025-12-13},
-  note         = {Demonstrates CQRS and event sourcing with Actor model for high-performance systems; empirical evidence of scalability gains}
 }
 
 % ----------------------------------------------------------------------------
@@ -1037,60 +710,4 @@
   url          = {https://arxiv.org/abs/2210.03350},
   urldate      = {2025-12-19},
   note         = {Quantifies compositionality gap where models correctly solve sub-problems but fail on overall compositional tasks; demonstrates performance degradation as composition steps increase; gap remains constant at ~40\% across model sizes}
-}
-
-% ----------------------------------------------------------------------------
-% Governance and Compliance (Section 11)
-% ----------------------------------------------------------------------------
-
-@techreport{iso-iec-42001,
-  type         = {Standard},
-  key          = {ISO/IEC 42001:2023},
-  year         = {2023},
-  month        = dec,
-  title        = {Information technology --- Artificial intelligence --- Management system},
-  institution  = {International Organization for Standardization},
-  url          = {https://www.iso.org/standard/81230.html},
-  urldate      = {2025-12-13},
-  note         = {First international standard for AI management systems (AIMS); provides structured approach for governance using PDCA methodology}
-}
-
-@techreport{gao-ai-financial-services-2025,
-  author       = {{U.S. Government Accountability Office}},
-  title        = {Artificial Intelligence: Use and Oversight in Financial Services},
-  number       = {GAO-25-107197},
-  year         = {2025},
-  institution  = {GAO},
-  url          = {https://www.gao.gov/assets/gao-25-107197.pdf},
-  urldate      = {2025-12-13},
-  note         = {Review of AI oversight by OCC, FDIC, Federal Reserve, CFPB, and NCUA; documents application of model risk management frameworks to AI systems}
-}
-
-@article{li2025aiaudit,
-  author       = {Li, Yueqi and Goel, Sanjay},
-  title        = {Making It Possible for the Auditing of {AI}: A Systematic Review of {AI} Audits and {AI} Auditability},
-  journal      = {Information Systems Frontiers},
-  year         = {2025},
-  volume       = {27},
-  number       = {3},
-  pages        = {1121--1151},
-  publisher    = {Springer},
-  doi          = {10.1007/s10796-024-10508-8},
-  url          = {https://link.springer.com/article/10.1007/s10796-024-10508-8},
-  urldate      = {2025-12-19},
-  note         = {Systematic review addressing AI auditability challenges including vulnerabilities, biases, and transparency requirements for compliance}
-}
-
-@article{zhong2024xai-auditing,
-  author       = {Zhong, Chen and Goel, Sunita},
-  title        = {Transparent {AI} in Auditing through Explainable {AI}},
-  journal      = {Current Issues in Auditing},
-  year         = {2024},
-  volume       = {18},
-  number       = {2},
-  pages        = {A1--A14},
-  publisher    = {American Accounting Association},
-  url          = {https://publications.aaahq.org/cia/article/18/2/A1/12271/Transparent-AI-in-Auditing-through-Explainable-AI},
-  urldate      = {2025-12-13},
-  note         = {Focuses on explainable AI as mechanism for transparency and trustworthiness in audit applications}
 }
