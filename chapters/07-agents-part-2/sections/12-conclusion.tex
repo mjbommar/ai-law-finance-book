@@ -1,101 +1,63 @@
 % ============================================================================
 % 12-conclusion.tex
-% Conclusion: From Architecture to Governance
+% Conclusion: Architecture as Foundation
 % Part of: Chapter 07 - Agents Part II: How to Design an Agent
 % ============================================================================
 
 \section{Conclusion}
 \label{sec:agents2-conclusion}
 
-% ----------------------------------------------------------------------------
-% Opening
-% ----------------------------------------------------------------------------
+Understanding agent architecture does not require becoming a developer. The goal is meaningful participation in decisions that affect your practice, your clients, and your professional responsibilities.
 
-This chapter opened with a claim: \textbf{agents are not magic; they are architecture}. Eleven sections later, that claim should feel concrete. The ten-question framework from \Cref{sec:agents2-ten-questions} has provided the spine for understanding how agents receive work, understand intent, gather information, take action, maintain context, plan, terminate, escalate, coordinate, and operate under governance.
+With architectural literacy, you can evaluate vendor claims with precision. When demonstrations look impressive, you know what questions to ask: What triggered the run? How was intent validated? What data sources were accessed? What approval gates exist? How is isolation enforced? What happens when confidence drops? Impressive outputs do not guarantee sound architecture; architectural literacy lets you probe beneath the surface.
 
-You now know how work reaches an agent (triggers), how instructions become goals (intent), how agents gather information (perception) and take action (action), how context persists (memory), how complex work decomposes (planning), how agents recognize completion (termination), when they hand off to humans (escalation), how they coordinate (delegation), and what controls keep them safe (governance).
+You can specify requirements in terms that technical teams understand. Rather than vague requests for ``AI that helps with research,'' you can describe what you need: perception tools for specific databases, action controls with appropriate approval gates, memory systems with client isolation, and escalation triggers for low-confidence situations. Shared vocabulary bridges the gap between professional requirements and technical implementation.
 
-Each capability involves tradeoffs. Richer memory improves context but increases latency. Aggressive escalation improves safety but reduces autonomy. Tighter approval gates reduce risk but slow execution. There are no free lunches, only choices that must be calibrated to your context, risk tolerance, and professional obligations. Additional resources, including protocol specifications, regulatory guidance links, and research references, are available on the book's companion website. \href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}} provides a risk-based calibration approach rather than a one-size-fits-all checklist.
+You can demand governance artifacts, not governance promises. If a vendor cannot demonstrate what the agent accessed, what it did, and why it stopped, the system is not ready for regulated practice. The governance surface requirements from \Cref{sec:agents2-governance-surface}---structured logging, override mechanisms, state snapshots, least privilege enforcement, reliable escalation---are your checklist for what must be demonstrable before deployment.
 
-The organizational analogy is not merely pedagogical. Law firms and investment teams are cognitive work systems that have evolved infrastructure for exactly these challenges: distributing work, maintaining context, and ensuring quality. When you evaluate an agentic system, ask the same questions you would ask about a professional team.
+And you can participate meaningfully in governance design. Governance policy depends on architectural infrastructure; controls must be built in rather than bolted on, and design choices determine what oversight is possible.
 
 % ----------------------------------------------------------------------------
-% What You Can Now Do
+% Calibration and Judgment
 % ----------------------------------------------------------------------------
 
-\subsection{What This Understanding Enables}
-\label{sec:agents2-conclusion-enables}
+\subsection{Tradeoffs Require Judgment}
+\label{sec:agents2-tradeoffs-judgment}
 
-With architectural literacy, you can evaluate vendor claims. When a vendor says their agent ``handles legal research,'' ask: What triggers it (\Cref{sec:agents2-triggers})? How does it understand the question (\Cref{sec:agents2-intent})? What databases does it access (\Cref{sec:agents2-perception})? How does it know when it is done (\Cref{sec:agents2-termination})? What happens when confidence is low (\Cref{sec:agents2-escalation})? The ten questions from \Cref{sec:agents2-ten-questions} provide your evaluation framework.
+Every architectural capability involves tradeoffs. Richer memory improves context but increases latency and cost. Aggressive escalation improves safety but reduces autonomy and throughput. Tighter approval gates reduce risk but slow execution. More sophisticated planning handles complexity but consumes more resources and introduces more potential failure points. There are no universally correct answers---only choices that must be calibrated to your context, your risk tolerance, and your professional obligations.
 
-You can participate meaningfully in procurement. Assess whether a system meets requirements: Does it enforce matter isolation? Maintain audit trails? Integrate with approval workflows? Escalate appropriately? You have the vocabulary to specify requirements.
+Current limitations make this calibration essential. Today's agents perform well on constrained, well-defined tasks but struggle as complexity and duration increase. The ``reliability cliff'' discussed in \Cref{sec:agents2-reliability} is real: success rates tend to degrade as tasks grow longer and more open-ended. Rather than avoiding agentic systems, these limitations argue for scoping them appropriately, adding checkpoints, and designing for human oversight.
 
-You can demand governance artifacts, not promises. Ask vendors to demonstrate action gating, escalation behavior under low confidence, and reconstruction via logs. If a system cannot show you what it accessed, what it did, and why it stopped, it is not deployable in regulated practice.
+For now, agents are best treated as capable assistants that amplify human judgment. The value lies in augmentation: agents handle the routine so professionals can focus on the consequential, with controls that keep humans in the loop where judgment matters.
 
-You can design governance that maps to architecture. Governance is enabled by architecture. If you want audit trails, the system must log reasoning. If you want approval gates, the system must pause before action. If you want confidentiality, the system must isolate context. You can design systems where governance is built in, not bolted on.
-
-Finally, you can communicate with technical teams. Describe requirements precisely: ``I need perception tools for these databases, action tools behind approval gates, escalation triggers for low confidence, and memory isolation between matters.'' Shared vocabulary enables collaboration.
+As technology improves, the tradeoffs will shift. But the ten architectural questions will remain, and the framework you have learned will stay useful even as implementations evolve.
 
 % ----------------------------------------------------------------------------
-% Evaluation Checklist
+% Bridge to Governing Agents
 % ----------------------------------------------------------------------------
 
-\subsection{Evaluation Checklist}
-\label{sec:agents2-evaluation-checklist}
+\subsection{From Architecture to Governance}
+\label{sec:agents2-to-governance}
 
-Table~\ref{tab:agents2-eval-checklist} consolidates evaluation criteria across all ten architectural questions. Use this checklist when assessing vendor systems, designing your own, or conducting due diligence on agentic deployments.
+This chapter has addressed how to design agents. The natural next question is how to govern them.
 
-\begin{table}[htbp]
-\centering
-\caption{Evaluation checklist by architectural component}
-\label{tab:agents2-eval-checklist}
-\small
-\begin{tabular}{ll}
-\toprule
-\textbf{Component} & \textbf{Key Topics} \\
-\midrule
-Triggers & Source coverage; latency; failure detection; audit logging \\
-Intent & Ambiguity detection; constraint validation; clarification requests \\
-Perception & Data source access; access controls; provenance; jurisdictional filtering \\
-Action & Approval gates; reversibility classification; circuit breakers \\
-Memory & Matter/client isolation; retention policies; state reconstruction; ethical walls \\
-Planning & Budget enforcement; pattern selection; plan validation \\
-Termination & Success criteria; failure recognition; graceful degradation \\
-Escalation & Confidence thresholds; handoff context; routing accuracy \\
-Delegation & Agent identity; delegation contracts; cross-agent ethical walls \\
-Governance & Logging infrastructure; override mechanisms; state snapshots; least privilege \\
-\bottomrule
-\end{tabular}
-\end{table}
+Architecture enables governance without determining governance. The governance surface provides the technical means---logging, overrides, state management, privileges, escalation---but policy determines how those means are used. How should approval thresholds be set? Who is accountable when an agent errs? What documentation must be maintained? How do professional duties translate into system requirements? Policy, regulation, and professional responsibility must answer these questions.
+
+\href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}}, the next chapter in this series, addresses these questions directly. It provides a five-layer regulatory framework spanning foundational law, professional obligations, sector-specific regulation, AI-specific requirements, and voluntary frameworks. It offers a dimensional approach to calibrating controls rather than one-size-fits-all checklists, grounded in the architectural understanding you have now developed.
+
+You are equipped to engage with those governance frameworks because you understand what the architecture can and cannot make observable and enforceable: what logging captures and what it misses, what escalation protocols can enforce and what they cannot, and what memory isolation protects and what additional controls it requires. Governance sits atop the architectural foundation this chapter has built.
 
 % ----------------------------------------------------------------------------
-% Current Limitations
+% Closing
 % ----------------------------------------------------------------------------
 
-\subsection{Honest Assessment of Current Capabilities}
-\label{sec:agents2-conclusion-limitations}
+\subsection{Agents, Understood}
+\label{sec:agents2-arch-understood}
 
-Architectural understanding requires honest acknowledgment of current limitations.
+Agents are not magic. They are triggers and channels, intent extraction and constraint validation, perception tools and action controls, memory systems and planning patterns, termination conditions and escalation protocols, delegation architectures and governance surfaces. They are the structural capabilities that any system---human or artificial---requires to do real cognitive work.
 
-\textbf{The reliability cliff} (\Cref{sec:agents2-reliability}) remains a significant constraint. Success rates tend to degrade as task complexity and duration increase. Systems that decompose work into smaller steps and checkpoint progress frequently tend to perform more reliably.
+These capabilities are now visible to you. You can see past an interface to the architecture beneath, evaluate claims with informed skepticism, and specify requirements that bridge professional needs and technical implementation.
 
-\textbf{Judgment limitations} constrain where agents add value. Current models perform better at retrieval and pattern matching than at tasks requiring nuance or handling novel situations. Effective deployments tend to pair agent capabilities with human judgment rather than replacing it entirely.
+Architectural literacy makes you a capable evaluator, a precise specifier, and an informed participant in decisions about technology that affects your practice. As agents become more prevalent in legal and financial work, that literacy becomes increasingly valuable.
 
-\textbf{Brittleness} can cause unexpected failures when APIs change or edge cases arise. Monitoring and graceful degradation help mitigate these risks.
-
-\textbf{Compounding errors} affect multi-step workflows. When each step has some probability of error, longer autonomous chains become less reliable. Shorter workflows with human checkpoints often perform better in practice.
-
-% ----------------------------------------------------------------------------
-% Closing: The Core Insight Revisited
-% ----------------------------------------------------------------------------
-
-\subsection{The Core Insight Revisited}
-\label{sec:agents2-conclusion-bridge}
-
-The ten questions framework demystifies agentic systems by mapping them to something you already understand: how professional teams work. Law firms and investment teams are cognitive work systems that receive work through defined channels, interpret ambiguous instructions, gather information from specialized sources, take consequential actions under constraints, maintain institutional memory, decompose complex problems, recognize completion, escalate appropriately, coordinate across specialists, and operate within compliance frameworks. Agentic systems face the same challenges and require the same structural capabilities.
-
-That mapping is the source of your architectural literacy. When evaluating a vendor's agent, you do not need to understand transformer architectures or embedding spaces. You need to ask the questions you would ask about a new team member: How does work reach them? Can they access the right databases? What happens when they are uncertain? Who reviews their output before it goes to clients? The ten questions give you a framework for asking---and a vocabulary for specifying what you need.
-
-Architectural literacy also enables governance. You cannot audit what is not logged, enforce boundaries without isolation, or intervene without override mechanisms. These are not afterthoughts; they are design decisions that must be made at architecture time. The governance surface---the interface through which controls interact with agents---is determined by architectural choices. \href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}}, the next chapter in this series, provides frameworks for calibrating those controls to your specific context, risk tolerance, and professional obligations. But you can only engage with governance frameworks meaningfully if you understand the architecture they govern.
-
-Agents are not magic. They are triggers, intent extraction, perception tools, action controls, memory systems, planning mechanisms, termination conditions, escalation protocols, delegation patterns, and governance surfaces. They are architecture. And architecture, once understood, can be evaluated, specified, deployed, and governed.
+You now have the foundation to evaluate, specify, deploy, and govern agentic systems with the same rigor you apply to the professional teams these systems are meant to augment. The work of understanding agents continues in \href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}}, where we address what controls are required, how to calibrate them, and who bears responsibility.
