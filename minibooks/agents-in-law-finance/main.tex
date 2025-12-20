@@ -1,0 +1,166 @@
+% ============================================================================
+% AGENTS IN LAW AND FINANCE
+% A Complete Guide to Understanding, Designing, and Governing AI Agents
+% ============================================================================
+% This is the root document for the mini-book combining:
+%   - Part I: What is an Agent? (from Chapter 06)
+%   - Part II: How to Design an Agent (from Chapter 07)
+%   - Part III: How to Govern an Agent (from Chapter 08)
+% ============================================================================
+
+\documentclass[11pt,oneside]{book}
+
+% ============================================================================
+% PATH CONFIGURATION
+% ============================================================================
+% Enable input path resolution for subfiles and includes
+\makeatletter
+\def\input@path{{./}{chapters/}{chapters/01-what-is-agent/}{chapters/02-how-to-design/}{chapters/03-how-to-govern/}}
+\makeatother
+
+% Subfiles package for modular chapter compilation
+\usepackage{subfiles}
+\usepackage{import}
+
+% ============================================================================
+% LOAD SHARED PREAMBLE
+% ============================================================================
+\input{preamble}
+
+% ============================================================================
+% BIBLIOGRAPHY
+% ============================================================================
+\addbibresource{bib/refs.bib}
+
+% ============================================================================
+% PDF METADATA
+% ============================================================================
+\hypersetup{
+  pdftitle={Agents in Law and Finance: Understanding, Designing, and Governing AI Agents},
+  pdfauthor={Michael J Bommarito II, Daniel Martin Katz, Jillian Bommarito},
+  pdfsubject={Artificial Intelligence, Agentic AI, Legal Technology, Financial Technology, AI Governance},
+  pdfkeywords={agentic AI, AI agents, legal AI, financial AI, agent architecture, AI governance, MCP, A2A, ReAct, regulatory compliance, AI risk management}
+}
+
+% ============================================================================
+% DOCUMENT
+% ============================================================================
+\begin{document}
+
+% ============================================================================
+% FRONT MATTER
+% ============================================================================
+\frontmatter
+
+% ----------------------------------------------------------------------------
+% TITLE PAGE
+% ----------------------------------------------------------------------------
+\begin{titlepage}
+\centering
+\vspace*{2cm}
+
+{\Huge\bfseries\color{primary} Agents in Law and Finance}
+
+\vspace{0.5cm}
+
+{\Large\color{primary-light} Understanding, Designing, and Governing AI Agents}
+
+\vspace{2cm}
+
+{\large\color{text-secondary}
+Michael J Bommarito II\\[0.3em]
+Daniel Martin Katz\\[0.3em]
+Jillian Bommarito
+}
+
+\vfill
+
+{\footnotesize\color{text-secondary}
+December 2025
+}
+
+\vspace{1cm}
+
+\end{titlepage}
+
+% ----------------------------------------------------------------------------
+% COPYRIGHT / COLOPHON PAGE
+% ----------------------------------------------------------------------------
+\thispagestyle{empty}
+\vspace*{\fill}
+{\small
+\noindent\textbf{Agents in Law and Finance}\\
+\textit{Understanding, Designing, and Governing AI Agents}\\[1em]
+
+\noindent Copyright \textcopyright\ 2025 Michael J Bommarito II, Daniel Martin Katz, and Jillian Bommarito.\\[1em]
+
+\noindent This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0). You are free to share and adapt this material for any purpose, even commercially, as long as you give appropriate credit and distribute your contributions under the same license.\\[0.5em]
+
+\noindent\url{https://creativecommons.org/licenses/by-sa/4.0/}\\[1em]
+
+\noindent This work is part of \textit{Artificial Intelligence for Law and Finance}, an open educational resource for legal and financial professionals.\\[1em]
+
+\noindent For the latest version and updates, visit:\\
+\url{https://github.com/mjbommar/ai-law-finance-book}
+}
+\vspace*{\fill}
+\newpage
+
+% ----------------------------------------------------------------------------
+% TABLE OF CONTENTS
+% ----------------------------------------------------------------------------
+\tableofcontents
+\newpage
+
+% ----------------------------------------------------------------------------
+% PREFACE
+% ----------------------------------------------------------------------------
+\input{preface}
+\newpage
+
+% ============================================================================
+% MAIN MATTER
+% ============================================================================
+\mainmatter
+
+% ----------------------------------------------------------------------------
+% CHAPTER 1: What is an Agent?
+% ----------------------------------------------------------------------------
+\chapter{What is an Agent?}
+\label{ch:what-is-agent}
+
+\subfile{chapters/01-what-is-agent/main}
+
+% ----------------------------------------------------------------------------
+% CHAPTER 2: How to Design an Agent
+% ----------------------------------------------------------------------------
+\chapter{How to Design an Agent}
+\label{ch:how-to-design}
+
+\subfile{chapters/02-how-to-design/main}
+
+% ----------------------------------------------------------------------------
+% CHAPTER 3: How to Govern an Agent
+% ----------------------------------------------------------------------------
+\chapter{How to Govern an Agent}
+\label{ch:how-to-govern}
+
+\subfile{chapters/03-how-to-govern/main}
+
+% ============================================================================
+% BACK MATTER
+% ============================================================================
+\backmatter
+
+% ----------------------------------------------------------------------------
+% GLOSSARY (optional)
+% ----------------------------------------------------------------------------
+% \input{glossary}
+% \newpage
+
+% ----------------------------------------------------------------------------
+% BIBLIOGRAPHY
+% ----------------------------------------------------------------------------
+\printbibliography[title={References}]
+
+\end{document}
