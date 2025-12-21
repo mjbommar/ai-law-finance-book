@@ -1,43 +1,261 @@
 % =============================================================================
-% Tokens, Tokenizers, Sampling — LLM Primer & Mechanics
-% Purpose: Explain tokens, context windows, sampling knobs
-% Label: sec:llmA-tokens
+% Tokens, Tokenizers, and Context Windows — LLM Primer & Mechanics
+% Purpose: Explain tokenization, BPE, context limits, Lost in Middle
+% Label: sec:llm1-tokens
 % =============================================================================
 
-\section{Tokens, Tokenizers, and Completions}
-\label{sec:llmA-tokens}
+\section{Tokens, Tokenizers, and Context Windows}
+\label{sec:llm1-tokens}
 
-% Outline (comments):
-% - How text → tokens (BPE/unigram); why token counts matter (cost, latency)
-% - Context window; truncation risks; system/user/assistant roles
-% - Sampling: temperature, top-p, stop sequences; determinism vs. diversity
+When you type a prompt into an LLM, the model does not ``see'' words, sentences, or paragraphs. It sees a sequence of integers. This conversion process---\keyterm{tokenization}---is the source of many peculiar LLM behaviors, including their struggles with arithmetic, their difficulty with specific string manipulation tasks (like reversing words), and their occasional incoherence with non-English scripts or specialized notation.
 
-\begin{keybox}[title={Practical Defaults}]
+Understanding tokenization is essential for legal and financial practitioners because it directly affects:
 \begin{itemize}
-  \item Use conservative temperature for regulated outputs; prefer determinism.
-  \item Set clear stop sequences and maximum tokens to bound responses.
-  \item Log prompt/output token counts for cost and audit purposes.
+  \item \textbf{Cost:} LLM pricing is typically per-token, so verbose formats cost more
+  \item \textbf{Context limits:} Fixed token budgets constrain how much text you can process
+  \item \textbf{Reliability:} Certain tokenization artifacts cause systematic errors (especially with numbers)
+  \item \textbf{Cross-language performance:} Non-English text often tokenizes less efficiently
 \end{itemize}
-\end{keybox}
 
-\subsection{Sampling Knobs and Defaults}
-% Broad, plain-English intuition for regulated workflows
-\textbf{Temperature} controls diversity; lower is more deterministic. \textbf{Top-$p$} (nucleus) limits to the smallest mass of likely tokens; \textbf{top-$k$} limits to the $k$ most likely tokens. Prefer low temperature with modest top-$p$ for schema-bound tasks.
+\subsection{Tokenization: From Text to Token IDs}
+\label{sec:llm1-tokens-bpe}
 
-\begin{highlightbox}[title={Recommended Starting Points}]
+In practice, a \keyterm{tokenizer} is a deterministic mapping between (1) text and (2) a sequence of token IDs (integers). This matters because \emph{the tokenizer is part of the model interface}: token counts determine cost, context window fit, and many ``mysterious'' error patterns.
+
+\paragraph{A practitioner-first mental model.} A tokenizer is a domain-specific ``compression'' scheme for text. Common strings become short representations (few tokens); rare strings become longer representations (more tokens). This is why legal citations, identifiers, and numbers often take more tokens than you expect.
+
+\subsubsection{Tokenization Strategies (High Level)}
+
+Tokenization is not standardized across providers or models. The most common strategy families are:
 \begin{itemize}
-  \item \textbf{Grounded/structured outputs:} temperature 0.0--0.2, top-$p$ 0.8--0.95; set stop sequences.
-  \item \textbf{Exploratory drafting/ideation:} temperature 0.5--0.8, top-$p$ 0.9--0.95.
-  \item \textbf{Reasoning with self-consistency:} keep temperature moderate; control total samples.
+  \item \textbf{Word-level tokenization:} A fixed dictionary of whole words. Simple to understand, but brittle: out-of-vocabulary terms (new company names, ticker symbols, citations) break easily and vocabularies become huge.
+
+  \item \textbf{Character-level tokenization:} Every character is a token. Extremely robust (it can represent any string), but sequences become very long, increasing cost and slowing attention.
+
+  \item \textbf{Byte-level tokenization:} A close cousin of character-level tokenization that operates on raw bytes (e.g., UTF-8 bytes). Also robust, and often used as a base layer so \emph{any} string can be represented.
+
+  \item \textbf{Subword tokenization (the modern default):} Tokens correspond to frequent \emph{pieces} of words (prefixes, suffixes, common character sequences). This balances robustness and efficiency and is the dominant approach for modern LLMs.
+\end{itemize}
+
+\subsubsection{Subword Tokenizers in Practice (BPE, WordPiece, Unigram)}
+
+Most modern LLMs use subword tokenization based on algorithms such as \keyterm{Byte Pair Encoding} (BPE) \parencite{sennrich2016bpe} or SentencePiece-style tokenizers \parencite{kudo2018sentencepiece}. The key practical implication is the same across variants: common strings become single tokens (``contract'', ``liability'', ``defendant''), while rare words, proper nouns, and technical strings are broken into multiple subword pieces.
+
+\begin{technicalbox}[title={Engineering Note (Optional): How Subword Tokenizers Are Built}]
+Subword tokenizers learn a vocabulary from training text so that frequent character sequences become single tokens.
+
+In BPE-style tokenizers, the training process repeatedly merges frequent adjacent units (characters or bytes) into larger units until a target vocabulary size is reached (often tens of thousands of tokens).
+
+You do \emph{not} need to know the algorithm to use LLMs safely. You \emph{do} need to understand the consequences: token counts vary by content type; identifiers and numbers fragment; and tokenization is model-specific.
+\end{technicalbox}
+
+\begin{highlightbox}[title={Tokenization Examples}]
+\textbf{Common words} (likely single tokens):
+\begin{itemize}
+  \item ``the'', ``contract'', ``agreement'', ``court''
+\end{itemize}
+
+\textbf{Rare words} (likely split):
+\begin{itemize}
+  \item ``Anthropocene'' $\rightarrow$ ``An'' + ``thro'' + ``po'' + ``cene''
+  \item ``indemnification'' $\rightarrow$ ``ind'' + ``em'' + ``nification'' (or similar)
+  \item ``counterparty'' $\rightarrow$ ``counter'' + ``party''
+\end{itemize}
+
+\textbf{Numbers and codes} (often fragmented):
+\begin{itemize}
+  \item ``\$1,234,567.89'' $\rightarrow$ ``\$'' + ``1'' + ``,'' + ``234'' + ``,'' + ``567'' + ``.'' + ``89''
+  \item ``Section 409A'' $\rightarrow$ ``Section'' + `` 4'' + ``09'' + ``A''
+  \item ``Rule 10b-5'' $\rightarrow$ tokens for ``Rule'' + `` 10'' + ``b'' + ``-'' + ``5'' (often split)
+  \item ``CUSIP 037833100'' $\rightarrow$ multiple tokens (letters, digits, and spacing often fragment)
 \end{itemize}
 \end{highlightbox}
 
-\subsection{Determinism, Seeds, and Reproducibility}
-For repeatable audits, fix sampling parameters, set random seeds where available, and record model version, date, and token counts. Beware vendor differences in determinism across hardware/backends.
+\paragraph{Reproducible token traces (forthcoming).} In later revisions, we will include concrete tokenization traces generated with open-source libraries (e.g., Hugging Face \texttt{tokenizers}/\texttt{transformers}) and model-specific tokenizers (e.g., \texttt{tiktoken}) using a reproducible command such as \texttt{uv run --with tokenizers,transformers,tiktoken python -c "..."}.
 
-\subsection{Stops, Length, and Biases}
-Define clear stop sequences to prevent run-on text. Set maximum tokens to bound cost/latency. Note length bias: some models prefer shorter/longer outputs; use length penalties or explicit length requirements.
+\subsubsection{The Token Counting Heuristic}
 
-\subsection{Latency/Cost Budgeting and Batching}
-Track prompt/output tokens. Consider batching low-risk evaluations and using shorter prompts via references/summaries to fit context windows.
+A widely cited approximation: \textbf{1,000 tokens $\approx$ 750 words} in standard English prose. However, this ratio varies significantly:
 
+\begin{itemize}
+  \item \textbf{English prose:} Close to the 750-word heuristic
+  \item \textbf{Legal documents:} Often more tokens per word due to technical terms, citations, and formatting
+  \item \textbf{Code and JSON:} Significantly more tokens per character (punctuation, brackets, quotes all consume tokens)
+  \item \textbf{Non-Latin scripts:} Chinese, Japanese, Arabic, and other scripts often require many more tokens per word equivalent
+  \item \textbf{Tables and structured data:} High token overhead for formatting characters
+\end{itemize}
+
+\paragraph{Cost Implications.} Since LLM pricing is typically per-million tokens, these differences matter economically:
+
+\begin{itemize}
+  \item Processing XML versus JSON can differ by 2--3$\times$ in token count for equivalent data
+  \item Verbose natural-language prompts cost more than concise structured prompts
+  \item Non-English documents may cost significantly more to process than English equivalents
+\end{itemize}
+
+\begin{definitionbox}[title={Token Economics}]
+\textbf{Input tokens:} Tokens in the prompt (less expensive, processed in parallel)
+
+\textbf{Output tokens:} Tokens generated by the model (more expensive, generated sequentially)
+
+\textbf{Context tokens:} Total tokens (input + output) that fit within the context window
+
+Typical pricing (as of 2024--2025 for frontier models):
+\begin{itemize}
+  \item Input: \$2--15 per million tokens
+  \item Output: \$8--60 per million tokens
+\end{itemize}
+A 50-page legal document might contain 25,000--35,000 tokens, costing \$0.10--0.50 in input tokens alone for a frontier model.
+\end{definitionbox}
+
+\subsection{The ``Numbers'' Problem: Tokenization Artifacts}
+\label{sec:llm1-tokens-numbers}
+
+One of the most persistent failure modes in LLMs---particularly problematic for financial applications---is unreliable arithmetic. This is largely a tokenization artifact.
+
+\subsubsection{Why LLMs Struggle with Math}
+
+Consider how numbers are tokenized:
+
+\begin{itemize}
+  \item The number ``345'' might be a single token in the vocabulary
+  \item The number ``346'' might be a \emph{different} single token
+  \item The number ``3455'' might be tokenized as ``34'' + ``55'' (two tokens)
+  \item The number ``34567'' might be tokenized as ``345'' + ``67'' or ``34'' + ``567''
+\end{itemize}
+
+The model sees these as distinct integer IDs---similar to how it distinguishes ``cat'' from ``dog.'' It has no inherent understanding of the base-10 place value system that would connect these representations mathematically.
+
+\paragraph{The Decimal Comparison Problem.} A classic failure case involves comparing decimals:
+
+\begin{itemize}
+  \item Question: ``Which is larger, 9.11 or 9.9?''
+  \item Tokenization: ``9.11'' $\rightarrow$ ``9'' + ``.'' + ``11''; ``9.9'' $\rightarrow$ ``9'' + ``.'' + ``9''
+  \item Failure mode: The model's attention might compare the final tokens (``11'' vs ``9'') and conclude incorrectly that 9.11 > 9.9 because 11 > 9.
+\end{itemize}
+
+This is not a failure of ``reasoning''---it is a failure of \emph{representation}. The tokenizer has destroyed the mathematical structure of the numbers.
+
+\begin{cautionbox}[title={Never Trust LLM Arithmetic}]
+For financial applications requiring reliable calculation:
+\begin{enumerate}
+  \item \textbf{Use tool-calling:} Have the LLM generate code (Python, Excel formulas) that performs calculations deterministically
+  \item \textbf{Validate externally:} Cross-check any numerical outputs against known sources
+  \item \textbf{Be especially cautious} with percentages, ratios, comparisons, and multi-step calculations
+\end{enumerate}
+The model can \emph{understand} that a calculation is needed and \emph{describe} the calculation steps, but actually performing the calculation should be delegated to deterministic tools.
+\end{cautionbox}
+
+\subsubsection{Other Tokenization Artifacts}
+
+Beyond arithmetic, tokenization causes other systematic issues:
+
+\paragraph{String Manipulation.} Tasks like reversing a word, counting letters, or finding specific character positions often fail because the model operates on tokens, not characters. ``Reversal'' of ``contract'' should yield ``tcartnoc'', but the model has never seen ``contract'' as individual letters---it sees it as a single token or small set of subword tokens.
+
+\paragraph{Rare Words and Names.} Unusual proper nouns (company names, jurisdiction names, technical terms) may be split into fragments that individually carry misleading associations. ``Anthropic'' might be tokenized into ``An'' + ``throp'' + ``ic'', where ``throp'' activates associations with ``philanthropy'' that are irrelevant to the technology company.
+
+\paragraph{Code and Syntax.} Programming languages, JSON, and other structured formats are tokenized character-by-character for punctuation, making outputs fragile. A missing comma or bracket is just as ``plausible'' to the model as the correct syntax---it does not have a syntactic parser built in.
+
+\subsection{The Context Window: Capacity and Constraints}
+\label{sec:llm1-tokens-context}
+
+The \keyterm{context window} is the maximum sequence length---input tokens plus output tokens---that a model can process in a single pass. Everything the model ``knows'' about your specific query must fit within this window; it has no persistent memory between calls (unless explicitly designed into the system).
+
+\subsubsection{Context Window Sizes}
+
+Context windows have expanded dramatically over the LLM era:
+
+\begin{table}[htbp]
+\centering
+\caption{Evolution of Context Window Sizes}
+\label{tab:llm1-context-sizes}
+\begin{tabular}{@{}lrl@{}}
+\toprule
+\textbf{Model/Era} & \textbf{Context Window} & \textbf{Approximate Equivalent} \\
+\midrule
+GPT-2 (2019) & 1,024 tokens & $\sim$2 pages \\
+GPT-3 (2020) & 2,048--4,096 tokens & $\sim$4--8 pages \\
+GPT-4 (2023) & 8,192--32,768 tokens & $\sim$15--60 pages \\
+Claude 2.1 (2023) & 100,000 tokens & $\sim$200 pages \\
+GPT-4 Turbo (2024) & 128,000 tokens & $\sim$250 pages \\
+Gemini 1.5 Pro (2024) & 1,000,000 tokens & $\sim$2,000 pages \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{What Fits in Context?} To give practical intuition:
+
+\begin{itemize}
+  \item \textbf{8K tokens:} A few pages of legal text plus detailed instructions
+  \item \textbf{32K tokens:} A typical contract or short legal brief
+  \item \textbf{128K tokens:} A substantial merger agreement or regulatory filing
+  \item \textbf{1M tokens:} Multiple lengthy documents, discovery sets, or a small codebase
+\end{itemize}
+
+\subsubsection{Cost and Latency Dynamics}
+
+Larger context windows are not free:
+
+\paragraph{Input Processing.} Reading the prompt (input tokens) can be parallelized, but longer prompts still take more time. \keyterm{Time-to-First-Token} (TTFT)---the latency before the model begins generating---increases with input length.
+
+\paragraph{Output Generation.} Each output token is generated sequentially (autoregressively), and each generation step must attend to all preceding tokens. Longer contexts slow generation and increase memory requirements.
+
+\paragraph{Pricing Tiers.} Some providers charge differently for long-context usage, or offer optimized pricing for cached/repeated contexts.
+
+\begin{highlightbox}[title={Practical Context Management}]
+Best practices for efficient context usage:
+\begin{enumerate}
+  \item \textbf{Retrieve, don't dump:} Use retrieval (RAG) to select relevant excerpts rather than pasting entire documents
+  \item \textbf{Summarize when possible:} For background context, summaries may suffice
+  \item \textbf{Structure your prompt:} Keep critical context near the query; long contexts do not guarantee uniform retrieval (see Chapter~2)
+  \item \textbf{Monitor token counts:} Log input and output tokens for cost attribution
+\end{enumerate}
+\end{highlightbox}
+
+\subsection{The ``Lost in the Middle'' Phenomenon}
+\label{sec:llm1-tokens-lost}
+
+Long context windows do not imply uniform retrieval. Empirical work shows a \textbf{U-shaped retrieval curve}: models more reliably use information placed at the beginning and end of the context than information buried in the middle \parencite{liu2023lostmiddle}. For practitioners, the implication is straightforward: pasting an entire agreement or filing into the prompt can still produce omission or hallucination if the relevant provision is located ``in the middle.''
+
+\paragraph{Where to go deeper.} Chapter~2 (Conversations and Reasoning) provides the primary treatment of ``Lost in the Middle'' in the context of prompt assembly, memory strategies, and instruction placement.
+
+\paragraph{Preview: Roles and Chat Formatting.} Most production systems structure interactions as role-tagged messages (system, user, assistant, tool). This is central to building stateful conversational systems and to understanding why prompt injection is a systems security problem, not a ``prompting trick.'' Chapter~2 covers role-based prompting and guardrails; this chapter's failure modes section (\Cref{sec:llm1-fail}) covers prompt injection risk and mitigations.
+
+\subsection{Token Efficiency and Prompt Engineering}
+\label{sec:llm1-tokens-efficiency}
+
+Given the economics and constraints of tokenization, efficient prompt design matters:
+
+\paragraph{Verbosity Costs.} Every unnecessary word consumes tokens and budget:
+\begin{itemize}
+  \item ``Please kindly summarize the following contract document for me'' $\rightarrow$ many tokens
+  \item ``Summarize this contract:'' $\rightarrow$ fewer tokens, same effect
+\end{itemize}
+
+\paragraph{Format Choices.} Structured formats vary in token efficiency:
+\begin{itemize}
+  \item Markdown lists are relatively efficient
+  \item JSON has overhead from quotes and brackets but enables structured parsing
+  \item XML is typically the most verbose (many tokens for tags)
+  \item YAML balances readability and efficiency
+\end{itemize}
+
+\paragraph{References vs. Repetition.} In multi-turn conversations or complex prompts:
+\begin{itemize}
+  \item Refer back to earlier content rather than repeating it
+  \item Use numbered sections that can be referenced (e.g., ``See Section~2'')
+  \item Summarize prior context rather than including full history
+\end{itemize}
+
+\begin{keybox}[title={Token Efficiency Checklist}]
+\begin{enumerate}
+  \item Remove unnecessary pleasantries and filler words
+  \item Choose concise formats (Markdown or YAML over XML)
+  \item Use retrieval to include only relevant document sections
+  \item Summarize prior conversation context rather than including full history
+  \item Set maximum token limits to bound output length
+  \item Consider smaller models for simple tasks (fewer capabilities but lower cost)
+\end{enumerate}
+\end{keybox}
+
+With the mechanics of tokenization and context established, we now turn to how models use these token sequences to generate outputs: the probabilistic sampling process that makes LLMs simultaneously powerful and unpredictable.

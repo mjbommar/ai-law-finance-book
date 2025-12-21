@@ -1,11 +1,266 @@
 % =============================================================================
 % Synthesis — LLM Primer & Mechanics
-% Purpose: Summarize and set up next chapter
-% Label: sec:llmA-synthesis
+% Purpose: Connect concepts; practical integration; design principles
+% Label: sec:llm1-synthesis
 % =============================================================================
 
-\section{Synthesis}
-\label{sec:llmA-synthesis}
+\section{Synthesis: From Mechanics to Practice}
+\label{sec:llm1-synthesis}
 
-You now have a mental model for LLMs and the core knobs that affect behavior, cost, and reliability. Next, we add conversation state and reasoning strategies.
+We have now examined the foundational mechanics of Large Language Models: the Transformer architecture that enabled them, the scaling laws that drove their improvement, the tokenization that converts text to numbers, the sampling processes that generate outputs, the embeddings that enable semantic search, and the failure modes that constrain their reliability.
+
+This section synthesizes these concepts into an integrated understanding and derives practical principles for deploying LLMs in legal and financial contexts.
+
+\subsection{The LLM as a System Component}
+\label{sec:llm1-synthesis-component}
+
+A key mental model shift: an LLM is not a solution; it is a \emph{component} within a system. The LLM's power comes from its ability to process and generate natural language. Its limitations---stochasticity, knowledge cutoffs, hallucination---must be addressed by the surrounding system architecture.
+
+\begin{highlightbox}[title={System Components Around the LLM}]
+A production LLM deployment typically includes:
+\begin{itemize}
+  \item \textbf{Retrieval layer:} Provides grounding in current, authoritative sources
+  \item \textbf{Input processing:} Tokenization, chunking, prompt construction
+  \item \textbf{Output processing:} Parsing, validation, formatting
+  \item \textbf{Guardrails:} Access control, rate limiting, content filtering
+  \item \textbf{Orchestration:} Routing, multi-step flows, error handling
+  \item \textbf{Monitoring:} Logging, cost tracking, quality measurement
+  \item \textbf{Human oversight:} Review workflows, escalation paths
+\end{itemize}
+The LLM itself is only one piece of this architecture.
+\end{highlightbox}
+
+\subsection{Connecting the Concepts}
+\label{sec:llm1-synthesis-connections}
+
+The mechanics we have studied are interconnected:
+
+\paragraph{Tokens Drive Everything.} Token counts determine cost, latency, and context capacity. Understanding tokenization helps you:
+\begin{itemize}
+  \item Budget costs accurately
+  \item Design efficient prompts
+  \item Recognize why numbers and code are fragile
+  \item Anticipate cross-language performance differences
+\end{itemize}
+
+\paragraph{Context Windows Constrain Design.} Fixed context limits force architectural decisions:
+\begin{itemize}
+  \item Retrieval becomes necessary for long documents
+  \item Summarization enables fitting more information
+  \item Chunking strategies affect retrieval quality
+  \item The ``lost in the middle'' effect influences prompt structure
+\end{itemize}
+
+\paragraph{Sampling Parameters Trade Off Properties.} Every sampling choice involves trade-offs:
+\begin{itemize}
+  \item \textbf{Low temperature:} More deterministic, less creative, potentially repetitive
+  \item \textbf{High temperature:} More varied, more creative, higher hallucination risk
+  \item \textbf{Constrained decoding:} Guaranteed structure, reduced flexibility
+  \item \textbf{Multiple samples:} Better accuracy, higher cost and latency
+\end{itemize}
+
+\paragraph{Embeddings Enable Grounding.} The same embedding technology that powers the model internally enables external retrieval:
+\begin{itemize}
+  \item Semantic search finds conceptually related documents
+  \item Hybrid search adds keyword precision
+  \item RAG injects retrieved content into the model's context
+  \item This grounding mitigates hallucination and knowledge cutoff issues
+\end{itemize}
+
+\paragraph{Failure Modes Are Architectural.} The failure modes we examined are not implementation bugs but consequences of the fundamental design:
+\begin{itemize}
+  \item Hallucination: next-token prediction rewards plausibility, not truth
+  \item Knowledge cutoff: training data has a fixed end date
+  \item Prompt injection: no privileged instruction layer
+  \item Formatting drift: no internal grammar enforcement
+\end{itemize}
+
+Understanding \emph{why} these failures occur enables principled mitigation rather than ad-hoc patches.
+
+\subsection{Design Principles for Regulated Domains}
+\label{sec:llm1-synthesis-principles}
+
+Drawing on our mechanical understanding, we articulate principles for deploying LLMs in legal and financial contexts:
+
+\begin{keybox}[title={Principle 1: Verify, Don't Trust}]
+Every LLM output is a hypothesis to be verified, not a fact to be accepted. This applies especially to:
+\begin{itemize}
+  \item Citations and references (verify against authoritative databases)
+  \item Numerical claims (cross-check against source data)
+  \item Time-sensitive information (consider knowledge cutoff)
+  \item Legal conclusions (human review required)
+\end{itemize}
+The model's confidence has little correlation with its accuracy.
+\end{keybox}
+
+\begin{keybox}[title={Principle 2: Ground in Sources}]
+Use retrieval-augmented generation to ground responses in authoritative documents:
+\begin{itemize}
+  \item Inject relevant source text into context
+  \item Require explicit citation of sources
+  \item Prefer quotation over paraphrase for critical content
+  \item Track and surface source provenance
+\end{itemize}
+RAG reduces (but does not eliminate) hallucination and addresses knowledge cutoff.
+\end{keybox}
+
+\begin{keybox}[title={Principle 3: Control the Stochasticity}]
+Match sampling parameters to your reliability requirements:
+\begin{itemize}
+  \item Use low temperature for regulated outputs
+  \item Enable constrained decoding for structured outputs
+  \item Log all parameters for reproducibility
+  \item Consider multiple samples for high-stakes decisions
+\end{itemize}
+Accept that perfect determinism is unattainable; design for graceful variation.
+\end{keybox}
+
+\begin{keybox}[title={Principle 4: Defend in Depth}]
+Implement multiple overlapping safeguards:
+\begin{itemize}
+  \item Input validation before the LLM
+  \item Output validation after the LLM
+  \item Access controls independent of the LLM
+  \item Monitoring across the entire system
+\end{itemize}
+No single safeguard is sufficient; assume each layer will occasionally fail.
+\end{keybox}
+
+\begin{keybox}[title={Principle 5: Maintain Human Oversight}]
+Keep humans in the loop for consequential decisions:
+\begin{itemize}
+  \item Design review workflows for LLM-generated content
+  \item Establish escalation paths for uncertain cases
+  \item Train users to evaluate (not just accept) LLM outputs
+  \item Maintain clear accountability for final decisions
+\end{itemize}
+LLMs are tools for human decision-makers, not autonomous agents.
+\end{keybox}
+
+\subsection{Mapping Mechanics to Requirements}
+\label{sec:llm1-synthesis-mapping}
+
+Different regulatory requirements map to different mechanical concerns:
+
+\begin{table}[htbp]
+\centering
+\caption{Regulatory Requirements and LLM Mechanics}
+\label{tab:llm1-requirements-mapping}
+\begin{tabular}{@{}p{3.5cm}p{4cm}p{4cm}@{}}
+\toprule
+\textbf{Requirement} & \textbf{Relevant Mechanics} & \textbf{Implementation Approach} \\
+\midrule
+Auditability & Sampling determinism, logging & Low temperature, seed, full logging \\
+Accuracy & Hallucination mitigation & RAG, citation requirements, verification \\
+Currency & Knowledge cutoff & Retrieval of current documents \\
+Reproducibility & Sampling parameters & Fixed seeds, versioned prompts \\
+Security & Prompt injection & Input sanitization, sandboxing \\
+Privacy & Training data, embeddings & On-premises deployment, data governance \\
+Explainability & Output structure & Structured outputs, citation trails \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Cost-Benefit Framework}
+\label{sec:llm1-synthesis-cost}
+
+LLM deployment involves economic trade-offs:
+
+\paragraph{Cost Drivers.}
+\begin{itemize}
+  \item Token volume (input + output)
+  \item Model size/capability tier
+  \item Latency requirements (faster = more expensive infrastructure)
+  \item Redundancy and verification (multiple samples, human review)
+\end{itemize}
+
+\paragraph{Benefit Drivers.}
+\begin{itemize}
+  \item Labor cost reduction (faster drafting, analysis, review)
+  \item Quality improvement (consistency, coverage)
+  \item Scalability (processing volume traditional approaches cannot match)
+  \item Capability expansion (tasks previously impractical)
+\end{itemize}
+
+\paragraph{Risk Drivers.}
+\begin{itemize}
+  \item Error cost (consequences of hallucination or failure)
+  \item Regulatory cost (compliance burden, audit requirements)
+  \item Reputational cost (client impact of visible failures)
+  \item Opportunity cost (resources devoted to AI vs. alternatives)
+\end{itemize}
+
+The mechanical understanding developed in this chapter enables informed trade-off analysis: knowing \emph{why} certain configurations are more expensive or more reliable supports rational resource allocation.
+
+\subsection{Building Intuition}
+\label{sec:llm1-synthesis-intuition}
+
+Beyond specific principles, practitioners benefit from developing intuition about LLM behavior:
+
+\paragraph{When to Trust More.}
+\begin{itemize}
+  \item Tasks involving pattern recognition and synthesis
+  \item Content summarization (where you can verify against source)
+  \item Drafting that will receive human review
+  \item Classification tasks with clear categories
+  \item Structured extraction from well-formatted documents
+\end{itemize}
+
+\paragraph{When to Trust Less.}
+\begin{itemize}
+  \item Factual claims without provided sources
+  \item Numerical calculations
+  \item Time-sensitive information
+  \item Highly specialized or technical domains
+  \item Adversarial or untrusted inputs
+  \item Long, complex reasoning chains
+\end{itemize}
+
+\paragraph{Red Flags to Watch For.}
+\begin{itemize}
+  \item Overly confident assertions without hedging
+  \item Specific citations (especially cases, statutes, dates)
+  \item Content that seems ``too good''---perfectly supporting your position
+  \item Responses that exactly match what you wanted to hear (sycophancy)
+  \item Unusual specificity (exact figures, precise dates) without sources
+\end{itemize}
+
+\subsection{Looking Ahead}
+\label{sec:llm1-synthesis-ahead}
+
+This chapter establishes the mechanical foundation. Subsequent chapters build on this understanding:
+
+\paragraph{Chapter 2 (Conversations and Reasoning).} Extends single-turn mechanics to multi-turn dialogue, introducing:
+\begin{itemize}
+  \item Conversation state management
+  \item Chain-of-thought and reasoning strategies
+  \item Role-based prompting
+  \item Context window management across turns
+\end{itemize}
+
+\paragraph{Chapter 3 (Retrieval-Augmented Generation).} Expands embedding and retrieval concepts into full RAG architectures:
+\begin{itemize}
+  \item Chunking and indexing strategies
+  \item Query formulation and re-ranking
+  \item Hybrid search configuration
+  \item RAG quality evaluation
+\end{itemize}
+
+\paragraph{Part II (Agents).} Introduces LLMs as components in autonomous systems:
+\begin{itemize}
+  \item Tool calling and function execution
+  \item Planning and multi-step reasoning
+  \item Error recovery and self-correction
+  \item Human-in-the-loop patterns
+\end{itemize}
+
+\paragraph{Governance Chapters.} Apply failure mode understanding to compliance frameworks:
+\begin{itemize}
+  \item Risk assessment methodologies
+  \item Validation and testing protocols
+  \item Monitoring and alerting systems
+  \item Audit trail requirements
+\end{itemize}
+
+The vocabulary and mental models established here---tokens, context windows, sampling, embeddings, hallucination, injection---will recur throughout. Mastery of these foundations enables sophisticated reasoning about system design in the chapters ahead.
 

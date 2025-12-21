@@ -1,19 +1,100 @@
 % =============================================================================
 % How to Read — LLM Primer & Mechanics
-% Purpose: Audience paths; scope and outcomes
-% Label prefix: sec:llmA-howtoread
+% Purpose: Audience paths; scope and outcomes; reading strategies
+% Label prefix: sec:llm1-howtoread
 % =============================================================================
 
 \section*{How to Read This Chapter}
 \addcontentsline{toc}{section}{How to Read This Chapter}
 
-This chapter is a plain-English primer. It gives you a mental model for modern LLMs without math. If you only have 15 minutes, skim the \emph{Key Objectives} box and read Sections~\ref{sec:llmA-history} and \ref{sec:llmA-tokens}.
+This chapter provides a comprehensive primer on the mechanics of Large Language Models (LLMs) for legal and financial professionals. Unlike user guides focused on specific tools, this chapter offers structural analysis of the technology itself---the foundational understanding you need to reason about model behavior from first principles.
+
+\paragraph{Target Audience.} This chapter is designed for practitioners who must understand \emph{how} LLMs work, not just \emph{that} they work:
+
+\begin{itemize}
+  \item \textbf{Legal professionals} evaluating AI tools for document review, research, or drafting
+  \item \textbf{Financial analysts and risk managers} deploying models for reporting, analysis, or client communication
+  \item \textbf{Compliance officers} designing validation frameworks and governance controls
+  \item \textbf{Technology leaders} architecting enterprise AI systems in regulated environments
+  \item \textbf{Researchers and policy analysts} studying the intersection of AI, law, and finance
+\end{itemize}
 
 \begin{keybox}[title={Key Objectives}]
-\begin{itemize}
-  \item Understand what LLMs are and why they improved so quickly.
-  \item Know what tokens, context windows, and sampling do in practice.
-  \item Recognize common failure modes you must guard against later.
-\end{itemize}
+By the end of this chapter, you will be able to:
+\begin{enumerate}
+  \item \textbf{Understand the architecture}: Know why the Transformer succeeded where predecessors failed, and how this enables processing of long legal and financial documents.
+  \item \textbf{Master the mechanics}: Grasp how tokenization, context windows, and sampling parameters directly affect output quality, cost, and reliability.
+  \item \textbf{Reason about embeddings}: Understand how text becomes vectors, enabling semantic search that powers retrieval-augmented generation.
+  \item \textbf{Anticipate failure}: Recognize intrinsic limitations---hallucinations, stochasticity, recency gaps---to build defensible guardrails.
+  \item \textbf{Apply practical defaults}: Know which parameter settings are appropriate for regulated outputs versus creative exploration.
+\end{enumerate}
 \end{keybox}
 
+\subsection*{Reading Paths by Role}
+
+Different readers will benefit from different emphases. We suggest the following paths:
+
+\paragraph{For the Strategic Leader (30 minutes).} Focus on \Cref{sec:llm1-history} (Conceptual Primer and Brief History) and \Cref{sec:llm1-fail} (Common Failure Modes). These sections outline the trajectory of AI capabilities defined by scaling laws and the operational risks---such as hallucination and data leakage---that define the liability profile of LLM deployment. Skim the technical sections to understand the vocabulary your teams will use.
+
+\paragraph{For the AI Engineer and Architect (2--3 hours).} Read all sections thoroughly. \Cref{sec:llm1-tokens} (Tokens and Tokenizers), \Cref{sec:llm1-sampling} (Sampling and Decoding), and \Cref{sec:llm1-embeddings} (Representations and Embeddings) contain operational parameters that directly influence system performance, latency, and cost. Pay special attention to the discussion of constrained decoding and hybrid search architectures.
+
+\paragraph{For the Risk and Compliance Officer (1--2 hours).} \Cref{sec:llm1-fail} (Failure Modes) provides the taxonomy of risks required for validation frameworks. Review governance considerations in \Cref{sec:llm1-history} regarding training data provenance and regulatory requirements (EU AI Act, OWASP Top 10 for LLMs). The practical defaults in \Cref{sec:llm1-sampling} will help you specify requirements for vendor evaluations.
+
+\paragraph{For the Time-Constrained Reader (15 minutes).} If you have limited time, read this section's Key Objectives box, then skim:
+\begin{enumerate}
+  \item The ``Plain-English Summary'' boxes throughout
+  \item \Cref{sec:llm1-history} through the first two subsections (through Scaling Laws)
+  \item \Cref{sec:llm1-tokens} focusing on ``Token Economics'' and practical context constraints
+  \item The ``Watch Outs'' cautionbox in \Cref{sec:llm1-fail}
+\end{enumerate}
+
+\subsection*{Relationship to Other Chapters}
+
+This chapter provides foundational vocabulary and mental models that subsequent chapters build upon:
+
+\begin{itemize}
+  \item \textbf{Chapter 2 (Conversations and Reasoning)} adds multi-turn dialogue, chain-of-thought prompting, and reasoning strategies. Understanding tokens and context windows here is prerequisite for managing conversation state there.
+
+  \item \textbf{Chapter 3 (Retrieval-Augmented Generation)} expands the embedding concepts introduced here into full RAG architectures. The discussion of hybrid search and vector databases here provides the conceptual foundation.
+
+  \item \textbf{Part II (Agents)} assumes familiarity with all concepts in this chapter. Tool-calling agents require structured outputs (constrained decoding), and agent loops must handle the stochastic nature of LLM outputs.
+
+  \item \textbf{Governance Chapters} build on the failure mode taxonomy here to specify validation frameworks, monitoring systems, and compliance controls.
+\end{itemize}
+
+\begin{highlightbox}[title={A Note on Technical Depth}]
+This chapter deliberately operates at the conceptual level. We explain \emph{what} attention mechanisms do and \emph{why} they matter, but we do not derive the mathematics. Readers seeking mathematical foundations should consult the primary sources cited in \Cref{sec:llm1-further}. Our goal is practical understanding: you should finish this chapter able to reason about why a particular configuration might produce unreliable outputs, even without being able to implement a Transformer from scratch.
+\end{highlightbox}
+
+\begin{highlightbox}[title={Visual Cues (Boxes)}]
+Throughout the chapter, colored boxes signal intent:
+\begin{itemize}
+  \item \textbf{Key takeaways (\texttt{keybox}):} objectives, practical defaults, and decision-relevant summaries
+  \item \textbf{Notes (\texttt{highlightbox}):} plain-English summaries and contextual intuition
+  \item \textbf{Optional technical detail (\texttt{technicalbox}):} deeper mechanics (hardware, arrays, algorithms) that you can safely skip on a first read
+  \item \textbf{Warnings (\texttt{cautionbox}):} red ``watch outs'' for risk, failure modes, and compliance pitfalls
+  \item \textbf{Code/examples (\texttt{listingbox}):} reproducible snippets and technical artifacts (when included)
+\end{itemize}
+\end{highlightbox}
+
+\subsection*{Terminology Conventions}
+
+Throughout this chapter, we use the following terminology consistently:
+
+\begin{itemize}
+  \item \keyterm{LLM} (Large Language Model): A neural network trained on massive text corpora to predict and generate text. Examples include GPT-4, Claude, Llama, and Gemini.
+
+  \item \keyterm{Token}: The atomic unit of text processing---typically a subword piece, punctuation mark, or character sequence.
+
+  \item \keyterm{Context window}: The maximum sequence length (input + output tokens) a model can process in a single pass.
+
+  \item \keyterm{Completion}: The text generated by the model in response to a prompt.
+
+  \item \keyterm{Hallucination}: Model-generated content that is factually incorrect, ungrounded, or fabricated.
+
+  \item \keyterm{Embedding}: A high-dimensional vector representation of text that captures semantic meaning.
+
+  \item \keyterm{Sampling}: The process by which a model selects the next token from its predicted probability distribution.
+\end{itemize}
+
+These terms will be defined more precisely as we encounter them. For now, this glossary provides orientation for the material ahead.

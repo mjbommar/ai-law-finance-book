@@ -1,5 +1,8 @@
 \documentclass[../../main.tex]{subfiles}
 
+% Add bibliography resource for standalone compilation
+\addbibresource{bib/refs.bib}
+
 \begin{document}
 
 \title{
@@ -65,6 +68,8 @@
 \input{sections/intro}
 \input{sections/history_primer}
 \input{sections/tokens_sampling}
+\input{sections/sampling}
+\input{sections/prompt_fundamentals}
 \input{sections/representations_embeddings}
 \input{sections/failure_modes}
 \input{sections/synthesis}
@@ -72,6 +77,6 @@
 \input{sections/conclusion}
 
 % Only print bibliography when compiling standalone
-\IfSubfilesClassLoaded{\printbibliography}{}
+\ifSubfilesClassLoaded{\printbibliography}{}
 
 \end{document}
