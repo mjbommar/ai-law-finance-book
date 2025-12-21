@@ -1,0 +1,154 @@
+% ============================================================================
+% pattern-selection.tex
+% TikZ flowchart for pattern selection decision tree
+% Part of: Chapter 07 - Agents Part II: How to Design an Agent
+% Section: Synthesis and Applications
+% ============================================================================
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  % Node styles
+  start/.style={
+    ellipse,
+    draw=definition-dark,
+    fill=bg-definition,
+    thick,
+    minimum width=2.5cm,
+    minimum height=1cm,
+    align=center,
+    font=\small\bfseries
+  },
+  decision/.style={
+    diamond,
+    draw=definition-dark,
+    fill=bg-definition,
+    thick,
+    minimum width=2.8cm,
+    minimum height=2.8cm,
+    align=center,
+    font=\small,
+    inner sep=2pt,
+    aspect=2
+  },
+  outcome-low/.style={
+    rectangle,
+    draw=border-example,
+    fill=bg-example,
+    thick,
+    rounded corners=3pt,
+    minimum width=3.5cm,
+    minimum height=1.2cm,
+    align=left,
+    font=\small,
+    inner sep=6pt
+  },
+  outcome-med/.style={
+    rectangle,
+    draw=border-definition,
+    fill=bg-definition,
+    thick,
+    rounded corners=3pt,
+    minimum width=3.5cm,
+    minimum height=1.2cm,
+    align=left,
+    font=\small,
+    inner sep=6pt
+  },
+  outcome-high/.style={
+    rectangle,
+    draw=border-key,
+    fill=bg-key,
+    thick,
+    rounded corners=3pt,
+    minimum width=3.5cm,
+    minimum height=1.2cm,
+    align=left,
+    font=\small,
+    inner sep=6pt
+  },
+  % Arrow styles
+  arrow/.style={
+    -stealth,
+    thick,
+    draw=definition-dark
+  },
+  yes/.style={
+    arrow,
+    draw=text-primary
+  },
+  no/.style={
+    arrow,
+    draw=text-muted
+  },
+  % Label styles
+  yeslabel/.style={
+    font=\scriptsize\bfseries,
+    text=text-primary,
+    pos=0.3
+  },
+  nolabel/.style={
+    font=\scriptsize,
+    text=text-muted,
+    pos=0.3
+  }
+]
+
+% Start node
+\node[start] (start) at (0,0) {START};
+
+% Decision 1: Irreversible actions?
+\node[decision] (d1) at (0,-2.5) {Irreversible\\external\\actions?};
+
+% Pattern 4 (High risk - amber/orange)
+\node[outcome-high] (p4) at (5,-2.5) {
+  \textbf{Pattern 4}\\
+  Autonomous Filing\\
+  \textit{High Risk}
+};
+
+% Decision 2: Multiple subtasks?
+\node[decision] (d2) at (0,-5.5) {Multiple\\specialized\\subtasks?};
+
+% Pattern 3 (High risk - amber/orange)
+\node[outcome-high] (p3) at (5,-5.5) {
+  \textbf{Pattern 3}\\
+  Multi-Agent Workflow\\
+  \textit{High Risk}
+};
+
+% Decision 3: High-volume documents?
+\node[decision] (d3) at (0,-8.5) {High-volume\\document\\processing?};
+
+% Pattern 2 (Medium risk - blue)
+\node[outcome-med] (p2) at (5,-8.5) {
+  \textbf{Pattern 2}\\
+  Document Review\\
+  \textit{Medium Risk}
+};
+
+% Pattern 1 (Low risk - green)
+\node[outcome-low] (p1) at (0,-11.5) {
+  \textbf{Pattern 1}\\
+  Assisted Research\\
+  \textit{Low Risk}\\
+  (Default starting point)
+};
+
+% Arrows and labels
+\draw[arrow] (start) -- (d1);
+
+\draw[yes] (d1) -- node[yeslabel, above] {YES} (p4);
+\draw[no] (d1) -- node[nolabel, right] {NO} (d2);
+
+\draw[yes] (d2) -- node[yeslabel, above] {YES} (p3);
+\draw[no] (d2) -- node[nolabel, right] {NO} (d3);
+
+\draw[yes] (d3) -- node[yeslabel, above] {YES} (p2);
+\draw[no] (d3) -- node[nolabel, right] {NO} (p1);
+
+\end{tikzpicture}
+
+\caption{Pattern selection decision tree for legal AI agent deployment. The flowchart guides practitioners from task characteristics to appropriate deployment pattern, with risk levels indicated by color: green (low), blue (medium), amber (high). Start with Pattern 1 unless task requirements justify higher-risk patterns.}
+\label{fig:agents2-pattern-selection}
+\end{figure}

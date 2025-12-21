@@ -1,0 +1,308 @@
+% ============================================================================
+% Design Principles: Dimensional Calibration — Agents Part III
+% Purpose: Present risk-based control calibration framework
+% Label: sec:agents3-dimensional
+% ============================================================================
+
+\section{Design Principles: Dimensional Calibration}
+\label{sec:agents3-dimensional}
+
+This section establishes \emph{how much} control intensity is required—how to calibrate governance based on system properties. Section~\ref{sec:agents3-governance-stack} will then demonstrate \emph{what} controls are required across regulatory layers, applying this calibration framework to specific legal and professional obligations. The key insight: governance is not binary (present or absent) but dimensional (scaled to risk). Organizations that apply uniform controls to all agentic systems either over-engineer low-risk deployments (wasting resources) or under-protect high-risk deployments (creating liability exposure). Dimensional calibration matches governance intensity to the operational characteristics that drive risk.
+
+\subsection{The Dimensional Calibration Logic}
+\label{sec:agents3-dimensional-logic}
+
+Before applying dimensional calibration, verify the system qualifies as an \emph{agentic system} under Part I's framework (GPA+IAT properties). Systems lacking any of these six properties are \emph{not agentic systems}. A single-shot ML model, batch classifier, or non-iterative chatbot requires different governance approaches beyond this chapter's scope.
+
+
+We calibrate governance intensity across four analytical dimensions introduced in Part I:
+
+\begin{enumerate}
+\item \textbf{Autonomy}: The degree of independence the system exercises in decision-making. Ranges from human-in-the-loop (HITL) requiring pre-approval for every significant action, through human-on-the-loop (HOTL) where humans monitor and can intervene, to human-in-command (HIC) where humans set strategic goals and retain emergency stop authority but do not review individual decisions.
+
+\item \textbf{Entity Frame}: How the system presents itself and how users perceive its role. Ranges from \emph{human frame} (agent represents a specific professional), through \emph{hybrid} (collaborative partnership), to \emph{machine frame} (clearly identified as non-human tool), to \emph{institutional frame} (agent acts on behalf of the organization).
+
+\item \textbf{Goal Dynamics}: How the system's objectives change over time. Ranges from \emph{static} (fixed goals validated once), through \emph{adaptive} (system refines goals within predefined boundaries based on feedback), to \emph{negotiated} (system proposes goal changes requiring explicit human approval).
+
+\item \textbf{Persistence}: Whether the system maintains state across interactions. Ranges from \emph{stateless} (each interaction independent) to \emph{stateful} (system accumulates information, builds context, and decisions depend on interaction history).
+\end{enumerate}
+
+These four dimensions were selected because they directly correspond to the technical properties that define agentic behavior (GPA+IAT from Part I) and represent the primary axes along which governance requirements vary across regulatory frameworks.
+
+Risk is \textbf{multidimensional}, not unidimensional. A system's overall risk profile emerges from the \emph{combination} of autonomy, entity frame, goal dynamics, and persistence. Control intensity must respond to this combination. The following subsections calibrate each dimension independently, then Section~\ref{sec:agents3-calibration-integration} demonstrates integration.
+
+\begin{keybox}[title={Why Dimensional Calibration Matters}, breakable=false]
+Generic governance frameworks provide one-size-fits-all guidance: ``implement human oversight,'' ``maintain logs,'' ``ensure fairness.'' Dimensional calibration operationalizes these principles: \emph{How much} human oversight (HITL vs. HOTL vs. HIC)? \emph{How detailed} must logs be (decision rationale vs. inputs/outputs only)? \emph{How frequently} must fairness be validated (pre-deployment only vs. continuous monitoring)?\\
+
+Without calibration, organizations default to either maximum controls (expensive, slow, may not be technically feasible) or minimum controls (cheap, fast, exposes liability). Calibration enables proportionate governance: controls sufficient to manage risk without unnecessary overhead.
+\end{keybox}
+
+\subsection{Autonomy Calibration}
+\label{sec:agents3-autonomy-calibration}
+
+Autonomy determines the degree of human involvement in decision-making. We distinguish three oversight modes, ordered by increasing system autonomy:
+
+\paragraph{Human-in-the-Loop (HITL): Pre-Approval Required}
+In HITL mode, the system recommends actions but a human must approve before execution.
+
+\input{figures/fig-autonomy-hitl}
+
+HITL governance is appropriate when errors carry high consequences and human expertise adds substantial value to decision quality. In legal, financial, and audit contexts, many high-stakes decisions benefit from this mode: the system accelerates research, analysis, or document preparation, but a qualified professional validates the output before it affects clients, counterparties, or regulatory filings. The key governance requirement is ensuring the human review is meaningful—not a rubber stamp—which requires the system to surface sufficient context for informed judgment.
+
+\begin{highlightbox}[title={Example: HITL Legal Research}]
+A legal research assistant that \emph{iteratively} searches case law: it queries legal databases, evaluates result relevance, refines search terms based on findings, and generates progressive case summaries—all before presenting final output to an attorney for review. The attorney verifies citations, assesses legal reasoning, and takes responsibility for the final work product. \textbf{Note}: If the attorney must approve each individual search query before the next query executes, the system lacks autonomous iteration and is not a full agentic system despite having other properties.
+\end{highlightbox}
+
+\paragraph{Human-on-the-Loop (HOTL): Monitoring with Intervention}
+In HOTL mode, the system operates autonomously within defined parameters, but humans monitor performance and can intervene if anomalies, errors, or safety concerns arise.
+
+\input{figures/fig-autonomy-hotl}
+
+HOTL governance suits situations where transaction volume makes individual review impractical, but errors remain detectable and correctable through monitoring. The system handles routine operations autonomously while humans watch for anomalies—unusual patterns, error spikes, or edge cases that exceed the system's training distribution. Governance focuses on defining clear escalation triggers, maintaining real-time dashboards, and ensuring intervention mechanisms actually work when needed.
+
+\begin{highlightbox}[title={Example: HOTL Customer Service}]
+A customer service chatbot that handles routine inquiries autonomously but escalates complex questions, complaints, or regulatory issues to human agents. Supervisors monitor conversation logs, error rates, and escalation frequency.
+\end{highlightbox}
+
+\paragraph{Human-in-Command (HIC): Strategic Oversight and Emergency Stop}
+In HIC mode, the system operates with high autonomy. Humans set strategic goals, define constraints, and monitor aggregate performance but do not review individual decisions. Humans retain emergency stop authority to halt the system if safety violations, systemic failures, or regulatory concerns emerge.
+
+\input{figures/fig-autonomy-hic}
+
+% Float placement: Change [b!] to [t!] (top), [h!] (here), or [htbp] (flexible)
+\begin{figure}[b!]
+\begin{highlightbox}[title={Example: HIC Fraud Detection}]
+A credit card fraud detection system that automatically blocks transactions meeting defined risk criteria. Fraud analysts set risk parameters, monitor aggregate block rates and false positive rates, and investigate flagged cases retrospectively. The system can be halted immediately if systemic bias or operational failures are detected.
+\end{highlightbox}
+\end{figure}
+
+\paragraph{The Autonomy-Auditability Trade-off}
+As summarized in Table~\ref{tab:agents3-autonomy-calibration}, as autonomy increases, the burden of governance shifts from ex-ante (pre-approval) to ex-post (logging, monitoring, audit). HITL systems rely on human review as the primary control; HIC systems rely on comprehensive logging and statistical monitoring. Organizations must invest in monitoring infrastructure proportionate to autonomy: high-autonomy systems cannot rely on ``we'll review it if someone complains.''
+
+\begin{table}[htbp]
+\centering
+\caption{Autonomy Calibration: Oversight Modes and Control Requirements}
+\label{tab:agents3-autonomy-calibration}
+\small
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.5cm} >{\raggedright\arraybackslash}p{3.5cm} >{\raggedright\arraybackslash}p{3cm} >{\raggedright\arraybackslash}p{4cm}}
+\toprule
+\textbf{Autonomy Level} & \textbf{Description} & \textbf{Example Use Cases} & \textbf{Control Requirements} \\
+\midrule
+\textbf{HITL}\newline (Human-in-the-Loop) & Human pre-approves significant actions & Legal research, investment advice, contract review & Approval workflows, automation bias mitigation, competence training \\
+\addlinespace
+\textbf{HOTL}\newline (Human-on-the-Loop) & System operates autonomously; humans monitor and intervene & Customer service chatbots, preliminary audit analytics & Monitoring dashboards, escalation triggers, intervention protocols \\
+\addlinespace
+\textbf{HIC}\newline (Human-in-Command) & High autonomy with strategic oversight and emergency stop & Fraud detection, credit pre-screening (within parameters), algorithmic trading & Comprehensive logging, statistical monitoring, emergency stop, fairness metrics \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Entity Frame Calibration}
+\label{sec:agents3-entity-frame-calibration}
+
+Entity frame determines how the system presents itself and how users perceive its role. Entity frame affects trust, liability allocation, and user expectations. Mismatches between entity frame and governance create risk. Table~\ref{tab:agents3-entity-frame-calibration} summarizes entity frame calibration.
+
+\paragraph{Human Entity Frame}
+The system represents a specific human professional (e.g., ``your attorney,'' ``your financial adviser''). Users may not distinguish between the professional and the AI tool.
+
+\textbf{Governance implications}: Human frame creates the highest accountability expectations. Professional responsibility rules apply in full. The professional represented by the system bears liability for all outputs. Confidentiality, competence, and fiduciary duty obligations are non-delegable. Governance must ensure the professional reviews, validates, and takes ownership of AI-generated outputs.
+
+\textbf{Mismatch risk}: If the system operates with high autonomy (HIC) but presents a human frame, users may assume human oversight that does not exist. This creates misplaced trust and potential liability.
+
+\begin{highlightbox}[title={Example: Human Entity Frame}]
+A legal research tool that produces work product under the attorney's name. The attorney must verify citations, assess legal reasoning, and ensure compliance with Rule 1.1 (competence) and Rule 3.3 (candor).
+\end{highlightbox}
+
+\paragraph{Hybrid Entity Frame}
+The system is presented as a collaborative partnership between human and AI (e.g., ``AI-assisted analysis,'' ``our team uses advanced tools'').
+
+\textbf{Governance implications}: Hybrid frame requires clear delineation of responsibilities. Users should understand that AI provides preliminary analysis or recommendations, but humans make final decisions. Transparency about the division of labor reduces misplaced trust. Governance must document which tasks are AI-performed vs. human-performed and ensure human review of AI outputs before client-facing use.
+
+\begin{highlightbox}[title={Example: Hybrid Entity Frame}]
+An investment advisory firm that discloses: ``Our financial plans combine AI-driven market analysis with our advisers' professional judgment and knowledge of your personal circumstances.''
+\end{highlightbox}
+
+\paragraph{Machine Entity Frame}
+The system is clearly identified as a non-human tool (e.g., ``AI chatbot,'' ``automated system''). Users understand they are interacting with technology, not a human.
+
+\textbf{Governance implications}: Machine frame sets appropriate expectations. Users are less likely to assume human judgment, empathy, or professional accountability. However, organizations must ensure the system's capabilities match user expectations—a chatbot labeled as ``informational only'' should not provide advice that creates reliance. Governance must include clear disclaimers, capability limitations, and escalation to humans for complex or high-stakes issues.
+
+\begin{highlightbox}[title={Example: Machine Entity Frame}]
+A customer service chatbot that states: ``I'm an AI assistant. I can help with account questions, but for disputes or complex issues, I'll connect you with a human agent.''
+\end{highlightbox}
+
+\paragraph{Institutional Entity Frame}
+The system acts on behalf of the organization (e.g., ``XYZ Bank's credit decisioning system,'' ``our firm's compliance review tool''). The organization, not an individual, bears accountability.
+
+\textbf{Governance implications}: Institutional frame allocates liability to the organization. This is appropriate for systems used in institutional decision-making (credit underwriting, hiring, fraud detection). Governance must include organizational oversight (board and executive accountability), institutional policies (acceptable use, risk appetite), and enterprise-level monitoring. Professional responsibility considerations (if applicable) must be addressed separately.
+
+\textbf{Mismatch risk}: If an institutional system operates without adequate organizational oversight (e.g., deployed by a rogue team without executive approval), the organization may face liability for decisions it did not authorize.
+
+\begin{highlightbox}[title={Example: Institutional Entity Frame}]
+A bank's credit pre-screening system that evaluates mortgage applications under institutional policies, with oversight by the Chief Risk Officer and compliance with ECOA.
+\end{highlightbox}
+
+
+\begin{table}[htbp]
+\centering
+\caption{Entity Frame Calibration: Presentation Modes and Accountability Structures}
+\label{tab:agents3-entity-frame-calibration}
+\small
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{3.2cm} >{\raggedright\arraybackslash}p{3cm} >{\raggedright\arraybackslash}p{4cm}}
+\toprule
+\textbf{Entity Frame} & \textbf{Description} & \textbf{Example Use Cases} & \textbf{Accountability Structure} \\
+\midrule
+\textbf{Human} & Agent represents specific professional & Legal research under attorney name, personalized financial advice & Professional bears full liability; professional responsibility rules apply; non-delegable duties \\
+\addlinespace
+\textbf{Hybrid} & Collaborative human-AI partnership & AI-assisted audit analytics, co-drafted documents & Shared responsibility; clear delineation required; human validates AI outputs \\
+\addlinespace
+\textbf{Machine} & Clearly identified as non-human tool & Customer service chatbot with AI disclosure, informational tools & Organization responsible for tool fitness; clear disclaimers and capability limitations \\
+\addlinespace
+\textbf{Institutional} & Agent acts on behalf of organization & Credit decisioning, hiring, compliance review & Organizational liability; board/executive oversight; institutional policies and monitoring \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Goal Dynamics Calibration}
+\label{sec:agents3-goal-dynamics-calibration}
+
+Goal dynamics determine how the system's objectives change over time. Static goals are easiest to govern; negotiated goals create the highest misalignment risk. Table~\ref{tab:agents3-goal-dynamics-calibration} summarizes goal dynamics calibration.
+
+\paragraph{Static Goals}
+The system pursues a fixed objective defined at deployment. The goal does not change without explicit redeployment.
+
+\textbf{Governance implications}: Static goals can be validated once during pre-deployment review. Organizations assess whether the goal aligns with organizational objectives, legal requirements, and ethical constraints. Once validated, the goal remains stable. Governance focuses on monitoring whether the system achieves the goal and whether side effects emerge.
+
+\begin{highlightbox}[title={Example: Static Goals}]
+A legal research tool with the static goal: ``Identify cases cited in the brief and verify they exist in official reporters.'' The goal does not change; the tool performs the same validation task repeatedly.
+\end{highlightbox}
+
+\paragraph{Adaptive Goals}
+The system refines its objectives within predefined boundaries based on feedback, but cannot change goals fundamentally. For example, a fraud detection system might adjust risk weights based on observed fraud patterns, but cannot change its core objective (detect fraud) or operate outside defined risk parameters.
+
+Adaptive goals can drift within their permitted boundaries, and subtle drift may escape notice until it causes harm. Detecting drift requires both a clear standard and active surveillance. The standard comes from explicitly defining which aspects of the goal may adapt and which constraints are inviolable—without this distinction, there is nothing to measure against. Surveillance comes from a monitoring framework that specifies review frequency and revalidation triggers, catching deviation before it compounds. Detection alone is insufficient, however; organizations also need rollback capability, enabling the system to revert to a validated state when adaptation degrades performance or violates constraints.
+
+\begin{highlightbox}[title={Example: Adaptive Goals}]
+A credit scoring model that adapts feature weights based on performance feedback but cannot introduce new features, change fairness constraints, or operate outside regulatory compliance boundaries.
+\end{highlightbox}
+
+\paragraph{Negotiated Goals}
+When a system proposes changes to its own objectives, every proposal requires human validation before implementation—the system cannot autonomously alter its goals. This creates the highest governance burden of any goal dynamics category. Organizations must designate approval authority, typically reserving this role for senior leadership or a governance committee given the stakes involved. The approval process demands rigorous documentation: why is the system proposing this change, what evidence supports it, and what are the potential consequences? Even after approval, governance is not complete; the modified system must undergo revalidation to confirm it remains safe, fair, and compliant. This cumulative overhead explains why negotiated goals appear only in the most sophisticated agentic deployments.
+
+\begin{highlightbox}[title={Example: Negotiated Goals}]
+An AI strategic planning assistant that proposes: ``Based on market analysis, I recommend shifting investment focus from Technology to Healthcare.'' This goal change requires executive approval, risk assessment, and fiduciary duty review.
+\end{highlightbox}
+
+
+\begin{table}[htbp]
+\centering
+\caption{Goal Dynamics Calibration: Objective Stability and Control Requirements}
+\label{tab:agents3-goal-dynamics-calibration}
+\small
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.5cm} >{\raggedright\arraybackslash}p{3.5cm} >{\raggedright\arraybackslash}p{3cm} >{\raggedright\arraybackslash}p{4cm}}
+\toprule
+\textbf{Goal Dynamics} & \textbf{Description} & \textbf{Example Use Cases} & \textbf{Control Requirements} \\
+\midrule
+\textbf{Static} & Fixed objectives; no goal changes & Citation verification, rule-based compliance checks & One-time goal validation; monitor achievement and side effects \\
+\addlinespace
+\textbf{Adaptive} & Refinement within boundaries based on feedback & Credit scoring (adjust weights), fraud detection (adapt risk parameters) & Define boundaries, continuous monitoring, rollback capability, revalidation triggers \\
+\addlinespace
+\textbf{Negotiated} & System proposes goal changes requiring human approval & Strategic planning assistant, adaptive investment strategy & Approval workflows, impact assessment, revalidation after changes, senior leadership involvement \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Persistence Calibration}
+\label{sec:agents3-persistence-calibration}
+
+Persistence determines whether the system maintains state across interactions. Stateful systems create compounding error risk and require state integrity controls. Table~\ref{tab:agents3-persistence-calibration} summarizes persistence calibration.
+
+\paragraph{Stateless Systems}
+Each interaction is independent. The system does not retain information from prior interactions.
+
+\textbf{Governance implications}: Stateless systems are simpler to govern. Errors do not compound—a mistake in one interaction does not affect subsequent interactions. Logging can be lighter (capture inputs/outputs without state reconstruction). Reproducibility requires only input data, not interaction history.
+
+\begin{highlightbox}[title={Example: Stateless System}]
+A legal citation verification tool that checks each citation independently. An error in verifying Citation A does not affect the verification of Citation B.
+\end{highlightbox}
+
+\paragraph{Stateful Systems}
+Stateful systems accumulate information across interactions, meaning each decision builds on prior context. This creates a distinctive governance challenge: errors compound. A misunderstanding in one session can propagate through subsequent decisions, corrupting an entire chain of reasoning. Governance must therefore protect state integrity against tampering, corruption, and adversarial manipulation. Comprehensive logging is essential to enable reconstruction of how state evolved—without it, diagnosing problems becomes nearly impossible. Monitoring must specifically watch for error compounding, catching cases where an early mistake ripples through later decisions. Organizations also need clear criteria for state resets: when should the system discard accumulated context and start fresh? Common triggers include user logout, policy changes, and detected anomalies, though the right criteria depend on deployment context.
+
+\begin{highlightbox}[title={Example: Stateful System}, breakable=false]
+A financial planning chatbot that builds a profile of the client's financial situation across multiple conversations. If the system misunderstands the client's risk tolerance in Session 1, all subsequent recommendations may be inappropriate. Governance must include periodic state validation (``Let me confirm: your risk tolerance is Moderate, correct?'') and state logging to reconstruct how the profile evolved.
+\end{highlightbox}
+
+
+\begin{table}[htbp]
+\centering
+\caption{Persistence Calibration: State Management and Control Requirements}
+\label{tab:agents3-persistence-calibration}
+\small
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.5cm} >{\raggedright\arraybackslash}p{3.5cm} >{\raggedright\arraybackslash}p{3cm} >{\raggedright\arraybackslash}p{4cm}}
+\toprule
+\textbf{Persistence} & \textbf{Description} & \textbf{Example Use Cases} & \textbf{Control Requirements} \\
+\midrule
+\textbf{Stateless} & Each interaction independent; no retained state & Citation verification, single-query research, one-time calculations & Standard logging (inputs/outputs); no state management; errors do not compound \\
+\addlinespace
+\textbf{Stateful} & System maintains state across interactions; decisions depend on history & Multi-session financial planning, ongoing fraud monitoring, adaptive customer profiles & State integrity protection, state change logging, error compounding monitoring, periodic state validation \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Integration: Risk-Calibrated Control Selection}
+\label{sec:agents3-calibration-integration}
+
+Dimensional calibration becomes powerful when dimensions are integrated. A system's overall risk profile emerges from the \emph{combination} of autonomy, entity frame, goal dynamics, and persistence. Controls must respond to this multidimensional risk.
+
+Table~\ref{tab:agents3-risk-profile-comparison} compares two contrasting risk profiles. The \textbf{low-risk} example is a legal research assistant that verifies whether citations in a brief exist in official reporters and accurately support the propositions for which they are cited. An attorney reviews every output before it reaches a client or court, and each verification stands alone without reference to prior work. The \textbf{high-risk} example is a bank's mortgage underwriting system that evaluates applications, requests documentation, and renders credit decisions. The system learns from outcomes over time, tracks applicant history across multiple interactions, and operates at scale with humans reviewing aggregate performance metrics rather than individual decisions. The low-risk profile demonstrates how strong human oversight compensates for other dimensions, enabling lighter governance. The high-risk profile shows how compounding risk across all four dimensions necessitates intensive controls.
+
+\begin{table}[htbp]
+\centering
+\caption{Risk Profile Comparison: Low-Risk vs. High-Risk Agentic Systems}
+\label{tab:agents3-risk-profile-comparison}
+\footnotesize
+\begin{tabular}{@{}>{\centering\arraybackslash}p{0.8cm} >{\sffamily\raggedright\arraybackslash}p{2.1cm} >{\raggedright\arraybackslash}p{5.2cm} >{\raggedright\arraybackslash}p{5.2cm}@{}}
+\toprule
+& & \textbf{Low-Risk: Legal Research} & \textbf{High-Risk: Credit Underwriting} \\
+\midrule
+\multirow{4}{*}[-1.8em]{\rotatebox[origin=c]{90}{\textbf{Dimensional}}}
+& Autonomy & HITL—attorney reviews all outputs & HIC—autonomous decisions; aggregate monitoring \\
+& \cellcolor{bg-neutral}Entity Frame & \cellcolor{bg-neutral}Human—operates under attorney's name & \cellcolor{bg-neutral}Institutional—acts on behalf of bank \\
+& Goal Dynamics & Static—fixed citation verification goal & Adaptive—adjusts feature weights from feedback \\
+& \cellcolor{bg-neutral}Persistence & \cellcolor{bg-neutral}Stateless—each verification independent & \cellcolor{bg-neutral}Stateful—maintains applicant history \\
+\midrule
+\multirow{7}{*}[-4.5em]{\rotatebox[origin=c]{90}{\textbf{Control Calibration}}}
+& Logging & Basic inputs/outputs (attorney review is primary control) & Comprehensive—inputs, model version, weights, rationale, state changes \\
+& \cellcolor{bg-neutral}Monitoring & \cellcolor{bg-neutral}Minimal (quarterly spot-checks) & \cellcolor{bg-neutral}Continuous—monthly fairness metrics, drift detection \\
+& Explainability & Not required (attorney verifies) & ECOA-compliant ``principal reasons'' \\
+& \cellcolor{bg-neutral}Fairness & \cellcolor{bg-neutral}Not applicable & \cellcolor{bg-neutral}Pre-deployment + continuous + revalidation \\
+& Vendor Mgmt & Standard SaaS due diligence & Enhanced—interpretability, audit rights \\
+& \cellcolor{bg-neutral}Human Oversight & \cellcolor{bg-neutral}Attorney review per output & \cellcolor{bg-neutral}Monthly, quarterly, annual board review \\
+& Incident Response & Standard error correction & Immediate halt; regulator notification \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{keybox}[title={Dimensional Calibration Worksheet}, breakable=false]
+When evaluating a new agentic system, assess each dimension:
+
+\begin{enumerate}
+\item \textbf{Autonomy}: HITL, HOTL, or HIC?
+\item \textbf{Entity Frame}: Human, Hybrid, Machine, or Institutional?
+\item \textbf{Goal Dynamics}: Static, Adaptive, or Negotiated?
+\item \textbf{Persistence}: Stateless or Stateful?
+\end{enumerate}
+
+Use Tables~\ref{tab:agents3-autonomy-calibration} through \ref{tab:agents3-persistence-calibration} to identify baseline controls for each dimension. Then integrate:
+\begin{itemize}
+\item High autonomy + institutional frame → Strong logging, statistical monitoring, board oversight.
+\item Adaptive goals + stateful persistence → Continuous revalidation, state integrity controls.
+\item HITL + human frame → Professional responsibility compliance, automation bias mitigation.
+\end{itemize}
+
+Dimensional calibration is not a formula—it is a structured reasoning framework that prevents under-protection (``it's just a chatbot'') and over-engineering (``we must apply maximum controls to everything'').
+\end{keybox}
+
+Section~\ref{sec:agents3-implementation} operationalizes dimensional calibration through technical architecture and organizational processes. Section~\ref{sec:agents3-examples} demonstrates calibration through worked examples in legal, financial, and audit contexts.
+

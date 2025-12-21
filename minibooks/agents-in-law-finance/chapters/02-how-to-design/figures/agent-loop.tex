@@ -1,0 +1,83 @@
+% agent-loop.tex
+% Core Agent Loop - Circular Flowchart
+% Part of: Chapter 07 - Agents Part II: How to Design an Agent
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    node distance=1.2cm,
+    box/.style={
+        font=\small,
+        align=center,
+        text width=2.8cm,
+        rounded corners=3pt,
+        inner sep=7pt,
+        minimum height=2.2em,
+        fill=bg-definition,
+        draw=border-definition,
+        line width=1pt,
+        drop shadow={shadow scale=1.05, shadow xshift=0.3pt, shadow yshift=-0.3pt}
+    },
+    actbox/.style={
+        font=\small,
+        align=center,
+        text width=2.8cm,
+        rounded corners=3pt,
+        inner sep=7pt,
+        minimum height=2.2em,
+        fill=bg-key,
+        draw=border-key,
+        line width=1pt,
+        drop shadow={shadow scale=1.05, shadow xshift=0.3pt, shadow yshift=-0.3pt}
+    },
+    decision/.style={
+        diamond,
+        font=\small,
+        align=center,
+        text width=2cm,
+        inner sep=3pt,
+        fill=bg-definition,
+        draw=border-definition,
+        line width=1pt,
+        aspect=2,
+        drop shadow={shadow scale=1.05, shadow xshift=0.3pt, shadow yshift=-0.3pt}
+    },
+    gate/.style={
+        font=\scriptsize,
+        align=center,
+        text width=2cm,
+        rounded corners=2pt,
+        inner sep=4pt,
+        fill=white,
+        draw=border-neutral,
+        line width=0.8pt,
+        dashed
+    },
+    arrow/.style={
+        -stealth,
+        line width=1.2pt,
+        color=border-neutral
+    }
+]
+
+% Circular arrangement of main nodes
+\node[box] (perceive) at (0, 3) {\textbf{PERCEIVE}\\{\scriptsize Gather context}};
+\node[box] (reason) at (3.5, 1.5) {\textbf{REASON}\\{\scriptsize Decide action}};
+\node[gate] (approval) at (3.5, -0.3) {Human\\Approval};
+\node[actbox] (act) at (3.5, -2) {\textbf{ACT}\\{\scriptsize Execute}};
+\node[box] (update) at (0, -3.5) {\textbf{UPDATE}\\{\scriptsize Store result}};
+\node[decision] (check) at (-3.5, 0) {Done?};
+
+% Arrows forming the cycle
+\draw[arrow] (perceive) -- (reason);
+\draw[arrow] (reason) -- (approval);
+\draw[arrow] (approval) -- (act);
+\draw[arrow] (act) -- (update);
+\draw[arrow] (update) -- (check);
+\draw[arrow] (check) -- node[left, font=\scriptsize] {No} (perceive);
+\draw[arrow] (check) -- node[above, font=\scriptsize] {Yes} ++(-2, 0) node[right, font=\small] {END};
+
+\end{tikzpicture}
+\caption{Core agent loop implementing GPA+IAT properties. The agent iteratively perceives (gathers context from tools and memory), reasons (selects next action), acts (executes with optional human approval), updates (stores results in memory), and checks termination conditions.}
+\label{fig:agents2-core-loop}
+\end{figure}

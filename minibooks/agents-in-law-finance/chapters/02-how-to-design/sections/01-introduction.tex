@@ -1,0 +1,70 @@
+% ============================================================================
+% 01-introduction.tex
+% Introduction and Framework
+% Part of: Chapter 07 - Agents Part II: How to Design an Agent
+% ============================================================================
+
+\section{Introduction}
+\label{sec:agents2-intro}
+
+In \href{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5806982}{\textit{What is an Agent?}}, the first part of this series \parencite{bommarito2025whatisanagent}, we introduced the GPA+IAT framework---a way to recognize agentic systems through Goals, Perception, Action, Iteration, Adaptation, and Termination. Now, we turn to the practical: \textit{How do you design one?}
+
+The answer starts with a simple observation: agentic systems are meant to do real work---augmenting human professionals, automating routine workflows, or even replacing entire organizational functions. Whatever the ambition, the system must handle the same work those humans and organizations currently perform. A contract negotiation agent must do what a transactional lawyer does; a portfolio monitoring agent must ``act like'' an analyst. This means an agentic system requires the same structural capabilities as a professional team---from receiving and understanding work to coordinating action and operating under governance controls.
+
+\begin{keybox}[title={The Core Insight}]
+	\textbf{Agents are not magic; they are architecture.}
+
+	Behind each architectural question is a design decision with real tradeoffs. Every capability that makes an agent useful corresponds to a concrete choice about how the system should work, and those choices shape what the system can do, how reliably it performs, how it fails, and what controls you have over it.\\
+
+	Notably, agents are also more than any single agentic framework, programming language, or foundation model.  While the implementation of an agentic architecture does require choosing between languages like Python or C\# and models like GPT or Claude, the design decisions transcend these details.\\
+
+	While we encourage you to learn by doing, we also encourage you to begin by focusing on the core concepts and design decisions in this chapter first.  Many commercial software providers and even open source libraries obscure or confuse the key design decisions that underlie agents, and you will likely learn best by building your own foundation before learning the language of any particular vendor or framework.
+\end{keybox}
+
+This chapter organizes those architectural decisions into ten questions---the kind you should be asking whether you're building, evaluating, deploying, or governing an agentic system.
+
+% ----------------------------------------------------------------------------
+% The Ten Questions Framework
+% ----------------------------------------------------------------------------
+
+\subsection{The Ten Questions}
+\label{sec:agents2-ten-questions}
+
+Designing an agent means answering these ten questions. The capabilities an agent needs are not determined by the technology; they are determined by the work. And work has structure that any system, human or artificial, must accommodate.
+
+Consider how a law firm operates. Work arrives through defined channels: a client calls, court filings appear on the docket, or an originating attorney refers a matter to a specialist. That work typically arrives as instructions that need clarification, and associates quickly learn to read between the lines, developing heuristics for what partners actually want rather than what they literally said. Research demands access to the right databases and thoughtful search strategies. Actions like filing motions or sending client letters have real consequences and require appropriate authorization. Institutional knowledge accumulates in case files and precedent databases. Complex matters break down into workstreams with dependencies, and work products have clear completion criteria. Associates know when to escalate to partners, teams coordinate across practice groups, and compliance controls keep the whole operation within ethical and regulatory bounds.
+
+A discretionary portfolio management team follows the same pattern. Market data and research flow through defined feeds, and analysts must interpret investment committee mandates that leave room for judgment. Research requires access to financial databases, company filings, and market intelligence. Trades have real-world consequences that demand compliance checks before execution. Position history and investment theses persist across quarters, informing future decisions. Portfolio construction breaks down into sector allocation, security selection, and risk management, each with its own completion criteria. Analysts escalate to portfolio managers when positions approach limits, teams coordinate across asset classes, and regulatory controls ensure fiduciary compliance throughout.
+
+These structural parallels are not coincidental. Law firms and investment teams are both \textit{cognitive work systems}: organizations that process information, make decisions, and take consequential actions under uncertainty \parencite{hollnagel2005joint,hollan2000distributed}. Agentic systems are cognitive work systems too \parencite{wang2024llmagents,rao1995bdi}, which means they face the same architectural challenges and require the same structural capabilities.
+
+This mapping has practical implications. When you evaluate an agentic system, you can ask the same questions you would ask about a professional team. When you design governance for an agentic system, you can draw on the same frameworks that govern professional organizations. When you communicate with technical teams, you can use organizational language they will understand.
+
+Table~\ref{tab:agents2-framework} lists these ten questions in the order an agent encounters them during execution.
+
+\begin{table}[H]
+	\centering
+	\caption{Architectural questions for agentic systems}
+	\label{tab:agents2-framework}
+	\small
+	\begin{tabular}{p{0.18\textwidth}p{0.70\textwidth}}
+		\toprule
+		\textbf{Section}                                & \textbf{Architectural Question}                    \\
+		\midrule
+		\hyperref[sec:agents2-triggers]{Triggers}       & How does the agent know when it has work to do?    \\
+		\hyperref[sec:agents2-intent]{Intent}           & How does the agent understand what is being asked? \\
+		\hyperref[sec:agents2-perception]{Perception}   & How does the agent find things out?                \\
+		\hyperref[sec:agents2-action]{Action}           & How does the agent make things happen?             \\
+		\hyperref[sec:agents2-memory]{Memory}           & How does the agent remember things?                \\
+		\hyperref[sec:agents2-planning]{Planning}       & How does the agent break a big job into steps?     \\
+		\hyperref[sec:agents2-termination]{Termination} & How does the agent know when it is done?           \\
+		\hyperref[sec:agents2-escalation]{Escalation}   & How does the agent know when to ask for help?      \\
+		\hyperref[sec:agents2-delegation]{Delegation}   & How does the agent work with other agents?         \\
+		\hyperref[sec:agents2-governance]{Governance}   & How do we design systems that can be governed?     \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+Each section addresses one question through organizational analogies, architectural concepts, domain-specific considerations for law and finance, and governance implications. You can read sequentially for cumulative understanding, jump directly to whichever question matters most, or skip to the end for synthesis.
+
+Lastly, remember that, like other human processes or software systems, agents require governance.  Our next chapter, \href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}}, addresses compliance frameworks and controls in detail.

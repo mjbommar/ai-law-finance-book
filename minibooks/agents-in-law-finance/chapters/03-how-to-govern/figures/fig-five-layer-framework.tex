@@ -1,0 +1,81 @@
+% Five-Layer Governance Framework — stacked cylinder (solid, no slice)
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    label arrow/.style={thick, black!65, ->, >=stealth},
+    label text/.style={align=left, anchor=west}
+]
+
+% ---------- LOCAL COLORS (from shared palette names) ----------
+\colorlet{cFoundation}{slate-700}
+\colorlet{cProf}{green-900}
+\colorlet{cSector}{teal-700}
+\colorlet{cAI}{indigo-700}
+\colorlet{cVoluntary}{amber-600}
+\colorlet{cFrosting}{gray-800}
+\colorlet{cFilling}{gray-200}
+
+% ---------- GEOMETRY ----------
+\def\Rx{3.2}
+\def\Ry{1.0}
+\def\LayerH{0.70}
+\def\FillH{0.12}
+\def\NLayers{5}
+\def\LabelXShift{1.05}
+
+\pgfmathsetmacro{\TotalH}{\NLayers*\LayerH + (\NLayers-1)*\FillH}
+
+% ---------- UTILITIES ----------
+\newcommand{\Layer}[4]{%
+    % #1=index, #2=color, #3=title, #4=subtitle
+    \pgfmathsetmacro{\yBot}{#1*(\LayerH+\FillH)}
+    \pgfmathsetmacro{\yTop}{\yBot+\LayerH}
+    \pgfmathsetmacro{\yMid}{\yBot+\LayerH/2}
+    \pgfmathsetmacro{\yFillTop}{\yTop+\FillH}
+
+    % outer wall
+    \path[fill=#2!85!black, draw=none]
+        (-\Rx, \yBot) arc[start angle=180, end angle=360, x radius=\Rx, y radius=\Ry] --
+        (\Rx, \yTop) arc[start angle=0, end angle=180, x radius=\Rx, y radius=\Ry] -- cycle;
+    % front soft face
+    \path[draw=white!25, fill=#2]
+        (-\Rx, \yBot) arc[start angle=180, end angle=360, x radius=\Rx, y radius=\Ry] --
+        (\Rx, \yTop) arc[start angle=0, end angle=180, x radius=\Rx, y radius=\Ry] -- cycle;
+
+    % top ellipse
+    \path[draw=white!40, fill=#2!70!white]
+        (0,\yTop) ellipse ({\Rx} and {\Ry});
+
+    % inter-layer filling (omit for top layer)
+    \ifnum#1<\numexpr\NLayers-1\relax
+        \path[draw=none, fill=cFilling!90!gray]
+            (-\Rx,\yTop) arc[start angle=180, end angle=360, x radius=\Rx, y radius=\Ry] --
+            (\Rx,\yFillTop) arc[start angle=0, end angle=180, x radius=\Rx, y radius=\Ry] -- cycle;
+        \path[draw=none, fill=cFilling!80!white]
+            (0,\yFillTop) ellipse ({\Rx} and {\Ry});
+    \fi
+
+    % label anchored on midline
+    \draw[label arrow] (\Rx, \yMid) -- ++(\LabelXShift,0)
+        node[label text] {\footnotesize\textbf{#3}\\[-2pt]{\scriptsize\textit{#4}}};
+}
+
+% ---------- LAYERS ----------
+\Layer{0}{cFoundation}{Foundational Law}{GDPR, ECOA, defamation}
+\Layer{1}{cProf}{Professional \& Ethical}{Fiduciary duties, PCAOB}
+\Layer{2}{cSector}{Sector-Specific}{SR 11-7, FINRA rules}
+\Layer{3}{cAI}{AI-Specific}{EU AI Act, NYC LL 144}
+\Layer{4}{cVoluntary}{Voluntary Frameworks}{NIST AI RMF, SOC 2}
+
+% ---------- SHADOW / AXIS ----------
+\shade[inner color=black!30, outer color=white, opacity=0.32]
+    (0,-0.14) ellipse ({\Rx+0.24} and {\Ry+0.24});
+
+\draw[->, thick, black!60] ({-\Rx-0.6}, 0) -- ({-\Rx-0.6}, \TotalH);
+\node[rotate=90, anchor=center] at ({-\Rx-0.6-0.35}, \TotalH/2) {\scriptsize Increasing specificity};
+
+\end{tikzpicture}
+\caption{The five-layer governance framework as stacked obligations. Foundational law sets the baseline; professional duties add licensed-practice requirements; sector-specific rules address industry contexts; AI-specific regulation targets algorithmic systems; and voluntary frameworks supply certification and best-practice guidance. All applicable layers must be addressed—no single layer provides complete coverage.}
+\label{fig:agents3-five-layer-framework}
+\end{figure}

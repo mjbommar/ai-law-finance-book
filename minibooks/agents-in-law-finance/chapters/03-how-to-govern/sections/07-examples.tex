@@ -1,0 +1,38 @@
+% ============================================================================
+% Examples in Context — Agents Part III
+% Purpose: Demonstrate governance through worked examples in law and accounting
+% Label: sec:agents3-examples
+% ============================================================================
+
+\section{Examples in Context}
+\label{sec:agents3-examples}
+
+This section demonstrates governance principles through worked examples in legal and accounting contexts. (Financial services examples---including credit underwriting, financial planning, and fair lending compliance---are developed throughout Section~\ref{sec:agents3-implementation}.) Each example follows a common governance framework: identify risks, calibrate controls, implement monitoring, and respond to incidents. These examples are illustrative---organizations must tailor governance to their specific regulatory obligations, risk appetite, and operational context---but they demonstrate how the conceptual frameworks from Sections~\ref{sec:agents3-dimensional} through \ref{sec:agents3-accountability} translate into practice.
+
+\subsection{Legal Domain: Professional Responsibility and Incident Management}
+\label{sec:agents3-examples-legal}
+
+\paragraph{Example 1: Agentic Legal Research Assistant—Iteration and Verification Controls}
+A mid-sized law firm deploys an agentic legal research system that \emph{iteratively} investigates legal questions by formulating search strategies, retrieving cases, analyzing precedential value, cross-referencing citations, adapting its search based on relevance patterns, and terminating when sufficient authority is identified or confidence thresholds require human escalation. \textit{Dimensional profile: HITL + human frame + static goals + stateless.}
+
+Figure~\ref{fig:agents3-incident-report-legal} documents an incident where the system's cross-cycle adaptation introduced citation errors that propagated through subsequent iterations—a failure mode unique to agentic systems. The incident report follows ISO 27001 incident management standards while illustrating three governance lessons. First, iteration and adaptation compound errors across cycles, making single-point output review insufficient. Second, confidence thresholds must incorporate domain-specific accuracy metrics, not just relevance scores. Third, professional duty under Rule 1.1 requires attorneys to understand iterative system logic, not merely review final outputs.
+
+\input{figures/fig-incident-report-legal}
+
+\subsection{Accounting Domain: Independence and Professional Skepticism}
+\label{sec:agents3-examples-accounting}
+
+\paragraph{Example 2: AI Acceptable Use Policy for Agentic Systems (AICPA Independence)}
+A Big Four accounting firm establishes an AI acceptable use policy to operationalize AICPA independence rules and SEC auditor independence requirements for \emph{agentic audit and advisory systems}. \textit{Dimensional profile: Spans HITL, HOTL, and HIC modes across human and institutional frames; policy-level governance rather than a single system.}
+
+Figure~\ref{fig:agents3-ai-acceptable-use-policy} shows an excerpt from the firm's policy. The policy establishes guiding principles (independence, competence, confidentiality), distinguishes permitted uses (research, analytics, documentation assistance) from prohibited uses (management decisions, audit opinions, unauthorized data sharing), and implements safeguards through vendor approval requirements, mandatory professional review, and documentation standards. Training requirements ensure personnel understand both tool capabilities and professional obligations. Incident reporting procedures establish clear escalation pathways when independence concerns or data breaches arise.
+
+\input{figures/fig-ai-acceptable-use-policy}
+
+\textbf{Governance Principles Demonstrated}:
+\begin{itemize}
+\item \textbf{Domain-specific calibration}: Policy tailored to AICPA and SEC independence rules, not generic AI governance.
+\item \textbf{Role-based permissions}: Distinguishes permitted (research, analytics) from prohibited (management decisions, audit opinions) uses.
+\item \textbf{Accountability assignment}: Partners responsible for reviewing AI-assisted work; National Office Ethics Group accountable for policy updates.
+\end{itemize}
+

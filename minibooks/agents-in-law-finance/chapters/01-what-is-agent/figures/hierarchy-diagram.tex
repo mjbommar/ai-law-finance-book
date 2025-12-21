@@ -1,0 +1,52 @@
+% Three-level hierarchy diagram: Agent > Agentic Software > Agentic AI
+% Visual representation of subset relationships
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    font=\sffamily,
+    level1/.style={fill=gray-100, draw=gray-500, line width=1.5pt},
+    level2/.style={fill=gray-200, draw=gray-600, line width=1.5pt},
+    level3/.style={fill=slate-100, draw=slate-700, line width=2pt},
+    label/.style={font=\sffamily\bfseries},
+    example/.style={font=\sffamily\small, text=gray-700}
+]
+
+% Level 1: Agents (outermost)
+\draw[level1] (0,0) circle (4.5cm);
+\node[label, align=center] at (0,3.8) {Level 1:\\Agents};
+\node[example, align=center] at (0,-3.6) {People, thermostats,\\software systems};
+
+% Level 2: Agentic Software - adjusted label position
+\draw[level2] (0,0) circle (3cm);
+\node[label, align=center] at (0,2.1) {Level 2:\\Agentic Software};
+\node[example, align=center] at (0,-2.1) {Expert systems,\\rule-based agents};
+
+% Level 3: Agentic AI (innermost)
+\draw[level3] (0,0) circle (1.5cm);
+\node[label, align=center] at (0,0.3) {Level 3:\\Agentic AI};
+\node[example, align=center, font=\sffamily\footnotesize] at (0,-0.6) {LLM-based\\agents};
+
+% Annotations for properties - showing cumulative hierarchy
+\node[
+    align=left,
+    font=\sffamily\small,
+    text=gray-700,
+    inner sep=8pt,
+    outer sep=0pt
+] at (6.95,0) {
+    {\footnotesize\textsc{Properties}}\\[3pt]
+    {\footnotesize Level 1:}\\[1pt]
+    \quad Goal\\[0.5pt]
+    \quad Perception\\[0.5pt]
+    \quad Action\\[5pt]
+    {\footnotesize Levels 2 \& 3:}\\[1pt]
+    \quad Iteration\\[0.5pt]
+    \quad Adaptation\\[0.5pt]
+    \quad Termination
+};
+
+\end{tikzpicture}
+\caption{The three-level hierarchy of agency. Each level is a subset of the one above it: all agentic AI is agentic software, and all agentic software consists of agents.}
+\label{fig:hierarchy}
+\end{figure}

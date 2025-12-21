@@ -1,0 +1,91 @@
+% ============================================================================
+% mcp-architecture.tex
+% TikZ diagram illustrating MCP (Model Context Protocol) architecture
+% Three-tier horizontal layout: Host -> Client -> Server
+% ============================================================================
+
+\begin{tikzpicture}[
+  node distance=3cm,
+  box/.style={
+    rectangle,
+    draw,
+    minimum width=2.5cm,
+    minimum height=3cm,
+    align=center,
+    rounded corners=2pt,
+    thick
+  },
+  hostbox/.style={
+    box,
+    fill=bg-definition,
+    draw=border-definition
+  },
+  clientbox/.style={
+    box,
+    fill=bg-key,
+    draw=border-key
+  },
+  serverbox/.style={
+    box,
+    fill=bg-definition,
+    draw=border-definition
+  },
+  arrow/.style={
+    ->,
+    >=stealth,
+    thick
+  },
+  label/.style={
+    font=\small,
+    align=center
+  }
+]
+
+% MCP Host (left)
+\node[hostbox] (host) at (0,0) {
+  \textbf{MCP Host}\\[0.3cm]
+  \small IDE or\\
+  \small Agent\\
+  \small Runtime\\[0.3cm]
+  \footnotesize Manages\\
+  \footnotesize clients
+};
+
+% MCP Client (center)
+\node[clientbox, right=of host] (client) {
+  \textbf{MCP Client}\\[0.3cm]
+  \small Agent or\\
+  \small LLM\\[0.3cm]
+  \footnotesize Discovers\\
+  \footnotesize \& invokes\\
+  \footnotesize tools
+};
+
+% MCP Server (right)
+\node[serverbox, right=of client] (server) {
+  \textbf{MCP Server}\\[0.3cm]
+  \small Tools\\
+  \small Resources\\
+  \small Prompts\\[0.3cm]
+  \footnotesize Exposes\\
+  \footnotesize capabilities
+};
+
+% Bidirectional arrow: Host <-> Client
+\draw[arrow] ([yshift=3pt]host.east) -- ([yshift=3pt]client.west)
+  node[midway, above, label] {\footnotesize manages};
+\draw[arrow] ([yshift=-3pt]client.west) -- ([yshift=-3pt]host.east)
+  node[midway, below, label] {\footnotesize lifecycle};
+
+% Bidirectional arrow: Client <-> Server
+\draw[arrow] ([yshift=3pt]client.east) -- ([yshift=3pt]server.west)
+  node[midway, above, label] {\footnotesize JSON-RPC};
+\draw[arrow] ([yshift=-3pt]server.west) -- ([yshift=-3pt]client.east)
+  node[midway, below, label] {\footnotesize stdio/HTTP};
+
+% Transport layer note
+\node[below=1.5cm of client, align=center, text width=8cm, font=\footnotesize] (transport) {
+  \textbf{Transport:} JSON-RPC 2.0 over stdio (local) or Streamable HTTP (cloud)
+};
+
+\end{tikzpicture}

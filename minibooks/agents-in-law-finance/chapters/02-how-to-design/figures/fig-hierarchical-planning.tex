@@ -1,0 +1,76 @@
+% fig-hierarchical-planning.tex
+% Hierarchical Planning: Parent agent delegating to specialists
+% Part of: Chapter 07 - Agents Part II: How to Design an Agent
+% Section: 07-planning
+
+\begin{figure}[!htb]
+\centering
+\begin{tikzpicture}[
+    % Parent task box
+    parent/.style={
+        rectangle,
+        rounded corners=6pt,
+        minimum width=2.8cm,
+        minimum height=1.4cm,
+        fill=bg-key,
+        draw=key-dark,
+        line width=1.5pt,
+        text=key-dark,
+        font=\small\bfseries,
+        align=center
+    },
+    % Decomposition node
+    decompose/.style={
+        rectangle,
+        rounded corners=4pt,
+        minimum width=2cm,
+        minimum height=1cm,
+        fill=gray-100,
+        draw=gray-400,
+        line width=1pt,
+        text=gray-600,
+        font=\scriptsize,
+        align=center
+    },
+    % Agent task boxes
+    agent/.style={
+        rectangle,
+        rounded corners=6pt,
+        minimum width=2.6cm,
+        minimum height=1.2cm,
+        fill=bg-definition,
+        draw=definition-dark,
+        line width=1.5pt,
+        text=definition-dark,
+        font=\scriptsize,
+        align=center
+    },
+    % Arrow style
+    myarrow/.style={
+        -{Stealth[length=3mm]},
+        gray-500,
+        line width=1.5pt
+    }
+]
+
+% Parent task on the left
+\node[parent] (parent) at (0,0) {Prepare\\for Trial};
+
+% Decomposition indicator
+\node[decompose] (decomp) at (3.5,0) {Decompose\\into sub-goals};
+
+% Three agent tasks on the right, stacked vertically
+\node[agent] (agentA) at (7.5,1.5) {Agent A\\Finalize witness list};
+\node[agent] (agentB) at (7.5,0) {Agent B\\Prepare exhibits};
+\node[agent] (agentC) at (7.5,-1.5) {Agent C\\Draft questions};
+
+% Arrows
+\draw[myarrow] (parent) -- (decomp);
+\draw[myarrow] (decomp.east) -- ++(0.5,0) |- (agentA.west);
+\draw[myarrow] (decomp.east) -- (agentB.west);
+\draw[myarrow] (decomp.east) -- ++(0.5,0) |- (agentC.west);
+
+\end{tikzpicture}
+\caption{Hierarchical planning decomposes high-level goals into sub-goals delegated to specialist agents. Each specialist may decompose further, enabling parallelization and specialization.}
+\label{fig:agents2-hierarchical-planning}
+\end{figure}

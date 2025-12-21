@@ -1,0 +1,146 @@
+% Four Channel Types for Agent Triggers - 2x2 Grid Visualization
+% Uses semantic color palette with neutral backgrounds and colored accents
+
+\begin{figure}[!htb]
+\centering
+\begin{tikzpicture}[
+    % Top row card style
+    channel top/.style={
+        rectangle,
+        minimum width=7.2cm,
+        minimum height=5.2cm,
+        fill=white,
+        draw=gray-300,
+        line width=0.5pt,
+        rounded corners=3pt,
+        inner sep=0pt
+    },
+    % Bottom row card style
+    channel bottom/.style={
+        rectangle,
+        minimum width=7.2cm,
+        minimum height=5.2cm,
+        fill=white,
+        draw=gray-300,
+        line width=0.5pt,
+        rounded corners=3pt,
+        inner sep=0pt
+    },
+    % Header text style - larger and bold
+    header/.style={
+        font=\sffamily\bfseries,
+        anchor=north west
+    },
+    % Tagline style
+    tagline/.style={
+        font=\sffamily\scriptsize,
+        text=gray-700,
+        anchor=north west
+    },
+    % Example text style - smaller
+    examples/.style={
+        font=\sffamily,
+        text=gray-600,
+        anchor=north west,
+        text width=6.0cm,
+        scale=0.85,
+        transform shape
+    }
+]
+
+% Define positions - center cards symmetrically around origin
+\def\hgap{3.8}   % Half the horizontal gap between card centers
+\def\vgap{5.7}   % Vertical gap between cards
+
+% ============================================================
+% TOP LEFT: External Feeds (Green accent)
+% ============================================================
+\node[channel top] (feeds) at (-\hgap, 0) {};
+\fill[example-base, rounded corners=2pt]
+    ([xshift=0.15cm, yshift=-0.15cm]feeds.north west)
+    rectangle ([xshift=0.45cm, yshift=0.15cm]feeds.south west);
+\node[header, text=example-dark] at ([xshift=0.7cm, yshift=-0.4cm]feeds.north west)
+    {\textbf{External Feeds}};
+\node[tagline] at ([xshift=0.7cm, yshift=-0.9cm]feeds.north west)
+    {The world pushes work to you};
+\node[examples] at ([xshift=0.7cm, yshift=-1.4cm]feeds.north west) {
+    \textbullet~Court filings\\
+    \quad\textcolor{gray-400}{CM/ECF, PACER}\\[0.5ex]
+    \textbullet~Market data\\
+    \quad\textcolor{gray-400}{Bloomberg, Reuters}\\[0.5ex]
+    \textbullet~Regulatory updates\\
+    \quad\textcolor{gray-400}{EDGAR, Federal Register}\\[0.5ex]
+    \textbullet~Research alerts\\
+    \quad\textcolor{gray-400}{Westlaw, Lexis}
+};
+
+% ============================================================
+% TOP RIGHT: Human Prompts (Blue/Slate accent)
+% ============================================================
+\node[channel top] (human) at (\hgap, 0) {};  % Right card at +4.4
+\fill[definition-base, rounded corners=2pt]
+    ([xshift=0.15cm, yshift=-0.15cm]human.north west)
+    rectangle ([xshift=0.45cm, yshift=0.15cm]human.south west);
+\node[header, text=definition-dark] at ([xshift=0.7cm, yshift=-0.4cm]human.north west)
+    {\textbf{Human Prompts}};
+\node[tagline] at ([xshift=0.7cm, yshift=-0.9cm]human.north west)
+    {People request work directly};
+\node[examples] at ([xshift=0.7cm, yshift=-1.4cm]human.north west) {
+    \textbullet~Chat interfaces\\
+    \quad\textcolor{gray-400}{Direct queries}\\[0.5ex]
+    \textbullet~Email routing\\
+    \quad\textcolor{gray-400}{Forwarded questions}\\[0.5ex]
+    \textbullet~Collaboration tools\\
+    \quad\textcolor{gray-400}{Slack, Teams}\\[0.5ex]
+    \textbullet~Voice interfaces\\
+    \quad\textcolor{gray-400}{Transcribed speech}
+};
+
+% ============================================================
+% BOTTOM LEFT: Scheduled Jobs (Amber accent)
+% ============================================================
+\node[channel bottom] (sched) at (-\hgap, -\vgap) {};
+\fill[key-base, rounded corners=2pt]
+    ([xshift=0.15cm, yshift=-0.15cm]sched.north west)
+    rectangle ([xshift=0.45cm, yshift=0.15cm]sched.south west);
+\node[header, text=key-dark] at ([xshift=0.7cm, yshift=-0.4cm]sched.north west)
+    {\textbf{Scheduled Jobs}};
+\node[tagline] at ([xshift=0.7cm, yshift=-0.9cm]sched.north west)
+    {Time itself triggers execution};
+\node[examples] at ([xshift=0.7cm, yshift=-1.4cm]sched.north west) {
+    \textbullet~Calendar deadlines\\
+    \quad\textcolor{gray-400}{Motion due dates}\\[0.5ex]
+    \textbullet~Compliance checks\\
+    \quad\textcolor{gray-400}{Nightly monitoring}\\[0.5ex]
+    \textbullet~End-of-day workflows\\
+    \quad\textcolor{gray-400}{P\&L, reconciliation}\\[0.5ex]
+    \textbullet~Recurring reports\\
+    \quad\textcolor{gray-400}{Monthly, quarterly}
+};
+
+% ============================================================
+% BOTTOM RIGHT: Escalation Events (Red accent)
+% ============================================================
+\node[channel bottom] (esc) at (\hgap, -\vgap) {};
+\fill[caution-base, rounded corners=2pt]
+    ([xshift=0.15cm, yshift=-0.15cm]esc.north west)
+    rectangle ([xshift=0.45cm, yshift=0.15cm]esc.south west);
+\node[header, text=caution-dark] at ([xshift=0.7cm, yshift=-0.4cm]esc.north west)
+    {\textbf{Escalation Events}};
+\node[tagline] at ([xshift=0.7cm, yshift=-0.9cm]esc.north west)
+    {Internal signals requiring intervention};
+\node[examples] at ([xshift=0.7cm, yshift=-1.4cm]esc.north west) {
+    \textbullet~Budget exhaustion\\
+    \quad\textcolor{gray-400}{Token or cost limits}\\[0.5ex]
+    \textbullet~Low confidence\\
+    \quad\textcolor{gray-400}{Uncertain results}\\[0.5ex]
+    \textbullet~Approval gates\\
+    \quad\textcolor{gray-400}{Filings, trades}\\[0.5ex]
+    \textbullet~Errors and anomalies\\
+    \quad\textcolor{gray-400}{Tool failures}
+};
+
+\end{tikzpicture}
+\caption{Four channel types through which work reaches agentic systems. External feeds push events from outside systems; human prompts arrive through interactive interfaces; scheduled jobs trigger on time-based conditions; and escalation events signal internal limits requiring human intervention. All channels converge on the agentic system's event router.}
+\label{fig:agents2-trigger-channels}
+\end{figure}

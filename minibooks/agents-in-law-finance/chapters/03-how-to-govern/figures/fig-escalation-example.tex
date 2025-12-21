@@ -1,0 +1,64 @@
+% Example Escalation: Fairness Violation - Vertical Timeline
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    step box/.style={rounded corners=4pt, draw=#1, line width=1pt, inner sep=8pt, text width=9.5cm, font=\small},
+    time marker/.style={font=\small\bfseries, text=gray-600, anchor=east},
+    tier marker/.style={font=\footnotesize\bfseries, anchor=west},
+    arrow/.style={->, thick, gray-600, >=stealth}
+]
+
+% Step 1 - Initial Detection (Tier 1 - Green)
+\node[step box=green-900, fill=green-100] (step1) at (0,0) {%
+\textbf{\textcolor{green-900}{1. Initial Detection}}\\[2pt]
+Compliance analyst (Tier 1 monitoring) identifies 80\% rule violation in credit pre-screening system.
+};
+\node[time marker] at ([xshift=-0.5cm]step1.west) {T+0};
+\node[tier marker, text=green-900] at ([xshift=0.3cm]step1.east) {TIER 1};
+
+% Arrow 1->2
+\draw[arrow] (step1.south) -- ++(0,-0.3);
+
+% Step 2 - Immediate Escalation (Tier 3 - Red)
+\node[step box=red-900, fill=red-100, below=0.5cm of step1] (step2) {%
+\textbf{\textcolor{red-900}{2. Immediate Escalation to Tier 3}}\\[2pt]
+Fairness violations are pre-defined as critical (ECOA enforcement risk; regulatory penalties; class action exposure). Analyst notifies Chief Risk Officer.
+};
+\node[time marker] at ([xshift=-0.5cm]step2.west) {< 2 hrs};
+\node[tier marker, text=red-900] at ([xshift=0.3cm]step2.east) {TIER 3};
+
+% Arrow 2->3
+\draw[arrow] (step2.south) -- ++(0,-0.3);
+
+% Step 3 - CRO Response (Tier 3 - Red)
+\node[step box=red-900, fill=red-100, below=0.5cm of step2] (step3) {%
+\textbf{\textcolor{red-900}{3. CRO Response}}\\[2pt]
+Halt system immediately (emergency stop protocol); convene incident response team (Legal, Compliance, AI Gov.\ Lead, System Owner); notify CEO and Board Risk Committee.
+};
+\node[time marker] at ([xshift=-0.5cm]step3.west) {< 24 hrs};
+
+% Arrow 3->4
+\draw[arrow] (step3.south) -- ++(0,-0.3);
+
+% Step 4 - Board Involvement (Tier 3 - Red)
+\node[step box=red-900, fill=red-100, below=0.5cm of step3] (step4) {%
+\textbf{\textcolor{red-900}{4. Board Involvement}}\\[2pt]
+Emergency board meeting (if material); approve remediation plan (model retraining, affected applicant notification, CFPB self-report); allocate investigation budget.
+};
+\node[time marker] at ([xshift=-0.5cm]step4.west) {24--72 hrs};
+
+% Arrow 4->5
+\draw[arrow] (step4.south) -- ++(0,-0.3);
+
+% Step 5 - Regulatory Report
+\node[step box=slate-700, fill=slate-100, below=0.5cm of step4] (step5) {%
+\textbf{\textcolor{slate-700}{5. Regulatory Report}}\\[2pt]
+General Counsel files self-report to CFPB within regulatory timeline.
+};
+\node[time marker] at ([xshift=-0.5cm]step5.west) {Per reg.};
+
+\end{tikzpicture}
+\caption{Example escalation pathway for a fairness violation detected in credit decisioning. The pathway demonstrates rapid Tier 1 to Tier 3 escalation for pre-defined critical issues, with specific time targets at each stage ensuring prompt organizational response.}
+\label{fig:agents3-escalation-example}
+\end{figure}

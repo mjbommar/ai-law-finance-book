@@ -1,0 +1,81 @@
+% fig-rag-pipeline.tex
+% RAG Pipeline: Embedding-Based Implementation
+% Part of: Chapter 07 - Agents Part II: How to Design an Agent
+% Section: 06-memory (RAG)
+
+\begin{figure}[!htb]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+    % Step box style
+    step box/.style={
+        rectangle,
+        rounded corners=6pt,
+        minimum width=3.0cm,
+        minimum height=1.8cm,
+        align=center,
+        line width=1.5pt,
+        font=\small\bfseries
+    },
+    % Input/Output box style
+    io box/.style={
+        rectangle,
+        rounded corners=6pt,
+        minimum width=2.4cm,
+        minimum height=1.8cm,
+        align=center,
+        line width=1.5pt,
+        font=\small\bfseries,
+        fill=bg-key,
+        draw=key-dark,
+        text=key-dark
+    },
+    % Description style
+    desc/.style={
+        font=\scriptsize,
+        text width=2.8cm,
+        align=center,
+        anchor=north
+    },
+    % Arrow style
+    arrow/.style={
+        -stealth,
+        line width=2pt,
+        color=gray-500
+    }
+]
+
+% Input: Documents
+\node[io box] (docs) at (-2.5, 0) {Documents};
+
+% Step 1: Chunking
+\node[step box, fill=bg-definition, draw=definition-dark, text=definition-dark] (chunk) at (1.5, 0) {1. Chunking};
+\node[desc, text=gray-700] at (chunk.south) [yshift=-0.3cm] {Break documents into semantic units with metadata};
+
+% Step 2: Embedding
+\node[step box, fill=bg-definition, draw=definition-dark, text=definition-dark] (embed) at (5.5, 0) {2. Embedding};
+\node[desc, text=gray-700] at (embed.south) [yshift=-0.3cm] {Convert each chunk into a vector encoding its meaning};
+
+% Step 3: Retrieval
+\node[step box, fill=bg-definition, draw=definition-dark, text=definition-dark] (retrieve) at (9.5, 0) {3. Retrieval};
+\node[desc, text=gray-700] at (retrieve.south) [yshift=-0.3cm] {Find chunks similar to the query by comparing vectors};
+
+% Step 4: Generation
+\node[step box, fill=bg-definition, draw=definition-dark, text=definition-dark] (generate) at (13.5, 0) {4. Generation};
+\node[desc, text=gray-700] at (generate.south) [yshift=-0.3cm] {Inject retrieved content into prompt for LLM response};
+
+% Output: Answer
+\node[io box] (answer) at (17.5, 0) {Answer};
+
+% Arrows
+\draw[arrow] (docs.east) -- (chunk.west);
+\draw[arrow] (chunk.east) -- (embed.west);
+\draw[arrow] (embed.east) -- (retrieve.west);
+\draw[arrow] (retrieve.east) -- (generate.west);
+\draw[arrow] (generate.east) -- (answer.west);
+
+\end{tikzpicture}
+}%
+\caption{An embedding-based RAG pipeline---one common implementation pattern. Documents are chunked into semantic units, embedded as vectors, and retrieved by semantic similarity. Alternative implementations may skip chunking and embedding entirely, using keyword search, BM25, database queries, or hybrid approaches to retrieve relevant content.}
+\label{fig:agents2-rag-pipeline}
+\end{figure}

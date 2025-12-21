@@ -1,0 +1,48 @@
+% Three-Tier Escalation Model - Traffic Light Visualization
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    remember picture,
+    tier circle/.style={circle, minimum size=2.2cm, inner sep=0pt, draw=gray-600, line width=1.5pt, font=\bfseries\small, align=center},
+    tier box/.style={rounded corners=4pt, draw=#1, line width=1pt, inner sep=8pt, text width=10cm, font=\small}
+]
+
+% Draw text boxes first to establish positions
+% Tier 3 description box
+\node[tier box=red-900, fill=red-100, anchor=north west] (box3) at (2.0,0) {%
+\textbf{\textcolor{red-900}{Material risk requiring immediate executive/board action}}\\[2pt]
+\textbf{Examples}: Fairness violation, security breach, regulatory inquiry, systemic failure\\[2pt]
+\textbf{Escalate to}: CEO, Board Risk Committee, General Counsel\\[2pt]
+\textbf{Timeline}: Immediate (within hours)
+};
+
+% Tier 2 description box - positioned directly below box3
+\node[tier box=amber-900, fill=amber-100, anchor=north west] (box2) at (box3.south west) {%
+\textbf{\textcolor{amber-900}{Issues requiring management review and potential changes}}\\[2pt]
+\textbf{Examples}: SLA breach, vendor violation, discrimination complaint, data drift\\[2pt]
+\textbf{Escalate to}: CRO, CCO, or AI Governance Committee\\[2pt]
+\textbf{Timeline}: 48--72 hours
+};
+
+% Tier 1 description box - positioned directly below box2
+\node[tier box=green-900, fill=green-100, anchor=north west] (box1) at (box2.south west) {%
+\textbf{\textcolor{green-900}{Routine issues managed without escalation}}\\[2pt]
+\textbf{Examples}: Low-confidence prediction, minor accuracy fluctuation, user complaint\\[2pt]
+\textbf{Handled by}: System owners and AI governance teams\\[2pt]
+\textbf{Timeline}: Standard operating procedures
+};
+
+% Traffic light housing - fixed width centered at x=0
+\fill[gray-800, rounded corners=8pt]
+    (-1.3,0 |- box3.north) rectangle (1.3,0 |- box1.south);
+
+% Calculate positions for circles using the center of each box
+\node[tier circle, fill=red-100, text=red-900] (tier3) at (0,0 |- box3.center) {Tier 3\\Critical};
+\node[tier circle, fill=amber-100, text=amber-900] (tier2) at (0,0 |- box2.center) {Tier 2\\Significant};
+\node[tier circle, fill=green-100, text=green-900] (tier1) at (0,0 |- box1.center) {Tier 1\\Operational};
+
+\end{tikzpicture}
+\caption{Three-tier escalation model for AI governance issues. Tier 1 (operational) issues are handled routinely; Tier 2 (significant) issues require management review; Tier 3 (critical) issues demand immediate executive or board action. Pre-defining which issues fall into each tier ensures rapid, consistent response.}
+\label{fig:agents3-escalation-tiers}
+\end{figure}

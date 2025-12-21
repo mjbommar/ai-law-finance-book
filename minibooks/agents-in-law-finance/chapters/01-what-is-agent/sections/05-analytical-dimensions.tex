@@ -1,0 +1,184 @@
+\section{Analytical Dimensions of Agency}
+\label{sec:dimensions}
+
+While different disciplines approach agency from distinct theoretical foundations (Section~\ref{sec:disciplines}), certain analytical dimensions cut across disciplinary boundaries. This section identifies four key dimensions---\keyterm{autonomy}, \keyterm{entity frames}, \keyterm{goal dynamics}, and \keyterm{persistence}---that structure variation in how agency is understood.
+
+\subsection{The Autonomy Spectrum}
+
+Perhaps the most fundamental dimension along which agent definitions vary is \keyterm{autonomy spectrum}: the degree to which an agent can set its own agenda, select tactics, and own accountability for outcomes.
+
+Three plain-language questions help position any definition on the autonomy spectrum:
+
+\begin{questionbox}[title={\textbf{Who sets the goal?}}]
+Does the agent accept goals from an external principal, or does it generate its own objectives? Delegated proxies follow instructions; self-directed entities set their own agendas.
+\end{questionbox}
+
+\begin{questionbox}[title={\textbf{Who decides the next step?}}]
+Does the agent execute predefined plans step-by-step, or does it choose actions autonomously? Delegated proxies follow explicit instructions. Contract-bound delegates choose methods (how) but not objectives (what). Perception-action planners select both tactics and timing independently.
+\end{questionbox}
+
+\begin{questionbox}[title={\textbf{Who carries responsibility if things go wrong?}}]
+Does accountability remain with the principal, or does the agent own outcomes? Low-autonomy agents are instruments; high-autonomy agents bear responsibility for their choices.
+\end{questionbox}
+
+Definitions range from delegated proxies at one extreme to self-directed entities at the other.
+
+\paragraph{Delegated Proxies (Low Autonomy)}
+The Restatement (Second) of Agency (1958) exemplifies this end: agents execute their principal's instructions within bounded authority. Goals, evaluation criteria, and ultimate responsibility remain with the principal. \textcite{milgram1974obedience}'s ``agentic state'' captures the psychological correlate---individuals who see themselves as mere instruments of authority, disclaiming personal responsibility.
+
+\paragraph{Contract-Bound Delegates (Low-Moderate Autonomy)}
+\textcite{jensen1976theory}'s principal-agent model grants agents tactical discretion within incentive contracts but evaluates them solely on principals' payoffs. Agents choose means but not ends, operating under monitoring and compensation schemes designed to align behavior.
+
+\paragraph{Self-Regulating Actors (Moderate Autonomy)}
+\textcite{bandura1989human}'s human agency emphasizes that individuals set sub-goals, monitor progress, and self-adjust within social structures. \textcite{maes1994agents}'s software agents learn user preferences and initiate actions based on high-level intent rather than step-by-step commands.
+
+\paragraph{Perception-Action Planners (Moderate-High Autonomy)}
+\textcite{russellnorvig1995ai}'s AI agents sense environments and select actions via performance-driven policies without waiting for commands. \textcite{franklin-graesser-1997}'s autonomous agents pursue their own agendas over time, acting to influence future perceptions.
+
+\paragraph{Learning Loop Owners (High Autonomy)}
+\textcite{suttonbarto1998rl}'s reinforcement learning agents experiment with actions and update policies from reward signals without human step-by-step guidance. The agent owns the exploration-exploitation trade-off.
+
+\paragraph{Tool Orchestrators (Very High Autonomy)}
+Modern tool-use APIs (2025)---whether implemented through AI/ML or traditional logic---choose when and how to invoke tools, integrating outputs into their reasoning loops. Contemporary LLM frameworks provide one implementation approach for this architectural pattern, ``independently accomplish[ing] tasks on behalf of users,'' planning, sequencing, and completing multi-step workflows before reporting back.
+
+\bigskip
+
+Table~\ref{tab:autonomy} summarizes this progression.
+
+\begin{table}[ht]
+	\centering
+	\small
+	\rowcolors{2}{white}{bg-note}
+	\begin{tabular}{lrl}
+		\toprule
+		\textbf{Position}    & \textbf{Source}                   & \textbf{Description}                              \\
+		\midrule
+		Delegated proxy      & \textcite{restatement2006agency}  & Follows instructions; principal retains liability \\
+		Obedience            & \textcite{milgram1974obedience}   & Suppresses personal goals under authority         \\
+		Contract-bound       & \textcite{jensen1976theory}       & Chooses tactics within contracts                  \\
+		Self-regulating      & \textcite{bandura1989human}       & Sets goals, monitors, adjusts                     \\
+		Adaptive assistant   & \textcite{maes1994agents}         & Learns preferences, initiates actions             \\
+		Perception-action    & \textcite{russellnorvig1995ai}    & Senses environment, executes policy               \\
+		Agenda-setting       & \textcite{franklin-graesser-1997} & Maintains independent agenda                      \\
+		Learning loop        & \textcite{suttonbarto1998rl}      & Experiments, updates from rewards                 \\
+		Tool orchestrator    & \textcite{yao2022react}           & Chooses tools to invoke                           \\
+		Independent finisher & \textcite{xi2023rise}             & Plans and completes tasks                         \\
+		\bottomrule
+	\end{tabular}
+	\caption{Autonomy spectrum: from delegated proxies to self-directed entities. \textit{Accessibility:} Progressive classification table with 3 columns (Position, Source, Description) and 10 rows ordered by increasing autonomy: from ``Delegated proxy'' (follows instructions, principal retains liability) through intermediate positions (obedience, contract-bound, self-regulating, adaptive assistant, perception-action, agenda-setting, learning loop, tool orchestrator) to ``Independent finisher'' (plans and completes tasks). Each row cites specific researchers showing chronological evolution.}
+	\label{tab:autonomy}
+\end{table}
+
+This dimension correlates with but differs from technological capability. Rule-based expert systems can exhibit moderate autonomy (goal-directed loops), while capable neural networks, including LLMs, operating in single-shot mode exhibit none. Autonomy is architectural, not merely a function of model sophistication.
+
+\textbf{Autonomy and Governance:} The autonomy level directly determines governance requirements. Low-autonomy agents (delegated proxies, contract-bound delegates) operate under tight principal control with lighter oversight burdens---the principal validates each step or constrains choices through explicit contracts. High-autonomy agents (tool orchestrators, independent finishers) make consequential decisions with minimal intervention, demanding mandatory precommit limits (resource budgets, scope boundaries), explicit escalation triggers (confidence thresholds, high-stakes decisions), and robust audit trails. \textit{Governance principle:} Oversight rigor must scale with autonomy level. An agent that independently orchestrates tools and completes multi-step tasks requires explicit termination mechanisms, human-in-the-loop checkpoints for irreversible actions, and clear accountability mapping---safeguards unnecessary for agents executing predefined scripts under direct supervision.
+
+\noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}
+
+\subsection{Entity Frames}
+
+Agent definitions often talk past each other because they quietly assume different kinds of \keyterm{entities}. We identify three clusters:
+
+\paragraph{Human-Centered}
+These definitions privilege individual humans and their cognition or morality. \textcite{anscombe1957intention}'s intentional action explores agency as practical knowledge held by persons. \textcite{milgram1974obedience}'s agentic state examines how people respond to authority. \textcite{bandura1989human}'s human agency emphasizes internal cognitive machinery---intentionality, forethought, self-reactiveness, self-reflectiveness. The hallmark questions: \textit{What intentions animate the person? How is responsibility assigned?}
+
+\paragraph{Institutional/Hybrid}
+These definitions situate agency in socio-technical collectives---humans embedded in contracts, firms, or organizational structures. The Restatement of Agency (1958) defines the principal-agent pair, not isolated individuals. \textcite{jensen1976theory}'s economic model examines ``manager-with-contract'' as the effective actor. \textcite{epstein1996growing}'s agent-based models simulate rule-following individuals shaped by local interactions. The hallmark questions: \textit{What structure channels decisions? How are incentives and authority shared?}
+
+\paragraph{Machine-Centered}
+These definitions assign agency to computational entities managing perception\-/action loops. \textcite{russellnorvig1995ai}'s AI agents can be any entity perceiving through sensors and acting via actuators. \textcite{franklin-graesser-1997}'s autonomous agents are persistent computational entities pursuing agendas. Contemporary LLM frameworks (2025) are explicitly software coordinating tools. The hallmark questions: \textit{How does the entity sense, plan, and act? What loop keeps it going?}
+
+Table~\ref{tab:entities} summarizes representative examples.
+
+\begin{table}[ht]
+	\centering
+	\small
+	\rowcolors{2}{white}{bg-note}
+	\begin{tabular}{@{}lrl@{}}
+		\toprule
+		\textbf{Frame} & \textbf{Source}                                                                                                                           & \textbf{Description}                \\
+		\midrule
+		Human          & \begin{tabular}[t]{@{}r@{}}\textcite{anscombe1957intention} \\ \textcite{milgram1974obedience} \\ \textcite{bandura1989human}\end{tabular}       & Human minds, intentions             \\
+		Institutional  & \begin{tabular}[t]{@{}r@{}}\textcite{restatement2006agency} \\ \textcite{jensen1976theory} \\ \textcite{epstein1996growing}\end{tabular}      & Organizations, authority structures \\
+		Machine        & \begin{tabular}[t]{@{}r@{}}\textcite{russellnorvig1995ai} \\ \textcite{franklin-graesser-1997} \\ \textcite{xi2023rise}\end{tabular}         & Computational entities, loops        \\
+		\bottomrule
+	\end{tabular}
+	\caption{Entity frames: human minds, institutional relationships, or computational entities. \textit{Accessibility:} Categorization table with 3 columns (Frame, Source, Description) and 3 rows representing three fundamental approaches. Row 1: Human frame (philosophy/psychology) emphasizes human minds and intentions. Row 2: Institutional frame (law/economics) emphasizes organizations and authority structures. Row 3: Machine frame (computer science/AI) emphasizes computational entities and loops. Multiple scholars cited per frame showing discipline-spanning taxonomy.}
+	\label{tab:entities}
+\end{table}
+
+Importantly, these frames are not mutually exclusive. Contemporary ``agentic AI'' often involves hybrid entities: AI systems acting on behalf of human principals, with goals supplied by humans but tactics chosen by machines. The legal and ethical challenges arise precisely at these boundaries.
+
+\noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}
+\vspace{0.5em}
+
+\subsection{Goal Dynamics}
+
+Definitions also vary in how they understand the \keyterm{relationship between agents and goals}. We identify three stances:
+
+\paragraph{Goal Acceptance}
+The agent receives a mandate and optimizes for it without debate. The Restatement of Agency (1958) requires agents to follow principal objectives; divergence invites breach. \textcite{suttonbarto1998rl}'s RL agent maximizes a fixed reward function supplied externally. Contemporary LLM frameworks (2025) ``independently accomplish tasks on behalf of users,'' but user goals remain the north star. Success equals compliance or reward maximization.
+
+\paragraph{Goal Adaptation}
+The agent refines, reprioritizes, or balances goals within constraints. \textcite{maes1994agents}'s software agents learn user preferences and decide when to intervene, reprioritizing information flows. \textcite{russellnorvig1995ai}'s agents balance performance measures, trading off actions based on context. Modern tool-use APIs (2025) interpret instructions, break them down, and choose which tools serve user intent. The agent has discretion in interpretation and tactics.
+
+\paragraph{Goal Negotiation}
+The agent co-determines objectives with others, often through communication. \textcite{weiss1999mas}'s multi-agent systems coordinate, cooperate, and negotiate when goals conflict. \textcite{jennings1998roadmap}'s AOSE roadmap treats agents as social entities that negotiate commitments and allocate tasks. Multi-agent frameworks (2025) enable multi-agent applications where agents message each other to propose plans, critique, and converge collaboratively.
+
+Table~\ref{tab:goals} summarizes this dimension.
+
+\begin{table}[ht]
+	\centering
+	\small
+	\rowcolors{2}{white}{bg-note}
+	\begin{tabular}{@{}lrl@{}}
+		\toprule
+		\textbf{Stance} & \textbf{Source}                                                                                                                         & \textbf{Description}           \\
+		\midrule
+		Acceptance      & \begin{tabular}[t]{@{}r@{}}\textcite{restatement2006agency} \\ \textcite{suttonbarto1998rl} \\ \textcite{xi2023rise}\end{tabular}      & Follows supplied objectives    \\
+		Adaptation      & \begin{tabular}[t]{@{}r@{}}\textcite{maes1994agents} \\ \textcite{russellnorvig1995ai} \\ \textcite{yao2022react}\end{tabular}        & Refines goals, chooses tactics \\
+		Negotiation     & \begin{tabular}[t]{@{}r@{}}\textcite{weiss1999mas} \\ \textcite{jennings1998roadmap}\end{tabular}                                         & Co-determines objectives       \\
+		\bottomrule
+	\end{tabular}
+	\caption{Goal dynamics: from acceptance through adaptation to negotiation. \textit{Accessibility:} Progressive stance table with 3 columns (Stance, Source, Description) and 3 rows showing increasing autonomy in goal-setting. Row 1: Acceptance stance (follows supplied objectives without modification). Row 2: Adaptation stance (refines goals and chooses tactics within constraints). Row 3: Negotiation stance (co-determines objectives through communication). Progression has direct implications for legal accountability.}
+	\label{tab:goals}
+\end{table}
+
+This dimension has direct implications for legal accountability. If an AI agent merely accepts goals, responsibility flows clearly to whoever set them. If it adapts goals through interpretation, questions arise about faithful execution. If it negotiates goals with other agents or humans, traditional principal-agent frameworks may not apply cleanly.
+
+\noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}
+\vspace{0.5em}
+
+\subsection{Persistence and Embodiment}
+
+Two additional dimensions merit brief mention:
+
+\paragraph{Temporal Persistence}
+\textcite{franklin-graesser-1997} distinguish programs from agents partly on \keyterm{persistence}—agents maintain state and pursue objectives over extended periods. This contrasts with reactive systems that respond to inputs without memory. Modern LLM agents incorporate conversation history and tool-use results, creating persistence within sessions. As discussed in Section~\ref{sec:intro}, single-shot LLM usage lacks the persistent goal pursuit that characterizes agentic systems.
+
+\paragraph{Embodiment}
+\textcite{kauffman2000investigations}'s autonomous agents require physical \keyterm{embodiment} capable of performing thermodynamic work cycles. This biological grounding contrasts sharply with purely virtual agents. Robotics and embodied AI represent one implementation; cloud-based LLM agents represent another. Whether virtual agents merit the term ``agent'' in the fullest sense remains philosophically contentious, though pragmatically settled in favor of inclusion.
+
+\subsection{Implications for Agentic AI}
+
+These four dimensions---autonomy, entity frames, goal dynamics, persistence---provide organizing principles for evaluating contemporary systems.
+
+When someone claims an entity is ``agentic,'' four questions create a shared, falsifiable basis for evaluation.
+
+\begin{keybox}[title={\textbf{Question 1: Autonomy}}]
+How much \textbf{discretion} does the entity have in selecting \textbf{goals} and \textbf{tactics}, and where does \textbf{accountability} reside when outcomes go wrong? Describe the locus of \textbf{control} and any \textbf{constraints} (contracts, prompts, policies).
+\end{keybox}
+
+\begin{keybox}[title={\textbf{Question 2: Entity}}]
+What kind of \textbf{entity} are we evaluating: a pure \textbf{machine} entity, a \textbf{human–AI} team, or an \textbf{institution}al arrangement? Clarifying the entity prevents conflating a tool with the broader organization that wields it.
+\end{keybox}
+
+\begin{keybox}[title={\textbf{Question 3: Goals}}]
+Does the entity merely accept \textbf{goals}, \textbf{adapt} them through interpretation, or \textbf{negotiate} them with other agents or humans? State how \textbf{goals} are set, refined, and \textbf{verified} in practice.
+\end{keybox}
+
+\begin{keybox}[title={\textbf{Question 4: Persistence}}]
+Does the entity maintain \textbf{state} and pursue \textbf{objectives} across multiple steps or sessions, or does it operate in \textbf{single‑shot} mode? Specify how \textbf{memory}, \textbf{logs}, or \textbf{context windows} support continuity.
+\end{keybox}
+
+These questions cut across the marketing hype and disciplinary jargon, providing a shared vocabulary for more precise discourse. The next section synthesizes these insights into a working definition grounded in theoretical foundations.
