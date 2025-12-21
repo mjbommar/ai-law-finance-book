@@ -506,7 +506,151 @@ make wordcount
 
 ---
 
-## 14. Integration with Project Documentation
+## 14. Domain Integration: Legal and Financial Examples
+
+This textbook targets legal and financial professionals. Every major concept should be grounded in domain-specific examples that resonate with this audience.
+
+### 14.1 The Domain Integration Requirement
+
+**Rule:** Each major section should include examples from BOTH legal and financial contexts.
+
+**Why this matters:**
+- Readers from legal backgrounds may not immediately see financial applications (and vice versa)
+- Domain-specific examples validate that concepts work in real professional contexts
+- Examples from both domains demonstrate the generalizability of techniques
+- Practitioners prefer examples from their own field
+
+### 14.2 Legal Domain Examples
+
+When illustrating concepts, draw from these legal practice areas:
+
+| Practice Area | Example Topics |
+|---------------|----------------|
+| **Litigation** | Case law research, document review, deadline management, motion drafting |
+| **Contracts** | Clause extraction, risk identification, playbook comparison, negotiation |
+| **Compliance** | Regulatory monitoring, policy updates, audit preparation, disclosure |
+| **Research** | Statutory analysis, precedent search, jurisdiction comparison |
+| **Due Diligence** | Document analysis, red flag identification, closing checklists |
+
+**Legal-specific considerations to address:**
+- Attorney-client privilege protection
+- Jurisdictional variation
+- Temporal sensitivity (law changes over time)
+- Citation verification (cases, statutes, regulations)
+- Ethical obligations (competence, confidentiality, candor)
+
+**Example structure for legal illustrations:**
+```latex
+\paragraph{Legal Application.} In litigation support, [concept] manifests as
+[specific application]. A legal research assistant using [technique] must
+[specific requirement] because [legal rationale]. For instance, when
+researching [topic], the system should [concrete behavior].
+```
+
+### 14.3 Financial Domain Examples
+
+When illustrating concepts, draw from these financial practice areas:
+
+| Practice Area | Example Topics |
+|---------------|----------------|
+| **Portfolio Management** | Position analysis, risk assessment, rebalancing, reporting |
+| **Trading** | Order execution, market data analysis, compliance checks |
+| **Risk Management** | Scenario analysis, stress testing, limit monitoring |
+| **Compliance** | Regulatory reporting, surveillance, disclosure review |
+| **Research** | Fundamental analysis, earnings reviews, sector analysis |
+| **Client Service** | Suitability assessment, recommendations, portfolio reviews |
+
+**Financial-specific considerations to address:**
+- Regulatory boundaries (advice vs. information)
+- Numerical precision (calculations, currency, percentages)
+- Real-time data requirements
+- Audit trail requirements
+- Client risk profiles and suitability
+
+**Example structure for financial illustrations:**
+```latex
+\paragraph{Financial Application.} In portfolio management, [concept] appears
+when [specific scenario]. An analyst using [technique] must consider
+[specific requirement] because [regulatory/practical rationale]. For example,
+when analyzing [topic], the system should [concrete behavior] to ensure
+[outcome].
+```
+
+### 14.4 Balancing Domain Examples
+
+**Pattern A: Parallel treatment**
+Discuss concept generally, then provide equal-weight examples from both domains:
+```latex
+[General explanation of concept]
+
+\paragraph{Legal Application.} [Legal example with 3-4 sentences]
+
+\paragraph{Financial Application.} [Financial example with 3-4 sentences]
+```
+
+**Pattern B: Integrated discussion**
+Weave examples throughout the explanation:
+```latex
+[Concept introduction] For instance, a litigation support system might
+[legal example], while a portfolio analyzer would [financial example].
+The key difference lies in [distinguishing factor].
+```
+
+**Pattern C: Case study pairs**
+For major concepts, provide detailed case studies from both domains:
+```latex
+\subsubsection{Case Study: Legal Document Review}
+[Detailed scenario, analysis, and recommendations]
+
+\subsubsection{Case Study: Financial Report Analysis}
+[Parallel structure with financial context]
+```
+
+### 14.5 Domain-Specific Terminology
+
+Maintain consistency in domain terminology:
+
+| Legal Term | Financial Term | Neutral Alternative |
+|------------|----------------|---------------------|
+| case, matter | trade, position | task, item |
+| counsel, attorney | analyst, advisor | professional, user |
+| filing, pleading | report, disclosure | document |
+| court, tribunal | exchange, regulator | authority |
+| privilege | confidentiality | access control |
+| jurisdiction | market, sector | scope, domain |
+
+### 14.6 Domain Integration Checklist
+
+Before finalizing any section, verify:
+
+- [ ] **Legal example present**: At least one concrete legal application
+- [ ] **Financial example present**: At least one concrete financial application
+- [ ] **Examples are substantive**: Not just name-drops but actual illustrations
+- [ ] **Domain-specific concerns addressed**: Privilege, regulation, precision, etc.
+- [ ] **Terminology appropriate**: Uses domain terms correctly
+- [ ] **Balance achieved**: Neither domain dominates unfairly
+- [ ] **Governance implications noted**: Compliance, audit, risk considerations
+
+### 14.7 When Examples Aren't Parallel
+
+Sometimes a concept applies more naturally to one domain. In these cases:
+
+1. **Acknowledge the asymmetry** explicitly
+2. **Provide the stronger example** in full detail
+3. **Offer a lighter touch** for the other domain
+4. **Explain why** the difference exists
+
+```latex
+\paragraph{Legal Application.} Contract review provides a natural application
+of [concept] because [detailed reason]. [Full example]
+
+\paragraph{Financial Parallel.} While less central to financial workflows,
+[concept] appears in [lighter example], particularly when [specific context].
+```
+
+---
+
+## 15. Integration with Project Documentation
 
 This style guide should be referenced in:
 1. **README.md** — Add link in "How to Contribute" or "Writing Guidelines" section
@@ -534,6 +678,7 @@ Please review the style guide before making substantial edits.
 | Date | Change | Reason |
 |------|--------|--------|
 | 2025-10-29 | Initial creation | Establish consistency across chapter series |
+| 2025-12-21 | Added Section 14: Domain Integration | Ensure legal/financial examples throughout |
 
 ---
 
