@@ -7,4 +7,108 @@
 \section{Introduction and Scope}
 \label{sec:llmC-intro}
 
-We turn conversations into robust systems. First, we make outputs reliable with schemas. Then we add function calls with clear contracts and governance metadata. A dedicated chapter follows for multimodal inputs common to legal and finance.
+In the previous chapter, we examined how to transform stateless language models into conversational systems capable of multi-step reasoning. We explored the mechanics of maintaining dialogue state, managing context windows, and orchestrating reasoning patterns from Chain-of-Thought to ReAct. Those techniques gave us powerful tools for natural language interaction---but they are not sufficient for the demands of professional legal and financial practice.
+
+The core challenge is this: \emph{Large Language Models are probabilistic engines, but legal and financial systems require deterministic contracts.}
+
+\subsection{The Stochastic-Deterministic Interface}
+
+For decades, software engineering has been built on deterministic principles. Given input \(X\), a properly designed system reliably produces output \(Y\) according to a predefined schema. Function signatures are contracts. Data types are guarantees. Every API call, every database transaction, every regulatory filing adheres to strict structural requirements that can be validated, audited, and reproduced.
+
+The Transformer architecture, while revolutionary in its capacity for semantic understanding and generative fluency, is inherently stochastic. These models function as probabilistic engines, predicting the next token based on a distribution of likelihoods rather than rigid logic \parencite{vaswani2017attention}. This probabilistic nature---the source of their creativity and linguistic sophistication---renders them natively unsuitable for integration into critical software pipelines that demand type safety, structural integrity, and auditability.
+
+When you ask a conversational model to ``summarize this contract,'' you receive eloquent prose. But that prose cannot be directly ingested into a compliance database, queried programmatically, or validated against regulatory schemas. When you ask it to ``calculate interest accrued,'' you might receive an answer---but can you trust the arithmetic? When you ask it to ``find the termination clause,'' can it cite the exact page and paragraph with cryptographic certainty of provenance?
+
+These are not hypothetical concerns. In a legal dispute over AI-generated analysis, courts and regulators will demand evidence: \emph{What data did the system see? What steps did it take? What sources support each claim?} Without structured outputs, governance metadata, and auditable evidence trails, AI systems remain conversational curiosities rather than professional tools.
+
+\subsection{From Conversational AI to Embedded Reasoning Engine}
+
+The transition we examine in this chapter is architectural. We move from treating the LLM as a \keyterm{conversationalist}---a partner in natural language dialogue---to deploying it as an \keyterm{embedded reasoning engine} within a strict control flow. This transition requires imposing deterministic constraints on probabilistic systems through three interconnected pillars:
+
+\begin{enumerate}
+  \item \textbf{Structured Outputs:} Forcing free-form text generation to adhere to precise schemas (JSON, XML, CSV) with validation and type safety.
+
+  \item \textbf{Tool Use and Function Calling:} Extending the model's capabilities beyond its parametric knowledge by integrating with external systems---calculators, databases, search engines, enterprise APIs---while maintaining strict governance and auditability.
+
+  \item \textbf{Grounding via Retrieval:} Tethering the model's responses to external knowledge sources so that every factual claim can be traced to verifiable evidence with proper provenance tracking.
+\end{enumerate}
+
+These three pillars work together to create what we call the \keyterm{hardening} of the LLM pipeline. We are no longer experimenting with chatbots; we are building production systems where AI components must satisfy the same reliability, security, and compliance standards as any other enterprise software.
+
+\subsection{The Three Pillars: A Technical Preview}
+
+\paragraph{Pillar 1: Structured Outputs.}
+Imagine an AI tasked with extracting key terms from a commercial lease: parties, effective date, rent amount, escalation clauses, termination conditions. A free-form narrative summary might be eloquent, but it cannot be validated, queried, or integrated with property management software. Instead, we need the AI to produce a JSON object with specific fields, typed correctly, with all required information present.
+
+Modern techniques use \keyterm{constrained decoding}---modifying the model's token generation process to enforce syntactic structure at the logit level. Libraries like Outlines and platform features like OpenAI's Structured Outputs guarantee that the generated text conforms to a predefined schema \parencite{openai2024structured}. We validate outputs using tools like Pydantic (Python) or Zod (TypeScript), treating the LLM as a typed function that implements a strict interface.
+
+The result: predictable, machine-readable outputs that can be ingested directly into databases, spreadsheets, or regulatory filing systems without manual parsing or cleanup.
+
+\paragraph{Pillar 2: Tool Use and Function Calling.}
+LLMs possess vast knowledge but are notoriously unreliable at arithmetic, real-time data lookup, and executing actions in external systems. A financial compliance system might need to calculate compound interest, query the latest exchange rates, check a watchlist database, or log a suspicious activity report.
+
+Rather than expecting the model to ``know'' everything or perform complex math internally, we provide it with \keyterm{tools}---callable functions with well-defined interfaces. The model reasons about \emph{when} to call a tool and \emph{what arguments} to provide. The orchestration layer executes the call, retrieves the result, and feeds it back to the model for synthesis \parencite{schick2023toolformer}.
+
+This neuro-symbolic approach combines the linguistic reasoning of the LLM with the precision of traditional software. But it introduces critical security and governance challenges: What permissions does the AI have? How do we log and audit every action? How do we prevent prompt injection attacks that manipulate tool usage? We address these through \keyterm{governance metadata}---annotating every tool call with who, what, why, and under what regulatory context.
+
+\paragraph{Pillar 3: Grounding via Retrieval.}
+Even the most sophisticated model trained on petabytes of data will encounter gaps: new regulations, recent case law, proprietary client documents, yesterday's market data. More fundamentally, legal and financial professionals don't just need answers---they need \emph{cited, verifiable sources}.
+
+\keyterm{Retrieval-Augmented Generation} (RAG) addresses this by providing the model with relevant documents or data from an external knowledge base when generating responses \parencite{lewis2020rag}. Instead of relying solely on parametric memory, the model ``augments'' its answer with retrieved information. This improves accuracy, enables citation of sources, and allows the knowledge base to be updated without retraining the model.
+
+We introduce the concept of the \keyterm{Canonical Evidence Record}---a structured log that captures the exact source, location (page/paragraph), quote, jurisdiction, date, and cryptographic hash for every claim. This transforms opaque AI outputs into auditable artifacts suitable for legal proceedings and regulatory scrutiny.
+
+\subsection{Chapter Scope and Relationship to Chapter 4}
+
+This chapter focuses on \textbf{text-based} structured outputs, tool use, and retrieval fundamentals. We examine how to design schemas, validate outputs, integrate function calling, and implement basic retrieval pipelines. We establish the governance frameworks and audit patterns that will carry forward throughout the book.
+
+\textbf{Chapter 4} will extend these concepts to \textbf{multimodal inputs}---PDFs, scanned documents, tables, charts, images, audio transcripts, and video. Legal and financial professionals work with complex document formats daily: contracts as PDFs, financial statements with embedded tables, deposition transcripts, slide decks with charts. Chapter 4 will cover layout analysis models, vision-language models, OCR, table extraction, and temporal media handling.
+
+However, the \emph{architectural principles} remain constant: structured extraction, tool-mediated access, and evidence-based grounding. A multimodal system still needs to output structured JSON, still needs to call functions safely, and still needs to cite \emph{which page of which document} supports each claim. The foundations we build here apply equally whether the input is a text string or a 200-page PDF.
+
+\subsection{Target Audience and Learning Objectives}
+
+This chapter is written for legal and financial professionals who may not have deep technical backgrounds but need to understand how AI systems can be made reliable, auditable, and compliant. We start with accessible concepts and build to technical details, using familiar examples from contract analysis, regulatory compliance, and financial calculations.
+
+\paragraph{What You Will Learn.}
+By the end of this chapter, you will understand:
+
+\begin{itemize}
+  \item \textbf{Why structure matters} (\Cref{sec:llmC-structured}): How schemas and validation transform unpredictable text into reliable data. You'll learn to choose between JSON, XML, and CSV based on use case, design schemas that align with the model's capabilities, and implement validation loops with versioning.
+
+  \item \textbf{How tool use works} (\Cref{sec:llmC-tools}): The mechanics of function calling, from OpenAPI specifications to parameter generation to execution feedback. You'll understand the governance metadata required for compliance, security vulnerabilities (OWASP Top 10 for LLMs), and best practices for error handling, idempotency, and least-privilege access.
+
+  \item \textbf{Grounding and retrieval basics} (\Cref{sec:llmC-rag}): How RAG improves accuracy and enables source citation. You'll learn about chunking strategies, embedding-based search, metadata filtering by jurisdiction and date, and maintaining evidence records that satisfy legal and regulatory standards.
+
+  \item \textbf{Pitfalls and best practices} (\Cref{sec:llmC-pitfalls}): Common failure modes in production systems and how to avoid them. From schema versioning to rate limiting, from PII redaction to circuit breakers, we cover the engineering discipline required for reliable AI systems.
+
+  \item \textbf{Integration patterns} (\Cref{sec:llmC-synthesis}): How these three pillars work together in practice. A complete system combines structured outputs (for predictability), tool use (for actions), and retrieval (for evidence) into an accountable architecture.
+\end{itemize}
+
+\subsection{The Accountability Imperative}
+
+The theme uniting these technical components is \keyterm{accountability}. In professional practice, AI systems must be accountable in three dimensions:
+
+\begin{enumerate}
+  \item \textbf{Accountable to data:} Through grounding and retrieval, ensuring that outputs are based on verifiable sources rather than hallucinated patterns.
+
+  \item \textbf{Accountable to format:} Through structured outputs and validation, ensuring that downstream systems can safely consume AI-generated data.
+
+  \item \textbf{Accountable to oversight:} Through governance metadata and audit trails, ensuring that every action can be traced, explained, and defended.
+\end{enumerate}
+
+This accountability is not merely a regulatory checkbox. It is a fundamental architectural requirement that distinguishes experimental AI from production-grade systems suitable for high-stakes domains.
+
+\subsection{A Note on Examples and Code}
+
+Throughout this chapter, we provide concrete examples drawn from legal and financial contexts: extracting contract terms, calculating interest, querying case law databases, analyzing compliance documents. Code snippets are illustrative rather than exhaustive---our goal is conceptual understanding of the patterns and their implications, not line-by-line implementation guides.
+
+For readers implementing these systems, we recommend consulting the vendor-specific documentation for your chosen LLM platform, validation library, and retrieval framework. The \emph{principles} we establish here---schema-first design, governance metadata, evidence records, security-conscious tool access---apply regardless of implementation details.
+
+\subsection{Looking Ahead}
+
+We begin in \Cref{sec:llmC-rag} with the fundamentals of retrieval-augmented generation, establishing how to ground AI responses in external knowledge. \Cref{sec:llmC-evidence} introduces the Canonical Evidence Record schema that will recur throughout the book. \Cref{sec:llmC-structured} dives into structured output techniques, from prompt-based approaches to constrained decoding. \Cref{sec:llmC-tools} examines tool use and function calling with a focus on security and governance. \Cref{sec:llmC-pitfalls} catalogs common mistakes and mitigations. Finally, \Cref{sec:llmC-synthesis} integrates these components into a coherent architectural framework.
+
+The journey from conversational AI to embedded reasoning engine requires discipline, rigor, and a deep respect for the deterministic requirements of professional practice. By imposing structure upon stochasticity, we transform powerful but unpredictable models into reliable components of mission-critical systems.
+
+Let us begin with the problem of grounding---ensuring that what the AI claims to know can be traced to what it actually \emph{observed}.

@@ -7,19 +7,209 @@
 \section{Grounding and Retrieval Basics (RAG 101)}
 \label{sec:llmC-rag}
 
-% Outline (comments):
-% - Why grounding: verification, recency, jurisdiction, provenance
-% - Chunking strategies (by structure vs. fixed size); overlap; identifiers
-% - Embeddings/indexing; filters (jurisdiction, date, client)
-% - Freshness/versioning; re-index triggers
-% - Citation fidelity: quotes, page/para IDs, timestamps, stable URLs/DOIs
+Even when an LLM has access to tools and produces structured output, we face a fundamental challenge: How do we ensure the \emph{content} of its answers is correct, up-to-date, and verifiable? This is where grounding the model's responses in external knowledge comes into play. \keyterm{Retrieval-Augmented Generation} (RAG) is a technique where the model is provided with relevant documents or data from an external source—a knowledge base, database, or search index—to use when generating its answer. Instead of relying solely on what is stored in the model's parameters (which could be outdated or insufficiently detailed), the model augments its answer with retrieved information. For legal and financial professionals, this means an AI can cite the actual law, regulation text, or financial report that supports its conclusion, rather than giving an answer you have to take on faith.
 
-Embeddings provide the similarity signal that powers retrieval; see the primer in \Cref{sec:llmA-embeddings}. All retrieval outputs should carry the canonical evidence record defined in \Cref{sec:llmC-evidence}.
+Embeddings provide the similarity signal that powers retrieval; see the primer in \href{\#}{Chapter~1 (LLM Primer)}. %TODO: update cross-chapter link to sec:llmA-embeddings
+All retrieval outputs should carry the canonical evidence record defined in \Cref{sec:llmC-evidence}.
+
+% -----------------------------------------------------------------------------
+\subsection{Why Grounding Matters}
+\label{sec:llmC-rag-why}
+% -----------------------------------------------------------------------------
+
+Think of a seasoned lawyer or financial analyst. They have general expertise (like an LLM's training), but for a specific case they will always consult primary sources—statutes, case law, financial statements. An LLM on its own is like a very smart person with a great memory of general knowledge, but it might not recall the exact wording of Section 10(b) of a securities law, or the latest quarterly earnings of a company. RAG provides the model with a library research assistant. The analogy is apt: a judge has general knowledge of law but sends a clerk to the law library for specific precedents—similarly, RAG is the process of sending the AI to fetch relevant text so it can deliver an authoritative, case-specific answer. This not only improves accuracy but also allows the answer to include citations to the sources used, just like a legal brief or research report would include footnotes.
+
+Grounding delivers four critical benefits:
+
+\begin{enumerate}
+\item \textbf{Accuracy and Factuality:} LLMs can hallucinate—produce answers that sound plausible but are false. By grounding in external data, the model has less freedom to make things up. It is reading from a source. For instance, if asked "What is the inflation rate as of this month?" a grounded approach will retrieve the latest official figure from a trusted source and the model will base its answer on that. Studies have shown that generation models augmented with retrieval produce more specific and factual language than those that rely only on internal knowledge. The original RAG paper noted that providing models a way to fetch information greatly improved their performance on knowledge-intensive tasks and even reduced incorrect answers.
+
+\item \textbf{Provenance (Source of Truth):} In legal and financial fields, you always need to know the source. An AI saying "Trust me, the defendant was in Paris on Jan 5" is not acceptable—you need the document or testimony that confirms that fact. Retrieval allows the AI to present the underlying evidence. For example, the AI might answer "According to \textit{Doe v. Smith}, p.~5, the defendant was in Paris on Jan 5, 2021." Now you (or a court) can verify the claim by checking that source. One of the open research problems noted with large models is providing provenance for their statements. Grounding helps solve this by forcing the model to draw from explicit sources rather than its hazy memory. RAG gives models sources they can cite, like footnotes in a research paper, so users can check any claims. That builds trust.
+
+\item \textbf{Freshness and Adaptability:} An LLM's training data might be a year or two out of date (or more). Even if up-to-date, it cannot contain every new law, every day's stock prices, or every recent court decision. With a retrieval approach, you can update the knowledge base continuously—feeding in new documents, regulations, news, etc. The AI can hot-swap new sources on the fly, which is much faster and cheaper than retraining the whole model. For example, after a major tax law change, you can have the AI search a database of 2025 tax code updates. The model does not need to have those updates in its frozen internal memory—it just needs to fetch them when relevant. This dynamic linking of external knowledge makes AI systems far more maintainable and responsive to change.
+
+\item \textbf{Domain Specificity without Overfitting:} Instead of trying to train a giant model on every detail of every domain (which could be impossible or at least inefficient), RAG enables using a general model and specializing it on the fly with domain data. Almost any business can turn its internal documents into a knowledge base for the AI. That means a law firm could feed in all case files, or a bank could feed in policy manuals and market data, and the AI becomes an expert on that content when needed. This specialization is achieved without altering the core model—it is guided by the retrieved documents.
+\end{enumerate}
+
+\begin{keybox}[title={RAG in Practice}]
+RAG transforms an LLM from a static knowledge repository into a dynamic research assistant that fetches, verifies, and cites sources. For compliance and audit purposes, every fact should trace back to a specific document, page, and date.
+\end{keybox}
+
+% -----------------------------------------------------------------------------
+\subsection{How Retrieval Works: The Judge and Law Clerk Analogy}
+\label{sec:llmC-rag-how}
+% -----------------------------------------------------------------------------
+
+Under the hood, retrieval-augmented generation typically involves a few coordinated steps:
+
+\paragraph{Indexing.} All reference documents—statutes, contracts, research papers, financial reports, emails, whatever corpus you have—are indexed in a way that the AI can search. Traditional methods use keywords (inverted indices). Modern methods often use \keyterm{embeddings}—vectors representing the semantic meaning of text. Each document or paragraph is turned into a vector in a high-dimensional space such that similar content is nearby in that space. The system can then retrieve the pieces of text most relevant to the query by \keyterm{vector similarity}. For example, your question "What are the termination conditions of the lease?" would be converted to a vector and the index might find the closest vectors, which could be clauses about termination in various lease documents.
+
+\paragraph{Chunking.} We usually break documents into \keyterm{chunks} (paragraphs or sections) before embedding. This is because retrieving at a whole-document level may bring in a lot of irrelevant text along with the relevant piece, and the model has a limited input size. By chunking, we aim to retrieve just the most pertinent pieces. The strategy for chunking can affect performance: experiments show that how you chunk—by fixed size, by sentence boundary, by semantic coherence—can change retrieval accuracy by several percentage points. For instance, one report found differences up to 9\% in recall between chunking strategies. Overlapping chunks (to not cut off context) often improve results but increase index size. This is a tunable process, which we discuss in detail below.
+
+\paragraph{Retrieval Step.} Given the user query or the task at hand, the system uses either classical search or embedding similarity to fetch, say, the top 3--5 most relevant chunks. These are then passed into the LLM (often appended to the prompt as context) with clear instruction to use them. You might frame it as: "You have access to the following excerpts from relevant documents:" then list the chunks with source names.
+
+\paragraph{Generation with Grounding.} The LLM now generates its answer, but it has these snippets at hand to quote or rely on. Ideally, it should stick to them for factual details. In practice, well-designed prompts (or fine-tuning) are needed to make the model (a)~actually use the provided info and (b)~not drift into unsupported claims. Many implementations also have the model output citations or an evidence list with the answer. In an interactive system, you might have the model output a JSON that includes the answer and references to sources (document ID and page/paragraph). This ties back to our Evidence Record concept in \Cref{sec:llmC-evidence}, where each claim is linked to its source details.
+
+\begin{highlightbox}
+\textbf{The Research Assistant Pattern:} Think of RAG as hiring a research assistant who looks up relevant materials before drafting a response. The LLM reasons over the retrieved excerpts rather than hallucinating from memory alone. This division of labor—retrieval for facts, generation for synthesis—is the heart of RAG.
+\end{highlightbox}
+
+% -----------------------------------------------------------------------------
+\subsection{Chunking Strategies: Balancing Context and Precision}
+\label{sec:llmC-rag-chunking}
+% -----------------------------------------------------------------------------
+
+Chunking is not merely a technical detail; it fundamentally shapes what the retrieval system can find and how useful that information is to the model. The central tension is between \emph{context} (larger chunks preserve more surrounding information) and \emph{precision} (smaller chunks return only the most relevant sentences).
+
+\paragraph{Fixed-Size Chunking.} The simplest approach is to split documents into chunks of a fixed token count, say 100--300 tokens per chunk. This is easy to implement and guarantees that no chunk will exceed the model's context window or your indexing budget. However, fixed-size chunking is blind to document structure. A chunk boundary might fall mid-sentence or mid-paragraph, severing the logical flow. For legal documents with numbered sections or financial reports with tables, this can be especially problematic—you might end up with a chunk that starts with "...and the lessee agrees" without the antecedent clause that defines who the lessee is.
+
+\paragraph{Semantic Boundary Chunking.} A more sophisticated approach respects natural boundaries: paragraphs, sections, or even sentence groups. For instance, if a contract has subsections labeled (a), (b), (c), you can chunk at those boundaries. This preserves the semantic unit. Similarly, if you are indexing a research paper, you might chunk by section headings (Introduction, Methodology, Results). The downside is variable chunk sizes—some sections might be very short (a few sentences) and others very long (multiple pages). You may need to recursively split long sections while preserving short ones.
+
+\paragraph{Overlap Between Chunks.} To mitigate the risk of splitting important context across chunk boundaries, many systems use \keyterm{overlapping chunks}. For example, if you chunk every 200 tokens, you might include the last 20--40 tokens of the previous chunk at the start of the next chunk (a 10--20\% overlap). This ensures that if a key phrase or clause appears near a boundary, it will be fully contained in at least one chunk. Empirical guidance suggests an overlap of 10--20\% is a good starting point, but this increases the total number of chunks and thus the index size and retrieval cost.
+
+\paragraph{Empirical Guidance on Chunk Size.} Research and practitioner experience suggest that chunks of roughly 100--300 tokens work well for most retrieval tasks. Chunks smaller than 100 tokens often lack sufficient context for the embedding to capture the semantic meaning, leading to noisy or irrelevant retrievals. Chunks larger than 300--500 tokens can dilute the signal—if only one sentence in a 500-token chunk is relevant, you are still passing 500 tokens to the model, wasting context space and potentially confusing the generation step. For legal and financial documents, where precise citations matter, erring on the smaller side (150--250 tokens) often yields better results, as long as you preserve section headers or clause numbers to maintain context.
+
+\begin{cautionbox}[title={Chunking Pitfalls}]
+\textbf{Avoid}: Splitting mid-clause or mid-table row. A chunk that starts with "Section 3(b) unless otherwise" without the preceding text is useless. \textbf{Best practice}: Use document structure (headings, numbered clauses) as primary boundaries, then apply token limits as a secondary constraint. Always test your chunking strategy on a sample corpus to ensure retrieved chunks make sense when read in isolation.
+\end{cautionbox}
+
+% -----------------------------------------------------------------------------
+\subsection{Embeddings and Indexing: Dense Retrieval for Legal Language}
+\label{sec:llmC-rag-embeddings}
+% -----------------------------------------------------------------------------
+
+Once documents are chunked, each chunk is passed through an \keyterm{embedding model} to produce a dense vector representation. These vectors are then stored in a \keyterm{vector index} (also called a vector database) that supports fast similarity search. The quality of your embeddings directly determines the quality of your retrieval.
+
+\paragraph{Dense Retrieval Models.} Early embedding models (like Word2Vec or GloVe) were word-level; modern dense retrieval uses \keyterm{sentence embeddings} or \keyterm{document embeddings} from models like Sentence-BERT (SBERT) or proprietary embedding APIs (OpenAI's \texttt{text-embedding-ada-002}, Cohere's embedding models, etc.). These models are trained to map semantically similar text to nearby points in a high-dimensional space (often 768 or 1536 dimensions). When a user query is embedded, the system performs a k-nearest-neighbor (k-NN) search in this space to find the top-k most similar chunks.
+
+\paragraph{Domain-Specific Embeddings for Legal Language.} General-purpose embedding models may struggle with legal jargon, Latin phrases, and citation formats. For example, "habeas corpus" or "15 U.S.C. § 1681a" might not be well-represented in a model trained primarily on web text. Domain-specific embeddings—fine-tuned on legal corpora—can significantly improve retrieval precision. Models like \texttt{legal-bert} or custom-trained embeddings on case law and statutes better understand the nuances of legal language. Similarly, for financial documents, embeddings trained on SEC filings, earnings reports, and financial news will capture domain-specific terminology (like "EBITDA", "non-GAAP", "risk factors") more accurately.
+
+\paragraph{Indexing at Scale.} For large corpora (tens of thousands of documents or more), efficient indexing is critical. Libraries like FAISS (Facebook AI Similarity Search) or cloud vector databases (Pinecone, Weaviate, Chroma) use approximate nearest neighbor (ANN) algorithms to handle billions of vectors with millisecond query times. The trade-off is between indexing speed, query speed, and recall accuracy. For legal and financial use cases, where missing a relevant statute or clause could have serious consequences, you may want to tune your index for higher recall (at the cost of slightly slower queries) rather than optimizing purely for speed.
+
+\begin{definitionbox}[title={Dense Retrieval}]
+\keyterm{Dense retrieval} uses learned vector representations (embeddings) to find semantically similar text, even when the exact keywords do not match. For example, a query about "contract termination" can retrieve chunks about "agreement cancellation" or "ending the lease" because those phrases are close in embedding space.
+\end{definitionbox}
+
+% -----------------------------------------------------------------------------
+\subsection{Hybrid Search: Combining Keyword and Vector Search}
+\label{sec:llmC-rag-hybrid}
+% -----------------------------------------------------------------------------
+
+While dense retrieval excels at semantic matching, it can sometimes miss exact matches that keyword search would catch. This is especially true for legal citations, case numbers, or specific regulatory references. For example, embedding-based search might not reliably retrieve the exact cite "42 U.S.C. § 1983" if that string is rare in the training corpus. A keyword search, however, would match it exactly.
+
+\keyterm{Hybrid search} combines both approaches: a keyword index (like Elasticsearch's inverted index or a traditional full-text search) and a vector index. The system runs both searches in parallel, retrieves candidate chunks from each, and then merges or re-ranks the results. Common strategies include:
+
+\begin{itemize}
+\item \textbf{Union and Re-Rank:} Retrieve top-10 from keyword search and top-10 from vector search, then use a \keyterm{re-ranking model} (like a cross-encoder) to score all 20 candidates and return the final top-5. This ensures you do not miss exact matches while still benefiting from semantic understanding.
+
+\item \textbf{Weighted Fusion:} Assign each result a combined score, e.g., \texttt{final\_score = alpha * keyword\_score + (1 - alpha) * vector\_score}. Tune \texttt{alpha} based on your corpus and use case. For legal research, you might weight keyword search higher for queries that look like citations (e.g., contain "U.S.C." or "Fed. Reg.") and weight vector search higher for conceptual queries (e.g., "What are the duties of a fiduciary?").
+
+\item \textbf{Metadata Pre-Filtering:} Use keyword search or metadata filters to narrow the corpus first, then apply vector search within that subset. For example, if the query is about Delaware corporate law, filter to documents tagged \texttt{jurisdiction: DE} before running semantic retrieval.
+\end{itemize}
+
+Hybrid search is particularly powerful in legal and financial domains, where precision (not missing a critical cite) and recall (finding all relevant clauses) are both paramount.
+
+\begin{keybox}[title={Hybrid Search in Practice}]
+For queries involving specific citations, statutes, or numeric identifiers (like "Sarbanes-Oxley Section 404"), use keyword search as the primary filter. For conceptual queries (like "What are the disclosure requirements for material events?"), rely on vector search. Hybrid approaches give you the best of both worlds.
+\end{keybox}
+
+% -----------------------------------------------------------------------------
+\subsection{Filtering by Metadata: Jurisdiction, Date, and Permissions}
+\label{sec:llmC-rag-metadata}
+% -----------------------------------------------------------------------------
+
+A critical aspect of retrieval systems in legal and financial use is \keyterm{filtering and scope}. You often have a large corpus but only some of it is relevant by jurisdiction, date, or client. For example, if a user asks about "data protection obligations for healthcare data," and we have laws from multiple jurisdictions in the knowledge base, we might want to first filter to the user's jurisdiction (say EU vs. US) or at least label answers with jurisdiction. Good retrieval design allows filtering on metadata before or alongside the semantic similarity search.
+
+\paragraph{Jurisdiction Filters.} Legal documents should be tagged with jurisdiction metadata: \texttt{US-federal}, \texttt{US-CA}, \texttt{EU}, \texttt{UK}, etc. When indexing, store these tags alongside each chunk. At query time, if the user's context indicates they are asking about California law, apply a filter: only retrieve chunks where \texttt{jurisdiction = "US-CA"}. This ensures the AI does not accidentally cite a UK law in answer to a question about a situation in California.
+
+\paragraph{Date Ranges and Effective Dates.} Legal and financial documents are time-sensitive. A regulation might be amended multiple times; a case might be overruled. Each chunk should carry metadata about the document's effective date or publication date. For example, if you are answering a question about "2024 tax filing requirements," you want to retrieve the version of the tax code effective in 2024, not the 2019 version (even if the 2019 version is still in your index for historical queries). Similarly, financial data (like quarterly earnings) must be tagged with the reporting period (e.g., \texttt{Q4 2024}). At retrieval time, filter or rank by date relevance.
+
+\paragraph{Client Permissions and Confidentiality.} In a law firm or financial institution, not all documents should be accessible to all users. A document from Client A's case file should not be retrieved for a query from Client B's matter. This requires a robust \keyterm{access control} layer. Each document (or chunk) should carry an ACL (access control list) or client identifier. The retrieval system must check the user's permissions before returning results. This is non-negotiable for confidentiality and conflict-of-interest reasons. Some vector databases support filtering by arbitrary metadata fields; others require you to maintain separate indices per client or role.
+
+\paragraph{Document Type and Classification.} You might also filter by document type: contracts, statutes, case law, internal memos, news articles, etc. For example, if a user asks for "authoritative guidance," you might boost or filter to official sources (statutes, regulations) and down-weight or exclude news articles or blog posts. This metadata-driven filtering ensures the AI is drawing from the most appropriate sources for the task.
+
+\begin{cautionbox}[title={Metadata is Critical}]
+Without proper metadata filtering, a RAG system can retrieve plausible but \emph{wrong} information—like citing a statute from the wrong jurisdiction, a superseded version of a law, or a confidential document the user should not access. Always design your indexing pipeline to capture and enforce jurisdiction, date, and permission metadata.
+\end{cautionbox}
+
+% -----------------------------------------------------------------------------
+\subsection{Index Freshness and Versioning: Keeping Knowledge Current}
+\label{sec:llmC-rag-freshness}
+% -----------------------------------------------------------------------------
+
+Unlike the static training of an LLM (which might be updated only rarely due to cost), the retrieval index can—and should—be updated frequently to keep the system's knowledge fresh. This is one of RAG's major advantages: you do not need to retrain the model to incorporate new information; you just update the index.
+
+\paragraph{Update Triggers.} Define clear triggers for when to re-index:
+\begin{itemize}
+\item \textbf{New Document Added:} When a new regulation is published, a new case is decided, or a new financial report is filed, ingest it immediately. Chunk it, embed it, and add it to the vector index.
+\item \textbf{Document Amended or Corrected:} If a statute is amended, the old version should be marked as superseded (not necessarily deleted, as you may need it for historical queries). The new version should be indexed with a new version ID and the current effective date.
+\item \textbf{Scheduled Batch Updates:} For high-volume sources (like news feeds, market data, or SEC filings), run a nightly or hourly batch job to ingest new content.
+\item \textbf{Manual Curator Review:} In some domains, you may want a human curator to review and tag documents before they are indexed, ensuring quality and correct metadata.
+\end{itemize}
+
+\paragraph{Marking Superseded Documents.} Rather than deleting old versions outright, best practice is to keep them in the index but mark them as \texttt{status: superseded} or \texttt{current: false}. At retrieval time, by default filter to \texttt{current: true}. This way, if a user asks a historical question ("What was the law in 2018?"), you can adjust the filter to retrieve the version effective at that time. For audit and compliance purposes, being able to trace what information was available at a given date is invaluable.
+
+\paragraph{Version IDs and Effective Dates.} Each document (or chunk) should have:
+\begin{itemize}
+\item \textbf{Document Version ID:} A unique identifier for this specific version (e.g., \texttt{tax-code-v2024-01-15}).
+\item \textbf{Effective Date:} When this version became effective (e.g., \texttt{2024-01-15}).
+\item \textbf{Superseded Date:} When it was replaced by a newer version (if applicable).
+\end{itemize}
+
+This versioning metadata allows the system to answer questions like "What were the disclosure rules on March 1, 2024?" by retrieving the version effective as of that date.
+
+\paragraph{Index Maintenance and Garbage Collection.} Over time, your index will accumulate many versions of documents. Periodically, you may want to archive or remove very old versions that are no longer relevant (e.g., laws from decades ago that have been fully replaced and are not commonly cited). However, be cautious: in legal and financial contexts, historical data can be critical for litigation, audits, or regulatory inquiries. A safer approach is to move old versions to a separate "archival" index that is queried only when explicitly needed, rather than deleting them entirely.
+
+\begin{keybox}[title={Freshness is a Feature}]
+One of RAG's superpowers is that you can update your knowledge base daily—or even in real-time—without touching the model. This makes RAG-based systems far more adaptable to changing regulations, market conditions, and case law than static LLMs.
+\end{keybox}
+
+% -----------------------------------------------------------------------------
+\subsection{Citation Fidelity: Quotes, Identifiers, and Evidence Records}
+\label{sec:llmC-rag-citations}
+% -----------------------------------------------------------------------------
+
+In legal and compliance settings, it is not enough for the AI to just have sources; it needs to \emph{show} them. Every factual claim should trace back to a specific document, with enough detail that a human reviewer can verify the claim. This is the purpose of the \keyterm{Canonical Evidence Record} we introduced in \Cref{sec:llmC-evidence}.
+
+\paragraph{What to Capture in a Citation.}
+\begin{itemize}
+\item \textbf{Source Identifier:} A stable, unique ID for the document (e.g., a DOI, a URL, or an internal document ID like \texttt{doc-12345}).
+\item \textbf{Locator:} Where in the source the information came from—page number, paragraph number, section, or timestamp (for audio/video). In law, this could be a citation like "15 U.S.C. § 1681a(d)" or "Complaint, para.~23."
+\item \textbf{Quote or Excerpt:} The exact text that supports the claim, copied verbatim (and perhaps truncated if very long). Exact quoting avoids any ambiguity over interpretation.
+\item \textbf{Date:} The publication or effective date of that source material. This matters for laws (effective dates) and for financial info (as of Q4 2024, etc.). It is also useful for news or articles to assess recency.
+\item \textbf{Jurisdiction or Context:} Especially for laws, which jurisdiction's law is this (e.g., US federal, EU, state of Michigan). For other info, it might include sector context (was this under HIPAA, under GDPR, etc., as tags).
+\item \textbf{Hash or Signature:} A cryptographic hash of the content (SHA-256, for example) to detect any tampering. If the AI cited an internal policy document, you would store a hash of that document version so that later you can prove "this is exactly the text that was seen by the AI at that time" and it has not been altered.
+\item \textbf{Model and Parameters Used:} Which AI model generated this and with what parameters (temperature, etc.), and possibly which retrieval method or index version was used. This helps in audits to know the configuration.
+\item \textbf{Correlation ID:} An identifier linking this record to the specific AI session or user query. If multiple claims were made in one answer, each can have its evidence record, all tied by a common session ID.
+\end{itemize}
+
+All these fields together form a robust evidence record. It is akin to the reference list at the end of a research paper combined with chain-of-custody details used in digital forensics.
+
+\paragraph{Why So Detailed?} In a regulated environment, you may need to defend the AI's output years later. For example, if a financial recommendation is ever litigated, you want to show exactly what data the AI saw and relied on (and that data might no longer be live on some website, hence storing the quote and hash is vital). Similarly, if a client questions an outcome, you can produce evidence records showing the sources behind each point, which builds confidence and transparency.
+
+\paragraph{Implementation Note.} Many teams implement this by extending the prompt or system so that the model outputs not just an answer but an answer plus citations. Alternatively, a second pass can find supporting sources for the answer (a verification step). Regardless of method, once you have identified the source and snippet for a claim, wrap it into the evidence record schema. Some advanced setups even produce a JSON file with all evidence records for a given conversation, which can be stored or indexed for later search (so you can ask, "Why did we tell client X this thing last year?" and retrieve the records).
+
+\begin{highlightbox}
+\textbf{Citation as Compliance:} In legal and financial AI, citations are not optional niceties—they are compliance artifacts. Every fact should be traceable to a source, date, and version. This is the difference between a helpful chatbot and an auditable decision support system.
+\end{highlightbox}
+
+% -----------------------------------------------------------------------------
+\subsection{Synthesis: RAG as a Research Assistant}
+\label{sec:llmC-rag-synthesis}
+% -----------------------------------------------------------------------------
+
+By implementing retrieval and grounding, we aim to tie every claim the AI makes to a solid foundation. If you implement it well, the AI's answers start to read like a well-researched memo: "Answer... (Source: Document X, p.~Y)". This not only makes the answers better, it also changes the user's relationship with the AI—from a black box oracle to an interactive research assistant that shows its work. Users can trust but verify, which is exactly what you want in law and finance.
+
+Grounding is not a silver bullet. The quality of retrieval depends on the quality of your corpus, your chunking strategy, your embeddings, and your metadata. A poorly indexed corpus—full of outdated documents, missing jurisdiction tags, or mis-chunked text—will produce poor retrievals, and the LLM will generate answers based on bad information. But when done right, RAG transforms an LLM from a creative writer into a disciplined researcher, anchored in the sources you provide.
+
+In the next sections, we will explore how structured outputs and tool use combine with grounding to create AI systems that are not just knowledgeable but also reliable, auditable, and trustworthy in high-stakes domains.
 
 \begin{definitionbox}[title={Grounding Goals}]
 \begin{itemize}
   \item Tie every claim to sources with quotes and identifiers.
   \item Filter by jurisdiction, date ranges, and client permissions.
   \item Refresh indexes on document updates; record versions.
+  \item Combine keyword and vector search for precision and recall.
+  \item Capture full citation metadata for audit and compliance.
 \end{itemize}
 \end{definitionbox}
