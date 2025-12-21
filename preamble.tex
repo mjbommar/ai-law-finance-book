@@ -448,6 +448,58 @@
   #1
 }
 
+% Caution box style - For warnings and critical alerts
+\newtcolorbox{cautionbox}[1][]{
+  enhanced,
+  colback=bg-caution,
+  colframe=border-caution,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=12pt,
+  right=12pt,
+  top=10pt,
+  bottom=10pt,
+  breakable,
+  drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.08},
+  borderline west={4pt}{0pt}{caution-dark},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=caution-dark,
+    colframe=caution-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% Technical detail box - For optional deeper mechanics (arrays, hardware, algorithms)
+\newtcolorbox{technicalbox}[1][]{
+  enhanced,
+  colback=practice-light,
+  colframe=practice-base,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=12pt,
+  right=12pt,
+  top=10pt,
+  bottom=10pt,
+  breakable,
+  drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.06},
+  borderline west={4pt}{0pt}{practice-dark},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=practice-dark,
+    colframe=practice-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
 % Listing box style - For code examples, API signatures, and technical content
 \newtcblisting{listingbox}[1][]{
   enhanced,

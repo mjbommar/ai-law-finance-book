@@ -2,9 +2,9 @@
 
 **A Modern Textbook at the Intersection of AI, Law, and Finance**
 
-🚧 **Status: Working Draft** (Last Updated: November 2025)
+🚧 **Status: Working Draft** (Last Updated: December 2025)
 
-Welcome! This repository contains the evolving draft of *Artificial Intelligence for Law and Finance*, an open-source textbook designed to bridge the gap between cutting-edge AI technology and its practical applications in legal and financial domains.
+Welcome! This repository contains the evolving draft of *Artificial Intelligence for Law and Finance*, an open-source textbook designed to bridge the gap between AI and its practical applications in legal and financial domains.
 
 ⭐ **Stay Updated**: [Star this repository](https://github.com/mjbommar/ai-law-finance-book) or click "Watch" to get notified of new chapters and updates!
 
@@ -39,10 +39,10 @@ Legend:
 - [x] **06 — Agents Part I: What Is an Agent?**  
   [PDF](chapters/06-agents-part-1/main.pdf) · [source](chapters/06-agents-part-1)
 
-- [~] **07 — Agents Part II: How to Build an Agent**  
-  [source](chapters/07-agents-part-2)
+- [x] **07 — Agents Part II: How to Build an Agent**  
+  [PDF](chapters/07-agents-part-2/main.pdf) · [source](chapters/07-agents-part-2)
 
-- [~] **08 — Agents Part III: How to Govern an Agent**  
+- [x] **08 — Agents Part III: How to Govern an Agent**  
   [PDF](chapters/08-agents-part-3/main.pdf) · [source](chapters/08-agents-part-3)
 
 ### Part III — Knowledge Graphs & Semantic Web
@@ -52,11 +52,6 @@ Legend:
 
 - [~] **10 — Knowledge Graphs & Semantic Web: Operations with LLMs**  
   [source](chapters/10-kg-operations-llm)
-
-### Future / Planned Chapters
-
-- [ ] **Prompting & Meta-Prompting**  
-  [source](chapters/prompting-and-meta-prompting)
 
 ## 📚 About This Book
 
@@ -84,22 +79,29 @@ Stay tuned for the launch!
 Want to dive right in? Here's where to find the current PDF drafts:
 
 ### 📚 Complete Book
-- **[main.pdf](main.pdf)** — The full book with all current chapters integrated (working draft)
+- **main.pdf** — The full book with all current chapters integrated (working draft). Generate locally via `make pdf`.
 
 ### 📑 Individual Chapters
-Currently available chapters that can be read standalone:
+Current standalone chapter PDFs (all working drafts unless marked finished in the roadmap):
 
-- **Agents Part I: What Is an Agent?** — [chapters/06-agents-part-1/main.pdf](chapters/06-agents-part-1/main.pdf)  
-  *Conceptual primer and history — understanding agents and agentic systems in legal and financial contexts.*
-
-- **Agents Part III: How to Govern an Agent** — [chapters/08-agents-part-3/main.pdf](chapters/08-agents-part-3/main.pdf)  
-  *Working draft on regulation, controls, conformance, and deployment of agentic systems.*
-
-Other chapters in the Foundations and Knowledge Graphs parts are under active development and can be explored via their source folders in the chapter roadmap above.
+- **01 — Foundations: LLM Primer and Mechanics** — [chapters/01-foundations-llm-primer-mechanics/main.pdf](chapters/01-foundations-llm-primer-mechanics/main.pdf)
+- **02 — Foundations: Conversations and Reasoning** — [chapters/02-foundations-conversations-reasoning/main.pdf](chapters/02-foundations-conversations-reasoning/main.pdf)
+- **03 — Foundations: Structured Outputs and Tool Use** — [chapters/03-foundations-structured-tools-multimodal/main.pdf](chapters/03-foundations-structured-tools-multimodal/main.pdf)
+- **04 — Foundations: Multimodal Fundamentals** — [chapters/04-foundations-multimodal/main.pdf](chapters/04-foundations-multimodal/main.pdf)
+- **05 — Foundations: Prompt Design, Evaluation, and Optimization** — [chapters/05-foundations-prompt-design-eval-optimization/main.pdf](chapters/05-foundations-prompt-design-eval-optimization/main.pdf)
+- **06 — Agents Part I: What Is an Agent?** — [chapters/06-agents-part-1/main.pdf](chapters/06-agents-part-1/main.pdf)
+- **07 — Agents Part II: How to Build an Agent** — [chapters/07-agents-part-2/main.pdf](chapters/07-agents-part-2/main.pdf)
+- **08 — Agents Part III: How to Govern an Agent** — [chapters/08-agents-part-3/main.pdf](chapters/08-agents-part-3/main.pdf)
+- **09 — Knowledge Graphs & Semantic Web: Foundations for Law and Finance** — [chapters/09-kg-foundations/main.pdf](chapters/09-kg-foundations/main.pdf)
+- **10 — Knowledge Graphs & Semantic Web: Operations with LLMs** — [chapters/10-kg-operations-llm/main.pdf](chapters/10-kg-operations-llm/main.pdf)
 
 More chapters coming soon! This is a living document—we're actively writing and revising.
 
 ⭐ **Star this repository** to get notified when new chapters are published!
+
+## 📘 Mini Books
+
+- **Agents in Law & Finance** — [minibooks/agents-in-law-finance](minibooks/agents-in-law-finance) (standalone mini book with its own build files)
 
 ## 🚀 Getting Started
 
@@ -134,7 +136,7 @@ We've organized everything to be intuitive and maintainable:
 ```
 📁 ai-law-finance-book/
 ├── 📄 main.tex           # Complete book document
-├── 📄 main.pdf           # 👈 Full book PDF
+├── 📄 main.pdf           # 👈 Full book PDF (generated; not tracked)
 ├── 📄 Makefile           # Build automation
 ├── 📄 preamble.tex       # Shared LaTeX configuration
 ├── 📁 chapters/          # Individual chapter workspaces
@@ -150,9 +152,9 @@ We've organized everything to be intuitive and maintainable:
 │   ├── 📁 07-agents-part-2/
 │   ├── 📁 08-agents-part-3/
 │   ├── 📁 09-kg-foundations/
-│   ├── 📁 10-kg-operations-llm/
-│   └── 📁 prompting-and-meta-prompting/   # Outline and resources for a future chapter
-│       └── EXECUTIVE_SUMMARY.md
+│   └── 📁 10-kg-operations-llm/
+├── 📁 minibooks/         # Standalone mini books
+│   └── 📁 agents-in-law-finance/
 ├── 📁 docs/              # Style and contribution guides
 │   ├── build-guide.md    # Build system documentation
 │   ├── style-guide.md    # Writing standards
@@ -259,7 +261,7 @@ Always consult qualified professionals for specific legal or financial matters. 
 
 ### Coming Soon (Q4 2025 - Q1 2026)
 - Launch website at [ai4lf.com](https://ai4lf.com)
-- Complete Chapter 2: Prompting & Meta-Prompting
+- Complete planned Prompting & Meta-Prompting chapter
 - Add interactive Jupyter notebooks for examples
 - Implement continuous integration for PDF builds
 
@@ -277,7 +279,7 @@ Always consult qualified professionals for specific legal or financial matters. 
 
 ## 📄 License
 
-This work is licensed under [Creative Commons Attribution 4.0 International License](LICENSE).
+This work is licensed under Creative Commons Attribution 4.0 International License (CC BY 4.0).
 
 You are free to:
 - **Share**: Copy and redistribute the material
