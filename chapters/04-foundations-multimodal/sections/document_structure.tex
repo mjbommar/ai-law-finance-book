@@ -7,5 +7,64 @@
 \section{Document Structure and Layout}
 \label{sec:llmD2-structure}
 
-Prefer extractors that retain headings, sections, footnotes, and figure/table numbering. Record page numbers and object IDs to enable precise citations.
+The primary bottleneck in enterprise document workflows is the Portable Document Format (PDF). Standard text extraction tools treat a PDF as a stream of text characters, often destroying the semantic structure of tables, multi-column layouts, and headers. This ``PDF problem'' results in systems that can retrieve text but cannot understand the relationship between a data point in a table cell and its row/column headers---a critical failure mode for legal and financial analysis.
+
+\subsection{The Spectrum of Document Parsing Strategies}
+\label{sec:llmD2-parsing-strategies}
+
+Modern document parsing spans a spectrum from simple text extraction to sophisticated visual understanding:
+
+\begin{definitionbox}[title={Document Parsing Strategies}]
+\begin{description}
+  \item[Text Stream (Legacy)] Extract characters via libraries like \texttt{pypdf}. Fast and cheap, but destroys tables, columns, and reading order.
+  \item[Heuristic Parsing] Rule-based approaches using whitespace and line detection (e.g., \texttt{pdfplumber}). Better table support but brittle on borderless or complex tables.
+  \item[Layout Models (AI)] Neural models like \keyterm{LayoutLM} or \keyterm{DocLayout-YOLO} that identify structural elements through bounding boxes. Identifies headers versus body text but requires GPU resources.
+  \item[Vision-First (VLM)] Screenshot pages and process through vision-language models like GPT-4V. ``Human-like'' understanding of layout but slow, expensive, and limited by context windows.
+\end{description}
+\end{definitionbox}
+
+\subsection{Layout Analysis Models}
+\label{sec:llmD2-layout-models}
+
+To solve the PDF problem, modern pipelines employ \keyterm{layout analysis models} that treat the document page as an image---or a hybrid of image and text box coordinates---to identify visual blocks: headers, paragraphs, tables, and figures.
+
+\paragraph{LayoutLM and Successors.} Microsoft's LayoutLM family combines text understanding with spatial awareness. The model receives both the OCR text and the bounding box coordinates for each text segment, allowing it to learn the relationship between content and position. LayoutLMv3 and subsequent models add visual features from the document image itself, enabling recognition of logos, signatures, and other non-textual elements.
+
+\paragraph{DocLayout-YOLO.} For high-throughput pipelines, object detection architectures like YOLO (``You Only Look Once'') have been adapted for document layout analysis. DocLayout-YOLO processes document images in a single forward pass, detecting and classifying regions as headers, paragraphs, tables, figures, or footnotes. This approach trades some accuracy for significantly faster processing.
+
+\paragraph{Azure Document Intelligence.} Microsoft's cloud service provides pre-trained models for common document types (invoices, receipts, contracts) and allows custom model training for specialized formats. The service returns structured JSON with identified fields, tables, and key-value pairs, along with confidence scores and bounding polygons.
+
+\subsection{Preserving Structure for Downstream Use}
+\label{sec:llmD2-structure-preservation}
+
+Regardless of the parsing approach, the goal is to preserve sufficient structure for downstream tasks:
+
+\begin{highlightbox}[title={Structure Preservation Checklist}]
+\begin{itemize}
+  \item \textbf{Reading order}: Reconstruct the logical sequence for multi-column layouts.
+  \item \textbf{Hierarchy}: Preserve heading levels, section numbering, and nested lists.
+  \item \textbf{Object identifiers}: Retain figure/table numbers and their captions.
+  \item \textbf{Page references}: Record page numbers for precise citations.
+  \item \textbf{Footnotes/endnotes}: Link footnote markers to their content.
+  \item \textbf{Cross-references}: Preserve internal document links where possible.
+\end{itemize}
+\end{highlightbox}
+
+For legal filings and financial disclosures, page numbers and exhibit references are essential for citation. A contract review system that cannot identify ``Section 4.2(a)'' or ``Exhibit B'' loses the precision that practitioners require.
+
+\subsection{Chunking Strategies for Retrieval}
+\label{sec:llmD2-chunking}
+
+Once structure is identified, documents must be divided into chunks for embedding and retrieval. Naive approaches split by token count, but structure-aware chunking yields better results:
+
+\begin{keybox}[title={Structure-Aware Chunking}]
+\begin{description}
+  \item[Semantic boundaries] Split at section headings rather than arbitrary token counts.
+  \item[Table isolation] Keep tables as atomic units with their captions.
+  \item[Contextual overlap] Include section headers in each chunk for context.
+  \item[Metadata preservation] Attach page numbers, section paths, and document identifiers to each chunk.
+\end{description}
+\end{keybox}
+
+For financial documents, a common pattern is to extract tables into a separate structured index while chunking the narrative text. This allows the retrieval system to search both modalities and combine results during synthesis.
 

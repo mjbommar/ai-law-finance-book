@@ -7,5 +7,112 @@
 \section{Privacy and Redaction}
 \label{sec:llmD2-privacy}
 
-Apply redaction pipelines prior to external processing. Track redaction rules, versions, and exceptions; log who performed redactions and when.
+Data leakage is a primary concern in multimodal RAG systems, while misinformation is a concern in generation. Before data enters the vector database or the LLM context window, it must be scrubbed of personally identifiable information (PII), privileged content, and other sensitive material. Equally important, the provenance of AI-generated content must be trackable.
+
+\subsection{PII Detection and Redaction}
+\label{sec:llmD2-pii-redaction}
+
+\paragraph{The Challenge.} Documents processed through multimodal pipelines often contain:
+\begin{itemize}
+  \item \textbf{Direct identifiers}: Names, Social Security numbers, account numbers.
+  \item \textbf{Quasi-identifiers}: Dates, locations, and demographic details that enable re-identification.
+  \item \textbf{Sensitive categories}: Health information, financial data, legal case details.
+  \item \textbf{Embedded PII}: Information within images, scanned forms, or handwritten notes.
+\end{itemize}
+
+\paragraph{Microsoft Presidio.} \keyterm{Presidio} is an open-source framework for detecting, redacting, masking, and anonymizing sensitive data. It combines:
+\begin{itemize}
+  \item \textbf{Pattern matching}: Regular expressions for structured identifiers (SSN, phone numbers, credit cards).
+  \item \textbf{Named entity recognition (NER)}: Machine learning models to identify names, organizations, and locations.
+  \item \textbf{Configurable anonymizers}: Replace, mask, hash, or encrypt detected entities.
+  \item \textbf{Extensibility}: Custom recognizers for domain-specific identifiers (case numbers, account formats).
+\end{itemize}
+
+\begin{highlightbox}[title={Presidio Redaction Pipeline}]
+A document processing pipeline might:
+\begin{enumerate}
+  \item Extract text from PDF using layout analysis.
+  \item Pass text through Presidio's analyzer to detect PII entities.
+  \item Apply anonymizers: replace names with tokens, mask account numbers.
+  \item Embed and index the redacted text.
+  \item Store mapping between tokens and original values in a secure vault (if reversible redaction is needed).
+\end{enumerate}
+\end{highlightbox}
+
+\paragraph{Image-Based PII.} For scanned documents and images:
+\begin{itemize}
+  \item Run OCR to extract text, then apply text-based PII detection.
+  \item Use bounding box coordinates to redact regions in the original image.
+  \item Consider visual PII (faces, signatures) that text-based methods miss.
+  \item Presidio Image Redactor extends the framework to handle images directly.
+\end{itemize}
+
+\subsection{Privilege and Confidentiality}
+\label{sec:llmD2-privilege}
+
+Beyond PII, legal and financial workflows must protect:
+\begin{itemize}
+  \item \textbf{Attorney-client privilege}: Communications protected from disclosure.
+  \item \textbf{Work product doctrine}: Attorney mental impressions and legal strategy.
+  \item \textbf{Trade secrets}: Proprietary business information.
+  \item \textbf{Material non-public information (MNPI)}: Information that could affect securities prices.
+\end{itemize}
+
+\begin{cautionbox}[title={Privilege in AI Systems}]
+Including privileged content in a shared vector database or sending it to an external LLM API may waive privilege. Design systems to:
+\begin{itemize}
+  \item Segregate privileged content into separate indices with strict access controls.
+  \item Use on-premises or private cloud deployments for sensitive processing.
+  \item Implement privilege review workflows before ingestion.
+  \item Log all access to privileged content for audit purposes.
+\end{itemize}
+\end{cautionbox}
+
+\subsection{Content Authenticity and Provenance}
+\label{sec:llmD2-content-authenticity}
+
+As AI generates increasingly realistic content, tracking provenance becomes critical. The \keyterm{Content Authenticity Initiative (CAI)} and \keyterm{C2PA} (Coalition for Content Provenance and Authenticity) standards address this need.
+
+\paragraph{Content Credentials.} C2PA enables cryptographic signing of media files. This metadata (``Content Credentials'') travels with the file, proving:
+\begin{itemize}
+  \item \textbf{Origin}: Whether content was AI-generated, camera-captured, or edited.
+  \item \textbf{Editing history}: What modifications were applied and by whom.
+  \item \textbf{Tool chain}: Which software or AI models were involved.
+\end{itemize}
+
+This provides a ``digital nutrition label'' that allows consumers to verify the provenance of the content they are viewing.
+
+\paragraph{Application to Legal and Finance.} Content Credentials are particularly relevant for:
+\begin{itemize}
+  \item \textbf{Evidence authenticity}: Establishing the chain of custody for digital evidence.
+  \item \textbf{AI-generated disclosures}: Marking synthetic content in regulatory filings.
+  \item \textbf{Document integrity}: Proving that a contract or filing has not been tampered with.
+  \item \textbf{Audit trails}: Demonstrating the provenance of AI-assisted analysis.
+\end{itemize}
+
+\subsection{Redaction Governance}
+\label{sec:llmD2-redaction-governance}
+
+Effective redaction requires governance beyond the technical implementation:
+
+\begin{keybox}[title={Redaction Governance Checklist}]
+\begin{itemize}
+  \item \textbf{Policy documentation}: Define what must be redacted and under what circumstances.
+  \item \textbf{Version control}: Track changes to redaction rules over time.
+  \item \textbf{Exception handling}: Document when and why redaction was overridden.
+  \item \textbf{Audit logging}: Record who performed redactions, when, and what was affected.
+  \item \textbf{Reversibility decisions}: Determine if redaction should be reversible and secure the mapping.
+  \item \textbf{Quality assurance}: Sample and review redacted output for completeness.
+\end{itemize}
+\end{keybox}
+
+\paragraph{Integration with Evidence Records.} Redaction events should be captured in the canonical evidence record (see Chapter~3). When a document is processed:
+\begin{itemize}
+  \item Log the redaction rules applied (version, configuration).
+  \item Record entities detected and actions taken.
+  \item Preserve checksums of both original and redacted content.
+  \item Link to the redaction policy governing the action.
+\end{itemize}
+
+This ensures that any downstream analysis can be traced back to the original data with full understanding of what was removed and why.
 

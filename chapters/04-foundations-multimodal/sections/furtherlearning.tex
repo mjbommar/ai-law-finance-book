@@ -7,5 +7,45 @@
 \section{Further Learning}
 \label{sec:llmD2-further}
 
-% TODO: Add primary citations for OCR/layout models, table extraction, chart Q&A, and speech-to-text (with dates and urldate).
+\subsection{Document Layout and Structure}
+
+\begin{itemize}
+  \item \textbf{LayoutLM}: Xu et al.\ introduced LayoutLM for document understanding, combining text and layout information in a pre-trained model. The LayoutLMv3 paper extends this with unified text-image pre-training.
+  \item \textbf{DocLayout-YOLO}: Adapts object detection for document layout analysis, enabling fast identification of headers, paragraphs, tables, and figures.
+  \item \textbf{Azure Document Intelligence}: Microsoft's documentation provides practical guidance on layout analysis, table extraction, and custom model training for enterprise document types.
+  \item \textbf{SCAN}: Recent work on Semantic Document Layout Analysis for visual and textual RAG pipelines.
+\end{itemize}
+
+\subsection{Table and Chart Understanding}
+
+\begin{itemize}
+  \item \textbf{Chain-of-Table}: Wang et al.\ (ICLR 2024) present a framework for table reasoning through iterative operations rather than full table ingestion.
+  \item \textbf{CHARGE}: The Chart-based Question Answering Generation framework for extracting and verifying information from data visualizations.
+  \item \textbf{Vision-Based Table Extraction}: Elastic Search Labs and others document practical approaches for parsing PDF tables using VLMs.
+\end{itemize}
+
+\subsection{Audio and Video RAG}
+
+\begin{itemize}
+  \item \textbf{Whisper}: OpenAI's open-source ASR model supports multiple languages with word-level timestamps.
+  \item \textbf{VoxRAG}: Research on transcription-free RAG systems for spoken question answering.
+  \item \textbf{VideoRAG}: Frameworks for long-context video understanding with dual-channel (audio + visual) retrieval.
+  \item \textbf{Speaker Diarization}: AssemblyAI and pyannote.audio provide practical tools for identifying speakers in multi-party recordings.
+\end{itemize}
+
+\subsection{Multimodal Embeddings}
+
+\begin{itemize}
+  \item \textbf{CLIP}: OpenAI's Contrastive Language-Image Pre-training model enables cross-modal search between text and images.
+  \item \textbf{SigLIP}: Google's Sigmoid Loss for Language Image Pre-Training improves on CLIP for certain retrieval tasks.
+  \item \textbf{Late Fusion Architectures}: Research comparing unified embeddings versus modality-specific indices with score fusion.
+\end{itemize}
+
+\subsection{Privacy and Content Authenticity}
+
+\begin{itemize}
+  \item \textbf{Microsoft Presidio}: Open-source PII detection and anonymization framework with support for text and images.
+  \item \textbf{C2PA}: The Coalition for Content Provenance and Authenticity specification for cryptographic content credentials.
+  \item \textbf{Content Authenticity Initiative}: Adobe-led consortium developing tools and standards for content provenance.
+\end{itemize}
 

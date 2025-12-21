@@ -7,5 +7,17 @@
 \section*{Conclusion}
 \addcontentsline{toc}{section}{Conclusion}
 
-You now have the essentials for multimodal inputs. Next, we treat prompt design, strategies, evaluation, and optimization as an engineering discipline.
+The transition from text-only to multimodal RAG represents a qualitative shift in what AI systems can perceive and process. By applying layout analysis to documents, specialized extraction to tables and charts, ASR with diarization to audio and video, and rigorous privacy controls throughout, you can build systems that match the multimodal reality of legal and financial practice.
+
+Key takeaways from this chapter:
+
+\begin{itemize}
+  \item \textbf{Structure matters}: The ``PDF problem'' destroys semantic relationships. Layout analysis models preserve the structure that practitioners need for accurate citation and analysis.
+  \item \textbf{Tables require special handling}: Whether through heuristic parsers, vision-based extraction, or Chain-of-Table reasoning, tables must be treated as first-class objects, not flattened text.
+  \item \textbf{Time is a dimension}: Audio and video RAG adds temporal coordinates to retrieval, enabling precise citation of spoken content.
+  \item \textbf{Privacy is non-negotiable}: PII detection, redaction, and privilege protection must occur before content enters shared systems or external APIs.
+  \item \textbf{Provenance enables trust}: Content Credentials and evidence records establish the chain of custody for AI-processed content.
+\end{itemize}
+
+With multimodal ingestion capabilities in place, the next challenge is the human-AI interface: how do we communicate intent to these systems effectively? Chapter~5 addresses prompt design, evaluation, and optimization as engineering disciplines---applying the same rigor to the interface layer that we have applied to structured outputs, tool use, and multimodal processing.
 

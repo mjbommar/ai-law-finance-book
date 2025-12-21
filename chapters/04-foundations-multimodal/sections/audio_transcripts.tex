@@ -7,5 +7,90 @@
 \section{Audio and Transcripts}
 \label{sec:llmD2-audio}
 
-Account for transcription error rates and diarization limits. Summarize with timestamps and speaker labels, and avoid exposing sensitive content unnecessarily.
+Extending retrieval-augmented generation to temporal media (audio and video) introduces the dimension of time. A retrieved result is not just a ``document'' but a specific time span within a media file. For legal and financial practitioners, this means earnings calls, depositions, regulatory hearings, and training recordings become searchable and quotable with timestamp precision.
+
+\subsection{Audio RAG Pipelines}
+\label{sec:llmD2-audio-rag}
+
+Audio RAG pipelines depend on the quality of automatic speech recognition (ASR) and the preservation of temporal metadata:
+
+\paragraph{Transcription with Timestamps.} Models like \keyterm{Whisper} (OpenAI) and \keyterm{AssemblyAI} convert audio to text while preserving word-level or segment-level timestamps. When a relevant chunk is found during retrieval, the system maps the text back to the original timestamps, allowing the user to ``jump to'' the exact moment in the audio player.
+
+\paragraph{Speaker Diarization.} Crucially, the transcription step must include \keyterm{speaker diarization}---identifying who is speaking. ``Speaker A said X'' is semantically different from ``Speaker B said X.'' In a deposition or earnings call, attributing statements to the correct speaker is essential for accurate analysis.
+
+\begin{definitionbox}[title={Audio RAG Pipeline Components}]
+\begin{enumerate}
+  \item \textbf{Ingestion}: Audio files processed through ASR with diarization enabled.
+  \item \textbf{Segmentation}: Text chunked by semantic breaks, speaker turns, or silence rather than arbitrary token counts.
+  \item \textbf{Embedding}: Transcript segments embedded with speaker and timestamp metadata.
+  \item \textbf{Retrieval}: Query matches return text plus temporal coordinates.
+  \item \textbf{Synthesis}: Response includes citations with timestamps and optional audio playback links.
+\end{enumerate}
+\end{definitionbox}
+
+\paragraph{Error Rates and Mitigation.} ASR is imperfect. Technical terminology, proper names, and accented speech increase word error rates (WER). For legal and financial applications:
+
+\begin{itemize}
+  \item Provide custom vocabularies (company names, legal terms) to the ASR system.
+  \item Consider human review for high-stakes transcripts (depositions, regulatory testimony).
+  \item Retain the original audio alongside transcripts for verification.
+  \item Display confidence scores where available to flag uncertain passages.
+\end{itemize}
+
+\subsection{Video Understanding and Retrieval}
+\label{sec:llmD2-video-rag}
+
+Video RAG treats video as a sequence of visual frames synchronized with an audio track, enabling queries that span both modalities.
+
+\paragraph{Dual-Stream Indexing.} A comprehensive video RAG system indexes both:
+\begin{itemize}
+  \item \textbf{Transcript vectors}: What was said (from ASR with diarization).
+  \item \textbf{Visual frame descriptions}: What was shown (from keyframe extraction and VLM captioning).
+\end{itemize}
+
+A user query searches both streams, allowing questions like ``Find the scene where the speaker discusses quarterly revenue while showing the bar chart.''
+
+\paragraph{Keyframe Extraction.} Keyframes are extracted at regular intervals (e.g., 1 frame per second) or at scene changes. Each frame is processed by a VLM to generate textual descriptions (``scene graphs'') or embedded directly using CLIP. For legal and financial video---training materials, recorded presentations, regulatory hearings---meaningful frames often coincide with slide transitions.
+
+\paragraph{VideoRAG Architecture.} Advanced frameworks like \keyterm{VideoRAG} employ a dual-channel architecture with ``Graph-based Textual Knowledge Grounding'' to transform visual signals into structured text representations while preserving temporal dependencies. This allows complex queries that span both audio and visual content.
+
+\begin{highlightbox}[title={Multimodal Video Query}]
+\textit{Query}: ``Find where the CFO discusses the accounting change while the slide shows the impact table.''
+
+\textit{System behavior}:
+\begin{enumerate}
+  \item Search transcript for ``accounting change'' + speaker ``CFO''
+  \item Search visual index for ``table'' or ``impact''
+  \item Intersect temporal windows to find overlapping segments
+  \item Return video clips with start/end timestamps
+\end{enumerate}
+\end{highlightbox}
+
+\subsection{Practical Considerations}
+\label{sec:llmD2-audio-video-practical}
+
+\paragraph{Storage and Streaming.} Video and audio files are large. Systems typically:
+\begin{itemize}
+  \item Store original media in object storage (S3, Azure Blob).
+  \item Generate and index transcripts/descriptions separately.
+  \item Stream relevant segments via FFMPEG or cloud media services.
+  \item Return playback links with timestamp parameters rather than downloading entire files.
+\end{itemize}
+
+\paragraph{Privacy and Access Control.} Audio and video often contain sensitive content---voices are biometric identifiers, and recordings may capture privileged communications. Apply the privacy controls discussed in Section~\ref{sec:llmD2-privacy} before ingestion:
+\begin{itemize}
+  \item Redact or exclude segments containing privileged discussions.
+  \item Apply speaker-level access controls where content is speaker-specific.
+  \item Consider whether transcripts alone (without audio) suffice for the use case.
+\end{itemize}
+
+\begin{keybox}[title={Audio/Video RAG Best Practices}]
+\begin{itemize}
+  \item Always preserve timestamp-to-text mappings for citation.
+  \item Enable speaker diarization for multi-party recordings.
+  \item Provide custom vocabularies for domain-specific terminology.
+  \item Retain original media for verification of AI-generated transcripts.
+  \item Apply access controls at the segment level where sensitivity varies.
+\end{itemize}
+\end{keybox}
 

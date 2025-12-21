@@ -7,5 +7,44 @@
 \section{Synthesis}
 \label{sec:llmD2-synthesis}
 
-With structure preserved, tables/charts extracted, audio summarized, and privacy safeguards in place, you can build reliable multimodal workflows.
+Multimodal RAG represents the maturation of retrieval-augmented generation from a text-processing technique to a comprehensive perception system. By addressing document structure, tables and charts, audio and video, and privacy safeguards, you can build workflows that match the multimodal reality of legal and financial practice.
+
+\subsection{Integration Patterns}
+\label{sec:llmD2-integration-patterns}
+
+The components discussed in this chapter work together in layered pipelines:
+
+\begin{enumerate}
+  \item \textbf{Ingestion layer}: Documents enter the system and are classified by type (PDF, image, audio, video).
+  \item \textbf{Preprocessing layer}: Layout analysis, table extraction, OCR, and ASR transform raw content into structured text with metadata.
+  \item \textbf{Privacy layer}: PII detection and redaction sanitize content before it enters shared indices or external APIs.
+  \item \textbf{Embedding layer}: Content is vectorized---potentially through multiple specialized embedders (text, image, table).
+  \item \textbf{Indexing layer}: Vectors and metadata are stored with provenance information.
+  \item \textbf{Retrieval layer}: Queries search across modalities, with late fusion combining results.
+  \item \textbf{Synthesis layer}: Retrieved content is presented to the LLM with appropriate context for generation.
+\end{enumerate}
+
+\subsection{Key Decisions}
+\label{sec:llmD2-key-decisions}
+
+When designing multimodal pipelines, key architectural decisions include:
+
+\begin{itemize}
+  \item \textbf{Parsing strategy}: Heuristic, AI-based layout models, or vision-first (VLM)?
+  \item \textbf{Embedding architecture}: Unified multimodal embeddings or late fusion?
+  \item \textbf{Privacy approach}: Pre-ingestion redaction, access controls, or both?
+  \item \textbf{Media handling}: Stream from source or cache processed segments?
+  \item \textbf{Provenance depth}: Minimal logging or full W3C PROV-O lineage?
+\end{itemize}
+
+The right answers depend on your accuracy requirements, latency constraints, cost sensitivity, and regulatory obligations.
+
+\begin{highlightbox}[title={Multimodal Perception in Agentic Systems}]
+Document processing and multimodal understanding become \emph{perception capabilities} in agentic systems. Chapter~7's Perception question addresses how agents access and interpret diverse information sources, while the Governance question covers privacy controls and data isolation requirements. The pipelines described here form the sensory apparatus through which agents perceive their documentary environment.
+\end{highlightbox}
+
+\subsection{Looking Forward}
+\label{sec:llmD2-looking-forward}
+
+With multimodal ingestion in place, the next challenge is designing prompts and evaluation frameworks that leverage these capabilities effectively. Chapter~5 treats prompt design, strategy selection, evaluation, and optimization as an engineering discipline---applying structured thinking to the interface between human intent and model behavior.
 
