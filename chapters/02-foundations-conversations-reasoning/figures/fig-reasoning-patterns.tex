@@ -1,0 +1,85 @@
+% =============================================================================
+% Figure: Reasoning Patterns Hierarchy
+% Shows the progression from simple to complex reasoning strategies
+% =============================================================================
+
+\begin{tikzpicture}[
+  node distance=1.2cm and 1.5cm,
+  box/.style={
+    rectangle,
+    draw=#1,
+    fill=#1!10,
+    rounded corners=4pt,
+    minimum width=3.2cm,
+    minimum height=1.2cm,
+    font=\small,
+    text=text-primary,
+    align=center
+  },
+  arrow/.style={
+    ->,
+    >=stealth,
+    thick,
+    draw=text-secondary
+  },
+  label/.style={
+    font=\footnotesize,
+    text=text-muted
+  },
+  dimbox/.style={
+    rectangle,
+    draw=border-note,
+    dashed,
+    rounded corners=2pt,
+    inner sep=8pt
+  }
+]
+
+% Row 1: Simple
+\node[box=definition-base] (direct) {Direct\\Prompting};
+\node[box=definition-base, right=of direct] (fewshot) {Few-Shot\\Prompting};
+
+% Row 2: Linear Reasoning
+\node[box=example-base, below=of direct] (cot) {Chain-of-\\Thought};
+\node[box=example-base, right=of cot] (sc) {Self-\\Consistency};
+
+% Row 3: Tool-Augmented
+\node[box=key-base, below=of cot] (react) {ReAct\\(Tool Use)};
+\node[box=key-base, right=of react] (reflect) {Self-\\Reflection};
+
+% Row 4: Advanced
+\node[box=caution-base, below=of react] (tot) {Tree of\\Thoughts};
+\node[box=caution-base, right=of tot] (got) {Graph of\\Thoughts};
+
+% Vertical arrows
+\draw[arrow] (direct) -- (cot);
+\draw[arrow] (fewshot) -- (sc);
+\draw[arrow] (cot) -- (react);
+\draw[arrow] (sc) -- (reflect);
+\draw[arrow] (react) -- (tot);
+\draw[arrow] (reflect) -- (got);
+
+% Horizontal arrows
+\draw[arrow, dashed] (direct) -- (fewshot);
+\draw[arrow, dashed] (cot) -- (sc);
+\draw[arrow, dashed] (react) -- (reflect);
+\draw[arrow, dashed] (tot) -- (got);
+
+% Dimension labels on right
+\node[label, right=1.5cm of fewshot] (l1) {Simple tasks};
+\node[label, right=1.5cm of sc] (l2) {Multi-step logic};
+\node[label, right=1.5cm of reflect] (l3) {External grounding};
+\node[label, right=1.5cm of got] (l4) {Complex exploration};
+
+% Dimension labels on left (cost/latency)
+\node[label, left=1cm of direct] {Low cost/latency};
+\node[label, left=1cm of tot] {High cost/latency};
+
+% Title
+\node[above=0.8cm of direct, xshift=1.5cm, font=\bfseries\small, text=text-primary] {Reasoning Pattern Progression};
+
+% Complexity arrow on far left
+\draw[arrow, very thick, draw=text-muted] ([xshift=-2.5cm]direct.west) -- ([xshift=-2.5cm]tot.west)
+  node[midway, left, font=\footnotesize\itshape, text=text-muted, align=right] {Increasing\\complexity};
+
+\end{tikzpicture}

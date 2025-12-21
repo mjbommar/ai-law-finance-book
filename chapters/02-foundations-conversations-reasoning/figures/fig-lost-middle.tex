@@ -1,0 +1,63 @@
+% =============================================================================
+% Figure: Lost in the Middle
+% Shows the U-shaped attention curve
+% =============================================================================
+
+\begin{tikzpicture}[
+  scale=0.9,
+  label/.style={
+    font=\footnotesize,
+    text=text-muted
+  }
+]
+
+% Axes
+\draw[->, thick, draw=text-secondary] (0,0) -- (12,0) node[right, font=\small] {Position in Context};
+\draw[->, thick, draw=text-secondary] (0,0) -- (0,5) node[above, font=\small, align=center] {Retrieval\\Accuracy};
+
+% X-axis labels
+\node[label, below] at (1,0) {Start};
+\node[label, below] at (6,0) {Middle};
+\node[label, below] at (11,0) {End};
+
+% Y-axis labels
+\node[label, left] at (0,1) {Low};
+\node[label, left] at (0,4) {High};
+
+% U-shaped curve
+\draw[very thick, draw=definition-base, smooth] plot coordinates {
+  (0.5, 3.8)
+  (1.5, 3.5)
+  (2.5, 2.8)
+  (3.5, 2.0)
+  (4.5, 1.5)
+  (5.5, 1.2)
+  (6.5, 1.2)
+  (7.5, 1.5)
+  (8.5, 2.0)
+  (9.5, 2.8)
+  (10.5, 3.5)
+  (11.5, 4.2)
+};
+
+% Shaded regions
+\fill[definition-light, opacity=0.3] (0.5,0) rectangle (2.5,3.8);
+\fill[caution-light, opacity=0.3] (4,0) rectangle (8,1.5);
+\fill[key-light, opacity=0.3] (9.5,0) rectangle (11.5,4.2);
+
+% Annotations
+\node[font=\footnotesize\bfseries, text=definition-dark] at (1.5, 4.3) {Primacy};
+\node[font=\footnotesize\bfseries, text=caution-dark] at (6, 0.6) {``Lost in Middle''};
+\node[font=\footnotesize\bfseries, text=key-dark] at (10.5, 4.6) {Recency};
+
+% Practical implications
+\draw[dashed, draw=text-muted] (1.5, 3.5) -- (1.5, -0.8);
+\draw[dashed, draw=text-muted] (10.5, 3.5) -- (10.5, -0.8);
+\node[label, align=center] at (1.5, -1.3) {Place system\\prompt here};
+\node[label, align=center] at (10.5, -1.3) {Place query +\\reminders here};
+\node[label, align=center] at (6, -1.3) {Context/history\\(may be missed)};
+
+% Title
+\node[font=\bfseries\small, text=text-primary] at (6, 5.5) {The U-Shaped Retrieval Curve (``Lost in the Middle'')};
+
+\end{tikzpicture}

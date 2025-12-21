@@ -1,0 +1,326 @@
+% =============================================================================
+% Bibliography for Chapter 02: Conversations and Reasoning
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+% Chain-of-Thought and Reasoning
+% -----------------------------------------------------------------------------
+
+@inproceedings{wei2022cot,
+  author    = {Wei, Jason and Wang, Xuezhi and Schuurmans, Dale and Bosma, Maarten and Ichter, Brian and Xia, Fei and Chi, Ed and Le, Quoc and Zhou, Denny},
+  title     = {Chain-of-Thought Prompting Elicits Reasoning in Large Language Models},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {35},
+  year      = {2022},
+  pages     = {24824--24837},
+  url       = {https://arxiv.org/abs/2201.11903},
+  urldate   = {2025-12-20},
+  note      = {Foundational paper introducing chain-of-thought prompting for improved reasoning in LLMs}
+}
+
+@inproceedings{wang2023selfconsistency,
+  author    = {Wang, Xuezhi and Wei, Jason and Schuurmans, Dale and Le, Quoc and Chi, Ed and Narang, Sharan and Chowdhery, Aakanksha and Zhou, Denny},
+  title     = {Self-Consistency Improves Chain of Thought Reasoning in Language Models},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2203.11171},
+  urldate   = {2025-12-20},
+  note      = {Introduces self-consistency decoding with majority voting to improve reasoning accuracy}
+}
+
+@inproceedings{yao2023react,
+  author    = {Yao, Shunyu and Zhao, Jeffrey and Yu, Dian and Du, Nan and Shafran, Izhak and Narasimhan, Karthik and Cao, Yuan},
+  title     = {ReAct: Synergizing Reasoning and Acting in Language Models},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2210.03629},
+  urldate   = {2025-12-20},
+  note      = {Introduces the ReAct framework combining reasoning traces with tool use}
+}
+
+@inproceedings{yao2023tot,
+  author    = {Yao, Shunyu and Yu, Dian and Zhao, Jeffrey and Shafran, Izhak and Griffiths, Thomas and Cao, Yuan and Narasimhan, Karthik},
+  title     = {Tree of Thoughts: Deliberate Problem Solving with Large Language Models},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {36},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2305.10601},
+  urldate   = {2025-12-20},
+  note      = {Extends chain-of-thought to tree-based exploration with backtracking}
+}
+
+@article{besta2024got,
+  author    = {Besta, Maciej and Blach, Nils and Kubicek, Ales and Gerstenberger, Robert and Podstawski, Michal and Gianinazzi, Lukas and Gajda, Joanna and Lehmann, Tomasz and Nyczyk, Hubert and Iff, Piotr and others},
+  title     = {Graph of Thoughts: Solving Elaborate Problems with Large Language Models},
+  journal   = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume    = {38},
+  number    = {16},
+  pages     = {17682--17690},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2308.09687},
+  urldate   = {2025-12-20},
+  note      = {Introduces graph-based reasoning with aggregation and refinement operations}
+}
+
+@article{besta2025demystifying,
+  author    = {Besta, Maciej and Memedi, Florim and Zhang, Zhenyu and Gerstenberger, Robert and Blach, Nils and Iff, Piotr and Gajda, Joanna and Nyczyk, Hubert and Kubicek, Ales and Gianinazzi, Lukas and others},
+  title     = {Demystifying Chains, Trees, and Graphs of Thoughts},
+  journal   = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  volume    = {47},
+  number    = {12},
+  pages     = {10967--10989},
+  year      = {2025},
+  url       = {https://arxiv.org/abs/2401.14295},
+  urldate   = {2025-12-20},
+  note      = {Comprehensive taxonomy of reasoning topologies in LLMs}
+}
+
+% -----------------------------------------------------------------------------
+% Context and Memory
+% -----------------------------------------------------------------------------
+
+@article{liu2024lostmiddle,
+  author    = {Liu, Nelson F. and Lin, Kevin and Hewitt, John and Paranjape, Ashwin and Bevilacqua, Michele and Petroni, Fabio and Liang, Percy},
+  title     = {Lost in the Middle: How Language Models Use Long Contexts},
+  journal   = {Transactions of the Association for Computational Linguistics},
+  volume    = {12},
+  pages     = {157--173},
+  year      = {2024},
+  url       = {https://aclanthology.org/2024.tacl-1.9/},
+  urldate   = {2025-12-20},
+  note      = {Demonstrates U-shaped retrieval accuracy in long contexts}
+}
+
+@inproceedings{kwon2023pagedattention,
+  author    = {Kwon, Woosuk and Li, Zhuohan and Zhuang, Siyuan and Sheng, Ying and Zheng, Lianmin and Yu, Cody Hao and Gonzalez, Joseph and Zhang, Hao and Stoica, Ion},
+  title     = {Efficient Memory Management for Large Language Model Serving with PagedAttention},
+  booktitle = {Proceedings of the 29th Symposium on Operating Systems Principles},
+  pages     = {611--626},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2309.06180},
+  urldate   = {2025-12-20},
+  note      = {Introduces PagedAttention for efficient KV-cache management in inference}
+}
+
+@article{wang2024recursivesummarizing,
+  author    = {Wang, Qingyue and Fu, Yun and Cao, Yang and others},
+  title     = {Recursively Summarizing Enables Long-Term Dialogue Memory in Large Language Models},
+  journal   = {Neurocomputing},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2308.15022},
+  urldate   = {2025-12-20},
+  note      = {Demonstrates recursive summarization for maintaining long conversation context}
+}
+
+@article{zhang2024memory,
+  author    = {Zhang, Zeyu and others},
+  title     = {From Human Memory to AI Memory: A Survey on Memory Mechanisms in the Era of LLMs},
+  journal   = {arXiv preprint arXiv:2504.15965},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2504.15965},
+  urldate   = {2025-12-20},
+  note      = {Comprehensive survey of memory mechanisms for LLM agents}
+}
+
+% -----------------------------------------------------------------------------
+% Few-Shot Learning and In-Context Learning
+% -----------------------------------------------------------------------------
+
+@inproceedings{brown2020gpt3,
+  author    = {Brown, Tom B. and Mann, Benjamin and Ryder, Nick and Subbiah, Melanie and Kaplan, Jared and Dhariwal, Prafulla and Neelakantan, Arvind and Shyam, Pranav and Sastry, Girish and Askell, Amanda and others},
+  title     = {Language Models are Few-Shot Learners},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {33},
+  pages     = {1877--1901},
+  year      = {2020},
+  url       = {https://arxiv.org/abs/2005.14165},
+  urldate   = {2025-12-20},
+  note      = {GPT-3 paper demonstrating in-context learning capabilities}
+}
+
+@article{zebaze2024icl,
+  author    = {Zebaze Dongmo, Arsene Romain and Sagot, Benoit and Bawden, Rachel},
+  title     = {In-Context Example Selection via Similarity Search Improves Low-Resource Machine Translation},
+  journal   = {arXiv preprint arXiv:2408.00397},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2408.00397},
+  urldate   = {2025-12-20},
+  note      = {Demonstrates semantic search for few-shot example selection}
+}
+
+% -----------------------------------------------------------------------------
+% Self-Reflection and Improvement
+% -----------------------------------------------------------------------------
+
+@article{shinn2023reflexion,
+  author    = {Shinn, Noah and Cassano, Federico and Gopinath, Ashwin and Narasimhan, Karthik and Yao, Shunyu},
+  title     = {Reflexion: Language Agents with Verbal Reinforcement Learning},
+  journal   = {Advances in Neural Information Processing Systems},
+  volume    = {36},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2303.11366},
+  urldate   = {2025-12-20},
+  note      = {Introduces self-reflection for iterative improvement in LLM agents}
+}
+
+@article{li2025selfreflection,
+  author    = {Li, Bo and Zhao, Chen},
+  title     = {Self-reflection enhances large language models towards substantial academic response},
+  journal   = {npj Artificial Intelligence},
+  volume    = {1},
+  number    = {42},
+  year      = {2025},
+  url       = {https://www.nature.com/articles/s44387-025-00045-3},
+  urldate   = {2025-12-20},
+  note      = {Empirical study of self-reflection improving LLM response quality}
+}
+
+@inproceedings{wang2023selfinstruct,
+  author    = {Wang, Yizhong and Kordi, Yeganeh and Mishra, Swaroop and Liu, Alisa and Smith, Noah A. and Khashabi, Daniel and Hajishirzi, Hannaneh},
+  title     = {Self-Instruct: Aligning Language Models with Self-Generated Instructions},
+  booktitle = {Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics},
+  pages     = {13484--13508},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2212.10560},
+  urldate   = {2025-12-20},
+  note      = {Method for bootstrapping instruction-following data from the model itself}
+}
+
+% -----------------------------------------------------------------------------
+% RAG and Retrieval
+% -----------------------------------------------------------------------------
+
+@inproceedings{lewis2020rag,
+  author    = {Lewis, Patrick and Perez, Ethan and Piktus, Aleksandra and Petroni, Fabio and Karpukhin, Vladimir and Goyal, Naman and K{\"u}ttler, Heinrich and Lewis, Mike and Yih, Wen-tau and Rockt{\"a}schel, Tim and others},
+  title     = {Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {33},
+  pages     = {9459--9474},
+  year      = {2020},
+  url       = {https://arxiv.org/abs/2005.11401},
+  urldate   = {2025-12-20},
+  note      = {Foundational paper on retrieval-augmented generation}
+}
+
+% -----------------------------------------------------------------------------
+% Safety and Alignment
+% -----------------------------------------------------------------------------
+
+@article{bai2022constitutional,
+  author    = {Bai, Yuntao and Kadavath, Saurav and Kundu, Sandipan and Askell, Amanda and Kernion, Jackson and Jones, Andy and Chen, Anna and Goldie, Anna and Mirhoseini, Azalia and McKinnon, Cameron and others},
+  title     = {Constitutional AI: Harmlessness from AI Feedback},
+  journal   = {arXiv preprint arXiv:2212.08073},
+  year      = {2022},
+  url       = {https://arxiv.org/abs/2212.08073},
+  urldate   = {2025-12-20},
+  note      = {Introduces constitutional AI for alignment via explicit principles}
+}
+
+@article{inan2023llamaguard,
+  author    = {Inan, Hakan and Upasani, Kartikeya and Chi, Jianfeng and Rungta, Rashi and Iyer, Krithika and Mao, Yuning and Tontchev, Michael and Hu, Qing and Fuller, Brian and Testuggine, Davide and others},
+  title     = {Llama Guard: LLM-based Input-Output Safeguard for Human-AI Conversations},
+  journal   = {arXiv preprint arXiv:2312.06674},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2312.06674},
+  urldate   = {2025-12-20},
+  note      = {Classification model for guardrailing LLM inputs and outputs}
+}
+
+@article{dong2024guardrails,
+  author    = {Dong, Yi and Zhao, Ronghui and others},
+  title     = {Building Guardrails for Large Language Models},
+  journal   = {arXiv preprint arXiv:2402.01822},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2402.01822},
+  urldate   = {2025-12-20},
+  note      = {Survey of guardrail architectures for LLM safety}
+}
+
+% -----------------------------------------------------------------------------
+% Prompt Engineering and System Prompts
+% -----------------------------------------------------------------------------
+
+@article{zheng2023personas,
+  author    = {Zheng, Ming and Pei, Jiahui and Logeswaran, Lajanugen and Lee, Moontae and Jurgens, David},
+  title     = {When ``A Helpful Assistant'' Is Not Really Helpful: Personas in System Prompts Do Not Improve Performances of Large Language Models},
+  journal   = {arXiv preprint arXiv:2311.10054},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2311.10054},
+  urldate   = {2025-12-20},
+  note      = {Empirical study of system prompt persona effects on LLM performance}
+}
+
+@online{touvron2023llama2,
+  author    = {Touvron, Hugo and Martin, Louis and Stone, Kevin and Albert, Peter and Almahairi, Amjad and Babaei, Yasmine and Bashlykov, Nikolay and Batra, Soumya and Bhargava, Prajjwal and Bhosale, Shruti and others},
+  title     = {Llama 2: Open Foundation and Fine-Tuned Chat Models},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2307.09288},
+  urldate   = {2025-12-20},
+  note      = {Technical report on Llama 2 architecture including chat formatting}
+}
+
+% -----------------------------------------------------------------------------
+% Efficient Reasoning
+% -----------------------------------------------------------------------------
+
+@article{xu2025tokenskip,
+  author    = {Xu, Yuxuan and others},
+  title     = {TokenSkip: Controllable Chain-of-Thought Compression in LLMs},
+  journal   = {Proceedings of EMNLP 2025},
+  year      = {2025},
+  url       = {https://aclanthology.org/2025.emnlp-main.165/},
+  urldate   = {2025-12-20},
+  note      = {Method for reducing chain-of-thought token overhead}
+}
+
+@article{xu2025cod,
+  author    = {Xu, Yilun and others},
+  title     = {Chain of Draft: Thinking Faster by Writing Less},
+  journal   = {arXiv preprint arXiv:2502.18600},
+  year      = {2025},
+  url       = {https://arxiv.org/abs/2502.18600},
+  urldate   = {2025-12-20},
+  note      = {Concise reasoning traces for faster inference}
+}
+
+% -----------------------------------------------------------------------------
+% Legal and Financial AI Applications
+% -----------------------------------------------------------------------------
+
+@inproceedings{katz2024gpt4,
+  author    = {Katz, Daniel Martin and Bommarito, Michael J. and Gao, Shang and Arredondo, Pablo},
+  title     = {GPT-4 Passes the Bar Exam},
+  booktitle = {Philosophical Transactions of the Royal Society A},
+  volume    = {382},
+  number    = {2270},
+  year      = {2024},
+  url       = {https://royalsocietypublishing.org/doi/10.1098/rsta.2023.0254},
+  urldate   = {2025-12-20},
+  note      = {Demonstrates LLM performance on legal reasoning tasks}
+}
+
+@article{choi2023chatgptlaw,
+  author    = {Choi, Jonathan H. and Hickman, Kristin E. and Monahan, Amy and Schwarcz, Daniel},
+  title     = {ChatGPT Goes to Law School},
+  journal   = {Journal of Legal Education},
+  volume    = {71},
+  number    = {3},
+  pages     = {387--400},
+  year      = {2023},
+  note      = {Early assessment of LLM capabilities in legal education}
+}
+
+% -----------------------------------------------------------------------------
+% Foundational Transformer and Attention
+% -----------------------------------------------------------------------------
+
+@inproceedings{vaswani2017attention,
+  author    = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N. and Kaiser, {\L}ukasz and Polosukhin, Illia},
+  title     = {Attention Is All You Need},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {30},
+  year      = {2017},
+  url       = {https://arxiv.org/abs/1706.03762},
+  urldate   = {2025-12-20},
+  note      = {Original Transformer architecture paper}
+}

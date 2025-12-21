@@ -1,11 +1,219 @@
 % =============================================================================
 % Further Learning — Conversations & Reasoning
-% Purpose: Pointers to primary sources
+% Purpose: Annotated bibliography of key sources
 % Label: sec:llmB-further
 % =============================================================================
 
 \section{Further Learning}
 \label{sec:llmB-further}
 
-% TODO: Add dated, primary citations (conversation tuning, reasoning techniques).
+This section provides an annotated guide to the foundational literature on conversational AI and reasoning in large language models. We organize sources by topic, with brief descriptions of what each contributes and why it matters for practitioners.
+
+\subsection{Foundational Papers on Reasoning}
+
+\paragraph{Chain-of-Thought Prompting.}
+\textcite{wei2022cot} introduced the chain-of-thought prompting technique, demonstrating that simply asking models to ``think step by step'' dramatically improves performance on arithmetic and symbolic reasoning tasks. This paper established that reasoning capabilities can be elicited through prompting alone, without fine-tuning. Essential reading for understanding why multi-step reasoning works in LLMs.
+
+\paragraph{Self-Consistency.}
+\textcite{wang2023selfconsistency} extended chain-of-thought by sampling multiple reasoning paths and selecting the most consistent answer via majority voting. Their experiments showed 10--20 percentage point improvements on challenging benchmarks. This paper is crucial for understanding how to improve reliability in high-stakes applications through redundancy.
+
+\paragraph{ReAct Framework.}
+\textcite{yao2023react} introduced the paradigm of interleaving reasoning with tool use, showing that grounding model reasoning in external observations significantly reduces hallucinations. This paper bridges the gap between pure reasoning and agentic behavior, making it foundational for building research assistants and fact-checking systems.
+
+\paragraph{Tree of Thoughts.}
+\textcite{yao2023tot} generalized chain-of-thought into a tree structure with exploration and backtracking. Their results on planning tasks (Game of 24, creative writing) demonstrated that deliberate search over reasoning paths can dramatically outperform linear chains. Important for complex planning and creative applications.
+
+\paragraph{Graph of Thoughts.}
+\textcite{besta2024got} extended reasoning to directed acyclic graphs, enabling aggregation and refinement operations. Their taxonomy paper \parencite{besta2025demystifying} provides a comprehensive framework for understanding the landscape of reasoning topologies. Advanced reading for those designing sophisticated reasoning systems.
+
+\subsection{Context and Memory Management}
+
+\paragraph{Lost in the Middle.}
+\textcite{liu2024lostmiddle} provided the definitive empirical analysis of how LLMs access information across long contexts, demonstrating the U-shaped retrieval curve. This paper fundamentally changed how practitioners think about prompt construction and is essential reading for anyone building systems with long context windows.
+
+\paragraph{PagedAttention.}
+\textcite{kwon2023pagedattention} introduced the memory management technique that enables efficient serving of large context windows. While technical, this paper explains the infrastructure innovations that make long conversations practical at scale. Important for those building production systems.
+
+\paragraph{Memory Mechanisms Survey.}
+\textcite{zhang2024memory} provides a comprehensive survey of memory architectures for LLM agents, covering episodic, semantic, and working memory. This is the best current overview of how to implement various memory strategies discussed in this chapter.
+
+\subsection{Safety and Alignment}
+
+\paragraph{Constitutional AI.}
+\textcite{bai2022constitutional} introduced the paradigm of training models using explicit principles rather than human preferences alone. This paper explains how modern safety-focused models (like Claude) achieve consistent, explainable refusal behavior. Essential for understanding the alignment approaches behind commercial models.
+
+\paragraph{Llama Guard.}
+\textcite{inan2023llamaguard} describes a practical guardrail architecture for filtering harmful inputs and outputs. This paper provides a template for implementing the input/output classification approach to safety discussed in this chapter.
+
+\paragraph{Guardrails Survey.}
+\textcite{dong2024guardrails} offers a comprehensive survey of guardrail architectures, covering prompt-based, classification-based, and hybrid approaches. Valuable for understanding the full landscape of safety options.
+
+\subsection{Few-Shot Learning and In-Context Learning}
+
+\paragraph{GPT-3 and Few-Shot Learning.}
+\textcite{brown2020gpt3} established that large language models are powerful few-shot learners, capable of generalizing from just a few examples provided in context. This foundational paper explains why in-context learning works and its limitations.
+
+\paragraph{Self-Instruct.}
+\textcite{wang2023selfinstruct} demonstrated how models can generate their own training data for instruction following. This paper is valuable for understanding bootstrapping techniques when human-labeled examples are scarce.
+
+\paragraph{Reflexion.}
+\textcite{shinn2023reflexion} introduced verbal reinforcement learning through self-reflection, showing that agents can improve by critiquing their own performance. Important for understanding self-improvement loops in autonomous systems.
+
+\subsection{Legal and Financial AI}
+
+\paragraph{GPT-4 Passes the Bar Exam.}
+\textcite{katz2024gpt4} demonstrated that GPT-4 can pass the Uniform Bar Examination at a level competitive with human test-takers. This paper provides concrete evidence of LLM capabilities in legal reasoning and establishes benchmarks for legal AI performance.
+
+\paragraph{ChatGPT Goes to Law School.}
+\textcite{choi2023chatgptlaw} offered an early assessment of LLM capabilities in legal education contexts, identifying both promising capabilities and significant limitations. Valuable for understanding the state of legal AI as of 2023.
+
+\subsection{Implementation Resources}
+
+\paragraph{Prompt Engineering Guides.}
+OpenAI, Anthropic, and Google all publish prompt engineering guides that complement the academic literature:
+\begin{itemize}
+  \item \textbf{OpenAI Cookbook}: Practical examples for API usage and prompting patterns
+  \item \textbf{Anthropic Documentation}: Guidelines for Constitutional AI principles and Claude-specific techniques
+  \item \textbf{Google AI}: Resources on PaLM/Gemini prompting and Vertex AI integration
+\end{itemize}
+
+\paragraph{Open-Source Frameworks.}
+Several frameworks implement the patterns discussed in this chapter:
+\begin{itemize}
+  \item \textbf{LangChain}: Comprehensive framework for chaining LLM calls, implementing memory, and integrating tools
+  \item \textbf{LlamaIndex}: Focused on document indexing, retrieval, and RAG patterns
+  \item \textbf{DSPy}: Programmatic approach to prompt optimization and chain-of-thought compilation
+  \item \textbf{Instructor}: Type-safe structured output extraction from LLMs
+\end{itemize}
+
+\subsection{Staying Current}
+
+The field of LLM reasoning and conversation design evolves rapidly. Key venues for tracking developments:
+
+\begin{itemize}
+  \item \textbf{arXiv cs.CL and cs.AI}: Pre-prints appear here first, often months before peer review
+  \item \textbf{ACL, EMNLP, NAACL}: Premier NLP conferences with rigorous peer review
+  \item \textbf{NeurIPS, ICML, ICLR}: Machine learning conferences with significant LLM content
+  \item \textbf{Research Blogs}: Anthropic, OpenAI, Google DeepMind, and Meta AI publish technical updates
+\end{itemize}
+
+For legal and financial AI specifically:
+\begin{itemize}
+  \item \textbf{Journal of Legal Education}: Academic perspectives on AI in legal practice
+  \item \textbf{Legal Tech News}: Industry coverage of AI adoption in law
+  \item \textbf{RegTech/FinTech publications}: Coverage of AI in financial compliance
+  \item \textbf{OECD and FSB reports}: Policy perspectives on AI in finance
+\end{itemize}
+
+\subsection{Recommended Reading Sequence}
+
+For readers who want to develop deep expertise in conversational AI and reasoning, we recommend the following structured approach:
+
+\paragraph{Foundation Level (Week 1--2).}
+Begin with the foundational papers that established the field:
+\begin{enumerate}
+  \item Start with \textcite{brown2020gpt3} to understand in-context learning capabilities
+  \item Read \textcite{wei2022cot} to grasp why step-by-step reasoning helps
+  \item Study \textcite{liu2024lostmiddle} to understand context limitations
+\end{enumerate}
+
+This foundation equips you to understand why basic prompting techniques work and where they fail.
+
+\paragraph{Intermediate Level (Week 3--4).}
+Progress to reliability and tool integration:
+\begin{enumerate}
+  \item \textcite{wang2023selfconsistency} for ensemble verification techniques
+  \item \textcite{yao2023react} for grounding reasoning in external observations
+  \item \textcite{bai2022constitutional} for understanding safety alignment
+\end{enumerate}
+
+This level prepares you to build robust systems that verify their outputs and interact with the world.
+
+\paragraph{Advanced Level (Week 5--6).}
+Explore sophisticated reasoning architectures:
+\begin{enumerate}
+  \item \textcite{yao2023tot} for deliberate search over reasoning paths
+  \item \textcite{besta2024got} for graph-based reasoning composition
+  \item \textcite{shinn2023reflexion} for self-improving agent loops
+\end{enumerate}
+
+This advanced material enables design of complex systems for planning, exploration, and autonomous improvement.
+
+\paragraph{Domain Specialization (Ongoing).}
+For legal or financial applications, complement the technical literature with:
+\begin{enumerate}
+  \item Domain-specific evaluation papers like \textcite{katz2024gpt4}
+  \item Regulatory guidance on AI in your specific sector
+  \item Professional ethics guidelines for AI use in your field
+\end{enumerate}
+
+\subsection{Common Misconceptions}
+
+Before concluding this chapter, it is worth addressing several common misconceptions that the literature does not always clearly dispel:
+
+\paragraph{Misconception: More reasoning steps always helps.}
+Chain-of-thought improves performance on tasks that require multi-step logic, but not on all tasks. For simple factual questions or pattern matching, adding reasoning can actually hurt performance by introducing opportunities for the model to ``overthink'' and reach incorrect conclusions. Always evaluate whether reasoning is helping for your specific task.
+
+\paragraph{Misconception: Longer context windows solve memory problems.}
+While extended context windows (100K+ tokens) enable longer conversations, they do not solve the fundamental ``lost in the middle'' problem. Information in the middle of very long contexts remains harder to access than information at the boundaries. Context length expansion should complement, not replace, active memory management strategies.
+
+\paragraph{Misconception: Fine-tuning is always better than prompting.}
+Fine-tuning can improve performance on specific tasks, but it requires data, expertise, and compute. For many applications, few-shot prompting with well-selected examples approaches fine-tuned performance at a fraction of the cost. Prompting is also more flexible---you can adapt behavior without retraining the model.
+
+\paragraph{Misconception: Safety guardrails eliminate risk.}
+Guardrails reduce risk but do not eliminate it. Adversarial users can sometimes bypass guardrails through creative prompting. Safety must be implemented in depth---prompt-level controls, input/output filtering, and downstream validation all play roles. Never rely on a single layer of protection for high-stakes applications.
+
+\paragraph{Misconception: Reasoning traces reveal ground truth.}
+When a model produces a chain-of-thought, it appears to show ``how it's thinking.'' But these traces may be post-hoc rationalizations rather than accurate reflections of the underlying computation. Models can produce confident-looking reasoning for incorrect conclusions. Always verify final answers independently of how convincing the reasoning appears.
+
+\subsection{Exercises for Practitioners}
+
+To solidify understanding of the concepts in this chapter, we recommend the following exercises:
+
+\paragraph{Exercise 1: Compare Reasoning Strategies.}
+Select a multi-step problem from your domain (e.g., a legal issue or financial calculation). Solve it using:
+\begin{enumerate}
+  \item Direct prompting (zero-shot)
+  \item Chain-of-thought prompting
+  \item Self-consistency with 5 samples
+\end{enumerate}
+Compare the quality of answers and the cost/latency trade-offs. Document which approach works best for your specific problem type.
+
+\paragraph{Exercise 2: Build a Few-Shot Library.}
+Create a library of 10--20 high-quality examples for a task you frequently perform. Include:
+\begin{enumerate}
+  \item Diverse problem types within your domain
+  \item Complete reasoning traces in your preferred format (e.g., IRAC for legal)
+  \item Edge cases that might confuse the model
+\end{enumerate}
+Test how few-shot examples from your library affect performance compared to zero-shot prompting.
+
+\paragraph{Exercise 3: Context Window Management.}
+Design a prompt structure for a multi-turn conversation in your domain. Specify:
+\begin{enumerate}
+  \item What goes in the system prompt (and what doesn't)
+  \item How you will summarize older conversation turns
+  \item What facts you will pin in persistent context
+  \item How you will prioritize context when approaching the window limit
+\end{enumerate}
+Test your design with a 20+ turn conversation and evaluate whether the model maintains coherence.
+
+\paragraph{Exercise 4: Implement a ReAct Loop.}
+Build a simple ReAct-style system for a research task:
+\begin{enumerate}
+  \item Define 2--3 tools (e.g., search, lookup, calculate)
+  \item Implement the thought-action-observation loop
+  \item Test with queries that require tool use to answer correctly
+\end{enumerate}
+Evaluate how tool integration affects accuracy compared to relying on model knowledge alone.
+
+\paragraph{Exercise 5: Safety Prompt Design.}
+Draft a comprehensive system prompt for a professional application. Include:
+\begin{enumerate}
+  \item Role and scope definitions
+  \item Explicit prohibitions for your domain
+  \item Uncertainty acknowledgment instructions
+  \item Refusal patterns for common problematic requests
+\end{enumerate}
+Test with adversarial prompts to evaluate robustness. Iterate on weak points you discover.
 

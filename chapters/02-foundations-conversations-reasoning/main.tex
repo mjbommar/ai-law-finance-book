@@ -1,12 +1,269 @@
-\documentclass[../../main.tex]{subfiles}
+\documentclass[11pt]{article}
 
-\begin{document}
+% ============================================================================
+% MODERN TYPOGRAPHY AND LAYOUT
+% ============================================================================
+\usepackage[margin=1.2in, top=1.3in, bottom=1.3in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 
+% Modern font: Libertinus (elegant, readable serif)
+\usepackage{libertinus}
+\usepackage{libertinust1math}
+
+% Typography enhancements
+\usepackage{microtype}
+\usepackage{setspace}
+\setstretch{1.15}
+
+% Paragraph formatting
+\usepackage{parskip}
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+% Language and quotation support
+\usepackage[english]{babel}
+\usepackage{csquotes}
+
+% ============================================================================
+% MATHEMATICS AND SYMBOLS
+% ============================================================================
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% ============================================================================
+% GRAPHICS AND FIGURES
+% ============================================================================
+\usepackage{graphicx}
+\usepackage{float}
+
+% ============================================================================
+% COLOR SYSTEM - Educational Semantic Palette
+% ============================================================================
+\usepackage{xcolor}
+
+% LAYER 1: PRIMITIVE COLOR PALETTE
+\definecolor{slate-900}{RGB}{30,58,95}
+\definecolor{slate-700}{RGB}{71,101,135}
+\definecolor{slate-100}{RGB}{240,246,252}
+\definecolor{green-900}{RGB}{46,125,50}
+\definecolor{green-600}{RGB}{67,160,71}
+\definecolor{green-100}{RGB}{232,245,233}
+\definecolor{amber-900}{RGB}{230,124,0}
+\definecolor{amber-600}{RGB}{251,140,0}
+\definecolor{amber-100}{RGB}{255,243,224}
+\definecolor{red-900}{RGB}{198,40,40}
+\definecolor{red-600}{RGB}{229,57,53}
+\definecolor{red-100}{RGB}{255,235,238}
+\definecolor{teal-700}{RGB}{0,128,128}
+\definecolor{teal-600}{RGB}{0,137,123}
+\definecolor{teal-100}{RGB}{224,242,241}
+\definecolor{indigo-700}{RGB}{63,81,181}
+\definecolor{indigo-600}{RGB}{92,107,192}
+\definecolor{indigo-100}{RGB}{232,234,246}
+\definecolor{gray-900}{RGB}{30,32,34}
+\definecolor{gray-800}{RGB}{52,58,64}
+\definecolor{gray-700}{RGB}{73,80,87}
+\definecolor{gray-600}{RGB}{95,100,105}
+\definecolor{gray-500}{RGB}{134,142,150}
+\definecolor{gray-400}{RGB}{173,181,189}
+\definecolor{gray-300}{RGB}{210,215,220}
+\definecolor{gray-200}{RGB}{233,236,239}
+\definecolor{gray-100}{RGB}{247,248,250}
+\definecolor{cream-100}{RGB}{252,250,246}
+
+% LAYER 2: SEMANTIC COLOR MAPPINGS
+\definecolor{definition-dark}{RGB}{30,58,95}
+\definecolor{definition-base}{RGB}{71,101,135}
+\definecolor{definition-light}{RGB}{240,246,252}
+\definecolor{example-dark}{RGB}{46,125,50}
+\definecolor{example-base}{RGB}{67,160,71}
+\definecolor{example-light}{RGB}{232,245,233}
+\definecolor{key-dark}{RGB}{230,124,0}
+\definecolor{key-base}{RGB}{251,140,0}
+\definecolor{key-light}{RGB}{255,243,224}
+\definecolor{caution-dark}{RGB}{198,40,40}
+\definecolor{caution-base}{RGB}{229,57,53}
+\definecolor{caution-light}{RGB}{255,235,238}
+\definecolor{note-dark}{RGB}{73,80,87}
+\definecolor{note-base}{RGB}{134,142,150}
+\definecolor{note-light}{RGB}{252,250,246}
+\definecolor{theorem-dark}{RGB}{63,81,181}
+\definecolor{theorem-base}{RGB}{92,107,192}
+\definecolor{theorem-light}{RGB}{232,234,246}
+\definecolor{practice-dark}{RGB}{0,128,128}
+\definecolor{practice-base}{RGB}{0,137,123}
+\definecolor{practice-light}{RGB}{224,242,241}
+
+% LAYER 3: COMPONENT-SPECIFIC ALIASES
+\definecolor{text-primary}{RGB}{30,32,34}
+\definecolor{text-secondary}{RGB}{73,80,87}
+\definecolor{text-muted}{RGB}{95,100,105}
+\definecolor{bg-definition}{RGB}{240,246,252}
+\definecolor{bg-example}{RGB}{232,245,233}
+\definecolor{bg-key}{RGB}{255,243,224}
+\definecolor{bg-caution}{RGB}{255,235,238}
+\definecolor{bg-note}{RGB}{252,250,246}
+\definecolor{bg-theorem}{RGB}{232,234,246}
+\definecolor{bg-practice}{RGB}{224,242,241}
+\definecolor{bg-neutral}{RGB}{247,248,250}
+\definecolor{border-definition}{RGB}{71,101,135}
+\definecolor{border-example}{RGB}{67,160,71}
+\definecolor{border-key}{RGB}{251,140,0}
+\definecolor{border-caution}{RGB}{229,57,53}
+\definecolor{border-note}{RGB}{210,215,220}
+\definecolor{border-theorem}{RGB}{92,107,192}
+\definecolor{border-practice}{RGB}{0,137,123}
+\definecolor{border-neutral}{RGB}{210,215,220}
+\definecolor{primary}{RGB}{30,58,95}
+\definecolor{primary-light}{RGB}{71,101,135}
+\definecolor{accent}{RGB}{251,140,0}
+
+% ============================================================================
+% TABLES - Modern styling
+% ============================================================================
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\renewcommand{\arraystretch}{1.3}
+
+% ============================================================================
+% BOXES AND VISUAL ELEMENTS
+% ============================================================================
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable,skins,theorems,listings}
+
+\usepackage{listings}
+\lstset{
+  basicstyle=\small\ttfamily\color{gray-900},
+  breaklines=true,
+  breakatwhitespace=false,
+  columns=flexible,
+  keepspaces=true,
+  showstringspaces=false,
+  tabsize=2,
+  xleftmargin=0pt,
+  framexleftmargin=0pt,
+  keywordstyle=\color{slate-700}\bfseries,
+  stringstyle=\color{green-900},
+  commentstyle=\color{gray-600}\itshape,
+  emphstyle=\color{amber-900},
+}
+
+\tcbset{
+  importance/.is choice,
+  importance/high/.style={boxrule=2pt,drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.12},top=10pt,bottom=10pt,left=12pt,right=12pt},
+  importance/medium/.style={},
+  importance/low/.style={boxrule=0.8pt,drop shadow={opacity=0},opacityback=0.92,opacityframe=0.6,boxed title style={opacityback=0.85},top=6pt,bottom=6pt,left=8pt,right=8pt},
+  importance/.default=medium
+}
+
+\newtcolorbox{definitionbox}[1][]{enhanced,colback=bg-definition,colframe=border-definition,fonttitle=\bfseries\large,coltitle=white,boxrule=1.5pt,arc=3pt,left=10pt,right=10pt,top=10pt,bottom=10pt,breakable,drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.08},attach boxed title to top left={yshift=-2mm, xshift=4mm},boxed title style={colback=definition-dark,colframe=definition-dark,arc=2pt,boxrule=0pt},#1}
+
+\newtcolorbox{highlightbox}[1][]{enhanced,colback=bg-note,colframe=border-note,fonttitle=\bfseries,coltitle=note-dark,boxrule=1pt,arc=2.5pt,left=10pt,right=10pt,top=8pt,bottom=8pt,breakable,drop shadow={shadow xshift=0.5pt, shadow yshift=-0.5pt, opacity=0.05},#1}
+
+\newtcolorbox{keybox}[1][]{enhanced,colback=bg-key,colframe=key-base,fonttitle=\bfseries\large,coltitle=white,boxrule=2pt,arc=3pt,left=12pt,right=12pt,top=10pt,bottom=10pt,breakable,drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.1},borderline west={3pt}{0pt}{key-base},attach boxed title to top left={yshift=-2mm, xshift=4mm},boxed title style={colback=key-base,colframe=key-base,arc=2pt,boxrule=0pt},#1}
+
+\newtcolorbox{questionbox}[1][]{enhanced,colback=gray-100,colframe=gray-600,fonttitle=\bfseries,coltitle=white,boxrule=1.5pt,arc=2pt,left=10pt,right=10pt,top=8pt,bottom=8pt,breakable,borderline west={4pt}{0pt}{slate-700},attach boxed title to top left={yshift=-2mm, xshift=4mm},boxed title style={colback=slate-700,colframe=slate-700,arc=2pt,boxrule=0pt},#1}
+
+\newtcolorbox{theorembox}[1][]{enhanced,colback=bg-theorem,colframe=border-theorem,fonttitle=\bfseries\large,coltitle=white,boxrule=1.5pt,arc=3pt,left=12pt,right=12pt,top=10pt,bottom=10pt,breakable,drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.08},attach boxed title to top left={yshift=-2mm, xshift=4mm},boxed title style={colback=theorem-dark,colframe=theorem-dark,arc=2pt,boxrule=0pt},#1}
+
+\newtcblisting{listingbox}[1][]{enhanced,colback=gray-100,colframe=gray-400,fonttitle=\bfseries\sffamily,coltitle=gray-800,boxrule=1pt,arc=2pt,left=8pt,right=8pt,top=6pt,bottom=6pt,breakable,listing only,listing options={basicstyle=\small\ttfamily\color{gray-900},breaklines=true,columns=flexible,keepspaces=true},attach boxed title to top left={yshift=-2mm, xshift=4mm},boxed title style={colback=gray-500,colframe=gray-500,arc=2pt,boxrule=0pt},#1}
+
+% ============================================================================
+% LISTS
+% ============================================================================
+\usepackage{enumitem}
+\setlist{itemsep=0.4em,parsep=0.2em,topsep=0.5em,leftmargin=1.5em}
+
+\newlist{evallist}{enumerate}{1}
+\setlist[evallist]{label=\textbf{Q\arabic*.},leftmargin=2em,itemsep=0.5em,labelsep=0.5em}
+
+% ============================================================================
+% TIKZ
+% ============================================================================
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,shapes.geometric,shapes.misc,calc,decorations.pathreplacing,backgrounds,fit,shadows.blur}
+\tikzset{every node/.style={font=\normalfont},every text node part/.style={font=\normalfont}}
+
+% ============================================================================
+% SECTION STYLING
+% ============================================================================
+\usepackage{titlesec}
+\usepackage{titletoc}
+
+\titleformat{\section}{\Large\bfseries\color{primary}}{\thesection}{1em}{}[\vspace{0.3em}{\color{primary}\titlerule[1.5pt]}\vspace{0.5em}]
+\titleformat{\subsection}{\large\bfseries\color{primary}}{\thesubsection}{1em}{}[\vspace{-0.3em}]
+\titleformat{\subsubsection}{\normalsize\bfseries\color{text-secondary}}{\thesubsubsection}{1em}{}
+\titleformat{\paragraph}[runin]{\normalsize\bfseries\color{primary}}{}{0em}{}[.]
+\titlespacing*{\paragraph}{0pt}{1em}{0.5em}
+
+% ============================================================================
+% TABLE OF CONTENTS
+% ============================================================================
+\renewcommand{\contentsname}{{\color{primary}\Large\bfseries Contents}}
+\titlecontents{section}[1.5em]{\vspace{0.5em}\bfseries}{\color{primary}\contentslabel{1.5em}}{}{\titlerule*[0.75pc]{.}\contentspage}
+\titlecontents{subsection}[3.8em]{\vspace{0.2em}}{\contentslabel{2.3em}}{}{\titlerule*[0.75pc]{.}\contentspage}
+
+% ============================================================================
+% CAPTIONS
+% ============================================================================
+\usepackage[font={small},labelfont={bf,color=primary},format=plain,justification=justified,skip=8pt]{caption}
+
+% ============================================================================
+% HYPERLINKS
+% ============================================================================
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  citecolor=accent,
+  urlcolor=primary,
+  bookmarksnumbered=true,
+  pdfborder={0 0 0},
+  pdftitle={Foundations: Conversations and Reasoning},
+  pdfauthor={Michael J Bommarito II, Daniel Martin Katz, Jillian Bommarito},
+  pdfsubject={LLM Conversations, Reasoning Patterns, Chain-of-Thought, ReAct},
+  pdfkeywords={conversational AI, chain-of-thought, ReAct, reasoning, context management, prompt engineering}
+}
+
+\usepackage{cleveref}
+\crefname{section}{Section}{Sections}
+\crefname{figure}{Figure}{Figures}
+\crefname{table}{Table}{Tables}
+
+% ============================================================================
+% BIBLIOGRAPHY
+% ============================================================================
+\usepackage[backend=biber,style=authoryear,maxcitenames=2,maxbibnames=99,uniquename=false,uniquelist=false,sorting=nyt,dashed=false]{biblatex}
+\DeclareFieldFormat{citetitle}{\mkbibquote{#1}}
+\DeclareFieldFormat[article]{citetitle}{#1}
+\DeclareFieldFormat[inproceedings]{citetitle}{#1}
+\DeclareFieldFormat[book]{citetitle}{\mkbibemph{#1}}
+\DeclareFieldFormat[techreport]{citetitle}{#1}
+\DeclareFieldFormat[misc]{citetitle}{#1}
+\addbibresource{bib/refs.bib}
+
+% ============================================================================
+% CUSTOM COMMANDS
+% ============================================================================
+\newcommand{\keyterm}[1]{\textbf{\color{primary}#1}}
+\newcommand{\levelone}[1]{\textbf{#1}}
+\newcommand{\leveltwo}[1]{\textbf{#1}}
+\newcommand{\levelthree}[1]{\textbf{#1}}
+
+% ============================================================================
+% TITLE AND METADATA
+% ============================================================================
 \title{
   \vspace{-0.5em}
   {\Huge\bfseries\color{primary} Foundations}\\[0.6em]
   {\LARGE\color{primary} Conversations and Reasoning}\\[0.4em]
-  {\large\itshape\color{text-secondary} Chat Mechanics and Reasoning Patterns}
+  {\large\itshape\color{text-secondary} Chat Mechanics, Memory, and Reasoning Patterns}
   \vspace{0.5em}
 }
 
@@ -14,20 +271,27 @@
   \vspace{-0.5em}
   {\large\color{text-muted}
     Michael J Bommarito II \enspace $\cdot$ \enspace
-    Jillian Bommarito \enspace $\cdot$ \enspace
-    Daniel Martin Katz
+    Daniel Martin Katz \enspace $\cdot$ \enspace
+    Jillian Bommarito
   }
   \vspace{-0.5em}
 }
 
 \date{{\normalsize\color{text-muted}\today}}
 
+% ============================================================================
+% DOCUMENT START
+% ============================================================================
+\begin{document}
+
 \maketitle
 
+% Decorative rule after title block
 \vspace{-1em}
 \noindent{\color{border-neutral}\rule{\textwidth}{0.5pt}}
 \vspace{1.0em}
 
+% Draft notice
 \begin{center}
   \begin{tcolorbox}[
       enhanced,
@@ -45,22 +309,36 @@
       drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.08},
       borderline west={4pt}{0pt}{note-dark}
     ]
+
     \begin{center}
       {\large\bfseries\color{note-dark} Working Draft Chapter} \\[0.2em]
       {\small\color{text-muted} Version 0.1}
     \end{center}
+
     \vspace{0.25em}
+
     {\small
-      From single-shot completions to multi-turn chats and structured reasoning. We cover roles, memory, scratchpads, and strategy selection.
+      This chapter is from the textbook \textit{Artificial Intelligence for Law and Finance}, currently under development. It covers the transition from single-shot completions to multi-turn conversations, context management strategies, and the reasoning patterns that enable complex problem-solving.
+
+      \vspace{0.5em}
+
+      The most current copy of the project is available at:\\
+      \url{https://github.com/mjbommar/ai-law-finance-book/}
     }
+
   \end{tcolorbox}
 \end{center}
 
-\vspace{1em}
+\pagebreak
 
+% Table of contents
 \tableofcontents
 
-% Main content
+\pagebreak
+
+% ============================================================================
+% MAIN CONTENT
+% ============================================================================
 \input{sections/howtoread}
 \input{sections/intro}
 \input{sections/conversational_models}
@@ -70,8 +348,11 @@
 \input{sections/furtherlearning}
 \input{sections/conclusion}
 
-% Only print bibliography when compiling standalone
-\IfSubfilesClassLoaded{\printbibliography}{}
+% ============================================================================
+% BIBLIOGRAPHY
+% ============================================================================
+
+\clearpage
+\printbibliography
 
 \end{document}
-
