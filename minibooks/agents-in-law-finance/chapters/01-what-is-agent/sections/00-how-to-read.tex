@@ -6,7 +6,7 @@
 
 This chapter answers a deceptively simple question: \textit{What is an agent?}
 
-The term ``agent'' appears everywhere in industry and academia today---from ``AI agents'' to ``agentic workflows''---yet rarely with clear definition. This creates confusion, miscommunication, and inevitably, disappointment.
+The term ``agent'' appears everywhere in industry and academia today, from ``AI agents'' to ``agentic workflows,'' yet rarely with clear definition. This creates confusion, miscommunication, and inevitably, disappointment.
 
 We hope to help you avoid this disappointment, but \textbf{this chapter is not short and your time is valuable}. You do not need to read everything, especially on first reading. Three reading paths correspond to different goals:
 
@@ -18,60 +18,5 @@ We hope to help you avoid this disappointment, but \textbf{this chapter is not s
 
 \vspace{1em}
 
-This chapter provides conceptual foundations and analytical frameworks. Part II (\textit{How to Build an Agent}) covers architectures, protocols, and technical evaluation. Part III (\textit{How to Govern an Agent}) addresses regulation, controls, and deployment.
+This chapter provides conceptual foundations and analytical frameworks. Chapter~2 (\textit{How to Design an Agent}) covers architectures, protocols, and technical evaluation. Chapter~3 (\textit{How to Govern an Agent}) addresses regulation, controls, and deployment.
 
-\vspace{0.5em}
-\noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}
-
-\pagebreak
-
-\section*{At a Glance: The Framework in One Page}
-\addcontentsline{toc}{section}{At a Glance: The Framework in One Page}
-
-\begin{definitionbox}[title={\textbf{Six Properties (Mnemonic: GPA + IAT)}}]
-\small
-\textbf{G (Goal):} Objective directing behavior toward desired outcomes \\
-\textbf{P (Perception):} Observing environment to inform action selection \\
-\textbf{A (Action):} Executing decisions that affect environment or state \\
-\textbf{I (Iteration):} Multiple perception-action cycles, not single-shot \\
-\textbf{A (Adaptation):} Modifying policy based on observations within session \\
-\textbf{T (Termination):} Explicit or implicit stopping conditions
-\medskip
-
-\textit{Note: the mnemonic reuses ``A'' twice---first for Action, then for Adaptation. When we need extra precision, we distinguish $A_{\text{act}}$ (action) from $A_{\text{adapt}}$ (adaptation).}
-\end{definitionbox}
-
-\begin{keybox}[title={\textbf{Three-Level Hierarchy}}]
-\textbf{Level 1 (Agent):} G + P + A — 3 properties minimum
-
-\textbf{Level 2 (Agentic System):} G + P + A + I + A + T — All 6 via rules/algorithms
-
-\textbf{Level 3 (Agentic AI):} G + P + A + I + A + T — All 6 via LLMs/neural networks
-
-\vspace{0.3em}
-\small\textit{Quick check: Q1--Q3 yes = Agent | Q1--Q6 yes = Agentic System | All 6 + AI/ML = Agentic AI}
-\end{keybox}
-
-\begin{table}[h!]
-\centering
-\small
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{7.2cm}>{\raggedright\arraybackslash}p{7.2cm}@{}}
-\toprule
-\textbf{Example: Portfolio Rebalancer (L2)} & \textbf{Example: Legal Research (L3)} \\
-\midrule
-Monitors positions, executes trades, adapts to volatility, stops when balanced. \textit{(6 properties via rules)} & Searches case law, refines queries based on results, escalates when stuck. \textit{(6 properties via LLM)} \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\vspace{-0.5em}
-
-\begin{highlightbox}[title={\textbf{Professional Deployment Adds Four Safeguards}}]
-\small
-\textbf{Attribution}: Every claim traceable to authoritative sources \\
-\textbf{Provenance}: Auditable logs showing reasoning steps and tool invocations \\
-\textbf{Escalation}: Clear triggers for human review of high-stakes decisions \\
-\textbf{Confidentiality}: Ethical walls and privilege protection mechanisms
-\end{highlightbox}
-
-\pagebreak

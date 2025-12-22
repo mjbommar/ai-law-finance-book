@@ -1,7 +1,7 @@
 % ============================================================================
 % 07-planning.tex
 % Q6: How Does an Agent Break a Big Job into Steps?
-% Part of: Chapter 07 - Agents Part II: How to Design an Agent
+% Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
 \section{How Does an Agent Break a Big Job into Steps?}
@@ -13,9 +13,10 @@
 
 A litigation partner approaching a new matter understands that the path from initial consultation to trial and beyond is a long sequence of interdependent steps. To navigate it, the partner develops a strategy: discovery first (identifying needed facts), then dispositive motions when appropriate, followed by settlement discussions or trial preparation. Discovery breaks into phases: initial disclosures, document requests, interrogatories, and depositions. Tasks distribute across the team: a senior associate handles briefing, a junior associate reviews documents, and a paralegal manages scheduling. Throughout, the partner monitors progress against deadlines and adjusts strategy as new facts emerge.
 
-This is \keyterm{planning}: decomposing complex goals into action sequences. It mirrors the litigation roadmap or deal timeline that guides execution. Without planning, agents react to immediate observations without strategy. With planning, they work systematically toward objectives, adapt when circumstances change, and recognize completion.
+\glsadd{goal}This is \keyterm{planning}: decomposing complex goals into action sequences. Where Chapter~1's IAT framework identified iteration as a key capability, planning determines how those iterations are structured and sequenced. It mirrors the litigation roadmap or deal timeline that guides execution. Without planning, agents react to immediate observations without strategy. With planning, they work systematically toward objectives, adapt when circumstances change, and recognize completion.
 
 \begin{definitionbox}[title={Planning}, breakable=false]
+\glsadd{planning}
 	\keyterm{Planning} decomposes complex goals into sequences of actions \parencite{russell2020artificial}. It encompasses:
 	\begin{itemize}[nosep]
 		\item \textbf{Decomposition}: Breaking large tasks into manageable steps.
@@ -35,6 +36,7 @@ This is \keyterm{planning}: decomposing complex goals into action sequences. It 
 \subsection{Planning Patterns}
 \label{sec:agents2-planning-patterns}
 
+\glsadd{react}
 Three patterns dominate agent planning, each suited to different task types.
 
 \textbf{ReAct (Reasoning + Acting).} The most fundamental pattern interleaves reasoning with action \parencite{yao2022react}. Consider a partner asking for authority on an unenforceable forum selection clause. The associate reasons: ``Key grounds are unconscionability and public policy. I will start with \textit{Atlantic Marine}.'' They search, observe results, and reason again: ``Unconscionability cases involve consumer contracts, not our commercial context. The public policy line is stronger.'' They search again, refining based on results.
@@ -51,7 +53,7 @@ Reasoning traces make decisions transparent and auditable. ReAct works well for 
 
 \textbf{Plan-Execute.} This pattern separates planning from execution. For a document review task (``Review 50 contracts for choice-of-law provisions''), the associate creates a plan: list the contracts, open each one, extract the provision, and record findings. Then they execute systematically. The plan remains static because the task is well-defined.
 
-Plan-Execute fits established workflows: due diligence checklists, compliance reviews, and document assembly. You create the plan upfront and execute methodically. Research variants like ReWOO \parencite{xu2023rewoo} (separating reasoning from observation) and LLMCompiler \parencite{kim2024llmcompiler} (optimizing execution graphs) enable parallel tool calling. However, the core pattern remains: plan first, then execute.
+Plan-Execute fits established workflows: due diligence checklists, compliance reviews, and document assembly. You create the plan upfront and execute methodically. Research variants like ReWOO \parencite{xu2023rewoo} (separating reasoning from observation) and LLMCompiler \parencite{kim2024llmcompiler} (optimizing execution graphs) enable parallel tool calling. Yet the core pattern remains: plan first, then execute.
 
 \textbf{Hierarchical Planning.} Law firms decompose matters into workstreams delegated through layers. A parent agent receives a high-level goal, breaks it into sub-goals, and delegates to specialists. ``Prepare for trial'' becomes:
 \begin{itemize}[nosep]
@@ -66,7 +68,7 @@ Each specialist may decompose further. This enables parallelization and speciali
 These patterns represent a shift from traditional workflow automation. Traditional engines used \textbf{static orchestration}: predefined graphs specifying exact steps and branches (BPM systems). The workflow was designed at build time; the engine merely executed it.
 
 \begin{definitionbox}[title={Static vs.\ Dynamic Orchestration}, breakable=false]
-	\textbf{Static orchestration} executes predefined workflow graphs. The same input always produces the same execution path. It is predictable and auditable but inflexible.
+\glsadd{tool-orchestration}	\textbf{Static orchestration} executes predefined workflow graphs. The same input always produces the same execution path. It is predictable and auditable but inflexible.
 
 	\vspace{0.5em}
 	\textbf{Dynamic orchestration} reasons about task decomposition at runtime. The LLM examines the goal, considers available resources, and constructs a plan on the fly. It is adaptive but less predictable.
@@ -131,7 +133,7 @@ Task classification shapes the choice of planning pattern. An exploratory questi
 
 Constraints establish the boundaries within which the plan must operate. These include explicit limits like deadlines and budgets, but also implicit bounds like the scope of the engagement and the level of detail expected. A request to ``summarize the key terms'' differs fundamentally from a request to ``conduct comprehensive due diligence,'' even if both involve the same underlying document.
 
-Success criteria complete the picture by defining how the agent recognizes that its work is done. Without clear criteria, agents struggle to terminate appropriately---they may stop too early, leaving important questions unanswered, or continue indefinitely, consuming resources on diminishing returns. The clearer the goal, the more focused the plan; ambiguity at the input stage propagates through the entire execution.
+Success criteria complete the picture by defining how the agent recognizes that its work is done. Without clear criteria, agents struggle to terminate appropriately. They may stop too early, leaving important questions unanswered, or continue indefinitely, consuming resources on diminishing returns. The clearer the goal, the more focused the plan; ambiguity at the input stage propagates through the entire execution.
 
 % ----------------------------------------------------------------------------
 % Budget Architecture
@@ -142,17 +144,17 @@ Success criteria complete the picture by defining how the agent recognizes that 
 
 Before examining resource budgets, note that memory constraints shape planning from the start. Working memory---the agent's context window---has strict limits, currently around 200,000 tokens for leading models (\Cref{sec:agents2-memory-types}). A plan that assumes unlimited context will fail when the agent cannot hold all relevant information simultaneously. Similarly, if the agent must retrieve information from episodic or semantic memory, retrieval cost and latency become part of the plan's resource budget. Memory is not merely storage; it is a planning constraint.
 
-Without resource constraints, agents can run indefinitely---the computational equivalent of asking a junior associate for two relevant cases and receiving fifty, along with a bill for the hours spent finding them. Budget architecture provides the planning mechanism that prevents this outcome, giving agents explicit limits that shape how they allocate effort across tasks.
+Without resource constraints, agents can run indefinitely. Think of asking a junior associate for two relevant cases and receiving fifty, along with a bill for the hours spent finding them. Budget architecture provides the planning mechanism that prevents this outcome, giving agents explicit limits that shape how they allocate effort across tasks.
 
-Resource consumption in agent systems takes several forms, each requiring its own type of constraint. Token budgets limit consumption of LLM API calls, preventing expensive reasoning loops where the agent repeatedly processes the same information or explores unproductive tangents. Time budgets enforce deadlines by halting execution after a specified duration, ensuring that a task expected to take ten minutes does not silently expand to consume an hour. Tool call budgets cap external interactions---limiting an agent to twenty database searches, for instance, forces it to formulate queries carefully rather than issuing dozens of slightly varied requests. Cost budgets provide the most direct control, capping total spending in dollars regardless of how that spending is distributed across tokens, tools, and time.
+Resource consumption in agent systems takes several forms, each requiring its own type of constraint. Token budgets limit consumption of LLM API calls, preventing expensive reasoning loops where the agent repeatedly processes the same information or explores unproductive tangents. Time budgets enforce deadlines by halting execution after a specified duration, ensuring that a task expected to take ten minutes does not silently expand to consume an hour. Tool call budgets cap external interactions by limiting an agent to twenty database searches, for instance, forcing it to formulate queries carefully rather than issuing dozens of slightly varied requests. Cost budgets provide the most direct control, capping total spending in dollars regardless of how that spending is distributed across tokens, tools, and time.
 
-These budgets operate hierarchically, cascading from broad constraints down to specific allocations. A session budget might constrain an entire client engagement; within that envelope, individual tasks receive their own allocations, which subdivide further into budgets for subtasks and individual operations. A legal research task might receive thirty minutes and fifty thousand tokens; the subtasks that compose it---identifying relevant statutes, finding controlling cases, synthesizing holdings---share this pool rather than each receiving unlimited resources.
+These budgets operate hierarchically, cascading from broad constraints down to specific allocations. A session budget might constrain an entire client engagement; within that envelope, individual tasks receive their own allocations, which subdivide further into budgets for subtasks and individual operations. Consider a legal research task receiving thirty minutes and fifty thousand tokens. The subtasks that compose it (identifying relevant statutes, finding controlling cases, synthesizing holdings) share this pool rather than each receiving unlimited resources.
 
-Understanding how costs compound is essential for realistic budgeting. Ingesting a 200-page credit facility consumes roughly 80,000 tokens before any analysis begins. The analysis itself requires additional tokens for reasoning, and a comprehensive review of a complex document might reach one million tokens in aggregate. Monitoring must track cumulative consumption across the entire task, not just individual operations, because costs that seem modest in isolation can accumulate rapidly.
+Understanding how costs compound is essential for realistic budgeting. Ingesting a 200-page credit facility consumes roughly 80,000 tokens before any analysis begins. The analysis itself requires additional tokens for reasoning, and a comprehensive review of a complex document might reach one million tokens in aggregate. Monitoring must track cumulative consumption across the entire task, not just individual operations, because costs that seem modest in isolation can accumulate rapidly. Chapter~3 examines these resource constraints in the context of a production mortgage underwriting system (\Cref{sec:agents3-audit-logging}), where iterative investigation across multiple cycles requires careful cost budgeting and termination condition design to satisfy both operational efficiency and regulatory compliance requirements.
 
 The economics of agent assistance vary significantly by task type. Retrieval-heavy work like document review often shows clear return on investment: the agent processes material faster and more consistently than a human reviewer, and the cost savings are straightforward to calculate. Judgment-intensive tasks present a more complex picture, since extensive human review of the agent's output may be required, potentially reducing the net benefit. Transparency about AI assistance---as encouraged by recent ethics guidance \parencite{aba-formal-opinion-512}---enables clients to evaluate this value proposition for themselves.
 
-Well-designed agents degrade gracefully as budgets tighten rather than failing abruptly. The key is tiered output that provides value at every resource level. With a minimal budget, the agent might return only the controlling statute. A moderate budget allows it to add key holdings from relevant cases. A full budget enables comprehensive analysis with supporting citations and counterarguments. Soft limits---triggered at perhaps eighty percent of the allocated budget---warn the agent to prioritize completion over thoroughness. Hard limits at one hundred percent terminate execution and return whatever results have been assembled. An agent that delivers useful partial results within budget is far more valuable than one that produces nothing when resources run short. When budgets are exhausted, the agent must terminate. The critical design principle is that termination under budget pressure should still produce value: the agent delivers what it has discovered rather than nothing. \Cref{sec:agents2-termination} addresses how termination conditions interact with budget limits, including how to define success for partial results.
+Well-designed agents degrade gracefully as budgets tighten rather than failing abruptly. The key is tiered output that provides value at every resource level. With a minimal budget, the agent might return only the controlling statute. A moderate budget allows it to add key holdings from relevant cases. A full budget enables comprehensive analysis with supporting citations and counterarguments. Soft limits (triggered at perhaps eighty percent of the allocated budget) warn the agent to prioritize completion over thoroughness. Hard limits at one hundred percent terminate execution and return whatever results have been assembled. An agent that delivers useful partial results within budget is far more valuable than one that produces nothing when resources run short. When budgets are exhausted, the agent must terminate. The critical design principle is that termination under budget pressure should still produce value: the agent delivers what it has discovered rather than nothing. \Cref{sec:agents2-termination} addresses how termination conditions interact with budget limits, including how to define success for partial results.
 
 % ----------------------------------------------------------------------------
 % Knowing When to Stop (Forward Reference)
@@ -161,7 +163,7 @@ Well-designed agents degrade gracefully as budgets tighten rather than failing a
 \subsection{Stopping Conditions}
 \label{sec:agents2-termination-preview}
 
-Planning must include stopping conditions. Success criteria, resource limits, and confidence thresholds all determine when an agent should stop. \Cref{sec:agents2-termination} addresses termination in depth; here we note that the planning phase is when these conditions must be defined. A plan without stopping rules is incomplete---the agent will either terminate prematurely or continue indefinitely, consuming resources without adding value.
+\glsadd{stopping-conditions}Planning must include stopping conditions. Success criteria, resource limits, and confidence thresholds all determine when an agent should stop. \Cref{sec:agents2-termination} addresses termination in depth; here we note that the planning phase is when these conditions must be defined. A plan without stopping rules is incomplete. The agent will either terminate prematurely or continue indefinitely, consuming resources without adding value.
 
 % ----------------------------------------------------------------------------
 % Connection to Other Questions
@@ -175,5 +177,3 @@ Planning decomposes work, but every plan must end. The next two questions addres
 \Cref{sec:agents2-termination} (Termination) addresses how an agent knows it is done. This requires defining success criteria and budget limits. \Cref{sec:agents2-escalation} (Escalation) addresses how an agent knows when to ask for help. This requires confidence thresholds and authority boundaries.
 
 Without clear termination, agents run forever. Without escalation, they exceed authority. These boundaries define the safe operating envelope for autonomous systems.
-
-\pagebreak

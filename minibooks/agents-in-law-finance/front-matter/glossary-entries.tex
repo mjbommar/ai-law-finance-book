@@ -1,0 +1,343 @@
+% ============================================================================
+% GLOSSARY ENTRIES - Agents in Law and Finance
+% ============================================================================
+% This file defines key terms for the mini-book glossary.
+% Terms are automatically tracked when referenced via \gls{key} or \glsadd{key}.
+%
+% Usage in text:
+%   \gls{agent}           - lowercase with automatic pluralization
+%   \Gls{agent}           - capitalized
+%   \glspl{agent}         - plural
+%   \glsadd{agent}        - add page reference without printing term
+%
+% In definitionbox environments, use glsadd to register the definition page:
+%   \begin{definitionbox}[title={Agent}]
+%     \glsadd{agent}
+%     Definition text...
+%   \end{definitionbox}
+% ============================================================================
+
+% ----------------------------------------------------------------------------
+% CORE FRAMEWORK TERMS
+% ----------------------------------------------------------------------------
+
+\newglossaryentry{agent}{
+  name={Agent},
+  description={A system exhibiting the three foundational properties of Goal, Perception, and Action (GPA). An agent pursues objectives, observes its environment, and takes actions to achieve its goals. This represents Level 1 in the three-level hierarchy}
+}
+
+\newglossaryentry{agentic-system}{
+  name={Agentic System},
+  description={A system exhibiting all six operational properties: Goal, Perception, Action, Iteration, Adaptation, and Termination (GPA+IAT). Agentic systems are production-ready and can operate across multiple cycles with learning and graceful stopping. This represents Level 2 in the three-level hierarchy}
+}
+
+\newglossaryentry{ai-agent}{
+  name={AI Agent},
+  description={An agentic system (Level 2) whose capabilities are powered by artificial intelligence or machine learning, particularly large language models (LLMs). This represents Level 3 in the three-level hierarchy}
+}
+
+\newglossaryentry{gpa}{
+  name={GPA (Goal, Perception, Action)},
+  description={The three foundational properties that define minimal agency. Goal provides direction, Perception enables environmental awareness, and Action allows the system to effect change. Together, they form the basis for all agentic behavior}
+}
+
+\newglossaryentry{iat}{
+  name={IAT (Iteration, Adaptation, Termination)},
+  description={The three operational properties that distinguish production-ready agentic systems from basic agents. Iteration enables multi-step execution, Adaptation allows learning from experience, and Termination ensures graceful stopping}
+}
+
+\newglossaryentry{three-level-hierarchy}{
+  name={Three-Level Hierarchy},
+  description={The conceptual framework distinguishing three levels of agency: Level 1 (Agent) with GPA properties, Level 2 (Agentic System) with all six GPA+IAT properties, and Level 3 (AI Agent) where capabilities are AI-powered}
+}
+
+% ----------------------------------------------------------------------------
+% THE SIX PROPERTIES
+% ----------------------------------------------------------------------------
+
+\newglossaryentry{goal}{
+  name={Goal},
+  description={The first foundational property (G in GPA). An agent's objective or purpose that guides its behavior. Goals can be explicit instructions, implicit preferences, or emergent from training. Governance requires goal authorization, alignment verification, and monitoring}
+}
+
+\newglossaryentry{perception}{
+  name={Perception},
+  description={The second foundational property (P in GPA). The ability to observe and interpret the environment through sensors, APIs, or data sources. Perception determines what information an agent can access and use for decision-making}
+}
+
+\newglossaryentry{action}{
+  name={Action},
+  description={The third foundational property (A in GPA). The ability to effect change in the environment through actuators, API calls, or tool use. Actions can be reversible or irreversible, and governance requires appropriate approval gates}
+}
+
+\newglossaryentry{iteration}{
+  name={Iteration},
+  description={The first operational property (I in IAT). The ability to execute multiple perceive-act cycles, building on prior state and environmental feedback. Iteration enables complex, multi-step tasks and requires audit trails for reproducibility}
+}
+
+\newglossaryentry{adaptation}{
+  name={Adaptation},
+  description={The second operational property (A in IAT). The ability to modify behavior based on experience, feedback, or changing conditions. Adaptation can occur within a session or across sessions, and requires change control and revalidation}
+}
+
+\newglossaryentry{termination}{
+  name={Termination},
+  description={The third operational property (T in IAT). The ability to recognize when to stop executing, whether due to goal completion, resource limits, errors, or the need for human escalation. Proper termination prevents runaway execution}
+}
+
+% ----------------------------------------------------------------------------
+% ARCHITECTURAL TERMS
+% ----------------------------------------------------------------------------
+
+\newglossaryentry{trigger}{
+  name={Trigger},
+  description={The event or condition that initiates agent execution. Triggers can be explicit (user command), scheduled (time-based), reactive (event-driven), or chained (from another agent). Understanding triggers is essential for governance}
+}
+
+\newglossaryentry{intent}{
+  name={Intent},
+  description={The interpreted meaning behind a user's request that guides agent behavior. Intent extraction transforms ambiguous natural language into actionable goals, often requiring clarification or constraint validation}
+}
+
+\newglossaryentry{tools}{
+  name={Tools},
+  description={External capabilities that extend an agent's perception and action abilities. Tools include APIs, databases, file systems, and specialized functions. Tool access must be governed through least-privilege principles}
+}
+
+\newglossaryentry{memory}{
+  name={Memory},
+  description={The mechanism by which agents retain information across interactions. Memory types include working memory (within session), episodic memory (past events), semantic memory (facts), and procedural memory (skills)}
+}
+
+\newglossaryentry{planning}{
+  name={Planning},
+  description={The process of decomposing goals into sequences of actions. Planning patterns include reactive (ReAct), hierarchical, and multi-agent orchestration. Planning determines how iteration cycles are structured}
+}
+
+\newglossaryentry{escalation}{
+  name={Escalation},
+  description={The process of transferring control from an agent to a human when the agent encounters situations beyond its competence, authority, or confidence threshold. Escalation is a safety mechanism distinct from termination}
+}
+
+\newglossaryentry{delegation}{
+  name={Delegation},
+  description={The assignment of subtasks from one agent to another in multi-agent systems. Delegation patterns include hierarchical orchestration, peer coordination, and specialist routing}
+}
+
+% ----------------------------------------------------------------------------
+% TECHNICAL PATTERNS
+% ----------------------------------------------------------------------------
+
+\newglossaryentry{rag}{
+  name={RAG (Retrieval-Augmented Generation)},
+  description={A pattern that enhances language model responses by retrieving relevant documents from a knowledge base before generation. RAG improves accuracy and enables grounding in authoritative sources}
+}
+
+\newglossaryentry{vector-store}{
+  name={Vector Store},
+  description={A database optimized for storing and retrieving high-dimensional embeddings. Vector stores enable semantic search by finding documents similar in meaning rather than exact keyword matches}
+}
+
+\newglossaryentry{in-context-learning}{
+  name={In-Context Learning},
+  description={The ability of language models to adapt behavior based on examples or instructions provided in the prompt, without updating model weights. This enables few-shot learning and dynamic capability extension}
+}
+
+\newglossaryentry{mcp}{
+  name={MCP (Model Context Protocol)},
+  description={An open protocol developed by Anthropic for connecting AI models to external tools and data sources. MCP standardizes how agents access capabilities like file systems, databases, and APIs}
+}
+
+\newglossaryentry{react}{
+  name={ReAct (Reasoning + Acting)},
+  description={An agent architecture pattern that interleaves reasoning traces with action execution. The agent thinks about what to do, takes an action, observes the result, and continues the cycle until completion}
+}
+
+% ----------------------------------------------------------------------------
+% GOVERNANCE TERMS
+% ----------------------------------------------------------------------------
+
+\newglossaryentry{human-in-the-loop}{
+  name={Human-in-the-Loop (HITL)},
+  description={A governance model where humans approve each significant agent action before execution. HITL provides maximum oversight but limits throughput and is appropriate for high-stakes, irreversible actions}
+}
+
+\newglossaryentry{human-on-the-loop}{
+  name={Human-on-the-Loop (HOTL)},
+  description={A governance model where agents operate autonomously but humans monitor dashboards and can intervene when needed. HOTL balances efficiency with oversight for medium-risk operations}
+}
+
+\newglossaryentry{human-in-command}{
+  name={Human-in-Command (HIC)},
+  description={A governance model where humans set policies and boundaries but agents operate with significant autonomy within those constraints. HIC is appropriate for well-understood, lower-risk tasks}
+}
+
+\newglossaryentry{dimensional-calibration}{
+  name={Dimensional Calibration},
+  description={The process of matching governance control intensity to system risk characteristics. The four key dimensions are autonomy level, entity frame, goal dynamics, and persistence}
+}
+
+\newglossaryentry{governance-surface}{
+  name={Governance Surface},
+  description={The set of technical capabilities that enable oversight of agent behavior, including structured logging, override mechanisms, state snapshots, privilege management, and escalation hooks}
+}
+
+% ----------------------------------------------------------------------------
+% AI/ML TECHNICAL TERMS
+% ----------------------------------------------------------------------------
+% Terms for legal/financial professionals learning AI agent fundamentals
+
+\newglossaryentry{llm}{
+  name={Large Language Model (LLM)},
+  description={A type of artificial intelligence trained on vast text corpora to understand and generate human language. LLMs power most modern AI agents, enabling natural language interaction, reasoning, and task execution. Examples include GPT-4, Claude, and Gemini}
+}
+
+\newglossaryentry{hallucination}{
+  name={Hallucination},
+  description={The generation of plausible-sounding but false or fabricated information by an AI system. In legal contexts, this includes invented case citations or nonexistent statutes; in finance, fabricated data or regulations. Hallucination risk requires verification controls and human oversight}
+}
+
+\newglossaryentry{bdi-architecture}{
+  name={BDI Architecture},
+  description={Belief-Desire-Intention framework for structuring agent reasoning. Agents maintain beliefs (knowledge about the world), desires (goals they want to achieve), and intentions (committed plans of action). BDI provides a foundation for understanding how agents reason and decide}
+}
+
+\newglossaryentry{multi-agent-system}{
+  name={Multi-Agent System (MAS)},
+  description={A system where multiple autonomous agents interact, cooperate, or compete to achieve individual or collective goals. Examples include trading systems with multiple algorithms, distributed due diligence teams, or coordinated compliance monitoring}
+}
+
+\newglossaryentry{reinforcement-learning}{
+  name={Reinforcement Learning (RL)},
+  description={A machine learning approach where agents learn optimal behavior through trial and error, receiving rewards or penalties for their actions. RL agents discover effective strategies without explicit programming, raising governance questions about learned behaviors}
+}
+
+\newglossaryentry{llm-as-agent}{
+  name={LLM-as-Agent Pattern},
+  description={The contemporary architectural approach where a large language model iteratively orchestrates tool calls, observes results, and adapts its strategy to achieve goals. This pattern underlies most modern AI agents in professional applications}
+}
+
+\newglossaryentry{chain-of-thought}{
+  name={Chain-of-Thought},
+  description={A prompting technique where AI models generate intermediate reasoning steps before producing a final answer. Chain-of-thought improves accuracy on complex tasks and provides transparency into the agent's reasoning process, supporting audit and verification}
+}
+
+% ----------------------------------------------------------------------------
+% ANALYTICAL DIMENSIONS
+% ----------------------------------------------------------------------------
+% The four dimensions for analyzing and comparing agent systems
+
+\newglossaryentry{autonomy-spectrum}{
+  name={Autonomy Spectrum},
+  description={The degree to which an agent sets its own agenda versus following explicit instructions. Ranges from delegated proxies (executing specific commands) to self-directed entities (independently identifying and pursuing objectives). Higher autonomy requires stronger governance controls}
+}
+
+\newglossaryentry{entity-frame}{
+  name={Entity Frame},
+  description={The category of entity being analyzed for agency: human-centered (individual decision-makers), institutional (organizations acting through representatives), or machine-centered (AI systems). Different frames emphasize different aspects of agency and require different governance approaches}
+}
+
+\newglossaryentry{goal-dynamics}{
+  name={Goal Dynamics},
+  description={How an agent relates to its objectives over time: accepting fixed goals, negotiating modifications, or autonomously setting new objectives. Dynamic goals require governance mechanisms for goal authorization, drift detection, and alignment verification}
+}
+
+\newglossaryentry{persistence}{
+  name={Persistence},
+  description={The characteristic of maintaining state and pursuing objectives over extended periods, distinguishing agents from one-shot reactive systems. Persistent agents accumulate context, learn from experience, and require governance for long-running operations}
+}
+
+% ----------------------------------------------------------------------------
+% LEGAL AND ECONOMIC TERMS
+% ----------------------------------------------------------------------------
+% Agency concepts from law and economics, contextualized for AI systems
+
+\newglossaryentry{agency-relationship}{
+  name={Agency Relationship},
+  description={A legal arrangement where one party (agent) acts on behalf of another (principal) with the principal's consent and subject to the principal's control. Creates fiduciary obligations of loyalty and care. The Restatement of Agency provides authoritative treatment in U.S. law}
+}
+
+\newglossaryentry{principal-agent-relationship}{
+  name={Principal-Agent Relationship},
+  description={An economic framework analyzing relationships where principals engage agents with delegated decision-making authority. Focuses on incentive alignment, information asymmetry, and agency costs. Foundational for understanding AI alignment challenges}
+}
+
+\newglossaryentry{fiduciary-duty}{
+  name={Fiduciary Duty},
+  description={Legal obligations of loyalty and care that agents owe to principals, requiring agents to act in the principal's best interest rather than their own. When AI agents act on behalf of clients or organizations, questions arise about how fiduciary standards apply}
+}
+
+\newglossaryentry{agency-costs}{
+  name={Agency Costs},
+  description={Economic costs arising from divergent interests between principals and agents, including monitoring costs (oversight), bonding costs (agent commitments), and residual losses (imperfect alignment). AI governance represents a form of monitoring cost}
+}
+
+\newglossaryentry{moral-hazard}{
+  name={Moral Hazard},
+  description={A principal-agent problem where agents take excessive risks or act against principal interests because they do not bear the full consequences. In AI contexts, relates to agents taking actions that benefit short-term metrics while creating long-term risks}
+}
+
+\newglossaryentry{adverse-selection}{
+  name={Adverse Selection},
+  description={A principal-agent problem where principals cannot accurately assess agent quality before engagement due to information asymmetry. In AI contexts, relates to difficulty evaluating AI system capabilities and limitations before deployment}
+}
+
+\newglossaryentry{information-asymmetry}{
+  name={Information Asymmetry},
+  description={A condition where principals and agents have unequal access to relevant information, enabling agents to act in ways principals cannot fully observe or evaluate. AI systems often possess knowledge or reasoning that humans cannot directly inspect}
+}
+
+% ----------------------------------------------------------------------------
+% PHILOSOPHICAL FOUNDATIONS
+% ----------------------------------------------------------------------------
+% Concepts from philosophy of action and mind, relevant to understanding agency
+
+\newglossaryentry{intentional-stance}{
+  name={Intentional Stance},
+  description={Dennett's pragmatic framework for understanding agency: treating entities as rational goal-pursuers when doing so yields reliable behavioral predictions, regardless of their internal mechanisms. Useful for analyzing AI systems without resolving metaphysical questions about machine consciousness}
+}
+
+\newglossaryentry{intentional-action}{
+  name={Intentional Action},
+  description={Anscombe's concept that actions are intentional ``under a description''---the same physical movement can be intentional under one description and unintentional under another. Relevant for analyzing AI agent behavior and attributing responsibility}
+}
+
+\newglossaryentry{causal-theory-of-action}{
+  name={Causal Theory of Action},
+  description={Davidson's theory that intentional actions are explained by an agent's beliefs and desires that causally produce the behavior. Provides philosophical grounding for understanding how mental states (or their computational analogues) drive agent behavior}
+}
+
+% ----------------------------------------------------------------------------
+% SPECIALIZED TECHNICAL TERMS
+% ----------------------------------------------------------------------------
+% Additional technical concepts for deeper understanding
+
+\newglossaryentry{perception-action-loop}{
+  name={Perception-Action Loop},
+  description={The iterative cycle of sensing the environment, processing observations, taking actions, and observing consequences. This continuous loop distinguishes agents from systems that process input once and produce output without feedback}
+}
+
+\newglossaryentry{tool-orchestration}{
+  name={Tool Orchestration},
+  description={The capability of an agent to independently select, invoke, and coordinate external tools (APIs, databases, services) based on task requirements. Tool orchestration represents high autonomy and requires governance of tool access permissions}
+}
+
+\newglossaryentry{agent-based-modeling}{
+  name={Agent-Based Modeling (ABM)},
+  description={A computational methodology where autonomous agents with simple rules interact to produce emergent macro-level patterns. Widely used in economics, finance, and social science to model markets, organizational behavior, and policy effects}
+}
+
+\newglossaryentry{emergent-behavior}{
+  name={Emergent Behavior},
+  description={Properties or behaviors exhibited by multi-agent systems that no individual agent possesses, arising from agent interactions. Emergent behavior can be beneficial (collective intelligence) or problematic (unexpected system dynamics), requiring system-level governance}
+}
+
+\newglossaryentry{stopping-conditions}{
+  name={Stopping Conditions},
+  description={Criteria that determine when an agent terminates operation, including goal satisfaction, resource limits, time constraints, error thresholds, or confidence levels requiring human review. Well-defined stopping conditions prevent runaway execution}
+}
+
+\newglossaryentry{confidence-thresholds}{
+  name={Confidence Thresholds},
+  description={Predetermined certainty levels below which an agent stops autonomous action and escalates to human oversight. Setting appropriate thresholds balances efficiency (avoiding unnecessary escalation) with safety (ensuring human review of uncertain situations)}
+}

@@ -1,7 +1,7 @@
 % ============================================================================
 % 04-perception.tex
 % Q3: How Does an Agent Find Things Out?
-% Part of: Chapter 07 - Agents Part II: How to Design an Agent
+% Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
 \section{How Does an Agent Find Things Out?}
@@ -11,20 +11,22 @@
 % Opening: Q3 Framing and Organizational Analogy
 % ----------------------------------------------------------------------------
 
-Understanding what someone wants is not the same as being able to deliver it. The previous section examined how agents interpret instructions, extracting goals, detecting ambiguity, and gathering the context needed to proceed. But even an agent that perfectly understands ``Research Ninth Circuit authority on personal jurisdiction for foreign corporations'' cannot help if it lacks access to case law databases. An agent that correctly interprets ``Analyze this credit agreement from the lender's perspective'' is useless without the credit agreement itself.
+Understanding what someone wants is not the same as being able to deliver it. The previous section examined how agents interpret instructions, extracting goals, detecting ambiguity, and gathering the context needed to proceed. But even an agent that perfectly understands ``Research Ninth Circuit authority on personal jurisdiction for foreign corporations'' cannot help if it lacks access to case law databases. Where Chapter~1 introduced perception as the ability to observe the world, we now examine the concrete mechanisms---tools and integrations---that enable agents to gather the information they need. An agent that correctly interprets ``Analyze this credit agreement from the lender's perspective'' is useless without the credit agreement itself.
 
 This constraint will feel familiar to anyone who has onboarded a new professional. A junior associate's effectiveness depends as much on access as on reasoning ability. Can they query Westlaw? Do they have credentials for the Bloomberg terminal? Can they search the firm's precedent database and document management system? The answers to these questions determine which problems they can solve. A brilliant analyst without access to portfolio data reasons in a vacuum; a talented associate without access to the case file works blind.
 
-Agentic systems face exactly the same constraint. A large language model can reason impressively about legal doctrines and financial concepts, but without integrations into external or internal sources, it cannot access current case law, live market prices, client documents, or regulatory filings. These connections are what we call \textit{perception tools}: the interfaces through which an agent observes the world beyond its training data.
+\glsadd{llm}Agentic systems face exactly the same constraint. A large language model can reason impressively about legal doctrines and financial concepts, but without integrations into external or internal sources, it cannot access current case law, live market prices, client documents, or regulatory filings. These connections are what we call \textit{perception tools}: the interfaces through which an agent observes the world beyond its training data.
 
 \begin{definitionbox}[title={Tools and Perception}, breakable=false]
+\glsadd{tools}
+\glsadd{perception}
 	A \keyterm{tool} is a function that allows an agent to interact with external systems. \keyterm{Perception tools} are the subset that are read-only: they let the agent observe without changing anything. When an agent queries a database, retrieves a document, or fetches market data, the external system's state remains unchanged.
 
 	\vspace{0.5em}
-	Perception implements the ``P'' in the GPA+IAT framework from Part I. It defines the boundary of what information the agent can access, and that boundary matters enormously. An agent with access to public filings reasons differently than one with access to internal deal documents. An agent that can query real-time market data operates differently than one limited to end-of-day prices.
+	Perception defines the boundary of what information the agent can access, and that boundary shapes every downstream decision. An agent with access to public filings reasons differently than one with access to internal deal documents. An agent that can query real-time market data operates differently than one limited to end-of-day prices.
 \end{definitionbox}
 
-This section examines perception: the read-only tools that let agents gather the information they need. The next section, on action, examines write tools that let agents change things in the world. The distinction matters for governance: reading a document and sending an email carry fundamentally different risks, and your controls should reflect that difference. \Cref{sec:agents2-action} develops these distinctions and the different oversight mechanisms each requires.
+Here we examine perception: the read-only tools that let agents gather the information they need. The next section, on action, examines write tools that let agents change things in the world. The distinction matters for governance: reading a document and sending an email carry fundamentally different risks, and your controls should reflect that difference. \Cref{sec:agents2-action} develops these distinctions and the different oversight mechanisms each requires.
 
 % ----------------------------------------------------------------------------
 % Perception Tool Categories
@@ -39,7 +41,7 @@ Not all perception tools work the same way, and choosing the right tool for the 
 
 \textbf{Document processing tools} transform raw files into data an agent can actually work with. A credit agreement arrives as a PDF; a financial statement comes as a scanned image; a data room contains thousands of files in mixed formats. Before an agent can reason about this content, it needs to extract the text (using OCR for scanned documents), identify what type of document each file is, and pull out structured information like party names, dates, and dollar amounts. During due diligence, for example, an agent reviewing a data room must distinguish contracts from correspondence, extract key terms from each agreement, and organize findings in a way that supports analysis. Without document processing tools, the agent sees only filenames and metadata.
 
-\textbf{Computation tools} generate new information through calculation rather than lookup. Consider deadline calculation: the Federal Rules of Civil Procedure require an answer within 21 days of service \parencite{frcp-rule-12}, but determining the actual due date requires accounting for weekends, court holidays, and local rules. That is a computational task, not a database query. Citation formatters perform a similar function, converting case information into proper Bluebook or other citation styles. In finance, computation tools normalize security identifiers (mapping between tickers, CUSIPs, and ISINs), calculate risk metrics like Value at Risk from position data, or derive analytics that inform investment decisions. These tools produce new information for the agent to use without changing anything in the external world.
+\textbf{Computation tools} generate new information through calculation rather than lookup. Take deadline calculation: the Federal Rules of Civil Procedure require an answer within 21 days of service \parencite{frcp-rule-12}, but determining the actual due date requires accounting for weekends, court holidays, and local rules. That is a computational task, not a database query. Citation formatters perform a similar function, converting case information into proper Bluebook or other citation styles. In finance, computation tools normalize security identifiers (mapping between tickers, CUSIPs, and ISINs), calculate risk metrics like Value at Risk from position data, or derive analytics that inform investment decisions. These tools produce new information for the agent to use without changing anything in the external world.
 
 % ----------------------------------------------------------------------------
 % In-Context Learning and Retrieval Fundamentals
@@ -51,6 +53,7 @@ Not all perception tools work the same way, and choosing the right tool for the 
 Before examining specific retrieval mechanisms, we must understand the fundamental capability that makes retrieval useful: \keyterm{in-context learning}. This concept is central to how modern language models work and why retrieval matters.
 
 \begin{definitionbox}[title={In-Context Learning}, breakable=false]
+\glsadd{in-context-learning}
 	\keyterm{In-context learning (ICL)} is the ability of large language models to learn from information provided in their input---without any update to the model's underlying parameters \parencite{brown2020gpt3}. When you provide examples, documents, or instructions in a prompt, the model adapts its responses based on that context. This is not ``learning'' in the traditional machine learning sense of updating weights; it is learning \textit{within the conversation}.
 
 	\vspace{0.5em}
@@ -99,6 +102,7 @@ To retrieve relevant information from large collections, we need a way to find w
 When using embeddings, storing and searching millions of vectors efficiently requires specialized infrastructure.
 
 \begin{definitionbox}[title={Vector Stores}, breakable=false]
+\glsadd{vector-store}
 	A \keyterm{vector store} (or vector database) is a system optimized for storing embeddings and performing similarity search. Given a query embedding, a vector store returns the most similar document embeddings from its collection. Vector stores use specialized indexing structures (like HNSW or IVF) that make approximate nearest-neighbor search practical at scale.
 
 	\vspace{0.5em}
@@ -110,6 +114,7 @@ When using embeddings, storing and searching millions of vectors efficiently req
 With these retrieval methods in hand, we can now define RAG precisely.
 
 \begin{definitionbox}[title={Retrieval-Augmented Generation (RAG)}, breakable=false]
+\glsadd{rag}
 	\keyterm{Retrieval-Augmented Generation (RAG)} is a \textit{prompt pattern}---not a software system or mathematical technique \parencite{lewis2020rag}. RAG augments a model's context with retrieved information before generation. The pattern has three steps:
 	\begin{enumerate}[nosep]
 		\item \textbf{Retrieve}: Given a query, find relevant content using \textit{any} retrieval method---keyword search, BM25, embeddings, database queries, API calls, or combinations thereof.
@@ -142,6 +147,7 @@ The distinction matters. When evaluating a system, you should ask: What retrieva
 \subsection{Model Context Protocol (MCP)}
 \label{sec:agents2-mcp-perception}
 
+\glsadd{mcp}
 One of the persistent challenges in building agentic systems is integration. Every database, every document management system, every market data feed has its own way of accepting queries and returning results. Historically, connecting an agent to a new information source meant writing custom code for that specific system. Multiply that by the number of agents and the number of tools an organization uses, and the integration burden grows quickly.
 
 The Model Context Protocol (MCP) addresses this problem by standardizing how agents access tools \parencite{anthropic-mcp,mcp-spec}. Instead of learning a different integration pattern for each system, agents learn the protocol once and can then access any compatible tool. For organizations, this means a single point of audit and control rather than dozens of bespoke connections to monitor.
@@ -196,8 +202,7 @@ Legal and regulatory information is bounded by jurisdiction. California preceden
 
 \paragraph{Matter and Client Isolation}
 
-\mbox{}\\[-0.3em]
-Critically, perception must respect confidentiality boundaries. Whether a human or AI, an agent working on Matter A cannot perceive documents from adverse Matter B. This enforcement of \keyterm{ethical walls} arguably must occur at the perception layer. In financial contexts, an agent advising Client X cannot perceive material non-public information (MNPI) from Client Y's engagement. Every perception event must be logged, capturing the agent, the query, and the matter context. This audit trail enables compliance review and breach detection. See \Cref{sec:agents2-memory} for detailed treatment of isolation requirements; \href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}} addresses the professional responsibility obligations---including attorney confidentiality duties and fiduciary obligations---that mandate these controls.
+Critically, perception must respect confidentiality boundaries. Whether a human or AI, an agent working on Matter A cannot perceive documents from adverse Matter B. This enforcement of \keyterm{ethical walls} arguably must occur at the perception layer. In financial contexts, an agent advising Client X cannot perceive material non-public information (MNPI) from Client Y's engagement. Every perception event must be logged, capturing the agent, the query, and the matter context. This audit trail enables compliance review and breach detection. See \Cref{sec:agents2-memory} for detailed treatment of isolation requirements; Chapter~3 (\textit{How to Govern an Agent}) addresses the professional responsibility obligations---including attorney confidentiality duties and fiduciary obligations---that mandate these controls.
 
 % ----------------------------------------------------------------------------
 % Tool Design Principles for Perception

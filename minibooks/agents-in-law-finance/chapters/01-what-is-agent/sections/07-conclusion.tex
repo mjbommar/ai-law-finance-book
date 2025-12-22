@@ -5,7 +5,7 @@ This chapter synthesized seven decades of scholarship from eight disciplines—p
 
 \subsection{The Framework You Now Have}
 
-The three-level hierarchy provides your foundational mental model. An \keyterm{agent} is an entity requiring three minimal properties: goals, perception, and action. This baseline is deliberately broad—thermostats, organizations, and humans all qualify. An \keyterm{agentic system} is an agent with three more properties essential for reliable professional deployment: iteration across multiple steps, adaptation through learning or feedback, and termination via explicit or implicit stopping conditions. \keyterm{Agentic AI} implements all six properties using artificial intelligence rather than traditional programming. This hierarchy clarifies what entities actually do, regardless of marketing labels.
+The three-level hierarchy provides your foundational mental model. An \keyterm{agent}\glsadd{agent} is an entity requiring three minimal properties: goals, perception, and action. This baseline is deliberately broad—thermostats, organizations, and humans all qualify. An \keyterm{agentic system}\glsadd{agentic-system} is an agent with three more properties essential for reliable professional deployment: iteration across multiple steps, adaptation through learning or feedback, and termination via explicit or implicit stopping conditions. \keyterm{Agentic AI}\glsadd{ai-agent} implements all six properties using artificial intelligence rather than traditional programming. This hierarchy clarifies what entities actually do, regardless of marketing labels.
 
 The six-question evaluation rubric makes the framework actionable: Does it have goals? Does it perceive? Does it act? Does it iterate? Does it adapt? Does it stop? Apply these questions to vendor claims. Entities failing the iteration test—no matter how sophisticated their single-shot responses—are not agentic systems. Entities lacking clear termination mechanisms raise operational risks. The rubric transforms theoretical distinctions into practical evaluation.
 
@@ -21,15 +21,38 @@ Willison's practitioner synthesis—``LLM agent runs tools in a loop to achieve 
 
 For legal and financial applications, general agency definitions require additional safeguards: attribution to authoritative sources, auditable provenance, escalation protocols recognizing human judgment needs, and confidentiality mechanisms protecting privilege. These augment rather than replace the six-property framework—they define what makes entities suitable for high-stakes professional work.
 
-\textbf{For Practitioners: Evaluate Rigorously, Deploy Carefully.} Evaluate vendor claims using the six-question rubric—demand evidence for each property. Recognize that higher autonomy brings both capability and risk—align deployment with organizational readiness. Insist on attribution and provenance mechanisms; absent these, verification becomes prohibitive. Treat AI agents as you would junior associates: supervise, verify, correct.
+\textbf{For Practitioners: Evaluate Rigorously, Deploy Carefully.} Assess vendor claims using the six-question rubric—demand evidence for each property. Recognize that higher autonomy brings both capability and risk—align deployment with organizational readiness. Insist on attribution and provenance mechanisms; absent these, verification becomes prohibitive. Treat AI agents as you would junior associates: supervise, verify, correct.
 
 \textbf{For Researchers: Build on These Foundations.} Develop comprehensive benchmarks assessing agentic properties beyond accuracy—iteration quality, adaptation effectiveness, escalation appropriateness. Study real-world deployments to understand adoption patterns and failure modes. Address responsibility attribution when high-autonomy agents err—traditional agency law provides foundations but novel questions demand new frameworks. Extend cross-disciplinary synthesis to medical AI, educational AI, and other professional domains.
 
 \textbf{For Regulators: Regulate Architecture, Not Marketing.} Base regulations on architectural properties (autonomy level, capability level) rather than vendor labels. Require transparency mechanisms enabling verification of attribution and provenance claims. Mandate human oversight aligned with autonomy levels—higher autonomy demands stronger oversight. Coordinate with professional ethics bodies to align AI governance with fiduciary and professional responsibilities.
 
-\paragraph{Connections within this textbook} Part II (\textit{How to Build an Agent}) explores architectures like ReAct and Reflexion in depth. Part III (\textit{How to Govern an Agent}) addresses professional safeguards, liability frameworks, and regulatory approaches. Additional chapters cover evaluation methods, deployment patterns, and domain-specific considerations for legal practice and financial services.
+\subsection{From Foundations to Practice}
 
-\paragraph{Recommended reading} For deeper engagement: \textcite{bratman1987intention} (philosophical BDI foundation), \textcite{bandura1989human} (psychological agency), \textcite{restatement2006agency} (legal foundations), \textcite{jensen1976theory} (principal-agent theory), \textcite{russell2010artificial} (comprehensive AI), \textcite{wooldridge2009introduction} (multi-agent systems), and \textcite{xi2023rise} (LLM-based agents).
+With these conceptual foundations established—the three-level hierarchy, the six operational properties, and the analytical dimensions—Chapter~2 addresses the practical question: How do you actually design an agentic system? The framework you have learned here translates directly into architectural decisions about triggers, intent extraction, perception tools, action controls, memory systems, planning patterns, termination conditions, and governance surfaces.
+\glsadd{trigger}\glsadd{intent}\glsadd{perception}\glsadd{tools}\glsadd{memory}\glsadd{planning}
+
+\paragraph{Connections within this textbook} Chapter~2 (\textit{How to Design an Agent}) explores architectures like ReAct and Reflexion in depth. Chapter~3 (\textit{How to Govern an Agent}) addresses professional safeguards, liability frameworks, and regulatory approaches. Additional chapters cover evaluation methods, deployment patterns, and domain-specific considerations for legal practice and financial services.
+
+\subsection{Further Learning}
+
+This chapter synthesized decades of scholarship across multiple disciplines. For deeper exploration:
+
+\begin{itemize}
+  \item \textbf{\textcite{bratman1987intention}, Intention, Plans, and Practical Reason.} Provides the philosophical foundation for the Belief-Desire-Intention (BDI) model that underlies modern agent architectures. Essential for understanding how agents represent and reason about goals, commitments, and practical constraints.
+
+  \item \textbf{\textcite{bandura1989human}, Human Agency in Social Cognitive Theory.} Establishes psychological foundations for agency, including self-regulation, self-reflection, and the interplay between internal cognition and external action. Particularly valuable for understanding adaptation and learning mechanisms in agentic systems.
+
+  \item \textbf{\textcite{restatement2006agency}, Restatement (Third) of Agency.} The authoritative legal framework for agency relationships, fiduciary duties, and attribution of actions. Critical for understanding liability, professional responsibility, and regulatory frameworks when deploying AI agents in legal and financial contexts.
+
+  \item \textbf{\textcite{jensen1976theory}, Theory of the Firm: Managerial Behavior, Agency Costs and Ownership Structure.} Foundational principal-agent economics explaining information asymmetry, incentive alignment, and monitoring costs. Directly applicable to human-AI delegation relationships and governance mechanisms.
+
+  \item \textbf{\textcite{russell2010artificial}, Artificial Intelligence: A Modern Approach.} Comprehensive treatment of AI fundamentals, including agent architectures from simple reflex agents to learning agents. Chapter 2's coverage of rational agents and their environments provides theoretical grounding for the six-property framework.
+
+  \item \textbf{\textcite{wooldridge2009introduction}, An Introduction to MultiAgent Systems.} Covers coordination, negotiation, and communication between multiple agents. Essential for understanding enterprise deployments where specialized agents must collaborate while maintaining distinct responsibilities.
+
+  \item \textbf{\textcite{xi2023rise}, The Rise and Potential of Large Language Model Based Agents: A Survey.} Contemporary survey of LLM-based agent architectures, including ReAct, Reflexion, and tools-in-a-loop patterns. Bridges historical agent concepts with current implementation approaches using foundation models.
+\end{itemize}
 
 \subsection{Why This Matters}
 

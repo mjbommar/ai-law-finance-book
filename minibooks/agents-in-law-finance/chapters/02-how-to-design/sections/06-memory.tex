@@ -1,7 +1,7 @@
 % ============================================================================
 % 06-memory.tex
 % Q5: How Does an Agent Remember Things?
-% Part of: Chapter 07 - Agents Part II: How to Design an Agent
+% Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
 \section{How Does an Agent Remember Things?}
@@ -11,11 +11,12 @@
 % Opening: Q5 Framing and Organizational Analogy
 % ----------------------------------------------------------------------------
 
-The previous two sections examined how agents gather information (perception) and effect change (action). However, these capabilities operate in the moment: the agent perceives the current state, reasons about it, and acts. Without memory, every interaction resets. The agent cannot recall prior research, successful strategies, or case history. Memory transforms an agent from a stateless tool into a system that learns and adapts.
+The previous two sections examined how agents gather information (perception) and effect change (action). Yet these capabilities operate in the moment: the agent perceives the current state, reasons about it, and acts. Without memory, every interaction resets. The agent cannot recall prior research, successful strategies, or case history. Where Chapter~1 introduced the concept of stateful versus stateless systems in the IAT framework, we now examine how to implement memory architectures that enable agents to learn and adapt across sessions.
 
 Every experienced professional knows that institutional memory distinguishes efficient work from reinventing the wheel. When starting a new securities registration or revisiting an investment thesis, you do not begin from scratch. You pull prior filings, review comment history, check precedent databases, and update existing models with new data. The firm maintains templates and research files that incorporate years of accumulated knowledge. Memory in agentic systems serves this same function: context retention across sessions and learning from experience, building on prior work rather than starting over.
 
 \begin{definitionbox}[title={Agent Memory}]
+\glsadd{memory}
 	\keyterm{Agent memory} stores and retrieves information across timescales \parencite{park2023generative,wang2024llmagents}.
 	\begin{itemize}[nosep]
 		\item \textbf{Working Memory:} The documents actively loaded in the agent's context (like papers on a desk).
@@ -39,7 +40,7 @@ Law firms use layered filing systems, each suited to different timescales. The a
 
 \textbf{Semantic memory} is the firm's precedent database. Institutional knowledge accumulates over decades. When you need a force majeure clause, the database offers fifty examples. Agentic systems access semantic memory through the RAG pattern introduced in \Cref{sec:agents2-icl-retrieval}: retrieve relevant content from a large corpus, inject it into the prompt, and generate a response informed by that specific knowledge \parencite{lewis2020rag}.
 
-The retrieval infrastructure powering semantic memory---embeddings and vector stores---was defined in \Cref{sec:agents2-icl-retrieval}. Here, the key insight is that semantic memory works because of \textit{in-context learning}: the model adapts its behavior based on what appears in its prompt. Retrieved precedents become part of the agent's working context, allowing it to reason about specific examples even when those examples were created after the model's training.
+The retrieval infrastructure powering semantic memory---embeddings and vector stores\glsadd{vector-store}---was defined in \Cref{sec:agents2-icl-retrieval}. Here, the key insight is that semantic memory works because of \textit{in-context learning}\glsadd{in-context-learning}: the model adapts its behavior based on what appears in its prompt. Retrieved precedents become part of the agent's working context, allowing it to reason about specific examples even when those examples were created after the model's training.
 
 % ----------------------------------------------------------------------------
 % RAG Implementation
@@ -48,6 +49,7 @@ The retrieval infrastructure powering semantic memory---embeddings and vector st
 \subsection{Implementing the RAG Pattern}
 \label{sec:agents2-rag}
 
+\glsadd{rag}
 The RAG pattern (\Cref{sec:agents2-icl-retrieval}) requires careful implementation to work reliably in professional contexts. The core pattern---retrieve, augment, generate---is simple, but the retrieval step admits many implementations with different tradeoffs.
 
 \paragraph{The Core Pattern}
@@ -81,8 +83,13 @@ Many production systems use simpler or hybrid approaches:
 	\item \textbf{Keyword and BM25 search} requires no chunking or embedding infrastructure. Existing search systems---Westlaw, Lexis, internal document search---can power RAG directly. This works well when exact terms matter (case citations, statutory references) and vocabulary is consistent.
 	\item \textbf{Structured queries} retrieve from databases or APIs. An agent checking SEC filings queries EDGAR; an agent researching court records queries PACER. No chunking or embedding required---the data source returns structured results.
 	\item \textbf{Hybrid retrieval} combines keyword search (fast, catches exact matches) with semantic search (slower, catches conceptual matches) \parencite{robertson2009bm25}. A common pattern uses BM25 for initial retrieval and embedding-based reranking to surface the most relevant results.
-	\item \textbf{Knowledge graph retrieval} leverages structured networks of entities and relationships. Where embeddings capture semantic similarity, knowledge graphs encode explicit connections---corporate ownership hierarchies, regulatory supersession chains, case citation networks. When a query references a known entity, the agent queries the graph and traverses relationships through multi-hop reasoning, following paths that vector similarity alone cannot discover. This approach excels when domain structure matters: tracing precedential chains in case law, mapping corporate family trees for conflict checks, or navigating regulatory cross-references. We examine knowledge graph foundations and their applications to law and finance later in this book.
 \end{itemize}
+
+\paragraph{Knowledge Graph Retrieval}
+
+When domain structure matters, knowledge graphs provide an alternative to vector similarity. Knowledge graphs leverage structured networks of entities and relationships. Where embeddings capture semantic similarity, knowledge graphs encode explicit connections---corporate ownership hierarchies, regulatory supersession chains, case citation networks.
+
+When a query references a known entity, the agent queries the graph and traverses relationships through multi-hop reasoning, following paths that vector similarity alone cannot discover. This approach excels when domain structure matters: tracing precedential chains in case law, mapping corporate family trees for conflict checks, or navigating regulatory cross-references. We examine knowledge graph foundations and their applications to law and finance later in this book.
 
 \paragraph{Enhancing Retrieval Quality}
 
@@ -93,12 +100,12 @@ Regardless of retrieval method, several techniques improve precision and authori
 	\item \textbf{Filtered retrieval} constrains results by metadata---jurisdiction, date, document type---preventing agents from citing inapplicable authority.
 \end{itemize}
 
-\begin{keybox}[title={Warning: The Hallucination Risk}]
-	Fabricated citations remain a critical failure mode even with RAG. Studies show that RAG-enabled tools can hallucinate 17--33\% of the time \parencite{dahl2024hallucinations}. The model may generate plausible-sounding citations that do not exist in the retrieved context---or anywhere.
+\begin{cautionbox}[title={Hallucination Risk and Mitigation}]
+	\glsadd{hallucination}Fabricated citations remain a critical failure mode even with RAG. Studies show that RAG-enabled tools can hallucinate 17--33\% of the time \parencite{dahl2024hallucinations}. The model may generate plausible-sounding citations that do not exist in the retrieved context---or anywhere.
 
 	\vspace{0.5em}
-	You must implement verification: before any citation reaches the user, confirm that the source exists in the retrieved context. This is not optional for professional applications.
-\end{keybox}
+	\textbf{Mitigation:} Before any citation reaches the user, confirm that the source exists in the retrieved context. This verification is not optional for professional applications.
+\end{cautionbox}
 
 % ----------------------------------------------------------------------------
 % Domain-Specific Memory Considerations
@@ -109,7 +116,7 @@ Regardless of retrieval method, several techniques improve precision and authori
 
 Memory systems for regulated industries require enhancements that go well beyond generic implementations. Three dimensions matter most: authority, jurisdiction, and time.
 
-Consider how a legal researcher thinks about sources. When investigating insider trading liability, a Supreme Court opinion carries far more weight than a law review article discussing the same topic. The human researcher instinctively applies this hierarchy; an agent's memory system must do the same. This means tagging documents with their position in the authority hierarchy---primary sources like statutes and binding precedent at the top, secondary sources like treatises and articles below---and ensuring that retrieval algorithms surface higher-authority documents more prominently. Financial systems face analogous challenges: an SEC no-action letter provides more reliable guidance than a client alert summarizing the same issue, and memory systems should reflect that difference.
+When investigating insider trading liability, a Supreme Court opinion carries far more weight than a law review article discussing the same topic. The human researcher instinctively applies this hierarchy; an agent's memory system must do the same. This means tagging documents with their position in the authority hierarchy---primary sources like statutes and binding precedent at the top, secondary sources like treatises and articles below---and ensuring that retrieval algorithms surface higher-authority documents more prominently. Financial systems face analogous challenges: an SEC no-action letter provides more reliable guidance than a client alert summarizing the same issue, and memory systems should reflect that difference.
 
 Jurisdiction adds another layer of complexity. Legal information does not exist in a vacuum; it operates within territorial boundaries. California precedent does not bind Texas courts, and New York banking regulations have no force in London. A memory system that fails to account for these boundaries will produce results that are not merely unhelpful but actively misleading. When an agent researches Delaware corporate law, it must filter results to surface Delaware authorities as controlling while clearly distinguishing persuasive authority from other jurisdictions. This requires rich metadata tagging and retrieval logic that can enforce strict jurisdictional filtering when the task demands it.
 
@@ -150,9 +157,10 @@ Memory evaluation requires four assessments: \textit{retrieval quality} (precisi
 \subsection{Adaptation: Learning and Its Consequences}
 \label{sec:agents2-adaptation}
 
-Memory enables \keyterm{adaptation}---the ``A'' in the GPA+IAT framework from \href{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5806982}{\textit{What is an Agent?}}. An agent that adapts changes its behavior based on experience, ideally improving over time. This capability transforms agents from static tools into systems that learn. But adaptation also introduces risks that static systems avoid.
+Memory facilitates \keyterm{adaptation}---the ``A'' in the GPA+IAT framework from Chapter~1. This capability transforms agents from static tools into systems that learn. But adaptation also introduces risks that static systems avoid.
 
 \begin{definitionbox}[title={Adaptation}, breakable=false]
+\glsadd{adaptation}
 	\keyterm{Adaptation} is behavioral change based on experience. In agentic systems, adaptation occurs through three mechanisms:
 	\begin{itemize}[nosep]
 		\item \textbf{In-context adaptation:} The agent changes behavior within a session based on instructions, examples, or retrieved content. This is in-context learning in action.
@@ -167,7 +175,7 @@ Cross-session adaptation requires persistent memory. The agent stores informatio
 
 \paragraph{Opportunities from Adaptation}
 
-Adaptation enables capabilities that static systems cannot match:
+Adaptation supports capabilities that static systems cannot match:
 
 \textbf{Personalization.} The agent learns user preferences---communication style, level of detail, preferred formats---and tailors responses accordingly. A partner who always asks follow-up questions about procedural history gets proactive procedural context. An analyst who focuses on downside scenarios gets risk-weighted analysis by default.
 
@@ -179,7 +187,7 @@ Adaptation enables capabilities that static systems cannot match:
 
 \paragraph{Risks from Adaptation}
 
-The same mechanisms that enable adaptation create risks that require governance:
+The same mechanisms that support adaptation create risks that demand governance:
 
 \textbf{Security: Memory poisoning.} If an adversary can write to an agent's memory, they can influence future behavior \parencite{clop2024ragpoisoning}. A document designed to be retrieved---containing misleading instructions or false information---can corrupt the agent's responses. This is prompt injection via the memory layer. The attack surface expands beyond the current conversation to include everything the agent might retrieve.
 
@@ -220,6 +228,6 @@ These governance questions are not abstract---they map directly to architectural
 
 Memory provides the context agents need to plan effectively. Without memory, agents cannot learn from failed strategies, cannot build on prior work, and cannot maintain the continuity that complex tasks require. The adaptation mechanisms discussed above (\Cref{sec:agents2-adaptation}) transform memory from passive storage into active learning---but that learning must be channeled into productive planning.
 
-Consider how an experienced associate approaches a new research task. They do not start from scratch; they recall similar matters, retrieve relevant precedents, and apply strategies that worked before. Memory-enabled agents can do the same: retrieve prior research, recall successful approaches, and avoid repeating failures.
+An experienced associate approaching a new research task does not start from scratch; they recall similar matters, retrieve relevant precedents, and apply strategies that worked before. Memory-enabled agents can do the same: retrieve prior research, recall successful approaches, and avoid repeating failures.
 
-\Cref{sec:agents2-planning} examines the next question: how does an agent break a big job into steps? Just as the case file enables strategic litigation planning, agent memory enables systematic task decomposition. The adaptation capabilities discussed here---personalization, domain specialization, performance improvement---all feed into more effective planning.
+\Cref{sec:agents2-planning} examines the next question: how does an agent break a big job into steps? Just as the case file facilitates strategic litigation planning, agent memory supports systematic task decomposition. The adaptation capabilities discussed here---personalization, domain specialization, performance improvement---all feed into more effective planning. Professional audit applications, such as the PCAOB-compliant accounts receivable investigation system detailed in \Cref{sec:agents3-explainability}, demonstrate how stateful memory enables agents to adapt investigation strategies across cycles while maintaining compliance with professional documentation standards.

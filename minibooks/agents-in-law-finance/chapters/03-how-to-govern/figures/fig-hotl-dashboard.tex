@@ -92,12 +92,12 @@
 
 % Metric 2: Confidence Exits
 \node[metric box] (m2) at (-1.3,-1.5) {};
-\node[metric value, text=green-900] at ([yshift=0.15cm]m2.center) {847};
+\node[metric value, text=example-dark] at ([yshift=0.15cm]m2.center) {847};
 \node[metric label] at ([yshift=-0.4cm]m2.center) {Confidence Exits};
 
 % Metric 3: Timeout Exits
 \node[metric box] (m3) at (1.2,-1.5) {};
-\node[metric value, text=amber-600] at ([yshift=0.15cm]m3.center) {23};
+\node[metric value, text=key-base] at ([yshift=0.15cm]m3.center) {23};
 \node[metric label] at ([yshift=-0.4cm]m3.center) {Timeout Exits};
 
 % Metric 4: Consistency Score
@@ -109,32 +109,32 @@
 \node[section header] at (-5.0,-2.8) {Active Escalation Triggers};
 
 % Alert 1 - Green (normal)
-\node[alert box=green-900] (a1) at (0.3,-3.7) {
+\node[alert box=example-dark] (a1) at (0.3,-3.7) {
     \textbf{Low Confidence After Max Cycles}~~\textnormal{(Conf.\ <0.70 after 7 cycles)}\\[1pt]
     \textcolor{gray-600}{3 applications escalated to senior underwriter for manual completion}
 };
-\node[status indicator, fill=green-600] at ([xshift=-0.3cm]a1.west) {};
+\node[status indicator, fill=example-base] at ([xshift=-0.3cm]a1.west) {};
 
 % Alert 2 - Green (normal)
-\node[alert box=green-900, below=0.3cm of a1] (a2) {
+\node[alert box=example-dark, below=0.3cm of a1] (a2) {
     \textbf{Timeout Termination Review}~~\textnormal{(System timeout vs.\ confidence exit)}\\[1pt]
     \textcolor{gray-600}{2 applications flagged for investigation adequacy review}
 };
-\node[status indicator, fill=green-600] at ([xshift=-0.3cm]a2.west) {};
+\node[status indicator, fill=example-base] at ([xshift=-0.3cm]a2.west) {};
 
 % Alert 3 - Amber (elevated)
-\node[alert box=amber-600, below=0.3cm of a2] (a3) {
+\node[alert box=key-base, below=0.3cm of a2] (a3) {
     \textbf{Applicant Dispute}~~\textnormal{(Preliminary assessment challenged)}\\[1pt]
     \textcolor{gray-600}{1 dispute --- underwriter reviewing cycle-by-cycle investigation log}
 };
-\node[status indicator, fill=amber-600] at ([xshift=-0.3cm]a3.west) {};
+\node[status indicator, fill=key-base] at ([xshift=-0.3cm]a3.west) {};
 
 % Alert 4 - Green (normal)
-\node[alert box=green-900, below=0.3cm of a3] (a4) {
+\node[alert box=example-dark, below=0.3cm of a3] (a4) {
     \textbf{Cross-Cycle Inconsistency}~~\textnormal{(Contradictory assessments detected)}\\[1pt]
     \textcolor{gray-600}{0 applications flagged --- consistency score within normal range}
 };
-\node[status indicator, fill=green-600] at ([xshift=-0.3cm]a4.west) {};
+\node[status indicator, fill=example-base] at ([xshift=-0.3cm]a4.west) {};
 
 % Alert 5 - Scheduled (gray)
 \node[alert box=gray-500, below=0.3cm of a4] (a5) {
@@ -145,9 +145,9 @@
 
 % Legend
 \node[font=\scriptsize, text=gray-600, anchor=north west] at (-5.0,-10.3) {
-    \tikz\node[status indicator, fill=green-600] {}; Normal~~
-    \tikz\node[status indicator, fill=amber-600] {}; Elevated~~
-    \tikz\node[status indicator, fill=red-600] {}; Critical~~
+    \tikz\node[status indicator, fill=example-base] {}; Normal~~
+    \tikz\node[status indicator, fill=key-base] {}; Elevated~~
+    \tikz\node[status indicator, fill=caution-base] {}; Critical~~
     \tikz\node[status indicator, fill=gray-500] {}; Scheduled
 };
 

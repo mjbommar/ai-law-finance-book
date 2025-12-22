@@ -1,7 +1,7 @@
 % ============================================================================
 % 12-conclusion.tex
 % Conclusion: Architecture as Foundation
-% Part of: Chapter 07 - Agents Part II: How to Design an Agent
+% Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
 \section{Conclusion}
@@ -13,7 +13,7 @@ With architectural literacy, you can evaluate vendor claims with precision. When
 
 You can specify requirements in terms that technical teams understand. Rather than vague requests for ``AI that helps with research,'' you can describe what you need: perception tools for specific databases, action controls with appropriate approval gates, memory systems with client isolation, and escalation triggers for low-confidence situations. Shared vocabulary bridges the gap between professional requirements and technical implementation.
 
-You can demand governance artifacts, not governance promises. If a vendor cannot demonstrate what the agent accessed, what it did, and why it stopped, the system is not ready for regulated practice. The governance surface requirements from \Cref{sec:agents2-governance-surface}---structured logging, override mechanisms, state snapshots, least privilege enforcement, reliable escalation---are your checklist for what must be demonstrable before deployment.
+You can demand governance artifacts, not governance promises. If a vendor cannot show what the agent accessed, what it did, and why it stopped, the system is not ready for regulated practice. The governance surface requirements from \Cref{sec:agents2-governance-surface} (structured logging, override mechanisms, state snapshots, least privilege enforcement, reliable escalation) are your checklist for what must be demonstrable before deployment.
 
 And you can participate meaningfully in governance design. Governance policy depends on architectural infrastructure; controls must be built in rather than bolted on, and design choices determine what oversight is possible.
 
@@ -33,7 +33,7 @@ For now, agents are best treated as capable assistants that amplify human judgme
 As technology improves, the tradeoffs will shift. But the ten architectural questions will remain, and the framework you have learned will stay useful even as implementations evolve.
 
 % ----------------------------------------------------------------------------
-% Bridge to Governing Agents
+% Bridge to Chapter 3
 % ----------------------------------------------------------------------------
 
 \subsection{From Architecture to Governance}
@@ -41,9 +41,9 @@ As technology improves, the tradeoffs will shift. But the ten architectural ques
 
 This chapter has addressed how to design agents. The natural next question is how to govern them.
 
-Architecture enables governance without determining governance. The governance surface provides the technical means---logging, overrides, state management, privileges, escalation---but policy determines how those means are used. How should approval thresholds be set? Who is accountable when an agent errs? What documentation must be maintained? How do professional duties translate into system requirements? Policy, regulation, and professional responsibility must answer these questions.
+Architecture enables governance without determining governance. The governance surface provides the technical means (logging, overrides, state management, privileges, escalation), but policy determines how those means are used. How should approval thresholds be set? Who is accountable when an agent errs? What documentation must be maintained? How do professional duties translate into system requirements? Policy, regulation, and professional responsibility must answer these questions.
 
-\href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}}, the next chapter in this series, addresses these questions directly. It provides a five-layer regulatory framework spanning foundational law, professional obligations, sector-specific regulation, AI-specific requirements, and voluntary frameworks. It offers a dimensional approach to calibrating controls rather than one-size-fits-all checklists, grounded in the architectural understanding you have now developed.
+Chapter~3 (\textit{How to Govern an Agent}) addresses these questions directly. It provides a five-layer regulatory framework spanning foundational law, professional obligations, sector-specific regulation, AI-specific requirements, and voluntary frameworks. It offers a dimensional approach to calibrating controls rather than one-size-fits-all checklists, grounded in the architectural understanding you have now developed.
 
 You are equipped to engage with those governance frameworks because you understand what the architecture can and cannot make observable and enforceable: what logging captures and what it misses, what escalation protocols can enforce and what they cannot, and what memory isolation protects and what additional controls it requires. Governance sits atop the architectural foundation this chapter has built.
 
@@ -54,10 +54,10 @@ You are equipped to engage with those governance frameworks because you understa
 \subsection{Agents, Understood}
 \label{sec:agents2-arch-understood}
 
-Agents are not magic. They are triggers and channels, intent extraction and constraint validation, perception tools and action controls, memory systems and planning patterns, termination conditions and escalation protocols, delegation architectures and governance surfaces. They are the structural capabilities that any system---human or artificial---requires to do real cognitive work.
+Agents are not magic. They are triggers and channels, intent extraction and constraint validation, perception tools and action controls, memory systems and planning patterns, termination conditions and escalation protocols, delegation architectures and governance surfaces. They are the structural capabilities that any system requires to do real cognitive work, whether human or artificial.
 
 These capabilities are now visible to you. You can see past an interface to the architecture beneath, evaluate claims with informed skepticism, and specify requirements that bridge professional needs and technical implementation.
 
 Architectural literacy makes you a capable evaluator, a precise specifier, and an informed participant in decisions about technology that affects your practice. As agents become more prevalent in legal and financial work, that literacy becomes increasingly valuable.
 
-You now have the foundation to evaluate, specify, deploy, and govern agentic systems with the same rigor you apply to the professional teams these systems are meant to augment. The work of understanding agents continues in \href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}}, where we address what controls are required, how to calibrate them, and who bears responsibility.
+You now have the foundation to evaluate, specify, deploy, and govern agentic systems with the same rigor you apply to the professional teams these systems are meant to augment. The work of understanding agents continues in Chapter~3 (\textit{How to Govern an Agent}), where we address what controls are required, how to calibrate them, and who bears responsibility.

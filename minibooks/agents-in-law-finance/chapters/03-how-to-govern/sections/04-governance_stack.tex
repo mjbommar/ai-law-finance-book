@@ -1,5 +1,5 @@
 % ============================================================================
-% The Governance Stack — Agents Part III
+% The Governance Stack — Chapter 3 - How to Govern an Agent
 % Purpose: Synthesize regulatory landscape into five-layer framework
 % Label: sec:agents3-governance-stack
 % ============================================================================
@@ -7,7 +7,7 @@
 \section{The Governance Stack: Overlapping Obligations}
 \label{sec:agents3-governance-stack}
 
-Having established dimensional calibration principles in Section~\ref{sec:agents3-dimensional}, we now map the regulatory landscape those controls must satisfy. Organizations deploying agentic systems in regulated domains face a complex, overlapping web of legal and professional obligations. There is no single ``AI governance law'' that comprehensively addresses all requirements. Instead, governance emerges from the interaction of five layers: foundational law, professional and ethical obligations, sector-specific regulation, AI-specific regulation, and voluntary governance frameworks. Understanding this layered structure—and why no single layer suffices—is essential for designing governance proportionate to organizational risk.
+With dimensional calibration principles established in Section~\ref{sec:agents3-dimensional}, we now map the regulatory landscape those controls must satisfy. Where Chapter~1 established what agents are and Chapter~2 addressed how to design them, this chapter examines how to govern them in practice. Organizations deploying agentic systems in regulated domains face a complex, overlapping web of legal and professional obligations. There is no single ``AI governance law'' that comprehensively addresses all requirements. Instead, governance emerges from the interaction of five layers: foundational law, professional and ethical obligations, sector-specific regulation, AI-specific regulation, and voluntary governance frameworks. Understanding this layered structure—and why no single layer suffices—is essential for designing governance proportionate to organizational risk.
 
 \subsection{The Five-Layer Framework}
 \label{sec:agents3-five-layers}
@@ -71,7 +71,7 @@ Foundational law provides the baseline for governance, applicable to all organiz
 \paragraph{Data Protection and Privacy: GDPR Article 22 and Stateful Agentic Systems}
 The GDPR establishes rights and obligations for processing personal data of EU residents. Article 22 addresses automated decision-making: individuals have the right not to be subject to decisions based solely on automated processing that produce legal or similarly significant effects \parencite{gdpr-article-22}. While not an absolute prohibition—automated decisions are permitted with explicit consent, contractual necessity, or legal authorization—Article 22 requires organizations to implement ``suitable measures'' to safeguard the data subject's rights, including the right to obtain human intervention and contest the decision.
 
-\textbf{Agentic-Specific Challenge—Stateful Decision Accumulation}: Article 22's human intervention requirement becomes complex for stateful agentic systems that accumulate context across multiple cycles. Generic AI guidance suggests ``add a button for human review,'' but this is insufficient for agentic systems. Meaningful human intervention requires access to the system's accumulated internal state: how the agent's understanding evolved across iterations, what adaptations occurred, and what termination logic triggered the final decision. Without comprehensive state logging (capturing perception, action, and rationale at each cycle), human reviewers cannot meaningfully intervene or contest decisions because they lack visibility into how the agent reached its conclusion.
+\textbf{Agentic-Specific Challenge—Stateful Decision Accumulation}: Article 22's human intervention requirement becomes complex for stateful agentic systems that accumulate context across multiple cycles. Generic AI guidance suggests ``add a button for human review,'' but this is insufficient for agentic systems. Building on Chapter~1's analysis of iteration and adaptation, meaningful human intervention requires access to the system's accumulated internal state: how the agent's understanding evolved across iterations, what adaptations occurred, and what termination logic triggered the final decision. Without comprehensive state logging (capturing perception, action, and rationale at each cycle), human reviewers cannot meaningfully intervene or contest decisions because they lack visibility into how the agent reached its conclusion.
 
 \emph{Governance Implication}: For agentic systems subject to GDPR Article 22, human intervention controls must be paired with state logging requirements (cross-cycle audit trails). Organizations cannot satisfy Article 22 by providing post-hoc review without the ability to reconstruct the agent's iterative decision process. This links directly to the State Logging control discussed in Section~\ref{sec:agents3-audit-logging}.
 
@@ -98,7 +98,7 @@ ECOA applies regardless of whether the decision was made by a human, an algorith
 \item Application abandonment rates during multi-cycle investigation (ensure verification burdens do not disproportionately affect protected classes).
 \end{itemize}
 
-Governance must ensure the system's dynamic investigation strategy does not introduce prohibited discrimination—a challenge that does not arise with single-shot credit scoring models. See Section~\ref{sec:agents3-monitoring-incident} for a worked example of process-based discrimination detected in agentic underwriting.
+Systems require controls ensuring that dynamic investigation strategies do not introduce prohibited discrimination—a challenge that does not arise with single-shot credit scoring models. See Section~\ref{sec:agents3-monitoring-incident} for a worked example of process-based discrimination detected in agentic underwriting.
 
 \paragraph{Consumer Protection}
 State consumer protection statutes (e.g., Unfair and Deceptive Acts and Practices laws) prohibit misleading representations and unfair business practices. If an AI chatbot misrepresents its capabilities, provides inaccurate information, or fails to disclose material limitations, the organization may face consumer protection enforcement regardless of whether the misrepresentation was intentional or the result of a model hallucination.
@@ -114,15 +114,15 @@ Most U.S. jurisdictions have adopted versions of the American Bar Association's 
 \begin{itemize}
 \item \textbf{Rule 1.1 (Competence)}: An attorney must provide competent representation, requiring ``the legal knowledge, skill, thoroughness and preparation reasonably necessary for the representation.'' ABA Formal Opinion 512 (July 2024) clarifies that competence includes understanding AI tools' capabilities and limitations \parencite{aba-formal-opinion-512}. Attorneys cannot delegate legal analysis to AI without independent verification.
 
-\item \textbf{Rule 1.6 (Confidentiality)}: An attorney must not reveal information relating to representation of a client unless the client gives informed consent. Using AI tools that transmit client data to third-party vendors, train models on client information, or store data insecurely may violate confidentiality obligations. Governance must assess vendor data handling practices and obtain client consent where necessary.
+\item \textbf{Rule 1.6 (Confidentiality)}: An attorney must not reveal information relating to representation of a client unless the client gives informed consent. Using AI tools that transmit client data to third-party vendors, train models on client information, or store data insecurely may violate confidentiality obligations. Organizations must assess vendor data handling practices and obtain client consent where necessary.
 
-\item \textbf{Rule 3.3 (Candor Toward the Tribunal)}: An attorney must not knowingly make false statements of fact or law to a tribunal. Submitting AI-generated legal research without verification—resulting in fabricated citations or misrepresented holdings—violates this duty. The \emph{Mata v.\ Avianca} case demonstrated that ``the AI made the mistake'' does not excuse the attorney's failure to verify \parencite{mata-avianca-2023}.
+\item \textbf{Rule 3.3 (Candor Toward the Tribunal)}: An attorney must not knowingly make false statements of fact or law to a tribunal. Submitting AI-generated legal research without verification can result in fabricated citations or misrepresented holdings, which violates this duty. Courts have imposed sanctions ranging from \$1,000 to \$15,000 for such violations, with some attorneys facing suspension or mandatory disclosure requirements on future filings.
 \end{itemize}
 
 Rule 5.3 addresses supervision of nonlawyer assistants, a framework some jurisdictions apply to AI tools. The attorney remains responsible for ensuring that AI-assisted work product meets professional standards.
 
 \paragraph{Financial Services: Fiduciary Duty and Suitability}
-Investment advisers owe fiduciary duties to clients under the Investment Advisers Act of 1940 and SEC interpretations. This duty has two components:
+\glsadd{fiduciary-duty}Investment advisers owe fiduciary duties to clients under the Investment Advisers Act of 1940 and SEC interpretations. This duty has two components:
 
 \begin{itemize}
 \item \textbf{Duty of Care}: Providing advice that is suitable for the client's financial situation, investment objectives, and risk tolerance. An AI-generated portfolio recommendation must be validated against these client-specific factors.

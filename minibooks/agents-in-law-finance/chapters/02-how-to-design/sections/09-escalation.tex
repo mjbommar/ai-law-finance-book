@@ -1,7 +1,7 @@
 % ============================================================================
 % 09-escalation.tex
 % Q8: How Does an Agent Know When to Ask for Help?
-% Part of: Chapter 07 - Agents Part II: How to Design an Agent
+% Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
 \section{How Does an Agent Know When to Ask for Help?}
@@ -16,10 +16,11 @@ Sometimes the best thing to know is when you do not know something. A wise junio
 Agentic systems require the same judgment. An agent that never escalates will eventually exceed its competence, authority, or the bounds of safe autonomous operation. An agent that escalates everything provides no value: it becomes a complicated way to route work to humans. The challenge is drawing the line.
 
 \begin{definitionbox}[title={Escalation}]
+\glsadd{escalation}
 	\keyterm{Escalation} transfers control from the agent to a human when autonomous execution should stop. Unlike termination, which ends the task (success or failure), escalation pauses the task and requests human input before continuing.
 \end{definitionbox}
 
-This reflects professionalism, not failure. Recognizing when you need help and asking for it is exactly what we expect from junior professionals. Agents should do the same. Escalation operationalizes the ``T'' (Termination) element of the GPA+IAT framework from \href{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5806982}{\textit{What is an Agent?}}, representing the third outcome---alongside success and failure---when autonomous execution should stop.
+This reflects professionalism, not failure. Recognizing when you need help and asking for it is exactly what we expect from junior professionals. Agents should do the same. Escalation represents the third outcome---alongside success and failure---when autonomous execution should pause and transfer control to a human.
 
 % ----------------------------------------------------------------------------
 % When to Escalate: Decision Framework
@@ -79,7 +80,7 @@ Effective escalation provides the human with everything needed to make a decisio
 
 A complete handoff weaves together five elements: a \textbf{situation summary} that orients the human quickly; a \textbf{progress report} explaining what has been done and what remains; a \textbf{trigger explanation} clarifying why the agent is escalating \textit{now}; the \textbf{gathered information} presenting relevant findings even if partial; and a \textbf{recommendation} proposing a path forward with supporting reasoning.
 
-Consider a legal research agent investigating the statute of limitations for a Section 10(b) securities fraud claim. After searching Westlaw and Lexis, it finds clear authority on the two-year discovery period but conflicting circuit authority on the trigger event---the Ninth and Second Circuits apply different tests for inquiry notice. The agent cannot determine which test applies to the client's facts. Rather than guessing, it escalates with a summary of the key cases, explains the circuit split, and recommends seeking partner guidance because the question is fact-intensive and requires judgment beyond the agent's competence.
+Examine a legal research agent investigating the statute of limitations for a Section 10(b) securities fraud claim. After searching Westlaw and Lexis, it finds clear authority on the two-year discovery period but conflicting circuit authority on the trigger event---the Ninth and Second Circuits apply different tests for inquiry notice. The agent cannot determine which test applies to the client's facts. Rather than guessing, it escalates with a summary of the key cases, explains the circuit split, and recommends seeking partner guidance because the question is fact-intensive and requires judgment beyond the agent's competence.
 
 A financial agent faces a different escalation pattern. After generating a trade list to reduce tech exposure from 35\% to 25\%, the agent completes its compliance check and is ready to execute---but the \$500K trade size exceeds the single-approver threshold. The agent escalates with the tax implications (\$45K in short-term gains, \$12K in losses, \$8K net liability), presents options (approve the full list, prioritize tax-loss positions, or execute in tranches), and notes which option serves which priority. The human can approve immediately rather than reconstructing the analysis.
 
@@ -89,12 +90,14 @@ A financial agent faces a different escalation pattern. After generating a trade
 
 \subsection{Human-in-the-Loop Patterns}
 \label{sec:agents2-hitl}
+\glsadd{autonomy-spectrum}
+\glsadd{human-in-the-loop}
 
 Different tasks and risk profiles call for different patterns of human integration. Five patterns span the spectrum from tight oversight to broad autonomy, and selecting the right pattern is itself a design decision with significant consequences.
 
 \textbf{Approval gates} enforce the strictest oversight by separating preparation from authorization. The agent performs all the work---drafting the motion, assembling the trade list, preparing the client communication---but stops short of execution. A human reviews the prepared output and explicitly authorizes the final action. This pattern is essential for irreversible actions where errors cannot be corrected after the fact: court filings, executed trades, sent communications. The cost is latency and human attention; the benefit is a hard guarantee that no consequential action occurs without human review.
 
-\textbf{Checkpoint reviews} insert human validation at natural milestones within a longer workflow. A research agent might present its initial findings and proposed authorities before beginning to draft a memorandum. A due diligence agent might summarize its document review before moving to the analysis phase. These checkpoints prevent the agent from investing significant effort in a direction the human would have redirected, catching misunderstandings early when course correction is cheap.
+\textbf{Checkpoint reviews} insert human validation at natural milestones within a longer workflow. A research agent might present its initial findings and proposed authorities before beginning to draft a memorandum. A due diligence agent might summarize its document review before moving to the analysis phase. In multi-agent M\&A due diligence scenarios (detailed in \Cref{sec:agents2-delegation}), checkpoint reviews become coordination points where specialist agents synchronize findings before the orchestrator proceeds. These checkpoints prevent the agent from investing significant effort in a direction the human would have redirected, catching misunderstandings early when course correction is cheap.
 
 \textbf{Confidence-based escalation} ties the level of autonomy to the agent's certainty about its outputs. When confidence is high---the answer is clear, the authorities are consistent, the data is unambiguous---the agent proceeds autonomously. When confidence drops below a threshold, the agent escalates rather than acting on uncertain conclusions. This pattern allows routine cases to flow without human intervention while ensuring that difficult cases receive appropriate attention. The challenge lies in calibrating both the thresholds and the agent's confidence estimates.
 
@@ -137,6 +140,6 @@ Escalation evaluation requires six assessments: \textit{coverage} (do all situat
 
 Escalation moves control \textit{upward} in the hierarchy---from agent to human supervisor, from junior to senior, from execution to oversight. But agents can also move control \textit{sideways} by delegating tasks to peer agents with different capabilities. These horizontal relationships introduce coordination challenges distinct from the vertical relationships of escalation.
 
-Critically, escalation and delegation are \textit{orthogonal} design dimensions. A specialist agent can escalate upward to humans while being coordinated sideways by a delegating parent agent---the two patterns do not conflict. However, they must be governed independently: escalation routing must identify the appropriate human supervisor, while delegation must verify that the specialist possesses the required permissions and authority for the delegated task.
+Critically, escalation and delegation are \textit{orthogonal} design dimensions. A specialist agent can escalate upward to humans while being coordinated sideways by a delegating parent agent---the two patterns do not conflict. Still, they must be governed independently: escalation routing must identify the appropriate human supervisor, while delegation must verify that the specialist possesses the required permissions and authority for the delegated task.
 
 \Cref{sec:agents2-delegation} examines this dimension of agent architecture: how does an agent work with other agents? A coordinating agent might delegate research to a specialist with access to legal databases, drafting to a specialist trained on firm precedents, and financial modeling to a specialist with quantitative capabilities. Each specialist retains its own ability to escalate vertically when it encounters situations requiring human judgment, creating a two-dimensional topology where control flows both upward to humans and sideways to specialists. Understanding both dimensions---escalation and delegation---is essential for designing systems that can handle complex professional workflows while maintaining appropriate human oversight throughout.

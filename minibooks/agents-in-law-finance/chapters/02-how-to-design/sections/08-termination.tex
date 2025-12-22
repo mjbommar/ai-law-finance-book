@@ -1,7 +1,7 @@
 % ============================================================================
 % 08-termination.tex
 % Q7: How Does an Agent Know When It's Done?
-% Part of: Chapter 07 - Agents Part II: How to Design an Agent
+% Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
 \section{How Does an Agent Know When It's Done?}
@@ -11,11 +11,12 @@
 % Opening: Q7 Framing and Organizational Analogy
 % ----------------------------------------------------------------------------
 
-Every professional learns to recognize completion. The research memo is done when you have found sufficient authority and synthesized it. The due diligence is done when you have reviewed all material documents. The trade is done when the order executes and settles. Knowing when work is complete distinguishes effective professionals from those who over-research or under-deliver.
+Every professional learns to recognize completion. The research memo is done when you have found sufficient authority and synthesized it. The due diligence is done when you have reviewed all material documents. The trade is done when the order executes and settles. Knowing when work is complete distinguishes effective professionals from those who over-research or under-deliver. As we explore in \Cref{sec:agents2-delegation}, complex M\&A due diligence often involves delegating parallel workstreams to specialist agents, each with its own termination conditions that must coordinate for overall task completion.
 
 Agents face the same challenge. Without explicit termination conditions, agents can run indefinitely: searching one more database, trying one more approach, refining one more time. We call this the ``runaway associate'' problem: you ask for two relevant cases, and the associate gives you fifty because they did not know when to stop.
 
 \begin{definitionbox}[title={Termination}]
+\glsadd{termination}
 	\keyterm{Termination} conditions define when an agent should stop executing. Three outcomes are possible:
 	\begin{itemize}[nosep]
 		\item \textbf{Success:} The goal is achieved, and the agent delivers the result.
@@ -23,7 +24,8 @@ Agents face the same challenge. Without explicit termination conditions, agents 
 		\item \textbf{Escalation:} The agent cannot determine success or failure, transferring the decision to human judgment.
 	\end{itemize}
 
-	Termination implements the ``T'' in the GPA+IAT framework introduced in \href{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5806982}{\textit{What is an Agent?}}. Without it, agentic systems lack the property that distinguishes systems from runaway processes.
+	\vspace{0.5em}
+	Without explicit termination conditions, agentic systems lack the property that distinguishes controlled systems from runaway processes.
 \end{definitionbox}
 
 % ----------------------------------------------------------------------------
@@ -39,7 +41,7 @@ Five categories of termination conditions bound agent execution, each addressing
 
 \textbf{Resource budgets} provide hard limits that prevent runaway execution. \Cref{sec:agents2-budgets} details budget architecture---token limits, time limits, tool call caps, and cost ceilings. The termination implication is straightforward: when any budget is exhausted, the agent must stop. Budget exhaustion is not necessarily failure; partial results assembled before the limit may be valuable and should be preserved. This principle is formalized in \Cref{sec:agents2-graceful-degradation} as tiered output design.
 
-\textbf{Confidence thresholds} gate autonomous action on the agent's certainty about its conclusions. When confidence is high, the agent delivers its answer and terminates normally. When confidence drops below a specified threshold---perhaps eighty percent for routine matters, higher for consequential decisions---the agent should stop and escalate rather than proceeding with uncertain conclusions. This mirrors the behavior expected of a well-trained associate: ``I've found relevant authority, but I'm not confident it controls here. Let me ask the partner before we rely on this.'' Calibrating these thresholds presents a genuine challenge, as research has shown that language models can be systematically overconfident in their outputs \parencite{kadavath2022calibration}. Effective calibration requires testing against known outcomes and adjusting thresholds based on observed reliability.
+\glsadd{confidence-thresholds}\textbf{Confidence thresholds} gate autonomous action on the agent's certainty about its conclusions. When confidence is high, the agent delivers its answer and terminates normally. When confidence drops below a specified threshold---perhaps eighty percent for routine matters, higher for consequential decisions---the agent should stop and escalate rather than proceeding with uncertain conclusions. This mirrors the behavior expected of a well-trained associate: ``I've found relevant authority, but I'm not confident it controls here. Let me ask the partner before we rely on this.'' Calibrating these thresholds presents a genuine challenge, as research has shown that language models can be systematically overconfident in their outputs \parencite{kadavath2022calibration}. Effective calibration requires testing against known outcomes and adjusting thresholds based on observed reliability.
 
 \textbf{Error conditions} require agents to recognize when something has gone wrong and continued execution is unlikely to help. \textit{Repeated failures}---a database that times out on three consecutive attempts, an API that returns malformed responses---indicate problems that retrying will not solve. \textit{Inconsistent data}, such as revenue figures in a 10-K that conflict with the earnings release, suggests either an error in the source documents or a parsing problem that requires human investigation. \textit{Constraint violations} demand immediate termination: if a planned trade would exceed position limits or a proposed filing would miss a regulatory deadline, the agent must stop before taking the problematic action. Perhaps most important is recognizing \textit{impossibility}---when requirements genuinely conflict or the requested task cannot be completed as specified, the agent should report this finding rather than compromising on some requirements to satisfy others.
 

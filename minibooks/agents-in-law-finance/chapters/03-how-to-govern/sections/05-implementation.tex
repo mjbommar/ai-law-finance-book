@@ -1,5 +1,5 @@
 % ============================================================================
-% Implementation: Building Governance Systems — Agents Part III
+% Implementation: Building Governance Systems — Chapter 3 - How to Govern an Agent
 % Purpose: Operationalize governance through controls and processes
 % Label: sec:agents3-implementation
 % ============================================================================
@@ -7,7 +7,7 @@
 \section{Implementation: Building Governance Systems}
 \label{sec:agents3-implementation}
 
-Section~\ref{sec:agents3-dimensional} established principles for calibrating control intensity. This section operationalizes those principles: how to design and implement risk assessment, audit logging, explainability, human oversight, vendor management, performance monitoring, and incident response. We focus on actionable guidance—what practitioners and governance teams actually build—illustrated through examples from legal, financial, and audit domains.
+Section~\ref{sec:agents3-dimensional} established principles for calibrating control intensity. We now turn to operationalizing those principles: how to design and implement risk assessment, audit logging, explainability, human oversight, vendor management, performance monitoring, and incident response. Where Chapter~2 established the technical infrastructure for logging, escalation, and action controls, we now address the governance policies and organizational processes that make those capabilities enforceable. We focus on actionable guidance—what practitioners and governance teams actually build—illustrated through examples from legal, financial, and audit domains.
 
 \subsection{Risk Assessment as Foundation}
 \label{sec:agents3-risk-assessment}
@@ -31,17 +31,18 @@ For each risk category, assess \emph{likelihood} (how probable is this harm?), \
 Define \emph{reassessment triggers}: When must the risk assessment be updated? Common triggers include model updates, policy changes, regulatory developments, incident discoveries, and significant drift in performance or fairness metrics.
 
 \paragraph{Example: Agentic Financial Planning Assistant Risk Assessment}
+\glsadd{escalation}\glsadd{planning}
 A registered investment adviser deploys an agentic financial planning system that \emph{iteratively} analyzes client portfolios, adapts recommendations based on market conditions and client feedback, and determines when to escalate to human advisers.
 
-The system iterates through analysis-recommendation-feedback loops over days or weeks, adapts its strategy based on client responses and market changes, and terminates when confidence thresholds are met or escalation is required. \textit{Dimensional profile: HITL + hybrid frame + adaptive goals + stateful.}
+The system iterates through analysis-recommendation-feedback loops over days or weeks, adapts its strategy based on client responses and market changes, and terminates when confidence thresholds are met or escalation is required. As Chapter~2 established, these iteration, adaptation, and termination capabilities create governance requirements beyond simple AI tools. \textit{Dimensional profile: HITL + hybrid frame + adaptive goals + stateful.}
 
 The risk assessment identifies five primary concerns, summarized in Table~\ref{tab:agents3-financial-planning-risk}.
 
 \emph{Compliance risk} ranks highest: the system may recommend unsuitable investments, violating Advisers Act fiduciary duty. Unlike a simple Q\&A chatbot, iteration and adaptation create compounding risk—a flawed recommendation in cycle one shapes subsequent analysis.
 
-\emph{Accuracy risk} stems from potential hallucination of market data or misinterpretation of client constraints. Across iterative cycles, these errors compound rather than self-correct.
+\glsadd{hallucination}\emph{Accuracy risk} stems from potential hallucination of market data or misinterpretation of client constraints. Across iterative cycles, these errors compound rather than self-correct.
 
-\emph{Adaptation risk} arises when the system drifts from regulatory compliance—for example, learning to recommend higher-fee products based on firm incentives rather than client best interest.
+\emph{Adaptation risk} arises when the system drifts from regulatory compliance—as an instance, learning to recommend higher-fee products based on firm incentives rather than client best interest.
 
 \emph{Iteration risk} manifests as either excessive iteration (analysis paralysis) or premature termination (incomplete analysis).
 
@@ -71,12 +72,12 @@ Security & \cellcolor{green-100}\textcolor{green-900}{Low} & & \cellcolor{red-10
 
 \textbf{Monitoring}: Daily compliance review, weekly adaptation log review, monthly accuracy and termination analysis, continuous client feedback.
 
-This risk assessment demonstrates how agentic properties (iteration, adaptation, autonomous termination) create governance requirements beyond simple AI tools. The system's ability to iterate and adapt demands \emph{cross-cycle consistency checks}, \emph{adaptation audits}, and \emph{termination condition validation}—controls unnecessary for non-agentic systems.
+This risk assessment illustrates how agentic properties (iteration, adaptation, autonomous termination) create governance requirements beyond simple AI tools. The system's ability to iterate and adapt demands \emph{cross-cycle consistency checks}, \emph{adaptation audits}, and \emph{termination condition validation}—controls unnecessary for non-agentic systems.
 
 \subsection{Audit Logging: Enabling Reconstruction and Accountability}
 \label{sec:agents3-audit-logging}
 
-Audit logging enables organizations to reconstruct decisions, investigate incidents, satisfy regulatory inquiries, and demonstrate accountability. Logging requirements scale with autonomy: high-autonomy systems (HIC) require more detailed logs than low-autonomy systems (HITL, where human review serves as primary control).
+Audit logging allows organizations to reconstruct decisions, investigate incidents, satisfy regulatory inquiries, and demonstrate accountability. Logging requirements scale with autonomy: high-autonomy systems (HIC) call for more detailed logs than low-autonomy systems (HITL, where human review serves as primary control).
 
 \paragraph{Logging Architecture Requirements}
 Effective audit logging captures:
@@ -86,7 +87,7 @@ Effective audit logging captures:
 \item \textbf{Outputs}: What did the system produce? Include recommendations, actions taken, messages sent, decisions rendered.
 \item \textbf{Decision Rationale}: Why did the system produce this output? For high-autonomy or high-consequence systems, log intermediate reasoning steps, confidence scores, alternative options considered.
 \item \textbf{Human Interventions}: When did humans approve, reject, or modify system outputs? Who made the decision? What was their rationale?
-\item \textbf{System State}: For stateful systems, log state changes to enable reconstruction of how the system's understanding evolved.
+\item \textbf{System State}: For stateful systems, log state changes to support reconstruction of how the system's understanding evolved.
 \end{itemize}
 
 Logs must be stored in \emph{tamper-evident} formats (e.g., append-only databases, cryptographic hashing) with access controls limiting who can read or delete logs. Retention periods must satisfy regulatory requirements: 7-10 years for financial services, 25 months minimum for ECOA adverse action records, potentially longer for litigation hold purposes.
@@ -98,9 +99,9 @@ A bank deploys an agentic mortgage underwriting system that \emph{iteratively} i
 
 The system's agentic properties shape its governance requirements. Its \textbf{goal} is to approve qualified applicants while managing credit risk and satisfying ECOA requirements. Its \textbf{perception} draws on application data, third-party verification responses, and historical default patterns. Its \textbf{actions} include requesting documents, querying APIs, and generating preliminary assessments. \textbf{Iteration} operates across 3--7 investigation cycles over 5--15 days. \textbf{Adaptation} adjusts investigation depth based on risk indicators and application complexity. \textbf{Termination} occurs under explicit conditions: confidence exceeds 0.90, the maximum of 7 cycles is reached, or red flags trigger escalation to a senior underwriter.
 
-Equal Credit Opportunity Act Regulation B requires lenders to provide ``principal reasons'' for adverse credit decisions \parencite{ecoa-reg-b}. For agentic systems that iterate across multiple cycles and adapt their investigation strategy, the logging architecture must capture \emph{cross-cycle decision evolution} to enable reconstruction of how the system's assessment changed over time.
+Equal Credit Opportunity Act Regulation B mandates that lenders provide ``principal reasons'' for adverse credit decisions \parencite{ecoa-reg-b}. For agentic systems that iterate across multiple cycles and adapt their investigation strategy, the logging architecture must capture \emph{cross-cycle decision evolution} to permit reconstruction of how the system's assessment changed over time. The technical logging capabilities from Chapter~2's governance surface now require policy decisions about what must be logged, how long to retain it, and who can access it.
 
-\begin{highlightbox}[title={\textbf{Listing: Agentic Underwriting Audit Log (Simplified JSON)}}]
+\begin{listingbox}[title={Listing: Agentic Underwriting Audit Log (Simplified JSON)}]
 \small
 \begin{verbatim}
 {
@@ -156,17 +157,17 @@ Equal Credit Opportunity Act Regulation B requires lenders to provide ``principa
   ]
 }
 \end{verbatim}
-\end{highlightbox}
+\end{listingbox}
 
 \textbf{Retention}: 25 months (ECOA requirement) + 7 years (standard banking litigation hold).
 
 \textbf{Security}: Logs are encrypted at rest, with access restricted to compliance officers, auditors, and authorized investigators. The system uses append-only storage with cryptographic integrity verification (tamper-evident) and per-cycle hash chains to detect any alteration.
 
-\textbf{Retrievability}: Indexed by application ID, applicant (hashed identifier to protect PII), decision date, termination reason, and number of cycles. Enables compliance officers to query: ``Show all adverse decisions where the system terminated due to timeout rather than confidence'' or ``Identify applications where preliminary assessment changed from \texttt{LIKELY\_APPROVE} to \texttt{ADVERSE} between cycles.''
+\textbf{Retrievability}: Indexed by application ID, applicant (hashed identifier to protect PII), decision date, termination reason, and number of cycles. Permits compliance officers to query: ``Show all adverse decisions where the system terminated due to timeout instead of confidence'' or ``Identify applications where preliminary assessment changed from \texttt{LIKELY\_APPROVE} to \texttt{ADVERSE} between cycles.''
 
-\textbf{Validation}: Quarterly audit sampling verifies logs enable reconstruction of iterative decision evolution; test whether system's cross-cycle adaptations comply with fair lending principles; validate termination conditions are consistently applied.
+\textbf{Validation}: Quarterly audit sampling verifies logs support reconstruction of iterative decision evolution; test whether system's cross-cycle adaptations comply with fair lending principles; validate termination conditions are consistently applied.
 
-This logging architecture satisfies ECOA's explainability requirement while addressing agentic-specific concerns: it captures \emph{how} the system's understanding evolved across cycles, \emph{what} triggered adaptation, and \emph{why} the system terminated. Without cross-cycle logging, the bank cannot reconstruct agentic decision-making or demonstrate that adaptation did not introduce prohibited discrimination.
+This logging architecture satisfies ECOA's explainability requirement while addressing agentic-specific concerns: it captures \emph{how} the system's understanding evolved across cycles, \emph{what} triggered adaptation, and \emph{why} the system terminated. Without cross-cycle logging, the bank cannot reconstruct agentic decision-making or show that adaptation did not introduce prohibited discrimination.
 
 \subsection{Explainability: From Technical Outputs to Stakeholder Understanding}
 \label{sec:agents3-explainability}
@@ -174,9 +175,9 @@ This logging architecture satisfies ECOA's explainability requirement while addr
 Explainability translates system behavior into understandable information for stakeholders—users, auditors, regulators, affected individuals. Regulatory requirements vary: ECOA requires ``principal reasons,'' GDPR requires ``meaningful information about the logic involved,'' PCAOB requires auditors to document the rationale for audit procedures. Explainability techniques must be selected based on regulatory requirements and validated for \emph{faithfulness} (reflects actual model logic), \emph{completeness} (material factors included), and \emph{usefulness} (enables informed decisions).
 
 \paragraph{Example: Agentic Audit Investigation System (PCAOB Compliance)}
-A Big Four accounting firm develops an agentic audit assistant that \emph{iteratively} investigates high-risk accounts receivable---analyzing transactions, requesting documentation, cross-referencing third-party data, adapting its strategy based on discovered anomalies, and escalating to senior auditors when material issues arise. \textit{Dimensional profile: HOTL + institutional frame + adaptive goals + stateful.}
+A Big Four accounting firm develops an agentic audit assistant that \emph{iteratively} investigates high-risk accounts receivable. The system analyzes transactions, requests documentation, cross-references third-party data, adapts its strategy based on discovered anomalies, and escalates to senior auditors when material issues arise. \textit{Dimensional profile: HOTL + institutional frame + adaptive goals + stateful.}
 
-PCAOB Auditing Standards require auditors to document the rationale for procedures in workpapers \parencite{pcaob-as1215,pcaob-as2315}. For agentic systems, explainability must capture \emph{why} the system escalated certain accounts, \emph{how} its strategy evolved across cycles, and \emph{what} evidence supported termination decisions. Figure~\ref{fig:agents3-iterative-investigation} illustrates the workflow. Each cycle generates explanations logged to audit workpapers.
+PCAOB Auditing Standards require auditors to document the rationale for procedures in workpapers \parencite{pcaob-as1215,pcaob-as2315}. For agentic systems, explainability must capture \emph{why} the system escalated certain accounts, \emph{how} its strategy evolved across cycles, and \emph{what} evidence supported termination decisions. \Cref{fig:agents3-iterative-investigation} illustrates the workflow. Each cycle generates explanations logged to audit workpapers.
 
 \input{figures/fig-iterative-investigation}
 
@@ -184,7 +185,7 @@ PCAOB Auditing Standards require auditors to document the rationale for procedur
 \begin{itemize}
 \item \textbf{Faithfulness}: Verify explanations match actual investigation logic by reviewing audit logs (do logged perceptions and actions align with explanations?).
 \item \textbf{Completeness}: Confirm all material risk indicators that triggered escalation appear in explanations.
-\item \textbf{Usefulness}: Senior auditor reviews cycle-level explanations and confirms they enable professional judgment (``Does the system's escalation rationale justify senior auditor involvement?'').
+\item \textbf{Usefulness}: Senior auditor reviews cycle-level explanations and confirms they support professional judgment (``Does the system's escalation rationale justify senior auditor involvement?'').
 \end{itemize}
 
 \textbf{Workpaper Documentation}: The audit workpaper includes:
@@ -199,6 +200,9 @@ This agentic design satisfies PCAOB's requirement that auditors understand their
 
 \subsection{Human Oversight: Workflows for HITL, HOTL, and HIC}
 \label{sec:agents3-human-oversight}
+\glsadd{human-in-the-loop}
+\glsadd{human-on-the-loop}
+\glsadd{human-in-command}
 
 Section~\ref{sec:agents3-autonomy-calibration} defined three oversight modes. This section operationalizes them through workflows, notification mechanisms, intervention interfaces, and escalation procedures.
 
@@ -224,7 +228,7 @@ HOTL systems operate autonomously but humans monitor and can intervene. Implemen
 \end{itemize}
 
 \textbf{Example: Agentic Credit Underwriting HOTL Monitoring.}
-A mortgage lender's agentic underwriting system (described in Section~\ref{sec:agents3-audit-logging}) operates in HOTL mode, iteratively investigating applications across multiple cycles. Senior underwriters monitor aggregate system performance through a dashboard (Figure~\ref{fig:agents3-hotl-dashboard}) displaying agentic-specific metrics and escalation triggers. When escalation frequency spikes or average cycles increase significantly, supervisors investigate root causes---data quality degradation, overly conservative termination thresholds, or emerging risk patterns requiring strategy adjustment.
+A mortgage lender's agentic underwriting system (described in Section~\ref{sec:agents3-audit-logging}) operates in HOTL mode, iteratively investigating applications across multiple cycles. Senior underwriters monitor aggregate system performance through a dashboard (\Cref{fig:agents3-hotl-dashboard}) displaying agentic-specific metrics and escalation triggers. When escalation frequency spikes or average cycles increase significantly, supervisors investigate root causes such as data quality degradation, overly conservative termination thresholds, or emerging risk patterns requiring strategy adjustment.
 
 \input{figures/fig-hotl-dashboard}
 
@@ -241,10 +245,10 @@ HIC systems operate with high autonomy. Humans set goals and constraints, monito
 \subsection{Vendor Management: Assessing and Monitoring Third-Party AI}
 \label{sec:agents3-vendor-management}
 
-Most organizations procure AI systems from vendors rather than building in-house. Vendor risk cascades into organizational liability: if the vendor's model hallucinates, is biased, or breaches confidentiality, the deploying organization faces regulatory penalties and reputational harm. Governance must include vendor due diligence, contract negotiation, and ongoing monitoring.
+\glsadd{hallucination}Most organizations procure AI systems from vendors rather than building in-house. Vendor risk cascades into organizational liability: if the vendor's model hallucinates, is biased, or breaches confidentiality, the deploying organization faces regulatory penalties and reputational harm. Governance must include vendor due diligence, contract negotiation, and ongoing monitoring.
 
 \paragraph{Vendor Due Diligence Framework (Three Phases)}
-The framework proceeds through three phases. \textbf{Phase 1 (Assessment)} uses questionnaires to gather information about the vendor's data sources, model architecture, security practices, performance benchmarks, and fairness testing methodology. \textbf{Phase 2 (Document Review)} examines supporting documentation---SOC 2 reports, data processing agreements, model validation reports, and security certifications---to verify vendor claims. \textbf{Phase 3 (Validation)} confirms claims through reference checks with existing clients in similar domains and pilot testing with representative data to validate accuracy, explainability, and performance before full deployment.
+The framework proceeds through three phases. \textbf{Phase 1 (Assessment)} uses questionnaires to gather information about the vendor's data sources, model architecture, security practices, performance benchmarks, and fairness testing methodology. \textbf{Phase 2 (Document Review)} examines supporting documentation to verify vendor claims. This includes SOC 2 reports, data processing agreements, model validation reports, and security certifications. \textbf{Phase 3 (Validation)} confirms claims through reference checks with existing clients in similar domains and pilot testing with representative data to validate accuracy, explainability, and performance before full deployment.
 
 \input{figures/fig-vendor-diligence}
 
@@ -304,7 +308,20 @@ Adaptation Freeze Options & Customer may temporarily disable learning mechanisms
 \label{tab:agents3-adaptation-clauses}
 \end{table}
 
-\begin{highlightbox}[title={Example Contractual Language: Adaptation Transparency}, breakable=false]
+\begin{tcolorbox}[
+  enhanced,
+  colback=bg-example,
+  colframe=example-base,
+  coltitle=white,
+  fonttitle=\bfseries,
+  title={Example Contractual Language: Adaptation Transparency},
+  boxrule=1pt,
+  left=3mm,
+  right=3mm,
+  top=2mm,
+  bottom=2mm,
+  breakable
+]
 \small
 \textbf{Section X: Adaptation Transparency and Change Control}
 
@@ -317,7 +334,7 @@ Adaptation Freeze Options & Customer may temporarily disable learning mechanisms
 \textbf{X.4 Revalidation Rights.} Upon Material Change notification, Customer may elect to: (a) require Vendor to revert System to last validated configuration (at no cost to Customer); (b) conduct revalidation testing (Vendor shall cooperate and bear reasonable costs); or (c) pause System operation pending resolution.
 
 \textbf{X.5 Adaptation Freeze.} Upon forty-eight (48) hours' notice, Customer may require Vendor to disable all adaptation mechanisms, causing the System to operate with static parameters. Vendor shall maintain freeze mode for up to ninety (90) days per Calendar Year at no additional cost.
-\end{highlightbox}
+\end{tcolorbox}
 
 \textbf{Governance Benefit}: These contractual provisions operationalize continuous validation requirements for adaptive agentic systems. Without adaptation transparency, organizations deploying vendor agentic systems face a compliance gap: regulatory obligations demand ongoing validation, but vendor opacity prevents detection of material changes. Adaptation transparency clauses shift this burden back to vendors and provide customers with the visibility necessary to satisfy SR 11-7, ECOA, and similar frameworks.
 
@@ -346,7 +363,7 @@ Firm approves vendor with conditions: HITL verification mandatory, quarterly acc
 \subsection{Performance Monitoring and Incident Response}
 \label{sec:agents3-monitoring-incident}
 
-Governance is not a one-time validation but a continuous cycle. Systems must be monitored for performance degradation, fairness violations, data drift, and security incidents. When failures occur, organizations must detect, contain, investigate, remediate, and learn. This shift from inspection-based to continuous monitoring mirrors the evolution of Statistical Process Control in manufacturing---a historical parallel we examined in Part II.
+Governance is not a one-time validation but a continuous cycle. Systems must be monitored for performance degradation, fairness violations, data drift, and security incidents. When failures occur, organizations must detect, contain, investigate, remediate, and learn. This shift from inspection-based to continuous monitoring mirrors the evolution of Statistical Process Control in manufacturing---a historical parallel we examined in Chapter~2.
 
 \input{figures/fig-incident-response-cycle}
 
@@ -356,22 +373,22 @@ Monitor continuously across four dimensions:
 \begin{enumerate}
 \item \textbf{Performance Metrics}: Accuracy, precision, recall, F1 score, latency—whatever aligns with business objectives. Establish SLAs and alert when performance degrades below thresholds.
 \item \textbf{Data Drift}: Are input distributions changing? If the system was trained on 2020-2022 mortgage applications and is now seeing 2024 applications with different characteristics (higher interest rates, different applicant demographics), performance may degrade.
-\item \textbf{Concept Drift}: Are input-output relationships changing? For example, fraud patterns evolve; a fraud detection model trained on 2022 patterns may miss 2024 attack vectors.
+\item \textbf{Concept Drift}: Are input-output relationships changing? In practice, fraud patterns evolve; a fraud detection model trained on 2022 patterns may miss 2024 attack vectors.
 \item \textbf{Fairness Metrics}: For systems affecting protected classes, monitor approval rates, error rates, and disparate impact ratios by demographic group. Regulatory expectations and enforcement practice under ECOA effectively require lenders to monitor for disparate impact as part of fair lending compliance. Similarly, GDPR Article 22 requires ongoing assessment of automated decision-making.
 \end{enumerate}
 
 \paragraph{Example: Disparate Impact in Agentic Credit Underwriting}
 A regional bank deploys an agentic mortgage underwriting system that iteratively investigates applicants: it performs initial risk scoring, requests documentation based on risk indicators, adapts its investigation strategy based on applicant responses, and terminates when sufficient information is gathered or confidence thresholds trigger human escalation. \textit{Dimensional profile: HIC + institutional frame + adaptive goals + stateful.}
 
-During routine monthly fairness monitoring, the compliance team detects a significant disparity: Hispanic applicants have a 65\% approval rate compared to 82\% for white applicants---a clear violation of the 80\% rule commonly used in disparate impact analysis (65/82 = 79.3\%). Following the Tier 3 escalation pathway for critical issues (see Figure~\ref{fig:agents3-escalation-example}), the compliance analyst immediately notifies the Chief Risk Officer, who halts the system and escalates to the CEO within hours of detection (Figure~\ref{fig:agents3-incident-email-discovery}).
+During routine monthly fairness monitoring, the compliance team detects a significant disparity: Hispanic applicants have a 65\% approval rate compared to 82\% for white applicants. This represents a clear violation of the 80\% rule commonly used in disparate impact analysis (65/82 = 79.3\%). Following the Tier 3 escalation pathway for critical issues (see \Cref{fig:agents3-escalation-example}), the compliance analyst immediately notifies the Chief Risk Officer, who halts the system and escalates to the CEO within hours of detection (\Cref{fig:agents3-incident-email-discovery}).
 
 \input{figures/fig-incident-email-discovery}
 
-Ten weeks later, with the investigation complete and remediation implemented, the CRO sends a closure report (Figure~\ref{fig:agents3-incident-email-closure}). The investigation reveals a governance challenge unique to agentic systems: the discrimination did not originate in the scoring model itself, which was facially neutral and passed traditional fairness testing. Instead, bias emerged through \emph{how the system investigated applicants across cycles}---Hispanic applicants triggered more verification cycles, leading to higher abandonment rates before final decisions were rendered. The system was discriminating in its \emph{process}, not its \emph{decisions}.
+Ten weeks later, with the investigation complete and remediation implemented, the CRO sends a closure report (\Cref{fig:agents3-incident-email-closure}). The investigation reveals a governance challenge unique to agentic systems: the discrimination did not originate in the scoring model itself, which was facially neutral and passed traditional fairness testing. Instead, bias emerged through \emph{how the system investigated applicants across cycles}---Hispanic applicants triggered more verification cycles, leading to higher abandonment rates before final decisions were rendered. The system was discriminating in its \emph{process}, not its \emph{decisions}.
 
 \input{figures/fig-incident-email-closure}
 
-\textbf{Governance Principles Demonstrated}:
+\textbf{Governance Principles Illustrated}:
 \begin{itemize}
 \item \textbf{Agentic fairness risk}: Discrimination emerges through \emph{how} the system iterates (process), not just final outcomes.
 \item \textbf{Cross-cycle accountability}: Traditional fairness testing (outcome parity) is insufficient; organizations must audit investigation process across cycles.

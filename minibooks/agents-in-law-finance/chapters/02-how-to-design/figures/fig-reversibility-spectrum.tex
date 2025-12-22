@@ -1,6 +1,6 @@
 % Reversibility Spectrum - Horizontal Layout with Governance Requirements
 
-\begin{figure}[!htb]
+\begin{figure}[htbp]
 \centering
 \resizebox{\textwidth}{!}{%
 \begin{tikzpicture}[
@@ -10,33 +10,33 @@
 ]
 
 % Horizontal connecting line at top
-\draw[gray-600, line width=1.5pt] (0,0) -- (14,0);
+\draw[text-muted, line width=1.5pt] (0,0) -- (14,0);
 
 % Arrow showing increasing governance requirements
-\draw[-{Stealth[length=3mm,width=2mm]}, gray-800, line width=1.2pt]
+\draw[-{Stealth[length=3mm,width=2mm]}, text-primary, line width=1.2pt]
     (0.5,1.0) -- (13.5,1.0) node[midway, above, font=\small\bfseries] {Increasing Governance Requirements};
 
 % Level 1: Fully Reversible (leftmost)
-\node[level circle={green-900}, fill=green-100, text=green-900] (level1) at (0,0) {Fully\\Reversible};
+\node[level circle={example-dark}, fill=bg-example, text=example-dark] (level1) at (0,0) {Fully\\Reversible};
 
-\node[level box={green-900}, fill=green-100, below=0.8cm of level1] (box1) {%
-\textbf{\textcolor{green-900}{Oversight}}\par
+\node[level box={example-dark}, fill=bg-example, below=0.8cm of level1] (box1) {%
+\textbf{\textcolor{example-dark}{Oversight}}\par
 Post-hoc review\par\vspace{4pt}
-\textbf{\textcolor{green-900}{Examples}}\par
+\textbf{\textcolor{example-dark}{Examples}}\par
 Research; internal drafts\par\vspace{4pt}
-\textbf{\textcolor{green-900}{Recovery}}\par
+\textbf{\textcolor{example-dark}{Recovery}}\par
 Delete/revise
 };
 
 % Level 2: Partially Reversible
-\node[level circle={amber-900}, fill=amber-100, text=amber-900] (level2) at (4.67,0) {Partially\\Reversible};
+\node[level circle={key-dark}, fill=bg-key, text=key-dark] (level2) at (4.67,0) {Partially\\Reversible};
 
-\node[level box={amber-900}, fill=amber-100, below=0.8cm of level2] (box2) {%
-\textbf{\textcolor{amber-900}{Oversight}}\par
+\node[level box={key-dark}, fill=bg-key, below=0.8cm of level2] (box2) {%
+\textbf{\textcolor{key-dark}{Oversight}}\par
 Checkpoint review\par\vspace{4pt}
-\textbf{\textcolor{amber-900}{Examples}}\par
+\textbf{\textcolor{key-dark}{Examples}}\par
 Internal emails\par\vspace{4pt}
-\textbf{\textcolor{amber-900}{Recovery}}\par
+\textbf{\textcolor{key-dark}{Recovery}}\par
 Correction message
 };
 
@@ -53,14 +53,14 @@ Amendment/\\retraction
 };
 
 % Level 4: Irreversible (rightmost)
-\node[level circle={red-900}, fill=red-100, text=red-900] (level4) at (14,0) {Irreversible};
+\node[level circle={caution-dark}, fill=bg-caution, text=caution-dark] (level4) at (14,0) {Irreversible};
 
-\node[level box={red-900}, fill=red-100, below=0.8cm of level4] (box4) {%
-\textbf{\textcolor{red-900}{Oversight}}\par
+\node[level box={caution-dark}, fill=bg-caution, below=0.8cm of level4] (box4) {%
+\textbf{\textcolor{caution-dark}{Oversight}}\par
 Multi-party approval\par\vspace{4pt}
-\textbf{\textcolor{red-900}{Examples}}\par
+\textbf{\textcolor{caution-dark}{Examples}}\par
 Court filings; trades; wires\par\vspace{4pt}
-\textbf{\textcolor{red-900}{Recovery}}\par
+\textbf{\textcolor{caution-dark}{Recovery}}\par
 Offsetting transaction
 };
 

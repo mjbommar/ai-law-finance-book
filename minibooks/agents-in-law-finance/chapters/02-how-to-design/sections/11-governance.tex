@@ -1,7 +1,7 @@
 % ============================================================================
 % 11-governance.tex
 % Q10: How Do We Design Systems That Can Be Governed?
-% Part of: Chapter 07 - Agents Part II: How to Design an Agent
+% Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
 \section{How Do We Design Systems That Can Be Governed?}
@@ -13,13 +13,13 @@
 
 You cannot audit what you did not log. You cannot enforce privilege boundaries that were never implemented. You cannot override a system that lacks pause mechanisms. When a regulator asks how the compliance agent detected a breach, or when opposing counsel demands the agent's reasoning, architecture determines whether you can answer.
 
-This distinction matters: \textit{governance policy} defines what controls are required; \textit{governance-aware architecture} provides the technical foundation that makes those controls possible. Our next chapter, \href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}}, addresses policy---the five-layer regulatory framework, dimensional calibration, and organizational accountability. This section addresses architecture: the patterns that enable governance, drawn from the capabilities developed throughout this chapter.
+This distinction matters: \textit{governance policy} defines what controls are required; \textit{governance-aware architecture} provides the technical foundation that makes those controls possible. Chapter~3 (\textit{How to Govern an Agent}) addresses policy---the five-layer regulatory framework, dimensional calibration, and organizational accountability. This section addresses architecture: the patterns that enable governance, drawn from the capabilities developed throughout this chapter.
 
 \begin{keybox}[title={Architecture Before Policy}]
-Governance cannot be retrofitted. A system designed without audit logging cannot suddenly produce compliance reports. A system without approval gates cannot enforce human-in-the-loop oversight. A system without state snapshots cannot support rollback or investigation. The architectural decisions in this chapter are not merely technical choices---they are the infrastructure that makes governance possible.
+Governance cannot be retrofitted—systems designed without audit logging cannot suddenly produce compliance reports when regulators arrive, those lacking approval gates cannot enforce human-in-the-loop oversight after deployment, and architectures missing state snapshots cannot support rollback or investigation when failures occur. The architectural decisions in this chapter are not merely technical choices; they are the infrastructure that makes governance possible.
 \end{keybox}
 
-Five architectural patterns enable governance: logging, override mechanisms, state management, privilege enforcement, and escalation hooks. Each pattern draws on capabilities introduced in earlier sections; this section synthesizes them into a coherent governance foundation.
+Five architectural patterns support governance: logging, override mechanisms, state management, privilege enforcement, and escalation hooks. Each pattern draws on capabilities introduced in earlier sections; this section synthesizes them into a coherent governance foundation.
 
 % ----------------------------------------------------------------------------
 % Logging Architecture
@@ -38,13 +38,13 @@ Comprehensive logging is the foundation of all governance. Without logs, there i
 
 \textbf{Reasoning traces} capture how the agent planned and reasoned (\Cref{sec:agents2-planning-patterns}). ReAct-style patterns explicitly generate thought-action-observation sequences; these traces make decisions transparent and auditable. For dynamic orchestration, where the agent selects decomposition strategies at runtime, logs must capture the \textit{reasoning} behind orchestration decisions, not just the decisions themselves.
 
-\textbf{Action logs} record what the agent did (\Cref{sec:agents2-action}). Every action must be logged with the agent identity, timestamp, parameters, and matter/client context. Action logs enable reconstruction: given a complaint about an erroneous filing, you can trace back through the action log to find when it was filed, what parameters were used, and what reasoning preceded it.
+\textbf{Action logs} record what the agent did (\Cref{sec:agents2-action}). Every action must be logged with the agent identity, timestamp, parameters, and matter/client context. Action logs allow reconstruction: given a complaint about an erroneous filing, you can trace back through the action log to find when it was filed, what parameters were used, and what reasoning preceded it.
 
 \textbf{Memory access logs} track reads and writes to persistent state (\Cref{sec:agents2-memory}). Each operation should be logged with a timestamp, the requesting agent or user, and the matter identifier. These logs support compliance review, breach investigation, and documentation that appropriate controls were maintained.
 
-\textbf{Delegation logs} capture agent-to-agent interactions (\Cref{sec:agents2-delegation}). When a coordinator delegates to specialists, the log must record the delegation contract, the specialist's identity, and the returned artifacts. Complete delegation logging enables audit trails that span the entire delegation tree.
+\textbf{Delegation logs} capture agent-to-agent interactions (\Cref{sec:agents2-delegation}). When a coordinator delegates to specialists, the log must record the delegation contract, the specialist's identity, and the returned artifacts. Complete delegation logging supports audit trails that span the entire delegation tree.
 
-\begin{highlightbox}[title={Structured Logging Schema}, breakable=false]
+\begin{practicebox}[title={Structured Logging Schema}]
 Effective governance requires structured logs, not free-form text. A minimal schema includes:
 \begin{itemize}[nosep]
 \item \textbf{Timestamp}: ISO 8601 with timezone
@@ -54,8 +54,8 @@ Effective governance requires structured logs, not free-form text. A minimal sch
 \item \textbf{Parameters}: structured data specific to the event type
 \item \textbf{Outcome}: success, failure, or pending
 \end{itemize}
-Structured logs enable programmatic analysis, anomaly detection, and automated compliance reporting.
-\end{highlightbox}
+Structured logs facilitate programmatic analysis, anomaly detection, and automated compliance reporting.
+\end{practicebox}
 
 % ----------------------------------------------------------------------------
 % Override and Circuit Breaker Patterns
@@ -94,7 +94,7 @@ Three governance requirements depend on state management: reproducibility (recon
 
 \textbf{Reproducibility} requires capturing sufficient state to replay decisions. When a regulator asks why the agent made a particular recommendation, you must be able to reconstruct the agent's context at that moment: what was in memory, what had been retrieved, what reasoning had occurred. This is more demanding than simple logging---it requires periodic state snapshots that capture the complete agent context, not just individual events.
 
-\textbf{Rollback capability} enables recovery from errors (\Cref{sec:agents2-reversibility}). For reversible actions, rollback is straightforward: delete the draft, revert the database change. For partially reversible actions, checkpoints enable recovery to the last known good state. The architecture must classify actions by reversibility and maintain appropriate checkpoints for recovery.
+\textbf{Rollback capability} supports recovery from errors (\Cref{sec:agents2-reversibility}). For reversible actions, rollback is straightforward: delete the draft, revert the database change. For partially reversible actions, checkpoints allow recovery to the last known good state. The architecture must classify actions by reversibility and maintain appropriate checkpoints for recovery.
 
 \textbf{Checkpoint reviews} support human-in-the-loop oversight (\Cref{sec:agents2-hitl}). At natural milestones within longer workflows, the agent can present its current state and proposed next steps for human validation. These checkpoints prevent the agent from investing significant effort in a wrong direction. Architecturally, checkpoints require the ability to serialize agent state, present it in human-readable form, and resume from exactly that point after approval.
 
@@ -113,15 +113,27 @@ Least privilege---granting only the minimum permissions required for a task---li
 
 \textbf{Tool-level permissions} control what actions an agent can take (\Cref{sec:agents2-action-security}). Role-based access control (RBAC) restricts which agents can invoke which tools. A research agent should not have filing permissions; a filing agent should not have broad database access. The MCP architecture supports this through tool manifests that declare required permissions, allowing the host to enforce access control.
 
-\textbf{Resource-level permissions} control what data an agent can access (\Cref{sec:agents2-mcp-perception}). MCP Resources are explicitly read-only, separating perception from action. An agent with resource access can retrieve documents but cannot modify or file them. This separation enables fine-grained access control that mirrors how organizations already think about permissions.
+\textbf{Resource-level permissions} control what data an agent can access (\Cref{sec:agents2-mcp-perception}). MCP Resources are explicitly read-only, separating perception from action. An agent with resource access can retrieve documents but cannot modify or file them. This separation supports fine-grained access control that mirrors how organizations already think about permissions.
 
 \textbf{Namespace isolation} enforces boundaries in memory systems (\Cref{sec:agents2-memory-isolation}). Matter isolation ensures that information from one client engagement cannot leak into another. Role-based permissions determine which agents can access each namespace. These controls mirror the ethical wall policies that law firms and financial institutions maintain for human professionals.
 
 \textbf{Multi-agent isolation} uses architectural boundaries to enforce privilege separation (\Cref{sec:agents2-why-multi-agent}). Rather than giving one agent broad permissions, decompose work across specialists, each with narrow permissions. A research agent can read legal databases but cannot file documents; a filing agent can submit to CM/ECF but cannot access client financial data. If one agent is compromised, damage is contained.
 
-\begin{highlightbox}[title={Privilege Escalation via Tool Chaining}]
+\begin{tcolorbox}[
+  enhanced,
+  colback=bg-caution,
+  colframe=caution-base,
+  coltitle=white,
+  fonttitle=\bfseries,
+  title={Privilege Escalation via Tool Chaining},
+  boxrule=1.5pt,
+  left=3mm,
+  right=3mm,
+  top=2mm,
+  bottom=2mm
+]
 A sophisticated threat involves combining multiple low-privilege tools to achieve a high-privilege outcome (\Cref{sec:agents2-action-security}). An agent with ``read email'' and ``send email'' permissions might forward confidential information to an external address. Mitigation requires analyzing tool combinations, not just individual tools, and requiring approval for sequences that cross security boundaries.
-\end{highlightbox}
+\end{tcolorbox}
 
 % ----------------------------------------------------------------------------
 % Escalation Hooks
@@ -149,6 +161,7 @@ For all escalation types, the architecture must ensure that escalation requests 
 \subsection{The Governance Surface}
 \label{sec:agents2-governance-surface}
 
+\glsadd{governance-surface}
 Together, these five patterns define the \keyterm{governance surface}---the interface through which governance systems interact with the agent. Table~\ref{tab:agents2-governance-surface} summarizes the architectural requirements.
 
 \begin{table}[htbp]
@@ -169,6 +182,6 @@ Escalation Hooks & Configurable triggers with reliable routing \\
 \end{tabular}
 \end{table}
 
-This governance surface is what \href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}} builds upon. The five-layer regulatory framework (foundational law, professional obligations, sector regulation, AI-specific regulation, voluntary frameworks) imposes requirements; the governance surface provides the technical means to satisfy them. Without logging, there is no audit trail for regulators. Without override capability, there is no human oversight mechanism. Without state management, there is no reproducibility for investigations. Without least privilege, there is no containment of failures. Without escalation hooks, there is no transfer of control to humans.
+This governance surface is what Chapter~3 (\textit{How to Govern an Agent}) builds upon. The five-layer regulatory framework (foundational law, professional obligations, sector regulation, AI-specific regulation, voluntary frameworks) imposes requirements; the governance surface provides the technical means to satisfy them. Without logging, there is no audit trail for regulators. Without override capability, there is no human oversight mechanism. Without state management, there is no reproducibility for investigations. Without least privilege, there is no containment of failures. Without escalation hooks, there is no transfer of control to humans.
 
-The architectural decisions made throughout this chapter---how you design triggers, intent extraction, perception tools, action controls, memory systems, planning mechanisms, termination conditions, escalation protocols, and delegation patterns---collectively determine whether your system can be governed. This section has addressed \textit{how} architecture enables governance; \href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}} addresses \textit{what} governance requires and how to calibrate controls to your specific context and risk profile.
+The architectural decisions made throughout this chapter---how you design triggers, intent extraction, perception tools, action controls, memory systems, planning mechanisms, termination conditions, escalation protocols, and delegation patterns---collectively determine whether your system can be governed. This section has addressed \textit{how} architecture supports governance; Chapter~3 (\textit{How to Govern an Agent}) addresses \textit{what} governance demands and how to calibrate controls to your specific context and risk profile.

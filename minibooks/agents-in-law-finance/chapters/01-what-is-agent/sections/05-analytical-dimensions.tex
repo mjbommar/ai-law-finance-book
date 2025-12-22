@@ -1,11 +1,11 @@
 \section{Analytical Dimensions of Agency}
 \label{sec:dimensions}
 
-While different disciplines approach agency from distinct theoretical foundations (Section~\ref{sec:disciplines}), certain analytical dimensions cut across disciplinary boundaries. This section identifies four key dimensions---\keyterm{autonomy}, \keyterm{entity frames}, \keyterm{goal dynamics}, and \keyterm{persistence}---that structure variation in how agency is understood.
+While different disciplines approach agency from distinct theoretical foundations (Section~\ref{sec:disciplines}), certain analytical dimensions cut across disciplinary boundaries. Here we identify four key dimensions that structure variation in how agency is understood: \keyterm{autonomy}\glsadd{autonomy-spectrum}, \keyterm{entity frames}\glsadd{entity-frame}, \keyterm{goal dynamics}\glsadd{goal-dynamics}, and \keyterm{persistence}\glsadd{persistence}.
 
 \subsection{The Autonomy Spectrum}
 
-Perhaps the most fundamental dimension along which agent definitions vary is \keyterm{autonomy spectrum}: the degree to which an agent can set its own agenda, select tactics, and own accountability for outcomes.
+Perhaps the most fundamental dimension along which agent definitions vary is \keyterm{autonomy spectrum}\glsadd{autonomy-spectrum}: the degree to which an agent can set its own agenda, select tactics, and own accountability for outcomes.
 
 Three plain-language questions help position any definition on the autonomy spectrum:
 
@@ -24,10 +24,10 @@ Does accountability remain with the principal, or does the agent own outcomes? L
 Definitions range from delegated proxies at one extreme to self-directed entities at the other.
 
 \paragraph{Delegated Proxies (Low Autonomy)}
-The Restatement (Second) of Agency (1958) exemplifies this end: agents execute their principal's instructions within bounded authority. Goals, evaluation criteria, and ultimate responsibility remain with the principal. \textcite{milgram1974obedience}'s ``agentic state'' captures the psychological correlate---individuals who see themselves as mere instruments of authority, disclaiming personal responsibility.
+The Restatement (Second) of Agency (1958) exemplifies this end: agents execute their principal's instructions within bounded authority. Goals, evaluation criteria, and ultimate responsibility remain with the principal. \textcite{milgram1974obedience}'s ``agentic state'' captures the psychological correlate, where individuals see themselves as mere instruments of authority, disclaiming personal responsibility.
 
 \paragraph{Contract-Bound Delegates (Low-Moderate Autonomy)}
-\textcite{jensen1976theory}'s principal-agent model grants agents tactical discretion within incentive contracts but evaluates them solely on principals' payoffs. Agents choose means but not ends, operating under monitoring and compensation schemes designed to align behavior.
+\glsadd{principal-agent-relationship}\textcite{jensen1976theory}'s principal-agent model grants agents tactical discretion within incentive contracts but evaluates them solely on principals' payoffs. Agents choose means but not ends, operating under monitoring and compensation schemes designed to align behavior.
 
 \paragraph{Self-Regulating Actors (Moderate Autonomy)}
 \textcite{bandura1989human}'s human agency emphasizes that individuals set sub-goals, monitor progress, and self-adjust within social structures. \textcite{maes1994agents}'s software agents learn user preferences and initiate actions based on high-level intent rather than step-by-step commands.
@@ -39,7 +39,7 @@ The Restatement (Second) of Agency (1958) exemplifies this end: agents execute t
 \textcite{suttonbarto1998rl}'s reinforcement learning agents experiment with actions and update policies from reward signals without human step-by-step guidance. The agent owns the exploration-exploitation trade-off.
 
 \paragraph{Tool Orchestrators (Very High Autonomy)}
-Modern tool-use APIs (2025)---whether implemented through AI/ML or traditional logic---choose when and how to invoke tools, integrating outputs into their reasoning loops. Contemporary LLM frameworks provide one implementation approach for this architectural pattern, ``independently accomplish[ing] tasks on behalf of users,'' planning, sequencing, and completing multi-step workflows before reporting back.
+Modern tool-use APIs (2025), whether implemented through AI/ML or traditional logic, choose when and how to invoke tools\glsadd{tool-orchestration}, integrating outputs into their reasoning loops. Contemporary LLM frameworks provide one implementation approach for this architectural pattern, ``independently accomplish[ing] tasks on behalf of users,'' planning, sequencing, and completing multi-step workflows before reporting back.
 
 \bigskip
 
@@ -71,19 +71,20 @@ Table~\ref{tab:autonomy} summarizes this progression.
 
 This dimension correlates with but differs from technological capability. Rule-based expert systems can exhibit moderate autonomy (goal-directed loops), while capable neural networks, including LLMs, operating in single-shot mode exhibit none. Autonomy is architectural, not merely a function of model sophistication.
 
-\textbf{Autonomy and Governance:} The autonomy level directly determines governance requirements. Low-autonomy agents (delegated proxies, contract-bound delegates) operate under tight principal control with lighter oversight burdens---the principal validates each step or constrains choices through explicit contracts. High-autonomy agents (tool orchestrators, independent finishers) make consequential decisions with minimal intervention, demanding mandatory precommit limits (resource budgets, scope boundaries), explicit escalation triggers (confidence thresholds, high-stakes decisions), and robust audit trails. \textit{Governance principle:} Oversight rigor must scale with autonomy level. An agent that independently orchestrates tools and completes multi-step tasks requires explicit termination mechanisms, human-in-the-loop checkpoints for irreversible actions, and clear accountability mapping---safeguards unnecessary for agents executing predefined scripts under direct supervision.
+\textbf{Autonomy and Governance:} The autonomy level directly determines governance requirements. Low-autonomy agents (delegated proxies, contract-bound delegates) operate under tight principal control with lighter oversight burdens---the principal validates each step or constrains choices through explicit contracts. High-autonomy agents (tool orchestrators, independent finishers) make consequential decisions with minimal intervention, demanding mandatory precommit limits (resource budgets, scope boundaries), explicit escalation triggers (confidence thresholds, high-stakes decisions), and robust audit trails.
+\glsadd{escalation}\glsadd{tools} \textit{Governance principle:} Oversight rigor must scale with autonomy level. An agent that independently orchestrates tools and completes multi-step tasks requires explicit termination mechanisms, human-in-the-loop checkpoints for irreversible actions, and clear accountability mapping. These safeguards are unnecessary for agents executing predefined scripts under direct supervision.
 
 \noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}
 
 \subsection{Entity Frames}
 
-Agent definitions often talk past each other because they quietly assume different kinds of \keyterm{entities}. We identify three clusters:
+Agent definitions often talk past each other because they quietly assume different kinds of \keyterm{entities}\glsadd{entity-frame}. We identify three clusters:
 
 \paragraph{Human-Centered}
 These definitions privilege individual humans and their cognition or morality. \textcite{anscombe1957intention}'s intentional action explores agency as practical knowledge held by persons. \textcite{milgram1974obedience}'s agentic state examines how people respond to authority. \textcite{bandura1989human}'s human agency emphasizes internal cognitive machinery---intentionality, forethought, self-reactiveness, self-reflectiveness. The hallmark questions: \textit{What intentions animate the person? How is responsibility assigned?}
 
 \paragraph{Institutional/Hybrid}
-These definitions situate agency in socio-technical collectives---humans embedded in contracts, firms, or organizational structures. The Restatement of Agency (1958) defines the principal-agent pair, not isolated individuals. \textcite{jensen1976theory}'s economic model examines ``manager-with-contract'' as the effective actor. \textcite{epstein1996growing}'s agent-based models simulate rule-following individuals shaped by local interactions. The hallmark questions: \textit{What structure channels decisions? How are incentives and authority shared?}
+These definitions situate agency in socio-technical collectives, such as humans embedded in contracts, firms, or organizational structures. The Restatement of Agency (1958) defines the principal-agent pair, not isolated individuals. \textcite{jensen1976theory}'s economic model examines ``manager-with-contract'' as the effective actor. \textcite{epstein1996growing}'s agent-based models simulate rule-following individuals shaped by local interactions. The hallmark questions: \textit{What structure channels decisions? How are incentives and authority shared?}
 
 \paragraph{Machine-Centered}
 These definitions assign agency to computational entities managing perception\-/action loops. \textcite{russellnorvig1995ai}'s AI agents can be any entity perceiving through sensors and acting via actuators. \textcite{franklin-graesser-1997}'s autonomous agents are persistent computational entities pursuing agendas. Contemporary LLM frameworks (2025) are explicitly software coordinating tools. The hallmark questions: \textit{How does the entity sense, plan, and act? What loop keeps it going?}
@@ -114,7 +115,7 @@ Importantly, these frames are not mutually exclusive. Contemporary ``agentic AI'
 
 \subsection{Goal Dynamics}
 
-Definitions also vary in how they understand the \keyterm{relationship between agents and goals}. We identify three stances:
+Definitions also vary in how they understand the \keyterm{relationship between agents and goals}\glsadd{goal-dynamics}. We identify three stances:
 
 \paragraph{Goal Acceptance}
 The agent receives a mandate and optimizes for it without debate. The Restatement of Agency (1958) requires agents to follow principal objectives; divergence invites breach. \textcite{suttonbarto1998rl}'s RL agent maximizes a fixed reward function supplied externally. Contemporary LLM frameworks (2025) ``independently accomplish tasks on behalf of users,'' but user goals remain the north star. Success equals compliance or reward maximization.
@@ -154,31 +155,35 @@ This dimension has direct implications for legal accountability. If an AI agent 
 Two additional dimensions merit brief mention:
 
 \paragraph{Temporal Persistence}
-\textcite{franklin-graesser-1997} distinguish programs from agents partly on \keyterm{persistence}—agents maintain state and pursue objectives over extended periods. This contrasts with reactive systems that respond to inputs without memory. Modern LLM agents incorporate conversation history and tool-use results, creating persistence within sessions. As discussed in Section~\ref{sec:intro}, single-shot LLM usage lacks the persistent goal pursuit that characterizes agentic systems.
+\textcite{franklin-graesser-1997} distinguish programs from agents partly on \keyterm{persistence}\glsadd{persistence}—agents maintain state and pursue objectives over extended periods. This contrasts with reactive systems that respond to inputs without memory. Modern LLM agents incorporate conversation history and tool-use results, creating persistence within sessions. As discussed in Section~\ref{sec:intro}, single-shot LLM usage lacks the persistent goal pursuit that characterizes agentic systems.
 
 \paragraph{Embodiment}
 \textcite{kauffman2000investigations}'s autonomous agents require physical \keyterm{embodiment} capable of performing thermodynamic work cycles. This biological grounding contrasts sharply with purely virtual agents. Robotics and embodied AI represent one implementation; cloud-based LLM agents represent another. Whether virtual agents merit the term ``agent'' in the fullest sense remains philosophically contentious, though pragmatically settled in favor of inclusion.
 
 \subsection{Implications for Agentic AI}
+\glsadd{autonomy-spectrum}
+\glsadd{entity-frame}
+\glsadd{goal-dynamics}
+\glsadd{persistence}
 
 These four dimensions---autonomy, entity frames, goal dynamics, persistence---provide organizing principles for evaluating contemporary systems.
 
 When someone claims an entity is ``agentic,'' four questions create a shared, falsifiable basis for evaluation.
 
-\begin{keybox}[title={\textbf{Question 1: Autonomy}}]
+\begin{questionbox}[title={\textbf{Question 1: Autonomy}}]
 How much \textbf{discretion} does the entity have in selecting \textbf{goals} and \textbf{tactics}, and where does \textbf{accountability} reside when outcomes go wrong? Describe the locus of \textbf{control} and any \textbf{constraints} (contracts, prompts, policies).
-\end{keybox}
+\end{questionbox}
 
-\begin{keybox}[title={\textbf{Question 2: Entity}}]
+\begin{questionbox}[title={\textbf{Question 2: Entity}}]
 What kind of \textbf{entity} are we evaluating: a pure \textbf{machine} entity, a \textbf{human–AI} team, or an \textbf{institution}al arrangement? Clarifying the entity prevents conflating a tool with the broader organization that wields it.
-\end{keybox}
+\end{questionbox}
 
-\begin{keybox}[title={\textbf{Question 3: Goals}}]
+\begin{questionbox}[title={\textbf{Question 3: Goals}}]
 Does the entity merely accept \textbf{goals}, \textbf{adapt} them through interpretation, or \textbf{negotiate} them with other agents or humans? State how \textbf{goals} are set, refined, and \textbf{verified} in practice.
-\end{keybox}
+\end{questionbox}
 
-\begin{keybox}[title={\textbf{Question 4: Persistence}}]
+\begin{questionbox}[title={\textbf{Question 4: Persistence}}]
 Does the entity maintain \textbf{state} and pursue \textbf{objectives} across multiple steps or sessions, or does it operate in \textbf{single‑shot} mode? Specify how \textbf{memory}, \textbf{logs}, or \textbf{context windows} support continuity.
-\end{keybox}
+\end{questionbox}
 
 These questions cut across the marketing hype and disciplinary jargon, providing a shared vocabulary for more precise discourse. The next section synthesizes these insights into a working definition grounded in theoretical foundations.

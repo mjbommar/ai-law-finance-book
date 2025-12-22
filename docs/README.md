@@ -15,6 +15,7 @@
 | **Write consistent prose** | [style-guide.md](#style-guidemd) |
 | **Edit and polish text** | [prose-editing-checklist.md](#prose-editing-checklistmd) |
 | **Use colors correctly** | [color-guide.md](#color-guidemd) |
+| **Use boxes and callouts correctly** | [box-guide.md](#box-guidemd) |
 | **Build the PDF** | [build-guide.md](#build-guidemd) |
 | **Understand the full project** | [../CLAUDE.md](../CLAUDE.md) or [../AGENTS.md](../AGENTS.md) |
 
@@ -100,6 +101,18 @@
 - Legacy color migration
 
 **When to use**: Creating new visual elements, ensuring color consistency, migrating from legacy colors
+
+---
+
+### [box-guide.md](box-guide.md)
+**Purpose**: Prescriptive guidance for semantic boxes and callouts
+
+**Key Contents**:
+- What each box/color means (and does *not* mean)
+- Do/don’t rules per box family (definition/key/caution/example/etc.)
+- When raw `tcolorbox` is acceptable (layout-only), and how to keep semantics consistent
+
+**When to use**: Adding new boxes, reviewing visual consistency, choosing between `keybox` vs `highlightbox` vs `cautionbox`, etc.
 
 ---
 
@@ -271,7 +284,11 @@ For each major section, verify:
 | `keybox` | Amber | Key takeaways |
 | `highlightbox` | Neutral | Notes, context |
 | `cautionbox` | Red | Warnings |
+| `examplebox` | Green | Worked examples |
 | `theorembox` | Indigo | Formal statements |
+| `practicebox` | Teal | Exercises / tasks |
+| `technicalbox` | Teal | Optional deep dives |
+| `questionbox` | Gray/slate | Self-check prompts |
 | `listingbox` | Gray | Code examples |
 
 ### Voice Patterns

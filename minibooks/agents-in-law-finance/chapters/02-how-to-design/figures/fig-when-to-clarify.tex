@@ -1,6 +1,6 @@
 % When to Clarify: Compact Stakes × Ambiguity Decision Matrix
 
-\begin{figure}[!htb]
+\begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[
     cell/.style={
@@ -16,11 +16,11 @@
     },
     example/.style={
         font=\scriptsize\itshape,
-        text=gray-700
+        text=text-secondary
     },
     axis label/.style={
         font=\scriptsize\bfseries\sffamily,
-        text=gray-700
+        text=text-secondary
     }
 ]
 
@@ -33,27 +33,27 @@
 \node[axis label, rotate=90, anchor=south, align=center] at (-6.5, -1.1) {High\\Stakes};
 
 % Top-left: Low Stakes, Low Ambiguity
-\node[cell, draw=green-600, fill=green-100] (tl) at (-3.1, 1.1) {
-    \textcolor{green-900}{\textsf{\textbf{PROCEED}}}\\[2pt]
-    \textcolor{gray-600}{\scriptsize\itshape ``Apple market cap'' → Apple Inc.}
+\node[cell, draw=example-base, fill=bg-example] (tl) at (-3.1, 1.1) {
+    \textcolor{example-dark}{\textsf{\textbf{PROCEED}}}\\[2pt]
+    \textcolor{text-muted}{\scriptsize\itshape ``Apple market cap'' → Apple Inc.}
 };
 
 % Top-right: Low Stakes, High Ambiguity
-\node[cell, draw=amber-600, fill=amber-100] (tr) at (3.1, 1.1) {
-    \textcolor{amber-900}{\textsf{\textbf{CLARIFY BRIEFLY}}}\\[2pt]
-    \textcolor{gray-600}{\scriptsize\itshape ``Research SOL'' → which claim type?}
+\node[cell, draw=key-base, fill=bg-key] (tr) at (3.1, 1.1) {
+    \textcolor{key-dark}{\textsf{\textbf{CLARIFY BRIEFLY}}}\\[2pt]
+    \textcolor{text-muted}{\scriptsize\itshape ``Research SOL'' → which claim type?}
 };
 
 % Bottom-left: High Stakes, Low Ambiguity
-\node[cell, draw=amber-600, fill=amber-100] (bl) at (-3.1, -1.1) {
-    \textcolor{amber-900}{\textsf{\textbf{CONFIRM}}}\\[2pt]
-    \textcolor{gray-600}{\scriptsize\itshape ``File this motion'' → verify before acting}
+\node[cell, draw=key-base, fill=bg-key] (bl) at (-3.1, -1.1) {
+    \textcolor{key-dark}{\textsf{\textbf{CONFIRM}}}\\[2pt]
+    \textcolor{text-muted}{\scriptsize\itshape ``File this motion'' → verify before acting}
 };
 
 % Bottom-right: High Stakes, High Ambiguity
-\node[cell, draw=red-600, fill=red-100] (br) at (3.1, -1.1) {
-    \textcolor{red-900}{\textsf{\textbf{CLARIFY THOROUGHLY}}}\\[2pt]
-    \textcolor{gray-600}{\scriptsize\itshape ``Handle the regulatory response''}
+\node[cell, draw=caution-base, fill=bg-caution] (br) at (3.1, -1.1) {
+    \textcolor{caution-dark}{\textsf{\textbf{CLARIFY THOROUGHLY}}}\\[2pt]
+    \textcolor{text-muted}{\scriptsize\itshape ``Handle the regulatory response''}
 };
 
 \end{tikzpicture}

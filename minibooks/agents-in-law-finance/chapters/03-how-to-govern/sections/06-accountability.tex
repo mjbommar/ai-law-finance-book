@@ -1,5 +1,5 @@
 % ============================================================================
-% Accountability and Organizational Structure — Agents Part III
+% Accountability and Organizational Structure — Chapter 3 - How to Govern an Agent
 % Purpose: Define roles, organizational models, and liability allocation
 % Label: sec:agents3-accountability
 % ============================================================================
@@ -7,7 +7,7 @@
 \section{Accountability and Organizational Structure}
 \label{sec:agents3-accountability}
 
-Technical controls alone do not create accountability. Governance requires explicit assignment of roles and responsibilities: who approves deployments, who monitors performance, who investigates incidents, who escalates to regulators? This section presents three organizational governance models, demonstrates role assignment through RACI matrices, defines escalation and reporting structures, and examines liability allocation. The goal is to ensure every governance activity has a clearly accountable owner.
+Technical controls alone do not create accountability. Where Chapter~2 established the technical infrastructure for action controls, escalation, and logging, governance requires explicit assignment of roles and responsibilities: who approves deployments, who monitors performance, who investigates incidents, who escalates to regulators? This section presents three organizational governance models, demonstrates role assignment through RACI matrices, defines escalation and reporting structures, and examines liability allocation. The goal is to ensure every governance activity has a clearly accountable owner.
 
 \subsection{Three Organizational Governance Models}
 \label{sec:agents3-governance-models}
@@ -23,8 +23,8 @@ A dedicated AI governance office or committee reports to senior leadership (typi
 \vspace{0pt}
 \begin{tcolorbox}[
   enhanced,
-  colback=bg-example,
-  colframe=example-dark,
+  colback=bg-key,
+  colframe=key-dark,
   fonttitle=\bfseries,
   coltitle=white,
   title=Advantages,
@@ -77,8 +77,8 @@ A central AI governance function establishes enterprise-wide policies and standa
 \vspace{0pt}
 \begin{tcolorbox}[
   enhanced,
-  colback=bg-example,
-  colframe=example-dark,
+  colback=bg-key,
+  colframe=key-dark,
   fonttitle=\bfseries,
   coltitle=white,
   title=Advantages,
@@ -130,8 +130,8 @@ AI governance is integrated into existing risk management, compliance, IT govern
 \vspace{0pt}
 \begin{tcolorbox}[
   enhanced,
-  colback=bg-example,
-  colframe=example-dark,
+  colback=bg-key,
+  colframe=key-dark,
   fonttitle=\bfseries,
   coltitle=white,
   title=Advantages,
@@ -274,7 +274,7 @@ Regardless of governance model, organizations must assign accountability for eac
 
 Table~\ref{tab:agents3-raci} provides a sample RACI matrix for AI governance activities.
 
-\begin{table}[!ht]
+\begin{table}[htbp]
 \centering
 \caption{Sample RACI Matrix for AI Governance Activities}
 \label{tab:agents3-raci}
@@ -307,7 +307,7 @@ Respond to regulatory inquiry & C & A & R & R & R \\
 \paragraph{Key Observations from the Matrix}:
 
 \begin{itemize}
-\item \textbf{Single Accountability}: Each activity has one A. For example, the CRO (Chief Risk Officer) is accountable for fairness violation investigations; the AI Governance Lead is accountable for low-risk deployments.
+\item \textbf{Single Accountability}: Each activity has one A. To illustrate, the CRO (Chief Risk Officer) is accountable for fairness violation investigations; the AI Governance Lead is accountable for low-risk deployments.
 
 \item \textbf{Escalation}: High-risk deployments elevate accountability to the Board/CEO, while low-risk deployments can be approved by the AI Governance Lead. This prevents bottlenecks (Board does not review every chatbot deployment) while ensuring senior oversight for consequential systems.
 
@@ -336,7 +336,7 @@ Governance requires clear escalation triggers: when must an operational issue be
 \textbf{Board Presentations (Quarterly/Annual)}: Board receives narrative synthesis: strategic governance posture (are we ahead of or behind regulatory curve?), high-risk system approvals, material incidents and responses, policy changes, budget and resource requests. Format: 10-15 slide deck; focus on risk appetite alignment, not operational details.
 
 \paragraph{Example Escalation: Fairness Violation in Credit Decisioning}
-A bank's monthly fairness monitoring detects disparate impact in credit pre-screening (see Section~\ref{sec:agents3-monitoring-incident}). Figure~\ref{fig:agents3-escalation-example} illustrates the Tier 1 → Tier 3 escalation pathway, demonstrating how pre-defined critical issues trigger rapid organizational response with specific time targets at each stage.
+A bank's monthly fairness monitoring detects disparate impact in credit pre-screening (see Section~\ref{sec:agents3-monitoring-incident}). \Cref{fig:agents3-escalation-example} illustrates the Tier 1 → Tier 3 escalation pathway, demonstrating how pre-defined critical issues trigger rapid organizational response with specific time targets at each stage.
 
 \input{figures/fig-escalation-example}
 
@@ -371,7 +371,7 @@ Vendor contracts typically shift risk to deployers through:
 Since deployers bear most liability and cannot fully recover from vendors, \emph{governance becomes the primary defense}:
 
 \begin{itemize}
-\item \textbf{Regulatory defense}: Demonstrating reasonable care through documented risk assessments, monitoring, and incident response may reduce penalties or satisfy regulatory expectations.
+\item \textbf{Regulatory defense}: Showing reasonable care through documented risk assessments, monitoring, and incident response may reduce penalties or satisfy regulatory expectations.
 \item \textbf{Litigation defense}: Evidence of good-faith governance efforts may reduce damages, support summary judgment motions, or enable favorable settlements.
 \item \textbf{Insurance}: Insurers may require evidence of governance (policies, audits, controls) as a condition of coverage or premium reduction.
 \end{itemize}
@@ -388,7 +388,7 @@ A mortgage applicant is denied credit by a bank using an AI underwriting system.
 \item \textbf{Regulatory escalation}: The Consumer Financial Protection Bureau (CFPB) investigates and imposes a \$5 million penalty for systemic ECOA violations. The penalty is assessed against the bank, not the vendor or employee.
 \end{enumerate}
 
-\textbf{Outcome}: The bank bears \$8 million in total liability (\$3M settlement + \$5M penalty) and recovers \$100K from the vendor. Effective governance—quarterly fairness monitoring, documented risk assessment, incident response protocols—might have detected the bias earlier, limited exposure, and demonstrated good faith to regulators.
+\textbf{Outcome}: The bank bears \$8 million in total liability (\$3M settlement + \$5M penalty) and recovers \$100K from the vendor. Effective governance—quarterly fairness monitoring, documented risk assessment, incident response protocols—might have detected the bias earlier, limited exposure, and shown good faith to regulators.
 
 \begin{keybox}[title={Liability Reality Check}]
 ``The AI did it'' is not a legal defense. ``We bought it from a reputable vendor'' does not transfer liability. ``Our employee was supposed to monitor it'' does not excuse organizational failures. Deployers own the risk. Governance is the mechanism for managing it.

@@ -4,112 +4,120 @@
 \section{How to Recognize an Agent}
 \label{sec:practical}
 
-With the three-level hierarchy and complete definition established in Section~\ref{sec:intro}, you now have the conceptual foundation. But recognizing agents in practice requires operational tools. This section provides practical approaches: a detailed evaluation rubric, concrete examples comparing agents to non-agents, and guidance for navigating common misconceptions.
+With the three-level hierarchy and complete definition established in Section~\ref{sec:intro}, you now have the conceptual foundation. But recognizing agents in practice requires operational tools. We now turn to practical approaches: a detailed evaluation rubric, concrete examples comparing agents to non-agents, and guidance for navigating common misconceptions.
 
-\subsection{The 6-Question Evaluation Rubric: Operational Properties}
+\subsection{The Six-Question Rubric}
 \label{sec:rubric-6q}
 
-These six questions assess whether an entity qualifies as an \emph{agentic system}. They operationalize the six-property definition established in Section~\ref{sec:intro}. The first three (Goal, Perception, Action) establish \emph{Level 1 agency}; Questions 4--6 add the operational properties required for deployment.
+These six questions operationalize the six-property definition from Section~\ref{sec:intro}. Questions 1--3 establish Level 1 agency; Questions 4--6 add operational properties.
 
-\begin{questionbox}[title={\textbf{Q1. Does it have goals (G)?}}]
-\textbf{Test:} Look for clear objectives, task specifications, or performance criteria that direct behavior.
+\begin{questionbox}[title={Q1. Does it have goals?}]
+Look for objectives or performance criteria that direct behavior.
 
-\textit{Domain examples:} Legal research goal (find relevant precedents), portfolio goal (maximize risk-adjusted returns), contract analysis goal (identify liability clauses).
-
-\textit{Falsification:} If it responds identically regardless of desired outcomes, it lacks goals. Examples: compilers, lookup tables.
+\textit{Falsification:} If it responds identically regardless of desired outcomes, it lacks goals.
 \end{questionbox}
 
-\begin{questionbox}[title={\textbf{Q2. Does it perceive (P)?}}]
-\textbf{Test:} Check for environmental awareness through sensors, APIs, databases, or document access. Can it observe the results of its own actions?
+In legal contexts, goals include finding relevant precedents or identifying liability clauses. In finance, goals include maximizing risk-adjusted returns or detecting fraudulent transactions.
 
-\textit{Domain examples:} Read case law databases, monitor market data feeds, parse contract text, access regulatory filings.
+\begin{questionbox}[title={Q2. Does it perceive?}]
+Check for environmental awareness through sensors, APIs, or document access. Can it observe results of its own actions?\glsadd{perception-action-loop}
 
-\textit{Falsification:} If it operates identically regardless of environmental state, or cannot observe action consequences, it lacks perception. Examples: write-only systems, open-loop controllers.
+\textit{Falsification:} If it operates identically regardless of environmental state, it lacks perception.
 \end{questionbox}
 
-\begin{questionbox}[title={\textbf{Q3. Does it act (A)?}}]
-\textbf{Test:} Verify capability to affect environment with at least minimal discretion (choosing among two+ actions contingent on perceptions).
+Legal systems perceive by reading case law databases or parsing contract text. Financial systems perceive by monitoring market data feeds or accessing regulatory filings.
 
-\textit{Domain examples:} Generate legal briefs, execute trades, flag contract risks, file regulatory reports, invoke research tools.
+\begin{questionbox}[title={Q3. Does it act?}]
+Verify capability to affect its environment with at least minimal discretion (two+ actions contingent on perceptions).
 
-\textit{Falsification:} If it cannot modify its environment, or executes exactly one fixed sequence, it lacks action. Examples: pure sensors, zero-conditional scripts.
+\textit{Falsification:} If it cannot modify its environment or executes exactly one fixed sequence, it lacks action.
 \end{questionbox}
 
-\begin{questionbox}[title={\textbf{Q4. Does it iterate (I)?}}]
-\textbf{Test:} Confirm multiple perceive-act cycles with state preservation across rounds, not single-shot processing. Does it loop: act → observe → act again?
+Legal actions include generating briefs, flagging risks, or filing reports. Financial actions include executing trades, adjusting positions, or invoking analysis tools.
 
-\textit{Domain examples:} Iteratively refine legal queries based on results, adjust portfolio based on market moves, review contract sections sequentially.
+\begin{questionbox}[title={Q4. Does it iterate?}]
+Confirm multiple perceive-act cycles with state preservation. Does it loop: act → observe → act again?
 
-\textit{Falsification:} If it processes input once without maintaining state across cycles, it lacks iteration. Examples: single ChatGPT response, batch processors without inter-item updates.
+\textit{Falsification:} If it processes input once without maintaining state across cycles, it lacks iteration.
 \end{questionbox}
 
-\begin{questionbox}[unbreakable,title={\textbf{Q5. Does it adapt (A)?}}]
-\textbf{Test:} Check whether strategy modifies based on accumulated observations and feedback. Does it adjust approach when initial attempts fail?
+Iteration appears in legal research that refines queries based on results, or portfolio management that adjusts positions based on market moves.
 
-\textit{Domain examples:} Adjust search terms when queries return no results, modify risk thresholds based on false positive rates, change trade strategies when volatility spikes.
+\begin{questionbox}[title={Q5. Does it adapt?}]
+Check whether strategy modifies based on observations and feedback. Does it adjust when initial attempts fail?
 
-\textit{Falsification:} If it applies identical logic regardless of outcomes, or cannot modify approach when strategies fail, it lacks adaptation. Examples: basic thermostats (fixed rules), static pattern matchers, rigid workflows.
+\textit{Falsification:} If it applies identical logic regardless of outcomes, it lacks adaptation.
 \end{questionbox}
 
-\begin{questionbox}[unbreakable,title={\textbf{Q6. Does it stop/terminate (T)?}}]
-\textbf{Test:} Verify clear stopping conditions---implicit (goal satisfaction, exhausted search) or explicit (time limits, resource budgets, escalation triggers, confidence thresholds, maximum iterations).
+Adaptation includes adjusting search terms when queries return no results, or modifying risk thresholds based on false positive rates.
 
-\textit{Domain examples:} Stop when finding relevant precedent, escalate when confidence is low, halt after maximum API calls, terminate when portfolio balanced.
+\begin{questionbox}[title={Q6. Does it terminate?}]
+Verify clear stopping conditions\glsadd{stopping-conditions}---implicit (goal satisfaction) or explicit (time limits, confidence thresholds\glsadd{confidence-thresholds}, escalation triggers).
 
-\textit{Falsification:} If it has no mechanism for recognizing when to stop, or could cycle indefinitely, it lacks termination. Examples: infinite loops, systems requiring manual kill.
+\textit{Falsification:} If it could cycle indefinitely without bounds, it lacks termination.
 \end{questionbox}
 
-\textit{If Q1--Q3 are yes, the entity qualifies as an agent. If all six answers are yes, it qualifies as an agentic system. Otherwise, it may be a useful tool but lacks full agentic character.}
+Termination examples: stop when finding relevant precedent, escalate when confidence is low, halt after maximum API calls, or terminate when portfolio reaches target allocation.
 
-\textbf{Note on Professional Governance:} The six questions above establish whether something is an agent. Professional deployment in high-stakes domains (legal research, medical diagnosis, financial advising) requires additional governance safeguards---attribution, explanation, escalation, and confidentiality. These professional governance requirements are covered in Part III (\textit{How to Govern an Agent}).
+\medskip
+\textit{If Q1--Q3 are yes, the entity qualifies as an agent. If all six are yes, it qualifies as an agentic system.}
+
+\textbf{Note on Professional Governance:} The six questions above establish whether something is an agent. As noted in Section~\ref{sec:intro}, professional deployment in high-stakes domains requires additional governance safeguards beyond the six properties, such as attribution, explanation, escalation, and confidentiality. Section~\ref{sec:synthesis} details these requirements; Chapter~3 (\textit{How to Govern an Agent}) covers implementation.
 
 \subsection{Common Misconceptions}
 
 Understanding what agents are requires equally understanding what they are \textit{not}. Five common misconceptions lead to over-attribution of agency.
 
-\textbf{Single-Shot Responses Are Not Agentic Systems.} A single response from a language model is not an agentic system, even if sophisticated. Without iteration and adaptation, it is a one-time transformation. Sending one query to ChatGPT and receiving one response demonstrates this limitation—no iteration, no adaptation to results, no perception-action loop. The same research system could be agentic if it iteratively refined queries based on initial results, but a single exchange lacks the fundamental properties required.
+\paragraph{Misconception: Single-shot responses are agentic systems}
+A single response from a language model is not an agentic system, even if sophisticated. Without iteration and adaptation, it is a one-time transformation. A basic API call that sends a prompt and receives a completion demonstrates this limitation—no iteration, no adaptation to results, no perception-action loop. The same system could be agentic if it iteratively refined queries based on results, but a single exchange lacks the required properties.
 
-\textbf{Automation Alone Is Not an Agentic System.} Automation does not imply agency. A data extraction script that automatically runs nightly has goals (extract data) and acts (writes to database), but lacks perception, adaptation, and iteration. It executes a fixed sequence on a schedule. It is a scheduled task, not an agentic system. The automation trigger does not create the perception-action loop or adaptive behavior that define agentic systems.
+Recent developments blur some boundaries. Reasoning models with extended ``thinking'' can resemble deliberation; hosted API providers may embed agentic capabilities (web search, code execution) behind a single call, making one response involve hidden iteration. Yet absent such scaffolding, no single inference run integrates perception and action through iteration—reasoning over internal states, no matter how rich a world model the system has learned, is not the same as perceiving external environments, taking real actions, and adapting based on observed outcomes.
 
-\textbf{Tool Use Alone Is Not Agency.} Calling external tools does not automatically make an entity agentic. The critical question is whether the entity iterates on tool results, adapting its strategy based on what it observes. A script that queries an API once is not an agent—it lacks iteration and adaptation. A research system that queries the API, evaluates relevance, and decides what to search next based on results may qualify, depending on whether it completes the perception-action-adaptation cycle.
+\paragraph{Misconception: Automation alone creates agentic systems}
+Automation does not imply agency. A data extraction script that automatically runs nightly has goals (extract data) and acts (writes to database), but lacks perception, adaptation, and iteration. It executes a fixed sequence on a schedule. It is a scheduled task, not an agentic system. The automation trigger does not create the perception-action loop or adaptive behavior that define agentic systems.
 
-\textbf{Complexity Is Not Agency.} Complex entities are not necessarily agents. A document processing pipeline performs sophisticated transformations—optical character recognition, entity extraction, format conversion—but follows a fixed sequence without goals, perception of results, or adaptation. Complexity measures sophistication, not agency. Conversely, simple entities can be agents. A basic thermostat has goals (maintain temperature), perceives (reads sensor), acts (turns heat on/off), iterates (continuous monitoring), and terminates (implicit when target reached), though it lacks adaptation through its fixed on/off rules. Simplicity and agency are orthogonal dimensions.
+\paragraph{Misconception: Tool use alone creates agency}
+Calling external tools does not automatically make an entity agentic. The critical question is whether the entity iterates on tool results, adapting its strategy based on what it observes. A script that queries an API once is not an agent—it lacks iteration and adaptation. A research system that queries the API, evaluates relevance, and decides what to search next based on results may qualify, depending on whether it completes the perception-action-adaptation cycle.
 
-\textbf{AI-Powered Is Not Agency.} Using AI or machine learning does not make something an agent. A neural network that classifies documents in a single forward pass—input to output—is not an agent, regardless of model sophistication. It lacks iteration, adaptation, and the perception-action loop. An AI entity that iteratively reviews content, flags issues, refines assessments based on observed patterns, and adapts its classification strategy across multiple cycles can be an agentic system. The AI component enables flexible reasoning, but agency requires the architectural properties, not merely the presence of neural networks.
+\paragraph{Misconception: Complexity creates agency}
+Complex entities are not necessarily agents. A document processing pipeline performs sophisticated transformations—optical character recognition, entity extraction, format conversion—but follows a fixed sequence without goals, perception of results, or adaptation. Complexity measures sophistication, not agency. Conversely, simple entities can be agents. A basic thermostat has goals (maintain temperature), perceives (reads sensor), acts (turns heat on/off), iterates (continuous monitoring), and terminates (implicit when target reached), though it lacks adaptation through its fixed on/off rules. Simplicity and agency are orthogonal dimensions.
+
+\paragraph{Misconception: AI-powered systems are inherently agentic}
+Using AI or machine learning does not make something an agent. A neural network that classifies documents in a single forward pass—input to output—is not an agent, regardless of model sophistication. It lacks iteration, adaptation, and the perception-action loop. An AI entity that iteratively reviews content, flags issues, refines assessments based on observed patterns, and adapts its classification strategy across multiple cycles can be an agentic system. The AI component enables flexible reasoning, but agency requires the architectural properties, not merely the presence of neural networks.
 
 \subsection{Examples: Agents vs Non-Agents}
 
 Table~\ref{tab:examples} orders entities along the spectrum of agency, from non-agents through AI-powered agents. Each tier illustrates increasing qualification based on the six core properties. Detailed explanations follow.
 
-\begin{table}[!htb]
+\begin{table}[htbp]
 \centering
-\small
-\begin{tabular}{@{}llp{8.2cm}@{}}
+\footnotesize
+\begin{tabular}{@{}l@{\hspace{0.5em}}c@{\hspace{0.5em}}>{\raggedright\arraybackslash}p{5.5cm}@{}}
 \toprule
-\textbf{System} & \textbf{Status} & \textbf{Key Properties} \\
+\textbf{System} & \textbf{Agent?} & \textbf{Properties} \\
 \midrule
-\rowcolor{bg-note}
-\multicolumn{3}{@{}l}{\textbf{Not Agents (Missing Critical Properties)}} \\
-Form validation script & No & One-pass validation; lacks goals, perception, and adaptation \\
+\rowcolor{bg-neutral}
+\multicolumn{3}{@{}l}{\textbf{Not Agents}} \\
+Form validation & No & One-pass; no goals/adaptation \\
 \midrule
-\rowcolor{bg-key}
-\multicolumn{3}{@{}l}{\textbf{Agents with Incomplete Agentic System Properties (Missing 1--2)}} \\
-Single query to research system & Partial & Has goal, perception, and action; lacks iteration and adaptation \\
-Rule-based pattern detection & Partial & Iterates continuously but lacks adaptive strategy \\
-Content suggestion system & Partial & Updates per interaction but uses fixed learning approach \\
+\rowcolor{bg-neutral}
+\multicolumn{3}{@{}l}{\textbf{Partial (Missing 1--2 Properties)}} \\
+Single research query & Partial & G+P+A only; no iteration \\
+Pattern detection & Partial & Iterates but no adaptation \\
+Content suggestions & Partial & Fixed learning approach \\
 \midrule
-\rowcolor{bg-definition}
-\multicolumn{3}{@{}l}{\textbf{Full Agents: Traditional (Rule-Based)}} \\
-Smart thermostat & Yes & All 6 properties; learns patterns and adapts behavior \\
-Portfolio rebalancing system & Yes & Monitors, adapts to volatility, stops when balanced \\
+\rowcolor{bg-neutral}
+\multicolumn{3}{@{}l}{\textbf{Full: Traditional}} \\
+Smart thermostat & Yes & All six; learns patterns \\
+Portfolio rebalancer & Yes & Monitors, adapts, terminates \\
 \midrule
-\rowcolor{bg-example}
-\multicolumn{3}{@{}l}{\textbf{Full Agents: AI-Powered (Flexible Reasoning)}} \\
-Document review system & Yes & Iterative classification with adaptive learning \\
-AI research assistant & Yes & Tool loop with query refinement and escalation \\
+\rowcolor{bg-neutral}
+\multicolumn{3}{@{}l}{\textbf{Full: AI-Powered}} \\
+Document review & Yes & Iterative, adaptive learning \\
+AI research assistant & Yes & Tool loop with refinement \\
 \bottomrule
 \end{tabular}
-\caption{Spectrum of agency ordered by increasing qualification, from non-agents through AI-powered systems. \textit{Accessibility:} Classification table with 3 columns (System, Status, Key Properties) and 9 rows in 4 groups. Group 1 (gray background): non-agents lacking critical properties. Group 2 (amber background): agents with incomplete agentic system properties (missing 1--2 of the six). Group 3 (blue background): full traditional agents with all 6 properties via rules/algorithms. Group 4 (green background): full AI-powered agents with all 6 properties via LLMs/neural networks.}
+\caption{Spectrum of agency by qualification level.}
 \label{tab:examples}
 \end{table}
 
@@ -117,53 +125,49 @@ AI research assistant & Yes & Tool loop with query refinement and escalation \\
 These entities lack the minimal properties (goals, perception, action). The \textbf{form validation script} checks inputs against rules in a single pass—it has no independent goals beyond validation, no perception of results, and no adaptation.
 
 \paragraph{Agents with Incomplete Agentic System Properties}
-These entities qualify as agents (they exceed the 3-property minimum for Level 1 agency) but lack one or two of the six operational properties required for full agentic systems. \textbf{Rule-based pattern detection} has a goal (flag patterns), perceives incoming data, acts (blocks or alerts), and iterates continuously with each input. However, it typically does not adapt its detection strategy within a session—it applies fixed rules. \textbf{Content suggestion systems} similarly have a goal (suggest relevant content), perceive context, act (display suggestions), and iterate with each interaction. Yet they use a fixed learning strategy rather than adapting their suggestions based on user acceptance patterns within a session.
+These entities qualify as agents (they exceed the three-property minimum for Level 1 agency) but lack one or two of the six operational properties required for full agentic systems. \textbf{Rule-based pattern detection} has a goal (flag patterns), perceives incoming data, acts (blocks or alerts), and iterates continuously with each input. Still, it typically does not adapt its detection strategy within a session—it applies fixed rules. \textbf{Content suggestion systems} similarly have a goal (suggest relevant content), perceive context, act (display suggestions), and iterate with each interaction. Yet they use a fixed learning strategy rather than adapting their suggestions based on user acceptance patterns within a session.
 
 \paragraph{Full Agents: Traditional}
-\textbf{Thermostats} illustrate the boundary case. Basic mechanical thermostats have five clear properties: goal (maintain temperature), perception (sensor readings), action (heat on/off), iteration (continuous monitoring), and termination through implicit goal satisfaction (stops heating when target reached). However, they lack true adaptation---they apply fixed rules without adjusting strategy based on results. \textbf{Smart thermostats} qualify as full agentic systems: they learn occupancy patterns, adjust heating schedules based on observed behavior, and implement explicit termination logic like time windows, energy budgets, or away modes. The contrast illustrates how reactive control (basic thermostats) differs from adaptive learning (smart thermostats). \textbf{Portfolio rebalancing systems} demonstrate explicit termination through multiple stopping conditions: goal achievement (balanced portfolio), temporal constraints (market close), or resource limits (maximum trades per session). They monitor market data and portfolio drift, generate trade orders, adapt to volatility within predefined parameters, and stop when any termination condition is met.
+\textbf{Thermostats} illustrate the boundary case. Basic mechanical thermostats have five clear properties: goal (maintain temperature), perception (sensor readings), action (heat on/off), iteration (continuous monitoring), and termination through implicit goal satisfaction (stops heating when target reached). Nevertheless, they lack true adaptation---they apply fixed rules without adjusting strategy based on results. \textbf{Smart thermostats} qualify as full agentic systems: they learn occupancy patterns, adjust heating schedules based on observed behavior, and implement explicit termination logic like time windows, energy budgets, or away modes. The contrast illustrates how reactive control (basic thermostats) differs from adaptive learning (smart thermostats). \textbf{Portfolio rebalancing systems} demonstrate explicit termination through multiple stopping conditions: goal achievement (balanced portfolio), temporal constraints (market close), or resource limits (maximum trades per session). They monitor market data and portfolio drift, generate trade orders, adapt to volatility within predefined parameters, and stop when any termination condition is met.
 
 \paragraph{Full Agents: AI-Powered}
 \textbf{Document review systems} use machine learning to iteratively classify documents based on relevance criteria. Unlike rule-based entities, they improve their categorization as they process more examples, adapting their classification strategy based on observed patterns. \textbf{AI research assistants} demonstrate the most sophisticated agency: they maintain goals (answer questions), observe search results from multiple sources, query iteratively, refine search strategies when initial approaches fail, and escalate to human oversight when encountering contradictory information or reaching confidence limits. This represents the convergence of all six properties enhanced by AI's flexible reasoning capabilities.
 
 \subsection{When to Call Something an Agent}
 
-Our taxonomy (Section~\ref{sec:intro}) distinguishes ``agent'' (3 minimal properties) from ``agentic system'' (6 operational properties). Table~\ref{tab:terminology-usage} provides practical guidance for applying these terms.
+Our taxonomy (Section~\ref{sec:intro}) distinguishes ``agent'' (three minimal properties) from ``agentic system'' (six operational properties). Table~\ref{tab:terminology-usage} provides guidance.
 
 \begin{table}[htbp]
 \centering
 \small
-\begin{tabular}{@{}clll@{}}
+\begin{tabular}{@{}rll@{}}
 \toprule
-\textbf{Properties} & \textbf{Term} & \textbf{When to Use} & \textbf{Notes} \\
+\textbf{Count} & \textbf{Term} & \textbf{Notes} \\
 \midrule
-3 (G+P+A) & \keyterm{agent} & Meets baseline & Includes thermostats, simple systems \\
-6 (all) & \keyterm{agentic system} & Production-ready & Required for professional deployment \\
-6 via AI/ML & \keyterm{agentic AI} & AI-powered & AI implements the six properties \\
-\cmidrule(lr){1-4}
-4-5 & agent with... & Partial implementation & Specify which properties present \\
-1-2 & (avoid ``agent'') & Insufficient & Use ``tool,'' ``function,'' ``classifier'' \\
+3 & agent & G+P+A baseline \\
+6 & agentic system & Production-ready \\
+6 & agentic AI & AI-powered variant \\
+\cmidrule(lr){1-3}
+4–5 & ``agent with...'' & Specify missing properties \\
+1–2 & (avoid ``agent'') & Use ``tool,'' ``classifier'' \\
 \bottomrule
 \end{tabular}
-\caption{Terminology usage based on property count. G=goals, P=perception, A=action. \textit{Accessibility:} Decision table with 4 columns (Properties, Term, When to Use, Notes) and 6 rows. Row 1: 3 properties (G+P+A) = agent (baseline). Row 2: 6 properties = agentic system (production-ready). Row 3: 6 via AI/ML = agentic AI. Row 4: 4--5 properties = agent with specific properties noted. Row 5--6: 1--2 properties insufficient for ``agent'' label, use ``tool/function/classifier'' instead.}
+\caption{Terminology by property count.}
 \label{tab:terminology-usage}
 \end{table}
 
-Precision requirements vary by context. Regulatory filings and academic papers demand explicit enumeration of properties and clear distinction between agent and agentic system. Informal discussions permit looser usage—``agent'' for entities meeting the 3-property baseline, with specific properties noted when relevant: ``has goals and perception but limited adaptation.'' Marketing claims should specify which properties are present rather than using ``agentic AI'' without substantiation.
+Precision requirements vary by context. Regulatory filings and academic papers demand explicit enumeration of properties and clear distinction between agent and agentic system. Informal discussions permit looser usage—``agent'' for entities meeting the three-property baseline, with specific properties noted when relevant. Marketing claims should specify which properties are present rather than using ``agentic AI'' without substantiation.
 
-When in doubt, use the 6-question rubric (\autoref{sec:rubric-6q}). It provides clear, answerable criteria that cut through ambiguity.
+When in doubt, use the six-question rubric (\autoref{sec:rubric-6q}). It provides clear, answerable criteria that cut through ambiguity.
 
 \begin{keybox}[unbreakable,colback=bg-key, colframe=key-base, boxrule=3pt, title={\textbf{Key Takeaways}}]
 \textbf{At this point you can:}
 \begin{itemize}
-\item Define agents and agentic systems using the 6-property framework
-\item Recognize agents using the 6-question rubric
+\item Define agents and agentic systems using the six-property framework
+\item Recognize agents using the six-question rubric
 \item Distinguish agents from sophisticated non-agents
 \item Evaluate marketing claims about ``agentic AI''
-\item Use terminology correctly in professional contexts
 \end{itemize}
-
-\textbf{Remaining sections provide:} Historical evolution (Section~\ref{sec:history}), disciplinary perspectives (Section~\ref{sec:disciplines}), analytical dimensions (Section~\ref{sec:dimensions}), and synthesis (Section~\ref{sec:furtherlearning}).
 \end{keybox}
 
-\bigskip
-\noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}
+With these practical tools in hand, the remaining sections provide context rather than prerequisites. Readers focused on immediate application can proceed directly to Chapter~2 (\textit{How to Design an Agent}) or Chapter~3 (\textit{How to Govern an Agent}). Those seeking deeper grounding will find value in what follows: Section~\ref{sec:history} traces how these concepts evolved, Section~\ref{sec:disciplines} examines how different fields approach agency, Section~\ref{sec:dimensions} introduces analytical dimensions for comparing systems, and Section~\ref{sec:synthesis} synthesizes requirements for professional deployment.

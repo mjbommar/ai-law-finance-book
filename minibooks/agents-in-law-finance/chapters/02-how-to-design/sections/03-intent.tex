@@ -1,7 +1,7 @@
 % ============================================================================
 % 03-intent.tex
 % Q2: How Does an Agent Understand What's Being Asked?
-% Part of: Chapter 07 - Agents Part II: How to Design an Agent
+% Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
 \section{How Does an Agent Understand What's Being Asked?}
@@ -31,6 +31,7 @@ Instructions are where work begins, but they are rarely complete specifications.
 Pre-LLM systems handled instructions through rigid steps: matching exact words, filling forms, simple if-then checklists. These systems worked for narrow domains with controlled vocabularies but broke on natural language variation. ``Find cases on personal jurisdiction'' and ``What's the law on where you can sue someone?'' express similar meanings but look nothing alike to a keyword matcher.
 
 \begin{definitionbox}[title={Intent}]
+\glsadd{intent}
 	\keyterm{Intent} is the underlying purpose, constraints, and success criteria behind an instruction. Intent captures the human meaning---what the user actually wants, not just what they said. Where an instruction might be ``review this credit agreement,'' the intent might be ``identify material risks to the lender by tomorrow for the partner's client call.''
 \end{definitionbox}
 
@@ -41,7 +42,8 @@ The gap between instruction and intent has always existed; what has changed is o
 Despite these capabilities, intent understanding remains imperfect. As conversations extend, LLMs may lose track of earlier context or constraints. When clarification is needed, LLMs sometimes proceed with a default interpretation rather than asking, resulting in a ``helpful but wrong'' failure: the agent does \textit{something} reasonable rather than confirming it understood correctly. Professionals also communicate through implication. Phrases like ``This needs to be right'' signal high stakes, while ``When you get a chance'' signals low urgency. These signals may not be explicitly parsed by current models.
 
 \begin{definitionbox}[title={Goal}]
-	A \keyterm{goal} is the machine-readable specification that intent points toward---the structured outcome that would satisfy the request. Goals connect to the GPA+IAT framework introduced in the previous chapter: an agent pursues goals through perception and action. Where intent is ``identify material risks to the lender by tomorrow,'' the goal is ``produce a lender-risk memo that meets firm policy and is ready for partner review.''
+\glsadd{goal}
+	A \keyterm{goal} is the machine-readable specification that intent points toward---the structured outcome that would satisfy the request. As Chapter~1 established, the GPA+IAT framework describes how an agent pursues goals through perception and action. Where intent is ``identify material risks to the lender by tomorrow,'' the goal is ``produce a lender-risk memo that meets firm policy and is ready for partner review.''
 \end{definitionbox}
 
 Goals provide the target for planning and the criterion for termination. An agent that understands the goal can determine whether its work is complete: does this memo identify the material risks? Does it meet firm standards? Is it ready for the partner? Without a clear goal, the agent cannot know when to stop---the ``runaway associate'' problem of endless research without a deliverable.
@@ -63,7 +65,7 @@ The flow from instruction to task is: \textbf{Instruction} $\rightarrow$ \textbf
 
 Traditional enterprise systems classified work using explicit \keyterm{routing rules}: fixed logic that checked message details and forwarded them to the right handler. A court filing tagged \texttt{matter\_id=12345} goes straight to litigation monitoring; a portfolio company's SEC filing routes to compliance review. This pattern dominated middleware architecture for decades: message queues, \keyterm{enterprise service buses (ESBs)}, and workflow engines functioned like a mailroom sorting notices to the right department.
 
-LLM-based agentic systems replace explicit routing logic with semantic reasoning. Rather than maintaining explicit rules for every event type, the model \textit{understands} what kind of work this is. ``Review this credit agreement'' and ``Check this loan doc for problems'' express similar intents despite different words; the LLM recognizes both as document review tasks without explicit rules mapping each phrase to a handler.
+LLM-based agentic systems replace explicit routing logic with semantic reasoning. Instead of maintaining explicit rules for every event type, the model \textit{understands} what kind of work this is. ``Review this credit agreement'' and ``Check this loan doc for problems'' express similar intents despite different words; the LLM recognizes both as document review tasks without explicit rules mapping each phrase to a handler.
 
 This architectural shift creates two primary tensions in system design.
 
@@ -196,7 +198,7 @@ Effective clarification has four characteristics. It is specific, asking ``Which
 	\textit{Best}: ``You asked to reduce tech exposure. Should I (a) sell tech to 25\% target, (b) hedge with options, or (c) add non-tech positions? Which deadline matters—this week or month-end reporting?''
 \end{quote}
 
-Research has documented that LLMs sometimes select a default interpretation rather than asking for clarification, even when ambiguity is significant \parencite{zhang2024clarifying,wang2024askwhenneed}. This ``proceed without asking'' behavior creates real risk: the agent interprets ``review the contract'' as a surface-level summary when the user expected deep issue-spotting, delivering work product that is technically responsive but wrong.
+Research has documented that LLMs sometimes select a default interpretation instead of asking for clarification, even when ambiguity is significant \parencite{zhang2024clarifying,wang2024askwhenneed}. This ``proceed without asking'' behavior creates real risk: the agent interprets ``review the contract'' as a surface-level summary when the user expected deep issue-spotting, delivering work product that is technically responsive but wrong.
 
 Several strategies can mitigate this tendency: prompt engineering that emphasizes clarification for ambiguous requests, confidence thresholds that trigger clarification below a certainty level, user training to provide detailed initial instructions, and checkpoint reviews before significant work begins. From a governance perspective, teams should monitor for cases where the agent proceeded confidently but delivered unexpected results. These cases may indicate calibration problems in ambiguity detection.
 
@@ -212,7 +214,7 @@ Ambiguity detection assumes the user has clear intent that was merely expressed 
 	\textbf{Unexamined tradeoffs}: The user may not have considered tradeoffs they would care about if surfaced---speed versus thoroughness, cost versus quality, brevity versus nuance.
 \end{keybox}
 
-When an agent detects these deeper problems, it should surface the conflict rather than silently resolving it: ``You asked for a one-page summary, but covering the indemnification, representations, and covenant issues adequately would require three to four pages. Would you prefer (a) a one-page overview that flags issues without detailed analysis, (b) a longer memo with full analysis, or (c) detailed treatment of just one area?'' This is harder than detecting ambiguous expression because it requires recognizing when the user's own mental model is incomplete or conflicted---and surfacing that recognition without appearing to second-guess or condescend.
+When an agent detects these deeper problems, it should surface the conflict instead of silently resolving it: ``You asked for a one-page summary, but covering the indemnification, representations, and covenant issues adequately would demand three to four pages. Would you prefer (a) a one-page overview that flags issues without detailed analysis, (b) a longer memo with full analysis, or (c) detailed treatment of just one area?'' This is harder than detecting ambiguous expression because it needs recognizing when the user's own mental model is incomplete or conflicted---and surfacing that recognition without appearing to second-guess or condescend.
 
 % ----------------------------------------------------------------------------
 % Constraint Identification
@@ -250,9 +252,9 @@ Before executing, agents should validate their understanding of intent. Several 
 
 \keyterm{Reflection} and summarization involve the agent pausing—much like an associate double-checking their notes—to restate its understanding before proceeding, giving the user an opportunity to correct misunderstandings before work begins. \keyterm{Chunked validation}, like partner check-ins after each memo section, breaks complex tasks into phases rather than validating all at once. After completing research, the agent summarizes findings and confirms direction before drafting. After drafting, it confirms the approach before finalizing. Each checkpoint prevents error propagation.
 
-Confidence signaling requires the agent to indicate how confident it is in its own understanding. When confidence is high, the agent can proceed with light oversight; when confidence is low, the right move is to pause and ask for clarification rather than press ahead. Clear confidence signaling helps users decide how much review is needed and whether to treat the output as a draft, a starting point, or a near-final product.
+Confidence signaling calls for the agent to indicate how confident it is in its own understanding. When confidence is high, the agent can proceed with light oversight; when confidence is low, the right move is to pause and ask for clarification instead of pressing ahead. Clear confidence signaling helps users decide how much review is needed and whether to treat the output as a draft, a starting point, or a near-final product.
 
-Consider how intent extraction and validation work together for a legal task. Given the instruction ``Review this credit agreement for risks,'' the agent classifies this as a document review task and detects that ``risks'' is ambiguous (risks to whom? what types?). Context gathering reveals this is a lender-side engagement for a senior secured facility. The agent infers implicit constraints (focus on lender risks, prioritize material issues, assume current market terms as baseline) and clarifies: ``I'll review from the lender's perspective, focusing on credit risk, collateral coverage, and covenant adequacy. Should I also flag documentation risks (drafting issues, missing provisions) or focus only on substantive credit terms?''
+To illustrate, observe how intent extraction and validation work together for a legal task. Given the instruction ``Review this credit agreement for risks,'' the agent classifies this as a document review task and detects that ``risks'' is ambiguous (risks to whom? what types?). Context gathering reveals this is a lender-side engagement for a senior secured facility. The agent infers implicit constraints (focus on lender risks, prioritize material issues, assume current market terms as baseline) and clarifies: ``I'll review from the lender's perspective, focusing on credit risk, collateral coverage, and covenant adequacy. Should I also flag documentation risks (drafting issues, missing provisions) or focus only on substantive credit terms?''
 
 \begin{center}
 	\begin{tikzpicture}[
@@ -401,14 +403,14 @@ The same pattern applies to financial tasks. Given the instruction ``Rebalance t
 	\end{itemize}
 
 	\vspace{0.5em}
-	Effective agents surface these discoveries through clarification rather than proceeding with outdated or impossible goals. Intent understanding is iterative, not instantaneous.
+	Effective agents surface these discoveries through clarification instead of proceeding with outdated or impossible goals. Intent understanding is iterative, not instantaneous.
 \end{keybox}
 
 % ----------------------------------------------------------------------------
 % Transition to Q3
 % ----------------------------------------------------------------------------
 
-Intent understanding connects to other framework questions. Memory (\Cref{sec:agents2-memory}) improves intent extraction over time by preserving user preferences, matter history, and firm norms. Planning (\Cref{sec:agents2-planning}) depends on clear intent; extracted goals feed the planning system, while ambiguous intent propagates through the plan as uncertainty. Governance must address intent misalignment as a core risk, verifying goal alignment before deployment and monitoring for drift during operation. \href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}} examines these controls through the lens of goal dynamics calibration, distinguishing static, adaptive, and negotiated goals and specifying appropriate oversight for each.
+Intent understanding connects to other framework questions. Memory (\Cref{sec:agents2-memory}) improves intent extraction over time by preserving user preferences, matter history, and firm norms. Planning (\Cref{sec:agents2-planning}) depends on clear intent; extracted goals feed the planning system, while ambiguous intent propagates through the plan as uncertainty. Governance must address intent misalignment as a core risk, verifying goal alignment before deployment and monitoring for drift during operation. Chapter~3 (\textit{How to Govern an Agent}) examines these controls through the lens of goal dynamics calibration, distinguishing static, adaptive, and negotiated goals and specifying appropriate oversight for each.
 
 Understanding intent bridges the gap between what users say (instruction) and what they mean (intent), shaping the goals and tasks the agent will plan. Clarification beats guessing when ambiguity is significant and stakes are high. Constraints---time, scope, audience, compliance, and budget---matter as much as goals. Validation prevents wasted effort by confirming understanding before significant work begins.
 

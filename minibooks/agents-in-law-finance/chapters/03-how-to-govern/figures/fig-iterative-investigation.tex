@@ -25,9 +25,9 @@
     },
     decision/.style={
         rounded corners=2pt,
-        draw=amber-600,
+        draw=key-base,
         line width=1pt,
-        fill=amber-100,
+        fill=bg-key,
         minimum width=1.6cm,
         minimum height=1cm,
         inner sep=3pt,
@@ -36,9 +36,9 @@
     },
     termination/.style={
         rounded corners=4pt,
-        draw=red-600,
+        draw=caution-base,
         line width=1pt,
-        fill=red-100,
+        fill=bg-caution,
         minimum width=2.6cm,
         minimum height=1cm,
         inner sep=4pt,
@@ -47,25 +47,25 @@
     },
     lowrisk/.style={
         rounded corners=4pt,
-        draw=gray-500,
+        draw=note-base,
         line width=0.6pt,
-        fill=gray-100,
+        fill=bg-note,
         minimum width=2.2cm,
         minimum height=0.6cm,
         font=\scriptsize,
         align=center
     },
-    arrow/.style={->, thick, gray-700, >=stealth, line width=1pt},
-    loop arrow/.style={->, thick, green-900, >=stealth, line width=1.2pt},
-    label text/.style={font=\tiny, text=gray-600}
+    arrow/.style={->, thick, text-secondary, >=stealth, line width=1pt},
+    loop arrow/.style={->, thick, example-dark, >=stealth, line width=1.2pt},
+    label text/.style={font=\tiny, text=text-muted}
 ]
 
 % === CYCLE 1 with detail box ===
-\node[cycle box=slate-700] (cycle1) at (-2.5,0) {
-    \textbf{\textcolor{slate-900}{Cycle 1: Initial Risk Scoring}}
+\node[cycle box=definition-base] (cycle1) at (-2.5,0) {
+    \textbf{\textcolor{definition-dark}{Cycle 1: Initial Risk Scoring}}
 };
 
-\node[detail box=slate-700, anchor=north west] (c1details) at (1.5,0.6) {
+\node[detail box=definition-base, anchor=north west] (c1details) at (1.5,0.6) {
     \textbf{Risk Criteria:}\\[2pt]
     High-value (>\$500K): +3\\
     Overdue >90 days: +2\\
@@ -85,11 +85,11 @@
 };
 
 % === CYCLE 2-N with detail box ===
-\node[cycle box=green-900, below=1.5cm of dec1] (cycle2) {
-    \textbf{\textcolor{green-900}{Cycles 2--N: Adaptive Investigation}}
+\node[cycle box=example-dark, below=1.5cm of dec1] (cycle2) {
+    \textbf{\textcolor{example-dark}{Cycles 2--N: Adaptive Investigation}}
 };
 
-\node[detail box=green-900, anchor=north west] (c2details) at (1.5,-3.2) {
+\node[detail box=example-dark, anchor=north west] (c2details) at (1.5,-3.2) {
     \textbf{Actions:}\\
     Request documents\\
     Analyze payment patterns\\
@@ -107,18 +107,18 @@
 
 % === TERMINATION OUTCOMES ===
 \node[termination, below=1cm of dec2, xshift=-3cm] (term1) {
-    \textbf{\textcolor{red-900}{Sufficient Evidence}}\\
-    \textcolor{gray-600}{(conf.\ >0.85)}
+    \textbf{\textcolor{caution-dark}{Sufficient Evidence}}\\
+    \textcolor{text-muted}{(conf.\ >0.85)}
 };
 
 \node[termination, below=1cm of dec2] (term2) {
-    \textbf{\textcolor{red-900}{Red Flag}}\\
-    \textcolor{gray-600}{$\rightarrow$ Escalate}
+    \textbf{\textcolor{caution-dark}{Red Flag}}\\
+    \textcolor{text-muted}{$\rightarrow$ Escalate}
 };
 
 \node[termination, below=1cm of dec2, xshift=3cm] (term3) {
-    \textbf{\textcolor{red-900}{Max Cycles}}\\
-    \textcolor{gray-600}{(5 reached)}
+    \textbf{\textcolor{caution-dark}{Max Cycles}}\\
+    \textcolor{text-muted}{(5 reached)}
 };
 
 % === ARROWS ===
@@ -140,7 +140,7 @@
 \draw[arrow] (dec2.south) -- ++(0,-0.3) -| (term3.north);
 
 % Loop back arrow - on left side, wide enough to clear the box
-\draw[loop arrow, rounded corners=6pt] (dec2.west) -- ++(-4.5,0) node[below, font=\scriptsize, text=green-900] {Next cycle} -- ++(0,2.3) -- (cycle2.west);
+\draw[loop arrow, rounded corners=6pt] (dec2.west) -- ++(-4.5,0) node[below, font=\scriptsize, text=example-dark] {Next cycle} -- ++(0,2.3) -- (cycle2.west);
 
 \end{tikzpicture}
 \caption{Iterative investigation workflow with explainable adaptation. Cycle~1 scores accounts using risk criteria; high-risk accounts (score $\geq$6) proceed to iterative investigation. Cycles~2--N gather evidence and adapt strategy based on findings. Investigation terminates when sufficient evidence is obtained, a red flag requires escalation, or maximum cycles are reached.}

@@ -1,7 +1,7 @@
 % ============================================================================
 % 10-delegation.tex
 % Q9: How Does an Agent Work with Other Agents?
-% Part of: Chapter 07 - Agents Part II: How to Design an Agent
+% Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
 \section{How Does an Agent Work with Other Agents?}
@@ -11,16 +11,17 @@
 % Opening: Q9 Framing and Organizational Analogy
 % ----------------------------------------------------------------------------
 
-Complex matters require coordination. An M\&A partner does not execute everything personally---they coordinate specialists, with corporate counsel reviewing governance, tax specialists analyzing structure, and antitrust counsel assessing regulatory risk. Each specialist contributes deep domain expertise while the partner orchestrates: defining deliverables, integrating work products, and synthesizing conclusions for the client.
+Complex matters require coordination. An M\&A partner does not execute everything personally; they coordinate specialists, with corporate counsel reviewing governance, tax specialists analyzing structure, and antitrust counsel assessing regulatory risk. Each specialist contributes deep domain expertise while the partner orchestrates: defining deliverables, integrating work products, and synthesizing conclusions for the client.
 
 A portfolio manager coordinates similarly, with analysts providing company analysis, traders handling execution, risk managers monitoring exposure, and compliance officers verifying adherence. Complex trades require all these perspectives because no single person possesses all necessary expertise.
 
-Agentic systems face the same coordination challenge. A single agent trying to do everything quickly exceeds its competence, permission boundaries, or context limits. Multi-agent architectures mirror professional teams: specialized agents with deep expertise, orchestrators that coordinate them, and structured protocols that enable seamless collaboration.
+\glsadd{multi-agent-system}Agentic systems face the same coordination challenge. A single agent trying to do everything quickly exceeds its competence, permission boundaries, or context limits. Multi-agent architectures mirror professional teams: specialized agents with deep expertise, orchestrators that coordinate them, and structured protocols that support seamless collaboration.
 
 \begin{definitionbox}[title={Delegation}]
+\glsadd{delegation}
 \keyterm{Delegation} assigns subtasks from one agent (the coordinator) to another (the specialist). Unlike escalation (agent to human), delegation is agent to agent. The coordinator defines \textit{what} needs to be done; the specialist determines \textit{how}.
 
-Delegation enables parallelization (multiple specialists work simultaneously), specialization (each agent is optimized for its domain), and security isolation (each agent has only the permissions it needs).
+Delegation permits parallelization (multiple specialists work simultaneously), specialization (each agent is optimized for its domain), and security isolation (each agent has only the permissions it needs).
 \end{definitionbox}
 
 % ----------------------------------------------------------------------------
@@ -34,7 +35,7 @@ Several factors drive multi-agent designs \parencite{wu2023autogen,guo2024multia
 
 \textbf{Specialization} allows agents to excel in narrow domains, just as a securities law agent can be optimized for SEC regulations and equipped with EDGAR tools while a tax agent handles tax implications---neither needs expertise in the other's domain. \textbf{Security isolation} enforces least privilege: a research agent can read legal databases but cannot file documents, while a filing agent can submit to CM/ECF but cannot access client financial data; if one agent is compromised, damage is contained. \textbf{Parallel execution} lets independent workstreams proceed simultaneously, so a document review agent can analyze contracts while a research agent investigates legal issues without either waiting for the other.
 
-Two additional factors favor multi-agent designs in production settings. \textbf{Vendor diversity} enables best-of-breed selection---a specialized legal model handles research, a general model handles drafting, and a fast model handles classification---matching capability to task. \textbf{Scale management} addresses context window limits by decomposing tasks across agents, each with focused context, rather than cramming everything into one overwhelmed process.
+Two additional factors favor multi-agent designs in production settings. \textbf{Vendor diversity} allows best-of-breed selection, matching capability to task. A specialized legal model handles research, a general model handles drafting, and a fast model handles classification. \textbf{Scale management} addresses context window limits by decomposing tasks across agents, each with focused context, instead of cramming everything into one overwhelmed process.
 
 These benefits come with tradeoffs: coordination overhead increases communication costs, debugging complexity grows when failures span agents, and the attack surface expands with each additional component. The protocols discussed in \Cref{sec:agents2-mcp-perception} and the security controls in \Cref{sec:agents2-action-security} help manage these risks.
 
@@ -54,19 +55,19 @@ Just as MCP standardizes how agents access tools (\Cref{sec:agents2-mcp-percepti
 \subsection{Multi-Agent Patterns}
 \label{sec:agents2-orchestration}
 
-Three patterns organize multi-agent collaboration, each with distinct tradeoffs \parencite{wang2024tdag}.
+\glsadd{tool-orchestration}Three patterns organize multi-agent collaboration, each with distinct tradeoffs \parencite{wang2024tdag}.
 
-\textbf{Sequential Delegation} processes work in series: the Coordinator delegates to a Research Agent, whose output flows to an Analysis Agent, then to a Drafting Agent. This pattern is simple to implement and debug---each handoff is clear---but slow, as each stage must wait for the previous one.
+\textbf{Sequential Delegation} processes work in series: the Coordinator delegates to a Research Agent, whose output flows to an Analysis Agent, then to a Drafting Agent. This pattern is simple to implement and debug (each handoff is clear) but slow, as each stage must wait for the previous one.
 
 \textbf{Parallel Delegation} runs independent workstreams simultaneously. Securities, Tax, and Employment Agents can analyze an acquisition concurrently while the Coordinator integrates findings afterward. This pattern trades coordination complexity for speed, but only works when tasks are truly independent; dependencies between specialists require careful orchestration.
 
 \textbf{Hierarchical Delegation} creates nested authority structures: a Lead Due Diligence Agent delegates to Document Review and Legal Research sub-agents, who may further delegate to specialized tools. This pattern enables deep task decomposition for complex matters but introduces orchestration overhead and debugging challenges when failures occur deep in the hierarchy. Hierarchical delegation mirrors the hierarchical planning pattern in \Cref{sec:agents2-planning-patterns}, where decomposition begins with a high-level goal and recursively breaks it into sub-goals. The key difference: planning structures may be internal reasoning steps within a single agent, while delegation structures explicitly distribute work across distinct agent boundaries with attendant coordination and audit requirements.
 
-Figure~\ref{fig:agents2-orchestration-patterns} illustrates these three approaches. Most production systems blend multiple patterns: parallel agents handle independent analyses while hierarchical structures decompose complex, tightly-coupled tasks. The choice depends on task structure---independent subtasks favor parallelism, dependent workflows favor sequencing, and complex matters with natural subdivisions favor hierarchy.
+\Cref{fig:agents2-orchestration-patterns} illustrates these three approaches. Most production systems blend multiple patterns: parallel agents handle independent analyses while hierarchical structures decompose complex, tightly-coupled tasks. The choice depends on task structure. Independent subtasks favor parallelism, dependent workflows favor sequencing, and complex matters with natural subdivisions favor hierarchy.
 
 \input{figures/fig-orchestration-patterns}
 
-Consider M\&A due diligence as an example. The Orchestrator delegates to specialists in parallel: a Document Processing Agent accesses the data room while a Financial Analysis Agent queries financial databases. Each specialist may use hierarchical delegation internally, with sub-agents handling specific document types or analysis categories. The specialists return structured Artifacts, which the Orchestrator synthesizes into a unified assessment.
+M\&A due diligence illustrates this pattern. The Orchestrator delegates to specialists in parallel: a Document Processing Agent accesses the data room while a Financial Analysis Agent queries financial databases. Each specialist may use hierarchical delegation internally, with sub-agents handling specific document types or analysis categories. The specialists return structured Artifacts, which the Orchestrator synthesizes into a unified assessment.
 
 % ----------------------------------------------------------------------------
 % Multi-Agent Workflows
@@ -132,4 +133,4 @@ The decision rule is straightforward: use MCP for well-defined, auditable operat
 
 Delegation distributes work, creating governance challenges. Accountability becomes complex: does responsibility lie with the coordinator, the specialist, or the approving human? Information barriers must apply to agents just as they do to humans. Audit trails must span the entire delegation tree.
 
-\Cref{sec:agents2-governance} addresses the architectural patterns that enable governance---logging that spans delegation trees, override mechanisms that work across agent boundaries, and privilege enforcement that contains failures. \href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}} then develops the policy layer: delegation authorization, identity management, retention requirements, and organizational accountability.
+\Cref{sec:agents2-governance} addresses the architectural patterns that enable governance: logging that spans delegation trees, override mechanisms that work across agent boundaries, and privilege enforcement that contains failures. Chapter~3 (\textit{How to Govern an Agent}) then develops the policy layer: delegation authorization, identity management, retention requirements, and organizational accountability.

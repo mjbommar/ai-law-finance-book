@@ -7,7 +7,7 @@
 
 % Card frame
 \node[
-    draw=amber-600,
+    draw=key-base,
     line width=1.5pt,
     fill=white,
     minimum width=13.5cm,
@@ -16,7 +16,7 @@
 ] (card) at (0,0) {};
 
 % Header bar
-\fill[amber-600, rounded corners=4pt]
+\fill[key-base, rounded corners=4pt]
     ([yshift=-0.15cm]card.north west) -- ([yshift=-0.15cm]card.north east)
     [rounded corners=0pt] -- ([yshift=-1.1cm]card.north east) -- ([yshift=-1.1cm]card.north west)
     [rounded corners=4pt] -- cycle;
@@ -24,7 +24,7 @@
 % Level name and tagline
 \node[font=\normalsize\bfseries\sffamily, text=white, anchor=west]
     at ([xshift=0.4cm, yshift=-0.45cm]card.north west) {HOTL: Human-on-the-Loop};
-\node[font=\scriptsize\sffamily, text=amber-100, anchor=west]
+\node[font=\scriptsize\sffamily, text=key-light, anchor=west]
     at ([xshift=0.4cm, yshift=-0.85cm]card.north west) {Monitoring with Intervention};
 
 % Left column: Appropriate When
@@ -35,9 +35,9 @@
     align=left
 ] at ([xshift=0.4cm, yshift=-1.4cm]card.north west) {
 \textbf{\textsf{APPROPRIATE WHEN}}\\[4pt]
-\textcolor{amber-900}{$\blacktriangleright$} Actions are moderate-consequence or reversible (customer service responses, preliminary data analysis)\\[3pt]
-\textcolor{amber-900}{$\blacktriangleright$} Real-time human review would create unacceptable latency but oversight remains necessary\\[3pt]
-\textcolor{amber-900}{$\blacktriangleright$} System operates within well-defined boundaries (credit limits, risk parameters)
+\textcolor{key-dark}{$\blacktriangleright$} Actions are moderate-consequence or reversible (customer service responses, preliminary data analysis)\\[3pt]
+\textcolor{key-dark}{$\blacktriangleright$} Real-time human review would create unacceptable latency but oversight remains necessary\\[3pt]
+\textcolor{key-dark}{$\blacktriangleright$} System operates within well-defined boundaries (credit limits, risk parameters)
 };
 
 % Vertical divider

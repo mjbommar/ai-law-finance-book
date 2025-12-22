@@ -71,7 +71,7 @@ pdf: $(PDFFILE)
 		echo "$(CYAN)   Pages: $$pages | Size: $$size$(RESET)"; \
 	fi
 
-$(PDFFILE): $(TEXFILE) $(BIBFILE) preamble.tex preface.tex chapters/*/main.tex
+$(PDFFILE): $(TEXFILE) $(BIBFILE) front-matter/preamble.tex front-matter/preface.tex chapters/*/main.tex
 	@echo "$(BOLD)$(BLUE)$(ARROW) Building $(PDFFILE)...$(RESET)"
 	@if command -v $(LATEXMK) >/dev/null 2>&1; then \
 		echo "$(CYAN)   Using latexmk (smart compilation)$(RESET)"; \
@@ -166,7 +166,7 @@ view: $(PDFFILE)
 wordcount:
 	@echo "$(BOLD)$(BLUE)$(ARROW) Counting words...$(RESET)"
 	@total=0; \
-	for f in preface.tex chapters/*/sections/*.tex; do \
+	for f in front-matter/preface.tex chapters/*/sections/*.tex; do \
 		if [ -f "$$f" ]; then \
 			words=$$(detex "$$f" 2>/dev/null | wc -w); \
 			total=$$((total + words)); \
@@ -186,6 +186,9 @@ clean:
 	@rm -f $(MAIN).run.xml $(MAIN).toc $(MAIN).lot $(MAIN).lof
 	@rm -f $(MAIN).synctex.gz $(MAIN).synctex
 	@rm -f texput.log
+	@# Clean glossary files
+	@rm -f $(MAIN).glo $(MAIN).gls $(MAIN).glg $(MAIN).ist
+	@rm -f $(MAIN).acn $(MAIN).acr $(MAIN).alg
 	@# Clean chapter auxiliary files
 	@find chapters -name "*.aux" -delete 2>/dev/null || true
 	@echo "$(GREEN)$(CHECK) Cleaned auxiliary files$(RESET)"
@@ -217,8 +220,7 @@ zip: $(PDFFILE)
 	@zip -r agents-in-law-finance.zip \
 		$(PDFFILE) \
 		$(TEXFILE) \
-		preamble.tex \
-		preface.tex \
+		front-matter/ \
 		chapters/ \
 		bib/ \
 		Makefile \

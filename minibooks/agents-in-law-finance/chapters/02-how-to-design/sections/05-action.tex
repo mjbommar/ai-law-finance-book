@@ -1,7 +1,7 @@
 % ============================================================================
 % 05-action.tex
 % Q4: How Does an Agent Make Things Happen?
-% Part of: Chapter 07 - Agents Part II: How to Design an Agent
+% Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
 \section{How Does an Agent Make Things Happen?}
@@ -13,10 +13,11 @@
 
 A junior associate's role extends beyond research to producing work product. They draft memos, send emails, file documents, and schedule meetings. A trader's role extends beyond analysis to execution. They enter orders, route trades, and confirm allocations. Value derives from action, not just observation.
 
-Agentic systems face the same imperative. An agent that only reads---searching databases, retrieving documents, analyzing information---produces no deliverable. To complete tasks, agents must \textit{act}: generate documents, send communications, update systems, or execute transactions. Action implements the ``A'' in the GPA+IAT framework introduced in Part I \parencite{bommarito2025whatisanagent}.
+Agentic systems face the same imperative. Where Chapter~1 distinguished perception (observing the world) from action (changing it), we now examine how to design and govern action capabilities. An agent that only reads---searching databases, retrieving documents, analyzing information---produces no deliverable. To complete tasks, agents must \textit{act}: generate documents, send communications, update systems, or execute transactions. This action capability transforms agents from passive research tools into systems that deliver concrete work product.
 
 \begin{definitionbox}[title={Action Tools}, breakable=false]
-	\keyterm{Action tools} enable agents to change the state of external systems. Unlike perception tools (\Cref{sec:agents2-perception}), which are read-only, action tools \textit{write}: they file documents, send messages, execute trades, and update databases. Once executed, some actions cannot be undone.
+\glsadd{action}
+	\keyterm{Action tools} allow agents to change the state of external systems. Unlike perception tools (\Cref{sec:agents2-perception}), which are read-only, action tools \textit{write}: they file documents, send messages, execute trades, and update databases. Once executed, some actions cannot be undone.
 
 	The distinction between perception and action is fundamental to governance. Perception risks involve internal errors (accessing wrong information). Action risks involve external consequences (harming clients, violating regulations, creating liability).
 \end{definitionbox}
@@ -59,7 +60,7 @@ These conceptual foundations have practical implications for how we design and e
 \subsection{Action Tool Categories}
 \label{sec:agents2-action-categories}
 
-Action tools vary in consequence. The critical dimension is \keyterm{reversibility}: the cost and feasibility of undoing an action. Research on rollback-augmented systems demonstrates that selective state rollback reduces catastrophic failures in safety-sensitive environments \parencite{grinsztajn2021reversibility}. We categorize action tools along a spectrum from easily undone to permanent.
+Action tools vary in consequence. The critical dimension is \keyterm{reversibility}: the cost and feasibility of undoing an action. Research on rollback-augmented systems shows that selective state rollback reduces catastrophic failures in safety-sensitive environments \parencite{grinsztajn2021reversibility}. We categorize action tools along a spectrum from easily undone to permanent.
 
 \textbf{Communication tools} send information to others. Internal communications (emails to colleagues, Slack messages) are \textit{partially reversible}. You can follow up with corrections, though you cannot unsend. External communications (emails to clients, letters to counsel) carry higher stakes because recipients are outside your control. Retractions are possible but damage professional reputation. Automated alerts (compliance notifications, reminders) are generally low-risk if templated. Governance typically relies on post-hoc review for internal actions and pre-approval for external ones.
 
@@ -76,7 +77,7 @@ Action tools vary in consequence. The critical dimension is \keyterm{reversibili
 \subsection{The Reversibility Framework}
 \label{sec:agents2-reversibility}
 
-Reversibility dictates oversight structure. Consider how you delegate to a junior associate: fully reversible work (research, drafting) proceeds independently with post-hoc review; partially reversible work (internal emails) gets checkpoint review; largely irreversible work (client communications, filings) requires pre-approval; and irreversible work (trades, wires) demands multi-party approval. \Cref{tab:agents2-reversibility} summarizes this mapping. Agent governance must enforce controls corresponding to each action's reversibility classification.
+Reversibility dictates oversight structure. Examine how you delegate to a junior associate: fully reversible work (research, drafting) proceeds independently with post-hoc review; partially reversible work (internal emails) gets checkpoint review; largely irreversible work (client communications, filings) requires pre-approval; and irreversible work (trades, wires) demands multi-party approval. \Cref{tab:agents2-reversibility} summarizes this mapping. Agent governance must enforce controls corresponding to each action's reversibility classification.
 
 \begin{table}[htbp]
 	\centering
@@ -109,6 +110,7 @@ This mapping from reversibility to oversight is not abstract---it directly deter
 \subsection{MCP Tools and Prompts for Action}
 \label{sec:agents2-mcp-action}
 
+\glsadd{mcp}
 The Model Context Protocol (MCP) defines two capability types relevant to action governance.
 
 \keyterm{MCP Tools} are executable functions that change state. Unlike read-only Resources, Tools create documents, send communications, submit filings, and execute transactions. Tool manifests should include risk metadata: reversibility classification, approval requirements, and audit logging needs. This allows the MCP Host to enforce controls automatically.
@@ -134,18 +136,18 @@ All action tools must implement core security controls:
 	\item \textbf{Authentication:} Verify the agent's identity via service accounts with strong credentials.
 	\item \textbf{Authorization:} Enforce role-based access control (RBAC) and least privilege.
 	\item \textbf{Input Validation:} Reject malformed requests by validating all parameters against strict schemas.
-	\item \textbf{Output Confirmation:} Require human approval before executing high-stakes actions.
+	\item \textbf{Output Confirmation:} Mandate human approval before executing high-stakes actions.
 	\item \textbf{Rate Limiting:} Cap action frequency to prevent runaway execution.
 	\item \textbf{Audit Logging:} Record every action with context (agent, timestamp, parameters, matter/client).
 \end{itemize}
 
-Beyond core controls, specific threats require targeted mitigations \parencite{owasp-llm-top10,liu2024promptinjection}:
+Beyond core controls, specific threats call for targeted mitigations \parencite{owasp-llm-top10,liu2024promptinjection}:
 
-\textbf{Prompt Injection via Action Parameters.} Adversaries may embed malicious instructions in data that the agent processes and passes to tools. Mitigation requires sanitizing all parameters and never passing raw user input directly to sensitive action interfaces.
+\textbf{Prompt Injection via Action Parameters.} Adversaries may embed malicious instructions in data that the agent processes and passes to tools. Mitigation demands sanitizing all parameters and never passing raw user input directly to sensitive action interfaces.
 
 \textbf{Privilege Escalation via Tool Chaining.} An agent might combine multiple low-privilege tools to achieve a high-privilege outcome. Mitigation involves analyzing tool combinations and requiring approval for sequences that cross security boundaries.
 
-\textbf{Action Replay.} An attacker might capture a valid action request (e.g., "Pay \$100") and replay it multiple times. Mitigation requires \keyterm{nonces} (unique, one-time numbers) or timestamps to ensure each request is processed only once.
+\textbf{Action Replay.} An attacker might capture a valid action request (e.g., "Pay \$100") and replay it multiple times. Mitigation demands \keyterm{nonces} (unique, one-time numbers) or timestamps to ensure each request is processed only once.
 
 % ----------------------------------------------------------------------------
 % Approval Workflows
@@ -154,7 +156,7 @@ Beyond core controls, specific threats require targeted mitigations \parencite{o
 \subsection{Approval Workflows}
 \label{sec:agents2-approval}
 
-For non-reversible actions, the agent prepares and the human approves \parencite{parasuraman2000automation}. These approval patterns operate alongside escalation logic (\Cref{sec:agents2-escalation}), which handles scenarios where human judgment is required regardless of the agent's confidence. We define three patterns for this division of responsibility.
+For non-reversible actions, the agent prepares and the human approves \parencite{parasuraman2000automation}. These approval patterns operate alongside escalation logic (\Cref{sec:agents2-escalation}), which handles scenarios where human judgment is needed regardless of the agent's confidence. We define three patterns for this division of responsibility.
 
 The \textbf{Single Approver} pattern suits routine actions with clear authority. The agent completes preparation and presents it to one designated human. \textit{Example:} The agent prepares a draft court filing; the supervising attorney reviews and approves; the agent submits.
 
@@ -162,7 +164,7 @@ The \textbf{Multi-Party Approval} pattern applies to high-stakes actions with si
 
 The \textbf{Escalating Approval} pattern adjusts authority based on risk tiers. \textit{Example:} Trades under \$100k require desk manager approval. Trades between \$100k and \$1M require senior trader approval. Trades over \$1M require CIO approval.
 
-Effective approval requests must enable informed decision-making. The agent should present:
+Effective approval requests must support informed decision-making. The agent should present:
 \begin{itemize}[nosep]
 	\item \textbf{Action:} Clear description of what will happen.
 	\item \textbf{Context:} Why is this needed?
@@ -225,6 +227,4 @@ Action tools are where agentic systems create real-world consequences. Governanc
 
 Perception risks (accessing wrong data) are internal. Action risks (sending wrong emails, executing wrong trades) are external and potentially irreversible. This section established the architectural controls: the Reversibility Framework, approval workflows, and circuit breakers.
 
-\Cref{sec:agents2-memory} addresses memory: how agents maintain context across sessions and learn from experience. Later, \Cref{sec:agents2-escalation} examines when agents should \textit{not} act---recognizing situations that require human decision-making. The interplay between action capability and escalation judgment is central to safety. These capabilities---action controls, memory, and escalation judgment---are then integrated into the governance architecture developed in \Cref{sec:agents2-governance}. As \href{https://papers.ssrn.com/abstract=5911464}{\textit{Governing Agents}} emphasizes, governance policy without governance-aware architecture is unenforceable; the controls established in this section provide the foundation that policy requires.
-
-\pagebreak
+\Cref{sec:agents2-memory} addresses memory: how agents maintain context across sessions and learn from experience. Later, \Cref{sec:agents2-escalation} examines when agents should \textit{not} act---recognizing situations that require human decision-making. The interplay between action capability and escalation judgment is central to safety. These capabilities---action controls, memory, and escalation judgment---are then integrated into the governance architecture developed in \Cref{sec:agents2-governance}. As Chapter~3 (\textit{How to Govern an Agent}) emphasizes, governance policy without governance-aware architecture is unenforceable; the controls established in this section provide the foundation that policy requires.

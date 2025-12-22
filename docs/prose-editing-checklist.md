@@ -154,6 +154,8 @@ Each question maps to a capability every useful agent needs, each capability inv
 
 ### 3.1 When to Use Boxes
 
+For semantic meaning and do/don’t rules by color family, see `docs/box-guide.md`.
+
 **USE boxes for:**
 - Key definitions (definitionbox) - one per major concept
 - Critical warnings or cautions (cautionbox)
@@ -174,6 +176,12 @@ Each question maps to a capability every useful agent needs, each capability inv
 | `keybox` | Actionable guidance, decision frameworks | Amber, prominent |
 | `highlightbox` | Supplementary context, notes | Neutral, subtle |
 | `cautionbox` | Warnings, pitfalls, mistakes | Red, attention-grabbing |
+| `examplebox` | Worked examples, scenarios | Green, concrete |
+| `questionbox` | Self-check prompts | Gray/slate, evaluative |
+| `theorembox` | Formal statements, invariants | Indigo, rigorous |
+| `practicebox` | Exercises, “try it yourself” | Teal, hands-on |
+| `technicalbox` | Optional deep dives | Teal, optional |
+| `listingbox` | Code/prompt/config snippets | Gray, technical |
 
 ### 3.3 Box Internal Structure
 

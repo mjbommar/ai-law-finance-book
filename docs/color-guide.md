@@ -140,9 +140,9 @@ An agent is a computational entity...
 
 **Example:**
 ```latex
-\begin{tcolorbox}[colback=bg-example, colframe=example-base, title={Example: Simple Agent}]
+\begin{examplebox}[title={Example: Simple Agent}]
 Here's how you might implement...
-\end{tcolorbox}
+\end{examplebox}
 ```
 
 #### `key-*` (Amber/Orange)
@@ -168,9 +168,9 @@ The most important distinction is...
 
 **Example:**
 ```latex
-\begin{tcolorbox}[colback=bg-caution, colframe=caution-base, title={Common Mistake}]
+\begin{cautionbox}[title={Common Mistake}]
 Don't confuse agents with...
-\end{tcolorbox}
+\end{cautionbox}
 ```
 
 #### `note-*` (Neutral)
@@ -183,7 +183,7 @@ Don't confuse agents with...
 
 **Example:**
 ```latex
-\begin{highlightbox}[colback=bg-note, colframe=border-note]
+\begin{highlightbox}
 For more background on this topic...
 \end{highlightbox}
 ```
@@ -197,9 +197,9 @@ For more background on this topic...
 
 **Example:**
 ```latex
-\begin{tcolorbox}[colback=bg-theorem, colframe=theorem-base, title={Theorem 1}]
+\begin{theorembox}[title={Theorem 1}]
 For all agents A, if A exhibits autonomy...
-\end{tcolorbox}
+\end{theorembox}
 ```
 
 #### `practice-*` (Teal)
@@ -211,9 +211,9 @@ For all agents A, if A exhibits autonomy...
 
 **Example:**
 ```latex
-\begin{tcolorbox}[colback=bg-practice, colframe=practice-base, title={Exercise}]
+\begin{practicebox}[title={Exercise}]
 Implement an agent that...
-\end{tcolorbox}
+\end{practicebox}
 ```
 
 ### Structural Elements
@@ -1009,10 +1009,154 @@ If you encounter legacy color names in old content, use this mapping:
 
 ---
 
+## Approved Color Patterns (Mini-Book Reference)
+
+Based on visual review, the following color patterns are **approved and recommended** for consistent use across the mini-book:
+
+### ✅ Approved Patterns
+
+#### 1. Professional Document Headers (Legal/Finance)
+
+**Red Header Strip** (for alerts, incidents, critical documents):
+```latex
+fill=red-900           % Header background
+text=white             % Firm name
+text=red-100           % Metadata on header
+```
+*Example: AI System Incident Report (Morrison & Sterling LLP)*
+
+**Blue/Slate Header Strip** (for policies, formal documents):
+```latex
+fill=slate-700         % Header background
+text=white             % Firm name
+text=gray-300          % Metadata on header
+```
+*Example: Artificial Intelligence Acceptable Use Policy (Big Four Accounting LLP)*
+
+#### 2. Educational Semantic Boxes
+
+**Blue/Definition Palette** (formal definitions, theoretical concepts):
+```latex
+colback=bg-definition       % Light blue background
+colframe=border-definition  % Medium blue border
+coltitle=white              % White title on dark header
+```
+*Example: "Six Properties (Mnemonic: GPA + IAT)" box*
+
+**Orange/Key Palette** (important takeaways, hierarchies):
+```latex
+colback=bg-key          % Light amber background
+colframe=key-base       % Orange border
+coltitle=white          % White title on amber header
+```
+*Example: "Three-Level Hierarchy" box*
+
+**Lavender/Theorem Palette** (theoretical results, formal statements):
+```latex
+colback=bg-theorem          % Light indigo/lavender background
+colframe=border-theorem     % Indigo border
+coltitle=white              % White title
+```
+*Example: "Key Theoretical Results" box*
+
+**Green/Example Palette** (concrete examples, demonstrations):
+```latex
+colback=bg-example          % Light green background
+colframe=example-base       % Green border
+text=example-dark           % Dark green header text
+```
+*Example: Any box with title "Example: ..."*
+
+#### 3. Multi-Category Figures (2x2 Grids, Quadrants)
+
+Use the **four semantic colors** to distinguish categories:
+```latex
+% Category 1 - Green (practical, external)
+fill=example-base, text=example-dark
+
+% Category 2 - Blue (formal, human-initiated)
+fill=definition-base, text=definition-dark
+
+% Category 3 - Amber (scheduled, routine)
+fill=key-base, text=key-dark
+
+% Category 4 - Red (alerts, escalation)
+fill=caution-base, text=caution-dark
+```
+*Example: Figure 2.1 "Four channel types for agent triggers"*
+
+#### 4. Flowcharts and Process Diagrams
+
+Use semantic colors for different node types:
+```latex
+% Standard steps
+fill=bg-definition, draw=definition-dark
+
+% Decision points
+fill=amber-100, draw=amber-600
+
+% Termination/outcomes
+fill=red-100, draw=red-600       % Critical
+fill=green-100, draw=green-600   % Success
+fill=gray-100, draw=gray-500     % Neutral
+```
+
+### ❌ Patterns to Avoid
+
+#### 1. Gray/Beige for Examples
+**Wrong:**
+```latex
+\begin{highlightbox}[title={Example: Something}]
+```
+**Right:**
+```latex
+% Create examplebox or use tcolorbox with example colors
+\begin{tcolorbox}[colback=bg-example, colframe=example-base, ...]
+```
+
+#### 2. Raw Color Names in Figures
+**Wrong:**
+```latex
+\colorlet{mycolor}{slate-700}     % Legacy raw name
+fill=amber-600                     % Direct primitive
+```
+**Right:**
+```latex
+fill=definition-base               % Semantic name
+draw=caution-dark                  % Semantic name
+```
+
+#### 3. Inconsistent Layer Mixing
+**Wrong:** Mixing semantic types for no reason
+```latex
+fill=bg-definition, draw=caution-base  % Mismatched types!
+```
+**Right:** Consistent semantic pairing
+```latex
+fill=bg-definition, draw=border-definition
+```
+
+### Box Type Selection Guide
+
+| Content Type | Box Command | Color Family |
+|--------------|-------------|--------------|
+| Formal definitions | `definitionbox` | Blue (definition-*) |
+| Concrete examples | Use tcolorbox with example colors | Green (example-*) |
+| Key takeaways | `keybox` | Amber/Orange (key-*) |
+| Warnings/pitfalls | Use tcolorbox with caution colors | Red (caution-*) |
+| Notes/asides | `highlightbox` | Neutral (note-*) |
+| Theorems/proofs | `theorembox` | Indigo (theorem-*) |
+| Exercises | Use tcolorbox with practice colors | Teal (practice-*) |
+| Chapter overview | `keybox` or custom | Amber (key-*) |
+| Code listings | `listingbox` or custom | Green (example-*) |
+
+---
+
 ## Document Version History
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1 | 2025-12-21 | Added "Approved Color Patterns" section based on mini-book review |
 | 1.0 | 2025-01-31 | Initial comprehensive guide and checklist |
 
 ---

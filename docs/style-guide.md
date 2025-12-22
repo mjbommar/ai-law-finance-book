@@ -302,13 +302,20 @@ Be direct unless genuine uncertainty exists:
 
 ### 8.1 Boxes and Callouts
 
-**Three box types** (defined in main.tex):
+**Semantic boxes** (defined in `preamble.tex`; usage guidance in `docs/box-guide.md`):
 
 | Box Type | Purpose | Color Scheme | Example Use |
 |----------|---------|--------------|-------------|
-| `definitionbox` | Formal definitions | Ice blue + slate border | Core definition of "agent" |
-| `highlightbox` | Context, notes, asides | Cream + neutral border | Etymology notes, historical context |
-| `keybox` | Critical takeaways | Amber + accent border | Stop-here summaries, essential questions |
+| `definitionbox` | Formal definitions | Blue | Core definition of “agent” |
+| `keybox` | Must-remember takeaways | Amber | Stop-here summaries, decision rules |
+| `highlightbox` | Optional context/notes | Neutral | Historical note, nuance, further reading |
+| `cautionbox` | Pitfalls / risks | Red | Compliance pitfall + mitigation |
+| `examplebox` | Worked examples | Green | Concrete scenario, sample artifact |
+| `questionbox` | Self-check prompts | Gray/slate | End-of-section review questions |
+| `theorembox` | Formal statements | Indigo | Invariants, “if X then Y” statements |
+| `practicebox` | Exercises / tasks | Teal | “Try it yourself” with deliverable |
+| `technicalbox` | Optional deep dives | Teal | Protocol/mechanics details |
+| `listingbox` | Code/templates | Gray | Prompt templates, config snippets |
 
 **Usage:**
 ```latex

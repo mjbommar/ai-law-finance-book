@@ -8,14 +8,14 @@
 %   - Part III: How to Govern an Agent (from Chapter 08)
 % ============================================================================
 
-\documentclass[11pt,oneside]{book}
+\documentclass[10pt,twoside,openany]{book}
 
 % ============================================================================
 % PATH CONFIGURATION
 % ============================================================================
 % Enable input path resolution for subfiles and includes
 \makeatletter
-\def\input@path{{./}{chapters/}{chapters/01-what-is-agent/}{chapters/02-how-to-design/}{chapters/03-how-to-govern/}}
+\def\input@path{{./}{front-matter/}{chapters/}{chapters/01-what-is-agent/}{chapters/02-how-to-design/}{chapters/03-how-to-govern/}}
 \makeatother
 
 % Subfiles package for modular chapter compilation
@@ -25,7 +25,12 @@
 % ============================================================================
 % LOAD SHARED PREAMBLE
 % ============================================================================
-\input{preamble}
+\input{front-matter/preamble}
+
+% ============================================================================
+% GLOSSARY ENTRIES
+% ============================================================================
+\input{front-matter/glossary-entries}
 
 % ============================================================================
 % BIBLIOGRAPHY
@@ -115,7 +120,13 @@ December 2025
 % ----------------------------------------------------------------------------
 % PREFACE
 % ----------------------------------------------------------------------------
-\input{preface}
+\input{front-matter/preface}
+\newpage
+
+% ----------------------------------------------------------------------------
+% HOW TO READ THIS BOOK
+% ----------------------------------------------------------------------------
+\input{front-matter/how-to-read}
 \newpage
 
 % ============================================================================
@@ -153,10 +164,10 @@ December 2025
 \backmatter
 
 % ----------------------------------------------------------------------------
-% GLOSSARY (optional)
+% GLOSSARY
 % ----------------------------------------------------------------------------
-% \input{glossary}
-% \newpage
+\printglossary[title={Glossary of Key Terms}]
+\newpage
 
 % ----------------------------------------------------------------------------
 % BIBLIOGRAPHY

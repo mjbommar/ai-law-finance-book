@@ -9,8 +9,9 @@
 % Key synthesis decisions:
 %   - TikZ: Superset of all chapter libraries (9 total)
 %   - TikZ: NO global font override (preserves explicit \tiny, \scriptsize in figures)
-%   - tcolorbox: All 6 box types (definitionbox, highlightbox, keybox,
-%                questionbox, theorembox, listingbox)
+%   - tcolorbox: Core semantic boxes (definitionbox, examplebox, highlightbox,
+%                keybox, cautionbox, questionbox, theorembox, technicalbox,
+%                practicebox, listingbox)
 %   - Listings: Enhanced syntax highlighting from chapter 07
 %   - Ligatures: Enabled (for proper dash rendering -- and ---)
 %   - Colors: Full 4-layer system with legacy compatibility
@@ -25,7 +26,16 @@
 % ============================================================================
 % MODERN TYPOGRAPHY AND LAYOUT
 % ============================================================================
-\usepackage[margin=1.2in, top=1.3in, bottom=1.3in]{geometry}
+% US Trade size: 6in × 9in (standard for professional/technical books)
+% Margins optimized for readability and POD printing
+\usepackage[
+  papersize={6in,9in},
+  inner=0.75in,       % Gutter margin (for binding)
+  outer=0.625in,      % Outside margin
+  top=0.7in,
+  bottom=0.8in,
+  footskip=0.35in
+]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 
@@ -38,7 +48,7 @@
 % Note: Ligatures are enabled to preserve proper dash rendering (-- and ---)
 % If f-ligatures cause print issues, can selectively disable with microtype settings
 \usepackage{setspace}   % Line spacing control
-\setstretch{1.15}       % Slightly increased line spacing for readability
+\setstretch{1.1}        % Line spacing optimized for US Trade size
 
 % Paragraph formatting
 \usepackage{parskip}    % Space between paragraphs instead of indentation
@@ -299,8 +309,9 @@
 % Table row coloring
 \usepackage{colortbl}
 
-% Landscape pages
+% Landscape pages and rotated figures
 \usepackage{pdflscape}
+\usepackage{rotating}  % For sidewaysfigure
 \renewcommand{\arraystretch}{1.3}  % Better row spacing
 
 % ============================================================================
@@ -334,13 +345,11 @@
   importance/.is choice,
   importance/high/.style={
     boxrule=2pt,
-    drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.14},
     top=10pt,bottom=10pt,left=12pt,right=12pt
   },
   importance/medium/.style={},
   importance/low/.style={
     boxrule=0.8pt,
-    drop shadow={opacity=0},
     opacityback=0.92,
     opacityframe=0.6,
     boxed title style={opacityback=0.85},
@@ -358,16 +367,40 @@
   coltitle=white,
   boxrule=1.5pt,
   arc=3pt,
-  left=10pt,
-  right=10pt,
-  top=10pt,
-  bottom=10pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
   breakable,
-  drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.08},
   attach boxed title to top left={yshift=-2mm, xshift=4mm},
   boxed title style={
     colback=definition-dark,
     colframe=definition-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% Example box style - Concrete examples and demonstrations
+\newtcolorbox{examplebox}[1][]{
+  enhanced,
+  colback=bg-example,
+  colframe=border-example,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  breakable,
+  borderline west={3pt}{0pt}{example-base},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=example-dark,
+    colframe=example-dark,
     arc=2pt,
     boxrule=0pt
   },
@@ -388,7 +421,6 @@
   top=8pt,
   bottom=8pt,
   breakable,
-  drop shadow={shadow xshift=0.5pt, shadow yshift=-0.5pt, opacity=0.05},
   #1
 }
 
@@ -401,12 +433,11 @@
   coltitle=white,
   boxrule=2pt,
   arc=3pt,
-  left=12pt,
-  right=12pt,
-  top=10pt,
-  bottom=10pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
   breakable,
-  drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.1},
   borderline west={3pt}{0pt}{key-base},
   attach boxed title to top left={yshift=-2mm, xshift=4mm},
   boxed title style={
@@ -452,16 +483,91 @@
   coltitle=white,
   boxrule=1.5pt,
   arc=3pt,
-  left=12pt,
-  right=12pt,
-  top=10pt,
-  bottom=10pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
   breakable,
-  drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.08},
   attach boxed title to top left={yshift=-2mm, xshift=4mm},
   boxed title style={
     colback=theorem-dark,
     colframe=theorem-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% Caution box style - For warnings and critical alerts
+\newtcolorbox{cautionbox}[1][]{
+  enhanced,
+  colback=bg-caution,
+  colframe=border-caution,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  breakable,
+  borderline west={4pt}{0pt}{caution-dark},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=caution-dark,
+    colframe=caution-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% Technical detail box - For optional deeper mechanics (algorithms, protocols, internals)
+% Uses indigo/theorem colors to distinguish from practice boxes
+\newtcolorbox{technicalbox}[1][]{
+  enhanced,
+  colback=bg-theorem,
+  colframe=border-theorem,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  breakable,
+  borderline west={4pt}{0pt}{theorem-dark},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=theorem-dark,
+    colframe=theorem-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% Practice box style - Exercises and hands-on activities
+\newtcolorbox{practicebox}[1][]{
+  enhanced,
+  colback=bg-practice,
+  colframe=border-practice,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  breakable,
+  borderline west={4pt}{0pt}{practice-dark},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=practice-dark,
+    colframe=practice-dark,
     arc=2pt,
     boxrule=0pt
   },
@@ -624,6 +730,75 @@
   pdfborder={0 0 0}
 }
 
+% ============================================================================
+% GLOSSARY SUPPORT
+% ============================================================================
+% The glossaries package:
+%   - Links terms in-text to their glossary entry (via hyperref)
+%   - Shows hyperlinked page numbers in the glossary ("where this term occurs")
+%
+% Note: glossaries recommends loading hyperref before glossaries.
+\usepackage[
+  toc,                    % Add glossary to table of contents
+  section=chapter,        % Format glossary as chapter-level
+  nopostdot,              % No period after descriptions
+  automake=immediate      % Auto-run makeglossaries via shell escape
+]{glossaries}
+\usepackage{glossary-longbooktabs} % Beautiful longtable + booktabs glossary styles
+
+% Create the glossary
+\makeglossaries
+
+% --- Glossary formatting (readable + navigable) ---
+% Wrap long term names, give the description room, and make page links obvious.
+\renewcommand*{\glsnamefont}[1]{\textbf{\color{primary}#1}}
+\renewcommand*{\glsnumberformat}[1]{\textcolor{text-secondary}{\glshypernumber{#1}}}
+
+\newglossarystyle{lawfin-long3col}{%
+  \setglossarystyle{longragged3col-booktabs}%
+  \renewenvironment{theglossary}%
+    {%
+      \begingroup
+      \setlength{\LTleft}{0pt}%
+      \setlength{\LTright}{0pt}%
+      \setlength{\LTpre}{-0.5em}%  % Reduce top margin
+      \setlength{\LTpost}{-0.5em}% % Reduce bottom margin
+      \setlength{\tabcolsep}{5pt}% % Tighter column spacing
+      \renewcommand{\arraystretch}{1.15}% % Slightly tighter row spacing
+      \small% Reduce glossary font size
+      \begin{longtable}{%
+        @{}%
+        >{\raggedright\arraybackslash}p{0.22\textwidth}%
+        >{\arraybackslash}p{0.65\textwidth}%  % Justified text for descriptions
+        >{\raggedright\arraybackslash}p{0.11\textwidth}%
+        @{}%
+      }%
+    }%
+    {%
+      \end{longtable}%
+      \endgroup
+    }%
+  \renewcommand{\glossentry}[2]{%
+    \glsentryitem{##1}\glstarget{##1}{\glossentryname{##1}} &
+    \glossentrydesc{##1} &
+    ##2\tabularnewline[0.35em]%
+  }%
+  \renewcommand{\subglossentry}[3]{%
+    &%
+    \glssubentryitem{##2}\glstarget{##2}{\strut}\glossentrydesc{##2} &
+    ##3\tabularnewline[0.35em]%
+  }%
+  \renewcommand*{\glossaryheader}{%
+    \toprule
+    \bfseries\color{primary}\entryname &
+    \bfseries\color{primary}\descriptionname &
+    \bfseries\color{primary}\pagelistname\tabularnewline
+    \midrule\endhead
+    \bottomrule\endfoot
+  }%
+}
+\setglossarystyle{lawfin-long3col}
+
 % Better cross-referencing
 \usepackage{cleveref}
 \crefname{section}{Section}{Sections}
@@ -652,6 +827,11 @@
 \DeclareFieldFormat[book]{citetitle}{\mkbibemph{#1}}
 \DeclareFieldFormat[techreport]{citetitle}{#1}
 \DeclareFieldFormat[misc]{citetitle}{#1}
+
+% Bibliography formatting - smaller text and tighter spacing
+\renewcommand*{\bibfont}{\small}
+\setlength{\bibitemsep}{0.5em}
+\setlength{\bibhang}{1.5em}
 
 % ============================================================================
 % CUSTOM COMMANDS

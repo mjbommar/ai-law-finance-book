@@ -1,5 +1,5 @@
 % ============================================================================
-% Conclusion: Synthesis and Path Forward — Agents Part III
+% Conclusion: Synthesis and Path Forward — Chapter 3 - How to Govern an Agent
 % Purpose: Synthesize imperatives and provide maturity-based guidance
 % Label: sec:agents3-conclusion
 % ============================================================================
@@ -7,7 +7,7 @@
 \section{Conclusion: Synthesis and Path Forward}
 \label{sec:agents3-conclusion}
 
-Governing agentic systems is not optional—it is the operational prerequisite for deploying these systems responsibly in regulated domains. This chapter has synthesized regulatory obligations, dimensional calibration principles, implementation practices, and organizational accountability structures into a coherent governance framework specific to \textbf{agentic systems}—AI systems exhibiting all six GPA+IAT properties (Goal, Perception, Action, Iteration, Adaptation, Termination).
+Responsible deployment in regulated domains requires governance as an operational prerequisite, not an afterthought. This chapter has synthesized regulatory obligations, dimensional calibration principles, implementation practices, and organizational accountability structures into a coherent governance framework specific to \textbf{agentic systems}—AI systems exhibiting all six GPA+IAT properties defined in Chapter~1.
 
 This conclusion distills the core imperatives and provides a maturity-based path forward for organizations at different stages of agentic system adoption.
 
@@ -20,13 +20,13 @@ Three converging forces—regulatory momentum, liability exposure, and trust imp
 AI-specific regulation is no longer emerging—it is here. The EU AI Act entered into force in August 2024, establishing enforceable requirements for high-risk AI systems with penalties up to €35 million or 7\% of global turnover \parencite{eu-ai-act-2024}. U.S. states are enacting their own requirements: Colorado's AI Act (effective January 2026) mandates impact assessments and prohibits algorithmic discrimination \parencite{colorado-ai-act}. Sector regulators—Federal Reserve (SR 11-7), PCAOB, SEC, FINRA—are issuing guidance that applies existing standards to AI systems, including agentic systems. The regulatory patchwork is complex and evolving, but the direction is clear: organizations deploying agentic systems in credit, employment, legal, financial, and audit contexts face enforceable obligations. Governance is the mechanism for translating those obligations into operational compliance.
 
 \paragraph{Liability Exposure}
-Early litigation demonstrates that governance gaps create liability. \emph{Mata v.\ Avianca} sanctioned an attorney for submitting AI-hallucinated citations—``the AI made the mistake'' was not a defense \parencite{mata-avianca-2023}. ECOA fair lending enforcement has traditionally applied disparate impact theory, holding lenders responsible for discriminatory effects regardless of intent or vendor disclaimers. Professional responsibility rules—ABA Model Rules, AICPA standards, fiduciary duties—are non-delegable. Vendor contracts cap liability at subscription fees, shifting risk to deployers. Without governance, organizations face uninsurable, unmitigated risk. With governance—documented risk assessments, monitoring, incident response—organizations create an evidentiary record of reasonable care that may reduce penalties, support litigation defenses, and satisfy regulatory expectations.
+Litigation has established clear precedents: ``the AI made the mistake'' is not a defense to professional failures. Courts have sanctioned attorneys across hundreds of AI hallucination cases; the SEC has pursued ``AI washing'' enforcement; fair lending regulators apply disparate impact theory to algorithmic systems. Professional responsibility rules (ABA Model Rules, AICPA standards, fiduciary duties) are non-delegable. Vendor contracts cap liability at subscription fees, shifting risk to deployers. Without governance, organizations face uninsurable, unmitigated risk. With governance, organizations create an evidentiary record of reasonable care through documented risk assessments, monitoring, and incident response. This record may reduce penalties, support litigation defenses, and satisfy regulatory expectations.
 
 \paragraph{Trust and Reputation}
 Legal, financial, and audit services are trust-intensive. Clients hire attorneys because they trust professional judgment. Investors entrust assets to advisers based on fiduciary obligations. Public companies rely on auditors for independent assurance. Agentic system failures that compromise accuracy, confidentiality, or impartiality erode this trust irreparably. A law firm that discloses client information through an agentic research system's data breach faces not only regulatory sanctions but client defection. An adviser whose agentic financial planning system provides unsuitable recommendations faces not only fiduciary claims but loss of clients. An audit firm whose agentic investigation system produces biased results faces not only PCAOB sanctions but reputational damage. In trust-intensive domains, governance is not merely a legal obligation—it is a competitive necessity.
 
 \begin{keybox}[title={Governance as Prerequisite, Not Afterthought}]
-Organizations cannot deploy first and govern later. Retrofitting governance onto production systems is costly, disruptive, and often reveals unfixable risks. Governance must be embedded from the outset: risk assessment informs system selection, dimensional calibration guides architecture, logging and monitoring enable accountability, organizational structures assign ownership. This chapter provides the frameworks—regulatory stack, dimensional calibration, implementation controls, accountability models—to build governance into deployment planning.
+Organizations cannot deploy first and govern later. Retrofitting governance onto production systems is costly, disruptive, and often reveals unfixable risks. Controls must be embedded from the outset: risk assessment informs system selection, dimensional calibration guides architecture, logging and monitoring enable accountability, organizational structures assign ownership. This chapter provides the frameworks—regulatory stack, dimensional calibration, implementation controls, accountability models—to build governance into deployment planning.
 \end{keybox}
 
 \subsection{Maturity-Based Path Forward}
@@ -46,7 +46,7 @@ If your organization has not yet deployed agentic systems or lacks formal agenti
 
 \item \textbf{Focus on Highest-Risk Use Cases First}: Do not attempt to govern all systems simultaneously. Identify the highest-risk deployments—institutional systems with high autonomy, adaptive goals, or access to sensitive data; systems subject to strict regulatory requirements (ECOA, GDPR, professional ethics)—and implement governance there. Success with high-risk cases builds organizational capability and credibility.
 
-\item \textbf{Document Everything}: Even if your governance is basic, document risk assessments, deployment decisions, monitoring results, and incidents. Documentation creates institutional memory, supports audits, and demonstrates good faith to regulators.
+\item \textbf{Document Everything}: Even if your governance is basic, document risk assessments, deployment decisions, monitoring results, and incidents. Documentation creates institutional memory, supports audits, and shows good faith to regulators.
 \end{enumerate}
 
 \paragraph{Organizations with Partial Governance}
@@ -59,7 +59,7 @@ If your organization has deployed agentic systems and implemented some governanc
 
 \item \textbf{Formalize Escalation and Accountability (RACI)}: If governance responsibilities are vaguely assigned (``the team is responsible for monitoring''), create a RACI matrix (Table~\ref{tab:agents3-raci}). Ensure every governance activity—pre-deployment review, fairness monitoring, incident response—has exactly one accountable party. Test escalation procedures with tabletop exercises.
 
-\item \textbf{Implement Continuous Monitoring}: If your governance relies on one-time pre-deployment validation, add continuous monitoring for performance degradation, data drift, concept drift, and fairness violations. Systems validated in 2023 may perform differently on 2024 data; regulatory requirements evolve; adversaries develop new attacks. Governance must be adaptive.
+\item \textbf{Implement Continuous Monitoring}: If your governance relies on one-time pre-deployment validation, add continuous monitoring for performance degradation, data drift, concept drift, and fairness violations. Systems validated in 2023 may perform differently on 2024 data; regulatory requirements evolve; adversaries develop new attacks. Effective oversight demands adaptability.
 
 \item \textbf{Conduct Post-Incident Reviews}: If incidents have occurred (accuracy failures, user complaints, near-misses), conduct structured post-incident reviews even if no regulatory penalty resulted. Document lessons learned, update risk assessments, and revise controls to prevent recurrence. Incidents are learning opportunities—waste them, and you will repeat them.
 \end{enumerate}
@@ -74,13 +74,13 @@ If your organization has comprehensive agentic system governance—formal polici
 
 \item \textbf{Monitor Regulatory Developments Proactively}: Assign personnel to track EU AI Act implementation, U.S. state AI laws, sector regulator guidance, and international developments. Anticipate regulatory changes and adapt governance before enforcement actions occur.
 
-\item \textbf{Build Governance as Competitive Advantage}: In trust-intensive domains, demonstrable governance maturity is a market differentiator. Clients, partners, and investors increasingly demand evidence of responsible AI practices. Consider third-party certifications (ISO/IEC 42001), public transparency reports, or governance audits to signal commitment.
+\item \textbf{Build Governance as Competitive Advantage}: In trust-intensive domains, demonstrable governance maturity is a market differentiator. Clients, partners, and investors increasingly demand evidence of responsible AI practices. Third-party certifications (ISO/IEC 42001), public transparency reports, or governance audits can signal commitment.
 \end{enumerate}
 
 \subsection{Investing in Governance Capability}
 \label{sec:agents3-conclusion-investment}
 
-Governance is not free. It requires sustained investment across four areas (Figure~\ref{fig:agents3-governance-investment}).
+Governance is not free. It requires sustained investment across four areas (\Cref{fig:agents3-governance-investment}).
 
 \input{figures/fig-governance-investment}
 
@@ -91,7 +91,7 @@ Each area addresses distinct organizational needs. \emph{Training} builds compet
 
 Agentic systems offer transformative potential: attorneys can research faster through iterative investigation, advisers can analyze portfolios more comprehensively through adaptive strategy, auditors can investigate anomalies more rigorously through autonomous evidence gathering. But potential is not permission. Deploying agentic systems without governance exposes organizations to regulatory penalties, civil liability, professional discipline, and reputational harm. More fundamentally, it betrays the trust that clients, investors, and the public place in professionals.
 
-Governance is not compliance theater—it is the operational mechanism for maintaining accountability, fulfilling professional duties, and demonstrating that technology serves human objectives rather than displacing human judgment. Done well, governance enables organizations to deploy agentic systems confidently, adapt as risks and regulations evolve, and sustain trust in domains where trust is the foundation of value.
+Governance is not compliance theater—it is the operational mechanism for maintaining accountability, fulfilling professional duties, and showing that technology serves human objectives rather than displacing human judgment. Done well, governance enables organizations to deploy agentic systems confidently, adapt as risks and regulations evolve, and sustain trust in domains where trust is the foundation of value.
 
-This chapter has provided the conceptual tools: the five-layer regulatory stack, dimensional calibration (mapping GPA+IAT properties to control requirements), implementation controls (iteration auditing, adaptation constraints, termination validation), accountability structures, and worked examples demonstrating how agentic properties create unique governance challenges. The challenge—and opportunity—is to translate these frameworks into your organizational context. The stakes are high, the regulatory landscape is evolving, and the margin for error is narrow. But organizations that invest in agentic system governance today will be positioned to deploy these systems responsibly, defend their practices credibly, and maintain trust durably. That is the path forward.
+This chapter has provided the conceptual tools: the five-layer regulatory stack, dimensional calibration (mapping GPA+IAT properties to control requirements), implementation controls (iteration auditing, adaptation constraints, termination validation), accountability structures, and worked examples illustrating how agentic properties create unique governance challenges. The challenge—and opportunity—is to translate these frameworks into your organizational context. The stakes are high, the regulatory landscape is evolving, and the margin for error is narrow. But organizations that invest in agentic system governance today will be positioned to deploy these systems responsibly, defend their practices credibly, and maintain trust durably. That is the path forward.
 

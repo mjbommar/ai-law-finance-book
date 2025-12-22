@@ -354,6 +354,32 @@
   #1
 }
 
+% Example box style - Concrete examples and demonstrations
+\newtcolorbox{examplebox}[1][]{
+  enhanced,
+  colback=bg-example,
+  colframe=border-example,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=12pt,
+  right=12pt,
+  top=10pt,
+  bottom=10pt,
+  breakable,
+  drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.07},
+  borderline west={3pt}{0pt}{example-base},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=example-dark,
+    colframe=example-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
 % Highlight box style - Warm, inviting context and notes
 \newtcolorbox{highlightbox}[1][]{
   enhanced,
@@ -479,6 +505,32 @@
   enhanced,
   colback=practice-light,
   colframe=practice-base,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=12pt,
+  right=12pt,
+  top=10pt,
+  bottom=10pt,
+  breakable,
+  drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.06},
+  borderline west={4pt}{0pt}{practice-dark},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=practice-dark,
+    colframe=practice-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% Practice box style - Exercises and hands-on activities
+\newtcolorbox{practicebox}[1][]{
+  enhanced,
+  colback=bg-practice,
+  colframe=border-practice,
   fonttitle=\bfseries\large,
   coltitle=white,
   boxrule=1.5pt,
