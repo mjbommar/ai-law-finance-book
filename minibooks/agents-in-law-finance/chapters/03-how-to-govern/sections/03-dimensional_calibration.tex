@@ -51,7 +51,7 @@ Autonomy determines the degree of human involvement in decision-making. We disti
 \glsadd{human-in-the-loop}
 In HITL mode, the system recommends actions but a human must approve before execution.
 
-\input{figures/fig-autonomy-hitl}
+\input{chapters/03-how-to-govern/figures/fig-autonomy-hitl}
 
 HITL governance is appropriate when errors carry high consequences and human expertise adds substantial value to decision quality. In legal, financial, and audit contexts, many high-stakes decisions benefit from this mode: the system accelerates research, analysis, or document preparation, but a qualified professional validates the output before it affects clients, counterparties, or regulatory filings. The key governance requirement is ensuring the human review is meaningful—not a rubber stamp—which requires the system to surface sufficient context for informed judgment.
 
@@ -63,7 +63,7 @@ A legal research assistant that \emph{iteratively} searches case law: it queries
 \glsadd{human-on-the-loop}
 In HOTL mode, the system operates autonomously within defined parameters, but humans monitor performance and can intervene if anomalies, errors, or safety concerns arise.
 
-\input{figures/fig-autonomy-hotl}
+\input{chapters/03-how-to-govern/figures/fig-autonomy-hotl}
 
 HOTL governance suits situations where transaction volume makes individual review impractical, but errors remain detectable and correctable through monitoring. The system handles routine operations autonomously while humans watch for anomalies—unusual patterns, error spikes, or edge cases that exceed the system's training distribution. Governance focuses on defining clear escalation triggers, maintaining real-time dashboards, and ensuring intervention mechanisms actually work when needed.
 
@@ -75,7 +75,7 @@ A customer service chatbot that handles routine inquiries autonomously but escal
 \glsadd{human-in-command}
 In HIC mode, the system operates with high autonomy. Humans set strategic goals, define constraints, and monitor aggregate performance but do not review individual decisions. Humans retain emergency stop authority to halt the system if safety violations, systemic failures, or regulatory concerns emerge.
 
-\input{figures/fig-autonomy-hic}
+\input{chapters/03-how-to-govern/figures/fig-autonomy-hic}
 
 \begin{examplebox}[title={Example: HIC Fraud Detection}]
 A credit card fraud detection system that automatically blocks transactions meeting defined risk criteria. Fraud analysts set risk parameters, monitor aggregate block rates and false positive rates, and investigate flagged cases retrospectively. The system can be halted immediately if systemic bias or operational failures are detected.

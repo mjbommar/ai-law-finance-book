@@ -179,7 +179,7 @@ A Big Four accounting firm develops an agentic audit assistant that \emph{iterat
 
 PCAOB Auditing Standards require auditors to document the rationale for procedures in workpapers \parencite{pcaob-as1215,pcaob-as2315}. For agentic systems, explainability must capture \emph{why} the system escalated certain accounts, \emph{how} its strategy evolved across cycles, and \emph{what} evidence supported termination decisions. \Cref{fig:agents3-iterative-investigation} illustrates the workflow. Each cycle generates explanations logged to audit workpapers.
 
-\input{figures/fig-iterative-investigation}
+\input{chapters/03-how-to-govern/figures/fig-iterative-investigation}
 
 \textbf{Explainability Validation}:
 \begin{itemize}
@@ -230,7 +230,7 @@ HOTL systems operate autonomously but humans monitor and can intervene. Implemen
 \textbf{Example: Agentic Credit Underwriting HOTL Monitoring.}
 A mortgage lender's agentic underwriting system (described in Section~\ref{sec:agents3-audit-logging}) operates in HOTL mode, iteratively investigating applications across multiple cycles. Senior underwriters monitor aggregate system performance through a dashboard (\Cref{fig:agents3-hotl-dashboard}) displaying agentic-specific metrics and escalation triggers. When escalation frequency spikes or average cycles increase significantly, supervisors investigate root causes such as data quality degradation, overly conservative termination thresholds, or emerging risk patterns requiring strategy adjustment.
 
-\input{figures/fig-hotl-dashboard}
+\input{chapters/03-how-to-govern/figures/fig-hotl-dashboard}
 
 \paragraph{HIC (Human-in-Command): Strategic Oversight and Emergency Stop}
 HIC systems operate with high autonomy. Humans set goals and constraints, monitor aggregate performance, and retain emergency stop authority. Implementation requires:
@@ -250,7 +250,7 @@ HIC systems operate with high autonomy. Humans set goals and constraints, monito
 \paragraph{Vendor Due Diligence Framework (Three Phases)}
 The framework proceeds through three phases. \textbf{Phase 1 (Assessment)} uses questionnaires to gather information about the vendor's data sources, model architecture, security practices, performance benchmarks, and fairness testing methodology. \textbf{Phase 2 (Document Review)} examines supporting documentation to verify vendor claims. This includes SOC 2 reports, data processing agreements, model validation reports, and security certifications. \textbf{Phase 3 (Validation)} confirms claims through reference checks with existing clients in similar domains and pilot testing with representative data to validate accuracy, explainability, and performance before full deployment.
 
-\input{figures/fig-vendor-diligence}
+\input{chapters/03-how-to-govern/figures/fig-vendor-diligence}
 
 \paragraph{Contract Negotiation: Shifting Risk to Vendors Where Possible}
 Negotiate contract terms that allocate risk appropriately:
@@ -365,7 +365,7 @@ Firm approves vendor with conditions: HITL verification mandatory, quarterly acc
 
 Governance is not a one-time validation but a continuous cycle. Systems must be monitored for performance degradation, fairness violations, data drift, and security incidents. When failures occur, organizations must detect, contain, investigate, remediate, and learn. This shift from inspection-based to continuous monitoring mirrors the evolution of Statistical Process Control in manufacturing---a historical parallel we examined in Chapter~2.
 
-\input{figures/fig-incident-response-cycle}
+\input{chapters/03-how-to-govern/figures/fig-incident-response-cycle}
 
 \paragraph{Performance Monitoring: Four Dimensions}
 Monitor continuously across four dimensions:
@@ -382,11 +382,11 @@ A regional bank deploys an agentic mortgage underwriting system that iteratively
 
 During routine monthly fairness monitoring, the compliance team detects a significant disparity: Hispanic applicants have a 65\% approval rate compared to 82\% for white applicants. This represents a clear violation of the 80\% rule commonly used in disparate impact analysis (65/82 = 79.3\%). Following the Tier 3 escalation pathway for critical issues (see \Cref{fig:agents3-escalation-example}), the compliance analyst immediately notifies the Chief Risk Officer, who halts the system and escalates to the CEO within hours of detection (\Cref{fig:agents3-incident-email-discovery}).
 
-\input{figures/fig-incident-email-discovery}
+\input{chapters/03-how-to-govern/figures/fig-incident-email-discovery}
 
 Ten weeks later, with the investigation complete and remediation implemented, the CRO sends a closure report (\Cref{fig:agents3-incident-email-closure}). The investigation reveals a governance challenge unique to agentic systems: the discrimination did not originate in the scoring model itself, which was facially neutral and passed traditional fairness testing. Instead, bias emerged through \emph{how the system investigated applicants across cycles}---Hispanic applicants triggered more verification cycles, leading to higher abandonment rates before final decisions were rendered. The system was discriminating in its \emph{process}, not its \emph{decisions}.
 
-\input{figures/fig-incident-email-closure}
+\input{chapters/03-how-to-govern/figures/fig-incident-email-closure}
 
 \textbf{Governance Principles Illustrated}:
 \begin{itemize}

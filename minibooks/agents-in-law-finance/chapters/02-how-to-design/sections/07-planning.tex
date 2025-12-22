@@ -49,7 +49,7 @@ Each cycle has three components:
 \end{itemize}
 Reasoning traces make decisions transparent and auditable. ReAct works well for exploratory tasks where you learn as you go---legal research, fact investigation, and market analysis.
 
-\input{figures/fig-react-cycle}
+\input{chapters/02-how-to-design/figures/fig-react-cycle}
 
 \textbf{Plan-Execute.} This pattern separates planning from execution. For a document review task (``Review 50 contracts for choice-of-law provisions''), the associate creates a plan: list the contracts, open each one, extract the provision, and record findings. Then they execute systematically. The plan remains static because the task is well-defined.
 
@@ -63,7 +63,7 @@ Plan-Execute fits established workflows: due diligence checklists, compliance re
 \end{itemize}
 Each specialist may decompose further. This enables parallelization and specialization, mirroring how litigation teams work. \Cref{sec:agents2-delegation} details these coordination patterns.
 
-\input{figures/fig-hierarchical-planning}
+\input{chapters/02-how-to-design/figures/fig-hierarchical-planning}
 
 These patterns represent a shift from traditional workflow automation. Traditional engines used \textbf{static orchestration}: predefined graphs specifying exact steps and branches (BPM systems). The workflow was designed at build time; the engine merely executed it.
 

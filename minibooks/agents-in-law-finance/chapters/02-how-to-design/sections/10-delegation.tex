@@ -65,7 +65,7 @@ Just as MCP standardizes how agents access tools (\Cref{sec:agents2-mcp-percepti
 
 \Cref{fig:agents2-orchestration-patterns} illustrates these three approaches. Most production systems blend multiple patterns: parallel agents handle independent analyses while hierarchical structures decompose complex, tightly-coupled tasks. The choice depends on task structure. Independent subtasks favor parallelism, dependent workflows favor sequencing, and complex matters with natural subdivisions favor hierarchy.
 
-\input{figures/fig-orchestration-patterns}
+\input{chapters/02-how-to-design/figures/fig-orchestration-patterns}
 
 M\&A due diligence illustrates this pattern. The Orchestrator delegates to specialists in parallel: a Document Processing Agent accesses the data room while a Financial Analysis Agent queries financial databases. Each specialist may use hierarchical delegation internally, with sub-agents handling specific document types or analysis categories. The specialists return structured Artifacts, which the Orchestrator synthesizes into a unified assessment.
 
