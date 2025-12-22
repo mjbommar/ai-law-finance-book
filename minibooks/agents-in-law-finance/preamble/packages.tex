@@ -1,0 +1,144 @@
+% ============================================================================
+% PACKAGES - Core package loading
+% ============================================================================
+% Load order matters for some packages. Comments indicate dependencies.
+% ============================================================================
+
+% --- Engine Detection ---
+\usepackage{iftex}
+
+% --- Page Geometry ---
+% US Trade size: 6in x 9in (standard for professional/technical books)
+\usepackage[
+  papersize={6in,9in},
+  inner=0.75in,       % Gutter margin (for binding)
+  outer=0.625in,      % Outside margin
+  top=0.7in,
+  bottom=0.8in,
+  footskip=0.35in
+]{geometry}
+
+% --- Font Encoding (pdfLaTeX only) ---
+\ifxetex\else\ifluatex\else
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+\fi\fi
+
+% --- Mathematics (load before libertinus to avoid symbol conflicts) ---
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% --- Fonts ---
+\usepackage{libertinus}
+\usepackage{libertinust1math}
+
+% --- Typography ---
+\usepackage{microtype}
+\usepackage{setspace}
+\setstretch{1.1}
+
+% --- Paragraphs ---
+\usepackage{parskip}
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+% --- Language (must come before biblatex) ---
+\usepackage[english]{babel}
+\usepackage{csquotes}
+
+% --- Graphics ---
+\usepackage{graphicx}
+\usepackage{float}
+
+% --- Tables ---
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{colortbl}
+\renewcommand{\arraystretch}{1.3}
+
+% --- Page Layout ---
+\usepackage{pdflscape}
+\usepackage{rotating}
+
+% --- Lists ---
+\usepackage{enumitem}
+\setlist{
+  itemsep=0.4em,
+  parsep=0.2em,
+  topsep=0.5em,
+  leftmargin=1.5em
+}
+
+% Custom evaluation question list
+\newlist{evallist}{enumerate}{1}
+\setlist[evallist]{
+  label=\textbf{Q\arabic*.},
+  leftmargin=2em,
+  itemsep=0.5em,
+  labelsep=0.5em
+}
+
+% --- Captions ---
+\usepackage[
+  font={small},
+  labelfont={bf,color=primary},
+  format=plain,
+  justification=justified,
+  skip=8pt
+]{caption}
+
+% --- Hyperlinks (load before glossaries) ---
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  citecolor=accent,
+  urlcolor=primary,
+  bookmarksnumbered=true,
+  pdfborder={0 0 0}
+}
+
+% --- Glossary ---
+\usepackage[
+  toc,
+  section=chapter,
+  nopostdot,
+  automake=immediate
+]{glossaries}
+\usepackage{glossary-longbooktabs}
+\makeglossaries
+
+% --- Cross-references ---
+\usepackage{cleveref}
+\crefname{section}{Section}{Sections}
+\crefname{figure}{Figure}{Figures}
+\crefname{table}{Table}{Tables}
+\crefname{chapter}{Chapter}{Chapters}
+
+% --- Bibliography ---
+\usepackage[
+  backend=biber,
+  style=authoryear,
+  maxcitenames=2,
+  maxbibnames=99,
+  uniquename=false,
+  uniquelist=false,
+  sorting=nyt,
+  dashed=false
+]{biblatex}
+
+% Citation formatting
+\DeclareFieldFormat{citetitle}{\mkbibquote{#1}}
+\DeclareFieldFormat[article]{citetitle}{#1}
+\DeclareFieldFormat[inproceedings]{citetitle}{#1}
+\DeclareFieldFormat[book]{citetitle}{\mkbibemph{#1}}
+\DeclareFieldFormat[techreport]{citetitle}{#1}
+\DeclareFieldFormat[misc]{citetitle}{#1}
+
+% Bibliography formatting
+\renewcommand*{\bibfont}{\small}
+\setlength{\bibitemsep}{0.5em}
+\setlength{\bibhang}{1.5em}

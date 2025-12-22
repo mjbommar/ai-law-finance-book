@@ -1,0 +1,113 @@
+% ============================================================================
+% STYLING - Section formatting and Table of Contents
+% ============================================================================
+
+\usepackage{titlesec}
+\usepackage{titletoc}
+
+% ============================================================================
+% SECTION FORMATTING
+% ============================================================================
+
+\titleformat{\section}
+  {\Large\bfseries\color{primary}}
+  {\thesection}{1em}{}
+  [\vspace{0.3em}{\color{primary}\titlerule[1.5pt]}\vspace{0.5em}]
+
+\titleformat{\subsection}
+  {\large\bfseries\color{primary}}
+  {\thesubsection}{1em}{}
+  [\vspace{-0.3em}]
+
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{text-secondary}}
+  {\thesubsubsection}{1em}{}
+
+\titleformat{\paragraph}[runin]
+  {\normalsize\bfseries\color{primary}}
+  {}{0em}{}[.]
+\titlespacing*{\paragraph}{0pt}{1em}{0.5em}
+
+% ============================================================================
+% TABLE OF CONTENTS
+% ============================================================================
+
+\renewcommand{\contentsname}{%
+  {\color{primary}\Large\bfseries Contents}%
+}
+
+% Chapter entries
+\titlecontents{chapter}
+  [0em]
+  {\vspace{1em}\large\bfseries}
+  {\color{primary}\contentslabel{2em}}
+  {\color{primary}}
+  {\titlerule*[0.75pc]{.}\contentspage}
+
+% Section entries
+\titlecontents{section}
+  [2em]
+  {\vspace{0.3em}}
+  {\color{primary}\contentslabel{2.5em}}
+  {}
+  {\titlerule*[0.75pc]{.}\contentspage}
+
+% Subsection entries
+\titlecontents{subsection}
+  [4.5em]
+  {\vspace{0.1em}}
+  {\contentslabel{3.2em}}
+  {}
+  {\titlerule*[0.75pc]{.}\contentspage}
+
+% ============================================================================
+% GLOSSARY FORMATTING
+% ============================================================================
+
+\renewcommand*{\glsnamefont}[1]{\textbf{\color{primary}#1}}
+\renewcommand*{\glsnumberformat}[1]{\textcolor{text-secondary}{\glshypernumber{#1}}}
+
+\newglossarystyle{lawfin-long3col}{%
+  \setglossarystyle{longragged3col-booktabs}%
+  \renewenvironment{theglossary}%
+    {%
+      \begingroup
+      \setlength{\LTleft}{0pt}%
+      \setlength{\LTright}{0pt}%
+      \setlength{\LTpre}{-0.5em}%
+      \setlength{\LTpost}{-0.5em}%
+      \setlength{\tabcolsep}{5pt}%
+      \renewcommand{\arraystretch}{1.15}%
+      \small%
+      \begin{longtable}{%
+        @{}%
+        >{\raggedright\arraybackslash}p{0.22\textwidth}%
+        >{\arraybackslash}p{0.65\textwidth}%
+        >{\raggedright\arraybackslash}p{0.11\textwidth}%
+        @{}%
+      }%
+    }%
+    {%
+      \end{longtable}%
+      \endgroup
+    }%
+  \renewcommand{\glossentry}[2]{%
+    \glsentryitem{##1}\glstarget{##1}{\glossentryname{##1}} &
+    \glossentrydesc{##1} &
+    ##2\tabularnewline[0.35em]%
+  }%
+  \renewcommand{\subglossentry}[3]{%
+    &%
+    \glssubentryitem{##2}\glstarget{##2}{\strut}\glossentrydesc{##2} &
+    ##3\tabularnewline[0.35em]%
+  }%
+  \renewcommand*{\glossaryheader}{%
+    \toprule
+    \bfseries\color{primary}\entryname &
+    \bfseries\color{primary}\descriptionname &
+    \bfseries\color{primary}\pagelistname\tabularnewline
+    \midrule\endhead
+    \bottomrule\endfoot
+  }%
+}
+\setglossarystyle{lawfin-long3col}

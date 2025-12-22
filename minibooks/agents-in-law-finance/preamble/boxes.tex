@@ -1,0 +1,310 @@
+% ============================================================================
+% BOXES - tcolorbox environments for educational content
+% ============================================================================
+
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable,skins,theorems,listings}
+
+% Listings package for code formatting
+\usepackage{listings}
+\lstset{
+  basicstyle=\small\ttfamily\color{gray-900},
+  breaklines=true,
+  breakatwhitespace=false,
+  columns=flexible,
+  keepspaces=true,
+  showstringspaces=false,
+  tabsize=2,
+  xleftmargin=0pt,
+  framexleftmargin=0pt,
+  keywordstyle=\color{slate-700}\bfseries,
+  stringstyle=\color{green-900},
+  commentstyle=\color{gray-600}\itshape,
+  emphstyle=\color{amber-900},
+}
+
+% ============================================================================
+% IMPORTANCE SCALING (applies to all boxes)
+% ============================================================================
+\tcbset{
+  importance/.is choice,
+  importance/high/.style={
+    boxrule=2pt,
+    top=10pt,bottom=10pt,left=12pt,right=12pt
+  },
+  importance/medium/.style={},
+  importance/low/.style={
+    boxrule=0.8pt,
+    opacityback=0.92,
+    opacityframe=0.6,
+    boxed title style={opacityback=0.85},
+    top=6pt,bottom=6pt,left=8pt,right=8pt
+  },
+  importance/.default=medium
+}
+
+% ============================================================================
+% DEFINITION BOX - Formal definitions, theoretical concepts
+% ============================================================================
+\newtcolorbox{definitionbox}[1][]{
+  enhanced,
+  colback=bg-definition,
+  colframe=border-definition,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  breakable,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=definition-dark,
+    colframe=definition-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% ============================================================================
+% EXAMPLE BOX - Concrete examples and demonstrations
+% ============================================================================
+\newtcolorbox{examplebox}[1][]{
+  enhanced,
+  colback=bg-example,
+  colframe=border-example,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  breakable,
+  borderline west={3pt}{0pt}{example-base},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=example-dark,
+    colframe=example-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% ============================================================================
+% HIGHLIGHT BOX - Notes, context, supplementary info
+% ============================================================================
+\newtcolorbox{highlightbox}[1][]{
+  enhanced,
+  colback=bg-note,
+  colframe=border-note,
+  fonttitle=\bfseries,
+  coltitle=note-dark,
+  boxrule=1pt,
+  arc=2.5pt,
+  left=10pt,
+  right=10pt,
+  top=8pt,
+  bottom=8pt,
+  breakable,
+  #1
+}
+
+% ============================================================================
+% KEY BOX - Important takeaways, essential points
+% ============================================================================
+\newtcolorbox{keybox}[1][]{
+  enhanced,
+  colback=bg-key,
+  colframe=key-base,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=2pt,
+  arc=3pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  breakable,
+  borderline west={3pt}{0pt}{key-base},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=key-base,
+    colframe=key-base,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% ============================================================================
+% QUESTION BOX - Evaluation questions
+% ============================================================================
+\newtcolorbox{questionbox}[1][]{
+  enhanced,
+  colback=gray-100,
+  colframe=gray-600,
+  fonttitle=\bfseries,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=2pt,
+  left=10pt,
+  right=10pt,
+  top=8pt,
+  bottom=8pt,
+  breakable,
+  borderline west={4pt}{0pt}{slate-700},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=slate-700,
+    colframe=slate-700,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% ============================================================================
+% THEOREM BOX - Formal statements, proofs
+% ============================================================================
+\newtcolorbox{theorembox}[1][]{
+  enhanced,
+  colback=bg-theorem,
+  colframe=border-theorem,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  breakable,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=theorem-dark,
+    colframe=theorem-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% ============================================================================
+% CAUTION BOX - Warnings, pitfalls
+% ============================================================================
+\newtcolorbox{cautionbox}[1][]{
+  enhanced,
+  colback=bg-caution,
+  colframe=border-caution,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  breakable,
+  borderline west={4pt}{0pt}{caution-dark},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=caution-dark,
+    colframe=caution-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% ============================================================================
+% TECHNICAL BOX - Deep mechanics, algorithms
+% ============================================================================
+\newtcolorbox{technicalbox}[1][]{
+  enhanced,
+  colback=bg-theorem,
+  colframe=border-theorem,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  breakable,
+  borderline west={4pt}{0pt}{theorem-dark},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=theorem-dark,
+    colframe=theorem-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% ============================================================================
+% PRACTICE BOX - Exercises, hands-on activities
+% ============================================================================
+\newtcolorbox{practicebox}[1][]{
+  enhanced,
+  colback=bg-practice,
+  colframe=border-practice,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  breakable,
+  borderline west={4pt}{0pt}{practice-dark},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=practice-dark,
+    colframe=practice-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% ============================================================================
+% LISTING BOX - Code examples
+% ============================================================================
+\newtcblisting{listingbox}[1][]{
+  enhanced,
+  colback=gray-100,
+  colframe=gray-400,
+  fonttitle=\bfseries\sffamily,
+  coltitle=gray-800,
+  boxrule=1pt,
+  arc=2pt,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  breakable,
+  listing only,
+  listing options={
+    basicstyle=\small\ttfamily\color{gray-900},
+    breaklines=true,
+    columns=flexible,
+    keepspaces=true,
+  },
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=gray-500,
+    colframe=gray-500,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
