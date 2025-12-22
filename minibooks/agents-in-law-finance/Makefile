@@ -71,7 +71,7 @@ pdf: $(PDFFILE)
 		echo "$(CYAN)   Pages: $$pages | Size: $$size$(RESET)"; \
 	fi
 
-$(PDFFILE): $(TEXFILE) $(BIBFILE) preamble/*.tex front-matter/preface.tex chapters/*/chapter.tex
+$(PDFFILE): $(TEXFILE) $(BIBFILE) preamble/*.tex front-matter/preface.tex chapters/*/chapter.tex back-matter/*.tex
 	@echo "$(BOLD)$(BLUE)$(ARROW) Building $(PDFFILE)...$(RESET)"
 	@if command -v $(LATEXMK) >/dev/null 2>&1; then \
 		echo "$(CYAN)   Using latexmk (smart compilation)$(RESET)"; \
