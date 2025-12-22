@@ -1,0 +1,86 @@
+% Radar Chart Diagram - Upper Left Circle
+% Centered at (2.2in, 7.6in) with radius 2.4in
+% No labels, decorative only
+
+\begin{scope}[shift={(2.2in, 7.6in)}]
+  % Radar chart parameters - scaled to fit within circle (max ~1.8in radius)
+  \def\maxradius{1.6in}
+  \def\numaxes{6}
+
+  % Grid circles (concentric rings)
+  \foreach \r in {0.4, 0.8, 1.2, 1.6} {
+    \draw[EdgeGlow, opacity=0.35, line width=0.6pt] (0,0) circle (\r in);
+  }
+
+  % Axes (spokes) - 6 axes at 60 degree intervals
+  \foreach \angle in {0, 60, 120, 180, 240, 300} {
+    \draw[EdgeGlow, opacity=0.40, line width=0.7pt]
+      (0,0) -- (\angle:\maxradius);
+  }
+
+  % Data polygon 1 - outer data shape (copper tones)
+  \def\dataA{1.4}  % axis 0
+  \def\dataB{1.1}  % axis 60
+  \def\dataC{1.5}  % axis 120
+  \def\dataD{0.9}  % axis 180
+  \def\dataE{1.3}  % axis 240
+  \def\dataF{1.0}  % axis 300
+
+  \fill[CopperGlow, opacity=0.08]
+    (0:\dataA in) --
+    (60:\dataB in) --
+    (120:\dataC in) --
+    (180:\dataD in) --
+    (240:\dataE in) --
+    (300:\dataF in) -- cycle;
+
+  \draw[CopperGlow, opacity=0.25, line width=0.8pt]
+    (0:\dataA in) --
+    (60:\dataB in) --
+    (120:\dataC in) --
+    (180:\dataD in) --
+    (240:\dataE in) --
+    (300:\dataF in) -- cycle;
+
+  % Data polygon 2 - inner data shape (blue tones)
+  \def\dataAA{0.8}
+  \def\dataBB{1.2}
+  \def\dataCC{0.7}
+  \def\dataDD{1.1}
+  \def\dataEE{0.6}
+  \def\dataFF{0.9}
+
+  \fill[CircleLight, opacity=0.10]
+    (0:\dataAA in) --
+    (60:\dataBB in) --
+    (120:\dataCC in) --
+    (180:\dataDD in) --
+    (240:\dataEE in) --
+    (300:\dataFF in) -- cycle;
+
+  \draw[CircleLight, opacity=0.30, line width=0.6pt]
+    (0:\dataAA in) --
+    (60:\dataBB in) --
+    (120:\dataCC in) --
+    (180:\dataDD in) --
+    (240:\dataEE in) --
+    (300:\dataFF in) -- cycle;
+
+  % Vertex nodes - subtle glow dots at data points
+  \foreach \angle/\radius in {0/1.4, 60/1.1, 120/1.5, 180/0.9, 240/1.3, 300/1.0} {
+    \fill[CopperGlow, opacity=0.15] (\angle:\radius in) circle (6pt);
+    \fill[CopperLight, opacity=0.35] (\angle:\radius in) circle (3pt);
+    \fill[TextSoft, opacity=0.8] (\angle:\radius in) circle (1.5pt);
+  }
+
+  \foreach \angle/\radius in {0/0.8, 60/1.2, 120/0.7, 180/1.1, 240/0.6, 300/0.9} {
+    \fill[CircleLight, opacity=0.12] (\angle:\radius in) circle (5pt);
+    \fill[EdgeGlow, opacity=0.30] (\angle:\radius in) circle (2.5pt);
+    \fill[TextSoft, opacity=0.7] (\angle:\radius in) circle (1.2pt);
+  }
+
+  % Center point
+  \fill[CopperGlow, opacity=0.10] (0,0) circle (4pt);
+  \fill[TextSoft, opacity=0.5] (0,0) circle (1.5pt);
+
+\end{scope}

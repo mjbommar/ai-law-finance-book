@@ -1,0 +1,120 @@
+% ============================================================================
+% COVER PAGE - Inline TikZ cover for US Trade (6x9)
+% ============================================================================
+% This file is included directly in main.tex, not compiled separately.
+% Uses \newgeometry for full-bleed, then restores normal margins.
+%
+% The cover design is uniformly scaled from 8.5x11 to 6x9 (scale=0.706)
+% to preserve circular geometry.
+% ============================================================================
+
+% Set full-bleed geometry for cover page
+\newgeometry{margin=0pt}
+\thispagestyle{empty}
+
+\begin{tikzpicture}[remember picture, overlay]
+
+% Position at page origin
+\begin{scope}[shift={(current page.south west)}]
+
+% Page dimensions
+\def\pagewidth{6in}
+\def\pageheight{9in}
+
+% ============================================================================
+% BACKGROUND - Full bleed (not scaled)
+% ============================================================================
+\shade[top color=MidSlate, bottom color=DeepSlate]
+    (0,0) rectangle (\pagewidth, \pageheight);
+
+% ============================================================================
+% SCALED CONTENT - Uniform 0.706 scale to preserve circles
+% ============================================================================
+\begin{scope}[scale=0.706, transform shape, shift={(0, 0.88in)}]
+
+% --- Texture ---
+\pgfmathsetseed{42}
+\foreach \i in {1,...,400} {
+    \pgfmathsetmacro{\px}{rnd * 8.5}
+    \pgfmathsetmacro{\py}{rnd * 11}
+    \pgfmathsetmacro{\psize}{0.3 + rnd * 0.8}
+    \pgfmathsetmacro{\popacity}{0.02 + rnd * 0.04}
+    \fill[white, opacity=\popacity] (\px in, \py in) circle (\psize pt);
+}
+\foreach \i in {1,...,300} {
+    \pgfmathsetmacro{\px}{rnd * 8.5}
+    \pgfmathsetmacro{\py}{rnd * 11}
+    \pgfmathsetmacro{\psize}{0.2 + rnd * 0.5}
+    \pgfmathsetmacro{\popacity}{0.03 + rnd * 0.05}
+    \fill[black, opacity=\popacity] (\px in, \py in) circle (\psize pt);
+}
+
+% --- Circles ---
+\fill[CircleDeep, opacity=0.20] (2.2in, 7.6in) circle (2.4in);
+\fill[CircleMid, opacity=0.15] (6.2in, 8.2in) circle (2.0in);
+\fill[CircleLight, opacity=0.12] (4.2in, 6.0in) circle (1.8in);
+\fill[CircleDeep, opacity=0.10] (1.0in, 9.0in) circle (1.6in);
+\fill[CircleMid, opacity=0.08] (7.2in, 6.8in) circle (1.4in);
+\fill[white, opacity=0.02] (3.5in, 7.4in) circle (1.5in);
+\fill[white, opacity=0.015] (5.5in, 7.8in) circle (1.2in);
+
+% --- Network Diagrams ---
+\input{front-matter/cover/network-mlp}
+\input{front-matter/cover/diagram-radar}
+\input{front-matter/cover/diagram-tree}
+\input{front-matter/cover/network-graph}
+
+% --- Title ---
+\node[anchor=center, align=center, opacity=0.12] at (4.32in, 3.28in) {
+    {\fontsize{44}{52}\selectfont\color{black}A\kern0.06em G\kern0.06em E\kern0.06em N\kern0.06em T\kern0.06em I\kern0.06em C\kern0.12em\kern0.12em A\kern0.06em I}\\[0.30in]
+    {\fontsize{20}{24}\selectfont\color{black}I\kern0.05em N\kern0.12em\kern0.12em L\kern0.05em A\kern0.05em W\kern0.12em\kern0.12em \&\kern0.12em\kern0.12em F\kern0.05em I\kern0.05em N\kern0.05em A\kern0.05em N\kern0.05em C\kern0.05em E}
+};
+\node[anchor=center, align=center, opacity=0.25] at (4.28in, 3.32in) {
+    {\fontsize{44}{52}\selectfont\color{DeepSlate}A\kern0.06em G\kern0.06em E\kern0.06em N\kern0.06em T\kern0.06em I\kern0.06em C\kern0.12em\kern0.12em A\kern0.06em I}\\[0.30in]
+    {\fontsize{20}{24}\selectfont\color{DeepSlate}I\kern0.05em N\kern0.12em\kern0.12em L\kern0.05em A\kern0.05em W\kern0.12em\kern0.12em \&\kern0.12em\kern0.12em F\kern0.05em I\kern0.05em N\kern0.05em A\kern0.05em N\kern0.05em C\kern0.05em E}
+};
+\node[anchor=center, align=center] at (4.25in, 3.38in) {
+    {\fontsize{44}{52}\selectfont\bfseries\color{TextPure}A\kern0.06em G\kern0.06em E\kern0.06em N\kern0.06em T\kern0.06em I\kern0.06em C\kern0.12em\kern0.12em A\kern0.06em I}\\[0.30in]
+    {\fontsize{20}{24}\selectfont\color{CopperLight}I\kern0.05em N\kern0.12em\kern0.12em L\kern0.05em A\kern0.05em W\kern0.12em\kern0.12em \&\kern0.12em\kern0.12em F\kern0.05em I\kern0.05em N\kern0.05em A\kern0.05em N\kern0.05em C\kern0.05em E}
+};
+
+% --- Divider ---
+\draw[TextMuted, line width=0.4pt, opacity=0.4] (2.6in, 2.55in) -- (3.7in, 2.55in);
+\fill[CopperGlow, opacity=0.6] (4.25in, 2.55in) circle (2pt);
+\draw[TextMuted, line width=0.4pt, opacity=0.4] (4.8in, 2.55in) -- (5.9in, 2.55in);
+
+% --- Subtitle ---
+\node[anchor=center, align=center] at (4.25in, 1.95in) {
+    {\fontsize{18}{22}\selectfont\itshape\color{TextSoft}Navigating a New Era of}\\[0.12in]
+    {\fontsize{18}{22}\selectfont\itshape\color{TextSoft}Autonomous Systems}
+};
+
+% --- Authors (larger, lower) ---
+\node[anchor=center, align=center] at (4.25in, 0.15in) {
+    {\fontsize{13}{15}\selectfont\color{TextSoft}%
+    M\kern0.06em I\kern0.06em C\kern0.06em H\kern0.06em A\kern0.06em E\kern0.06em L\ %
+    J\kern0.06em.\ %
+    B\kern0.06em O\kern0.06em M\kern0.06em M\kern0.06em A\kern0.06em R\kern0.06em I\kern0.06em T\kern0.06em O\ %
+    I\kern0.06em I%
+    \quad \textbullet \quad %
+    D\kern0.06em A\kern0.06em N\kern0.06em I\kern0.06em E\kern0.06em L\ %
+    M\kern0.06em.\ %
+    K\kern0.06em A\kern0.06em T\kern0.06em Z%
+    \quad \textbullet \quad %
+    J\kern0.06em I\kern0.06em L\kern0.06em L\kern0.06em I\kern0.06em A\kern0.06em N\ %
+    B\kern0.06em O\kern0.06em M\kern0.06em M\kern0.06em A\kern0.06em R\kern0.06em I\kern0.06em T\kern0.06em O}
+};
+
+\node[anchor=center, align=center] at (4.25in, -0.15in) {
+    {\fontsize{10}{12}\selectfont\color{TextMuted}%
+    F\kern0.06em I\kern0.06em R\kern0.06em S\kern0.06em T\kern0.15em\kern0.15em %
+    E\kern0.06em D\kern0.06em I\kern0.06em T\kern0.06em I\kern0.06em O\kern0.06em N}
+};
+
+\end{scope}
+\end{scope}
+\end{tikzpicture}
+
+% Restore normal geometry
+\restoregeometry
+\clearpage
