@@ -1,31 +1,26 @@
 % ============================================================================
-% AGENTS IN LAW AND FINANCE
-% A Complete Guide to Understanding, Designing, and Governing AI Agents
+% AGENTIC AI IN LAW AND FINANCE
 % ============================================================================
-% This is the root document for the mini-book combining:
-%   - Part I: What is an Agent? (from Chapter 06)
-%   - Part II: How to Design an Agent (from Chapter 07)
-%   - Part III: How to Govern an Agent (from Chapter 08)
+% A comprehensive guide to understanding, designing, and governing
+% agentic AI systems in legal and financial contexts.
+%
+% Authors: Michael J. Bommarito II, Daniel M. Katz, Jillian Bommarito
+% First Edition, 2025
+%
+% Build: xelatex main.tex (single compiler, no separate cover compilation)
 % ============================================================================
 
 \documentclass[10pt,twoside,openany]{book}
 
 % ============================================================================
-% PATH CONFIGURATION
+% LOAD PREAMBLE (packages, colors, tikz, boxes, styling, commands)
 % ============================================================================
-% Enable input path resolution for subfiles and includes
-\makeatletter
-\def\input@path{{./}{front-matter/}{chapters/}{chapters/01-what-is-agent/}{chapters/02-how-to-design/}{chapters/03-how-to-govern/}}
-\makeatother
-
-% Subfiles package for modular chapter compilation
-\usepackage{subfiles}
-\usepackage{import}
+\input{preamble/main}
 
 % ============================================================================
-% LOAD SHARED PREAMBLE
+% BIBLIOGRAPHY DATABASE
 % ============================================================================
-\input{front-matter/preamble}
+\addbibresource{bib/refs.bib}
 
 % ============================================================================
 % GLOSSARY ENTRIES
@@ -33,24 +28,24 @@
 \input{front-matter/glossary-entries}
 
 % ============================================================================
-% BIBLIOGRAPHY
-% ============================================================================
-\addbibresource{bib/refs.bib}
-
-% ============================================================================
 % PDF METADATA
 % ============================================================================
 \hypersetup{
-  pdftitle={Agents in Law and Finance: Understanding, Designing, and Governing AI Agents},
-  pdfauthor={Michael J Bommarito II, Daniel Martin Katz, Jillian Bommarito},
-  pdfsubject={Artificial Intelligence, Agentic AI, Legal Technology, Financial Technology, AI Governance},
-  pdfkeywords={agentic AI, AI agents, legal AI, financial AI, agent architecture, AI governance, MCP, A2A, ReAct, regulatory compliance, AI risk management}
+  pdftitle={Agentic AI in Law and Finance},
+  pdfauthor={Michael J. Bommarito II, Daniel M. Katz, Jillian Bommarito},
+  pdfsubject={Artificial Intelligence, Agentic AI, Legal Technology, Financial Technology},
+  pdfkeywords={agentic AI, AI agents, legal AI, financial AI, AI governance}
 }
 
 % ============================================================================
 % DOCUMENT
 % ============================================================================
 \begin{document}
+
+% ============================================================================
+% COVER PAGE (inline TikZ, no PDF include)
+% ============================================================================
+\input{front-matter/cover/cover}
 
 % ============================================================================
 % FRONT MATTER
@@ -64,7 +59,8 @@
 \centering
 \vspace*{2cm}
 
-{\Huge\bfseries\color{primary} Agents in Law and Finance}
+{\Huge\bfseries\color{primary} Agentic AI}\\[0.3cm]
+{\LARGE\color{primary} in Law \& Finance}
 
 \vspace{0.5cm}
 
@@ -73,31 +69,31 @@
 \vspace{2cm}
 
 {\large\color{text-secondary}
-Michael J Bommarito II\\[0.3em]
-Daniel Martin Katz\\[0.3em]
+Michael J. Bommarito II\\[0.3em]
+Daniel M. Katz\\[0.3em]
 Jillian Bommarito
 }
 
 \vfill
 
 {\footnotesize\color{text-secondary}
-December 2025
+First Edition\\
+2025
 }
 
 \vspace{1cm}
-
 \end{titlepage}
 
 % ----------------------------------------------------------------------------
-% COPYRIGHT / COLOPHON PAGE
+% COPYRIGHT PAGE
 % ----------------------------------------------------------------------------
 \thispagestyle{empty}
 \vspace*{\fill}
 {\small
-\noindent\textbf{Agents in Law and Finance}\\
+\noindent\textbf{Agentic AI in Law \& Finance}\\
 \textit{Understanding, Designing, and Governing AI Agents}\\[1em]
 
-\noindent Copyright \textcopyright\ 2025 Michael J Bommarito II, Daniel Martin Katz, and Jillian Bommarito.\\[1em]
+\noindent Copyright \textcopyright\ 2025 Michael J. Bommarito II, Daniel M. Katz, and Jillian Bommarito.\\[1em]
 
 \noindent This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0). You are free to share and adapt this material for any purpose, even commercially, as long as you give appropriate credit and distribute your contributions under the same license.\\[0.5em]
 
@@ -139,24 +135,21 @@ December 2025
 % ----------------------------------------------------------------------------
 \chapter{What is an Agent?}
 \label{ch:what-is-agent}
-
-\subfile{chapters/01-what-is-agent/main}
+\input{chapters/01-what-is-agent/chapter}
 
 % ----------------------------------------------------------------------------
 % CHAPTER 2: How to Design an Agent
 % ----------------------------------------------------------------------------
 \chapter{How to Design an Agent}
 \label{ch:how-to-design}
-
-\subfile{chapters/02-how-to-design/main}
+\input{chapters/02-how-to-design/chapter}
 
 % ----------------------------------------------------------------------------
 % CHAPTER 3: How to Govern an Agent
 % ----------------------------------------------------------------------------
 \chapter{How to Govern an Agent}
 \label{ch:how-to-govern}
-
-\subfile{chapters/03-how-to-govern/main}
+\input{chapters/03-how-to-govern/chapter}
 
 % ============================================================================
 % BACK MATTER

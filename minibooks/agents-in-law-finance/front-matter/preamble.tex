@@ -36,10 +36,26 @@
   bottom=0.8in,
   footskip=0.35in
 ]{geometry}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
+% Font encoding - conditional for XeLaTeX/LuaLaTeX vs pdfLaTeX compatibility
+\usepackage{iftex}
+\ifxetex
+  % XeLaTeX: use fontspec (loaded automatically by libertinus)
+\else\ifluatex
+  % LuaLaTeX: use fontspec (loaded automatically by libertinus)
+\else
+  % pdfLaTeX: use traditional encoding
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+\fi\fi
+
+% ============================================================================
+% MATHEMATICS AND SYMBOLS (load before libertinus to avoid conflicts)
+% ============================================================================
+\usepackage{amsmath}
+\usepackage{amssymb}
 
 % Modern font: Libertinus (elegant, readable serif)
+% Auto-detects engine and uses fontspec with LuaLaTeX
 \usepackage{libertinus}
 \usepackage{libertinust1math} % Math support for Libertinus
 
@@ -60,15 +76,10 @@
 \usepackage{csquotes}
 
 % ============================================================================
-% MATHEMATICS AND SYMBOLS
-% ============================================================================
-\usepackage{amsmath}
-\usepackage{amssymb}
-
-% ============================================================================
 % GRAPHICS AND FIGURES
 % ============================================================================
 \usepackage{graphicx}
+\usepackage{pdfpages}   % Include external PDF pages (for cover)
 \usepackage{float}      % Better float control
 
 % ============================================================================

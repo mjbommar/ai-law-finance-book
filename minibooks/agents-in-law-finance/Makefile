@@ -24,13 +24,13 @@ TEXFILE = $(MAIN).tex
 PDFFILE = $(MAIN).pdf
 BIBFILE = bib/refs.bib
 
-# LaTeX tools
-LATEX = pdflatex
+# LaTeX tools - using XeLaTeX for fontspec support (works with standalone+tikz)
+LATEX = xelatex
 BIBER = biber
 LATEXMK = latexmk
 
-# Latexmk options
-LATEXMK_OPTS = -pdf -pdflatex="$(LATEX) -interaction=nonstopmode -file-line-error -halt-on-error"
+# Latexmk options - use xelatex
+LATEXMK_OPTS = -xelatex -interaction=nonstopmode -file-line-error -halt-on-error
 
 # Manual compilation flags
 LATEX_OPTS = -interaction=nonstopmode -file-line-error -halt-on-error
@@ -71,7 +71,7 @@ pdf: $(PDFFILE)
 		echo "$(CYAN)   Pages: $$pages | Size: $$size$(RESET)"; \
 	fi
 
-$(PDFFILE): $(TEXFILE) $(BIBFILE) front-matter/preamble.tex front-matter/preface.tex chapters/*/main.tex
+$(PDFFILE): $(TEXFILE) $(BIBFILE) preamble/*.tex front-matter/preface.tex chapters/*/chapter.tex
 	@echo "$(BOLD)$(BLUE)$(ARROW) Building $(PDFFILE)...$(RESET)"
 	@if command -v $(LATEXMK) >/dev/null 2>&1; then \
 		echo "$(CYAN)   Using latexmk (smart compilation)$(RESET)"; \
