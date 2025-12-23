@@ -6,10 +6,10 @@
     cell/.style={
         rounded corners=4pt,
         line width=1.2pt,
-        minimum width=5.8cm,
-        minimum height=1.8cm,
+        minimum width=4.2cm,
+        minimum height=1.6cm,
         align=center,
-        inner sep=10pt
+        inner sep=8pt
     },
     action/.style={
         font=\small\bfseries\sffamily
@@ -25,35 +25,35 @@
 ]
 
 % Column headers
-\node[axis label] at (-3.1, 2.4) {Low Ambiguity};
-\node[axis label] at (3.1, 2.4) {High Ambiguity};
+\node[axis label] at (-2.3, 2.1) {Low Ambiguity};
+\node[axis label] at (2.3, 2.1) {High Ambiguity};
 
 % Row headers
-\node[axis label, rotate=90, anchor=south, align=center] at (-6.5, 1.1) {Low\\Stakes};
-\node[axis label, rotate=90, anchor=south, align=center] at (-6.5, -1.1) {High\\Stakes};
+\node[axis label, rotate=90, anchor=south, align=center] at (-4.8, 0.9) {Low\\Stakes};
+\node[axis label, rotate=90, anchor=south, align=center] at (-4.8, -0.9) {High\\Stakes};
 
 % Top-left: Low Stakes, Low Ambiguity
-\node[cell, draw=example-base, fill=bg-example] (tl) at (-3.1, 1.1) {
+\node[cell, draw=example-base, fill=bg-example] (tl) at (-2.3, 0.9) {
     \textcolor{example-dark}{\textsf{\textbf{PROCEED}}}\\[2pt]
-    \textcolor{text-muted}{\scriptsize\itshape ``Apple market cap'' → Apple Inc.}
+    \textcolor{text-muted}{\scriptsize\itshape ``Apple market cap''}
 };
 
 % Top-right: Low Stakes, High Ambiguity
-\node[cell, draw=key-base, fill=bg-key] (tr) at (3.1, 1.1) {
+\node[cell, draw=key-base, fill=bg-key] (tr) at (2.3, 0.9) {
     \textcolor{key-dark}{\textsf{\textbf{CLARIFY BRIEFLY}}}\\[2pt]
-    \textcolor{text-muted}{\scriptsize\itshape ``Research SOL'' → which claim type?}
+    \textcolor{text-muted}{\scriptsize\itshape ``Research SOL''}
 };
 
 % Bottom-left: High Stakes, Low Ambiguity
-\node[cell, draw=key-base, fill=bg-key] (bl) at (-3.1, -1.1) {
+\node[cell, draw=key-base, fill=bg-key] (bl) at (-2.3, -0.9) {
     \textcolor{key-dark}{\textsf{\textbf{CONFIRM}}}\\[2pt]
-    \textcolor{text-muted}{\scriptsize\itshape ``File this motion'' → verify before acting}
+    \textcolor{text-muted}{\scriptsize\itshape ``File this motion''}
 };
 
 % Bottom-right: High Stakes, High Ambiguity
-\node[cell, draw=caution-base, fill=bg-caution] (br) at (3.1, -1.1) {
+\node[cell, draw=caution-base, fill=bg-caution] (br) at (2.3, -0.9) {
     \textcolor{caution-dark}{\textsf{\textbf{CLARIFY THOROUGHLY}}}\\[2pt]
-    \textcolor{text-muted}{\scriptsize\itshape ``Handle the regulatory response''}
+    \textcolor{text-muted}{\scriptsize\itshape ``Handle regulatory response''}
 };
 
 \end{tikzpicture}

@@ -29,8 +29,16 @@
 \usepackage{amssymb}
 
 % --- Fonts ---
+% libertinus package auto-detects engine:
+%   - XeLaTeX/LuaLaTeX: loads libertinus-otf (OpenType fonts + unicode-math)
+%   - pdfLaTeX: loads libertinus-type1 (T1 fonts)
 \usepackage{libertinus}
-\usepackage{libertinust1math}
+
+% libertinust1math is T1-encoded math for pdfLaTeX only.
+% For XeLaTeX/LuaLaTeX, libertinus-otf already provides math via unicode-math.
+\ifpdftex
+  \usepackage{libertinust1math}
+\fi
 
 % --- Typography ---
 \usepackage{microtype}

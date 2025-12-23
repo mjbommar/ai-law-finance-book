@@ -148,6 +148,22 @@ The key to graceful degradation is \textbf{tiered output design}. Rather than tr
 
 Termination evaluation requires six assessments: \textit{success clarity} (are termination conditions explicit and predictable?), \textit{budget enforcement} (are limits actually respected, not exceeded by 20\%?), \textit{loop detection} (does it escape unproductive patterns?), \textit{failure reporting} (do error messages enable effective human follow-up?), \textit{graceful degradation} (do partial results have standalone value?), and \textit{escalation handoff} (does the human receive sufficient context to continue?).
 
+\begin{practicebox}[title={\textbf{Termination Audit Checklist}}]
+Before deploying an agentic system in professional contexts, verify it implements at least one explicit termination mechanism:
+
+\begin{itemize}[leftmargin=1.5em,nosep]
+\item[$\square$] \textbf{Time budget:} Maximum wall-clock duration (seconds/minutes)
+\item[$\square$] \textbf{Iteration limit:} Maximum perception-action cycles
+\item[$\square$] \textbf{Token/request budget:} Maximum API calls, LLM tokens, or database queries
+\item[$\square$] \textbf{Cost ceiling:} Maximum monetary expenditure per task
+\item[$\square$] \textbf{Escalation trigger:} Automatic handoff when confidence drops below threshold
+\item[$\square$] \textbf{Error accumulation:} Stop after N consecutive failures or exceptions
+\item[$\square$] \textbf{Human intervention point:} Required approval before high-stakes actions
+\end{itemize}
+
+\textit{For high-stakes deployments (legal, medical, financial), implement multiple explicit termination mechanisms to prevent runaway processes and ensure predictable resource consumption.}
+\end{practicebox}
+
 % ----------------------------------------------------------------------------
 % Connection to Other Questions
 % ----------------------------------------------------------------------------

@@ -11,109 +11,63 @@ Our analysis across disciplines reveals four fundamental patterns that consisten
 
 \begin{keybox}[title={\textbf{Pattern 1: Goal-Directedness}}]
 \glsadd{goal}
-Agents pursue objectives or performance criteria. Whether we call them intentions in philosophy, rewards in reinforcement learning, mandates in law, or incentives in economics, the common thread remains: agents exhibit behavior oriented toward achieving outcomes rather than merely reacting to stimuli. This distinguishes purposeful action from reflexive response.
+Agents pursue objectives—whether called intentions, rewards, mandates, or incentives—exhibiting behavior oriented toward outcomes rather than merely reacting to stimuli.
 \end{keybox}
 
 \begin{keybox}[title={\textbf{Pattern 2: Perception–Action Coupling}}]
 \glsadd{perception}
 \glsadd{action}
 \glsadd{iteration}
-Agents operate through iterative cycles of sensing and acting. This pattern appears across theoretical frameworks, from \textcite{russellnorvig2020aima}'s sensor-actuator loops to \textcite{bratman1987intention}'s practical reasoning and \textcite{bandura1989human}'s reciprocal determinism. Entities that transform inputs once without iteration, such as compilers or single-shot classifiers, lack this essential coupling that characterizes agentic systems.
+Agents operate through iterative cycles of sensing and acting. Entities that transform inputs once without iteration—compilers, single-shot classifiers—lack this essential coupling.
 \end{keybox}
 
 \begin{keybox}[title={\textbf{Pattern 3: Selective Autonomy}}]
-\glsadd{autonomy-spectrum}Agents call for some degree of discretion in their choices, as we explored in \Cref{sec:dimensions}. Entities that execute fixed scripts without any decision-making capacity do not qualify as agents. The degree of autonomy varies significantly across domains, from minimal discretion in rule-based entities to substantial independence in modern AI agents, with higher levels of discretion typically raising more complex governance and accountability questions.
+\glsadd{autonomy-spectrum}
+Agents exercise discretion in their choices. Entities executing fixed scripts without decision-making capacity do not qualify.
 \end{keybox}
 
 \begin{keybox}[title={\textbf{Pattern 4: Termination}},breakable=false]
 \glsadd{termination}
 \glsadd{escalation}
-\glsadd{stopping-conditions}Purposeful behavior demands boundaries. Agents must have mechanisms for recognizing when to stop, whether through explicit controls (resource budgets, time limits, escalation triggers) or implicit goal satisfaction (achieving target state, exhausting search space). Entities that run indefinitely without clear stopping conditions or decision points fall outside our definition of agentic systems, as they lack the goal-oriented closure that characterizes purposeful action.
+\glsadd{stopping-conditions}
+Agents must recognize when to stop---through explicit controls or implicit goal satisfaction. Entities running indefinitely without stopping conditions lack goal-oriented closure. \Cref{sec:agents2-termination} provides detailed implementation guidance for termination conditions.
 \end{keybox}
 
-\subsection{Formal Core}
+\subsection{Precise Definitions}
 
-While the patterns above provide intuitive understanding, precision calls for formal specification. We now translate our insights into a mathematical framework that permits rigorous analysis and falsifiable claims about agency.
+The four patterns above provide intuition. Now we make them precise. A rigorous framework lets us make testable claims: given any system, we can determine whether it qualifies as an agent, an agentic system, or an AI agent---and defend that determination.
 
-To formalize our framework, we denote the six essential properties as follows:
+\paragraph{The Six Properties}
+
+Our framework rests on six observable properties. The first three establish minimal agency; the additional three distinguish fully operational agentic systems:
+
 \begin{itemize}[leftmargin=1.5em]
-\item $G$ = goal or utility function that directs behavior
-\item $P$ = perception capability for sensing environment
-\item $A$ = action capability for affecting environment
-\item $I$ = iteration across multiple steps with state preservation
-\item $A_{\text{adapt}}$ = adaptation through modifying strategy based on accumulated observations and feedback
-\item $T$ = termination through explicit or implicit conditions
+\item \textbf{Goal}---a clear objective or performance criterion that directs behavior
+\item \textbf{Perception}---the capability to sense and gather information from the environment
+\item \textbf{Action}---the capability to affect or change the environment
+\item \textbf{Iteration}---operating across multiple steps while preserving state between cycles
+\item \textbf{Adaptation}---modifying strategy based on accumulated observations and feedback
+\item \textbf{Termination}---recognizing when to stop, through explicit controls or goal satisfaction
 \end{itemize}
 
-Consistent with the operational definition in Section~\ref{sec:intro}, the six formal properties are Goal, Perception, Action, Iteration, Adaptation, and Termination (GPA + IAT). Autonomy or discretion remains an analytical dimension from Section~\ref{sec:dimensions} that describes \emph{how} these properties are exercised rather than a separate core property.
+The mnemonic \textbf{GPA + IAT} captures this structure: Goals, Perception, and Action form the minimal foundation; Iteration, Adaptation, and Termination complete the operational requirements. Autonomy---explored in \Cref{sec:dimensions}---describes \emph{how} these properties are exercised rather than serving as a separate core property.
 
-We use the notation $\mathit{has}(x, \cdot)$ to indicate that entity $x$ possesses a given property.
-
-\begin{definitionbox}[title={\textbf{Formal Definitions}}]
-We define three nested categories of entities based on their properties:
-\begin{align*}
-\mathit{Agent}(x) &\iff \mathit{has}(x,G) \land \mathit{has}(x,P) \land \mathit{has}(x,A) \\
-&\quad\text{(Minimal agency: goals, perception, action)}\\[0.5em]
-\mathit{AgenticSystem}(x) &\iff \mathit{Agent}(x) \land \mathit{has}(x,I) \land \mathit{has}(x,A_{\text{adapt}}) \land \mathit{has}(x,T) \\
-&\quad\text{(Full operational system: all six properties)}\\[0.5em]
-\mathit{AIAgent}(x) &\iff \mathit{AgenticSystem}(x) \land \mathit{implementedWithAI}(x)\\
-&\quad\text{(AI-powered implementation of agentic system)}
-\end{align*}
+\begin{definitionbox}[title={\textbf{Three Categories of Entities}}]
+\begin{itemize}[leftmargin=1.5em,nosep]
+\item \textbf{Agent} (minimal): Has goals, perception, and action. Includes humans, organizations, animals, and computational systems.
+\item \textbf{Agentic System} (operational): Has all six properties. Ready for deployment---operates through cycles, learns from feedback, knows when to stop.
+\item \textbf{AI Agent}: An agentic system implemented using AI/ML technologies.
+\end{itemize}
 \end{definitionbox}
 
-These formal definitions yield several important theoretical results that clarify the relationships between different types of entities:
+These categories form a strict hierarchy: every AI agent is an agentic system, and every agentic system is an agent---but the reverse does not hold. A single-shot image classifier qualifies as an agent (goals, perception, action) but lacks iteration, adaptation, and termination, so it fails as an agentic system. Individual features can be ``agentic'' without the whole system qualifying.
 
-\begin{theorembox}[unbreakable,title={\textbf{Key Theoretical Results}}]
-\textbf{Hierarchical Subsumption.} The categories form a nested hierarchy:
-$$\mathit{AIAgent}(x) \Rightarrow \mathit{AgenticSystem}(x) \Rightarrow \mathit{Agent}(x)$$
-Every AI agent is necessarily an agentic system, and every agentic system is necessarily an agent, but the converses do not hold.
+\paragraph{Termination in Detail}
 
-\textbf{Non-Equivalence.} The categories are strictly distinct:
-$$\exists x:\ \mathit{Agent}(x) \land \neg\mathit{AgenticSystem}(x)$$
-To illustrate, a single-shot classifier might have goals, perception, and action capabilities, but lacks the iteration, discretion, and termination properties needed for an agentic system.
+Termination deserves special attention because runaway processes pose real risks in professional contexts. An entity can satisfy the termination requirement through either of two mechanisms---or both:
 
-\textbf{Property Attribution.} Individual features can be described as ``agentic'' (such as ``agentic perception'' or ``agentic planning'') without implying the system as a whole qualifies as an $\mathit{AgenticSystem}$. Full agentic system status demands all six properties.
-\end{theorembox}
-
-The termination property deserves special attention, as it can manifest in two distinct forms:
-
-\begin{definitionbox}[unbreakable,title={\textbf{Termination Modes}}]
-An entity satisfies the termination requirement through either explicit or implicit mechanisms:
-$$\mathit{has}(x,T) \iff \text{ExplicitTerm}(x)\ \lor\ \text{ImplicitTerm}(x)$$
-
-\textbf{Explicit termination} involves programmed monitoring of conditions such as:
 \glsadd{escalation}
-\begin{itemize}[leftmargin=1.5em,nosep]
-\item Resource budgets (computation time, API calls, token limits)
-\item Timeout constraints (wall clock time, iteration counts)
-\item Escalation triggers (confidence thresholds, error conditions)
-\end{itemize}
-
-\textbf{Implicit termination} occurs naturally through:
-\begin{itemize}[leftmargin=1.5em,nosep]
-\item Goal satisfaction (target state achieved)
-\item Quiescent states (no further actions available)
-\item Bounded episodes (fixed-duration tasks)
-\end{itemize}
-
-Professional deployments typically combine both modes. A legal research agent might terminate implicitly when a satisfactory precedent is found while respecting explicit resource limits and escalating to humans when confidence falls below thresholds.
-\end{definitionbox}
-
-\begin{practicebox}[title={\textbf{Termination Audit Checklist for Deployments}}]
-Before deploying an agentic system in professional contexts, verify it implements at least one explicit termination mechanism:
-
-\begin{itemize}[leftmargin=1.5em,nosep]
-\item[$\square$] \textbf{Time budget:} Maximum wall-clock duration (seconds/minutes)
-\item[$\square$] \textbf{Iteration limit:} Maximum perception-action cycles
-\item[$\square$] \textbf{Token/request budget:} Maximum API calls, LLM tokens, or database queries
-\item[$\square$] \textbf{Cost ceiling:} Maximum monetary expenditure per task
-\item[$\square$] \textbf{Escalation trigger:} Automatic handoff when confidence drops below threshold
-\item[$\square$] \textbf{Error accumulation:} Stop after N consecutive failures or exceptions
-\item[$\square$] \textbf{Human intervention point:} Required approval before high-stakes actions
-\end{itemize}
-
-\textit{For high-stakes deployments (legal, medical, financial), implement multiple explicit termination mechanisms to prevent runaway processes and ensure predictable resource consumption.}
-\end{practicebox}
+\textbf{Explicit termination} involves programmed hard limits: resource budgets, timeout constraints, and escalation triggers. \textbf{Implicit termination} occurs naturally when goals are satisfied, no further actions are available, or task episodes end. Professional deployments combine both---a legal research agent terminates implicitly upon finding precedent while respecting explicit resource limits. \Cref{sec:agents2-termination} examines five categories of termination conditions (success, resource budgets, confidence thresholds, error conditions, and escalation triggers), while \Cref{sec:agents2-escalation} addresses when agents should pause and request human input rather than terminating outright.
 
 \subsection{Foundations in Context}
 
@@ -166,32 +120,42 @@ Testing our framework against boundary cases reveals both its strengths and the 
 
 \subsection{Professional Deployment}
 
-Understanding what makes an entity agentic is only the first step. In regulated domains like law and finance, deploying AI agents calls for robust governance frameworks that ensure compliance, maintain professional standards, and protect sensitive information. The stakes are particularly high: errors can trigger regulatory sanctions, breach fiduciary duties, or compromise client confidentiality.
+Understanding what makes an entity agentic is only the first step. In regulated domains like law and finance, deploying AI agents demands robust governance frameworks that ensure compliance, maintain professional standards, and protect sensitive information. The stakes are high: errors can trigger regulatory sanctions, breach fiduciary duties, or compromise client confidentiality.
 
-Professional deployment demands that we move beyond theoretical properties to operational safeguards. Each of the six properties we've identified creates both opportunities and risks that must be managed through careful entity design and governance controls. The following controls transform theoretical capabilities into trustworthy tools:
+\begin{cautionbox}[title={\textbf{Governance Cannot Be Retrofitted}}]
+\glsadd{governance-surface}
+Systems designed without audit logging cannot produce compliance reports when regulators arrive. Those lacking approval gates cannot enforce human oversight after deployment. Build governance in from the start.
+\end{cautionbox}
 
-\begin{keybox}[title={\textbf{Six Governance Controls for Professional Deployment}}]
+Professional deployment demands that we move beyond theoretical properties to operational safeguards. Each of the six properties creates both opportunities and risks that must be managed through careful design and governance controls. \Cref{ch:how-to-design} addresses the \textit{how}---designing agents with governance-aware architecture---while \Cref{ch:how-to-govern} addresses the \textit{what}---the five-layer regulatory framework and organizational accountability structures that deployed agents must satisfy.
+
+\paragraph{Attribution and Auditability}
+Every factual claim must be traceable to its source---case law, regulatory filings, market data, or expert analysis. Modern AI agents should maintain citation chains that satisfy legal brief or investment memorandum standards. Beyond citations, log major reasoning steps, tool invocations, and decision points in forms that preserve privilege while facilitating review. \Cref{sec:agents2-logging-arch} details the logging architecture that makes this possible; \Cref{sec:agents3-audit-logging} specifies what governance frameworks demand.
+
+\paragraph{Bounded Operation}
+\glsadd{termination}
+Without explicit termination conditions, agentic systems lack the property that distinguishes controlled systems from runaway processes. Enforce computational budgets, time constraints, and maximum iteration counts. In financial contexts, limit market data queries; in legal contexts, cap document review cycles. \Cref{sec:agents2-termination} provides implementation guidance for five categories of termination conditions; \Cref{sec:agents2-loop-detection} addresses guardrails that detect and interrupt unproductive loops.
+
+\paragraph{Escalation Pathways}
 \glsadd{escalation}
-\begin{enumerate}[leftmargin=1.5em]
-\item \textbf{Attribution and Provenance.} Every factual claim must be traceable to its source---case law, regulatory filings, market data, or expert analysis. Modern AI agents should maintain citation chains that satisfy legal brief or investment memorandum standards.
+\glsadd{human-in-the-loop}
+Clear triggers---low confidence, high-stakes decisions, detected conflicts---should route matters to human review. A contract review agent might escalate unusual liability provisions; a trading agent might pause before executing orders that exceed authorization thresholds. Escalation represents professionalism, not failure: recognizing when you need help is exactly what we expect from junior professionals. \Cref{sec:agents2-escalation} examines when agents should escalate; \Cref{sec:agents3-human-oversight} addresses human-in-the-loop patterns.
 
-\item \textbf{Auditable Reasoning.} Log major reasoning steps, tool invocations, and decision points in forms that preserve privilege while facilitating review. Capture the business logic an expert would expect to see: litigation hold decisions, trade execution rationales, compliance determination paths.
+\paragraph{Confidentiality Controls}
+Attorney-client privilege, insider trading restrictions, and client confidentiality duties are non-delegable professional obligations. Governance systems must operationalize them through technical controls---ethical walls between matters, role-based access, and redaction rules---not rely on agent ``judgment.'' \Cref{sec:agents2-least-privilege} addresses least-privilege enforcement; \Cref{sec:agents3-professional-obligations} maps the professional responsibility rules that govern legal and financial practice.
 
-\item \textbf{Bounded Operation.} Enforce explicit limits: computational budgets, time constraints, maximum iteration counts. In financial contexts, limit market data queries; in legal contexts, cap document review cycles.
+\paragraph{Accountability Mapping}
+Establish clear responsibility lines before deployment: Who configured the agent? Who reviewed its outputs? Who authorized deployment? These questions must have answers before processing the first client matter. \Cref{sec:agents3-accountability} presents organizational governance models and examines how liability flows when agents cause harm.
 
-\item \textbf{Escalation Pathways.} Clear triggers---low confidence, high-stakes decisions, detected conflicts---should route matters to human review. A contract review agent might escalate unusual liability provisions or non-standard jurisdiction clauses.
-
-\item \textbf{Confidentiality Controls.} Enforce ethical walls between matters, role-based access controls, and redaction rules. This encompasses legal privilege, insider trading restrictions, and client confidentiality duties.
-
-\item \textbf{Accountability Mapping.} Establish clear responsibility lines before deployment: Who configured the agent? Who reviewed its outputs? Who authorized deployment? These questions must have answers before processing the first client matter.
-\end{enumerate}
+\begin{keybox}[title={\textbf{From Framework to Practice}}]
+This chapter establishes \textit{what} agents are. The chapters that follow address \textit{how} to build them (\Cref{ch:how-to-design}) and \textit{how} to govern them (\Cref{ch:how-to-govern}). The six properties and governance controls introduced here reappear throughout---as design requirements, as audit checkpoints, and as the foundation for regulatory compliance.
 \end{keybox}
 
 \subsection{Common Questions About Agency}
 
 Our framework inevitably raises questions about edge cases and apparent contradictions. Here we address the most common concerns that arise when applying these definitions to real-world systems.
 
-\textbf{Is iteration just repeated action?} Iteration means more than simply repeating the same action multiple times. True iteration involves maintaining state across perception-action cycles, enabling the entity to learn from previous attempts and adjust its approach. An entity that simply retries the same failing action indefinitely is not iterating in our sense—it is stuck in a loop. Iteration requires the ability to incorporate feedback, correct errors, and make progress toward goals through successive refinements. A system that queries the same API endpoint repeatedly with identical parameters is not iterating; one that refines its query based on previous results is. This is why single-shot entities, no matter how sophisticated, do not qualify as agentic systems under our framework.
+\textbf{Is iteration just repeated action?} Iteration means more than simply repeating the same action multiple times. True iteration involves maintaining state across perception-action cycles, enabling the entity to learn from previous attempts and adjust its approach. An entity that simply retries the same failing action indefinitely is not iterating in our sense---it is stuck in a loop. Iteration requires the ability to incorporate feedback, correct errors, and make progress toward goals through successive refinements. A system that queries the same API endpoint repeatedly with identical parameters is not iterating; one that refines its query based on previous results is. This connection between iteration, memory, and adaptation is fundamental: \Cref{sec:agents2-memory} examines how agents maintain state across cycles, while \Cref{sec:agents2-adaptation} addresses how memory enables behavioral change based on experience. Single-shot entities, no matter how sophisticated, do not qualify as agentic systems under our framework because they lack this capacity to learn and adjust.
 
 \textbf{Do continuous tasks violate the termination requirement?} Entities performing continuous tasks like monitoring or maintenance might seem to run forever, apparently violating our termination requirement. However, these entities still satisfy the termination property through implicit or explicit mechanisms. Implicit termination occurs when the entity reaches a steady state or exhausts available actions. Explicit termination happens through resource budgets, time limits, or escalation triggers. Even an entity that monitors markets continuously operates in bounded episodes—trading sessions, reporting periods, or maintenance windows. The key is that the entity has clear conditions under which it will cease its current behavior pattern, even if it later resumes. The termination requirement ensures predictable resource consumption and prevents runaway processes, not that entities can never restart.
 

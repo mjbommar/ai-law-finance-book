@@ -190,25 +190,25 @@ The interplay between triggers, channels, and surfaces creates the complete huma
 
 \begin{table}[htbp]
 	\centering
-	\caption{How triggers, channels, and surfaces combine in practice}
-	\label{tab:agents2-trigger-surface-examples}
 	\small
-	\begin{tabular}{p{0.23\textwidth}p{0.15\textwidth}p{0.13\textwidth}p{0.39\textwidth}}
+	\begin{tabular}{p{0.32\textwidth}p{0.22\textwidth}p{0.22\textwidth}}
 		\toprule
-		\textbf{Trigger}          & \textbf{Channel}  & \textbf{Surface}   & \textbf{Workflow}                              \\
+		\textbf{Trigger}          & \textbf{Channel}  & \textbf{Surface}   \\
 		\midrule
-		New court filing          & External feed     & Automation         & Background monitoring; alert when needed       \\
-		New court filing          & External feed     & Chat               & Interactive research on opposing brief         \\
-		New court filing          & External feed     & Document           & Case summary memo for partner                  \\
+		New court filing          & External feed     & Automation         \\
+		New court filing          & External feed     & Chat               \\
+		New court filing          & External feed     & Document           \\
 		\midrule
-		Price threshold crossed   & External feed     & Automation         & Background alert to portfolio manager          \\
-		Price threshold crossed   & External feed     & Chat               & Interactive rebalancing analysis               \\
-		Price threshold crossed   & External feed     & Document           & Trade recommendation for committee             \\
+		Price threshold crossed   & External feed     & Automation         \\
+		Price threshold crossed   & External feed     & Chat               \\
+		Price threshold crossed   & External feed     & Document           \\
 		\midrule
-		Research question         & Human prompt      & Chat               & Iterative legal research                       \\
-		Report request            & Human prompt      & Document           & Due diligence memo                             \\
+		Research question         & Human prompt      & Chat               \\
+		Report request            & Human prompt      & Document           \\
 		\bottomrule
 	\end{tabular}
+	\caption{How triggers, channels, and surfaces combine in practice. The same trigger arriving through the same channel can manifest through different surfaces: automation for background monitoring, chat for interactive research, or document generation for formal deliverables.}
+	\label{tab:agents2-trigger-surface-examples}
 \end{table}
 
 \textbf{Emerging surfaces} include embedded copilots (agentic capabilities integrated into existing applications via sidebars or inline suggestions), ambient interfaces (voice-based interaction, though currently limited by transcription errors in professional contexts), and agentic APIs (machine-to-machine orchestration where the ``user'' is another system---see \Cref{sec:agents2-delegation}).

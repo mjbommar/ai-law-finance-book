@@ -10,21 +10,19 @@
 \glsadd{agentic-system}
 \glsadd{gpa}
 \glsadd{iat}
-In Chapter~1 (\textit{What is an Agent?}) \parencite{bommarito2025whatisanagent}, we introduced the GPA+IAT framework: a way to recognize agentic systems through Goals, Perception, Action, Iteration, Adaptation, and Termination. Now, we turn to the practical: \textit{How do you design one?}
+The previous chapter introduced the GPA+IAT framework: a way to recognize agentic systems through Goals, Perception, Action, Iteration, Adaptation, and Termination. Now we turn to the practical: \textit{How do you design one?}
 
 \glsadd{agentic-system}
 \glsadd{agent}
 The answer starts with a simple observation: agentic systems are meant to do real work, whether augmenting human professionals, automating routine workflows, or even replacing entire organizational functions. Whatever the ambition, the system must handle the same work those humans and organizations currently perform. A contract lifecycle management agent must do what a legal operations team does; a portfolio monitoring agent must ``act like'' an analyst; a due diligence automation agent must perform the same tasks as junior associates reviewing acquisition targets. This means an agentic system requires the same structural capabilities as a professional team, from receiving and understanding work to coordinating action and operating under governance controls.
 
-\begin{keybox}[title={The Core Insight}]
-	\textbf{Agents are not magic; they are architecture.}
-
-	Behind each architectural question lies a design decision with real tradeoffs—capabilities that make agents useful require concrete choices about how systems should work, and those choices determine not just what the system can do but how reliably it performs, how it fails, and what controls remain available when things go wrong.\\
-
-	Notably, agents are also more than any single agentic framework, programming language, or foundation model.  While the implementation of an agentic architecture does require choosing between languages like Python or C\# and models like GPT or Claude, the design decisions transcend these details.\\
-
-	While we encourage you to learn by doing, we also encourage you to begin by focusing on the core concepts and design decisions in this chapter first.  Many commercial software providers and even open source libraries obscure or confuse the key design decisions that underlie agents, and you will likely learn best by building your own foundation before learning the language of any particular vendor or framework.
+\begin{keybox}[title={Agents are not magic; they are architecture}]
+	Behind each architectural question lies a design decision with real tradeoffs---capabilities that make agents useful require concrete choices about how systems should work, and those choices determine not just what the system can do but how reliably it performs, how it fails, and what controls remain available when things go wrong.
 \end{keybox}
+
+Agents should never be defined by any single framework, programming language, or foundation model. Implementation inevitably requires choosing between Python and C\#, between GPT and Claude, between LangChain and custom orchestration---but the design decisions that matter transcend these details.
+
+While we encourage you to learn by doing, we also encourage you to begin by focusing on the core concepts and design decisions in this chapter first. Many commercial software providers and even open source libraries obscure or confuse the key design decisions that underlie agents, and you will likely learn best by building your own foundation before learning the language of any particular vendor or framework.
 
 This chapter organizes those architectural decisions into ten questions: the kind you should be asking whether you're building, evaluating, deploying, or governing an agentic system.
 
@@ -37,7 +35,15 @@ This chapter organizes those architectural decisions into ten questions: the kin
 
 Designing an agent means answering these ten questions. The capabilities an agent needs are not determined by the technology; they are determined by the work. And work has structure that any system, human or artificial, must accommodate.
 
-Examine how a law firm operates. Work arrives through defined channels: a client calls, court filings appear on the docket, or an originating attorney refers a matter to a specialist. That work typically arrives as instructions that need clarification, and associates quickly learn to read between the lines, developing heuristics for what partners actually want rather than what they literally said. Research demands access to the right databases (Westlaw, Lexis, PACER, internal matter management systems) and thoughtful search strategies. Actions like filing motions or sending client letters have real consequences and require appropriate authorization and privilege review. Institutional knowledge accumulates in case files, precedent databases, and practice group work product repositories. Complex matters break down into workstreams with dependencies: discovery must complete before summary judgment motions, corporate due diligence must finish before closing, compliance audits must conclude before regulatory filings. Each work product has clear completion criteria and quality standards. Associates know when to escalate to partners: when legal issues exceed their experience, when client relationship implications arise, or when matter budgets risk overruns. Teams coordinate across practice groups, with corporate attorneys working alongside litigators on acquisition disputes, or securities lawyers collaborating with compliance specialists on disclosure obligations. Throughout, ethics rules and professional responsibility standards keep the whole operation within bounds: conflicts checks before engagement, confidentiality protections during representation, and privilege safeguards in every communication.
+Examine how a law firm operates. Work arrives through defined channels: a client calls, court filings appear on the docket, or an originating attorney refers a matter to a specialist. That work typically arrives as instructions that need clarification, and associates quickly learn to read between the lines, developing heuristics for what partners actually want rather than what they literally said.
+
+Research demands access to the right databases (Westlaw, Lexis, PACER, internal matter management systems) and thoughtful search strategies. Actions like filing motions or sending client letters have real consequences and require appropriate authorization and privilege review. Institutional knowledge accumulates in case files, precedent databases, and practice group work product repositories.
+
+Complex matters break down into workstreams with dependencies: discovery must complete before summary judgment motions, corporate due diligence must finish before closing, compliance audits must conclude before regulatory filings. Each work product has clear completion criteria and quality standards.
+
+Associates know when to escalate to partners: when legal issues exceed their experience, when client relationship implications arise, or when matter budgets risk overruns. Teams coordinate across practice groups, with corporate attorneys working alongside litigators on acquisition disputes, or securities lawyers collaborating with compliance specialists on disclosure obligations.
+
+Throughout, ethics rules and professional responsibility standards keep the whole operation within bounds: conflicts checks before engagement, confidentiality protections during representation, and privilege safeguards in every communication.
 
 A discretionary portfolio management team follows the same pattern. Market data and research flow through defined feeds, and analysts must interpret investment committee mandates that leave room for judgment. Research requires access to financial databases, company filings, and market intelligence. Trades have real-world consequences that demand compliance checks before execution. Position history and investment theses persist across quarters, informing future decisions. Portfolio construction breaks down into sector allocation, security selection, and risk management, each with its own completion criteria. Analysts escalate to portfolio managers when positions approach limits, teams coordinate across asset classes, and regulatory controls ensure fiduciary compliance throughout.
 

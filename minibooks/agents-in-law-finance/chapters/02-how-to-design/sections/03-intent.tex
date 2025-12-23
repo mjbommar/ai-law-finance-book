@@ -77,18 +77,11 @@ Production systems often combine both patterns. Simple, high-volume, time-sensit
 
 For architects evaluating agentic systems: where must classification be deterministic (regulatory requirements, latency/speed constraints, auditability)? Where does flexibility justify the overhead of LLM reasoning? The answer shapes system design.
 
-\begin{keybox}[title={Intent Inference Is Not Mind Reading}, breakable=false]
-	LLMs infer \textit{probable} intent from language patterns; they do not read minds. Inference fails when:
+\begin{cautionbox}[title={Intent Inference Is Not Mind Reading}]
+	LLMs infer \textit{probable} intent from language patterns; they do not read minds. Design for clarification, not guessing.
+\end{cautionbox}
 
-	\begin{itemize}[nosep]
-		\item The instruction is genuinely ambiguous (multiple reasonable interpretations)
-		\item The user's intent differs from typical patterns for similar language
-		\item Critical context exists outside the conversation (prior meetings, firm norms)
-		\item The user themselves is unclear about what they want\\
-	\end{itemize}
-\end{keybox}
-
-\textbf{Design for clarification, not guessing.} The aim is an agent that surfaces uncertainty and asks, not one that pretends it possesses certainty regarding intent.
+Inference fails when instructions are genuinely ambiguous, when the user's intent differs from typical patterns, when critical context exists outside the conversation (prior meetings, firm norms), or when the user themselves is unclear about what they want. The aim is an agent that surfaces uncertainty and asks, not one that pretends certainty regarding intent.
 
 % ----------------------------------------------------------------------------
 % Goal Extraction from Natural Language
@@ -120,60 +113,63 @@ Two additional constraint types often remain unstated. Audience and privilege co
 
 Once extracted, these components can be organized into structured goal representations that guide execution. These representations resemble short assignment memos that the planning system can act on (\Cref{sec:agents2-planning}) and the termination system can measure against (\Cref{sec:agents2-termination}).
 
-\begin{center}
-	\begin{tikzpicture}[
-			inbox/.style={
-					rectangle,
-					rounded corners=3pt,
-					draw=gray-300,
-					fill=gray-100,
-					minimum width=4cm,
-					minimum height=4cm,
-					align=center,
-					inner sep=8pt
-				},
-			goalbox/.style={
-					rectangle,
-					rounded corners=3pt,
-					draw=example-base,
-					fill=example-light,
-					minimum width=8.5cm,
-					minimum height=4cm,
-					align=left,
-					inner sep=10pt
-				},
-			arrow/.style={->, >=stealth, line width=1.5pt, gray-400}
-		]
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+		inbox/.style={
+				rectangle,
+				rounded corners=3pt,
+				draw=gray-300,
+				fill=gray-100,
+				minimum width=3.2cm,
+				minimum height=3.2cm,
+				align=center,
+				inner sep=6pt
+			},
+		goalbox/.style={
+				rectangle,
+				rounded corners=3pt,
+				draw=example-base,
+				fill=example-light,
+				minimum width=6.2cm,
+				minimum height=3.2cm,
+				align=left,
+				inner sep=8pt
+			},
+		arrow/.style={->, >=stealth, line width=1.5pt, gray-400}
+	]
 
-		% Left: User instruction
-		\node[inbox] (input) at (-2.6, 0) {
-			\textcolor{gray-500}{\scriptsize\sffamily\bfseries USER INSTRUCTION}\\[6pt]
-			\large\textit{``Review the Smith}\\
-			\large\textit{acquisition agreement}\\
-			\large\textit{for change-of-control}\\
-			\large\textit{provisions''}
-		};
+	% Left: User instruction
+	\node[inbox] (input) at (-2.0, 0) {
+		\textcolor{gray-500}{\tiny\sffamily\bfseries USER INSTRUCTION}\\[4pt]
+		\small\textit{``Review the Smith}\\
+		\small\textit{acquisition agreement}\\
+		\small\textit{for change-of-control}\\
+		\small\textit{provisions''}
+	};
 
-		% Arrow
-		\draw[arrow] (input.east) -- ++(0.6, 0);
+	% Arrow
+	\draw[arrow] (input.east) -- ++(0.5, 0);
 
-		% Right: Extracted goal
-		\node[goalbox, right=1cm of input] (goal) {
-			\textcolor{example-dark}{\sffamily\bfseries Structured Goal Representation}\\[4pt]
-			\small
-			\begin{tabular}{@{}l@{\hspace{0.5em}}l@{}}
-				\textcolor{gray-600}{Task:}        & Document review                                                                                        \\
-				\textcolor{gray-600}{Document:}    & Smith Acquisition Agreement                                                                            \\
-				\textcolor{gray-600}{Objective:}   & Identify change-of-control provisions                                                                  \\[2pt]
-				\textcolor{gray-600}{Deadline:}    & January 15, 2025                                                                                       \\
-				\textcolor{gray-600}{Scope:}       & Sections 5--8                                                                                          \\
-				\textcolor{gray-600}{Deliverable:} & Summary memo                                                                                           \\[2pt]
-				\textcolor{gray-600}{Success:}     & \parbox[t]{6.5cm}{All CoC provisions identified, triggering events listed, consent requirements noted} \\
-			\end{tabular}
-		};
+	% Right: Extracted goal
+	\node[goalbox, right=0.8cm of input] (goal) {
+		\textcolor{example-dark}{\small\sffamily\bfseries Structured Goal}\\[3pt]
+		\scriptsize
+		\begin{tabular}{@{}l@{\hspace{0.4em}}l@{}}
+			\textcolor{gray-600}{Task:}        & Document review                    \\
+			\textcolor{gray-600}{Document:}    & Smith Acquisition Agreement        \\
+			\textcolor{gray-600}{Objective:}   & Identify CoC provisions            \\
+			\textcolor{gray-600}{Deadline:}    & January 15, 2025                   \\
+			\textcolor{gray-600}{Scope:}       & Sections 5--8                      \\
+			\textcolor{gray-600}{Deliverable:} & Summary memo                       \\
+			\textcolor{gray-600}{Success:}     & All provisions identified          \\
+		\end{tabular}
+	};
 
-	\end{tikzpicture}
-\end{center}
+\end{tikzpicture}
+\caption{Goal extraction transforms natural language instructions into structured specifications that guide agent execution and define success criteria.}
+\label{fig:agents2-goal-extraction}
+\end{figure}
 
 % ----------------------------------------------------------------------------
 % Ambiguity Detection and Clarification

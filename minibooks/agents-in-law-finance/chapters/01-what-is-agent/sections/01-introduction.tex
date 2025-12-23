@@ -13,11 +13,13 @@ The proliferation of ``agentic AI'' makes definitional clarity urgent. Existing 
 
 Some of this fragmentation reflects genuinely different perspectives, such as whether we recognize agents by their \textit{internal properties} (mental states, intentions) or \textit{external manifestations} (observable behavior, delegated authority)—a spectrum we explore in Section~\ref{sec:disciplines}. While theoretical considerations like these can be useful, it is now most critical that we \textbf{establish a practical framework} to guide communication and coordination.
 
-The stakes for getting this right are tangible. By late 2025, courts worldwide had identified over 400 cases involving AI-generated hallucinations\glsadd{hallucination} in legal filings---fabricated citations, fictitious holdings, and nonexistent cases submitted to tribunals. The ABA's Formal Opinion 512 (July 2024) established that attorneys bear full responsibility for verifying AI-generated content, noting that leading legal AI systems ``hallucinate between 17\% and 33\% of the time'' \parencite{aba-formal-opinion-512}. These failures share a common pattern: attorneys treated single-shot text generators as if they were research tools, when those systems lacked the ability to search authoritative databases, iterate to verify citations, or escalate uncertainty. An agentic legal research system---one exhibiting all six operational properties---would validate citations through tool access, confirm holdings through iteration, and flag unverifiable sources through escalation. The distinction between genuinely agentic systems and sophisticated chatbots is not academic; it is essential for professional practice, regulatory compliance, and client protection.
+The stakes for getting this right are tangible. By late 2025, courts worldwide had identified over 400 cases involving AI-generated hallucinations\glsadd{hallucination} in legal filings---fabricated citations, fictitious holdings, and nonexistent cases submitted to tribunals. The ABA's Formal Opinion 512 (July 2024) established that attorneys bear full responsibility for verifying AI-generated content, noting that leading legal AI systems ``hallucinate between 17\% and 33\% of the time'' \parencite{aba-formal-opinion-512}.
 
-For legal and financial applications, the six operational properties are \textit{necessary but not sufficient}. Professional deployment demands additional safeguards—attribution to authoritative sources, auditable provenance, escalation protocols, and confidentiality controls—that augment rather than replace the six-property framework. Section~\ref{sec:synthesis} addresses these professional deployment requirements in detail.
+These failures share a common pattern: attorneys treated single-shot text generators as if they were research tools, when those systems lacked the ability to search authoritative databases, iterate to verify citations, or escalate uncertainty. An agentic legal research system---one exhibiting all six operational properties we introduce below---would validate citations through tool access, confirm holdings through iteration, and flag unverifiable sources through escalation. The distinction between genuinely agentic systems and sophisticated chatbots is not academic; it is essential for professional practice, regulatory compliance, and client protection.
 
-To do so, we organize agency into three levels that correspond to answering the following questions:
+For legal and financial applications, these six operational properties are \textit{necessary but not sufficient}. Professional deployment demands additional safeguards---attribution to authoritative sources, auditable provenance, escalation protocols, and confidentiality controls---that augment rather than replace the core framework. Section~\ref{sec:synthesis} addresses these professional deployment requirements in detail.
+
+Building toward these operational requirements, we organize agency into three levels that correspond to the following questions:
 
 \textbf{Level 1}: What makes \textit{something}—biological or computational—an agent?
 
@@ -240,16 +242,7 @@ Having traced the progression from minimal agency (three properties) through age
 
 The critical distinction lies between \textit{properties} and \textit{implementation}. The major jump in capability occurs between Level 1 (three properties) and agentic systems (six properties). Levels 2 and 3, by contrast, have \textit{identical property requirements}, differing only in how those properties are implemented: through explicit rules and logic (Level 2) or through AI/ML models (Level 3).
 
-This hierarchy permits precise terminology:
-
-
-\begin{keybox}[title={Terminology Precision}]
-	\begin{itemize}[nosep]
-		\item \textbf{``Agent'' (noun):} Anything that exhibits Level 1's three minimal properties.
-		\item \textbf{``Agentic'' (adjective):} At the system level, describes systems meeting all six operational properties. We may also use it descriptively at the feature/behavior level (e.g., ``agentic behavior/properties''); reserve ``agentic system'' for six-of-six conformance.
-		\item \textbf{``AI agent'':} An agentic system specifically powered by AI/ML (Level 3).
-	\end{itemize}
-\end{keybox}
+This hierarchy permits precise terminology. An \textbf{``agent''} (noun) refers to anything that exhibits Level 1's three minimal properties. The adjective \textbf{``agentic''} describes systems meeting all six operational properties at the system level; we may also use it descriptively at the feature or behavior level (e.g., ``agentic behavior'' or ``agentic properties''), but reserve ``agentic system'' for six-of-six conformance. Finally, an \textbf{``AI agent''} is an agentic system specifically powered by AI/ML capabilities (Level 3).
 
 These definitions allow clear exclusions. Compilers and databases lack goals entirely, failing even Level 1's minimal requirements. A single chatbot response, however sophisticated, lacks iteration and therefore does not qualify as an operational agentic system. Traditional ML classifiers—image recognizers, spam filters, sentiment analyzers—lack both iteration and autonomous goals, processing inputs without pursuing objectives across perceive-act cycles. Rule-based expert systems present a more nuanced case: they can be fully agentic (meeting all six operational properties) but are not AI-powered, placing them at Level 2 rather than Level 3.
 

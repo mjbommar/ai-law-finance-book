@@ -30,7 +30,8 @@ BIBER = biber
 LATEXMK = latexmk
 
 # Latexmk options - use xelatex
-LATEXMK_OPTS = -xelatex -interaction=nonstopmode -file-line-error -halt-on-error
+# -recorder helps track file dependencies for TikZ remember picture
+LATEXMK_OPTS = -xelatex -interaction=nonstopmode -file-line-error -halt-on-error -recorder
 
 # Manual compilation flags
 LATEX_OPTS = -interaction=nonstopmode -file-line-error -halt-on-error
@@ -71,7 +72,17 @@ pdf: $(PDFFILE)
 		echo "$(CYAN)   Pages: $$pages | Size: $$size$(RESET)"; \
 	fi
 
-$(PDFFILE): $(TEXFILE) $(BIBFILE) preamble/*.tex front-matter/preface.tex chapters/*/chapter.tex back-matter/*.tex
+# Dependencies: all tex files that could affect the PDF
+TEX_DEPS = $(TEXFILE) $(BIBFILE) \
+	preamble/*.tex \
+	front-matter/*.tex \
+	front-matter/*/*.tex \
+	chapters/*/chapter.tex \
+	chapters/*/sections/*.tex \
+	chapters/*/figures/*.tex \
+	back-matter/*.tex
+
+$(PDFFILE): $(TEX_DEPS)
 	@echo "$(BOLD)$(BLUE)$(ARROW) Building $(PDFFILE)...$(RESET)"
 	@if command -v $(LATEXMK) >/dev/null 2>&1; then \
 		echo "$(CYAN)   Using latexmk (smart compilation)$(RESET)"; \
@@ -185,6 +196,7 @@ clean:
 	@rm -f $(MAIN).fdb_latexmk $(MAIN).fls $(MAIN).log $(MAIN).out
 	@rm -f $(MAIN).run.xml $(MAIN).toc $(MAIN).lot $(MAIN).lof
 	@rm -f $(MAIN).synctex.gz $(MAIN).synctex
+	@rm -f $(MAIN).xdv
 	@rm -f texput.log
 	@# Clean glossary files
 	@rm -f $(MAIN).glo $(MAIN).gls $(MAIN).glg $(MAIN).ist

@@ -3,12 +3,12 @@
 
 \begin{figure}[htbp]
 \centering
-\begin{tikzpicture}[
+\begin{tikzpicture}[scale=0.85, every node/.style={scale=0.85},
     % Top row card style
     channel top/.style={
         rectangle,
-        minimum width=7.2cm,
-        minimum height=5.2cm,
+        minimum width=5.4cm,
+        minimum height=4.8cm,
         fill=white,
         draw=gray-300,
         line width=0.5pt,
@@ -18,8 +18,8 @@
     % Bottom row card style
     channel bottom/.style={
         rectangle,
-        minimum width=7.2cm,
-        minimum height=5.2cm,
+        minimum width=5.4cm,
+        minimum height=4.8cm,
         fill=white,
         draw=gray-300,
         line width=0.5pt,
@@ -42,15 +42,15 @@
         font=\sffamily,
         text=gray-600,
         anchor=north west,
-        text width=6.0cm,
+        text width=4.4cm,
         scale=0.85,
         transform shape
     }
 ]
 
 % Define positions - center cards symmetrically around origin
-\def\hgap{3.8}   % Half the horizontal gap between card centers
-\def\vgap{5.7}   % Vertical gap between cards
+\def\hgap{2.9}   % Half the horizontal gap between card centers
+\def\vgap{5.3}   % Vertical gap between cards
 
 % ============================================================
 % TOP LEFT: External Feeds (Green accent)

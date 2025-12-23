@@ -47,65 +47,23 @@
 % ============================================================================
 \input{front-matter/cover/cover}
 
+% ----------------------------------------------------------------------------
+% COPYRIGHT PAGE (page 2 - verso of cover, before frontmatter)
+% ----------------------------------------------------------------------------
+% Place copyright immediately after cover, before \frontmatter which would
+% insert a blank page. We handle page numbering manually.
+\newpage
+\input{front-matter/copyright}
+
 % ============================================================================
-% FRONT MATTER
+% FRONT MATTER (starts after copyright)
 % ============================================================================
 \frontmatter
 
 % ----------------------------------------------------------------------------
-% TITLE PAGE
+% TITLE PAGE (page iii - traditional full title)
 % ----------------------------------------------------------------------------
-\begin{titlepage}
-\centering
-\vspace*{2cm}
-
-{\Huge\bfseries\color{primary} Agentic AI}\\[0.3cm]
-{\LARGE\color{primary} in Law \& Finance}
-
-\vspace{0.5cm}
-
-{\Large\color{primary-light} Understanding, Designing, and Governing AI Agents}
-
-\vspace{2cm}
-
-{\large\color{text-secondary}
-Michael J. Bommarito II\\[0.3em]
-Daniel M. Katz\\[0.3em]
-Jillian Bommarito
-}
-
-\vfill
-
-{\footnotesize\color{text-secondary}
-First Edition\\
-2025
-}
-
-\vspace{1cm}
-\end{titlepage}
-
-% ----------------------------------------------------------------------------
-% COPYRIGHT PAGE
-% ----------------------------------------------------------------------------
-\thispagestyle{empty}
-\vspace*{\fill}
-{\small
-\noindent\textbf{Agentic AI in Law \& Finance}\\
-\textit{Understanding, Designing, and Governing AI Agents}\\[1em]
-
-\noindent Copyright \textcopyright\ 2025 Michael J. Bommarito II, Daniel M. Katz, and Jillian Bommarito.\\[1em]
-
-\noindent This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0). You are free to share and adapt this material for any purpose, even commercially, as long as you give appropriate credit and distribute your contributions under the same license.\\[0.5em]
-
-\noindent\url{https://creativecommons.org/licenses/by-sa/4.0/}\\[1em]
-
-\noindent This work is part of \textit{Artificial Intelligence for Law and Finance}, an open educational resource for legal and financial professionals.\\[1em]
-
-\noindent For the latest version and updates, visit:\\
-\url{https://github.com/mjbommar/ai-law-finance-book}
-}
-\vspace*{\fill}
-\newpage
+\input{front-matter/title-page}
 
 % ----------------------------------------------------------------------------
 % TABLE OF CONTENTS
@@ -128,6 +86,8 @@ First Edition\\
 % ============================================================================
 % MAIN MATTER
 % ============================================================================
+% Suppress blank page that \mainmatter's \cleardoublepage would insert
+\let\cleardoublepage\clearpage
 \mainmatter
 
 % ----------------------------------------------------------------------------
