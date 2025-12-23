@@ -4,14 +4,14 @@
 % Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
-\section{How Does an Agent Know When to Ask for Help?}
+\section{Escalation}
 \label{sec:agents2-escalation}
 
 % ----------------------------------------------------------------------------
 % Opening: Q8 Framing and Organizational Analogy
 % ----------------------------------------------------------------------------
 
-Sometimes the best thing to know is when you do not know something. A wise junior associate knows when to consult their supervising partner. In turn, a deputy corporate counsel can often tell when an issue should be escalated to someone more senior within the organization. It is a balancing act: it is unwise to interrupt a partner or senior lawyer with every question, but it is also unwise to proceed confidently into territory beyond your expertise. In a sense, the most effective junior professionals recognize authority boundaries: ``I can draft this motion, but I need partner review before filing.'' They recognize competence limits: ``I have researched for two hours and cannot find clear authority---I should ask someone with more experience.'' They recognize high-stakes situations: ``The client is asking about strategy, not just research---this needs partner involvement.''
+\textit{How does an agent know when to ask for help?} Sometimes the best thing to know is when you do not know something. A wise junior associate knows when to consult their supervising partner. In turn, a deputy corporate counsel can often tell when an issue should be escalated to someone more senior within the organization. It is a balancing act: it is unwise to interrupt a partner or senior lawyer with every question, but it is also unwise to proceed confidently into territory beyond your expertise. In a sense, the most effective junior professionals recognize authority boundaries: ``I can draft this motion, but I need partner review before filing.'' They recognize competence limits: ``I have researched for two hours and cannot find clear authority---I should ask someone with more experience.'' They recognize high-stakes situations: ``The client is asking about strategy, not just research---this needs partner involvement.''
 
 Agentic systems require the same judgment. An agent that never escalates will eventually exceed its competence, authority, or the bounds of safe autonomous operation. An agent that escalates everything provides no value: it becomes a complicated way to route work to humans. The challenge is drawing the line.
 
@@ -109,7 +109,7 @@ Different tasks and risk profiles call for different patterns of human integrati
 % Domain-Specific Escalation
 % ----------------------------------------------------------------------------
 
-\subsection{Domain-Specific Escalation Requirements}
+\subsection{Domain Requirements}
 \label{sec:agents2-escalation-domain}
 
 Beyond general principles, regulated industries impose specific escalation duties grounded in professional responsibility rules and compliance requirements. These are not optional design choices but mandatory constraints that any deployed system must respect.
@@ -126,7 +126,7 @@ Regulatory obligations and fiduciary duties impose parallel requirements on fina
 % Evaluating Escalation
 % ----------------------------------------------------------------------------
 
-\subsection{Evaluating Escalation Mechanisms}
+\subsection{Evaluation}
 \label{sec:agents2-escalation-eval}
 
 Escalation evaluation requires six assessments: \textit{coverage} (do all situations that should trigger escalation actually do so?), \textit{calibration} (are thresholds set to balance false positives against missed escalations?), \textit{latency} (does escalation reach humans quickly enough for time-sensitive matters?), \textit{routing} (does it reach the right person with relevant expertise?), \textit{context quality} (can the human decide based on the message alone?), and \textit{response handling} (does the agent correctly incorporate human guidance?). Routing reliability---ensuring escalations reach the right person through channels that cannot be bypassed---is an architectural property; \Cref{sec:agents2-escalation-hooks} addresses how escalation hooks must be implemented at the governance layer.
@@ -134,9 +134,6 @@ Escalation evaluation requires six assessments: \textit{coverage} (do all situat
 % ----------------------------------------------------------------------------
 % Connection to Other Questions
 % ----------------------------------------------------------------------------
-
-\subsection{From Escalation to Delegation}
-\label{sec:agents2-escalation-delegation}
 
 Escalation moves control \textit{upward} in the hierarchy---from agent to human supervisor, from junior to senior, from execution to oversight. But agents can also move control \textit{sideways} by delegating tasks to peer agents with different capabilities. These horizontal relationships introduce coordination challenges distinct from the vertical relationships of escalation.
 

@@ -4,14 +4,14 @@
 % Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
-\section{How Does an Agent Break a Big Job into Steps?}
+\section{Planning}
 \label{sec:agents2-planning}
 
 % ----------------------------------------------------------------------------
 % Opening: Q6 Framing and Organizational Analogy
 % ----------------------------------------------------------------------------
 
-A litigation partner approaching a new matter understands that the path from initial consultation to trial and beyond is a long sequence of interdependent steps. To navigate it, the partner develops a strategy: discovery first (identifying needed facts), then dispositive motions when appropriate, followed by settlement discussions or trial preparation. Discovery breaks into phases: initial disclosures, document requests, interrogatories, and depositions. Tasks distribute across the team: a senior associate handles briefing, a junior associate reviews documents, and a paralegal manages scheduling. Throughout, the partner monitors progress against deadlines and adjusts strategy as new facts emerge.
+\textit{How does an agent break a big job into steps?} A litigation partner approaching a new matter understands that the path from initial consultation to trial and beyond is a long sequence of interdependent steps. To navigate it, the partner develops a strategy: discovery first (identifying needed facts), then dispositive motions when appropriate, followed by settlement discussions or trial preparation. Discovery breaks into phases: initial disclosures, document requests, interrogatories, and depositions. Tasks distribute across the team: a senior associate handles briefing, a junior associate reviews documents, and a paralegal manages scheduling. Throughout, the partner monitors progress against deadlines and adjusts strategy as new facts emerge.
 
 \glsadd{goal}This is \keyterm{planning}: decomposing complex goals into action sequences. Where Chapter~1's IAT framework identified iteration as a key capability, planning determines how those iterations are structured and sequenced. It mirrors the litigation roadmap or deal timeline that guides execution. Without planning, agents react to immediate observations without strategy. With planning, they work systematically toward objectives, adapt when circumstances change, and recognize completion.
 
@@ -70,7 +70,7 @@ These patterns represent a shift from traditional workflow automation. Tradition
 \begin{definitionbox}[title={Static vs.\ Dynamic Orchestration}, breakable=false]
 \glsadd{tool-orchestration}	\textbf{Static orchestration} executes predefined workflow graphs. The same input always produces the same execution path. It is predictable and auditable but inflexible.
 
-	\vspace{0.5em}
+	\smallskip
 	\textbf{Dynamic orchestration} reasons about task decomposition at runtime. The LLM examines the goal, considers available resources, and constructs a plan on the fly. It is adaptive but less predictable.
 \end{definitionbox}
 
@@ -168,9 +168,6 @@ Well-designed agents degrade gracefully as budgets tighten rather than failing a
 % ----------------------------------------------------------------------------
 % Connection to Other Questions
 % ----------------------------------------------------------------------------
-
-\subsection{From Planning to Termination}
-\label{sec:agents2-planning-termination}
 
 Planning decomposes work, but every plan must end. The next two questions address the boundaries of autonomous execution.
 

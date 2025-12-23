@@ -4,12 +4,12 @@
 % Label: sec:agents3-accountability
 % ============================================================================
 
-\section{Accountability and Organizational Structure}
+\section{Accountability Structure}
 \label{sec:agents3-accountability}
 
 Technical controls alone do not create accountability. Where Chapter~2 established the technical infrastructure for action controls, escalation, and logging, governance requires explicit assignment of roles and responsibilities: who approves deployments, who monitors performance, who investigates incidents, who escalates to regulators? This section presents three organizational governance models, demonstrates role assignment through RACI matrices, defines escalation and reporting structures, and examines liability allocation. The goal is to ensure every governance activity has a clearly accountable owner.
 
-\subsection{Three Organizational Governance Models}
+\subsection{Governance Models}
 \label{sec:agents3-governance-models}
 
 Organizations structure AI governance in three primary ways, each with advantages and disadvantages depending on size, AI maturity, and regulatory intensity.
@@ -174,7 +174,7 @@ AI governance is integrated into existing risk management, compliance, IT govern
 
 This model requires AI-specific training for existing governance personnel and clear assignment of AI oversight responsibilities within each function.
 
-\subsection{RACI Matrix: Operationalizing Accountability}
+\subsection{RACI Matrix}
 \label{sec:agents3-raci}
 
 Regardless of governance model, organizations must assign accountability for each governance activity using a RACI framework:
@@ -272,34 +272,48 @@ Regardless of governance model, organizations must assign accountability for eac
 \medskip
 \noindent The key principle: \textbf{every governance activity must have exactly one Accountable party}. Diffused accountability (``the team is accountable'') creates gaps where no one takes ownership.
 
-Table~\ref{tab:agents3-raci} provides a sample RACI matrix for AI governance activities.
+Table~\ref{tab:agents3-raci} provides a sample RACI matrix for AI governance activities. Activities are coded for compactness:
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{@{}>{\sffamily\bfseries}l@{\hspace{1em}}>{\raggedright\arraybackslash}p{8.5cm}@{}}
+\toprule
+\textbf{Code} & \textbf{Activity} \\
+\midrule
+A1 & Approve enterprise AI governance policy \\
+A2 & Approve low-risk AI deployment \\
+A3 & Approve high-risk AI deployment \\
+A4 & Conduct pre-deployment risk assessment \\
+A5 & Monitor system performance (ongoing) \\
+A6 & Investigate fairness violation \\
+A7 & Approve vendor contract (high-risk system) \\
+A8 & Report to board (quarterly update) \\
+A9 & Respond to regulatory inquiry \\
+\bottomrule
+\end{tabular}
+\caption{Activity codes for the RACI matrix in Table~\ref{tab:agents3-raci}.}
+\label{tab:agents3-activity-codes}
+\end{table}
 
 \begin{table}[htbp]
 \centering
 \caption{Sample RACI Matrix for AI Governance Activities}
 \label{tab:agents3-raci}
-\footnotesize
-\begin{tabular}{>{\raggedright\arraybackslash}p{4.0cm} >{\centering\arraybackslash}p{1.5cm} >{\centering\arraybackslash}p{1.4cm} >{\centering\arraybackslash}p{1.5cm} >{\centering\arraybackslash}p{1.5cm} >{\centering\arraybackslash}p{2.0cm}}
+\small
+\begin{tabular}{>{\sffamily\centering\arraybackslash}p{0.8cm} >{\centering\arraybackslash}p{1.4cm} >{\centering\arraybackslash}p{1.3cm} >{\centering\arraybackslash}p{1.4cm} >{\centering\arraybackslash}p{1.4cm} >{\centering\arraybackslash}p{1.3cm}}
 \toprule
-\textbf{Activity} & \textbf{Board / CEO} & \textbf{CRO / CCO} & \textbf{AI Gov. Lead} & \textbf{System Owner} & \textbf{Legal / Compliance} \\
+\textbf{Act.} & \textbf{Board} & \textbf{CRO} & \textbf{AI Gov} & \textbf{Owner} & \textbf{Legal} \\
 \midrule
-Approve enterprise AI governance policy & A & C & R & I & C \\
-\addlinespace
-Approve low-risk AI deployment & I & I & A & R & C \\
-\addlinespace
-Approve high-risk AI deployment & A & C & R & R & C \\
-\addlinespace
-Conduct pre-deployment risk assessment & I & C & A & R & C \\
-\addlinespace
-Monitor system performance (ongoing) & I & I & C & A, R & I \\
-\addlinespace
-Investigate fairness violation & I & A & C & R & C \\
-\addlinespace
-Approve vendor contract (high-risk system) & I & A & C & R & C \\
-\addlinespace
-Report to board (quarterly AI governance update) & I & A & R & I & C \\
-\addlinespace
-Respond to regulatory inquiry & C & A & R & R & R \\
+A1 & A & C & R & I & C \\
+A2 & I & I & A & R & C \\
+A3 & A & C & R & R & C \\
+A4 & I & C & A & R & C \\
+A5 & I & I & C & A, R & I \\
+A6 & I & A & C & R & C \\
+A7 & I & A & C & R & C \\
+A8 & I & A & R & I & C \\
+A9 & C & A & R & R & R \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -342,7 +356,7 @@ A bank's monthly fairness monitoring detects disparate impact in credit pre-scre
 
 This escalation pathway ensures the organization responds rapidly to critical risks and maintains board-level visibility into material governance failures.
 
-\subsection{Liability Allocation: Who Bears the Risk?}
+\subsection{Liability Allocation}
 \label{sec:agents3-liability}
 
 A foundational reality shapes AI governance: \textbf{liability concentrates on deployers, not vendors or technology}. Understanding this allocation is essential for calibrating governance investments.

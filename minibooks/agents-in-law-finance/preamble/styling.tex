@@ -12,12 +12,10 @@
 \titleformat{\section}
   {\Large\bfseries\color{primary}}
   {\thesection}{1em}{}
-  [\vspace{0.3em}{\color{primary}\titlerule[1.5pt]}\vspace{0.5em}]
 
 \titleformat{\subsection}
   {\large\bfseries\color{primary}}
   {\thesubsection}{1em}{}
-  [\vspace{-0.3em}]
 
 \titleformat{\subsubsection}
   {\normalsize\bfseries\color{text-secondary}}
@@ -31,6 +29,9 @@
 % ============================================================================
 % TABLE OF CONTENTS
 % ============================================================================
+
+% Show chapters, sections, and subsections
+\setcounter{tocdepth}{2}
 
 \renewcommand{\contentsname}{%
   {\color{primary}\Large\bfseries Contents}%

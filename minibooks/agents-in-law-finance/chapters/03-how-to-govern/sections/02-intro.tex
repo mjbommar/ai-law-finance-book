@@ -4,12 +4,12 @@
 % Label: sec:agents3-intro
 % ============================================================================
 
-\section{Introduction: The Governance Imperative}
+\section{Introduction}
 \label{sec:agents3-intro}
 
-Software has always required governance. We audit code, review changes, test deployments, and maintain access controls. Yet the governance challenges posed by agentic systems differ in \emph{kind}, not merely degree. Understanding this shift begins with recognizing what makes agents fundamentally different from the passive tools that dominate enterprise software today—and why those differences create accountability obligations that traditional governance structures were not designed to address.
+The governance imperative is clear: software has always required governance. We audit code, review changes, test deployments, and maintain access controls. Yet the governance challenges posed by agentic systems differ in \emph{kind}, not merely degree. Understanding this shift begins with recognizing what makes agents fundamentally different from the passive tools that dominate enterprise software today—and why those differences create accountability obligations that traditional governance structures were not designed to address.
 
-\subsection{From Tools to Agents: The Governance Shift}
+\subsection{From Tools to Agents}
 \label{sec:agents3-tools-to-agents}
 
 Most enterprise software operates as a passive tool: you invoke it, it executes a predetermined sequence, and it stops. Spreadsheets recalculate when you enter data, databases return results when you query them, and compilers translate source code when you run them. These tools are \keyterm{reactive}—waiting for explicit human commands, executing well-defined operations, and producing outputs that can be traced directly to inputs and logic paths.
@@ -31,18 +31,18 @@ This autonomy creates three immediate accountability challenges:
 \begin{keybox}[title={Scope: This Chapter Focuses on Agentic Systems}, breakable=false]
 This chapter addresses the specific governance challenges posed by \textbf{agentic systems}—AI systems exhibiting all six GPA+IAT properties as defined in Chapter~1. While agentic systems present unique accountability and compliance challenges, they represent only one category within the broader landscape of AI technologies deployed in legal, financial, and audit contexts.
 
-\vspace{0.5em}
+\smallskip
 
 Many critical AI governance questions—such as foundation model evaluation, training data provenance, algorithmic fairness in non-agentic classifiers, explainability requirements for static models, and sector-specific ethical considerations—extend beyond agentic systems to AI more generally. These broader governance considerations, including frameworks for non-agentic AI applications, will be addressed in a forthcoming companion volume dedicated to comprehensive AI governance across all system types.
 
-\vspace{0.5em}
+\smallskip
 % TODO: Reference to standalone AI governance book to be added upon publication.
 \end{keybox}
 
 \begin{keybox}[title={The GPA Governance Gap}]
 Traditional software governance assumes human-in-the-loop execution: humans decide when to invoke tools, interpret outputs, and take consequential actions. GPA properties move decision-making \emph{inside} the system boundary. This demands a shift from \emph{access control} to \emph{behavioral oversight}.
 
-\vspace{0.5em}
+\smallskip
 \noindent\textbf{Note on Human Agents:} Many of these governance controls—goal authorization, perceptual validation, actuation constraints—mirror requirements we impose on human agents (employees, contractors, delegates). When we hire a paralegal or junior analyst, we specify their objectives, verify the quality of their information sources, and limit their authority to take binding actions. The GPA framework makes explicit what has long been implicit in human delegation: \emph{agency requires accountability structures}. What differs for AI agents is the need to encode these controls in technical systems rather than organizational policies alone.
 \end{keybox}
 
@@ -51,7 +51,7 @@ If GPA creates accountability challenges for basic agents, the IAT properties th
 \glsadd{governance-surface}
 These six properties combine multiplicatively. An agentic system that adapts its perception across iterated interactions while pursuing evolving goals creates a governance surface far larger than a deterministic, single-invocation tool.
 
-\subsection{The Stakes: Professional Duties Are Non-Delegable}
+\subsection{Professional Stakes}
 \label{sec:agents3-stakes}
 
 The governance imperative becomes urgent when we recognize a foundational legal and professional principle: \textbf{professional duties cannot be delegated to AI}. Attorneys, investment advisers, auditors, and other licensed professionals remain fully liable for the quality, accuracy, and ethical propriety of their work product—regardless of whether they used AI assistance.
@@ -70,7 +70,7 @@ The Public Company Accounting Oversight Board (PCAOB) requires auditors to exerc
 Across legal, financial, and audit domains, professional responsibility rules establish that using AI tools does not diminish the professional's accountability. Governance is not optional—it is the operational mechanism for maintaining professional competence and fulfilling non-delegable duties.
 \end{keybox}
 
-\subsection{Three Forces Driving Governance Adoption}
+\subsection{Forces Driving Adoption}
 \label{sec:agents3-forces}
 
 Beyond professional obligations, three converging forces make governance essential for any organization deploying agentic systems:
@@ -94,7 +94,7 @@ A law firm that discloses client confidential information through an AI tool's t
 
 In trust-intensive domains, governance is not merely a compliance obligation—it is a competitive necessity.
 
-\subsection{Mapping Agent Properties to Governance Requirements}
+\subsection{Mapping Properties to Requirements}
 \label{sec:agents3-property-mapping}
 
 Effective governance begins with a systematic mapping from the six GPA+IAT properties (Chapter~1) to the specific controls required to manage risk, ensure compliance, and maintain accountability. This section provides that mapping, organized by property.

@@ -1,4 +1,4 @@
-% Iterative Investigation with Explainable Adaptation - Clean Vertical Flow
+% Iterative Investigation with Explainable Adaptation - Compact Vertical Flow
 
 \begin{figure}[htbp]
 \centering
@@ -8,8 +8,8 @@
         draw=#1,
         line width=1.2pt,
         fill=#1!10,
-        minimum width=5cm,
-        minimum height=1.2cm,
+        minimum width=4.8cm,
+        minimum height=1.1cm,
         font=\small,
         align=center
     },
@@ -18,7 +18,7 @@
         draw=#1,
         line width=0.6pt,
         fill=#1!5,
-        text width=4.5cm,
+        text width=4.2cm,
         inner sep=5pt,
         font=\scriptsize,
         align=left
@@ -28,8 +28,8 @@
         draw=key-base,
         line width=1pt,
         fill=bg-key,
-        minimum width=1.6cm,
-        minimum height=1cm,
+        minimum width=1.5cm,
+        minimum height=0.9cm,
         inner sep=3pt,
         font=\scriptsize,
         align=center
@@ -39,8 +39,8 @@
         draw=caution-base,
         line width=1pt,
         fill=bg-caution,
-        minimum width=2.6cm,
-        minimum height=1cm,
+        minimum width=2.4cm,
+        minimum height=0.9cm,
         inner sep=4pt,
         font=\scriptsize,
         align=center
@@ -50,7 +50,7 @@
         draw=note-base,
         line width=0.6pt,
         fill=bg-note,
-        minimum width=2.2cm,
+        minimum width=2.0cm,
         minimum height=0.6cm,
         font=\scriptsize,
         align=center
@@ -60,12 +60,8 @@
     label text/.style={font=\tiny, text=text-muted}
 ]
 
-% === CYCLE 1 with detail box ===
-\node[cycle box=definition-base] (cycle1) at (-2.5,0) {
-    \textbf{\textcolor{definition-dark}{Cycle 1: Initial Risk Scoring}}
-};
-
-\node[detail box=definition-base, anchor=north west] (c1details) at (1.5,0.6) {
+% === DETAIL BOX 1 (Risk Criteria) - positioned above cycle 1 ===
+\node[detail box=definition-base] (c1details) at (0,1.8) {
     \textbf{Risk Criteria:}\\[2pt]
     High-value (>\$500K): +3\\
     Overdue >90 days: +2\\
@@ -74,22 +70,23 @@
     Related-party: +3
 };
 
+% === CYCLE 1 ===
+\node[cycle box=definition-base] (cycle1) at (0,0) {
+    \textbf{\textcolor{definition-dark}{Cycle 1: Initial Risk Scoring}}
+};
+
 % === DECISION 1 ===
-\node[decision, below=0.8cm of cycle1] (dec1) {
+\node[decision, below=0.7cm of cycle1] (dec1) {
     Score\\$\geq$6?
 };
 
 % Low risk exit - to the left
-\node[lowrisk, left=1.2cm of dec1] (lowrisk) {
+\node[lowrisk, left=1.0cm of dec1] (lowrisk) {
     Standard procedures
 };
 
-% === CYCLE 2-N with detail box ===
-\node[cycle box=example-dark, below=1.5cm of dec1] (cycle2) {
-    \textbf{\textcolor{example-dark}{Cycles 2--N: Adaptive Investigation}}
-};
-
-\node[detail box=example-dark, anchor=north west] (c2details) at (1.5,-3.2) {
+% === DETAIL BOX 2 (Actions/Adaptation) - positioned above cycle 2 ===
+\node[detail box=example-dark, below=1.3cm of dec1] (c2details) {
     \textbf{Actions:}\\
     Request documents\\
     Analyze payment patterns\\
@@ -100,47 +97,57 @@
     Fraud signals $\rightarrow$ escalate
 };
 
+% === CYCLE 2-N ===
+\node[cycle box=example-dark, below=0.5cm of c2details] (cycle2) {
+    \textbf{\textcolor{example-dark}{Cycles 2--N: Adaptive Investigation}}
+};
+
 % === DECISION 2 ===
-\node[decision, below=0.8cm of cycle2] (dec2) {
+\node[decision, below=0.7cm of cycle2] (dec2) {
     Continue?
 };
 
 % === TERMINATION OUTCOMES ===
-\node[termination, below=1cm of dec2, xshift=-3cm] (term1) {
+\node[termination, below=0.9cm of dec2, xshift=-2.8cm] (term1) {
     \textbf{\textcolor{caution-dark}{Sufficient Evidence}}\\
     \textcolor{text-muted}{(conf.\ >0.85)}
 };
 
-\node[termination, below=1cm of dec2] (term2) {
+\node[termination, below=0.9cm of dec2] (term2) {
     \textbf{\textcolor{caution-dark}{Red Flag}}\\
     \textcolor{text-muted}{$\rightarrow$ Escalate}
 };
 
-\node[termination, below=1cm of dec2, xshift=3cm] (term3) {
+\node[termination, below=0.9cm of dec2, xshift=2.8cm] (term3) {
     \textbf{\textcolor{caution-dark}{Max Cycles}}\\
     \textcolor{text-muted}{(5 reached)}
 };
 
 % === ARROWS ===
+% Detail 1 to Cycle 1
+\draw[arrow, dashed, definition-base] (c1details.south) -- (cycle1.north);
+
 % Cycle 1 to Decision 1
 \draw[arrow] (cycle1.south) -- (dec1.north);
 
-% Decision 1: Yes to Cycle 2
-\draw[arrow] (dec1.south) -- node[right, label text] {Yes} (cycle2.north);
+% Decision 1: Yes to Detail 2
+\draw[arrow] (dec1.south) -- node[right, label text] {Yes} (c2details.north);
 
 % Decision 1: No to low risk (left)
 \draw[arrow] (dec1.west) -- node[above, label text] {No} (lowrisk.east);
+
+% Detail 2 to Cycle 2 (implicit via spacing)
 
 % Cycle 2 to Decision 2
 \draw[arrow] (cycle2.south) -- (dec2.north);
 
 % Decision 2 to terminations
-\draw[arrow] (dec2.south) -- ++(0,-0.3) -| (term1.north);
+\draw[arrow] (dec2.south) -- ++(0,-0.25) -| (term1.north);
 \draw[arrow] (dec2.south) -- (term2.north);
-\draw[arrow] (dec2.south) -- ++(0,-0.3) -| (term3.north);
+\draw[arrow] (dec2.south) -- ++(0,-0.25) -| (term3.north);
 
-% Loop back arrow - on left side, wide enough to clear the box
-\draw[loop arrow, rounded corners=6pt] (dec2.west) -- ++(-4.5,0) node[below, font=\scriptsize, text=example-dark] {Next cycle} -- ++(0,2.3) -- (cycle2.west);
+% Loop back arrow - tighter on left side
+\draw[loop arrow, rounded corners=6pt] (dec2.west) -- ++(-3.2,0) node[left, font=\scriptsize, text=example-dark] {Next cycle} |- (cycle2.west);
 
 \end{tikzpicture}
 \caption{Iterative investigation workflow with explainable adaptation. Cycle~1 scores accounts using risk criteria; high-risk accounts (score $\geq$6) proceed to iterative investigation. Cycles~2--N gather evidence and adapt strategy based on findings. Investigation terminates when sufficient evidence is obtained, a red flag requires escalation, or maximum cycles are reached.}

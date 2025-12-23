@@ -6,7 +6,7 @@
 
 With the three-level hierarchy and complete definition established in Section~\ref{sec:intro}, you now have the conceptual foundation. But recognizing agents in practice requires operational tools. We now turn to practical approaches: a detailed evaluation rubric, concrete examples comparing agents to non-agents, and guidance for navigating common misconceptions.
 
-\subsection{The Six-Question Rubric}
+\subsection{Six-Question Rubric}
 \label{sec:rubric-6q}
 
 These six questions operationalize the six-property definition from Section~\ref{sec:intro}. Questions 1--3 establish Level 1 agency; Questions 4--6 add operational properties.
@@ -14,6 +14,7 @@ These six questions operationalize the six-property definition from Section~\ref
 \begin{questionbox}[title={Q1. Does it have goals?}]
 Look for objectives or performance criteria that direct behavior.
 
+\smallskip
 \textit{Falsification:} If it responds identically regardless of desired outcomes, it lacks goals.
 \end{questionbox}
 
@@ -22,6 +23,7 @@ In legal contexts, goals include finding relevant precedents or identifying liab
 \begin{questionbox}[title={Q2. Does it perceive?}]
 Check for environmental awareness through sensors, APIs, or document access. Can it observe results of its own actions?\glsadd{perception-action-loop}
 
+\smallskip
 \textit{Falsification:} If it operates identically regardless of environmental state, it lacks perception.
 \end{questionbox}
 
@@ -30,6 +32,7 @@ Legal systems perceive by reading case law databases or parsing contract text. F
 \begin{questionbox}[title={Q3. Does it act?}]
 Verify capability to affect its environment with at least minimal discretion (two+ actions contingent on perceptions).
 
+\smallskip
 \textit{Falsification:} If it cannot modify its environment or executes exactly one fixed sequence, it lacks action.
 \end{questionbox}
 
@@ -38,6 +41,7 @@ Legal actions include generating briefs, flagging risks, or filing reports. Fina
 \begin{questionbox}[title={Q4. Does it iterate?}]
 Confirm multiple perceive-act cycles with state preservation. Does it loop: act → observe → act again?
 
+\smallskip
 \textit{Falsification:} If it processes input once without maintaining state across cycles, it lacks iteration.
 \end{questionbox}
 
@@ -46,6 +50,7 @@ Iteration appears in legal research that refines queries based on results, or po
 \begin{questionbox}[title={Q5. Does it adapt?}]
 Check whether strategy modifies based on observations and feedback. Does it adjust when initial attempts fail?
 
+\smallskip
 \textit{Falsification:} If it applies identical logic regardless of outcomes, it lacks adaptation.
 \end{questionbox}
 
@@ -54,6 +59,7 @@ Adaptation includes adjusting search terms when queries return no results, or mo
 \begin{questionbox}[title={Q6. Does it terminate?}]
 Verify clear stopping conditions\glsadd{stopping-conditions}---implicit (goal satisfaction) or explicit (time limits, confidence thresholds\glsadd{confidence-thresholds}, escalation triggers).
 
+\smallskip
 \textit{Falsification:} If it could cycle indefinitely without bounds, it lacks termination.
 \end{questionbox}
 

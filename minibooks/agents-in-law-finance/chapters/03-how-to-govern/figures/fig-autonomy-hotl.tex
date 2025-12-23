@@ -10,8 +10,8 @@
     draw=key-base,
     line width=1.5pt,
     fill=white,
-    minimum width=13.5cm,
-    minimum height=5.8cm,
+    minimum width=11.5cm,
+    minimum height=5.4cm,
     rounded corners=4pt
 ] (card) at (0,0) {};
 
@@ -29,15 +29,15 @@
 
 % Left column: Appropriate When
 \node[
-    text width=6.2cm,
+    text width=5.2cm,
     anchor=north west,
     font=\scriptsize,
     align=left
 ] at ([xshift=0.4cm, yshift=-1.4cm]card.north west) {
 \textbf{\textsf{APPROPRIATE WHEN}}\\[4pt]
-\textcolor{key-dark}{$\blacktriangleright$} Actions are moderate-consequence or reversible (customer service responses, preliminary data analysis)\\[3pt]
-\textcolor{key-dark}{$\blacktriangleright$} Real-time human review would create unacceptable latency but oversight remains necessary\\[3pt]
-\textcolor{key-dark}{$\blacktriangleright$} System operates within well-defined boundaries (credit limits, risk parameters)
+\textcolor{key-dark}{$\blacktriangleright$} Moderate-consequence or reversible actions (service responses, preliminary analysis)\\[3pt]
+\textcolor{key-dark}{$\blacktriangleright$} Real-time review creates unacceptable latency\\[3pt]
+\textcolor{key-dark}{$\blacktriangleright$} System operates within defined boundaries
 };
 
 % Vertical divider
@@ -45,16 +45,16 @@
 
 % Right column: Control Requirements
 \node[
-    text width=6.0cm,
+    text width=5.0cm,
     anchor=north west,
     font=\scriptsize,
     align=left
 ] at ([xshift=0.15cm, yshift=-1.4cm]card.north) {
 \textbf{\textsf{CONTROL REQUIREMENTS}}\\[4pt]
-\textbf{Primary Control:} Monitoring dashboards with anomaly detection\\[3pt]
-\textbf{Logging:} Detailed---enables retrospective audit of decisions not reviewed prospectively\\[3pt]
-\textbf{Escalation:} Triggers for low-confidence decisions, policy boundary cases, user complaints\\[3pt]
-\textbf{Intervention:} Protocols for human override when anomalies detected
+\textbf{Primary:} Dashboards + anomaly detection\\[3pt]
+\textbf{Logging:} Detailed for retrospective audit\\[3pt]
+\textbf{Escalation:} Low confidence, complaints\\[3pt]
+\textbf{Intervention:} Override protocols
 };
 
 \end{tikzpicture}

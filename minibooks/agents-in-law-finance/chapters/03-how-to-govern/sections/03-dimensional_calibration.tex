@@ -4,13 +4,13 @@
 % Label: sec:agents3-dimensional
 % ============================================================================
 
-\section{Design Principles: Dimensional Calibration}
+\section{Dimensional Calibration}
 \label{sec:agents3-dimensional}
 \glsadd{dimensional-calibration}
 
-Here we establish \emph{how much} control intensity is required—how to calibrate governance based on system properties. Section~\ref{sec:agents3-governance-stack} will then demonstrate \emph{what} controls are required across regulatory layers, applying this calibration framework to specific legal and professional obligations. The key insight: governance is not binary (present or absent) but dimensional (scaled to risk). Organizations that apply uniform controls to all agentic systems either over-engineer low-risk deployments (wasting resources) or under-protect high-risk deployments (creating liability exposure). Dimensional calibration matches governance intensity to the operational characteristics that drive risk.
+As a design principle for governance, here we establish \emph{how much} control intensity is required—how to calibrate governance based on system properties. Section~\ref{sec:agents3-governance-stack} will then demonstrate \emph{what} controls are required across regulatory layers, applying this calibration framework to specific legal and professional obligations. The key insight: governance is not binary (present or absent) but dimensional (scaled to risk). Organizations that apply uniform controls to all agentic systems either over-engineer low-risk deployments (wasting resources) or under-protect high-risk deployments (creating liability exposure). Dimensional calibration matches governance intensity to the operational characteristics that drive risk.
 
-\subsection{The Dimensional Calibration Logic}
+\subsection{Calibration Logic}
 \label{sec:agents3-dimensional-logic}
 
 Before applying dimensional calibration, verify the system qualifies as an \emph{agentic system} under Chapter~1's framework (GPA+IAT properties). Systems lacking any of these six properties are \emph{not agentic systems}. A single-shot ML model, batch classifier, or non-iterative chatbot requires different governance approaches beyond this chapter's scope.
@@ -89,15 +89,15 @@ As summarized in Table~\ref{tab:agents3-autonomy-calibration}, as autonomy incre
 \caption{Autonomy Calibration: Oversight Modes and Control Requirements}
 \label{tab:agents3-autonomy-calibration}
 \small
-\begin{tabular}{>{\raggedright\arraybackslash}p{2.5cm} >{\raggedright\arraybackslash}p{3.5cm} >{\raggedright\arraybackslash}p{3cm} >{\raggedright\arraybackslash}p{4cm}}
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.2cm} >{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}p{3.2cm}}
 \toprule
-\textbf{Autonomy Level} & \textbf{Description} & \textbf{Example Use Cases} & \textbf{Control Requirements} \\
+\textbf{Autonomy Level} & \textbf{Description} & \textbf{Examples} & \textbf{Controls} \\
 \midrule
-\textbf{HITL}\newline (Human-in-the-Loop) & Human pre-approves significant actions & Legal research, investment advice, contract review & Approval workflows, automation bias mitigation, competence training \\
+\textbf{HITL}\newline (Human-in-the-Loop) & Human pre-approves actions & Legal research, investment advice & Approval workflows, bias mitigation \\
 \addlinespace
-\textbf{HOTL}\newline (Human-on-the-Loop) & System operates autonomously; humans monitor and intervene & Customer service chatbots, preliminary audit analytics & Monitoring dashboards, escalation triggers, intervention protocols \\
+\textbf{HOTL}\newline (Human-on-the-Loop) & Autonomous operation; humans monitor & Customer service, audit analytics & Dashboards, escalation triggers \\
 \addlinespace
-\textbf{HIC}\newline (Human-in-Command) & High autonomy with strategic oversight and emergency stop & Fraud detection, credit pre-screening (within parameters), algorithmic trading & Comprehensive logging, statistical monitoring, emergency stop, fairness metrics \\
+\textbf{HIC}\newline (Human-in-Command) & High autonomy + emergency stop & Fraud detection, algo trading & Logging, monitoring, fairness metrics \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -154,17 +154,17 @@ A bank's credit pre-screening system that evaluates mortgage applications under 
 \caption{Entity Frame Calibration: Presentation Modes and Accountability Structures}
 \label{tab:agents3-entity-frame-calibration}
 \small
-\begin{tabular}{>{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{3.2cm} >{\raggedright\arraybackslash}p{3cm} >{\raggedright\arraybackslash}p{4cm}}
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.0cm} >{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}p{3.4cm}}
 \toprule
-\textbf{Entity Frame} & \textbf{Description} & \textbf{Example Use Cases} & \textbf{Accountability Structure} \\
+\textbf{Entity Frame} & \textbf{Description} & \textbf{Examples} & \textbf{Accountability} \\
 \midrule
-\textbf{Human} & Agent represents specific professional & Legal research under attorney name, personalized financial advice & Professional bears full liability; professional responsibility rules apply; non-delegable duties \\
+\textbf{Human} & Represents specific professional & Legal research, financial advice & Full professional liability; non-delegable duties \\
 \addlinespace
-\textbf{Hybrid} & Collaborative human-AI partnership & AI-assisted audit analytics, co-drafted documents & Shared responsibility; clear delineation required; human validates AI outputs \\
+\textbf{Hybrid} & Human-AI collaboration & Audit analytics, co-drafted documents & Shared; human validates AI \\
 \addlinespace
-\textbf{Machine} & Clearly identified as non-human tool & Customer service chatbot with AI disclosure, informational tools & Organization responsible for tool fitness; clear disclaimers and capability limitations \\
+\textbf{Machine} & Clearly non-human tool & Chatbot with disclosure & Organization responsible; clear disclaimers \\
 \addlinespace
-\textbf{Institutional} & Agent acts on behalf of organization & Credit decisioning, hiring, compliance review & Organizational liability; board/executive oversight; institutional policies and monitoring \\
+\textbf{Institutional} & Acts for organization & Credit decisions, hiring & Organizational liability; board oversight \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -208,15 +208,15 @@ An AI strategic planning assistant that proposes: ``Based on market analysis, I 
 \caption{Goal Dynamics Calibration: Objective Stability and Control Requirements}
 \label{tab:agents3-goal-dynamics-calibration}
 \small
-\begin{tabular}{>{\raggedright\arraybackslash}p{2.5cm} >{\raggedright\arraybackslash}p{3.5cm} >{\raggedright\arraybackslash}p{3cm} >{\raggedright\arraybackslash}p{4cm}}
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.2cm} >{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}p{3.2cm}}
 \toprule
-\textbf{Goal Dynamics} & \textbf{Description} & \textbf{Example Use Cases} & \textbf{Control Requirements} \\
+\textbf{Goal Dynamics} & \textbf{Description} & \textbf{Examples} & \textbf{Controls} \\
 \midrule
-\textbf{Static} & Fixed objectives; no goal changes & Citation verification, rule-based compliance checks & One-time goal validation; monitor achievement and side effects \\
+\textbf{Static} & Fixed objectives & Citation verification, compliance checks & One-time validation; monitor side effects \\
 \addlinespace
-\textbf{Adaptive} & Refinement within boundaries based on feedback & Credit scoring (adjust weights), fraud detection (adapt risk parameters) & Define boundaries, continuous monitoring, rollback capability, revalidation triggers \\
+\textbf{Adaptive} & Refinement within boundaries & Credit scoring, fraud detection & Boundaries, monitoring, rollback \\
 \addlinespace
-\textbf{Negotiated} & System proposes goal changes requiring human approval & Strategic planning assistant, adaptive investment strategy & Approval workflows, impact assessment, revalidation after changes, senior leadership involvement \\
+\textbf{Negotiated} & System proposes goal changes & Strategic planning, investment strategy & Approval workflows, revalidation \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -250,18 +250,18 @@ A financial planning chatbot that builds a profile of the client's financial sit
 \caption{Persistence Calibration: State Management and Control Requirements}
 \label{tab:agents3-persistence-calibration}
 \small
-\begin{tabular}{>{\raggedright\arraybackslash}p{2.5cm} >{\raggedright\arraybackslash}p{3.5cm} >{\raggedright\arraybackslash}p{3cm} >{\raggedright\arraybackslash}p{4cm}}
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.2cm} >{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}p{3.2cm}}
 \toprule
-\textbf{Persistence} & \textbf{Description} & \textbf{Example Use Cases} & \textbf{Control Requirements} \\
+\textbf{Persistence} & \textbf{Description} & \textbf{Examples} & \textbf{Controls} \\
 \midrule
-\textbf{Stateless} & Each interaction independent; no retained state & Citation verification, single-query research, one-time calculations & Standard logging (inputs/outputs); no state management; errors do not compound \\
+\textbf{Stateless} & Each interaction independent & Citation verification, single queries & Standard logging; errors don't compound \\
 \addlinespace
-\textbf{Stateful} & System maintains state across interactions; decisions depend on history & Multi-session financial planning, ongoing fraud monitoring, adaptive customer profiles & State integrity protection, state change logging, error compounding monitoring, periodic state validation \\
+\textbf{Stateful} & State maintained across interactions & Financial planning, fraud monitoring & State integrity, error monitoring, validation \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{Integration: Risk-Calibrated Control Selection}
+\subsection{Integration}
 \label{sec:agents3-calibration-integration}
 \glsadd{dimensional-calibration}
 \glsadd{autonomy-spectrum}
@@ -278,24 +278,24 @@ Table~\ref{tab:agents3-risk-profile-comparison} compares two contrasting risk pr
 \caption{Risk Profile Comparison: Low-Risk vs. High-Risk Agentic Systems}
 \label{tab:agents3-risk-profile-comparison}
 \footnotesize
-\begin{tabular}{@{}>{\centering\arraybackslash}p{0.8cm} >{\sffamily\raggedright\arraybackslash}p{2.1cm} >{\raggedright\arraybackslash}p{5.2cm} >{\raggedright\arraybackslash}p{5.2cm}@{}}
+\begin{tabular}{@{}>{\centering\arraybackslash}p{0.7cm} >{\sffamily\raggedright\arraybackslash}p{1.8cm} >{\raggedright\arraybackslash}p{4.0cm} >{\raggedright\arraybackslash}p{4.0cm}@{}}
 \toprule
 & & \textbf{Low-Risk: Legal Research} & \textbf{High-Risk: Credit Underwriting} \\
 \midrule
-\multirow{4}{*}[-1.8em]{\rotatebox[origin=c]{90}{\textbf{Dimensional}}}
-& Autonomy & HITL—attorney reviews all outputs & HIC—autonomous decisions; aggregate monitoring \\
-& \cellcolor{bg-neutral}Entity Frame & \cellcolor{bg-neutral}Human—operates under attorney's name & \cellcolor{bg-neutral}Institutional—acts on behalf of bank \\
-& Goal Dynamics & Static—fixed citation verification goal & Adaptive—adjusts feature weights from feedback \\
-& \cellcolor{bg-neutral}Persistence & \cellcolor{bg-neutral}Stateless—each verification independent & \cellcolor{bg-neutral}Stateful—maintains applicant history \\
+\multirow{4}{*}[-1.8em]{\rotatebox[origin=c]{90}{\textbf{Dimension}}}
+& Autonomy & HITL—attorney reviews outputs & HIC—autonomous; aggregate monitoring \\
+& \cellcolor{bg-neutral}Entity Frame & \cellcolor{bg-neutral}Human—attorney's name & \cellcolor{bg-neutral}Institutional—acts for bank \\
+& Goal Dynamics & Static—fixed verification goal & Adaptive—adjusts from feedback \\
+& \cellcolor{bg-neutral}Persistence & \cellcolor{bg-neutral}Stateless—independent & \cellcolor{bg-neutral}Stateful—applicant history \\
 \midrule
-\multirow{7}{*}[-4.5em]{\rotatebox[origin=c]{90}{\textbf{Control Calibration}}}
-& Logging & Basic inputs/outputs (attorney review is primary control) & Comprehensive—inputs, model version, weights, rationale, state changes \\
-& \cellcolor{bg-neutral}Monitoring & \cellcolor{bg-neutral}Minimal (quarterly spot-checks) & \cellcolor{bg-neutral}Continuous—monthly fairness metrics, drift detection \\
-& Explainability & Not required (attorney verifies) & ECOA-compliant ``principal reasons'' \\
-& \cellcolor{bg-neutral}Fairness & \cellcolor{bg-neutral}Not applicable & \cellcolor{bg-neutral}Pre-deployment + continuous + revalidation \\
-& Vendor Mgmt & Standard SaaS due diligence & Enhanced—interpretability, audit rights \\
-& \cellcolor{bg-neutral}Human Oversight & \cellcolor{bg-neutral}Attorney review per output & \cellcolor{bg-neutral}Monthly, quarterly, annual board review \\
-& Incident Response & Standard error correction & Immediate halt; regulator notification \\
+\multirow{7}{*}[-4.5em]{\rotatebox[origin=c]{90}{\textbf{Controls}}}
+& Logging & Basic inputs/outputs & Comprehensive—all parameters \\
+& \cellcolor{bg-neutral}Monitoring & \cellcolor{bg-neutral}Quarterly spot-checks & \cellcolor{bg-neutral}Continuous fairness, drift \\
+& Explainability & Not required & ECOA ``principal reasons'' \\
+& \cellcolor{bg-neutral}Fairness & \cellcolor{bg-neutral}Not applicable & \cellcolor{bg-neutral}Pre + continuous + revalidation \\
+& Vendor Mgmt & Standard due diligence & Enhanced audit rights \\
+& \cellcolor{bg-neutral}Human Oversight & \cellcolor{bg-neutral}Per-output review & \cellcolor{bg-neutral}Monthly/quarterly board \\
+& Incident Response & Error correction & Halt; regulator notification \\
 \bottomrule
 \end{tabular}
 \end{table}

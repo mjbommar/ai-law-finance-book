@@ -6,10 +6,10 @@
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[
-    % Description style
+    % Description style - narrower text for compact figure
     desc/.style={
-        font=\small,
-        text width=4cm,
+        font=\scriptsize,
+        text width=2.6cm,
         align=center
     }
 ]
@@ -20,24 +20,24 @@
         circle,
         fill=bg-definition,
         draw=definition-dark,
-        line width=1.5pt,
+        line width=1.2pt,
         text=definition-dark,
-        minimum size=2.4cm,
-        font=\normalsize\bfseries,
+        minimum size=1.7cm,
+        font=\small\bfseries,
         align=center,
-    ] (n\i) at (\angle:2.8cm) {\label};
+    ] (n\i) at (\angle:1.9cm) {\label};
 }
 
 % Arrows between nodes - bend left for clockwise = follows the circle path
 \foreach \from/\to in {1/2, 2/3, 3/1} {
-    \draw[-{Stealth[length=3mm]}, gray-500, line width=2pt]
+    \draw[-{Stealth[length=2.5mm]}, gray-500, line width=1.4pt]
         (n\from) to[bend left=40] (n\to);
 }
 
-% Descriptions positioned radially outside
-\node[desc, anchor=south] at (90:5cm) {Explicit reasoning about\\what to do next};
-\node[desc, anchor=west] at (-30:5cm) {A tool call to gather\\information or effect change};
-\node[desc, anchor=east] at (210:5cm) {The tool output that\\informs the next thought};
+% Descriptions positioned consistently outside each node along outward rays
+\node[desc, anchor=south] at (90:3.1cm) {Explicit reasoning about\\what to do next};
+\node[desc, anchor=north west] at (-30:3.0cm) {A tool call to gather\\information or effect change};
+\node[desc, anchor=north east] at (210:3.0cm) {The tool output that\\informs the next thought};
 
 \end{tikzpicture}
 \caption{The ReAct cycle interleaves reasoning with action. The agent reasons about what to do (Thought), executes a tool call (Action), observes the result (Observation), and uses that observation to inform the next round of reasoning.}

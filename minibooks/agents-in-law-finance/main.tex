@@ -10,7 +10,7 @@
 % Build: xelatex main.tex (single compiler, no separate cover compilation)
 % ============================================================================
 
-\documentclass[10pt,twoside,openany]{book}
+\documentclass[10pt,twoside,openright]{book}
 
 % ============================================================================
 % LOAD PREAMBLE (packages, colors, tikz, boxes, styling, commands)
@@ -45,10 +45,12 @@
 % ============================================================================
 % COVER PAGE (inline TikZ, no PDF include)
 % ============================================================================
+% Use Alph numbering for pre-frontmatter pages to avoid hyperref anchor conflicts
+\pagenumbering{Alph}
 \input{front-matter/cover/cover}
 
 % ----------------------------------------------------------------------------
-% COPYRIGHT PAGE (page 2 - verso of cover, before frontmatter)
+% COPYRIGHT PAGE (page B - verso of cover, before frontmatter)
 % ----------------------------------------------------------------------------
 % Place copyright immediately after cover, before \frontmatter which would
 % insert a blank page. We handle page numbering manually.
@@ -58,10 +60,13 @@
 % ============================================================================
 % FRONT MATTER (starts after copyright)
 % ============================================================================
+% Disable blank page insertion for front matter (we don't want blank pages here)
+\disablecleardoublepage
 \frontmatter
+\usefrontmatterstyle
 
 % ----------------------------------------------------------------------------
-% TITLE PAGE (page iii - traditional full title)
+% TITLE PAGE (page i - traditional full title)
 % ----------------------------------------------------------------------------
 \input{front-matter/title-page}
 
@@ -69,26 +74,27 @@
 % TABLE OF CONTENTS
 % ----------------------------------------------------------------------------
 \tableofcontents
-\newpage
+\clearpage
 
 % ----------------------------------------------------------------------------
 % PREFACE
 % ----------------------------------------------------------------------------
 \input{front-matter/preface}
-\newpage
+\clearpage
 
 % ----------------------------------------------------------------------------
 % HOW TO READ THIS BOOK
 % ----------------------------------------------------------------------------
 \input{front-matter/how-to-read}
-\newpage
 
 % ============================================================================
 % MAIN MATTER
 % ============================================================================
-% Suppress blank page that \mainmatter's \cleardoublepage would insert
-\let\cleardoublepage\clearpage
+% Re-enable blank page insertion so chapters start on right-hand (odd) pages
+\enablecleardoublepage
+\cleardoublepage
 \mainmatter
+\usemainmatterstyle
 
 % ----------------------------------------------------------------------------
 % CHAPTER 1: What is an Agent?
@@ -114,28 +120,27 @@
 % ============================================================================
 % BACK MATTER
 % ============================================================================
+% Disable blank page insertion for back matter (no blank pages needed)
+\disablecleardoublepage
 \backmatter
-
-% ----------------------------------------------------------------------------
-% ABOUT THE AUTHORS
-% ----------------------------------------------------------------------------
-\input{back-matter/about-authors}
-\newpage
+\usebackmatterstyle
 
 % ----------------------------------------------------------------------------
 % GLOSSARY
 % ----------------------------------------------------------------------------
+\clearpage
 \printglossary[title={Glossary of Key Terms}]
-\newpage
 
 % ----------------------------------------------------------------------------
 % BIBLIOGRAPHY
 % ----------------------------------------------------------------------------
+\clearpage
 \printbibliography[title={References}]
 
 % ----------------------------------------------------------------------------
 % BACK COVER
 % ----------------------------------------------------------------------------
+\clearpage
 \input{back-matter/back-cover}
 
 \end{document}

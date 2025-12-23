@@ -1,7 +1,7 @@
-\section{A Historical Journey: Defining Agents Across Seven Decades}
+\section{Historical Foundations}
 \label{sec:history}
 
-The concept of \keyterm{agency} has evolved dramatically since the mid-20th century, shaped by philosophical inquiry, economic theory, legal doctrine, and technological capability. Tracing agent definitions chronologically reveals how each level of the hierarchy from Section~\ref{sec:intro} emerged historically: philosophical and legal foundations addressed general agency (Level 1), the computer science revolution instantiated these concepts in software (Level 2), and the LLM era added flexible reasoning powered by AI (Level 3). \Cref{fig:timeline} provides a visual overview of key milestones.
+Our historical journey traces the evolution of agent definitions across seven decades. The concept of \keyterm{agency} has evolved dramatically since the mid-20th century, shaped by philosophical inquiry, economic theory, legal doctrine, and technological capability. Tracing agent definitions chronologically reveals how each level of the hierarchy from Section~\ref{sec:intro} emerged historically: philosophical and legal foundations addressed general agency (Level 1), the computer science revolution instantiated these concepts in software (Level 2), and the LLM era added flexible reasoning powered by AI (Level 3). \Cref{fig:timeline} provides a visual overview of key milestones.
 
 \begin{tcolorbox}[
   enhanced,
@@ -21,7 +21,7 @@ The semantic complexity surrounding ``agent'' traces back to the word's origins.
 
 \input{chapters/01-what-is-agent/figures/timeline}
 
-\subsection{The Origin and Evolution of Agency Law}
+\subsection{Origin and Evolution of Agency Law}
 
 Agency law, which governs the relationships between principals and agents where one party acts on behalf of another, has roots tracing back to ancient civilizations. In Roman law, the concept emerged through institutions like the "mandatum," a gratuitous contract allowing one person to manage affairs for another without compensation, and the "procurator," who handled legal matters on behalf of a principal. This framework influenced early European legal systems, particularly during the Middle Ages, when mercantile practices in Italy and England began formalizing agency in commercial transactions. Further evolution of doctrines in agency law took place during the Industrial Revolution in the 18th and 19th centuries, as expanding commerce necessitated clearer rules for delegation and liability. More recently, various editions of the Restatement of Agency have been published by the American Law Institute. These foundational treatises have codified and clarified the common law principles governing the creation, scope, and termination of agency relationships between principals and agents.
 
@@ -41,8 +41,6 @@ G.E.M. Anscombe's \textit{Intention} established that actions are \keyterm{inten
 Donald Davidson's ``Actions, Reasons, and Causes'' defended the \keyterm{causal theory of action}\glsadd{causal-theory-of-action}, arguing that intentional actions are explained by an agent's primary reason (belief–desire pair) that causally produces the action \parencite{davidson1963actions}. This framework connected mental states to observable behavior.
 
 These three works established complementary foundations for thinking about agency. Philosophy offered frameworks for intention and the causal structure of action, while law formalized delegation and control in principal–agent relationships. Together, they set up core tensions that would animate later debates: the relationship between mental states and observable behavior, the balance between autonomy and control in delegated relationships, and the explanatory role of reasons versus causes. When researchers began implementing computational agents in subsequent decades, they inherited both the conceptual resources and these unresolved tensions—questions that remain live today when we ask whether AI systems truly have intentions or merely simulate goal-directed behavior.
-
-\noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}
 
 \subsection{Economic and Social Theory (1970--1989)}
 
@@ -74,8 +72,6 @@ Albert Bandura synthesized psychological research, defining human agency through
 These seven works collectively established a spectrum of autonomy that would prove essential for understanding computational agents. At one extreme, Milgram's agentic state described humans functioning as mere instruments executing another's directives—agents as pure delegates without independent judgment. At the other extreme, Bandura enumerated the rich capacities of human agency: forming intentions, planning ahead, monitoring and regulating behavior, and reflecting on one's own efficacy. Between these poles, each discipline tackled different facets of the agency problem. Economics formalized principal-agent relationships as contracts with delegated decision-making but misaligned incentives, focusing on control mechanisms and information asymmetries. Sociology examined how agents act independently within structural constraints. Cognitive science explored how minds might emerge from societies of simpler agents. Philosophy developed practical frameworks for planning, prediction, and attributing mental states.
 
 This diversity reflected genuine differences in disciplinary focus, but the frameworks proved complementary rather than contradictory. When researchers began implementing computational agents in the 1990s, they inherited this rich conceptual toolkit and translated it into software architectures. Bratman's BDI framework became the dominant architecture for intelligent agents. Dennett's intentional stance provided a pragmatic criterion for when to treat systems as agents—when doing so yields reliable predictions. Bandura's enumeration of human agency properties became a checklist for evaluating artificial systems. The spectrum from minimal delegation to full autonomy helped designers understand where their systems fell and what capabilities they still needed to develop.
-
-\noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}
 
 \subsection{The Computer Science Revolution (1990--1999)}
 
@@ -127,8 +123,6 @@ Sutton and Barto's \textit{Reinforcement Learning} defined agents maximizing cum
 
 Two computational paradigms proved particularly durable. Agent-based modeling demonstrated how to generate social phenomena from individual interactions, bridging agent theory and social science applications. Reinforcement learning formalized agents as reward maximizers learning through environmental feedback, a framework that would scale far beyond the decade's initial demonstrations. By 1999, multi-agent systems had matured into a distinct field with established conferences, textbooks, and architectural patterns. These 1990s frameworks—mental states, observable properties, perception-action cycles, learning mechanisms, and emergence—would shape agent definitions for the next two decades, until large language models introduced qualitatively new capabilities.
 
-\noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}
-
 \subsection{Consolidation and Formalization (Late 1990s--2019)}
 
 The early 21st century marked a period of consolidation rather than conceptual revolution. Following the 1990s explosion of agent definitions and implementations, the field matured through educational resources that trained new generations of researchers, reference works that synthesized accumulated knowledge, and successful demonstrations that validated the frameworks at scale. The dot-com boom and bust, the rise of Web 2.0, mobile computing, and eventually the deep learning revolution all occurred during this period, yet they produced remarkably few new definitional frameworks for agency itself.
@@ -153,8 +147,6 @@ Deep RL combined neural networks with established RL frameworks, achieving super
 The period's consolidation reflected the 1990s frameworks' success—they fit the technological capabilities available. Wooldridge's \textit{Introduction to Multi\-Agent Systems} and Bonabeau's agent-based modeling syntheses trained new generations of practitioners \parencite{wooldridge2009introduction,bonabeau2002abm}. Epstein's \textit{Generative Social Science} articulated ABM's explanatory program: explaining phenomena through simple rule-based actors whose local interactions generate macro patterns \parencite{epstein2006generative}. Stanford Encyclopedia entries on ``Agency'' and ``Action'' provided philosophical syntheses \parencite{sep-agency,sep-action}. By 2020, Russell and Norvig's 4th edition of AIMA had refined agent definitions incorporating ML progress \parencite{russellnorvig2020aima}.
 
 Kauffman's thermodynamic criteria highlighted the still-unresolved tension between physical and virtual agency—a question that remains contentious as purely software-based LLM agents proliferate. Jennings and colleagues' software engineering formalization helped practitioners but did not redefine agency itself. Deep RL validated existing frameworks at unprecedented scale: agents learning through environmental interaction could achieve superhuman performance, confirming Sutton and Barto's 1998 framework rather than replacing it. The stage was set, however, for disruption. Large language models' capacity for flexible reasoning, few-shot learning, and natural language understanding would soon enable agent architectures qualitatively different from the hand-coded systems of previous decades.
-
-\noindent\textcolor{border-neutral}{\rule{\textwidth}{1.5pt}}
 
 \subsection{The LLM Era (2020--2025)}
 

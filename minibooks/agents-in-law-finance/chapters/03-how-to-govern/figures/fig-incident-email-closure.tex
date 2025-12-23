@@ -11,56 +11,55 @@
     draw=gray-400,
     line width=0.5pt,
     fill=white,
-    minimum width=13.5cm,
-    minimum height=20.2cm,
+    minimum width=9.8cm,
+    minimum height=14.2cm,
     rounded corners=2pt
 ] (page) at (0,0) {};
 
 % Email header fields
-\node[font=\scriptsize\sffamily, text=gray-600, anchor=west] at ([xshift=0.5cm, yshift=-0.4cm]page.north west) {\textbf{From:}};
-\node[font=\scriptsize\sffamily, text=gray-900, anchor=west] at ([xshift=1.6cm, yshift=-0.4cm]page.north west) {Sarah Chen, Chief Risk Officer <s.chen@firstnational.com>};
+\node[font=\scriptsize\sffamily, text=gray-600, anchor=west] at ([xshift=0.4cm, yshift=-0.35cm]page.north west) {\textbf{From:}};
+\node[font=\scriptsize\sffamily, text=gray-900, anchor=west] at ([xshift=1.4cm, yshift=-0.35cm]page.north west) {Sarah Chen, CRO <s.chen@firstnational.com>};
 
-\node[font=\scriptsize\sffamily, text=gray-600, anchor=west] at ([xshift=0.5cm, yshift=-0.75cm]page.north west) {\textbf{To:}};
-\node[font=\scriptsize\sffamily, text=gray-900, anchor=west] at ([xshift=1.6cm, yshift=-0.75cm]page.north west) {Michael Torres, Chief Executive Officer <m.torres@firstnational.com>};
+\node[font=\scriptsize\sffamily, text=gray-600, anchor=west] at ([xshift=0.4cm, yshift=-0.65cm]page.north west) {\textbf{To:}};
+\node[font=\scriptsize\sffamily, text=gray-900, anchor=west] at ([xshift=1.4cm, yshift=-0.65cm]page.north west) {Michael Torres, CEO <m.torres@firstnational.com>};
 
-\node[font=\scriptsize\sffamily, text=gray-600, anchor=west] at ([xshift=0.5cm, yshift=-1.1cm]page.north west) {\textbf{Cc:}};
-\node[font=\scriptsize\sffamily, text=gray-900, anchor=west] at ([xshift=1.6cm, yshift=-1.1cm]page.north west) {Jennifer Walsh, General Counsel; Board Risk Committee Chair};
+\node[font=\scriptsize\sffamily, text=gray-600, anchor=west] at ([xshift=0.4cm, yshift=-0.95cm]page.north west) {\textbf{Cc:}};
+\node[font=\scriptsize\sffamily, text=gray-900, anchor=west] at ([xshift=1.4cm, yshift=-0.95cm]page.north west) {J.\ Walsh (GC); Board Risk Committee};
 
-\node[font=\scriptsize\sffamily, text=gray-600, anchor=west] at ([xshift=0.5cm, yshift=-1.45cm]page.north west) {\textbf{Date:}};
-\node[font=\scriptsize\sffamily, text=gray-900, anchor=west] at ([xshift=1.6cm, yshift=-1.45cm]page.north west) {August 30, 2024, 4:47 PM};
+\node[font=\scriptsize\sffamily, text=gray-600, anchor=west] at ([xshift=0.4cm, yshift=-1.25cm]page.north west) {\textbf{Date:}};
+\node[font=\scriptsize\sffamily, text=gray-900, anchor=west] at ([xshift=1.4cm, yshift=-1.25cm]page.north west) {August 30, 2024, 4:47 PM};
 
-\node[font=\scriptsize\sffamily, text=gray-600, anchor=west] at ([xshift=0.5cm, yshift=-1.8cm]page.north west) {\textbf{Subject:}};
-\node[font=\scriptsize\bfseries\sffamily, text=gray-900, anchor=west, text width=10cm] at ([xshift=1.6cm, yshift=-1.8cm]page.north west) {CLOSED: Fair Lending Incident FL-2024-003 -- Findings and Remediation};
+\node[font=\scriptsize\sffamily, text=gray-600, anchor=west] at ([xshift=0.4cm, yshift=-1.55cm]page.north west) {\textbf{Subject:}};
+\node[font=\scriptsize\bfseries\sffamily, text=gray-900, anchor=west, text width=6.8cm] at ([xshift=1.4cm, yshift=-1.55cm]page.north west) {CLOSED: FL-2024-003 -- Findings and Remediation};
 
 % Horizontal rule
-\draw[gray-300, line width=0.5pt] ([xshift=0.5cm, yshift=-2.15cm]page.north west) -- ([xshift=-0.5cm, yshift=-2.15cm]page.north east);
+\draw[gray-300, line width=0.5pt] ([xshift=0.4cm, yshift=-1.9cm]page.north west) -- ([xshift=-0.4cm, yshift=-1.9cm]page.north east);
 
 % Email body
 \node[
-    text width=12.5cm,
+    text width=9.0cm,
     anchor=north west,
     font=\scriptsize,
     align=left
-] at ([xshift=0.5cm, yshift=-2.4cm]page.north west) {
-Michael,\\[6pt]
-I'm pleased to confirm that Incident FL-2024-003 is now closed. The system has been remediated and redeployed. Here's what we found and what we've changed.\\[6pt]
-\textbf{Root Cause: Process-Based Discrimination.} The discrimination wasn't in the scoring model---Cycle 1 risk assessment was facially neutral and passed our traditional fairness tests. The problem was \textit{how the system investigated applicants across subsequent cycles}:\\[3pt]
-\begin{tabular}{@{\hspace{1em}\textbullet~}p{11.5cm}@{}}
-Hispanic applicants triggered more verification cycles (5.2 avg vs. 3.8 for white applicants)\\[1pt]
-The system had learned to flag shorter U.S. employment tenure for extra scrutiny---a proxy for national origin\\[1pt]
-Extended verification led to higher abandonment: 28\% of Hispanic applicants withdrew vs. 12\% of white applicants\\
-\end{tabular}\\[3pt]
-The system wasn't discriminating in its \textit{decisions}---it was discriminating in its \textit{process}. Applicants who would have been approved were dropping out because we were investigating them more aggressively.\\[6pt]
-\textbf{Remediation Implemented.} Rita Gonzalez and Marcus Thompson led the technical remediation. Before redeploying, we made four changes: (1) prohibited employment tenure from influencing investigation depth; (2) added cycle-count parity monitoring that flags deviations >20\% from demographic medians; (3) implemented abandonment tracking by protected class; and (4) retrained and revalidated the system for both outcome \textit{and} process fairness.\\[6pt]
-\textbf{Regulatory and Applicant Notification.} Jennifer filed our self-report with the CFPB on July 12th, within the 30-day window the board approved. Her team has also sent notification letters to all 847 affected Hispanic applicants from the past 12 months, offering expedited re-review with human oversight, waived fees, and priority processing. So far, 312 have requested re-review.\\[6pt]
-\textbf{What We're Changing Going Forward.} This one caught us off guard. Our fairness testing was focused on approval rates---we weren't looking at how the system \textit{investigated} people differently. I talked with Marcus yesterday, and he's already updating our AI Governance framework to treat ``iteration bias'' as a distinct risk category. We're revising our validation protocols to require fairness testing across the full investigation process, not just final decisions. We're also adding this to the quarterly model risk review.\\[6pt]
-I'll present the full post-incident review at next month's board meeting, including proposed policy updates for all agentic systems.\\[8pt]
-Sarah\\[6pt]
-\textcolor{gray-400}{\rule{3cm}{0.5pt}}\\[3pt]
+] at ([xshift=0.4cm, yshift=-2.1cm]page.north west) {
+Michael,\\[5pt]
+Incident FL-2024-003 is now closed. The system has been remediated and redeployed.\\[5pt]
+\textbf{Root Cause: Process-Based Discrimination.} The discrimination wasn't in the scoring model---Cycle 1 was facially neutral and passed traditional fairness tests. The problem was \textit{how the system investigated applicants across subsequent cycles}:\\[2pt]
+\begin{tabular}{@{\hspace{0.8em}\textbullet~}p{8.0cm}@{}}
+Hispanic applicants triggered more verification cycles (5.2 avg vs.\ 3.8)\\[1pt]
+System flagged shorter U.S.\ employment tenure for extra scrutiny---a proxy for national origin\\[1pt]
+Extended verification led to higher abandonment: 28\% Hispanic vs.\ 12\% white\\
+\end{tabular}\\[2pt]
+The system discriminated in its \textit{process}, not its \textit{decisions}. Qualified applicants dropped out because we investigated them more aggressively.\\[5pt]
+\textbf{Remediation.} Before redeploying: (1) prohibited employment tenure from influencing investigation depth; (2) added cycle-count parity monitoring (flags >20\% deviation); (3) implemented abandonment tracking by protected class; (4) revalidated for outcome \textit{and} process fairness.\\[5pt]
+\textbf{Notifications.} Jennifer filed our CFPB self-report on July 12th. Her team sent letters to all 847 affected applicants offering expedited re-review, waived fees, and priority processing. 312 have requested re-review.\\[5pt]
+\textbf{Going Forward.} Marcus is updating our AI Governance framework to treat ``iteration bias'' as a distinct risk category. We're revising validation protocols to require fairness testing across the full investigation process, not just final decisions.\\[5pt]
+Full post-incident review at next month's board meeting.\\[6pt]
+Sarah\\[5pt]
+\textcolor{gray-400}{\rule{2.5cm}{0.5pt}}\\[2pt]
 \textbf{Sarah Chen}~\textbar~Chief Risk Officer\\
-First National Bank~\textbar~Tel: (555) 234-5678\\
-\textcolor{slate-700}{s.chen@firstnational.com}\\[12pt]
-\textit{\textcolor{gray-500}{\scriptsize This email and any attachments are confidential and intended solely for the addressee. If you have received this message in error, please notify the sender immediately and delete this message. Unauthorized use, disclosure, or copying is prohibited.}}
+First National Bank~\textbar~(555) 234-5678\\[8pt]
+\textit{\textcolor{gray-500}{\tiny This email is confidential. If received in error, notify sender and delete.}}
 };
 
 \end{tikzpicture}

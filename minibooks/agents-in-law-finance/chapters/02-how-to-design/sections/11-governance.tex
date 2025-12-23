@@ -4,16 +4,16 @@
 % Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
-\section{How Do We Design Systems That Can Be Governed?}
+\section{Governance by Design}
 \label{sec:agents2-governance}
 
 % ----------------------------------------------------------------------------
 % Opening: Architecture Enables Governance
 % ----------------------------------------------------------------------------
 
-You cannot audit what you did not log. You cannot enforce privilege boundaries that were never implemented. You cannot override a system that lacks pause mechanisms. When a regulator asks how the compliance agent detected a breach, or when opposing counsel demands the agent's reasoning, architecture determines whether you can answer.
+\textit{How do we design systems that can be governed?} You cannot audit what you did not log. You cannot enforce privilege boundaries that were never implemented. You cannot override a system that lacks pause mechanisms. When a regulator asks how the compliance agent detected a breach, or when opposing counsel demands the agent's reasoning, architecture determines whether you can answer.
 
-This distinction matters: \textit{governance policy} defines what controls are required; \textit{governance-aware architecture} provides the technical foundation that makes those controls possible. Chapter~3 (\textit{How to Govern an Agent}) addresses policy---the five-layer regulatory framework, dimensional calibration, and organizational accountability. This section addresses architecture: the patterns that enable governance, drawn from the capabilities developed throughout this chapter.
+This distinction matters: \textit{governance policy} defines what controls are required; \textit{governance-aware architecture} provides the technical foundation that makes those controls possible. Chapter~3 addresses policy---the five-layer regulatory framework, dimensional calibration, and organizational accountability. This section addresses architecture: the patterns that enable governance, drawn from the capabilities developed throughout this chapter.
 
 \begin{keybox}[title={Architecture Before Policy}]
 Governance cannot be retrofitted—systems designed without audit logging cannot suddenly produce compliance reports when regulators arrive, those lacking approval gates cannot enforce human-in-the-loop oversight after deployment, and architectures missing state snapshots cannot support rollback or investigation when failures occur. The architectural decisions in this chapter are not merely technical choices; they are the infrastructure that makes governance possible.
@@ -44,7 +44,7 @@ Comprehensive logging is the foundation of all governance. Without logs, there i
 
 \textbf{Delegation logs} capture agent-to-agent interactions (\Cref{sec:agents2-delegation}). When a coordinator delegates to specialists, the log must record the delegation contract, the specialist's identity, and the returned artifacts. Complete delegation logging supports audit trails that span the entire delegation tree.
 
-\begin{practicebox}[title={Structured Logging Schema}]
+\begin{technicalbox}[title={Structured Logging Schema}]
 Effective governance requires structured logs, not free-form text. A minimal schema includes:
 \begin{itemize}[nosep]
 \item \textbf{Timestamp}: ISO 8601 with timezone
@@ -55,7 +55,7 @@ Effective governance requires structured logs, not free-form text. A minimal sch
 \item \textbf{Outcome}: success, failure, or pending
 \end{itemize}
 Structured logs facilitate programmatic analysis, anomaly detection, and automated compliance reporting.
-\end{practicebox}
+\end{technicalbox}
 
 % ----------------------------------------------------------------------------
 % Override and Circuit Breaker Patterns
@@ -158,7 +158,7 @@ For all escalation types, the architecture must ensure that escalation requests 
 % The Governance Surface
 % ----------------------------------------------------------------------------
 
-\subsection{The Governance Surface}
+\subsection{Governance Surface}
 \label{sec:agents2-governance-surface}
 
 \glsadd{governance-surface}
@@ -182,6 +182,6 @@ Escalation Hooks & Configurable triggers with reliable routing \\
 \end{tabular}
 \end{table}
 
-This governance surface is what Chapter~3 (\textit{How to Govern an Agent}) builds upon. The five-layer regulatory framework (foundational law, professional obligations, sector regulation, AI-specific regulation, voluntary frameworks) imposes requirements; the governance surface provides the technical means to satisfy them. Without logging, there is no audit trail for regulators. Without override capability, there is no human oversight mechanism. Without state management, there is no reproducibility for investigations. Without least privilege, there is no containment of failures. Without escalation hooks, there is no transfer of control to humans.
+This governance surface is what the next chapter builds upon. The five-layer regulatory framework imposes requirements; the governance surface provides the technical means to satisfy them. Without logging, there is no audit trail. Without override capability, there is no human oversight. Without state management, there is no reproducibility. Without least privilege, there is no containment of failures. Without escalation hooks, there is no transfer of control to humans.
 
-The architectural decisions made throughout this chapter---how you design triggers, intent extraction, perception tools, action controls, memory systems, planning mechanisms, termination conditions, escalation protocols, and delegation patterns---collectively determine whether your system can be governed. This section has addressed \textit{how} architecture supports governance; Chapter~3 (\textit{How to Govern an Agent}) addresses \textit{what} governance demands and how to calibrate controls to your specific context and risk profile.
+The architectural decisions made throughout this chapter collectively determine whether your system can be governed. This section has addressed \textit{how} architecture supports governance; Chapter~3 addresses \textit{what} governance demands and how to calibrate controls to your specific context and risk profile.

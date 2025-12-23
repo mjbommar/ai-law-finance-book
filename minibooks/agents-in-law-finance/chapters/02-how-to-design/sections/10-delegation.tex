@@ -4,14 +4,14 @@
 % Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
-\section{How Does an Agent Work with Other Agents?}
+\section{Coordination}
 \label{sec:agents2-delegation}
 
 % ----------------------------------------------------------------------------
 % Opening: Q9 Framing and Organizational Analogy
 % ----------------------------------------------------------------------------
 
-Complex matters require coordination. An M\&A partner does not execute everything personally; they coordinate specialists, with corporate counsel reviewing governance, tax specialists analyzing structure, and antitrust counsel assessing regulatory risk. Each specialist contributes deep domain expertise while the partner orchestrates: defining deliverables, integrating work products, and synthesizing conclusions for the client.
+\textit{How does an agent work with other agents?} Complex matters require coordination. An M\&A partner does not execute everything personally; they coordinate specialists, with corporate counsel reviewing governance, tax specialists analyzing structure, and antitrust counsel assessing regulatory risk. Each specialist contributes deep domain expertise while the partner orchestrates: defining deliverables, integrating work products, and synthesizing conclusions for the client.
 
 A portfolio manager coordinates similarly, with analysts providing company analysis, traders handling execution, risk managers monitoring exposure, and compliance officers verifying adherence. Complex trades require all these perspectives because no single person possesses all necessary expertise.
 
@@ -28,7 +28,7 @@ Delegation permits parallelization (multiple specialists work simultaneously), s
 % Why Multi-Agent?
 % ----------------------------------------------------------------------------
 
-\subsection{Why Multi-Agent Architectures?}
+\subsection{Multi-Agent Rationale}
 \label{sec:agents2-why-multi-agent}
 
 Several factors drive multi-agent designs \parencite{wu2023autogen,guo2024multiagent}, each reflecting challenges familiar to professional practice.
@@ -127,9 +127,6 @@ The decision rule is straightforward: use MCP for well-defined, auditable operat
 % ----------------------------------------------------------------------------
 % Connection to Other Questions
 % ----------------------------------------------------------------------------
-
-\subsection{From Delegation to Governance}
-\label{sec:agents2-delegation-governance}
 
 Delegation distributes work, creating governance challenges. Accountability becomes complex: does responsibility lie with the coordinator, the specialist, or the approving human? Information barriers must apply to agents just as they do to humans. Audit trails must span the entire delegation tree.
 

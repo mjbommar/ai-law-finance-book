@@ -4,14 +4,14 @@
 % Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
-\section{How Does an Agent Know When It Has Work to Do?}
+\section{Triggers}
 \label{sec:agents2-triggers}
 
 % ----------------------------------------------------------------------------
 % Opening: Q1 Framing and Organizational Analogy
 % ----------------------------------------------------------------------------
 
-Take a day in the life of an average attorney. How does work reach their desk?  Typically, a client calls with a question, a court docket updates with a new filing, a calendar reminds them of an upcoming motion, or a junior associate knocks on their door with a question that exceeds their expertise.  Agentic systems operate in the same way. Building on Chapter~1's GPA+IAT framework, no matter how sophisticated a system's perception and action capabilities, it remains idle until work ``arrives''; the architectural question is how these triggers and channels are defined and designed.
+\textit{How does an agent know when it has work to do?} Take a day in the life of an average attorney. How does work reach their desk?  Typically, a client calls with a question, a court docket updates with a new filing, a calendar reminds them of an upcoming motion, or a junior associate knocks on their door with a question that exceeds their expertise.  Agentic systems operate in the same way. Building on Chapter~1's GPA+IAT framework, no matter how sophisticated a system's perception and action capabilities, it remains idle until work ``arrives''; the architectural question is how these triggers and channels are defined and designed.
 
 \begin{definitionbox}[title={Triggers}]
 \glsadd{trigger}
@@ -25,16 +25,16 @@ Triggers also create the audit trail that governance depends on. Every action an
 \begin{definitionbox}[title={Channels}]
 	\keyterm{Channels} are how triggers reach the agent. In professional practice, four channels cover almost all work intake:
 
-	\vspace{0.5em}
+	\smallskip
 	\textbf{External feeds}: The world pushes work to you (court filings, market data, regulatory updates).
 
-	\vspace{0.3em}
+	\smallskip
 	\textbf{Human prompts}: People request work directly (chat, email, collaboration platforms).
 
-	\vspace{0.3em}
+	\smallskip
 	\textbf{Scheduled jobs}: Time itself triggers execution (deadlines, periodic checks, end-of-day).
 
-	\vspace{0.3em}
+	\smallskip
 	\textbf{Escalation events}: Internal signals that ask for human help (budget exhaustion, low confidence).
 \end{definitionbox}
 
@@ -48,26 +48,24 @@ Compare the litigator who explores docket alerts through an interactive research
 
 We address surfaces in this section because they complete the picture of the human-agent interface. Triggers, channels, and surfaces together determine whether an agentic system fits naturally into professional workflows or feels like an awkward intrusion. System architects must understand surfaces to design appropriate triggers and channels; UX designers must understand triggers and channels to design effective surfaces. The disciplines are distinct but interdependent. After examining how work arrives through each channel type, we turn to how users experience the system through different surfaces (\Cref{sec:agents2-surfaces}).
 
-\input{chapters/02-how-to-design/figures/fig-trigger-channels}
-
 % ----------------------------------------------------------------------------
 % External Feeds
 % ----------------------------------------------------------------------------
 
-\subsection{External Feeds: The World Pushes Work to You}
+\subsection{External Feeds}
 \label{sec:agents2-external-feeds}
 
 External feeds deliver events from systems outside the agentic system's direct control. The external system pushes notifications when events occur, much like receiving service of process instead of checking the courthouse daily to see if you have been sued.
 
-\textbf{Legal and Regulatory Feeds}: Court docket systems and state e-filing platforms can send notifications whenever documents are filed in cases you are monitoring. When an alert arrives, an agentic system can retrieve the filed document, analyze its contents, and trigger the appropriate response, whether that means flagging a motion for attorney review, updating a case timeline, or drafting a preliminary response memo. SEC filing systems offer similar capabilities for corporate disclosures, enabling agentic systems to monitor competitors' filings and flag material changes. Citator services can notify the system whenever cases you care about are cited or overruled, keeping your legal research current without manual checking.
+\textbf{Legal and Regulatory Feeds}: Court docket systems and e-filing platforms notify you when documents are filed in cases you monitor. An agentic system can retrieve the filing, analyze it, and respond---flagging motions for review, updating timelines, or drafting response memos. SEC filing systems enable similar monitoring for corporate disclosures. Citator services alert you when relevant cases are cited or overruled.
 
-\textbf{Financial Market Feeds}: Financial institutions receive real-time market data through providers like Bloomberg and Reuters. A portfolio management agent can subscribe to price alerts and receive notifications when thresholds are crossed, then evaluate whether rebalancing is warranted and either execute trades within pre-approved limits or escalate to a portfolio manager for approval. News feeds add another layer, delivering headlines, earnings announcements, and analyst ratings that the agent can assess for materiality and surface to managers when developments warrant attention.
+\textbf{Financial Market Feeds}: Portfolio agents subscribe to price alerts from providers like Bloomberg and Reuters. When thresholds are crossed, the agent evaluates whether rebalancing is warranted and either executes within pre-approved limits or escalates. News feeds deliver earnings, analyst ratings, and headlines for materiality assessment.
 
-\begin{keybox}[title={Speed vs. Reasoning: A Critical Distinction}]
-Market data arrives at millisecond granularity. LLM-based reasoning operates at second-to-minute timescales. This mismatch means agentic systems are unsuited for high-frequency trading or latency-sensitive execution, but well suited for strategic decisions, research synthesis, and compliance monitoring. The architecture pattern: fast deterministic systems handle real-time capture and threshold detection; the agentic system processes only after an alert is raised.
+\begin{keybox}[title={Speed vs. Reasoning}]
+Market data arrives in milliseconds; LLM reasoning takes seconds to minutes. Agentic systems are unsuited for high-frequency trading but well suited for strategic decisions and compliance. The pattern: fast deterministic systems capture data and detect thresholds; the agent processes only after alerts fire.
 \end{keybox}
 
-\textbf{Reliability Matters}: How external feeds connect to agentic systems has real consequences for governance. Some integration approaches prioritize speed but may occasionally miss events; others guarantee delivery and maintain complete logs but add latency. For regulated applications, you generally want the latter: systems that ensure every event is recorded, processed in order, and available for later audit. When evaluating vendor systems, ask whether the integration approach guarantees delivery and maintains audit trails, or whether events can be lost without detection.
+\textbf{Reliability Matters}: Integration architecture affects governance. Some approaches prioritize speed but may miss events; others guarantee delivery with complete logs but add latency. For regulated applications, prefer the latter---every event recorded, processed in order, and auditable. Ask vendors: does your integration guarantee delivery, or can events be lost?
 
 % ----------------------------------------------------------------------------
 % Human Prompts as Events
@@ -94,7 +92,7 @@ These synchronous channels share a common advantage: if the system misunderstand
 % Scheduled Jobs
 % ----------------------------------------------------------------------------
 
-\subsection{Scheduled Jobs: Time as Trigger}
+\subsection{Scheduled Jobs}
 \label{sec:agents2-scheduled}
 
 Unlike the channels we have discussed so far, some work does not wait for an external event or a human request. End-of-day reconciliation, monthly compliance reporting, quarterly reviews, and annual filings all happen on a calendar. For these recurring tasks, time itself becomes the trigger, and the system must initiate work without anyone asking.
@@ -109,7 +107,7 @@ Unlike the channels we have discussed so far, some work does not wait for an ext
 % Escalation Events (Brief - Full Treatment in Section 09)
 % ----------------------------------------------------------------------------
 
-\subsection{Escalation Events: When Agents Reach Their Limits}
+\subsection{Escalation Events}
 \label{sec:agents2-escalation-brief}
 
 The previous three channel types bring work into the system from outside: external feeds push events, humans make requests, and scheduled jobs fire on the clock. Escalation events are different. They originate inside the system itself, when an agent reaches a limit and cannot proceed autonomously. The system generates an event signaling that it needs human intervention, transferring control to a decision-maker at precisely the moment when human judgment matters most.
@@ -126,26 +124,26 @@ Four types of escalation triggers appear most frequently in practice.
 
 We return to escalation design in depth in \Cref{sec:agents2-escalation}, including how to calibrate when systems should ask for help versus proceed autonomously, and how to design escalation interfaces that give humans the context they need to make good decisions quickly. The organizational structures that support escalation---tiered response models, accountability pathways, and governance reporting---are addressed in Chapter~3 (\textit{How to Govern an Agent}).
 
+% \input{chapters/02-how-to-design/figures/fig-trigger-channels}
+
 % ----------------------------------------------------------------------------
 % Surfaces: Interaction Modalities
 % ----------------------------------------------------------------------------
 
-\subsection{Surfaces: How Users Experience Agentic Systems}
+\subsection{Surfaces}
 \label{sec:agents2-surfaces}
 
-Triggers and channels are architectural concepts---they answer questions about event routing, message delivery, and system integration. \keyterm{Surfaces} are user experience concepts---they answer questions about interaction modality, workflow integration, and interface design. These are different disciplines asking different questions, even when they address the same system.
+Triggers and channels are architectural concepts---they answer questions about event routing, message delivery, and system integration. \keyterm{Surfaces} are user experience concepts---they answer questions about interaction modality, workflow integration, and interface design.
 
-We include surfaces in this architectural chapter for two reasons. First, surface choice constrains architectural decisions: a system designed for conversational interaction needs different trigger handling than one designed for background automation. Second, architects and UX designers must communicate: when a UX designer specifies that users need real-time research dialogue, the architect must understand what that implies for channel selection and response latency.
+\begin{definitionbox}[title={Interaction Surfaces}, breakable=false]
+	An \keyterm{interaction surface} is the user experience modality through which humans engage with an agentic system. Surfaces vary along four dimensions: synchronicity (when results arrive), initiative (who starts the conversation), embodiment (whether the system is visible), and output format (what the system produces).
+\end{definitionbox}
+
+We include surfaces in this architectural chapter because surface choice constrains architectural decisions: a system designed for conversational interaction needs different trigger handling than one designed for background automation. Architects and UX designers must communicate; when a UX designer specifies that users need real-time research dialogue, the architect must understand what that implies for channel selection and response latency.
 
 Conversational surfaces deserve special attention because they sit at the intersection of architecture and UX. When a litigator types a research question into a chat window, the interface serves two roles simultaneously: it is the pathway through which the human prompt trigger arrives (an architectural function) and the interaction modality through which the user engages with responses (a UX function). This dual role is unique to conversational surfaces---automation and document surfaces do not receive triggers, they only deliver outputs.
 
-Surface design warrants extended treatment in its own right. Questions of conversational UX, interface affordances, and workflow integration deserve the depth we give them elsewhere in this book. Here, we focus on the essentials that architects need to understand: what surfaces exist, how they differ, and how surface choice shapes system requirements.
-
 Surface choice matters because it shapes workflow integration. An agentic system with identical capabilities will succeed or fail based partly on whether its surface matches how professionals actually work. Usability researcher Jakob Nielsen argues that generative AI represents the first new user interface paradigm in sixty years, marking a shift from \textit{command-based interaction}, where you tell the computer what to do, to \textit{intent-based outcome specification}, where you tell the computer what you want \parencite{nielsen-ai-ui-paradigm}. But intent-based systems still require interfaces, and those interfaces---the surfaces through which users engage---determine whether the system feels natural or intrusive.
-
-\begin{definitionbox}[title={Interaction Surfaces}]
-	An \keyterm{interaction surface} is the user experience modality through which humans engage with an agentic system. Where triggers and channels are architectural concepts describing how work reaches the system, surfaces are UX concepts describing how users experience the system. Surfaces vary along four dimensions that UX designers use to match interaction paradigms to user needs: synchronicity, initiative, embodiment, and output format.
-\end{definitionbox}
 
 \textbf{Synchronicity} determines when results arrive. Synchronous interactions deliver results while the user waits, as with chat interfaces where you ask a question and watch the response stream in. This suits exploratory work where you refine direction based on what you see. Asynchronous interactions deliver results later through notifications or reports, as with document generation where you specify requirements, do other work, and return when the draft is ready. This suits production tasks where waiting would waste billable time.
 
@@ -167,24 +165,23 @@ Automation surfaces suit \textit{monitoring tasks} where continuous human attent
 
 Document surfaces suit \textit{production tasks} with defined deliverables. The associate needs a memo for the partner's review, and the analyst needs a report for the investment committee. The output format matters here because you need a polished document that can be filed, sent to clients, or presented to regulators, not a chat transcript.
 
-\begin{keybox}[title={Matching Surface to Task}]
-	Surface selection is a design decision, not a technical constraint. When choosing how users will interact with an agentic system, match the surface to the task type.
-
-	\vspace{0.5em}
-	\textbf{Exploratory tasks} like research questions, strategy discussions, and ad hoc analysis work best through \textbf{chat surfaces} that support iterative refinement.
-
-	\vspace{0.3em}
-	\textbf{Monitoring tasks} like docket surveillance, compliance screening, and portfolio alerts work best through \textbf{automation surfaces} that operate in the background.
-
-	\vspace{0.3em}
-	\textbf{Production tasks} like research memos, due diligence reports, and regulatory filings work best through \textbf{document surfaces} that generate formal deliverables.
-
-	\vspace{0.5em}
-	Many deployments combine all three. A litigation support system might offer chat for research, automation for alerts, and document generation for motion drafts. The underlying reasoning capabilities remain constant while only the interaction modality changes.
-
-	\vspace{0.5em}
-	\textbf{Mismatches waste effort.} Forcing chat onto monitoring tasks demands attention no one can sustain. Forcing documents onto exploratory tasks prevents the iteration that produces good results.
+\begin{keybox}[title={Matching Surfaces to Tasks}, breakable=false]
+Surface selection is a design decision, not a technical constraint. Match the surface to how users actually work, not to what the technology makes easiest.
 \end{keybox}
+
+When choosing how users will interact with an agentic system, match the surface to the task type:
+
+\begin{itemize}[nosep]
+	\item \textbf{Exploratory tasks} like research questions, strategy discussions, and ad hoc analysis work best through \textbf{chat surfaces} that support iterative refinement.
+	\item \textbf{Monitoring tasks} like docket surveillance, compliance screening, and portfolio alerts work best through \textbf{automation surfaces} that operate in the background.
+	\item \textbf{Production tasks} like research memos, due diligence reports, and regulatory filings work best through \textbf{document surfaces} that generate formal deliverables.
+\end{itemize}
+
+Many deployments combine all three surfaces. A litigation support system might offer chat for research, automation for alerts, and document generation for motion drafts. The underlying reasoning capabilities remain constant; only the interaction modality changes.
+
+\begin{cautionbox}[title={Surface Mismatches Waste Effort}]
+Forcing chat onto monitoring tasks demands attention no one can sustain. Forcing documents onto exploratory tasks prevents the iteration that produces good results. Match the surface to the work, not the other way around.
+\end{cautionbox}
 
 The interplay between triggers, channels, and surfaces creates the complete human-agent interface. Table~\ref{tab:agents2-trigger-surface-examples} illustrates how the same trigger arriving through the same channel can manifest through different surfaces depending on workflow context.
 
@@ -219,7 +216,7 @@ Surface design draws on decades of human-computer interaction research. What arc
 % Evaluating Trigger Systems
 % ----------------------------------------------------------------------------
 
-\subsection{Evaluating Trigger Systems}
+\subsection{Evaluation}
 \label{sec:agents2-evaluating-triggers}
 
 When evaluating trigger systems, assess five criteria: \textit{coverage} (all relevant event sources), \textit{latency} (acceptable delay for the use case), \textit{reliability} (failure handling and fallbacks), \textit{priority} (distinguishing urgent from routine), and \textit{auditability} (complete trigger logs).
@@ -227,9 +224,6 @@ When evaluating trigger systems, assess five criteria: \textit{coverage} (all re
 % ----------------------------------------------------------------------------
 % Connection to Other Questions
 % ----------------------------------------------------------------------------
-
-\subsection{From Triggers to Action}
-\label{sec:agents2-triggers-to-action}
 
 We have examined the human-agent interface from two disciplinary perspectives. From an architectural standpoint, \textit{triggers} are the events that initiate work, and \textit{channels} are the pathways through which those triggers reach the agent. From a user experience standpoint, \textit{surfaces} are the interaction modalities through which users engage with the agent's capabilities. Architects design trigger routing and channel infrastructure; UX designers choose surfaces that match how professionals actually work. The disciplines address different questions but must align for a system to succeed.
 

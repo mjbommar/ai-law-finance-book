@@ -10,8 +10,8 @@
     draw=slate-700,
     line width=1.5pt,
     fill=white,
-    minimum width=13.5cm,
-    minimum height=5.8cm,
+    minimum width=11.5cm,
+    minimum height=5.4cm,
     rounded corners=4pt
 ] (card) at (0,0) {};
 
@@ -29,15 +29,15 @@
 
 % Left column: Appropriate When
 \node[
-    text width=6.2cm,
+    text width=5.2cm,
     anchor=north west,
     font=\scriptsize,
     align=left
 ] at ([xshift=0.4cm, yshift=-1.4cm]card.north west) {
 \textbf{\textsf{APPROPRIATE WHEN}}\\[4pt]
-\textcolor{slate-700}{$\blacktriangleright$} Actions are high-consequence and irreversible (filing court documents, executing large trades, signing contracts)\\[3pt]
-\textcolor{slate-700}{$\blacktriangleright$} Professional duties require human judgment (attorney competence, fiduciary duty)\\[3pt]
-\textcolor{slate-700}{$\blacktriangleright$} Regulatory requirements mandate human review (certain medical diagnoses, credit decisions)
+\textcolor{slate-700}{$\blacktriangleright$} High-consequence, irreversible actions (filing documents, large trades, contracts)\\[3pt]
+\textcolor{slate-700}{$\blacktriangleright$} Professional duties require human judgment (competence, fiduciary duty)\\[3pt]
+\textcolor{slate-700}{$\blacktriangleright$} Regulatory mandates require human review
 };
 
 % Vertical divider
@@ -45,16 +45,16 @@
 
 % Right column: Control Requirements
 \node[
-    text width=6.0cm,
+    text width=5.0cm,
     anchor=north west,
     font=\scriptsize,
     align=left
 ] at ([xshift=0.15cm, yshift=-1.4cm]card.north) {
 \textbf{\textsf{CONTROL REQUIREMENTS}}\\[4pt]
-\textbf{Primary Control:} Human reviewer approves every significant action\\[3pt]
-\textbf{Logging:} Capture recommendation + human decision (approve/reject/modify)\\[3pt]
-\textbf{Monitoring:} Lighter post-action review (human serves as primary control)\\[3pt]
-\textbf{Key Risk:} Automation bias---humans rubber-stamping without meaningful review
+\textbf{Primary:} Human approves each action\\[3pt]
+\textbf{Logging:} Recommendation + decision\\[3pt]
+\textbf{Monitoring:} Lighter post-action review\\[3pt]
+\textbf{Key Risk:} Automation bias---rubber-stamping
 };
 
 \end{tikzpicture}

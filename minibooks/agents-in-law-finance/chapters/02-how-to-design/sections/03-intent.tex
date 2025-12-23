@@ -4,14 +4,14 @@
 % Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
-\section{How Does an Agent Understand What's Being Asked?}
+\section{Understanding}
 \label{sec:agents2-intent}
 
 % ----------------------------------------------------------------------------
 % Opening: Q2 Framing and Organizational Analogy
 % ----------------------------------------------------------------------------
 
-When a partner walks into your office and says ``get me up to speed on the Acme acquisition,'' your first job is understanding what that actually means. You must determine whether this is a quick status check or a request for deep analysis, whether you should answer a specific question or identify all issues, and whether this is urgent work for today's call or background work for next week's meeting. The words you hear are the \textbf{instruction}; the underlying purpose that those words point toward is the \textbf{intent}.
+\textit{How does an agent understand what's being asked?} When a partner walks into your office and says ``get me up to speed on the Acme acquisition,'' your first job is understanding what that actually means. You must determine whether this is a quick status check or a request for deep analysis, whether you should answer a specific question or identify all issues, and whether this is urgent work for today's call or background work for next week's meeting. The words you hear are the \textbf{instruction}; the underlying purpose that those words point toward is the \textbf{intent}.
 
 Every professional develops this skill over time: reading the assignment memo, clarifying ambiguous instructions, and understanding not just what was said but what was meant. Junior associates tend to over-clarify, whereas senior associates internalize firm norms and client expectations and infer appropriately. The best professionals know when to ask and when to proceed.
 
@@ -203,10 +203,10 @@ Ambiguity detection assumes the user has clear intent that was merely expressed 
 \begin{keybox}[title={When Intent Itself Is Unclear or Conflicted}, breakable=false]
 	\textbf{Domain expertise gaps}: The user may not understand the subject well enough to specify what they need. ``Give me the key issues'' presumes the user knows what issues exist and which matter most---knowledge they may be asking the agent to provide.
 
-	\vspace{0.3em}
+	\smallskip
 	\textbf{Conflicted constraints}: The user may want contradictory things. A one-page memo on a complex acquisition may be impossible without sacrificing the accuracy or completeness that makes the memo useful.
 
-	\vspace{0.3em}
+	\smallskip
 	\textbf{Unexamined tradeoffs}: The user may not have considered tradeoffs they would care about if surfaced---speed versus thoroughness, cost versus quality, brevity versus nuance.
 \end{keybox}
 
@@ -252,56 +252,59 @@ Confidence signaling calls for the agent to indicate how confident it is in its 
 
 To illustrate, observe how intent extraction and validation work together for a legal task. Given the instruction ``Review this credit agreement for risks,'' the agent classifies this as a document review task and detects that ``risks'' is ambiguous (risks to whom? what types?). Context gathering reveals this is a lender-side engagement for a senior secured facility. The agent infers implicit constraints (focus on lender risks, prioritize material issues, assume current market terms as baseline) and clarifies: ``I'll review from the lender's perspective, focusing on credit risk, collateral coverage, and covenant adequacy. Should I also flag documentation risks (drafting issues, missing provisions) or focus only on substantive credit terms?''
 
-\begin{center}
-	\begin{tikzpicture}[
-			inbox/.style={
-					rectangle,
-					rounded corners=3pt,
-					draw=gray-300,
-					fill=gray-100,
-					minimum width=4cm,
-					minimum height=3.2cm,
-					align=center,
-					inner sep=8pt
-				},
-			goalbox/.style={
-					rectangle,
-					rounded corners=3pt,
-					draw=example-base,
-					fill=example-light,
-					minimum width=7.8cm,
-					minimum height=3.2cm,
-					align=left,
-					inner sep=10pt
-				},
-			arrow/.style={->, >=stealth, line width=1.5pt, gray-400}
-		]
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+		inbox/.style={
+				rectangle,
+				rounded corners=3pt,
+				draw=gray-300,
+				fill=gray-100,
+				minimum width=3.2cm,
+				minimum height=3.2cm,
+				align=center,
+				inner sep=6pt
+			},
+		goalbox/.style={
+				rectangle,
+				rounded corners=3pt,
+				draw=example-base,
+				fill=example-light,
+				minimum width=6.2cm,
+				minimum height=3.2cm,
+				align=left,
+				inner sep=8pt
+			},
+		arrow/.style={->, >=stealth, line width=1.5pt, gray-400}
+	]
 
-		% Left: User instruction
-		\node[inbox] (input) at (-2.2, 0) {
-			\textcolor{gray-500}{\scriptsize\sffamily\bfseries USER INSTRUCTION}\\[6pt]
-			\large\textit{``Review this credit}\\
-			\large\textit{agreement for risks''}
-		};
+	% Left: User instruction
+	\node[inbox] (input) at (-2.0, 0) {
+		\textcolor{gray-500}{\tiny\sffamily\bfseries USER INSTRUCTION}\\[4pt]
+		\small\textit{``Review this credit}\\
+		\small\textit{agreement for risks''}
+	};
 
-		% Arrow
-		\draw[arrow] (input.east) -- ++(0.8, 0);
+	% Arrow
+	\draw[arrow] (input.east) -- ++(0.5, 0);
 
-		% Right: Extracted goal
-		\node[goalbox, right=1.2cm of input] (goal) {
-			\textcolor{example-dark}{\sffamily\bfseries Extracted Goal}\\[4pt]
-			\small
-			\begin{tabular}{@{}l@{\hspace{0.5em}}l@{}}
-				\textcolor{gray-600}{Task:}        & Document review                                                                                  \\
-				\textcolor{gray-600}{Perspective:} & Lender                                                                                           \\
-				\textcolor{gray-600}{Focus:}       & Credit risk, collateral, covenants                                                               \\
-				\textcolor{gray-600}{Deliverable:} & Risk summary memo                                                                                \\[2pt]
-				\textcolor{gray-600}{Success:}     & \parbox[t]{6cm}{Material risks identified, comparison to market terms, recommendations provided} \\
-			\end{tabular}
-		};
+	% Right: Extracted goal
+	\node[goalbox, right=0.8cm of input] (goal) {
+		\textcolor{example-dark}{\small\sffamily\bfseries Extracted Goal}\\[3pt]
+		\scriptsize
+		\begin{tabular}{@{}l@{\hspace{0.4em}}l@{}}
+			\textcolor{gray-600}{Task:}        & Document review                    \\
+			\textcolor{gray-600}{Perspective:} & Lender                             \\
+			\textcolor{gray-600}{Focus:}       & Credit risk, collateral, covenants \\
+			\textcolor{gray-600}{Deliverable:} & Risk summary memo                  \\
+			\textcolor{gray-600}{Success:}     & Material risks identified          \\
+		\end{tabular}
+	};
 
-	\end{tikzpicture}
-\end{center}
+\end{tikzpicture}
+\caption{Goal extraction for a credit agreement review, showing how ambiguous instructions are refined through context gathering into structured specifications.}
+\label{fig:agents2-credit-goal-extraction}
+\end{figure}
 
 The agent validates: ``I'll prepare a memo identifying material risks to the lender, comparing key terms to market standards, and recommending negotiation points. I'll have a draft for your review by tomorrow afternoon.''
 
@@ -309,22 +312,22 @@ The same pattern applies to financial tasks. Given the instruction ``Rebalance t
 
 \begin{figure}[htbp]
 	\centering
-	\begin{tikzpicture}[
+	\begin{tikzpicture}[scale=0.84, every node/.style={scale=0.84},
 			userbubble/.style={
 					rectangle,
-					rounded corners=8pt,
+					rounded corners=6pt,
 					fill=definition-light,
 					align=right,
-					inner sep=8pt,
+					inner sep=6pt,
 					font=\small,
 					anchor=north east
 				},
 			agentbubble/.style={
 					rectangle,
-					rounded corners=8pt,
+					rounded corners=6pt,
 					fill=gray-100,
 					align=left,
-					inner sep=8pt,
+					inner sep=6pt,
 					font=\small,
 					anchor=north west
 				},
@@ -334,41 +337,41 @@ The same pattern applies to financial tasks. Given the instruction ``Rebalance t
 					draw=example-base,
 					fill=example-light,
 					align=left,
-					inner sep=8pt,
+					inner sep=6pt,
 					font=\small
 				}
 		]
 
 		% Chat container background
-		\fill[white, rounded corners=4pt] (-6.2, 0.8) rectangle (5.2, -9.2);
-		\draw[gray-300, rounded corners=4pt] (-6.2, 0.8) rectangle (5.2, -9.2);
+		\fill[white, rounded corners=4pt] (-5.5, 0.8) rectangle (4.2, -8.5);
+		\draw[gray-300, rounded corners=4pt] (-5.5, 0.8) rectangle (4.2, -8.5);
 
 		% Chat header bar
-		\fill[gray-200, rounded corners=4pt] (-6.2, 0.8) rectangle (5.2, 0.2);
-		\node[font=\scriptsize\sffamily\bfseries, text=gray-600] at (-0.5, 0.5) {Portfolio Assistant};
+		\fill[gray-200, rounded corners=4pt] (-5.5, 0.8) rectangle (4.2, 0.2);
+		\node[font=\scriptsize\sffamily\bfseries, text=gray-600] at (-0.65, 0.5) {Portfolio Assistant};
 
 		% User message 1 (right aligned)
-		\node[userbubble] (u1) at (4.5, -0.3) {
-			\parbox{7cm}{\raggedleft Rebalance to reduce tech exposure}
+		\node[userbubble] (u1) at (3.6, -0.3) {
+			\parbox{5.5cm}{\raggedleft Rebalance to reduce tech exposure}
 		};
 
 		% Agent clarification (left aligned)
-		\node[agentbubble] (a1) at (-5.5, -2.1) {
-			\parbox{8cm}{Current tech exposure is 35\%. What's your target? Should I reduce through sales or reallocation? Any tax considerations?}
+		\node[agentbubble] (a1) at (-4.9, -1.8) {
+			\parbox{6.5cm}{Current tech exposure is 35\%. What's your target? Should I reduce through sales or reallocation? Any tax considerations?}
 		};
 
 		% User response (right aligned)
-		\node[userbubble] (u2) at (4.5, -4.3) {
-			\parbox{7cm}{\raggedleft Get to 25\% through sales. Minimize taxes---use loss harvesting.}
+		\node[userbubble] (u2) at (3.6, -3.8) {
+			\parbox{5.5cm}{\raggedleft Get to 25\% through sales. Minimize taxes---use loss harvesting.}
 		};
 
 		% Agent validation (left aligned)
-		\node[agentbubble] (a2) at (-5.5, -6.0) {
-			\parbox{8cm}{I'll prepare a plan to reduce tech from 35\% to 25\% via sales, optimized for tax efficiency. I'll need your approval before executing.}
+		\node[agentbubble] (a2) at (-4.9, -5.4) {
+			\parbox{6.5cm}{I'll prepare a plan to reduce tech from 35\% to 25\% via sales, optimized for tax efficiency. I'll need your approval before executing.}
 		};
 
 		% Extracted goal box (to the right, showing internal state)
-		\node[goalbox, anchor=north west] (goal) at (6.0, -1.5) {
+		\node[goalbox, anchor=north west] (goal) at (5.0, -1.2) {
 			\textcolor{example-dark}{\scriptsize\sffamily\bfseries EXTRACTED GOAL}\\[3pt]
 			\scriptsize
 			\begin{tabular}{@{}l@{\hspace{0.4em}}l@{}}
@@ -398,7 +401,7 @@ The same pattern applies to financial tasks. Given the instruction ``Rebalance t
 		\item The task is impossible as specified (constraints are mutually exclusive)
 	\end{itemize}
 
-	\vspace{0.5em}
+	\smallskip
 	Effective agents surface these discoveries through clarification instead of proceeding with outdated or impossible goals. Intent understanding is iterative, not instantaneous.
 \end{keybox}
 

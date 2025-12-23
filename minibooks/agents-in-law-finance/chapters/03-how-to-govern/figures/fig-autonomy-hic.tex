@@ -10,8 +10,8 @@
     draw=caution-dark,
     line width=1.5pt,
     fill=white,
-    minimum width=13.5cm,
-    minimum height=5.8cm,
+    minimum width=11.5cm,
+    minimum height=5.4cm,
     rounded corners=4pt
 ] (card) at (0,0) {};
 
@@ -29,15 +29,15 @@
 
 % Left column: Appropriate When
 \node[
-    text width=6.2cm,
+    text width=5.2cm,
     anchor=north west,
     font=\scriptsize,
     align=left
 ] at ([xshift=0.4cm, yshift=-1.4cm]card.north west) {
 \textbf{\textsf{APPROPRIATE WHEN}}\\[4pt]
-\textcolor{caution-dark}{$\blacktriangleright$} System operates at scale and speed that precludes individual review (millions of transactions daily)\\[3pt]
-\textcolor{caution-dark}{$\blacktriangleright$} Actions are individually low-consequence but cumulatively significant\\[3pt]
-\textcolor{caution-dark}{$\blacktriangleright$} System operates in a stable, well-understood environment with strong safeguards
+\textcolor{caution-dark}{$\blacktriangleright$} Scale/speed precludes individual review (millions of transactions)\\[3pt]
+\textcolor{caution-dark}{$\blacktriangleright$} Individually low-consequence but cumulatively significant\\[3pt]
+\textcolor{caution-dark}{$\blacktriangleright$} Stable environment with strong safeguards
 };
 
 % Vertical divider
@@ -45,16 +45,16 @@
 
 % Right column: Control Requirements
 \node[
-    text width=6.0cm,
+    text width=5.0cm,
     anchor=north west,
     font=\scriptsize,
     align=left
 ] at ([xshift=0.15cm, yshift=-1.4cm]card.north) {
 \textbf{\textsf{CONTROL REQUIREMENTS}}\\[4pt]
-\textbf{Primary Control:} Comprehensive logging + statistical monitoring\\[3pt]
-\textbf{Logging:} Exceptionally detailed---post-action auditability is critical\\[3pt]
-\textbf{Monitoring:} Statistical (fairness metrics, error trends, drift detection)\\[3pt]
-\textbf{Emergency Stop:} Accessible to authorized personnel; tested regularly
+\textbf{Primary:} Logging + statistical monitoring\\[3pt]
+\textbf{Logging:} Detailed for auditability\\[3pt]
+\textbf{Monitoring:} Fairness, errors, drift\\[3pt]
+\textbf{Emergency Stop:} Tested regularly
 };
 
 \end{tikzpicture}

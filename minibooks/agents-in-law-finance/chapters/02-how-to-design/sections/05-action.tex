@@ -4,14 +4,14 @@
 % Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
-\section{How Does an Agent Make Things Happen?}
+\section{Action}
 \label{sec:agents2-action}
 
 % ----------------------------------------------------------------------------
 % Opening: Q4 Framing and Organizational Analogy
 % ----------------------------------------------------------------------------
 
-A junior associate's role extends beyond research to producing work product. They draft memos, send emails, file documents, and schedule meetings. A trader's role extends beyond analysis to execution. They enter orders, route trades, and confirm allocations. Value derives from action, not just observation.
+\textit{How does an agent make things happen?} A junior associate's role extends beyond research to producing work product. They draft memos, send emails, file documents, and schedule meetings. A trader's role extends beyond analysis to execution. They enter orders, route trades, and confirm allocations. Value derives from action, not just observation.
 
 Agentic systems face the same imperative. Where Chapter~1 distinguished perception (observing the world) from action (changing it), we now examine how to design and govern action capabilities. An agent that only reads---searching databases, retrieving documents, analyzing information---produces no deliverable. To complete tasks, agents must \textit{act}: generate documents, send communications, update systems, or execute transactions. This action capability transforms agents from passive research tools into systems that deliver concrete work product.
 
@@ -41,11 +41,23 @@ This state-transition view raises a crucial question that philosophers and AI re
 
 Some actions are \textit{performative} in the sense developed by philosophers of language \parencite{austin1962speech}: they do not merely describe or report on the world but constitute changes to it. When a judge says ``I sentence you to five years,'' the utterance does not describe a sentencing---it \textit{is} the sentencing. When parties sign a contract, the signatures do not report that an agreement exists---they bring the agreement into existence.
 
-Many professional actions share this performative character. Filing a motion is not a report about legal status; it is an act that changes legal status. Executing a trade is not an observation about ownership; it is a transfer of ownership. Sending a legal opinion creates reliance that may give rise to liability. This performative quality explains why action governance must be stricter than perception governance: an agent that retrieves the wrong document has made a research error that can be corrected, but an agent that files the wrong document has changed legal reality in ways that may be difficult or impossible to undo.
+Many professional actions share this performative character. Filing a motion is not a report about legal status; it is an act that changes legal status. Executing a trade is not an observation about ownership; it is a transfer of ownership. Sending a legal opinion creates reliance that may give rise to liability.
+
+Large language models are fundamentally text generators. In most domains, generated text is relatively harmless because words do not change the world: a recipe for cake does not create a cake. The text merely describes---action requires something more. Law and finance are different.
+
+\begin{cautionbox}[title={Text Is Action in Law and Finance}]
+In professional practice, text often \textit{is} action. A contract clause creates binding obligations. A court filing changes legal status. A trade order transfers ownership. An email to opposing counsel may waive privilege or create estoppel. The gap between ``saying'' and ``doing'' that protects most LLM applications collapses here.
+\end{cautionbox}
+
+This performative quality explains why action governance must be stricter than perception governance: an agent that retrieves the wrong document has made a research error that can be corrected, but an agent that files the wrong document has changed legal reality in ways that may be difficult or impossible to undo.
 
 \paragraph{Idempotency and Safe Retry}
 
-Computer science formalizes an important property of operations called \keyterm{idempotency}: an operation is idempotent if performing it multiple times produces the same result as performing it once. Reading a file is idempotent---reading ten times leaves the file unchanged. Retrieving a case from Westlaw is idempotent. But sending an email is not idempotent: sending the same message ten times produces ten emails in the recipient's inbox. Executing a trade is not idempotent: executing the same order ten times produces ten separate transactions.
+Computer science formalizes an important property of operations that matters greatly for agentic systems.
+
+\begin{definitionbox}[title={Idempotency}, breakable=false]
+An operation is \keyterm{idempotent} if performing it multiple times produces the same result as performing it once. Reading a file is idempotent---reading ten times leaves the file unchanged. Retrieving a case from Westlaw is idempotent. But sending an email is not idempotent: sending the same message ten times produces ten emails in the recipient's inbox. Executing a trade is not idempotent: executing the same order ten times produces ten separate transactions.
+\end{definitionbox}
 
 Idempotency matters enormously for error recovery and system reliability. When an agent's connection drops mid-operation, or when a timeout occurs before confirmation arrives, the agent faces a difficult question: did the action complete? For idempotent operations, the answer does not matter---the agent can safely retry. For non-idempotent operations, retry might cause duplicate actions with serious consequences: double payments, duplicate filings, repeated client communications. Robust action tools must either be designed for idempotency from the start---typically by using unique transaction identifiers that allow the system to detect and reject duplicates---or must provide explicit confirmation mechanisms that let the agent verify whether the action completed before deciding whether to retry.
 
@@ -74,7 +86,7 @@ Action tools vary in consequence. The critical dimension is \keyterm{reversibili
 % The Reversibility Framework
 % ----------------------------------------------------------------------------
 
-\subsection{The Reversibility Framework}
+\subsection{Reversibility Framework}
 \label{sec:agents2-reversibility}
 
 Reversibility dictates oversight structure. Examine how you delegate to a junior associate: fully reversible work (research, drafting) proceeds independently with post-hoc review; partially reversible work (internal emails) gets checkpoint review; largely irreversible work (client communications, filings) requires pre-approval; and irreversible work (trades, wires) demands multi-party approval. \Cref{tab:agents2-reversibility} summarizes this mapping. Agent governance must enforce controls corresponding to each action's reversibility classification.
@@ -101,7 +113,11 @@ Reversibility dictates oversight structure. Examine how you delegate to a junior
 	\end{tabular}
 \end{table}
 
-This mapping from reversibility to oversight is not abstract---it directly determines which approval workflows apply. The following subsections operationalize these oversight tiers.
+\begin{keybox}[title={Reversibility Determines Governance}, breakable=false]
+The reversibility of an action directly determines the appropriate level of oversight. Fully reversible actions (research, drafting) can proceed with post-hoc review. Irreversible actions (trades, wire transfers) require multi-party approval before execution. This mapping is not abstract---it operationalizes the professional judgment that experienced practitioners apply instinctively when delegating work.
+\end{keybox}
+
+The following subsections operationalize these oversight tiers.
 
 % ----------------------------------------------------------------------------
 % MCP Tools for Action
@@ -148,6 +164,10 @@ Beyond core controls, specific threats call for targeted mitigations \parencite{
 \textbf{Privilege Escalation via Tool Chaining.} An agent might combine multiple low-privilege tools to achieve a high-privilege outcome. Mitigation involves analyzing tool combinations and requiring approval for sequences that cross security boundaries.
 
 \textbf{Action Replay.} An attacker might capture a valid action request (e.g., "Pay \$100") and replay it multiple times. Mitigation demands \keyterm{nonces} (unique, one-time numbers) or timestamps to ensure each request is processed only once.
+
+\begin{keybox}[title={Defense in Depth for Action Tools}, breakable=false]
+No single control prevents all failures. Effective action security layers multiple defenses: authentication verifies identity, authorization limits scope, validation catches malformed inputs, approval gates catch errors before execution, and audit logging enables post-hoc review. Each layer catches failures that slip through others.
+\end{keybox}
 
 % ----------------------------------------------------------------------------
 % Approval Workflows
@@ -203,7 +223,7 @@ Circuit breakers transform runaway failures into controlled pauses, buying time 
 % Evaluating Action Capabilities
 % ----------------------------------------------------------------------------
 
-\subsection{Evaluating Action Capabilities}
+\subsection{Evaluation}
 \label{sec:agents2-action-eval}
 
 When evaluating agentic systems, assess action capabilities against professional standards.
@@ -219,9 +239,6 @@ When evaluating agentic systems, assess action capabilities against professional
 % ----------------------------------------------------------------------------
 % Connection to Other Questions
 % ----------------------------------------------------------------------------
-
-\subsection{From Action to Governance}
-\label{sec:agents2-action-governance}
 
 Action tools are where agentic systems create real-world consequences. Governance here differs in kind from perception governance.
 

@@ -4,14 +4,14 @@
 % Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
-\section{How Does an Agent Know When It's Done?}
+\section{Termination}
 \label{sec:agents2-termination}
 
 % ----------------------------------------------------------------------------
 % Opening: Q7 Framing and Organizational Analogy
 % ----------------------------------------------------------------------------
 
-Every professional learns to recognize completion. The research memo is done when you have found sufficient authority and synthesized it. The due diligence is done when you have reviewed all material documents. The trade is done when the order executes and settles. Knowing when work is complete distinguishes effective professionals from those who over-research or under-deliver. As we explore in \Cref{sec:agents2-delegation}, complex M\&A due diligence often involves delegating parallel workstreams to specialist agents, each with its own termination conditions that must coordinate for overall task completion.
+\textit{How does an agent know when it's done?} Every professional learns to recognize completion. The research memo is done when you have found sufficient authority and synthesized it. The due diligence is done when you have reviewed all material documents. The trade is done when the order executes and settles. Knowing when work is complete distinguishes effective professionals from those who over-research or under-deliver. As we explore in \Cref{sec:agents2-delegation}, complex M\&A due diligence often involves delegating parallel workstreams to specialist agents, each with its own termination conditions that must coordinate for overall task completion.
 
 Agents face the same challenge. Without explicit termination conditions, agents can run indefinitely: searching one more database, trying one more approach, refining one more time. We call this the ``runaway associate'' problem: you ask for two relevant cases, and the associate gives you fifty because they did not know when to stop.
 
@@ -24,7 +24,7 @@ Agents face the same challenge. Without explicit termination conditions, agents 
 		\item \textbf{Escalation:} The agent cannot determine success or failure, transferring the decision to human judgment.
 	\end{itemize}
 
-	\vspace{0.5em}
+	\smallskip
 	Without explicit termination conditions, agentic systems lack the property that distinguishes controlled systems from runaway processes.
 \end{definitionbox}
 
@@ -112,15 +112,15 @@ Even well-designed termination conditions cannot prevent every failure mode. Age
 % The Reliability Cliff
 % ----------------------------------------------------------------------------
 
-\subsection{The Reliability Cliff}
+\subsection{Reliability Cliff}
 \label{sec:agents2-reliability}
 
 Benchmarking reveals a striking pattern: agent performance does not degrade gradually as tasks become more complex, but instead \textit{falls off a cliff}. METR's 2025 research found near-perfect success on tasks completable in minutes, but under ten percent success on multi-hour tasks \parencite{metr-agent-capability-2025}. The exact boundary shifts as models improve, but the underlying design challenge persists.
 
-\begin{keybox}[title={The Reliability Cliff}, breakable=false]
+\begin{keybox}[title={Reliability Cliff}, breakable=false]
 This cliff reflects \textbf{compounding errors} \parencite{press2023compositionality}: each step has some probability of failure, and these probabilities \textit{multiply}. A chain of twenty steps at 95\% per-step reliability yields only 36\% end-to-end success. Two factors steepen the cliff: \textbf{planning fragility} (early errors propagate forward and invalidate subsequent work) and \textbf{integration brittleness} (API timeouts and rate limits accumulate over time).
 
-\vspace{0.5em}
+\smallskip
 \textbf{Design for this reality:} Decompose aggressively. Keep agent tasks short. Insert human checkpoints. Build for resumability. And test against your own workflows---benchmark results establish a baseline, but your specific tasks may differ from standardized test suites.
 \end{keybox}
 
@@ -143,7 +143,7 @@ The key to graceful degradation is \textbf{tiered output design}. Rather than tr
 % Evaluating Termination
 % ----------------------------------------------------------------------------
 
-\subsection{Evaluating Termination Capabilities}
+\subsection{Evaluation}
 \label{sec:agents2-termination-eval}
 
 Termination evaluation requires six assessments: \textit{success clarity} (are termination conditions explicit and predictable?), \textit{budget enforcement} (are limits actually respected, not exceeded by 20\%?), \textit{loop detection} (does it escape unproductive patterns?), \textit{failure reporting} (do error messages enable effective human follow-up?), \textit{graceful degradation} (do partial results have standalone value?), and \textit{escalation handoff} (does the human receive sufficient context to continue?).
@@ -167,9 +167,6 @@ Before deploying an agentic system in professional contexts, verify it implement
 % ----------------------------------------------------------------------------
 % Connection to Other Questions
 % ----------------------------------------------------------------------------
-
-\subsection{From Termination to Escalation}
-\label{sec:agents2-termination-escalation}
 
 Termination and escalation are closely related but distinct concepts. Termination defines \textit{when} an agent stops; escalation defines \textit{what happens next} when stopping requires human involvement. An agent that terminates successfully has completed its task and can deliver results. An agent that terminates due to failure has determined that the task cannot be completed and reports why. But an agent that \textit{escalates} has reached a different conclusion: not ``I'm done'' or ``This is impossible,'' but rather ``I need help to proceed.''
 

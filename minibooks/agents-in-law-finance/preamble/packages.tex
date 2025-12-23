@@ -70,6 +70,7 @@
 % --- Page Layout ---
 \usepackage{pdflscape}
 \usepackage{rotating}
+\usepackage{needspace}  % \needspace{length} to avoid orphaned headings
 
 % --- Lists ---
 \usepackage{enumitem}
@@ -106,7 +107,10 @@
   citecolor=accent,
   urlcolor=primary,
   bookmarksnumbered=true,
-  pdfborder={0 0 0}
+  pdfborder={0 0 0},
+  % Fix duplicate destination warnings when page numbering resets
+  plainpages=false,
+  pdfpagelabels=true
 }
 
 % --- Glossary ---

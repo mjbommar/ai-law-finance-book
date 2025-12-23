@@ -4,14 +4,14 @@
 % Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
-\section{How Does an Agent Find Things Out?}
+\section{Perception}
 \label{sec:agents2-perception}
 
 % ----------------------------------------------------------------------------
 % Opening: Q3 Framing and Organizational Analogy
 % ----------------------------------------------------------------------------
 
-Understanding what someone wants is not the same as being able to deliver it. The previous section examined how agents interpret instructions, extracting goals, detecting ambiguity, and gathering the context needed to proceed. But even an agent that perfectly understands ``Research Ninth Circuit authority on personal jurisdiction for foreign corporations'' cannot help if it lacks access to case law databases. Where Chapter~1 introduced perception as the ability to observe the world, we now examine the concrete mechanisms---tools and integrations---that enable agents to gather the information they need. An agent that correctly interprets ``Analyze this credit agreement from the lender's perspective'' is useless without the credit agreement itself.
+\textit{How does an agent find things out?} Understanding what someone wants is not the same as being able to deliver it. The previous section examined how agents interpret instructions, extracting goals, detecting ambiguity, and gathering the context needed to proceed. But even an agent that perfectly understands ``Research Ninth Circuit authority on personal jurisdiction for foreign corporations'' cannot help if it lacks access to case law databases. Where Chapter~1 introduced perception as the ability to observe the world, we now examine the concrete mechanisms---tools and integrations---that enable agents to gather the information they need. An agent that correctly interprets ``Analyze this credit agreement from the lender's perspective'' is useless without the credit agreement itself.
 
 This constraint will feel familiar to anyone who has onboarded a new professional. A junior associate's effectiveness depends as much on access as on reasoning ability. Can they query Westlaw? Do they have credentials for the Bloomberg terminal? Can they search the firm's precedent database and document management system? The answers to these questions determine which problems they can solve. A brilliant analyst without access to portfolio data reasons in a vacuum; a talented associate without access to the case file works blind.
 
@@ -22,7 +22,7 @@ This constraint will feel familiar to anyone who has onboarded a new professiona
 \glsadd{perception}
 	A \keyterm{tool} is a function that allows an agent to interact with external systems. \keyterm{Perception tools} are the subset that are read-only: they let the agent observe without changing anything. When an agent queries a database, retrieves a document, or fetches market data, the external system's state remains unchanged.
 
-	\vspace{0.5em}
+	\smallskip
 	Perception defines the boundary of what information the agent can access, and that boundary shapes every downstream decision. An agent with access to public filings reasons differently than one with access to internal deal documents. An agent that can query real-time market data operates differently than one limited to end-of-day prices.
 \end{definitionbox}
 
@@ -56,20 +56,18 @@ Before examining specific retrieval mechanisms, we must understand the fundament
 \glsadd{in-context-learning}
 	\keyterm{In-context learning (ICL)} is the ability of large language models to learn from information provided in their input---without any update to the model's underlying parameters \parencite{brown2020gpt3}. When you provide examples, documents, or instructions in a prompt, the model adapts its responses based on that context. This is not ``learning'' in the traditional machine learning sense of updating weights; it is learning \textit{within the conversation}.
 
-	\vspace{0.5em}
+	\smallskip
 	In-context learning is what makes retrieval valuable. When an agent retrieves a relevant statute or prior memo and includes it in its prompt, the model can reason about that specific content even though it never saw it during training. The model's behavior changes based on what appears in its context window.
 \end{definitionbox}
 
 In-context learning explains why agents can work with information far newer than their training data. A model trained in 2024 can analyze a regulation enacted in 2025---provided that regulation appears in its context. The limitation is the \keyterm{context window}: the maximum amount of text the model can process at once. Current models handle roughly 200,000 to 1,000,000 tokens (where a token is roughly three-quarters of a word),\footnote{Context window sizes as of December 2025 (vendor-reported): Claude Opus 4.5 (200k tokens), Gemini 3 (up to 1M tokens), GPT-5.2 (256k tokens). These specifications change frequently; consult current model documentation.} but the cost, speed, and quality of results vary widely---and dangerously---when operating on large amounts of input. A model may technically accept a million tokens while producing degraded results on tasks requiring attention to details scattered throughout. Professional knowledge bases contain millions of documents regardless; the gap between what fits in context and what exists in the world creates the need for retrieval.
 
-\begin{keybox}[title={Why Agentic Architecture Works}]
-	The practical limits of context windows explain much of the value of agentic systems. Rather than attempting to process an entire knowledge base in a single prompt---which would exceed limits and degrade quality regardless---an agent decomposes work into focused steps, retrieves only what is relevant to each step, and reasons over smaller, manageable contexts.
+The practical limits of context windows explain much of the value of agentic systems. Rather than attempting to process an entire knowledge base in a single prompt---which would exceed limits and degrade quality regardless---an agent decomposes work into focused steps, retrieves only what is relevant to each step, and reasons over smaller, manageable contexts.
 
-	\vspace{0.5em}
-	This is not merely automation; it is an architectural solution to a fundamental constraint. Planning (\Cref{sec:agents2-planning}) breaks complex tasks into subtasks, ensuring each retrieval step is targeted rather than overwhelming. Retrieval fetches specific information for each subtask. The LLM operates within its effective range on each step, even when the overall task would be impossible to handle monolithically.
+This is not merely automation; it is an architectural solution to a fundamental constraint. Planning (\Cref{sec:agents2-planning}) breaks complex tasks into subtasks, ensuring each retrieval step is targeted rather than overwhelming. Retrieval fetches specific information for each subtask. The LLM operates within its effective range on each step, even when the overall task would be impossible to handle monolithically.
 
-	\vspace{0.5em}
-	This decomposition explains both why agentic systems are powerful and why they fail in predictable ways. The reliability cliff (\Cref{sec:agents2-termination}) shows that short, focused tasks succeed while long tasks fail---precisely because decomposition keeps individual steps within the model's effective operating range, but errors compound across many steps.
+\begin{keybox}[title={Why Decomposition Matters}]
+Decomposition explains both why agentic systems are powerful and why they fail in predictable ways. The reliability cliff (\Cref{sec:agents2-termination}) shows that short, focused tasks succeed while long tasks fail---precisely because decomposition keeps individual steps within the model's effective operating range, but errors compound across many steps.
 \end{keybox}
 
 \paragraph{Retrieval Methods}
@@ -78,36 +76,35 @@ To retrieve relevant information from large collections, we need a way to find w
 
 \textbf{Keyword and boolean search} is the oldest and most familiar approach. Platforms like Westlaw, Lexis, and Bloomberg have offered sophisticated keyword search for decades. Boolean operators (AND, OR, NOT), proximity searches, and field-specific queries give users precise control. When you need documents containing exact terms---a specific case citation, a statutory section, a company name---keyword search excels. Its limitation is vocabulary mismatch: a search for ``breach of fiduciary duty'' will not find documents discussing ``violation of trust obligations'' unless both phrases happen to appear.
 
-\textbf{BM25 and probabilistic search} extends keyword matching with statistical weighting \parencite{robertson2009bm25}. Terms that appear rarely in the corpus but frequently in a document signal relevance more strongly than common terms. BM25 powers many production search systems, including Elasticsearch and the baseline retrievers in academic benchmarks. It requires no machine learning infrastructure---just an inverted index---making it fast, interpretable, and cheap to operate.
+\textbf{BM25 and probabilistic search} extends keyword matching with statistical weighting \parencite{robertson2009bm25}. The approach builds on \keyterm{TF-IDF} (Term Frequency-Inverse Document Frequency), which weights terms by how often they appear in a document relative to how common they are across the corpus. A term that appears frequently in one document but rarely elsewhere signals that document's relevance more strongly than a common term appearing everywhere. BM25 refines TF-IDF with saturation functions that prevent very frequent terms from dominating scores. The method requires no machine learning infrastructure---just an inverted index---making it fast, interpretable, and cheap to operate. BM25 remains the baseline retriever in academic benchmarks and powers many production search systems.
 
-\textbf{Embedding-based semantic search} uses machine learning to encode meaning numerically. An \keyterm{embedding} is a vector---a list of numbers---that represents semantic content. Similar concepts produce similar vectors; different concepts produce distant vectors. The phrases ``breach of fiduciary duty'' and ``violation of trust obligations'' have embeddings close together in vector space, even though they share no words. This enables \textit{meaning matching} rather than vocabulary matching. Embedding models vary in quality and domain fit; legal-specific models may outperform general-purpose ones for professional content. The infrastructure cost is higher: you need embedding models, vector storage, and similarity search capabilities.
+\textbf{Embedding-based semantic search} uses machine learning to encode meaning numerically. An \keyterm{embedding} is a vector---a list of numbers---that represents semantic content. The goal is that similar concepts should produce similar vectors, while different concepts produce distant vectors. When this works well, phrases like ``breach of fiduciary duty'' and ``violation of trust obligations'' have embeddings close together in vector space, even though they share no words. This enables \textit{meaning matching} rather than vocabulary matching.
+
+Embedding quality varies significantly across models and tasks. Different embedding models excel at different objectives: some are optimized for clustering documents by topic, others for matching semantically similar sentences, and still others for asymmetric retrieval where short queries must find longer passages. A model trained for one task may perform poorly on another. Legal-specific or financial-domain models may outperform general-purpose ones for professional content, but this depends on training data and task alignment. The infrastructure cost is also higher than traditional search: you need embedding models, vector storage, and similarity search capabilities.
 
 \textbf{Structured queries} retrieve from databases and APIs. An agent checking a company's SEC filings queries EDGAR; an agent researching a case retrieves from a court's electronic filing system. These are not ``search'' in the traditional sense---they are direct data access---but they serve the same function in RAG: finding relevant information to inject into context.
 
 \textbf{Hybrid approaches} combine methods. A common pattern uses BM25 for initial retrieval (fast, cheap, catches exact matches) followed by semantic reranking (slower, more expensive, captures meaning). Many production systems blend keyword and semantic scores, getting the best of both approaches.
 
-\begin{keybox}[title={Choosing Retrieval Methods}, breakable=false]
-	No single retrieval method dominates. The right choice depends on your content, queries, and constraints:
-	\begin{itemize}[nosep]
-		\item \textbf{Exact terms matter}: Keyword or BM25. Case citations, statutory references, and party names must match precisely.
-		\item \textbf{Conceptual similarity matters}: Embeddings. Finding documents about ``materiality'' when the query says ``significance'' requires semantic matching.
-		\item \textbf{Structured data}: Database queries or APIs. Retrieving a specific filing from EDGAR or a price from Bloomberg.
-		\item \textbf{Production constraints}: BM25 is cheaper and faster; embeddings require more infrastructure but capture meaning better.
-	\end{itemize}
-	Most professional systems use hybrid approaches, combining methods to balance precision, recall, and cost.
+\begin{keybox}[title={No Single Method Dominates}, breakable=false]
+The right retrieval method depends on whether you need exact matching (keywords, BM25), conceptual similarity (embeddings), or structured data access (database queries). Most professional systems use hybrid approaches, combining methods to balance precision and cost.
 \end{keybox}
 
 \paragraph{Vector Stores for Embedding-Based Search}
 
-When using embeddings, storing and searching millions of vectors efficiently requires specialized infrastructure.
+Most professionals have conceptual familiarity with traditional keyword search from years of using Westlaw, Lexis, Bloomberg, or even web search engines. Embedding-based search operates differently and may be less intuitive: instead of matching words, the system matches meaning by comparing numerical vectors in high-dimensional space. Understanding this infrastructure helps when evaluating agentic systems that rely on semantic retrieval. Storing and searching millions of vectors efficiently requires specialized infrastructure.
 
 \begin{definitionbox}[title={Vector Stores}, breakable=false]
 \glsadd{vector-store}
 	A \keyterm{vector store} (or vector database) is a system optimized for storing embeddings and performing similarity search. Given a query embedding, a vector store returns the most similar document embeddings from its collection. Vector stores use specialized indexing structures (like HNSW or IVF) that make approximate nearest-neighbor search practical at scale.
 
-	\vspace{0.5em}
+	\smallskip
 	Vector stores are \textit{infrastructure}---the retrieval mechanism that powers semantic search. They are not the same as the retrieval pattern itself.
 \end{definitionbox}
+
+Organizations need not adopt entirely new infrastructure to use vector search. Traditional relational databases are rapidly adding vector capabilities---databases such as PostgreSQL now offer vector extensions, and most major cloud providers include native vector search in their managed database offerings. For firms with established database infrastructure, this convergence means semantic search can be added alongside existing systems rather than requiring a parallel technology stack. The trade-off is that purpose-built vector databases may offer better performance at scale, while integrated solutions offer simpler operations and unified data management.
+
+\textbf{Knowledge graph retrieval} takes a different approach. Rather than matching meaning through vector similarity, \keyterm{knowledge graphs} represent entities and their relationships explicitly---corporate structures, ownership chains, party relationships, regulatory hierarchies. An agent researching a company can traverse the graph to find subsidiaries, board members, or regulatory filings, following connections that semantic similarity alone would miss. Graph databases (such as Neo4j) power this approach. For legal and financial applications where relationships matter---who owns whom, who advised whom, which entities share directors---graph retrieval complements vector search. Some systems combine both: vector search finds semantically relevant documents, then graph traversal enriches results with related entities and context.
 
 \paragraph{Retrieval-Augmented Generation (RAG)}
 
@@ -121,23 +118,14 @@ With these retrieval methods in hand, we can now define RAG precisely.
 		\item \textbf{Augment}: Insert the retrieved content into the model's prompt as additional context.
 		\item \textbf{Generate}: The model produces a response informed by both its training and the retrieved content.
 	\end{enumerate}
-
-	\vspace{0.5em}
-	RAG works because of in-context learning. The retrieved content appears in the prompt, and the model adapts its response to incorporate that specific information. The retrieval step is completely method-agnostic: what matters is getting relevant content into context, not how you find it.
 \end{definitionbox}
 
-The distinction matters. When evaluating a system, you should ask: What retrieval infrastructure does it use? (Keyword index, vector store, database, external API, hybrid?) What RAG pattern does it implement? (Single-stage, multi-stage, with reranking?) These are separate architectural decisions with different tradeoffs.
+RAG works because of in-context learning. The retrieved content appears in the prompt, and the model adapts its response to incorporate that specific information. The retrieval step is completely method-agnostic: what matters is getting relevant content into context, not how you find it.
+
+The distinction matters for system evaluation. A system's retrieval infrastructure---whether keyword index, vector store, database, external API, or some hybrid---determines its search capabilities and performance characteristics. The RAG pattern it implements---single-stage, multi-stage, or reranked---shapes how effectively it surfaces relevant content. These are separate architectural decisions with different tradeoffs, and understanding both helps you assess whether a system fits your needs.
 
 \begin{keybox}[title={RAG Is Retrieval-Agnostic}, breakable=false]
-	A common misconception equates RAG with embeddings and vector stores. In practice, RAG implementations vary widely:
-	\begin{itemize}[nosep]
-		\item \textbf{Keyword search}: Westlaw, Lexis, or internal full-text search---no embeddings required.
-		\item \textbf{BM25}: Fast probabilistic retrieval powering many production systems.
-		\item \textbf{Semantic search}: Embeddings and vector stores for meaning-based matching.
-		\item \textbf{Structured queries}: SQL databases, EDGAR filings, court record APIs.
-		\item \textbf{Hybrid}: Combining methods to balance precision, recall, and cost.
-	\end{itemize}
-	The ``embedding plus vector store'' pattern dominates tutorials because it is general-purpose and handles semantic similarity well. But many production systems---especially those leveraging existing search infrastructure---use simpler approaches that work well for their specific needs.
+A common misconception equates RAG with embeddings and vector stores. In practice, any retrieval method works: keyword search, BM25, database queries, or API calls. The ``embedding plus vector store'' pattern dominates tutorials because it handles semantic similarity well, but many production systems use simpler approaches that leverage existing search infrastructure.
 \end{keybox}
 
 % ----------------------------------------------------------------------------
@@ -148,29 +136,31 @@ The distinction matters. When evaluating a system, you should ask: What retrieva
 \label{sec:agents2-mcp-perception}
 
 \glsadd{mcp}
-One of the persistent challenges in building agentic systems is integration. Every database, every document management system, every market data feed has its own way of accepting queries and returning results. Historically, connecting an agent to a new information source meant writing custom code for that specific system. Multiply that by the number of agents and the number of tools an organization uses, and the integration burden grows quickly.
+One of the persistent challenges in building agentic systems is integration. Every database, document management system, and market data feed has its own interface. Historically, connecting an agent to a new information source meant writing custom code for that specific system. The Model Context Protocol (MCP) addresses this by standardizing how agents access external capabilities \parencite{anthropic-mcp,mcp-spec}.
 
-The Model Context Protocol (MCP) addresses this problem by standardizing how agents access tools \parencite{anthropic-mcp,mcp-spec}. Instead of learning a different integration pattern for each system, agents learn the protocol once and can then access any compatible tool. For organizations, this means a single point of audit and control rather than dozens of bespoke connections to monitor.
+\Cref{fig:agents2-mcp-architecture} illustrates the three-tier architecture. The \keyterm{MCP Host} is the agent application itself---it manages access control and coordinates connections, functioning like a firm's IT department deciding which systems a new employee can use. Each \keyterm{MCP Client} maintains a connection to one \keyterm{MCP Server}. Servers expose their capabilities through standardized primitives that clients discover and invoke via JSON-RPC.
 
-The architecture has three components. The \keyterm{MCP Host} manages the agent and controls what it can access, functioning like a firm's IT department deciding which systems a new employee can use. The \keyterm{MCP Client} is the agent-side component that discovers available tools and makes requests. The \keyterm{MCP Server} is what each information source runs to expose its capabilities through the standard interface. A document management system, an internal knowledge base, or a proprietary analytics platform can each run as an MCP server, and any MCP-compatible agent can then access them without custom integration work.
+\input{chapters/02-how-to-design/figures/fig-mcp-architecture}
 
-For perception specifically, MCP defines \keyterm{Resources} as read-only data access endpoints. These might include document repositories, market data feeds, regulatory filing databases, or internal knowledge bases. The read-only designation matters: an agent with resource access can retrieve documents but cannot modify or file them. This separation enables fine-grained access control that mirrors how organizations already think about permissions.
+Servers expose three types of primitives. \keyterm{Resources} provide read-only data access---document repositories, market data feeds, regulatory databases. The read-only designation matters: an agent with resource access can retrieve documents but cannot modify them. \keyterm{Tools} are executable functions that can change state---filing documents, sending messages, executing queries. \keyterm{Prompts} are reusable templates encoding standard procedures---checklists, SOPs, and structured workflows that ensure consistency.
 
-\begin{keybox}[title={The Integration Landscape Is Changing}]
-	Historically, many information providers in law and finance offered no programmatic access at all. Legal research platforms required human users working through web interfaces; market data terminals assumed a person at the keyboard. This created a barrier for agentic systems, which need machine-readable interfaces to function.
+For perception specifically, Resources are the primary primitive. An agent perceives external information by querying Resources exposed by MCP Servers. The separation between Resources (read-only) and Tools (read-write) enables fine-grained access control that mirrors how organizations already manage permissions.
 
-	\vspace{0.5em}
-	That landscape is shifting. Competitive pressure and customer demand are pushing providers to open up. Document management systems, e-discovery platforms, and financial data providers increasingly offer APIs that agents can use. Some legal research providers are beginning to follow. As this trend continues, the range of information sources available to agentic systems will expand significantly.
+The integration landscape is shifting. Document management systems, e-discovery platforms, and financial data providers increasingly offer APIs. Some legal research providers are beginning to follow. As more systems expose MCP-compatible interfaces, the range of information sources available to agents expands.
 
-	\vspace{0.5em}
-	Standards like MCP accelerate this shift by reducing the cost of integration. Without MCP, connecting 10 agents to 10 tools requires 100 custom integrations. With MCP, the same setup requires only 20 implementations, since each agent and each tool learns the protocol once. Recent benchmarks found over ten thousand MCP servers already in the ecosystem \parencite{livemcpbench-2025}, and that number will likely grow substantially in the years ahead.
+\begin{keybox}[title={Standards Reduce Integration Costs}, breakable=false]
+Without MCP, connecting 10 agents to 10 tools requires 100 custom integrations. With MCP, the same setup requires only 20 implementations---each agent and each tool learns the protocol once. Recent benchmarks found over ten thousand MCP servers in the ecosystem \parencite{livemcpbench-2025}.
 \end{keybox}
+
+\begin{cautionbox}[title={MCP Is Evolving Rapidly}]
+The MCP specification has undergone significant revision since its initial release, and the ecosystem remains immature. Many third-party MCP servers do not fully implement the specification---particularly around Resources (often omitted in favor of Tools) and authentication (frequently absent or non-standard). Before deploying MCP integrations in production, verify that servers implement the primitives and security controls your use case requires. Expect breaking changes as the protocol matures.
+\end{cautionbox}
 
 % ----------------------------------------------------------------------------
 % Memory as Perception
 % ----------------------------------------------------------------------------
 
-\subsection{Memory as Perception into Institutional Knowledge}
+\subsection{Institutional Memory}
 \label{sec:agents2-memory-perception}
 
 Memory systems (\Cref{sec:agents2-memory}) serve as perception tools for institutional knowledge. The retrieval concepts introduced above---embeddings, vector stores, and RAG---enable agents to perceive accumulated expertise that would otherwise be inaccessible.
@@ -187,7 +177,7 @@ Memory-as-perception distinguishes experienced agents from novices. A junior ass
 % Domain-Specific Perception Requirements
 % ----------------------------------------------------------------------------
 
-\subsection{Domain-Specific Perception Requirements}
+\subsection{Domain Requirements}
 \label{sec:agents2-perception-domain}
 
 Perception for regulated professional services requires specialized enhancements. General-purpose search is insufficient; professional agents require authority tracking, jurisdictional awareness, and confidentiality boundaries.
@@ -278,7 +268,7 @@ Perception tools should request minimum necessary permissions. A legal research 
 % Evaluating Perception Capabilities
 % ----------------------------------------------------------------------------
 
-\subsection{Evaluating Perception Capabilities}
+\subsection{Evaluation}
 \label{sec:agents2-perception-eval}
 
 When evaluating agentic systems, you should assess perception against criteria that matter for professional practice.
@@ -298,9 +288,6 @@ When evaluating agentic systems, you should assess perception against criteria t
 % ----------------------------------------------------------------------------
 % Connection to Other Questions
 % ----------------------------------------------------------------------------
-
-\subsection{From Perception to Action}
-\label{sec:agents2-perception-action}
 
 Perception enables agents to gather information, but professional value ultimately requires effecting change: filing documents, sending communications, executing trades. This distinction between observing the world and changing it is fundamental to agent architecture, and the protocols we use reflect it. MCP, introduced earlier in this section, explicitly separates \textbf{Resources} (read-only data access) from \textbf{Tools} (operations that modify state). A single MCP server might expose both capabilities---a document management system could offer read access to files alongside the ability to create, modify, or delete them---but the protocol distinguishes these so that access control and governance can treat them differently.
 

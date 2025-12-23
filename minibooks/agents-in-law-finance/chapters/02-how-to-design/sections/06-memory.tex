@@ -4,41 +4,51 @@
 % Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
-\section{How Does an Agent Remember Things?}
+\section{Memory}
 \label{sec:agents2-memory}
 
 % ----------------------------------------------------------------------------
 % Opening: Q5 Framing and Organizational Analogy
 % ----------------------------------------------------------------------------
 
-The previous two sections examined how agents gather information (perception) and effect change (action). Yet these capabilities operate in the moment: the agent perceives the current state, reasons about it, and acts. Without memory, every interaction resets. The agent cannot recall prior research, successful strategies, or case history. Where Chapter~1 introduced the concept of stateful versus stateless systems in the IAT framework, we now examine how to implement memory architectures that enable agents to learn and adapt across sessions.
+\textit{How does an agent remember things?} The previous two sections examined how agents gather information (perception) and effect change (action). Yet these capabilities operate in the moment: the agent perceives the current state, reasons about it, and acts. Without memory, every interaction resets. The agent cannot recall prior research, successful strategies, or case history. Where Chapter~1 introduced the concept of stateful versus stateless systems in the IAT framework, we now examine how to implement memory architectures that enable agents to learn and adapt across sessions.
 
 Every experienced professional knows that institutional memory distinguishes efficient work from reinventing the wheel. When starting a new securities registration or revisiting an investment thesis, you do not begin from scratch. You pull prior filings, review comment history, check precedent databases, and update existing models with new data. The firm maintains templates and research files that incorporate years of accumulated knowledge. Memory in agentic systems serves this same function: context retention across sessions and learning from experience, building on prior work rather than starting over.
 
-\begin{definitionbox}[title={Agent Memory}]
+\begin{definitionbox}[title={Agent Memory}, breakable=false]
 \glsadd{memory}
-	\keyterm{Agent memory} stores and retrieves information across timescales \parencite{park2023generative,wang2024llmagents}.
-	\begin{itemize}[nosep]
-		\item \textbf{Working Memory:} The documents actively loaded in the agent's context (like papers on a desk).
-		\item \textbf{Episodic Memory:} The history of actions and outcomes for a specific matter (like a case file).
-		\item \textbf{Semantic Memory:} The general principles and institutional knowledge available for retrieval (like the firm's precedent archive).
-	\end{itemize}
+	\keyterm{Agent memory} encompasses the mechanisms by which agents store and retrieve information across different timescales \parencite{park2023generative,wang2024llmagents}. Like a professional's layered filing systems---from desk to archive---agent memory operates at multiple levels, each trading immediacy for capacity.
 \end{definitionbox}
 
 % ----------------------------------------------------------------------------
 % Memory Types
 % ----------------------------------------------------------------------------
 
-\subsection{Memory Types: From Desk to Archive}
+\subsection{Memory Types}
 \label{sec:agents2-memory-types}
 
 Law firms use layered filing systems, each suited to different timescales. The associate's desk holds active work; the matter file contains engagement history; the precedent database archives institutional knowledge. Each layer trades immediacy for capacity. Agent memory systems follow the same pattern.
 
-\textbf{Working memory} utilizes the \keyterm{context window}---the text currently loaded in the LLM's active attention. Just like desk space, context windows have strict limits. An associate can only have so many documents open at once; an agent can only hold so many \keyterm{tokens} (units of text, roughly 0.75 words) in active context. As of late 2025, leading models handle roughly 200,000 tokens. When the task exceeds this limit, you need other storage systems. In finance, this parallels the active trading screen: live prices and positions are immediate but transient.
+\begin{definitionbox}[title={Working Memory}, breakable=false]
+\glsadd{working-memory}
+	\keyterm{Working memory} is the information actively loaded in an agent's context window---analogous to papers spread across a desk. Limited by the model's context size, working memory is immediate but transient: what the agent can ``see'' right now.
+\end{definitionbox}
 
-\textbf{Episodic memory} corresponds to the matter file. Every memo, correspondence, and research result related to an engagement goes here. The associate does not re-research answered questions; the file provides the history. In agentic systems, episodic memory captures the log of actions and outcomes \parencite{park2023generative}. The agent records: ``I searched for Ninth Circuit venue cases, found three opinions, and drafted the analysis.'' When asked a follow-up, the agent retrieves that prior state. This mirrors the financial research file: you pull prior analysis and update it, rather than starting fresh.
+Working memory utilizes the \keyterm{context window}---the text currently loaded in the LLM's active attention. Just like desk space, context windows have strict limits. An associate can only have so many documents open at once; an agent can only hold so many \keyterm{tokens} (units of text, roughly 0.75 words) in active context. As of late 2025, leading models handle roughly 200,000 tokens. When the task exceeds this limit, you need other storage systems. In finance, this parallels the active trading screen: live prices and positions are immediate but transient.
 
-\textbf{Semantic memory} is the firm's precedent database. Institutional knowledge accumulates over decades. When you need a force majeure clause, the database offers fifty examples. Agentic systems access semantic memory through the RAG pattern introduced in \Cref{sec:agents2-icl-retrieval}: retrieve relevant content from a large corpus, inject it into the prompt, and generate a response informed by that specific knowledge \parencite{lewis2020rag}.
+\begin{definitionbox}[title={Episodic Memory}, breakable=false]
+\glsadd{episodic-memory}
+	\keyterm{Episodic memory} stores the history of actions and outcomes for a specific engagement---analogous to the matter file. It captures what the agent did, what it found, and what happened, enabling continuity across sessions.
+\end{definitionbox}
+
+Episodic memory corresponds to the matter file. Every memo, correspondence, and research result related to an engagement goes here. The associate does not re-research answered questions; the file provides the history. In agentic systems, episodic memory captures the log of actions and outcomes \parencite{park2023generative}. The agent records: ``I searched for Ninth Circuit venue cases, found three opinions, and drafted the analysis.'' When asked a follow-up, the agent retrieves that prior state. This mirrors the financial research file: you pull prior analysis and update it, rather than starting fresh.
+
+\begin{definitionbox}[title={Semantic Memory}, breakable=false]
+\glsadd{semantic-memory}
+	\keyterm{Semantic memory} stores general principles and institutional knowledge available for retrieval---analogous to the firm's precedent archive. It represents accumulated expertise that applies across many engagements.
+\end{definitionbox}
+
+Semantic memory is the firm's precedent database. Institutional knowledge accumulates over decades. When you need a force majeure clause, the database offers fifty examples. Agentic systems access semantic memory through the RAG pattern introduced in \Cref{sec:agents2-icl-retrieval}: retrieve relevant content from a large corpus, inject it into the prompt, and generate a response informed by that specific knowledge \parencite{lewis2020rag}.
 
 The retrieval infrastructure powering semantic memory---embeddings and vector stores\glsadd{vector-store}---was defined in \Cref{sec:agents2-icl-retrieval}. Here, the key insight is that semantic memory works because of \textit{in-context learning}\glsadd{in-context-learning}: the model adapts its behavior based on what appears in its prompt. Retrieved precedents become part of the agent's working context, allowing it to reason about specific examples even when those examples were created after the model's training.
 
@@ -101,9 +111,9 @@ Regardless of retrieval method, several techniques improve precision and authori
 \end{itemize}
 
 \begin{cautionbox}[title={Hallucination Risk and Mitigation}]
-	\glsadd{hallucination}Fabricated citations remain a critical failure mode even with RAG. Studies show that RAG-enabled tools can hallucinate 17--33\% of the time \parencite{dahl2024hallucinations}. The model may generate plausible-sounding citations that do not exist in the retrieved context---or anywhere.
+	\glsadd{hallucination}Fabricated citations remain a critical failure mode even with RAG. The first preregistered study of commercial legal AI tools found that RAG-enabled systems hallucinate 17--33\% of the time---including citing nonexistent statutes and misattributing judicial opinions \parencite{magesh2025hallucinations}. Counterintuitively, newer ``reasoning'' models may perform worse: OpenAI's o3 hallucinates roughly twice as often as its predecessor o1 on factual benchmarks \parencite{openai2025o3hallucinations}.
 
-	\vspace{0.5em}
+	\smallskip
 	\textbf{Mitigation:} Before any citation reaches the user, confirm that the source exists in the retrieved context. This verification is not optional for professional applications.
 \end{cautionbox}
 
@@ -111,7 +121,7 @@ Regardless of retrieval method, several techniques improve precision and authori
 % Domain-Specific Memory Considerations
 % ----------------------------------------------------------------------------
 
-\subsection{Domain-Specific Memory Considerations}
+\subsection{Domain Considerations}
 \label{sec:agents2-memory-domain}
 
 Memory systems for regulated industries require enhancements that go well beyond generic implementations. Three dimensions matter most: authority, jurisdiction, and time.
@@ -145,7 +155,7 @@ Retention and deletion policies add a temporal dimension to isolation. Organizat
 % Evaluating Memory Systems
 % ----------------------------------------------------------------------------
 
-\subsection{Evaluating Memory Systems}
+\subsection{Evaluation}
 \label{sec:agents2-memory-eval}
 
 Memory evaluation requires four assessments: \textit{retrieval quality} (precision and recall against expert work product---does it find the authorities a skilled attorney would cite?), \textit{isolation integrity} (adversarial testing to verify matter/client boundaries hold), \textit{temporal validity} (tracking whether retrieved precedent remains good law and how quickly updates propagate), and \textit{scale performance} (latency as corpus grows to tens of thousands of documents).
@@ -154,7 +164,7 @@ Memory evaluation requires four assessments: \textit{retrieval quality} (precisi
 % Adaptation: In-Context Learning as a System Design Element
 % ----------------------------------------------------------------------------
 
-\subsection{Adaptation: Learning and Its Consequences}
+\subsection{Adaptation}
 \label{sec:agents2-adaptation}
 
 Memory facilitates \keyterm{adaptation}---the ``A'' in the GPA+IAT framework from Chapter~1. This capability transforms agents from static tools into systems that learn. But adaptation also introduces risks that static systems avoid.
@@ -206,7 +216,7 @@ Detecting and responding to these risks---particularly drift and leakage---requi
 \begin{keybox}[title={The Adaptation Tradeoff}]
 	Adaptation is not optional. Any system that uses RAG, maintains conversation history, or persists user preferences is adapting. The question is not whether to allow adaptation, but how to govern it.
 
-	\vspace{0.5em}
+	\smallskip
 	Key governance questions:
 	\begin{itemize}[nosep]
 		\item \textbf{What can be written to memory?} Control the write path to prevent poisoning.
@@ -222,9 +232,6 @@ These governance questions are not abstract---they map directly to architectural
 % ----------------------------------------------------------------------------
 % Connection to Other Questions
 % ----------------------------------------------------------------------------
-
-\subsection{From Memory to Planning}
-\label{sec:agents2-memory-planning}
 
 Memory provides the context agents need to plan effectively. Without memory, agents cannot learn from failed strategies, cannot build on prior work, and cannot maintain the continuity that complex tasks require. The adaptation mechanisms discussed above (\Cref{sec:agents2-adaptation}) transform memory from passive storage into active learning---but that learning must be channeled into productive planning.
 
