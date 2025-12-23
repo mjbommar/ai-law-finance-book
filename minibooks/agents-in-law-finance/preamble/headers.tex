@@ -1,0 +1,115 @@
+% ============================================================================
+% HEADERS - Running heads and page numbers (fancyhdr configuration)
+% ============================================================================
+% US Trade Paperback Professional Book Conventions:
+%   - Front matter: Roman numerals, folios only (no running heads)
+%   - Main matter: Book title (even/verso), Chapter title (odd/recto)
+%   - Chapter openers: Plain style (folio bottom center, no running head)
+%   - Folios: Top outer corner in running heads
+% ============================================================================
+
+\usepackage{fancyhdr}
+
+% ----------------------------------------------------------------------------
+% Book title constant (used on even/verso pages in main matter)
+% ----------------------------------------------------------------------------
+\newcommand{\booktitle}{Agentic AI in Law and Finance}
+
+% ----------------------------------------------------------------------------
+% Style: frontmatterstyle - Folios only, no running heads
+% Used throughout front matter (TOC, Preface, How to Read)
+% ----------------------------------------------------------------------------
+\fancypagestyle{frontmatterstyle}{%
+  \fancyhf{}% Clear all headers and footers
+  \fancyhead[LE,RO]{\thepage}% Folio at outer top corner (Left-Even, Right-Odd)
+  \renewcommand{\headrulewidth}{0pt}% No header rule
+  \renewcommand{\footrulewidth}{0pt}% No footer rule
+}
+
+% ----------------------------------------------------------------------------
+% Style: mainmatterstyle - Running heads with book title and chapter title
+% Even (verso) pages: Book title on left
+% Odd (recto) pages: Chapter title on right
+% Folios at outer top corners
+% ----------------------------------------------------------------------------
+\fancypagestyle{mainmatterstyle}{%
+  \fancyhf{}% Clear all headers and footers
+  \fancyhead[LE]{\thepage\quad\textsc{\booktitle}}% Even: folio + book title
+  \fancyhead[RO]{\textsc{\leftmark}\quad\thepage}% Odd: chapter title + folio
+  \renewcommand{\headrulewidth}{0.4pt}% Subtle header rule
+  \renewcommand{\footrulewidth}{0pt}% No footer rule
+}
+
+% ----------------------------------------------------------------------------
+% Style: backmatterstyle - Same as mainmatter for consistency
+% Used in back matter (About Authors, Glossary, References)
+% ----------------------------------------------------------------------------
+\fancypagestyle{backmatterstyle}{%
+  \fancyhf{}% Clear all headers and footers
+  \fancyhead[LE]{\thepage\quad\textsc{\booktitle}}% Even: folio + book title
+  \fancyhead[RO]{\textsc{\leftmark}\quad\thepage}% Odd: section title + folio
+  \renewcommand{\headrulewidth}{0.4pt}% Subtle header rule
+  \renewcommand{\footrulewidth}{0pt}% No footer rule
+}
+
+% ----------------------------------------------------------------------------
+% Redefine plain style - Used automatically by \chapter
+% Folio at bottom center, no running head (standard for chapter openers)
+% ----------------------------------------------------------------------------
+\fancypagestyle{plain}{%
+  \fancyhf{}% Clear all headers and footers
+  \fancyfoot[C]{\thepage}% Folio at bottom center
+  \renewcommand{\headrulewidth}{0pt}% No header rule
+  \renewcommand{\footrulewidth}{0pt}% No footer rule
+}
+
+% ----------------------------------------------------------------------------
+% Chapter mark configuration
+% Only use chapter title in running head (no section titles - they're too long)
+% \MakeUppercase removed to allow mixed case; we use \textsc instead
+% ----------------------------------------------------------------------------
+\renewcommand{\chaptermark}[1]{%
+  \markboth{#1}{}%
+}
+
+% Disable section marks entirely (prevents long section titles in headers)
+\renewcommand{\sectionmark}[1]{}
+
+% ----------------------------------------------------------------------------
+% Commands for switching pagestyles at document boundaries
+% ----------------------------------------------------------------------------
+% These are called from main.tex at \frontmatter, \mainmatter, \backmatter
+
+\newcommand{\usefrontmatterstyle}{%
+  \pagestyle{frontmatterstyle}%
+}
+
+\newcommand{\usemainmatterstyle}{%
+  \pagestyle{mainmatterstyle}%
+}
+
+\newcommand{\usebackmatterstyle}{%
+  \pagestyle{backmatterstyle}%
+}
+
+% ----------------------------------------------------------------------------
+% Selective cleardoublepage control
+% ----------------------------------------------------------------------------
+% Problem: With openright, \frontmatter and \chapter* insert blank pages.
+% We want openright behavior in main matter only, not front matter.
+%
+% Solution: Save the original \cleardoublepage, then toggle it off for
+% front matter and restore it for main matter.
+
+% Save the original cleardoublepage
+\let\cleardoublepagestd\cleardoublepage
+
+% Command to disable blank page insertion (for front matter)
+\newcommand{\disablecleardoublepage}{%
+  \let\cleardoublepage\clearpage%
+}
+
+% Command to restore blank page insertion (for main matter)
+\newcommand{\enablecleardoublepage}{%
+  \let\cleardoublepage\cleardoublepagestd%
+}

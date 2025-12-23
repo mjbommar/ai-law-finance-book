@@ -1,0 +1,120 @@
+% fig-mcp-architecture.tex
+% Model Context Protocol (MCP) Architecture
+% Part of: Chapter 2 - How to Design an Agent
+% Section: 04-perception (MCP subsection)
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    % Host box style
+    hostbox/.style={
+        rectangle,
+        rounded corners=6pt,
+        minimum width=6.3cm,
+        minimum height=1.1cm,
+        fill=bg-key,
+        draw=key-dark,
+        line width=1.2pt,
+        text=key-dark,
+        font=\small\bfseries,
+        align=center
+    },
+    % Client box style
+    clientbox/.style={
+        rectangle,
+        rounded corners=5pt,
+        minimum width=1.85cm,
+        minimum height=0.9cm,
+        fill=bg-definition,
+        draw=definition-dark,
+        line width=1pt,
+        text=definition-dark,
+        font=\scriptsize\bfseries,
+        align=center
+    },
+    % Server box style
+    serverbox/.style={
+        rectangle,
+        rounded corners=5pt,
+        minimum width=1.85cm,
+        minimum height=1.1cm,
+        fill=bg-example,
+        draw=example-dark,
+        line width=1pt,
+        text=example-dark,
+        font=\scriptsize\bfseries,
+        align=center
+    },
+    % Primitive label style
+    primitive/.style={
+        rectangle,
+        rounded corners=2pt,
+        minimum width=1.6cm,
+        minimum height=0.5cm,
+        fill=gray-100,
+        draw=gray-300,
+        line width=0.6pt,
+        text=gray-600,
+        font=\tiny,
+        align=center
+    },
+    % Arrow style
+    arrow/.style={
+        -stealth,
+        line width=1pt,
+        gray-500
+    },
+    % Bidirectional arrow
+    biarrow/.style={
+        stealth-stealth,
+        line width=1pt,
+        gray-500
+    },
+    % Label style
+    lbl/.style={
+        font=\tiny,
+        text=gray-500
+    }
+]
+
+% Host (top)
+\node[hostbox] (host) at (0, 0) {MCP Host {\scriptsize\normalfont (Agent Application)}};
+
+% Clients (middle row)
+\node[clientbox] (client1) at (-2.55, -1.6) {Client};
+\node[clientbox] (client2) at (0, -1.6) {Client};
+\node[clientbox] (client3) at (2.55, -1.6) {Client};
+
+% Servers (bottom row)
+\node[serverbox] (server1) at (-2.55, -3.4) {Server\\[-1pt]{\tiny\normalfont Docs}};
+\node[serverbox] (server2) at (0, -3.4) {Server\\[-1pt]{\tiny\normalfont Data}};
+\node[serverbox] (server3) at (2.55, -3.4) {Server\\[-1pt]{\tiny\normalfont Research}};
+
+% Primitives (below servers, compact)
+\node[primitive] (prim1) at (-2.55, -4.7) {Resources};
+\node[primitive] (prim2) at (0, -4.7) {Tools};
+\node[primitive] (prim3) at (2.55, -4.7) {Prompts};
+
+% Host to Clients
+\draw[arrow] (host.south) ++(-2.55, 0) -- (client1.north);
+\draw[arrow] (host.south) -- (client2.north);
+\draw[arrow] (host.south) ++(2.55, 0) -- (client3.north);
+
+% Clients to Servers
+\draw[biarrow] (client1.south) -- (server1.north);
+\draw[biarrow] (client2.south) -- (server2.north);
+\draw[biarrow] (client3.south) -- (server3.north);
+
+% Servers to Primitives
+\draw[arrow, gray-400] (server1.south) -- (prim1.north);
+\draw[arrow, gray-400] (server2.south) -- (prim2.north);
+\draw[arrow, gray-400] (server3.south) -- (prim3.north);
+
+% Labels
+\node[lbl] at (-0.9, -0.8) {manages};
+\node[lbl] at (1.6, -2.5) {JSON-RPC};
+
+\end{tikzpicture}
+\caption{MCP architecture. The Host manages access control. Each Client connects to one Server. Servers expose primitives: Resources (read-only data), Tools (executable functions), and Prompts (reusable templates).}
+\label{fig:agents2-mcp-architecture}
+\end{figure}
