@@ -10,19 +10,16 @@
 \glsadd{agentic-system}
 \glsadd{gpa}
 \glsadd{iat}
-The previous chapter introduced the GPA+IAT framework: a way to recognize agentic systems through Goals, Perception, Action, Iteration, Adaptation, and Termination. Now we turn to the practical: \textit{How do you design one?}
-
-\glsadd{agentic-system}
 \glsadd{agent}
-The answer starts with a simple observation: agentic systems are meant to do real work, whether augmenting human professionals, automating routine workflows, or even replacing entire organizational functions. Whatever the ambition, the system must handle the same work those humans and organizations currently perform. A contract lifecycle management agent must do what a legal operations team does; a portfolio monitoring agent must ``act like'' an analyst; a due diligence automation agent must perform the same tasks as junior associates reviewing acquisition targets. This means an agentic system requires the same structural capabilities as a professional team, from receiving and understanding work to coordinating action and operating under governance controls.
+The previous chapter introduced the GPA+IAT framework: a way to recognize agentic systems through Goals, Perception, Action, Iteration, Adaptation, and Termination. Now we turn to the practical: how do you design one?
+
+The answer starts with a simple observation: agentic systems are meant to do real work, whether augmenting human professionals, automating routine workflows, or even replacing entire organizational functions. Whatever the ambition, the system must handle the same work those humans and organizations currently perform. A contract lifecycle management agent must do what a legal operations team does; a portfolio monitoring agent must ``act like'' an analyst; a due diligence agent must perform the same tasks as junior associates reviewing acquisition targets. This means an agentic system requires the same structural capabilities as a professional team: receiving and understanding work, coordinating action, and operating under governance controls.
+
+Notably, these structural capabilities don't depend on implementation choices. Building agents inevitably requires choosing between Python and C\#, between GPT and Claude, between libraries like LangChain or custom implementations---but the design decisions that matter transcend these details. Many commercial providers and open source libraries obscure the key architectural questions, and you will learn best by building your own conceptual foundation before adopting any particular vendor's framework.
 
 \begin{keybox}[title={Agents are not magic; they are architecture}]
 	Behind each architectural question lies a design decision with real tradeoffs---capabilities that make agents useful require concrete choices about how systems should work, and those choices determine not just what the system can do but how reliably it performs, how it fails, and what controls remain available when things go wrong.
 \end{keybox}
-
-Agents should never be defined by any single framework, programming language, or foundation model. Implementation inevitably requires choosing between Python and C\#, between GPT and Claude, between LangChain and custom orchestration---but the design decisions that matter transcend these details.
-
-While we encourage you to learn by doing, we also encourage you to begin by focusing on the core concepts and design decisions in this chapter first. Many commercial software providers and even open source libraries obscure or confuse the key design decisions that underlie agents, and you will likely learn best by building your own foundation before learning the language of any particular vendor or framework.
 
 This chapter organizes those architectural decisions into ten questions: the kind you should be asking whether you're building, evaluating, deploying, or governing an agentic system.
 
