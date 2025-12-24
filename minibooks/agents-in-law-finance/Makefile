@@ -32,6 +32,9 @@ COVER_BACK_TEX = covers/cover-back.tex
 COVER_FRONT_PDF = covers/cover-front.pdf
 COVER_BACK_PDF = covers/cover-back.pdf
 INTERIOR_PDF = lulu-interior.pdf
+INTERIOR_BLEED_JOB = interior-bleed
+INTERIOR_BLEED_PDF = lulu-interior-bleed.pdf
+BLEED_INPUT = \\def\\BleedMode{1}\\input{$(TEXFILE)}
 
 # LaTeX tools - using XeLaTeX for fontspec support (works with standalone+tikz)
 LATEX = xelatex
@@ -255,7 +258,55 @@ $(INTERIOR_PDF): $(PDFFILE)
 	fi; \
 	last=$$((pages-1)); \
 	mutool merge -o $(INTERIOR_PDF) $(PDFFILE) 3-$$last
+	@if command -v gs >/dev/null 2>&1; then \
+		echo "$(CYAN)   Flattening transparency (Ghostscript PDF 1.3)...$(RESET)"; \
+		tmp="$(INTERIOR_PDF).tmp"; \
+		gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.3 -dNOPAUSE -dBATCH -dSAFER \
+			-dPDFSETTINGS=/prepress -sOutputFile="$$tmp" "$(INTERIOR_PDF)" >/dev/null 2>&1; \
+		mv "$$tmp" "$(INTERIOR_PDF)"; \
+	else \
+		echo "$(YELLOW)   gs not found; skipping flattening$(RESET)"; \
+	fi
 	@echo "$(BOLD)$(GREEN)$(CHECK) Interior built: $(INTERIOR_PDF)$(RESET)"
+
+.PHONY: interior-bleed
+interior-bleed: $(INTERIOR_BLEED_PDF)
+
+$(INTERIOR_BLEED_PDF): $(TEX_DEPS)
+	@echo "$(BOLD)$(BLUE)$(ARROW) Building Lulu interior with bleed...$(RESET)"
+	$(LATEX) $(LATEX_OPTS) -jobname=$(INTERIOR_BLEED_JOB) "$(BLEED_INPUT)"
+	$(BIBER) $(INTERIOR_BLEED_JOB)
+	$(LATEX) $(LATEX_OPTS) -jobname=$(INTERIOR_BLEED_JOB) "$(BLEED_INPUT)"
+	$(LATEX) $(LATEX_OPTS) -jobname=$(INTERIOR_BLEED_JOB) "$(BLEED_INPUT)"
+	@if ! command -v mutool >/dev/null 2>&1; then \
+		echo "$(RED)$(CROSS) mutool not found (install mupdf-tools)$(RESET)"; \
+		exit 1; \
+	fi
+	@pages=$$(if command -v pdfinfo >/dev/null 2>&1; then \
+		pdfinfo $(INTERIOR_BLEED_JOB).pdf 2>/dev/null | awk '/^Pages:/ {print $$2}'; \
+	else \
+		mutool info -M $(INTERIOR_BLEED_JOB).pdf 2>/dev/null | awk '/^Pages:/ {print $$2}'; \
+	fi); \
+	if [ -z "$$pages" ]; then \
+		echo "$(RED)$(CROSS) Could not determine page count$(RESET)"; \
+		exit 1; \
+	fi; \
+	if [ $$pages -le 3 ]; then \
+		echo "$(RED)$(CROSS) Not enough pages to strip covers$(RESET)"; \
+		exit 1; \
+	fi; \
+	last=$$((pages-1)); \
+	mutool merge -o $(INTERIOR_BLEED_PDF) $(INTERIOR_BLEED_JOB).pdf 3-$$last
+	@if command -v gs >/dev/null 2>&1; then \
+		echo "$(CYAN)   Flattening transparency (Ghostscript PDF 1.3)...$(RESET)"; \
+		tmp="$(INTERIOR_BLEED_PDF).tmp"; \
+		gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.3 -dNOPAUSE -dBATCH -dSAFER \
+			-dPDFSETTINGS=/prepress -sOutputFile="$$tmp" "$(INTERIOR_BLEED_PDF)" >/dev/null 2>&1; \
+		mv "$$tmp" "$(INTERIOR_BLEED_PDF)"; \
+	else \
+		echo "$(YELLOW)   gs not found; skipping flattening$(RESET)"; \
+	fi
+	@echo "$(BOLD)$(GREEN)$(CHECK) Interior built: $(INTERIOR_BLEED_PDF)$(RESET)"
 
 .PHONY: cover-vars
 cover-vars: $(COVER_VARS)
@@ -291,6 +342,15 @@ $(COVER_BACK_PDF): $(COVER_BACK_TEX) \
 $(COVER_PDF): $(COVER_TEX) $(COVER_VARS) $(COVER_FRONT_PDF) $(COVER_BACK_PDF)
 	@echo "$(BOLD)$(BLUE)$(ARROW) Building Lulu wrap cover...$(RESET)"
 	$(LATEX) $(LATEX_OPTS) $(COVER_TEX)
+	@if command -v gs >/dev/null 2>&1; then \
+		echo "$(CYAN)   Flattening transparency (Ghostscript PDF 1.3)...$(RESET)"; \
+		tmp="$(COVER_PDF).tmp"; \
+		gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.3 -dNOPAUSE -dBATCH -dSAFER \
+			-dPDFSETTINGS=/prepress -sOutputFile="$$tmp" "$(COVER_PDF)" >/dev/null 2>&1; \
+		mv "$$tmp" "$(COVER_PDF)"; \
+	else \
+		echo "$(YELLOW)   gs not found; skipping flattening$(RESET)"; \
+	fi
 	@echo "$(BOLD)$(GREEN)$(CHECK) Cover built: $(COVER_PDF)$(RESET)"
 
 .PHONY: cover-check

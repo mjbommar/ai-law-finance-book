@@ -18,6 +18,19 @@
   footskip=0.35in
 ]{geometry}
 
+% Bleed build: expand canvas to 6.25 x 9.25 while preserving trim margins.
+\ifdefined\BleedMode
+  \geometry{
+    paperwidth=6.25in,
+    paperheight=9.25in,
+    inner=0.875in,
+    outer=0.625in,
+    top=0.825in,
+    bottom=0.925in,
+    footskip=0.35in
+  }
+\fi
+
 % --- Font Encoding (pdfLaTeX only) ---
 \ifxetex\else\ifluatex\else
   \usepackage[utf8]{inputenc}
