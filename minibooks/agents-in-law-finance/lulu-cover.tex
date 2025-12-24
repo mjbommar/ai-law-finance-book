@@ -1,0 +1,94 @@
+% ============================================================================
+% LULU WRAP COVER - Single-page cover spread with bleed
+% ============================================================================
+% Builds a single integrated spread (back + spine + front) for Lulu.
+% ============================================================================
+
+\documentclass[10pt]{book}
+
+% ==========================================================================
+% LOAD PREAMBLE (packages, colors, tikz, boxes, styling, commands)
+% ==========================================================================
+\input{preamble/main}
+
+% ==========================================================================
+% COVER VARIABLES (trim size, bleed, spine width)
+% ==========================================================================
+\input{front-matter/cover/cover-vars}
+
+% ==========================================================================
+% DERIVED SIZES
+% ==========================================================================
+\newlength{\CoverWidth}
+\newlength{\CoverHeight}
+\newlength{\CoverBackX}
+\newlength{\CoverSpineX}
+\newlength{\CoverFrontX}
+\newlength{\CoverCenterY}
+\newlength{\CoverSpineCenterX}
+
+\setlength{\CoverWidth}{\CoverTrimWidth}
+\addtolength{\CoverWidth}{\CoverTrimWidth}
+\addtolength{\CoverWidth}{\CoverSpineWidth}
+\addtolength{\CoverWidth}{\CoverBleed}
+\addtolength{\CoverWidth}{\CoverBleed}
+
+\setlength{\CoverHeight}{\CoverTrimHeight}
+\addtolength{\CoverHeight}{\CoverBleed}
+\addtolength{\CoverHeight}{\CoverBleed}
+
+\setlength{\CoverBackX}{\CoverBleed}
+\setlength{\CoverSpineX}{\CoverBleed}
+\addtolength{\CoverSpineX}{\CoverTrimWidth}
+\setlength{\CoverFrontX}{\CoverSpineX}
+\addtolength{\CoverFrontX}{\CoverSpineWidth}
+
+\setlength{\CoverCenterY}{\CoverTrimHeight}
+\divide\CoverCenterY by 2
+\addtolength{\CoverCenterY}{\CoverBleed}
+
+\setlength{\CoverSpineCenterX}{\CoverSpineWidth}
+\divide\CoverSpineCenterX by 2
+\addtolength{\CoverSpineCenterX}{\CoverSpineX}
+
+% ==========================================================================
+% SPINE TEXT (optional)
+% ==========================================================================
+\newif\ifcoverspine
+\coverspinetrue
+\newcommand{\CoverSpineTitle}{Agentic AI in Law and Finance}
+
+\begin{document}
+
+% Explicit page size for the wrap cover
+\newgeometry{paperwidth=\CoverWidth, paperheight=\CoverHeight, margin=0pt}
+\thispagestyle{empty}
+
+\begin{tikzpicture}[remember picture, overlay]
+	\begin{scope}[shift={(current page.south west)}]
+
+		% Base background to ensure full bleed coverage
+		\shade[top color=MidSlate, bottom color=DeepSlate]
+			(0,0) rectangle (\CoverWidth, \CoverHeight);
+
+		% Back cover (left)
+		\begin{scope}[shift={(\CoverBackX, \CoverBleed)}]
+			\input{back-matter/back-cover-art}
+		\end{scope}
+
+		% Front cover (right)
+		\begin{scope}[shift={(\CoverFrontX, \CoverBleed)}]
+			\input{front-matter/cover/front-cover-art}
+		\end{scope}
+
+		% Spine text (rotate -90 for top-to-bottom reading)
+		\ifcoverspine
+		\node[rotate=-90, align=center] at (\CoverSpineCenterX, \CoverCenterY) {
+			{\rmfamily\fontsize{9}{11}\selectfont\color{TextSoft}\textsc{\CoverSpineTitle}}
+		};
+		\fi
+
+	\end{scope}
+\end{tikzpicture}
+
+\end{document}

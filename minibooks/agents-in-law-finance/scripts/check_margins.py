@@ -83,10 +83,10 @@ class PageAnalysis:
 class MarginConfig:
     """Configuration for margin detection.
 
-    Default values are for US Trade (6x9in) book format with typical LaTeX book class margins:
+    Default values are for US Trade (6x9in) book format matching preamble/packages.tex geometry:
     - Paper: 6in x 9in
     - Inner (gutter): 0.75in = 12.5% of width
-    - Outer: 0.625in = 10.4% of width
+    - Outer: 0.5in = 8.3% of width
     - Top: 0.7in = 7.8% of height
     - Bottom: 0.8in = 8.9% of height
     """
@@ -94,9 +94,9 @@ class MarginConfig:
     page_width_in: float = 6.0
     page_height_in: float = 9.0
 
-    # Margin sizes in inches (matching geometry package defaults)
+    # Margin sizes in inches (matching preamble/packages.tex geometry)
     inner_margin_in: float = 0.75   # Gutter (binding side)
-    outer_margin_in: float = 0.625  # Outside edge
+    outer_margin_in: float = 0.5    # Outside edge
     top_margin_in: float = 0.7
     bottom_margin_in: float = 0.8
 
@@ -682,9 +682,9 @@ def check(
     # Page dimensions (US Trade 6x9 default)
     page_width: float = typer.Option(6.0, "--page-width", help="Page width in inches"),
     page_height: float = typer.Option(9.0, "--page-height", help="Page height in inches"),
-    # Margin sizes in inches (LaTeX geometry defaults for US Trade)
+    # Margin sizes in inches (matching preamble/packages.tex geometry)
     inner_margin: float = typer.Option(0.75, "--inner", "-i", help="Inner (gutter) margin in inches"),
-    outer_margin: float = typer.Option(0.625, "--outer", "-o", help="Outer margin in inches"),
+    outer_margin: float = typer.Option(0.5, "--outer", "-o", help="Outer margin in inches"),
     top_margin: float = typer.Option(0.7, "--top", "-t", help="Top margin in inches"),
     bottom_margin: float = typer.Option(0.8, "--bottom", "-b", help="Bottom margin in inches"),
     # Twoside document

@@ -11,174 +11,193 @@
 
 \begin{tikzpicture}[remember picture, overlay]
 
-% Position at page origin
-\begin{scope}[shift={(current page.south west)}]
+	% Position at page origin
+	\begin{scope}[shift={(current page.south west)}]
 
-% Page dimensions
-\def\pagewidth{6in}
-\def\pageheight{9in}
+		% Page dimensions
+		\def\pagewidth{6in}
+		\def\pageheight{9in}
 
-% ============================================================================
-% BACKGROUND - Same as front cover
-% ============================================================================
-\shade[top color=MidSlate, bottom color=DeepSlate]
-    (0,0) rectangle (\pagewidth, \pageheight);
+		% ============================================================================
+		% BACKGROUND - Same as front cover
+		% ============================================================================
+		\shade[top color=MidSlate, bottom color=DeepSlate]
+		(0,0) rectangle (\pagewidth, \pageheight);
 
-% ============================================================================
-% SUBTLE TEXTURE - Reduced from front cover
-% ============================================================================
-% Scaled background elements to match the front cover geometry.
-\begin{scope}[scale=0.706, transform shape, shift={(0, 1.4in)}]
-    \pgfmathsetseed{42}
-    \foreach \i in {1,...,320} {
-        \pgfmathsetmacro{\px}{rnd * 8.5}
-        \pgfmathsetmacro{\py}{rnd * 11}
-        \pgfmathsetmacro{\psize}{0.3 + rnd * 0.8}
-        \pgfmathsetmacro{\popacity}{0.015 + rnd * 0.03}
-        \fill[white, opacity=\popacity] (\px in, \py in) circle (\psize pt);
-    }
-    \foreach \i in {1,...,240} {
-        \pgfmathsetmacro{\px}{rnd * 8.5}
-        \pgfmathsetmacro{\py}{rnd * 11}
-        \pgfmathsetmacro{\psize}{0.2 + rnd * 0.5}
-        \pgfmathsetmacro{\popacity}{0.02 + rnd * 0.04}
-        \fill[black, opacity=\popacity] (\px in, \py in) circle (\psize pt);
-    }
+		% ============================================================================
+		% SUBTLE TEXTURE - Reduced from front cover
+		% ============================================================================
+		% Scaled background elements to match the front cover geometry.
+		\begin{scope}[scale=0.706, transform shape, shift={(0, 1.4in)}]
+			\pgfmathsetseed{42}
+			\foreach \i in {1,...,320} {
+					\pgfmathsetmacro{\px}{rnd * 8.5}
+					\pgfmathsetmacro{\py}{rnd * 11}
+					\pgfmathsetmacro{\psize}{0.3 + rnd * 0.8}
+					\pgfmathsetmacro{\popacity}{0.015 + rnd * 0.03}
+					\fill[white, opacity=\popacity] (\px in, \py in) circle (\psize pt);
+				}
+			\foreach \i in {1,...,240} {
+					\pgfmathsetmacro{\px}{rnd * 8.5}
+					\pgfmathsetmacro{\py}{rnd * 11}
+					\pgfmathsetmacro{\psize}{0.2 + rnd * 0.5}
+					\pgfmathsetmacro{\popacity}{0.02 + rnd * 0.04}
+					\fill[black, opacity=\popacity] (\px in, \py in) circle (\psize pt);
+				}
 
-    % Faint network for continuity with the front cover (reduced for back)
-    \begin{scope}[opacity=0.12]
-        \input{front-matter/cover/network-mlp}
-    \end{scope}
-\end{scope}
+			% Faint network for continuity with the front cover (reduced for back)
+			\input{front-matter/cover/network-mlp-back}
+		\end{scope}
 
-% ============================================================================
-% BOOK SUMMARY - Main content area
-% ============================================================================
+		% ============================================================================
+		% BOOK SUMMARY - Main content area
+		% ============================================================================
 
-% Glass box for book summary - more prominent
-\begin{scope}[shift={(0.45in, 3.15in)}]
-    % Glass box background - slightly more opaque
-    \fill[white, opacity=0.08, rounded corners=6pt] (0, 0) rectangle (5.1in, 5.1in);
-    % Subtle border
-    \draw[white, opacity=0.18, line width=0.5pt, rounded corners=6pt] (0, 0) rectangle (5.1in, 5.1in);
+		% Glass box for book summary - more prominent
+		\begin{scope}[shift={(0.45in, 3.15in)}]
+			% Multi-layer glass effect for depth and text contrast with drop shadow
+			% Shadow layer (beneath boxes for 3D lift)
+			\fill[black, opacity=0.08, rounded corners=6pt]
+			(0.05in, -0.05in) rectangle (5.15in, 5.05in);
+			% Layer 1 (bottom): Warm gradient (vertical: top→bottom)
+			\shade[top color=CopperLight, bottom color=MidSlate, opacity=0.12, rounded corners=6pt]
+			(0, 0) rectangle (5.1in, 5.1in);
+			% Layer 2 (middle): Dark blue gradient (diagonal) - refined corner radius
+			\shade[left color=black!40, right color=DeepSlate, opacity=0.22, rounded corners=5.5pt, shading angle=135]
+			(0, 0) rectangle (5.1in, 5.1in);
+			% Layer 3: Frosted white overlay - refined corner radius
+			\fill[white, opacity=0.04, rounded corners=6.5pt] (0, 0) rectangle (5.1in, 5.1in);
+			% Layer 4 (top): Border outline
+			\draw[white, opacity=0.15, line width=0.5pt, rounded corners=6pt] (0, 0) rectangle (5.1in, 5.1in);
 
-    % Spacing calculations (reduced line spacing from 11.5pt to 11pt):
-    % - Hook (10/12pt, 3 lines): ~0.50in height
-    % - Body paragraphs (8.5/11pt): ~0.30in per 2 lines, ~0.46in per 3 lines, ~0.61in per 4 lines
-    % - Consistent inter-paragraph gap: 0.18in
-    % - Larger gap after Arc intro (transition to main sections): 0.24in
+			% Spacing calculations (reduced line spacing from 11.5pt to 11pt):
+			% - Hook (10/12pt, 3 lines): ~0.50in height
+			% - Body paragraphs (8.5/11pt): ~0.30in per 2 lines, ~0.46in per 3 lines, ~0.61in per 4 lines
+			% - Consistent inter-paragraph gap: 0.18in
+			% - Larger gap after Arc intro (transition to main sections): 0.24in
 
-    % Hook questions - starts at 4.85in
-    \node[anchor=north west, text width=4.75in, align=left] at (0.2in, 4.85in) {
-        {\rmfamily\fontsize{10}{12}\selectfont\color{TextPure}\itshape%
-        What makes something agentic or an ``AI agent?'' How do you design one that actually works? And what does it take to deploy one safely in legal and financial applications?}
-    };
+			% Hook questions - starts at 4.85in
+			\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 4.85in) {
+				{\rmfamily\fontsize{10}{12}\selectfont\color{TextPure}\itshape%
+						What makes something agentic or an ``AI agent?'' How do you design one that actually works? And what does it take to deploy one safely in legal and financial applications?}
+			};
 
-    % Problem statement - Hook ends ~4.35in, gap 0.18in → 4.17in
-    \node[anchor=north west, text width=4.75in, align=left] at (0.2in, 4.17in) {
-        {\rmfamily\fontsize{8.5}{11}\selectfont\color{TextSoft}%
-        The term ``agentic AI'' means different things to different people, creating confusion in procurement, design, and regulation. This book provides a clear framework for building and governing agents in high-stakes domains where precision matters.}
-    };
+			% Problem statement - Hook ends ~4.35in, gap 0.18in → 4.17in
+			\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 4.17in) {
+				{\rmfamily\fontsize{8.5}{11}\selectfont\color{TextPure}%
+						The term ``agentic AI'' means different things to different people, creating confusion in procurement, design, and regulation. This book provides a clear framework for building and governing agents in high-stakes domains where precision matters.}
+			};
 
-    % Arc intro - Problem ends ~3.71in, gap 0.24in (larger before transition) → 3.47in
-    \node[anchor=north west, text width=4.75in, align=left] at (0.2in, 3.47in) {
-        {\rmfamily\fontsize{8.5}{11}\selectfont\color{TextSoft}%
-        We move systematically from theory to practice---\textbf{\textcolor{CopperLight}{defining}} what makes systems truly agentic, \textbf{\textcolor{CopperLight}{designing}} architectures that work reliably, and \textbf{\textcolor{CopperLight}{governing}} their deployment in regulated environments.}
-    };
+			% Arc intro - Problem ends ~3.71in, gap 0.24in (larger before transition) → 3.47in
+			\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 3.47in) {
+				{\rmfamily\fontsize{8.5}{11}\selectfont\color{TextPure}%
+						We move systematically from theory to practice---\textbf{\textcolor{CopperLight}{defining}} what makes systems truly agentic, \textbf{\textcolor{CopperLight}{designing}} architectures that work reliably, and \textbf{\textcolor{CopperLight}{governing}} their deployment in regulated environments.}
+			};
 
-    % Define - Arc ends ~3.17in, gap 0.20in → 2.85in
-    \node[anchor=north west, text width=4.75in, align=left] at (0.2in, 2.85in) {
-        {\rmfamily\fontsize{8.5}{11}\selectfont\color{TextSoft}%
-        \textbf{\textcolor{TextPure}{Define.}} Before you can build, buy, or evaluate an ``agent,'' you need a definition that holds up. Drawing on seven decades of scholarship, this book provides a framework that separates genuine agency from marketing claims---and gives you tools to test what a system can actually do.}
-    };
+			% Define - Arc ends ~3.17in, gap 0.20in → 2.85in
+			\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 2.85in) {
+				{\rmfamily\fontsize{8.5}{11}\selectfont\color{TextPure}%
+						\textbf{\textcolor{TextPure}{Define.}} Before you can build, buy, or evaluate an ``agent,'' you need a definition that holds up. Drawing on seven decades of scholarship, this book provides a framework that separates genuine agency from marketing claims---and gives you tools to test what a system can actually do.}
+			};
 
-    % Design - Define ends ~2.36in, gap 0.20in → 2.04in
-    \node[anchor=north west, text width=4.75in, align=left] at (0.2in, 2.04in) {
-        {\rmfamily\fontsize{8.5}{11}\selectfont\color{TextSoft}%
-        \textbf{\textcolor{TextPure}{Design.}} Clear definitions lead to sound architecture. The book translates agency into concrete design choices: how work reaches the system, how it perceives and acts, how it remembers and plans, when it escalates, and how it knows when to stop.}
-    };
+			% Design - Define ends ~2.36in, gap 0.20in → 2.04in
+			\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 2.04in) {
+				{\rmfamily\fontsize{8.5}{11}\selectfont\color{TextPure}%
+						\textbf{\textcolor{TextPure}{Design.}} Clear definitions lead to sound architecture. The book translates agency into concrete design choices: how work reaches the system, how it perceives and acts, how it remembers and plans, when it escalates, and how it knows when to stop.}
+			};
 
-    % Govern - Design ends ~1.70in, gap 0.20in → 1.38in
-    \node[anchor=north west, text width=4.75in, align=left] at (0.2in, 1.38in) {
-        {\rmfamily\fontsize{8.5}{11}\selectfont\color{TextSoft}%
-        \textbf{\textcolor{TextPure}{Govern.}} Good architecture makes oversight possible. In legal and financial settings, duties are non-delegable and supervision is not optional. The book shows how governance must change when systems can act with autonomy, and what controls make agentic systems deployable in regulated environments.}
-    };
+			% Govern - Design ends ~1.70in, gap 0.20in → 1.38in
+			\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 1.38in) {
+				{\rmfamily\fontsize{8.5}{11}\selectfont\color{TextPure}%
+						\textbf{\textcolor{TextPure}{Govern.}} Good architecture makes oversight possible. In legal and financial settings, duties are non-delegable and supervision is not optional. The book shows how governance must change when systems can act with autonomy, and what controls make agentic systems deployable in regulated environments.}
+			};
 
-    % Audience - Govern ends ~0.89in, gap 0.20in → 0.57in
-    \node[anchor=north west, text width=4.75in, align=left] at (0.2in, 0.57in) {
-        {\rmfamily\fontsize{8.5}{11}\selectfont\color{TextSoft}%
-        Written for legal practitioners, finance professionals, technology leaders, risk and compliance teams, and regulators who need clarity that will still matter as the technology evolves.}
-    };
-\end{scope}
+			% Audience - Govern ends ~0.89in, gap 0.20in → 0.57in
+			\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 0.57in) {
+				{\rmfamily\fontsize{8.5}{11}\selectfont\color{TextPure}%
+						Written for legal practitioners, finance professionals, technology leaders, risk and compliance teams, and regulators who need clarity that will still matter as the technology evolves.}
+			};
+		\end{scope}
 
-% ============================================================================
-% ABOUT THE AUTHORS - Glass box section matching book summary style
-% ============================================================================
-% Padding matched to book summary: top=0.25in, left=0.2in, right=0.15in, bottom≈0.26in
-% Box positioned to align with book summary box (same x coordinates)
+		% ============================================================================
+		% ABOUT THE AUTHORS - Glass box section matching book summary style
+		% ============================================================================
+		% Padding matched to book summary: top=0.25in, left=0.2in, right=0.2in, bottom≈0.26in
+		% Box positioned to align with book summary box (same x coordinates)
 
-\begin{scope}[shift={(0.45in, 0.65in)}]
-    % Glass box for authors section
-    % Height: 2.3in (matches content needs with proper padding)
-    \fill[white, opacity=0.08, rounded corners=6pt] (0, 0) rectangle (5.1in, 2.3in);
-    \draw[white, opacity=0.18, line width=0.5pt, rounded corners=6pt] (0, 0) rectangle (5.1in, 2.3in);
+		\begin{scope}[shift={(0.45in, 0.65in)}]
+			% Glass box for authors section - multi-layer effect with drop shadow
+			% Height: 2.3in (matches content needs with proper padding)
+			% Shadow layer (beneath boxes for 3D lift)
+			\fill[black, opacity=0.08, rounded corners=6pt]
+			(0.05in, -0.05in) rectangle (5.15in, 2.25in);
+			% Layer 1 (bottom): Warm gradient (vertical: top→bottom)
+			\shade[top color=CopperLight, bottom color=MidSlate, opacity=0.12, rounded corners=6pt]
+			(0, 0) rectangle (5.1in, 2.3in);
+			% Layer 2 (middle): Dark blue gradient (diagonal) - refined corner radius
+			\shade[left color=black!40, right color=DeepSlate, opacity=0.22, rounded corners=5.5pt, shading angle=135]
+			(0, 0) rectangle (5.1in, 2.3in);
+			% Layer 3: Frosted white overlay - refined corner radius
+			\fill[white, opacity=0.04, rounded corners=6.5pt] (0, 0) rectangle (5.1in, 2.3in);
+			% Layer 4 (top): Border outline
+			\draw[white, opacity=0.15, line width=0.5pt, rounded corners=6pt] (0, 0) rectangle (5.1in, 2.3in);
 
-    % Header - matches front cover author line styling (size, color, letterspacing, caps)
-    % Top padding: 2.3in - 2.05in = 0.25in (matches book summary)
-    \node[anchor=north west, inner sep=0pt] at (0.2in, 2.05in) {
-        {\fontsize{13}{15}\selectfont\color{TextSoft}%
-        A\kern0.06em B\kern0.06em O\kern0.06em U\kern0.06em T\ %
-        T\kern0.06em H\kern0.06em E\ %
-        A\kern0.06em U\kern0.06em T\kern0.06em H\kern0.06em O\kern0.06em R\kern0.06em S}
-    };
+			% Header - matches front cover author line styling (size, color, letterspacing, caps)
+			% Top padding: 2.3in - 2.05in = 0.25in (matches book summary)
+			\node[anchor=north west, inner sep=0pt] at (0.2in, 2.05in) {
+				{\fontsize{13}{15}\selectfont\color{TextSoft}%
+						A\kern0.06em B\kern0.06em O\kern0.06em U\kern0.06em T\ %
+						T\kern0.06em H\kern0.06em E\ %
+						A\kern0.06em U\kern0.06em T\kern0.06em H\kern0.06em O\kern0.06em R\kern0.06em S}
+			};
 
-    % Shared intro
-    \node[anchor=north west, inner sep=0pt] at (0.2in, 1.75in) {
-        \begin{minipage}[t]{4.75in}
-        \rmfamily\fontsize{7.5}{7.5}\selectfont\color{TextSoft}\raggedright%
-        The authors founded legal tech company LexPredict in 2014, exited in 2018, and today lead 273 Ventures.
-        \end{minipage}
-    };
+			% Shared intro
+			\node[anchor=north west, inner sep=0pt] at (0.2in, 1.75in) {
+				\begin{minipage}[t]{4.7in}
+					\rmfamily\fontsize{7.5}{7.5}\selectfont\color{TextPure}%
+					The authors founded legal tech company LexPredict in 2014, exited in 2018, and today lead 273 Ventures.
+				\end{minipage}
+			};
 
-    % Michael
-    % Bottom at ~1.29in (2 lines), gap to Daniel: 0.15in
-    \node[anchor=north west, inner sep=0pt] at (0.2in, 1.5in) {
-        \begin{minipage}[t]{4.75in}
-        \rmfamily\fontsize{7.5}{7.5}\selectfont\color{TextSoft}\raggedright%
-        \textbf{\textcolor{TextPure}{Michael J. Bommarito II, MSE, MA}} --- Serial entrepreneur, researcher, and adjunct professor with 25 years of industry experience.
-        \end{minipage}
-    };
+			% Michael
+			% Bottom at ~1.29in (2 lines), gap to Daniel: 0.15in
+			\node[anchor=north west, inner sep=0pt] at (0.2in, 1.5in) {
+				\begin{minipage}[t]{4.7in}
+					\rmfamily\fontsize{7.5}{7.5}\selectfont\color{TextPure}%
+					\textbf{\textcolor{TextPure}{Michael J. Bommarito II, MSE, MA}} --- Serial entrepreneur, researcher, and adjunct professor with 25 years of industry experience.
+				\end{minipage}
+			};
 
-    % Daniel
-    % Top at 1.14in (Michael bottom 1.29 - 0.15 gap), bottom at ~0.83in (3 lines)
-    \node[anchor=north west, inner sep=0pt] at (0.2in, 1.14in) {
-        \begin{minipage}[t]{4.75in}
-        \rmfamily\fontsize{7.5}{7.5}\selectfont\color{TextSoft}\raggedright%
-        \textbf{\textcolor{TextPure}{Daniel Martin Katz, PhD, JD, MPP}} --- Professor at Illinois Tech - Chicago Kent College of Law, named by the FT as one of the top 20 legal market shapers of the past 20 years.
-        \end{minipage}
-    };
+			% Daniel
+			% Top at 1.14in (Michael bottom 1.29 - 0.15 gap), bottom at ~0.83in (3 lines)
+			\node[anchor=north west, inner sep=0pt] at (0.2in, 1.09in) {
+				\begin{minipage}[t]{4.7in}
+					\rmfamily\fontsize{7.5}{7.5}\selectfont\color{TextPure}%
+					\textbf{\textcolor{TextPure}{Daniel Martin Katz, PhD, JD, MPP}} --- Professor at Illinois Tech - Chicago Kent College of Law, named by the FT as one of the top 20 legal market shapers of the past 20 years.
+				\end{minipage}
+			};
 
-    % Jillian
-    % Top at 0.68in (Daniel bottom 0.83 - 0.15 gap), bottom at ~0.47in (2 lines)
-    \node[anchor=north west, inner sep=0pt] at (0.2in, 0.68in) {
-        \begin{minipage}[t]{4.75in}
-        \rmfamily\fontsize{7.5}{7.5}\selectfont\color{TextSoft}\raggedright%
-        \textbf{\textcolor{TextPure}{Jillian Bommarito, CPA, CIPP/US/E}} --- Advisor, risk and governance expert, one of the first certified AI auditors in the world.
-        \end{minipage}
-    };
-\end{scope}
+			% Jillian
+			% Top at 0.68in (Daniel bottom 0.83 - 0.15 gap), bottom at ~0.47in (2 lines)
+			\node[anchor=north west, inner sep=0pt] at (0.2in, 0.68in) {
+				\begin{minipage}[t]{4.7in}
+					\rmfamily\fontsize{7.5}{7.5}\selectfont\color{TextPure}%
+					\textbf{\textcolor{TextPure}{Jillian Bommarito, CPA, CIPP/US/E}} --- Advisor, risk and governance expert, and one of the first certified AI auditors in the world.
+				\end{minipage}
+			};
+		\end{scope}
 
-% ----------------------------------------------------------------------------
-% FOOTER: Website (bottom left) and ISBN (bottom right)
-% ----------------------------------------------------------------------------
-\node[anchor=south west, inner sep=0pt] at (0.45in, 0.2in) {
-    {\rmfamily\fontsize{7.5}{9}\selectfont\bfseries\color{TextPure}\textsc{ai4lf.com}}
-};
-\node[anchor=south east, inner sep=0pt] at (5.55in, 0.2in) {
-    {\rmfamily\fontsize{7.5}{9}\selectfont\color{TextMuted}ISBN 979-8-9943457-0-2}
-};
+		% ----------------------------------------------------------------------------
+		% FOOTER: Website (bottom left) and ISBN (bottom right)
+		% ----------------------------------------------------------------------------
+		\node[anchor=south west, inner sep=0pt] at (0.45in, 0.2in) {
+			{\rmfamily\fontsize{7.5}{9}\selectfont\bfseries\color{TextPure}\textsc{ai4lf.com}}
+		};
+		\node[anchor=south east, inner sep=0pt] at (5.55in, 0.2in) {
+			{\rmfamily\fontsize{7.5}{9}\selectfont\color{TextMuted}ISBN 979-8-9943457-0-2}
+		};
 
-\end{scope}
+	\end{scope}
 \end{tikzpicture}
 
 % Restore normal geometry

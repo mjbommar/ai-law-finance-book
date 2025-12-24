@@ -23,6 +23,11 @@ MAIN = main
 TEXFILE = $(MAIN).tex
 PDFFILE = $(MAIN).pdf
 BIBFILE = bib/refs.bib
+COVER = lulu-cover
+COVER_TEX = $(COVER).tex
+COVER_PDF = $(COVER).pdf
+COVER_VARS = front-matter/cover/cover-vars.tex
+INTERIOR_PDF = lulu-interior.pdf
 
 # LaTeX tools - using XeLaTeX for fontspec support (works with standalone+tikz)
 LATEX = xelatex
@@ -197,6 +202,9 @@ clean:
 	@rm -f $(MAIN).run.xml $(MAIN).toc $(MAIN).lot $(MAIN).lof
 	@rm -f $(MAIN).synctex.gz $(MAIN).synctex
 	@rm -f $(MAIN).xdv
+	@rm -f $(COVER).aux $(COVER).log $(COVER).out
+	@rm -f $(COVER).fdb_latexmk $(COVER).fls $(COVER).toc
+	@rm -f $(COVER).synctex.gz $(COVER).synctex $(COVER).xdv
 	@rm -f texput.log
 	@# Clean glossary files
 	@rm -f $(MAIN).glo $(MAIN).gls $(MAIN).glg $(MAIN).ist
@@ -209,17 +217,61 @@ clean:
 cleanall: clean
 	@echo "$(BOLD)$(BLUE)$(ARROW) Removing PDF...$(RESET)"
 	@rm -f $(PDFFILE)
+	@rm -f $(COVER_PDF) $(INTERIOR_PDF)
 	@echo "$(GREEN)$(CHECK) Removed $(PDFFILE)$(RESET)"
 
 # ----------------------------------------------------------------------------
-# Cover build (for print production)
+# Lulu interior and wrap cover
 # ----------------------------------------------------------------------------
 
+.PHONY: interior
+interior: $(INTERIOR_PDF)
+
+$(INTERIOR_PDF): $(PDFFILE)
+	@echo "$(BOLD)$(BLUE)$(ARROW) Building Lulu interior (strip covers)...$(RESET)"
+	@if ! command -v mutool >/dev/null 2>&1; then \
+		echo "$(RED)$(CROSS) mutool not found (install mupdf-tools)$(RESET)"; \
+		exit 1; \
+	fi
+	@pages=$$(if command -v pdfinfo >/dev/null 2>&1; then \
+		pdfinfo $(PDFFILE) 2>/dev/null | awk '/^Pages:/ {print $$2}'; \
+	else \
+		mutool info -M $(PDFFILE) 2>/dev/null | awk '/^Pages:/ {print $$2}'; \
+	fi); \
+	if [ -z "$$pages" ]; then \
+		echo "$(RED)$(CROSS) Could not determine page count$(RESET)"; \
+		exit 1; \
+	fi; \
+	if [ $$pages -le 3 ]; then \
+		echo "$(RED)$(CROSS) Not enough pages to strip covers$(RESET)"; \
+		exit 1; \
+	fi; \
+	last=$$((pages-1)); \
+	mutool merge -o $(INTERIOR_PDF) $(PDFFILE) 3-$$last
+	@echo "$(BOLD)$(GREEN)$(CHECK) Interior built: $(INTERIOR_PDF)$(RESET)"
+
+.PHONY: cover-vars
+cover-vars: $(COVER_VARS)
+
+$(COVER_VARS): $(INTERIOR_PDF) scripts/update_cover_vars.py
+	@echo "$(BOLD)$(BLUE)$(ARROW) Updating cover variables...$(RESET)"
+	@python3 scripts/update_cover_vars.py --pdf $(INTERIOR_PDF) --output $(COVER_VARS)
+
 .PHONY: cover
-cover:
-	@echo "$(BOLD)$(BLUE)$(ARROW) Building standalone front cover...$(RESET)"
-	$(LATEX) $(LATEX_OPTS) -output-directory=covers covers/cover-front.tex
-	@echo "$(BOLD)$(GREEN)$(CHECK) Cover built: covers/cover-front.pdf$(RESET)"
+cover: $(COVER_PDF)
+
+$(COVER_PDF): $(COVER_TEX) $(COVER_VARS) \
+	preamble/*.tex \
+	front-matter/cover/*.tex \
+	back-matter/*.tex
+	@echo "$(BOLD)$(BLUE)$(ARROW) Building Lulu wrap cover...$(RESET)"
+	$(LATEX) $(LATEX_OPTS) $(COVER_TEX)
+	@echo "$(BOLD)$(GREEN)$(CHECK) Cover built: $(COVER_PDF)$(RESET)"
+
+.PHONY: cover-check
+cover-check: $(COVER_PDF)
+	@echo "$(BOLD)$(BLUE)$(ARROW) Checking cover dimensions...$(RESET)"
+	@python3 scripts/check_pdf_dimensions.py $(COVER_PDF) --vars $(COVER_VARS) --pages 1
 
 # ----------------------------------------------------------------------------
 # Export targets
@@ -263,7 +315,10 @@ help:
 	@echo ""
 	@echo "$(BOLD)Targets:$(RESET)"
 	@echo "  $(CYAN)pdf$(RESET)        Build the complete mini-book PDF (default)"
-	@echo "  $(CYAN)cover$(RESET)      Build standalone cover for print production"
+	@echo "  $(CYAN)interior$(RESET)   Build Lulu interior PDF (strip covers)"
+	@echo "  $(CYAN)cover-vars$(RESET) Update Lulu cover variables from interior"
+	@echo "  $(CYAN)cover$(RESET)      Build Lulu wrap cover PDF"
+	@echo "  $(CYAN)cover-check$(RESET)Verify cover PDF dimensions"
 	@echo "  $(CYAN)quick$(RESET)      Single-pass build for minor edits"
 	@echo "  $(CYAN)watch$(RESET)      Continuous compilation on file changes"
 	@echo "  $(CYAN)validate$(RESET)   Check for undefined references and citations"
