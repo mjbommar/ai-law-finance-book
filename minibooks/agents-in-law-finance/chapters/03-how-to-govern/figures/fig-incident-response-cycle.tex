@@ -1,16 +1,17 @@
 % Incident Response Cycle - Vertical Flow with Full Descriptions
+% Redesigned for US Trade 6x9 format (text width ~11.75cm)
 
 \begin{figure}[htbp]
 \centering
-\begin{tikzpicture}[scale=0.82, every node/.append style={transform shape},
+\begin{tikzpicture}[
     stage box/.style={
         draw=slate-700,
         line width=1pt,
         fill=white,
         rounded corners=3pt,
-        minimum width=13.5cm,
-        minimum height=1.35cm,
-        inner sep=8pt
+        minimum width=10.5cm,
+        minimum height=1.5cm,
+        inner sep=6pt
     },
     stage num/.style={
         circle,
@@ -18,68 +19,68 @@
         line width=1.5pt,
         fill=amber-600,
         text=white,
-        font=\small\bfseries,
-        minimum size=0.7cm,
+        font=\small\bfseries\sffamily,
+        minimum size=0.65cm,
         inner sep=0pt
     },
     stage title/.style={
         font=\small\bfseries\sffamily,
         text=slate-700,
         anchor=west,
-        text width=1.8cm
+        text width=1.6cm
     },
     stage desc/.style={
-        font=\scriptsize,
+        font=\footnotesize\sffamily,
         text=gray-700,
-        text width=9.5cm,
+        text width=6.5cm,
         align=left
     },
     arrow/.style={->, thick, slate-700, >=stealth}
 ]
 
 % Vertical spacing
-\def\vstep{1.7cm}
+\def\vstep{1.85cm}
 
 % Stage 1 - Detect
 \node[stage box] (s1) at (0, 0) {};
-\node[stage num] at ([xshift=0.55cm]s1.west) {1};
-\node[stage title] at ([xshift=1.1cm]s1.west) {Detect};
+\node[stage num] at ([xshift=0.5cm]s1.west) {1};
+\node[stage title] at ([xshift=0.95cm]s1.west) {Detect};
 \node[stage desc, anchor=west] at ([xshift=3.0cm]s1.west) {Monitoring alerts, user complaints, audit findings, or external reports identify a potential issue.};
 
 % Stage 2 - Triage
 \node[stage box] (s2) at (0, -\vstep) {};
-\node[stage num] at ([xshift=0.55cm]s2.west) {2};
-\node[stage title] at ([xshift=1.1cm]s2.west) {Triage};
-\node[stage desc, anchor=west] at ([xshift=3.0cm]s2.west) {Assess severity. Fairness violation $\rightarrow$ immediate escalation and halt. Accuracy degradation $\rightarrow$ investigate. Isolated error $\rightarrow$ document. Security breach $\rightarrow$ activate response team.};
+\node[stage num] at ([xshift=0.5cm]s2.west) {2};
+\node[stage title] at ([xshift=0.95cm]s2.west) {Triage};
+\node[stage desc, anchor=west] at ([xshift=3.0cm]s2.west) {Assess severity. Fairness violation $\rightarrow$ escalate/halt. Accuracy issue $\rightarrow$ investigate. Security breach $\rightarrow$ activate response team.};
 
 % Stage 3 - Contain
 \node[stage box] (s3) at (0, -2*\vstep) {};
-\node[stage num] at ([xshift=0.55cm]s3.west) {3};
-\node[stage title] at ([xshift=1.1cm]s3.west) {Contain};
-\node[stage desc, anchor=west] at ([xshift=3.0cm]s3.west) {Limit harm. Fairness/safety failures $\rightarrow$ halt immediately. Accuracy degradation $\rightarrow$ revert to prior model. Security breach $\rightarrow$ isolate affected systems.};
+\node[stage num] at ([xshift=0.5cm]s3.west) {3};
+\node[stage title] at ([xshift=0.95cm]s3.west) {Contain};
+\node[stage desc, anchor=west] at ([xshift=3.0cm]s3.west) {Limit harm. Safety failures $\rightarrow$ halt immediately. Accuracy degradation $\rightarrow$ revert model. Security breach $\rightarrow$ isolate systems.};
 
 % Stage 4 - Investigate
 \node[stage box] (s4) at (0, -3*\vstep) {};
-\node[stage num] at ([xshift=0.55cm]s4.west) {4};
-\node[stage title] at ([xshift=1.1cm]s4.west) {Investigate};
-\node[stage desc, anchor=west] at ([xshift=3.0cm]s4.west) {Root cause analysis. Data quality issue? Model drift? Adversarial attack? Process breakdown (human failed to review)?};
+\node[stage num] at ([xshift=0.5cm]s4.west) {4};
+\node[stage title] at ([xshift=0.95cm]s4.west) {Investigate};
+\node[stage desc, anchor=west] at ([xshift=3.0cm]s4.west) {Root cause analysis. Data quality? Model drift? Adversarial attack? Process breakdown?};
 
 % Stage 5 - Remediate
 \node[stage box] (s5) at (0, -4*\vstep) {};
-\node[stage num] at ([xshift=0.55cm]s5.west) {5};
-\node[stage title] at ([xshift=1.1cm]s5.west) {Remediate};
-\node[stage desc, anchor=west] at ([xshift=3.0cm]s5.west) {Fix the root cause. Retrain model, update data sources, patch vulnerability, revise process.};
+\node[stage num] at ([xshift=0.5cm]s5.west) {5};
+\node[stage title] at ([xshift=0.95cm]s5.west) {Remediate};
+\node[stage desc, anchor=west] at ([xshift=3.0cm]s5.west) {Fix root cause. Retrain model, update data sources, patch vulnerability, revise process.};
 
 % Stage 6 - Notify
 \node[stage box] (s6) at (0, -5*\vstep) {};
-\node[stage num] at ([xshift=0.55cm]s6.west) {6};
-\node[stage title] at ([xshift=1.1cm]s6.west) {Notify};
-\node[stage desc, anchor=west] at ([xshift=3.0cm]s6.west) {Regulatory notification (if required), affected individuals (if harm occurred), internal stakeholders (board, executives).};
+\node[stage num] at ([xshift=0.5cm]s6.west) {6};
+\node[stage title] at ([xshift=0.95cm]s6.west) {Notify};
+\node[stage desc, anchor=west] at ([xshift=3.0cm]s6.west) {Regulatory notification (if required), affected individuals (if harm), internal stakeholders.};
 
 % Stage 7 - Post-Incident Review
 \node[stage box] (s7) at (0, -6*\vstep) {};
-\node[stage num] at ([xshift=0.55cm]s7.west) {7};
-\node[stage title] at ([xshift=1.1cm]s7.west) {Review};
+\node[stage num] at ([xshift=0.5cm]s7.west) {7};
+\node[stage title] at ([xshift=0.95cm]s7.west) {Review};
 \node[stage desc, anchor=west] at ([xshift=3.0cm]s7.west) {Document lessons learned, update risk assessment, revise controls to prevent recurrence.};
 
 % Arrows between stages
@@ -91,9 +92,9 @@
 \draw[arrow] (s6.south) -- (s7.north);
 
 % Feedback loop arrow from Review back to Detect
-\draw[arrow, rounded corners=8pt, dashed]
-    ([xshift=0.3cm]s7.east) -- ([xshift=1.0cm]s7.east) -- ([xshift=1.0cm]s1.east) -- ([xshift=0.3cm]s1.east);
-\node[font=\tiny\sffamily, text=slate-700, rotate=90, anchor=south] at ([xshift=1.55cm, yshift=-5.1cm]s1.east) {Continuous Improvement};
+\draw[arrow, rounded corners=6pt, dashed]
+    ([xshift=0.2cm]s7.east) -- ([xshift=0.5cm]s7.east) -- ([xshift=0.5cm]s1.east) -- ([xshift=0.2cm]s1.east);
+\node[font=\scriptsize\sffamily, text=slate-700, rotate=90, anchor=south] at ([xshift=0.95cm, yshift=-5.55cm]s1.east) {Continuous Improvement};
 
 \end{tikzpicture}
 \caption{The seven-stage incident response cycle for AI system failures. The dashed feedback loop emphasizes that post-incident review improves detection capabilities, creating continuous improvement in governance controls.}

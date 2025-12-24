@@ -10,7 +10,7 @@
         fill=#1!10,
         minimum width=4.8cm,
         minimum height=1.1cm,
-        font=\small,
+        font=\small\sffamily,
         align=center
     },
     detail box/.style={
@@ -20,7 +20,7 @@
         fill=#1!5,
         text width=4.2cm,
         inner sep=5pt,
-        font=\scriptsize,
+        font=\scriptsize\sffamily,
         align=left
     },
     decision/.style={
@@ -31,7 +31,7 @@
         minimum width=1.5cm,
         minimum height=0.9cm,
         inner sep=3pt,
-        font=\scriptsize,
+        font=\scriptsize\sffamily,
         align=center
     },
     termination/.style={
@@ -42,7 +42,7 @@
         minimum width=2.4cm,
         minimum height=0.9cm,
         inner sep=4pt,
-        font=\scriptsize,
+        font=\scriptsize\sffamily,
         align=center
     },
     lowrisk/.style={
@@ -52,12 +52,12 @@
         fill=bg-note,
         minimum width=2.0cm,
         minimum height=0.6cm,
-        font=\scriptsize,
+        font=\scriptsize\sffamily,
         align=center
     },
     arrow/.style={->, thick, text-secondary, >=stealth, line width=1pt},
     loop arrow/.style={->, thick, example-dark, >=stealth, line width=1.2pt},
-    label text/.style={font=\tiny, text=text-muted}
+    label text/.style={font=\tiny\sffamily, text=text-muted}
 ]
 
 % === DETAIL BOX 1 (Risk Criteria) - positioned above cycle 1 ===
@@ -147,7 +147,7 @@
 \draw[arrow] (dec2.south) -- ++(0,-0.25) -| (term3.north);
 
 % Loop back arrow - tighter on left side
-\draw[loop arrow, rounded corners=6pt] (dec2.west) -- ++(-3.2,0) node[left, font=\scriptsize, text=example-dark] {Next cycle} |- (cycle2.west);
+\draw[loop arrow, rounded corners=6pt] (dec2.west) -- ++(-3.2,0) node[left, font=\scriptsize\sffamily, text=example-dark] {Next cycle} |- (cycle2.west);
 
 \end{tikzpicture}
 \caption{Iterative investigation workflow with explainable adaptation. Cycle~1 scores accounts using risk criteria; high-risk accounts (score $\geq$6) proceed to iterative investigation. Cycles~2--N gather evidence and adapt strategy based on findings. Investigation terminates when sufficient evidence is obtained, a red flag requires escalation, or maximum cycles are reached.}

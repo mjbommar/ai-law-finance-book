@@ -54,11 +54,11 @@
 
 % ----------------------------------------------------------------------------
 % Redefine plain style - Used automatically by \chapter
-% Folio at bottom center, no running head (standard for chapter openers)
+% Folio at outer top corner (same position as running pages, no running head)
 % ----------------------------------------------------------------------------
 \fancypagestyle{plain}{%
   \fancyhf{}% Clear all headers and footers
-  \fancyfoot[C]{\thepage}% Folio at bottom center
+  \fancyhead[LE,RO]{\thepage}% Folio at outer top corner (same as other pages)
   \renewcommand{\headrulewidth}{0pt}% No header rule
   \renewcommand{\footrulewidth}{0pt}% No footer rule
 }

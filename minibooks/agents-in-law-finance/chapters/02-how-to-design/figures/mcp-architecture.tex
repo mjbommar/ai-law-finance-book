@@ -36,55 +36,55 @@
     thick
   },
   label/.style={
-    font=\small,
+    font=\small\sffamily,
     align=center
   }
 ]
 
 % MCP Host (left)
 \node[hostbox] (host) at (0,0) {
-  \textbf{MCP Host}\\[0.3cm]
-  \small IDE or\\
-  \small Agent\\
-  \small Runtime\\[0.3cm]
-  \footnotesize Manages\\
-  \footnotesize clients
+  \textbf{\sffamily MCP Host}\\[0.3cm]
+  {\small\sffamily IDE or}\\
+  {\small\sffamily Agent}\\
+  {\small\sffamily Runtime}\\[0.3cm]
+  {\footnotesize\sffamily Manages}\\
+  {\footnotesize\sffamily clients}
 };
 
 % MCP Client (center)
 \node[clientbox, right=of host] (client) {
-  \textbf{MCP Client}\\[0.3cm]
-  \small Agent or\\
-  \small LLM\\[0.3cm]
-  \footnotesize Discovers\\
-  \footnotesize \& invokes\\
-  \footnotesize tools
+  \textbf{\sffamily MCP Client}\\[0.3cm]
+  {\small\sffamily Agent or}\\
+  {\small\sffamily LLM}\\[0.3cm]
+  {\footnotesize\sffamily Discovers}\\
+  {\footnotesize\sffamily \& invokes}\\
+  {\footnotesize\sffamily tools}
 };
 
 % MCP Server (right)
 \node[serverbox, right=of client] (server) {
-  \textbf{MCP Server}\\[0.3cm]
-  \small Tools\\
-  \small Resources\\
-  \small Prompts\\[0.3cm]
-  \footnotesize Exposes\\
-  \footnotesize capabilities
+  \textbf{\sffamily MCP Server}\\[0.3cm]
+  {\small\sffamily Tools}\\
+  {\small\sffamily Resources}\\
+  {\small\sffamily Prompts}\\[0.3cm]
+  {\footnotesize\sffamily Exposes}\\
+  {\footnotesize\sffamily capabilities}
 };
 
 % Bidirectional arrow: Host <-> Client
 \draw[arrow] ([yshift=3pt]host.east) -- ([yshift=3pt]client.west)
-  node[midway, above, label] {\footnotesize manages};
+  node[midway, above, label] {\footnotesize\sffamily manages};
 \draw[arrow] ([yshift=-3pt]client.west) -- ([yshift=-3pt]host.east)
-  node[midway, below, label] {\footnotesize lifecycle};
+  node[midway, below, label] {\footnotesize\sffamily lifecycle};
 
 % Bidirectional arrow: Client <-> Server
 \draw[arrow] ([yshift=3pt]client.east) -- ([yshift=3pt]server.west)
-  node[midway, above, label] {\footnotesize JSON-RPC};
+  node[midway, above, label] {\footnotesize\sffamily JSON-RPC};
 \draw[arrow] ([yshift=-3pt]server.west) -- ([yshift=-3pt]client.east)
-  node[midway, below, label] {\footnotesize stdio/HTTP};
+  node[midway, below, label] {\footnotesize\sffamily stdio/HTTP};
 
 % Transport layer note
-\node[below=1.5cm of client, align=center, text width=8cm, font=\footnotesize] (transport) {
+\node[below=1.5cm of client, align=center, text width=8cm, font=\footnotesize\sffamily] (transport) {
   \textbf{Transport:} JSON-RPC 2.0 over stdio (local) or Streamable HTTP (cloud)
 };
 

@@ -7,7 +7,7 @@
 \begin{tikzpicture}[
     node distance=1.2cm,
     box/.style={
-        font=\small,
+        font=\small\sffamily,
         align=center,
         text width=2.8cm,
         rounded corners=3pt,
@@ -19,7 +19,7 @@
         drop shadow={shadow scale=1.05, shadow xshift=0.3pt, shadow yshift=-0.3pt}
     },
     actbox/.style={
-        font=\small,
+        font=\small\sffamily,
         align=center,
         text width=2.8cm,
         rounded corners=3pt,
@@ -32,7 +32,7 @@
     },
     decision/.style={
         diamond,
-        font=\small,
+        font=\small\sffamily,
         align=center,
         text width=2cm,
         inner sep=3pt,
@@ -43,7 +43,7 @@
         drop shadow={shadow scale=1.05, shadow xshift=0.3pt, shadow yshift=-0.3pt}
     },
     gate/.style={
-        font=\scriptsize,
+        font=\scriptsize\sffamily,
         align=center,
         text width=2cm,
         rounded corners=2pt,
@@ -61,11 +61,11 @@
 ]
 
 % Circular arrangement of main nodes
-\node[box] (perceive) at (0, 3) {\textbf{PERCEIVE}\\{\scriptsize Gather context}};
-\node[box] (reason) at (3.5, 1.5) {\textbf{REASON}\\{\scriptsize Decide action}};
+\node[box] (perceive) at (0, 3) {\textbf{PERCEIVE}\\{\scriptsize\sffamily Gather context}};
+\node[box] (reason) at (3.5, 1.5) {\textbf{REASON}\\{\scriptsize\sffamily Decide action}};
 \node[gate] (approval) at (3.5, -0.3) {Human\\Approval};
-\node[actbox] (act) at (3.5, -2) {\textbf{ACT}\\{\scriptsize Execute}};
-\node[box] (update) at (0, -3.5) {\textbf{UPDATE}\\{\scriptsize Store result}};
+\node[actbox] (act) at (3.5, -2) {\textbf{ACT}\\{\scriptsize\sffamily Execute}};
+\node[box] (update) at (0, -3.5) {\textbf{UPDATE}\\{\scriptsize\sffamily Store result}};
 \node[decision] (check) at (-3.5, 0) {Done?};
 
 % Arrows forming the cycle
@@ -74,8 +74,8 @@
 \draw[arrow] (approval) -- (act);
 \draw[arrow] (act) -- (update);
 \draw[arrow] (update) -- (check);
-\draw[arrow] (check) -- node[left, font=\scriptsize] {No} (perceive);
-\draw[arrow] (check) -- node[above, font=\scriptsize] {Yes} ++(-2, 0) node[right, font=\small] {END};
+\draw[arrow] (check) -- node[left, font=\scriptsize\sffamily] {No} (perceive);
+\draw[arrow] (check) -- node[above, font=\scriptsize\sffamily] {Yes} ++(-2, 0) node[right, font=\small\sffamily] {END};
 
 \end{tikzpicture}
 \caption{Core agent loop implementing GPA+IAT properties. The agent iteratively perceives (gathers context from tools and memory), reasons (selects next action), acts (executes with optional human approval), updates (stores results in memory), and checks termination conditions.}

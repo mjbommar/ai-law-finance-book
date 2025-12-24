@@ -5,8 +5,8 @@
 \resizebox{\textwidth}{!}{%
 \begin{tikzpicture}[
     remember picture,
-    level circle/.style={circle, minimum size=2.0cm, inner sep=0pt, draw=#1, line width=1.5pt, font=\bfseries\small, align=center},
-    level box/.style={rounded corners=4pt, draw=#1, line width=1pt, inner sep=8pt, text width=3.2cm, font=\small\raggedright, align=left}
+    level circle/.style={circle, minimum size=2.0cm, inner sep=0pt, draw=#1, line width=1.5pt, font=\bfseries\small\sffamily, align=center},
+    level box/.style={rounded corners=4pt, draw=#1, line width=1pt, inner sep=8pt, text width=3.2cm, font=\small\sffamily\raggedright, align=left}
 ]
 
 % Horizontal connecting line at top
@@ -14,7 +14,7 @@
 
 % Arrow showing increasing governance requirements
 \draw[-{Stealth[length=3mm,width=2mm]}, text-primary, line width=1.2pt]
-    (0.5,1.0) -- (13.5,1.0) node[midway, above, font=\small\bfseries] {Increasing Governance Requirements};
+    (0.5,1.0) -- (13.5,1.0) node[midway, above, font=\small\bfseries\sffamily] {Increasing Governance Requirements};
 
 % Level 1: Fully Reversible (leftmost)
 \node[level circle={example-dark}, fill=bg-example, text=example-dark] (level1) at (0,0) {Fully\\Reversible};

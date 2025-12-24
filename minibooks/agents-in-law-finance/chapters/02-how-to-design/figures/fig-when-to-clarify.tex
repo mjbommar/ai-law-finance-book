@@ -1,62 +1,81 @@
-% When to Clarify: Compact Stakes × Ambiguity Decision Matrix
+% When to Clarify: Stakes × Ambiguity Decision Matrix
+% Square 2x2 grid with clean axis labels
 
 \begin{figure}[htbp]
 \centering
-\begin{tikzpicture}[
+\begin{tikzpicture}[scale=0.85, every node/.style={scale=0.85},
+    % Square cells: 3.6cm × 3.6cm
     cell/.style={
-        rounded corners=4pt,
+        rounded corners=5pt,
         line width=1.2pt,
-        minimum width=4.2cm,
-        minimum height=1.6cm,
+        minimum width=3.6cm,
+        minimum height=3.6cm,
         align=center,
-        inner sep=8pt
+        inner sep=10pt
     },
+    % Action label styling
     action/.style={
-        font=\small\bfseries\sffamily
+        font=\normalsize\bfseries\sffamily
     },
+    % Example styling - larger than before
     example/.style={
-        font=\scriptsize\itshape,
-        text=text-secondary
+        font=\small\sffamily\itshape,
+        text=gray-600
     },
+    % Axis styling
     axis label/.style={
-        font=\scriptsize\bfseries\sffamily,
-        text=text-secondary
+        font=\small\bfseries\sffamily,
+        text=slate-700
+    },
+    axis tick/.style={
+        font=\footnotesize\sffamily,
+        text=slate-700
     }
 ]
 
-% Column headers
-\node[axis label] at (-2.3, 2.1) {Low Ambiguity};
-\node[axis label] at (2.3, 2.1) {High Ambiguity};
+% === GRID CELLS ===
+% Cell centers at ±1.975 for 3.6cm cells with 0.35cm gap
 
-% Row headers
-\node[axis label, rotate=90, anchor=south, align=center] at (-4.8, 0.9) {Low\\Stakes};
-\node[axis label, rotate=90, anchor=south, align=center] at (-4.8, -0.9) {High\\Stakes};
+% Top-left: HIGH Stakes + LOW Ambiguity → CONFIRM
+\node[cell, draw=key-base, fill=bg-key] (hl) at (-1.975, 1.975) {};
+\node[action, text=key-dark] at ([yshift=6pt]hl.center) {CONFIRM};
+\node[example] at ([yshift=-10pt]hl.center) {``File this motion''};
 
-% Top-left: Low Stakes, Low Ambiguity
-\node[cell, draw=example-base, fill=bg-example] (tl) at (-2.3, 0.9) {
-    \textcolor{example-dark}{\textsf{\textbf{PROCEED}}}\\[2pt]
-    \textcolor{text-muted}{\scriptsize\itshape ``Apple market cap''}
-};
+% Top-right: HIGH Stakes + HIGH Ambiguity → CLARIFY THOROUGHLY
+\node[cell, draw=caution-base, fill=bg-caution] (hh) at (1.975, 1.975) {};
+\node[action, text=caution-dark] at ([yshift=6pt]hh.center) {CLARIFY};
+\node[action, text=caution-dark] at ([yshift=-8pt]hh.center) {THOROUGHLY};
+\node[example] at ([yshift=-26pt]hh.center) {``Handle regulatory issue''};
 
-% Top-right: Low Stakes, High Ambiguity
-\node[cell, draw=key-base, fill=bg-key] (tr) at (2.3, 0.9) {
-    \textcolor{key-dark}{\textsf{\textbf{CLARIFY BRIEFLY}}}\\[2pt]
-    \textcolor{text-muted}{\scriptsize\itshape ``Research SOL''}
-};
+% Bottom-left: LOW Stakes + LOW Ambiguity → PROCEED
+\node[cell, draw=example-base, fill=bg-example] (ll) at (-1.975, -1.975) {};
+\node[action, text=example-dark] at ([yshift=6pt]ll.center) {PROCEED};
+\node[example] at ([yshift=-10pt]ll.center) {``Apple market cap''};
 
-% Bottom-left: High Stakes, Low Ambiguity
-\node[cell, draw=key-base, fill=bg-key] (bl) at (-2.3, -0.9) {
-    \textcolor{key-dark}{\textsf{\textbf{CONFIRM}}}\\[2pt]
-    \textcolor{text-muted}{\scriptsize\itshape ``File this motion''}
-};
+% Bottom-right: LOW Stakes + HIGH Ambiguity → CLARIFY BRIEFLY
+\node[cell, draw=slate-700, fill=slate-100] (lh) at (1.975, -1.975) {};
+\node[action, text=slate-900] at ([yshift=6pt]lh.center) {CLARIFY};
+\node[action, text=slate-900] at ([yshift=-8pt]lh.center) {BRIEFLY};
+\node[example] at ([yshift=-26pt]lh.center) {``Research SOL''};
 
-% Bottom-right: High Stakes, High Ambiguity
-\node[cell, draw=caution-base, fill=bg-caution] (br) at (2.3, -0.9) {
-    \textcolor{caution-dark}{\textsf{\textbf{CLARIFY THOROUGHLY}}}\\[2pt]
-    \textcolor{text-muted}{\scriptsize\itshape ``Handle regulatory response''}
-};
+% === AXIS LABELS ===
+% Cell edges at ±3.775, margin of 0.6cm to axis lines
+
+% Y-axis: Stakes (left side)
+\node[axis label, rotate=90, anchor=south] at (-5.2, 0) {Stakes};
+\node[axis tick, anchor=east] at (-4.55, 1.975) {High};
+\node[axis tick, anchor=east] at (-4.55, -1.975) {Low};
+
+% X-axis: Ambiguity (bottom)
+\node[axis label, anchor=north] at (0, -5.1) {Ambiguity};
+\node[axis tick, anchor=north] at (-1.975, -4.55) {Low};
+\node[axis tick, anchor=north] at (1.975, -4.55) {High};
+
+% Axis lines (with arrows, proper margin from cells)
+\draw[->, line width=1pt, slate-700] (-4.38, -4.08) -- (-4.38, 4.28);
+\draw[->, line width=1pt, slate-700] (-4.08, -4.38) -- (4.28, -4.38);
 
 \end{tikzpicture}
-\caption{Decision matrix for when agents should clarify user intent. Stakes measure consequence of error; ambiguity measures interpretation confidence.}
+\caption{Decision matrix for when agents should clarify intent. Stakes measure consequence of error; ambiguity measures interpretation confidence.}
 \label{fig:agents2-when-to-clarify}
 \end{figure}

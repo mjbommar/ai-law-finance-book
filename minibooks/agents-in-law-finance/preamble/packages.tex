@@ -12,7 +12,7 @@
 \usepackage[
   papersize={6in,9in},
   inner=0.75in,       % Gutter margin (for binding)
-  outer=0.625in,      % Outside margin
+  outer=0.5in,        % Outside margin
   top=0.7in,
   bottom=0.8in,
   footskip=0.35in
@@ -33,6 +33,26 @@
 %   - XeLaTeX/LuaLaTeX: loads libertinus-otf (OpenType fonts + unicode-math)
 %   - pdfLaTeX: loads libertinus-type1 (T1 fonts)
 \usepackage{libertinus}
+
+% Match monospaced font to Libertinus for consistent kerning/sizing
+% Fall back safely if the mono font is not installed.
+\ifxetex
+  \IfFontExistsTF{Libertinus Mono}
+    {\setmonofont{Libertinus Mono}[Scale=MatchLowercase]}
+    {\IfFontExistsTF{LibertinusMono}
+      {\setmonofont{LibertinusMono}[Scale=MatchLowercase]}
+      {\IfFileExists{LibertinusMono-Regular.otf}
+        {\setmonofont{LibertinusMono-Regular.otf}[Scale=MatchLowercase]}
+        {\setmonofont{Latin Modern Mono}[Scale=MatchLowercase]}}}
+\else\ifluatex
+  \IfFontExistsTF{Libertinus Mono}
+    {\setmonofont{Libertinus Mono}[Scale=MatchLowercase]}
+    {\IfFontExistsTF{LibertinusMono}
+      {\setmonofont{LibertinusMono}[Scale=MatchLowercase]}
+      {\IfFileExists{LibertinusMono-Regular.otf}
+        {\setmonofont{LibertinusMono-Regular.otf}[Scale=MatchLowercase]}
+        {\setmonofont{Latin Modern Mono}[Scale=MatchLowercase]}}}
+\fi\fi
 
 % libertinust1math is T1-encoded math for pdfLaTeX only.
 % For XeLaTeX/LuaLaTeX, libertinus-otf already provides math via unicode-math.
@@ -71,6 +91,26 @@
 \usepackage{pdflscape}
 \usepackage{rotating}
 \usepackage{needspace}  % \needspace{length} to avoid orphaned headings
+
+% --- Vertical Page Alignment ---
+% Use \raggedbottom to prevent ugly vertical stretching between paragraphs
+% when pages have less content. This is preferred for technical books over
+% \flushbottom which forces all pages to the same height by adding space.
+\raggedbottom
+
+% Allow extra stretch to avoid overfull lines (bleed into margins)
+\setlength{\emergencystretch}{2em}
+
+% --- Widow and Orphan Control ---
+% Widows: last line of paragraph alone at top of page
+% Orphans: first line of paragraph alone at bottom of page
+% Penalty of 10000 is "infinite" - TeX tries very hard to avoid these
+\widowpenalty=10000
+\clubpenalty=10000
+\brokenpenalty=10000  % Discourage hyphenation across page breaks
+\tolerance=1500
+\hyphenpenalty=1200
+\exhyphenpenalty=1200
 
 % --- Lists ---
 \usepackage{enumitem}

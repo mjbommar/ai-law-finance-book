@@ -15,10 +15,10 @@ The previous chapter introduced the GPA+IAT framework: a way to recognize agenti
 
 The answer starts with a simple observation: agentic systems are meant to do real work, whether augmenting human professionals, automating routine workflows, or even replacing entire organizational functions. Whatever the ambition, the system must handle the same work those humans and organizations currently perform. A contract lifecycle management agent must do what a legal operations team does; a portfolio monitoring agent must ``act like'' an analyst; a due diligence agent must perform the same tasks as junior associates reviewing acquisition targets. This means an agentic system requires the same structural capabilities as a professional team: receiving and understanding work, coordinating action, and operating under governance controls.
 
-Notably, these structural capabilities don't depend on implementation choices. Building agents inevitably requires choosing between Python and C\#, between GPT and Claude, between libraries like LangChain or custom implementations---but the design decisions that matter transcend these details. Many commercial providers and open source libraries obscure the key architectural questions, and you will learn best by building your own conceptual foundation before adopting any particular vendor's framework.
+Notably, these structural capabilities don't depend on implementation choices. Building agents inevitably requires choosing between Python and C\#, between GPT and Claude, between libraries like LangChain or custom implementations, but the design decisions that matter transcend these details. Many commercial providers and open source libraries obscure the key architectural questions, and you will learn best by building your own conceptual foundation before adopting any particular vendor's framework.
 
 \begin{keybox}[title={Agents are not magic; they are architecture}]
-	Behind each architectural question lies a design decision with real tradeoffs---capabilities that make agents useful require concrete choices about how systems should work, and those choices determine not just what the system can do but how reliably it performs, how it fails, and what controls remain available when things go wrong.
+	Behind each architectural question lies a design decision with real tradeoffs. Capabilities that make agents useful require concrete choices about how systems should work, and those choices determine not just what the system can do but how reliably it performs, how it fails, and what controls remain available when things go wrong.
 \end{keybox}
 
 This chapter organizes those architectural decisions into ten questions: the kind you should be asking whether you're building, evaluating, deploying, or governing an agentic system.
@@ -60,14 +60,14 @@ Table~\ref{tab:agents2-framework} lists these ten questions in the order an agen
 		\textbf{Section}                                        & \textbf{Architectural Question}                    \\
 		\midrule
 		\hyperref[sec:agents2-triggers]{Triggers}               & How does the agent know when it has work to do?    \\
-		\hyperref[sec:agents2-intent]{Understanding}            & How does the agent understand what is being asked? \\
+		\hyperref[sec:agents2-intent]{Intent}                   & How does the agent understand what is being asked? \\
 		\hyperref[sec:agents2-perception]{Perception}           & How does the agent find things out?                \\
 		\hyperref[sec:agents2-action]{Action}                   & How does the agent make things happen?             \\
 		\hyperref[sec:agents2-memory]{Memory}                   & How does the agent remember things?                \\
 		\hyperref[sec:agents2-planning]{Planning}               & How does the agent break a big job into steps?     \\
 		\hyperref[sec:agents2-termination]{Termination}         & How does the agent know when it is done?           \\
 		\hyperref[sec:agents2-escalation]{Escalation}           & How does the agent know when to ask for help?      \\
-		\hyperref[sec:agents2-delegation]{Coordination}         & How does the agent work with other agents?         \\
+		\hyperref[sec:agents2-delegation]{Delegation}           & How does the agent work with other agents?         \\
 		\hyperref[sec:agents2-governance]{Governance by Design} & How do we design systems that can be governed?     \\
 		\bottomrule
 	\end{tabular}
@@ -76,4 +76,4 @@ Table~\ref{tab:agents2-framework} lists these ten questions in the order an agen
 
 Each section addresses one question through organizational analogies, architectural concepts, domain-specific considerations for law and finance, and governance implications. You can read sequentially for cumulative understanding, jump directly to whichever question matters most, or skip to the end for synthesis.
 
-Lastly, remember that, like other human processes or software systems, agents require governance. Chapter~3 (\textit{How to Govern an Agent}) addresses compliance frameworks and controls in detail.
+Lastly, remember that, like other human processes or software systems, agents require governance. Chapter~3 addresses compliance frameworks and controls in detail.

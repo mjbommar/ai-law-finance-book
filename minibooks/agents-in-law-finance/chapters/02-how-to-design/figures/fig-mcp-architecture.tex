@@ -5,7 +5,7 @@
 
 \begin{figure}[htbp]
 \centering
-\begin{tikzpicture}[
+\begin{tikzpicture}[scale=1.15, every node/.style={scale=1.15},
     % Host box style
     hostbox/.style={
         rectangle,
@@ -16,7 +16,7 @@
         draw=key-dark,
         line width=1.2pt,
         text=key-dark,
-        font=\small\bfseries,
+        font=\small\bfseries\sffamily,
         align=center
     },
     % Client box style
@@ -29,7 +29,7 @@
         draw=definition-dark,
         line width=1pt,
         text=definition-dark,
-        font=\scriptsize\bfseries,
+        font=\scriptsize\bfseries\sffamily,
         align=center
     },
     % Server box style
@@ -42,7 +42,7 @@
         draw=example-dark,
         line width=1pt,
         text=example-dark,
-        font=\scriptsize\bfseries,
+        font=\scriptsize\bfseries\sffamily,
         align=center
     },
     % Primitive label style
@@ -55,7 +55,7 @@
         draw=gray-300,
         line width=0.6pt,
         text=gray-600,
-        font=\tiny,
+        font=\tiny\sffamily,
         align=center
     },
     % Arrow style
@@ -72,13 +72,13 @@
     },
     % Label style
     lbl/.style={
-        font=\tiny,
+        font=\tiny\sffamily,
         text=gray-500
     }
 ]
 
 % Host (top)
-\node[hostbox] (host) at (0, 0) {MCP Host {\scriptsize\normalfont (Agent Application)}};
+\node[hostbox] (host) at (0, 0) {MCP Host {\scriptsize\normalfont\sffamily (Agent Application)}};
 
 % Clients (middle row)
 \node[clientbox] (client1) at (-2.55, -1.6) {Client};
@@ -86,9 +86,9 @@
 \node[clientbox] (client3) at (2.55, -1.6) {Client};
 
 % Servers (bottom row)
-\node[serverbox] (server1) at (-2.55, -3.4) {Server\\[-1pt]{\tiny\normalfont Docs}};
-\node[serverbox] (server2) at (0, -3.4) {Server\\[-1pt]{\tiny\normalfont Data}};
-\node[serverbox] (server3) at (2.55, -3.4) {Server\\[-1pt]{\tiny\normalfont Research}};
+\node[serverbox] (server1) at (-2.55, -3.4) {Server\\[-1pt]{\tiny\normalfont\sffamily Docs}};
+\node[serverbox] (server2) at (0, -3.4) {Server\\[-1pt]{\tiny\normalfont\sffamily Data}};
+\node[serverbox] (server3) at (2.55, -3.4) {Server\\[-1pt]{\tiny\normalfont\sffamily Research}};
 
 % Primitives (below servers, compact)
 \node[primitive] (prim1) at (-2.55, -4.7) {Resources};

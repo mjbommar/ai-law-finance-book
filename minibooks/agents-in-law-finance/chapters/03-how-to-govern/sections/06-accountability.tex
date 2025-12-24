@@ -1,5 +1,5 @@
 % ============================================================================
-% Accountability and Organizational Structure — Chapter 3 - How to Govern an Agent
+% Accountability and Organizational Structure --- Chapter 3 - How to Govern an Agent
 % Purpose: Define roles, organizational models, and liability allocation
 % Label: sec:agents3-accountability
 % ============================================================================
@@ -23,8 +23,8 @@ A dedicated AI governance office or committee reports to senior leadership (typi
 \vspace{0pt}
 \begin{tcolorbox}[
   enhanced,
-  colback=bg-key,
-  colframe=key-dark,
+  colback=bg-example,
+  colframe=example-dark,
   fonttitle=\bfseries,
   coltitle=white,
   title=Advantages,
@@ -77,8 +77,8 @@ A central AI governance function establishes enterprise-wide policies and standa
 \vspace{0pt}
 \begin{tcolorbox}[
   enhanced,
-  colback=bg-key,
-  colframe=key-dark,
+  colback=bg-example,
+  colframe=example-dark,
   fonttitle=\bfseries,
   coltitle=white,
   title=Advantages,
@@ -130,8 +130,8 @@ AI governance is integrated into existing risk management, compliance, IT govern
 \vspace{0pt}
 \begin{tcolorbox}[
   enhanced,
-  colback=bg-key,
-  colframe=key-dark,
+  colback=bg-example,
+  colframe=example-dark,
   fonttitle=\bfseries,
   coltitle=white,
   title=Advantages,
@@ -298,8 +298,6 @@ A9 & Respond to regulatory inquiry \\
 
 \begin{table}[htbp]
 \centering
-\caption{Sample RACI Matrix for AI Governance Activities}
-\label{tab:agents3-raci}
 \small
 \begin{tabular}{>{\sffamily\centering\arraybackslash}p{0.8cm} >{\centering\arraybackslash}p{1.4cm} >{\centering\arraybackslash}p{1.3cm} >{\centering\arraybackslash}p{1.4cm} >{\centering\arraybackslash}p{1.4cm} >{\centering\arraybackslash}p{1.3cm}}
 \toprule
@@ -316,6 +314,8 @@ A8 & I & A & R & I & C \\
 A9 & C & A & R & R & R \\
 \bottomrule
 \end{tabular}
+\caption{Sample RACI Matrix for AI Governance Activities}
+\label{tab:agents3-raci}
 \end{table}
 
 \paragraph{Key Observations from the Matrix}:
@@ -330,7 +330,7 @@ A9 & C & A & R & R & R \\
 \item \textbf{Consultation and Information Flow}: Legal and Compliance are Consulted on most activities, ensuring regulatory considerations inform decisions. The Board is Informed of governance activities but not burdened with operational details.
 \end{itemize}
 
-Organizations should customize this matrix to their structure, size, and regulatory context. The principle—single accountability per activity—remains universal.
+Organizations should customize this matrix to their structure, size, and regulatory context. The principle of single accountability per activity remains universal.
 
 \subsection{Escalation and Reporting}
 \label{sec:agents3-escalation-reporting}
@@ -349,8 +349,8 @@ Governance requires clear escalation triggers: when must an operational issue be
 
 \textbf{Board Presentations (Quarterly/Annual)}: Board receives narrative synthesis: strategic governance posture (are we ahead of or behind regulatory curve?), high-risk system approvals, material incidents and responses, policy changes, budget and resource requests. Format: 10-15 slide deck; focus on risk appetite alignment, not operational details.
 
-\paragraph{Example Escalation: Fairness Violation in Credit Decisioning}
-A bank's monthly fairness monitoring detects disparate impact in credit pre-screening (see Section~\ref{sec:agents3-monitoring-incident}). \Cref{fig:agents3-escalation-example} illustrates the Tier 1 → Tier 3 escalation pathway, demonstrating how pre-defined critical issues trigger rapid organizational response with specific time targets at each stage.
+\paragraph{Example Escalation: Credit Screening Fairness Violation}
+Monthly fairness monitoring at a bank detects disparate impact in credit pre-screening (see Section~\ref{sec:agents3-monitoring-incident}). \Cref{fig:agents3-escalation-example} illustrates the Tier 1 → Tier 3 escalation pathway, demonstrating how pre-defined critical issues trigger rapid organizational response with specific time targets at each stage.
 
 \input{chapters/03-how-to-govern/figures/fig-escalation-example}
 
@@ -362,7 +362,7 @@ This escalation pathway ensures the organization responds rapidly to critical ri
 A foundational reality shapes AI governance: \textbf{liability concentrates on deployers, not vendors or technology}. Understanding this allocation is essential for calibrating governance investments.
 
 \paragraph{Deployers Bear Primary Liability}
-When an AI system causes harm—discriminates against a protected class, provides inaccurate advice, breaches confidentiality—the deploying organization faces legal consequences:
+When an AI system causes harm (such as discriminating against a protected class, providing inaccurate advice, or breaching confidentiality), the deploying organization faces legal consequences:
 
 \begin{itemize}
 \item \textbf{Regulatory penalties}: ECOA violations, GDPR breaches, professional responsibility sanctions.
@@ -376,7 +376,7 @@ The fact that the system was purchased from a reputable vendor, relies on cuttin
 Vendor contracts typically shift risk to deployers through:
 
 \begin{itemize}
-\item \textbf{Liability caps}: ``Vendor's total liability shall not exceed fees paid in the prior 12 months.'' For a \$50,000/year SaaS subscription, this caps vendor exposure at \$50,000—insufficient to cover a \$5 million ECOA class action settlement or \$10 million GDPR penalty.
+\item \textbf{Liability caps}: ``Vendor's total liability shall not exceed fees paid in the prior 12 months.'' For a \$50,000/year SaaS subscription, this caps vendor exposure at \$50,000, insufficient to cover a \$5 million ECOA class action settlement or \$10 million GDPR penalty.
 \item \textbf{Warranty disclaimers}: ``Vendor makes no warranties regarding accuracy, completeness, or fitness for a particular purpose.'' Deployers cannot recover damages for model hallucinations or bias if the vendor disclaimed such warranties.
 \item \textbf{Indemnification limits}: Vendors may indemnify only for certain risks (e.g., IP infringement) but exclude liability for ``deployer's use of the system.''
 \end{itemize}
@@ -390,21 +390,21 @@ Since deployers bear most liability and cannot fully recover from vendors, \emph
 \item \textbf{Insurance}: Insurers may require evidence of governance (policies, audits, controls) as a condition of coverage or premium reduction.
 \end{itemize}
 
-Organizations that deploy AI systems without governance face \emph{uninsurable, unmitigated risk}. Conversely, robust governance creates an evidentiary record of due diligence—valuable in regulatory inquiries, litigation, and board oversight.
+Organizations that deploy AI systems without governance face \emph{uninsurable, unmitigated risk}. Conversely, robust governance creates an evidentiary record of due diligence, valuable in regulatory inquiries, litigation, and board oversight.
 
 \paragraph{Example: Credit Decisioning Liability Chain}
 A mortgage applicant is denied credit by a bank using an AI underwriting system. The applicant sues under ECOA, alleging disparate impact (the system disproportionately denies applications from Hispanic applicants). The liability chain unfolds:
 
 \begin{enumerate}
 \item \textbf{Applicant sues bank}: Under traditional enforcement practice, ECOA liability attaches to the \emph{creditor} (the bank), not the technology vendor. The bank is the defendant, regardless of whether it built the system in-house or purchased it.
-\item \textbf{Bank investigates vendor recovery}: The bank's contract with the AI vendor caps liability at \$100,000 (annual subscription fee). The ECOA settlement is \$3 million (class action covering 500 affected applicants). The bank recovers only \$100,000—3\% of total damages.
+\item \textbf{Bank investigates vendor recovery}: The bank's contract with the AI vendor caps liability at \$100,000 (annual subscription fee). The ECOA settlement is \$3 million (class action covering 500 affected applicants). The bank recovers only \$100,000, representing just 3\% of total damages.
 \item \textbf{Bank disciplines employee}: The bank's AI governance policy required quarterly fairness monitoring. The assigned compliance analyst failed to conduct monitoring for six months. The bank terminates the analyst but remains liable to applicants and regulators (the analyst's failure does not excuse the bank's ECOA violation).
 \item \textbf{Regulatory escalation}: The Consumer Financial Protection Bureau (CFPB) investigates and imposes a \$5 million penalty for systemic ECOA violations. The penalty is assessed against the bank, not the vendor or employee.
 \end{enumerate}
 
-\textbf{Outcome}: The bank bears \$8 million in total liability (\$3M settlement + \$5M penalty) and recovers \$100K from the vendor. Effective governance—quarterly fairness monitoring, documented risk assessment, incident response protocols—might have detected the bias earlier, limited exposure, and shown good faith to regulators.
+\textbf{Outcome}: The bank bears \$8 million in total liability (\$3M settlement + \$5M penalty) and recovers \$100K from the vendor. Effective governance (including quarterly fairness monitoring, documented risk assessment, and incident response protocols) might have detected the bias earlier, limited exposure, and shown good faith to regulators.
 
-\begin{keybox}[title={Liability Reality Check}]
+\begin{cautionbox}[title={Liability Reality Check}]
 ``The AI did it'' is not a legal defense. ``We bought it from a reputable vendor'' does not transfer liability. ``Our employee was supposed to monitor it'' does not excuse organizational failures. Deployers own the risk. Governance is the mechanism for managing it.
-\end{keybox}
+\end{cautionbox}
 

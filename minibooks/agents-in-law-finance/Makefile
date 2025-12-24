@@ -212,6 +212,16 @@ cleanall: clean
 	@echo "$(GREEN)$(CHECK) Removed $(PDFFILE)$(RESET)"
 
 # ----------------------------------------------------------------------------
+# Cover build (for print production)
+# ----------------------------------------------------------------------------
+
+.PHONY: cover
+cover:
+	@echo "$(BOLD)$(BLUE)$(ARROW) Building standalone front cover...$(RESET)"
+	$(LATEX) $(LATEX_OPTS) -output-directory=covers covers/cover-front.tex
+	@echo "$(BOLD)$(GREEN)$(CHECK) Cover built: covers/cover-front.pdf$(RESET)"
+
+# ----------------------------------------------------------------------------
 # Export targets
 # ----------------------------------------------------------------------------
 
@@ -253,6 +263,7 @@ help:
 	@echo ""
 	@echo "$(BOLD)Targets:$(RESET)"
 	@echo "  $(CYAN)pdf$(RESET)        Build the complete mini-book PDF (default)"
+	@echo "  $(CYAN)cover$(RESET)      Build standalone cover for print production"
 	@echo "  $(CYAN)quick$(RESET)      Single-pass build for minor edits"
 	@echo "  $(CYAN)watch$(RESET)      Continuous compilation on file changes"
 	@echo "  $(CYAN)validate$(RESET)   Check for undefined references and citations"

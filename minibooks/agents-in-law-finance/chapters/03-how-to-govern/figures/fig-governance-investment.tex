@@ -1,78 +1,91 @@
-% Four-Pillar Governance Investment Framework - 2x2 Layout
+% Four-Pillar Governance Investment Framework - Clean 2x2 Grid
+% Square cells with elegant proportions and consistent styling
 
 \begin{figure}[htbp]
 \centering
-\begin{tikzpicture}[scale=0.80, every node/.append style={transform shape},
-    base box/.style={
-        rounded corners=6pt,
-        line width=1.5pt,
-        minimum width=6.4cm,
-        minimum height=3.2cm,
-        align=left,
-        inner sep=14pt
+\scalebox{1.05}{%
+\begin{tikzpicture}[
+    % Square cells: 4cm x 4cm for elegant proportions
+    cell/.style={
+        rounded corners=5pt,
+        draw=slate-700,
+        line width=1.2pt,
+        minimum width=4cm,
+        minimum height=4cm,
+        align=center,
+        inner sep=10pt
     },
-    box header/.style={
-        font=\small\bfseries\sffamily
+    % Unified fill for consistency
+    cell light/.style={cell, fill=gray-50},
+    cell medium/.style={cell, fill=gray-50},
+    % Header styling - larger, bolder
+    header/.style={
+        font=\normalsize\bfseries\sffamily,
+        text=slate-900
     },
-    box content/.style={
-        font=\scriptsize,
-        text=gray-800,
-        text width=5.6cm
+    % Content styling - larger than before
+    content/.style={
+        font=\footnotesize\sffamily,
+        text=gray-700,
+        text width=3.4cm,
+        align=left
     }
 ]
 
-% Outer frame
-\draw[rounded corners=8pt, draw=slate-700, line width=2pt, fill=slate-100]
-    (-7.1,-4.0) rectangle (7.1,4.3);
+% Outer frame - nearly square (9.3cm x 9.8cm)
+\draw[rounded corners=8pt, draw=slate-700, line width=2pt, fill=white]
+    (-4.65,-4.65) rectangle (4.65,5.15);
 
 % Frame title
 \node[font=\normalsize\bfseries\sffamily, text=white, fill=slate-700,
-      rounded corners=3pt, inner sep=6pt] at (0,4.3) {Governance Capability};
+      rounded corners=3pt, inner sep=6pt] at (0,5.15) {Governance Investment};
+
+% === TOP ROW ===
 
 % Top-left: Training
-\node[base box, draw=slate-700, fill=white] (training) at (-3.5,1.85) {};
-\node[box header, text=slate-900, anchor=north west] at ([xshift=2pt, yshift=-2pt]training.north west) {Training};
-\node[box content, anchor=north west] at ([xshift=2pt, yshift=-18pt]training.north west) {
-    Role-based programs for AI capabilities, limitations, and governance obligations\\[4pt]
-    \textbullet~Attorneys: hallucination risks, Rule 3.3\\
-    \textbullet~Auditors: PCAOB AI documentation\\
-    \textbullet~Compliance: fairness, disparate impact
+\node[cell light] (training) at (-2.25,2.25) {};
+\node[header, anchor=north] at ([yshift=-6pt]training.north) {Training};
+\node[content, anchor=center] at ([yshift=-4pt]training.center) {
+    \textbf{Role-specific programs:}\\[3pt]
+    \textbullet~AI capabilities \& limits\\
+    \textbullet~Professional obligations\\
+    \textbullet~Risk identification
 };
 
 % Top-right: Hiring
-\node[base box, draw=slate-700, fill=gray-100] (hiring) at (3.5,1.85) {};
-\node[box header, text=slate-900, anchor=north west] at ([xshift=2pt, yshift=-2pt]hiring.north west) {Hiring};
-\node[box content, anchor=north west] at ([xshift=2pt, yshift=-18pt]hiring.north west) {
-    Specialized expertise that general staff lack\\[4pt]
-    \textbullet~Risk analysts (AI fairness testing)\\
-    \textbullet~Compliance officers (ECOA, GDPR)\\
-    \textbullet~Technical specialists (model validation)\\
-    \textbullet~AI-aware legal counsel
+\node[cell medium] (hiring) at (2.25,2.25) {};
+\node[header, anchor=north] at ([yshift=-6pt]hiring.north) {Hiring};
+\node[content, anchor=center] at ([yshift=-4pt]hiring.center) {
+    \textbf{Specialized expertise:}\\[3pt]
+    \textbullet~AI risk analysts\\
+    \textbullet~Model validators\\
+    \textbullet~Compliance specialists
 };
 
+% === BOTTOM ROW ===
+
 % Bottom-left: Partnerships
-\node[base box, draw=slate-700, fill=gray-100] (partnerships) at (-3.5,-2.05) {};
-\node[box header, text=slate-900, anchor=north west] at ([xshift=2pt, yshift=-2pt]partnerships.north west) {Partnerships};
-\node[box content, anchor=north west] at ([xshift=2pt, yshift=-18pt]partnerships.north west) {
-    External capabilities for gaps and scale\\[4pt]
-    \textbullet~AI-specialized law firms\\
-    \textbullet~Governance consultants\\
-    \textbullet~Certification auditors (SOC 2, ISO 42001)\\
-    \textbullet~Industry groups and best practices
+\node[cell medium] (partnerships) at (-2.25,-2.25) {};
+\node[header, anchor=north] at ([yshift=-6pt]partnerships.north) {Partnerships};
+\node[content, anchor=center] at ([yshift=-4pt]partnerships.center) {
+    \textbf{External capabilities:}\\[3pt]
+    \textbullet~AI-focused counsel\\
+    \textbullet~Audit \& certification\\
+    \textbullet~Industry consortia
 };
 
 % Bottom-right: Technology
-\node[base box, draw=slate-700, fill=definition-light] (technology) at (3.5,-2.05) {};
-\node[box header, text=slate-900, anchor=north west] at ([xshift=2pt, yshift=-2pt]technology.north west) {Technology};
-\node[box content, anchor=north west] at ([xshift=2pt, yshift=-18pt]technology.north west) {
-    Infrastructure for high-autonomy governance\\[4pt]
-    \textbullet~Logging and audit trail systems\\
-    \textbullet~Real-time monitoring dashboards\\
-    \textbullet~Fairness and bias testing tools\\
-    \textbullet~Explainability platforms
+\node[cell light] (technology) at (2.25,-2.25) {};
+\node[header, anchor=north] at ([yshift=-6pt]technology.north) {Technology};
+\node[content, anchor=center] at ([yshift=-4pt]technology.center) {
+    \textbf{Infrastructure:}\\[3pt]
+    \textbullet~Logging \& audit trails\\
+    \textbullet~Monitoring dashboards\\
+    \textbullet~Fairness testing tools
 };
 
 \end{tikzpicture}
-\caption{Four areas of sustained governance investment. Underinvestment in any area creates capability gaps that undermine the others.}
+}
+\caption{Four areas of sustained governance investment. Gaps in any area undermine the others.}
 \label{fig:agents3-governance-investment}
 \end{figure}

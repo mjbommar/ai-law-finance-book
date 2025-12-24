@@ -43,48 +43,60 @@
 \begin{document}
 
 % ============================================================================
-% COVER PAGE (inline TikZ, no PDF include)
+% FRONT COVER (jacket front)
 % ============================================================================
-% Use Alph numbering for pre-frontmatter pages to avoid hyperref anchor conflicts
+% Use Alph numbering for cover pages to avoid hyperref anchor conflicts
+% with frontmatter roman numerals.
 \pagenumbering{Alph}
 \input{front-matter/cover/cover}
 
-% ----------------------------------------------------------------------------
-% COPYRIGHT PAGE (page B - verso of cover, before frontmatter)
-% ----------------------------------------------------------------------------
-% Place copyright immediately after cover, before \frontmatter which would
-% insert a blank page. We handle page numbering manually.
+% Blank verso (back of cover, traditionally blank)
 \newpage
-\input{front-matter/copyright}
+\thispagestyle{empty}
+\null
+\newpage
 
 % ============================================================================
-% FRONT MATTER (starts after copyright)
+% FRONT MATTER
 % ============================================================================
-% Disable blank page insertion for front matter (we don't want blank pages here)
-\disablecleardoublepage
+% Traditional US Trade book order:
+%   p.i   (recto)  Title page
+%   p.ii  (verso)  Copyright — back of title page
+%   p.iii (recto)  Table of Contents
+%   p.v+  (recto)  Preface
+%   etc.
+% ============================================================================
 \frontmatter
 \usefrontmatterstyle
+\enablecleardoublepage
 
 % ----------------------------------------------------------------------------
-% TITLE PAGE (page i - traditional full title)
+% TITLE PAGE (page i, recto)
 % ----------------------------------------------------------------------------
 \input{front-matter/title-page}
 
 % ----------------------------------------------------------------------------
-% TABLE OF CONTENTS
+% COPYRIGHT PAGE (page ii, verso — back of title page)
 % ----------------------------------------------------------------------------
+% No \cleardoublepage here: copyright MUST be on verso (back of title page)
+\input{front-matter/copyright}
+
+% ----------------------------------------------------------------------------
+% TABLE OF CONTENTS (starts page iii, recto)
+% ----------------------------------------------------------------------------
+\cleardoublepage
 \tableofcontents
-\clearpage
 
 % ----------------------------------------------------------------------------
-% PREFACE
+% PREFACE (starts on recto)
 % ----------------------------------------------------------------------------
+\cleardoublepage
 \input{front-matter/preface}
-\clearpage
 
 % ----------------------------------------------------------------------------
-% HOW TO READ THIS BOOK
+% HOW TO READ THIS BOOK (starts on recto)
 % ----------------------------------------------------------------------------
+\cleardoublepage
 \input{front-matter/how-to-read}
 
 % ============================================================================

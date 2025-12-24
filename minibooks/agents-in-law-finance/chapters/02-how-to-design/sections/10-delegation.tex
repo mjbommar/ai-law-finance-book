@@ -4,7 +4,7 @@
 % Part of: Chapter 2 - How to Design an Agent
 % ============================================================================
 
-\section{Coordination}
+\section{Delegation}
 \label{sec:agents2-delegation}
 
 % ----------------------------------------------------------------------------
@@ -33,7 +33,7 @@ Delegation permits parallelization (multiple specialists work simultaneously), s
 
 Several factors drive multi-agent designs \parencite{wu2023autogen,guo2024multiagent}, each reflecting challenges familiar to professional practice.
 
-\textbf{Specialization} allows agents to excel in narrow domains, just as a securities law agent can be optimized for SEC regulations and equipped with EDGAR tools while a tax agent handles tax implications---neither needs expertise in the other's domain. \textbf{Security isolation} enforces least privilege: a research agent can read legal databases but cannot file documents, while a filing agent can submit to CM/ECF but cannot access client financial data; if one agent is compromised, damage is contained. \textbf{Parallel execution} lets independent workstreams proceed simultaneously, so a document review agent can analyze contracts while a research agent investigates legal issues without either waiting for the other.
+\textbf{Specialization} allows agents to excel in narrow domains, just as a securities law agent can be optimized for SEC regulations and equipped with EDGAR tools while a tax agent handles tax implications; neither needs expertise in the other's domain. \textbf{Security isolation} enforces least privilege: a research agent can read legal databases but cannot file documents, while a filing agent can submit to CM/ECF but cannot access client financial data; if one agent is compromised, damage is contained. \textbf{Parallel execution} lets independent workstreams proceed simultaneously, so a document review agent can analyze contracts while a research agent investigates legal issues without either waiting for the other.
 
 Two additional factors favor multi-agent designs in production settings. \textbf{Vendor diversity} allows best-of-breed selection, matching capability to task. A specialized legal model handles research, a general model handles drafting, and a fast model handles classification. \textbf{Scale management} addresses context window limits by decomposing tasks across agents, each with focused context, instead of cramming everything into one overwhelmed process.
 
@@ -77,7 +77,7 @@ M\&A due diligence illustrates this pattern. The Orchestrator delegates to speci
 \label{sec:agents2-workflows}
 
 \paragraph{Example: Regulatory Assessment for Financial Product Launch}
-A fintech company asks about regulatory approvals for a new product---a scenario that spans both legal and financial domains. The Orchestrator decomposes the request across four specialists working in parallel. A \textbf{Securities Agent} analyzes SEC guidance and identifies potential registration requirements. A \textbf{Banking Agent} checks OCC and FDIC rules, flagging money transmitter licensing needs. A \textbf{Consumer Agent} reviews CFPB regulations and highlights disclosure requirements. An \textbf{AML Agent} analyzes Bank Secrecy Act obligations and determines KYC needs. Each specialist accesses relevant regulatory databases through the tool integrations discussed in \Cref{sec:agents2-mcp-perception}. The Orchestrator synthesizes these parallel findings into a prioritized regulatory roadmap, identifying which approvals are prerequisites for others, and escalates if any specialist encounters problems requiring human judgment (see \Cref{sec:agents2-escalation}).
+A fintech company asks about regulatory approvals for a new product (a scenario that spans both legal and financial domains). The Orchestrator decomposes the request across four specialists working in parallel. A \textbf{Securities Agent} analyzes SEC guidance and identifies potential registration requirements. A \textbf{Banking Agent} checks OCC and FDIC rules, flagging money transmitter licensing needs. A \textbf{Consumer Agent} reviews CFPB regulations and highlights disclosure requirements. An \textbf{AML Agent} analyzes Bank Secrecy Act obligations and determines KYC needs. Each specialist accesses relevant regulatory databases through the tool integrations discussed in \Cref{sec:agents2-mcp-perception}. The Orchestrator synthesizes these parallel findings into a prioritized regulatory roadmap, identifying which approvals are prerequisites for others, and escalates if any specialist encounters problems requiring human judgment (see \Cref{sec:agents2-escalation}).
 
 % ----------------------------------------------------------------------------
 % Multi-Agent Risks
@@ -88,7 +88,7 @@ A fintech company asks about regulatory approvals for a new product---a scenario
 
 Multi-agent systems introduce failure modes beyond single-agent systems \parencite{cemri2025multiagentfail}. \textbf{Coordination failures} include deadlock (agents waiting cyclically), divergence (incompatible conclusions requiring reconciliation), and cascading errors (incorrect output propagating through the system). Prevention requires timeouts, validation at handoffs, and clear escalation paths.
 
-\textbf{Security risks} require the same rigor applied to human teams: verifiable agent identities, access policies restricting delegation authority, ethical walls enforced across agent boundaries (an agent on one side of a transaction cannot delegate to specialists with access to the other side's confidential information), and complete delegation logging for audit \parencite{openid-ai-identity-2024}. Comprehensive logging of delegation chains---who delegated what to whom, what constraints were communicated, and what artifacts were returned---is foundational to audit and accountability; \Cref{sec:agents2-logging-arch} develops the architectural requirements.
+\textbf{Security risks} require the same rigor applied to human teams: verifiable agent identities, access policies restricting delegation authority, ethical walls enforced across agent boundaries (an agent on one side of a transaction cannot delegate to specialists with access to the other side's confidential information), and complete delegation logging for audit \parencite{openid-ai-identity-2024}. Comprehensive logging of delegation chains (who delegated what to whom, what constraints were communicated, and what artifacts were returned) is foundational to audit and accountability; \Cref{sec:agents2-logging-arch} develops the architectural requirements.
 
 % ----------------------------------------------------------------------------
 % Protocol Selection
@@ -130,4 +130,4 @@ The decision rule is straightforward: use MCP for well-defined, auditable operat
 
 Delegation distributes work, creating governance challenges. Accountability becomes complex: does responsibility lie with the coordinator, the specialist, or the approving human? Information barriers must apply to agents just as they do to humans. Audit trails must span the entire delegation tree.
 
-\Cref{sec:agents2-governance} addresses the architectural patterns that enable governance: logging that spans delegation trees, override mechanisms that work across agent boundaries, and privilege enforcement that contains failures. Chapter~3 (\textit{How to Govern an Agent}) then develops the policy layer: delegation authorization, identity management, retention requirements, and organizational accountability.
+\Cref{sec:agents2-governance} addresses the architectural patterns that enable governance: logging that spans delegation trees, override mechanisms that work across agent boundaries, and privilege enforcement that contains failures. Chapter~3 then develops the policy layer: delegation authorization, identity management, retention requirements, and organizational accountability.

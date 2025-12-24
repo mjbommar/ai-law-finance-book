@@ -3,7 +3,7 @@
 
 \textbf{Agent.} \textit{Agentic.}
 
-Few terms generate more confusion despite widespread use. While these words appear everywhere—from marketing copy to academic papers—their meanings remain contested and often unclear. Yet despite this definitional chaos, the underlying concepts are deeply intuitive and accessible.
+Few terms generate more confusion despite widespread use. While these words appear everywhere, from marketing copy to academic papers, their meanings remain contested and often unclear. Yet despite this definitional chaos, the underlying concepts are deeply intuitive and accessible.
 
 At heart, agents are simply \textbf{``doers'' with a to-do}. As we unpack this accessible starting point, we will discover more explicit conditions for identification. But this four-word formulation captures something essential: agency requires both goals and the capacity to act toward them.
 
@@ -11,17 +11,17 @@ At heart, agents are simply \textbf{``doers'' with a to-do}. As we unpack this a
 
 The proliferation of ``agentic AI'' makes definitional clarity urgent. Existing work remains fragmented across purpose and discipline: computer scientists cite Russell and Norvig \parencite{russellnorvig2020aima}, philosophers reference Bratman \parencite{bratman1987intention}\glsadd{bdi-architecture}, legal scholars consult the Restatement of Agency \parencite{restatement2006agency}\glsadd{agency-relationship}, and commercial vendors seem untethered by anything other than sales.
 
-Some of this fragmentation reflects genuinely different perspectives, such as whether we recognize agents by their \textit{internal properties} (mental states, intentions) or \textit{external manifestations} (observable behavior, delegated authority)—a spectrum we explore in Section~\ref{sec:disciplines}. While theoretical considerations like these can be useful, it is now most critical that we \textbf{establish a practical framework} to guide communication and coordination.
+Some of this fragmentation reflects genuinely different perspectives, such as whether we recognize agents by their \textit{internal properties} (mental states, intentions) or \textit{external manifestations} (observable behavior, delegated authority); a spectrum we explore in Section~\ref{sec:disciplines}. While theoretical considerations like these can be useful, it is now most critical that we \textbf{establish a practical framework} to guide communication and coordination.
 
-The stakes for getting this right are tangible. By late 2025, courts worldwide had identified over 400 cases involving AI-generated hallucinations\glsadd{hallucination} in legal filings---fabricated citations, fictitious holdings, and nonexistent cases submitted to tribunals. The ABA's Formal Opinion 512 (July 2024) established that attorneys bear full responsibility for verifying AI-generated content, noting that leading legal AI systems ``hallucinate between 17\% and 33\% of the time'' \parencite{aba-formal-opinion-512}.
+The stakes for getting this right are tangible. By late 2025, courts worldwide had identified over 400 cases involving AI-generated hallucinations\glsadd{hallucination} in legal filings including fabricated citations, fictitious holdings, and nonexistent cases submitted to tribunals. The ABA's Formal Opinion 512 (July 2024) established that attorneys bear full responsibility for verifying AI-generated content. The opinion noted that leading legal AI systems ``hallucinate between 17\% and 33\% of the time'' \parencite{aba-formal-opinion-512}.
 
-These failures share a common pattern: attorneys treated single-shot text generators as if they were research tools, when those systems lacked the ability to search authoritative databases, iterate to verify citations, or escalate uncertainty. An agentic legal research system---one exhibiting all six operational properties we introduce below---would validate citations through tool access, confirm holdings through iteration, and flag unverifiable sources through escalation. The distinction between genuinely agentic systems and sophisticated chatbots is not academic; it is essential for professional practice, regulatory compliance, and client protection.
+These failures share a common pattern: attorneys treated single-shot text generators as if they were research tools, when those systems lacked the ability to search authoritative databases, iterate to verify citations, or escalate uncertainty. An agentic legal research system (one exhibiting all six operational properties we introduce below) would validate citations through tool access, confirm holdings through iteration, and flag unverifiable sources through escalation. The distinction between genuinely agentic systems and sophisticated chatbots is not academic; it is essential for professional practice, regulatory compliance, and client protection.
 
-For legal and financial applications, these six operational properties are \textit{necessary but not sufficient}. Professional deployment demands additional safeguards---attribution to authoritative sources, auditable provenance, escalation protocols, and confidentiality controls---that augment rather than replace the core framework. Section~\ref{sec:synthesis} addresses these professional deployment requirements in detail.
+For legal and financial applications, these six operational properties are \textit{necessary but not sufficient}. Professional deployment demands additional safeguards such as attribution to authoritative sources, auditable provenance, escalation protocols, and confidentiality controls that augment rather than replace the core framework. Section~\ref{sec:synthesis} addresses these professional deployment requirements in detail.
 
 Building toward these operational requirements, we organize agency into three levels that correspond to the following questions:
 
-\textbf{Level 1}: What makes \textit{something}—biological or computational—an agent?
+\textbf{Level 1}: What makes \textit{something}, biological or otherwise, an agent?
 
 \textbf{Level 2}: What makes computational systems agentic?
 
@@ -33,7 +33,7 @@ Answering these progressive questions establishes a nested hierarchy with three 
 
 \subsection{Level 1: Minimal Agency}
 
-We begin with the conceptual foundation. What is the absolute minimum required for something to qualify as an agent—whether human, organizational, or computational? Level 1 establishes this baseline, applicable across all domains and technologies.
+We begin with the conceptual foundation. What is the absolute minimum required for something to qualify as an agent, whether human, organizational, or computational? Level 1 establishes this baseline, applicable across all domains and technologies.
 
 \begin{definitionbox}[unbreakable,title={\textbf{Level 1: Agent (Mnemonic: GPA)}}]
 \glsadd{agent}
@@ -44,9 +44,9 @@ We begin with the conceptual foundation. What is the absolute minimum required f
 
 	\textbf{Minimal properties:}
 	\begin{itemize}[nosep,leftmargin=1.5em]
-		\item \textbf{G}oal --- Clear objective or performance criterion
-		\item \textbf{P}erception --- Awareness of environment through sensing
-		\item \textbf{A}ction --- Capability to affect environment
+		\item \textbf{G}oal: Clear objective or performance criterion
+		\item \textbf{P}erception: Awareness of environment through sensing
+		\item \textbf{A}ction: Capability to affect environment
 	\end{itemize}
 \end{definitionbox}
 
@@ -62,9 +62,9 @@ We begin with the conceptual foundation. What is the absolute minimum required f
 
 \textbf{Action (A):}\glsadd{action} Capability to affect environment through actuators such as physical forces, variable modifications, tool invocations, API calls, or command execution. Requires minimal discretion: selecting among at least two possible actions contingent on perceptions.
 
-\textit{Falsification:} If the entity cannot modify its environment, or executes exactly one predetermined sequence regardless of circumstances, it lacks action. The discretion threshold is ``$\geq$2 policies contingent on perceptions.'' Examples that fail: pure sensors (read-only), fixed scripts with zero conditional logic, fully deterministic single-action transformers that apply one complex transformation regardless of input content (even if the transformation itself is sophisticated).
+\textit{Falsification:} If the entity cannot modify its environment, or executes exactly one predetermined sequence regardless of circumstances, it lacks action. The discretion threshold is ``$\geq$2 policies contingent on perceptions.'' Examples that fail: pure sensors (read-only), fixed scripts with zero conditional logic, and single-shot transformers that apply one transformation regardless of input. Sophistication alone does not confer agency; a complex translation model still lacks discretion if it cannot choose among alternative actions based on what it observes.
 
-This trinity forms the conceptual bedrock of agency—equally applicable to humans navigating social contexts, organizations pursuing strategic objectives, biological organisms seeking survival, or computational systems executing tasks. While these three characteristics suffice for theoretical classification, practical deployment demands additional sophistication. The breadth of this definition becomes clear through concrete instances:
+This trinity forms the conceptual bedrock of agency, equally applicable to humans navigating social contexts, organizations pursuing strategic objectives, biological organisms seeking survival, or computational systems executing tasks. While these three characteristics suffice for theoretical classification, practical deployment demands more.
 
 \begin{examplebox}[title={Level 1 Agents in Practice}]
 \begin{itemize}[nosep,leftmargin=1.5em]
@@ -74,13 +74,21 @@ This trinity forms the conceptual bedrock of agency—equally applicable to huma
 \end{itemize}
 \end{examplebox}
 
-These examples span vastly different domains, yet each satisfies the same three-property test. \textbf{Distinguishing agents from non-agents reveals equally critical boundaries.} Consider tools we encounter daily that, despite their utility, fail to meet our criteria. A calculator—whether handheld or embedded in a spreadsheet—transforms inputs into outputs but pursues no objectives of its own; it waits passively for instructions. A legal research database like Westlaw or EDGAR contains vast information and responds to queries, yet it lacks independent goals or the capacity to act on its own initiative. Even a single ChatGPT response, however sophisticated, represents a one-shot generation rather than iterative goal pursuit—the system produces output and stops, without perceiving whether that output succeeded or adapting its approach.
+Readers from philosophy, psychology, or law may find our inclusion of thermostats jarring. Traditional definitions often require more: philosophers may demand intentional mental states or consciousness; psychologists emphasize self-regulation and reflective awareness; legal scholars define agency through consensual fiduciary relationships; economists presuppose self-interested preference orderings. A thermostat satisfies none of these richer criteria.
 
-This baseline framework illuminates the essence of agency, yet professional applications demand more. The gap between a simple thermostat cycling toward a temperature target and an AI system conducting legal research spans more than technological sophistication—it requires architectural elements that ensure reliability, adaptability, and accountability. Legal research tools, portfolio management systems, and document review platforms operate in environments where stakes are high and errors costly. These operational realities shape our expanded framework for deployable agentic systems.
+\begin{keybox}[title={\textbf{A Note on Definitional Breadth}}]
+We adopt a property-based definition deliberately. Following \textcite{dennett1987intentional}'s intentional stance, we treat agency as a predictive attribution: when it is \textit{useful} to describe an entity as pursuing goals, perceiving its environment, and taking action, we call it an agent.
+\end{keybox}
+
+Rather than adjudicating centuries of debate about what agency ``really'' requires, we identify the observable properties that consistently appear where entities exhibit goal-directed behavior and that matter for governance. This low definitional floor is not an oversight; it allows the gradient from minimal agents through agentic systems to AI agents to do meaningful analytical work. The thermostat and the AI legal research assistant are both agents under our framework, but they differ profoundly in autonomy, adaptation, and governance requirements. Those differences, not the shared label, are what matter for professional practice.
+
+These examples span vastly different domains, yet each satisfies the same three-property test. \textbf{Distinguishing agents from non-agents reveals equally critical boundaries.} Consider tools we encounter daily that, despite their utility, fail to meet our criteria. A calculator, whether handheld or embedded in a spreadsheet, transforms inputs into outputs but pursues no objectives of its own; it waits passively for instructions. A legal research database like Westlaw or EDGAR contains vast information and responds to queries, yet it lacks independent goals or the capacity to act on its own initiative. Even a single ChatGPT response, however sophisticated, represents a one-shot generation rather than iterative goal pursuit: the system produces output and stops, without perceiving whether that output succeeded or adapting its approach.
+
+This baseline framework illuminates the essence of agency, yet professional applications demand more. The gap between a simple thermostat cycling toward a temperature target and an AI system conducting legal research spans more than technological sophistication: it requires architectural elements that ensure reliability, adaptability, and accountability. Legal research tools, portfolio management systems, and document review platforms operate in environments where stakes are high and errors costly. These operational realities shape our expanded framework for deployable agentic systems.
 
 \subsection{Operational Definition: Agentic Systems}
 
-While Level 1 establishes what makes something an agent, computational systems in production require three additional properties beyond the minimal three. These six properties together define what we call \keyterm{agentic systems}—the operational standard that bridges conceptual agency and real-world deployment. Both traditional software (Level 2) and AI-powered implementations (Level 3) can achieve this operational standard, though they differ fundamentally in how they realize each property.
+While Level 1 establishes what makes something an agent, computational systems in production require three additional properties beyond the minimal three. These six properties together define what we call \keyterm{agentic systems}: the operational standard that bridges conceptual agency and real-world deployment. Both traditional software (Level 2) and AI-powered implementations (Level 3) can achieve this operational standard, though they differ fundamentally in how they realize each property.
 
 \begin{definitionbox}[unbreakable,title={\textbf{Operational Definition: Agentic System (GPA+IAT)}}]
 \glsadd{agentic-system}
@@ -91,13 +99,13 @@ While Level 1 establishes what makes something an agent, computational systems i
 
 	\textbf{Additional properties beyond Level 1:}
 	\begin{itemize}[nosep,leftmargin=1.5em]
-		\item \textbf{I}teration --- Repeat perceive-act cycles, not single-shot
-		\item \textbf{A}daptation --- Adjust strategy based on feedback/results
-		\item \textbf{T}ermination --- Clear stopping conditions (explicit or implicit)
+		\item \textbf{I}teration: Repeat perceive-act cycles, not single-shot
+		\item \textbf{A}daptation: Adjust strategy based on feedback/results
+		\item \textbf{T}ermination: Clear stopping conditions (explicit or implicit)
 	\end{itemize}
 \end{definitionbox}
 
-Together with the three Level 1 properties, agentic systems exhibit six operational properties: Goal, Perception, Action, Iteration, Adaptation, and Termination. For mnemonic convenience, we write this as \textbf{GPA + IAT}---the foundational three (Goal, Perception, Action) plus the three that distinguish operational systems (Iteration, Adaptation, Termination).
+Together with the three Level 1 properties, agentic systems exhibit six operational properties: Goal, Perception, Action, Iteration, Adaptation, and Termination. For mnemonic convenience, we write this as \textbf{GPA + IAT}, representing the foundational three (Goal, Perception, Action) plus the three that distinguish operational systems (Iteration, Adaptation, Termination).
 
 These six properties emerged from decades of agent research as commonly recognized operational requirements for reliable computational deployment. While not formally proven as minimum necessary, they consistently appear across deployed systems in domains from robotics to enterprise software, reflecting lessons from fielding real-world implementations. Section~\ref{sec:history} traces how each property became recognized as essential through both theoretical development and practical experience.
 
@@ -107,7 +115,9 @@ These six properties emerged from decades of agent research as commonly recogniz
 
 \textit{Falsification:} If the entity processes input once and produces output without maintaining state across cycles, it lacks iteration. Merely repeating the same action without incorporating new observations does not qualify. \textit{Batching vs. iteration:} Batched one-pass pipelines processing multiple items sequentially are not iteration unless the system observes outcomes from earlier items and modifies its approach for later items based on those observations. Examples that fail iteration test: single ChatGPT response (one-shot), batch processors applying identical logic to each item without inter-item learning.
 
-\textbf{Adaptation (A):}\glsadd{adaptation} Strategy modification based on accumulated observations and feedback within a session or task.\footnote{This definition focuses on \textit{session-level adaptation}---modifying behavior within a single task execution based on immediate feedback. This differs from \textit{cross-session learning}, where a system improves through model retraining across multiple tasks (for example, fine-tuning an LLM on user feedback). For our purposes, within-session adaptation is the operational property that distinguishes agentic systems from static tools. In professional contexts (such as procurement or vendor evaluation), be explicit about which type of learning is in scope.} The entity adjusts its approach when initial attempts fail, learns which actions succeed, updates its policy based on results.
+\textbf{Adaptation (A):}\glsadd{adaptation} Strategy modification based on accumulated observations and feedback within a session or task. The entity adjusts its approach when initial attempts fail, learns which actions succeed, updates its policy based on results.
+
+This definition focuses on \textit{session-level adaptation}: modifying behavior within a single task execution based on immediate feedback. This differs from \textit{cross-session learning}, where a system improves through model retraining across multiple tasks (for example, fine-tuning an LLM on user feedback). For our purposes, within-session adaptation is the operational property that distinguishes agentic systems from static tools. In professional contexts (such as procurement or vendor evaluation), be explicit about which type of learning is in scope.
 
 \textit{Falsification:} If the entity applies identical logic regardless of outcomes, or cannot modify its approach when initial strategies fail, it lacks adaptation. Fixed rules that never change based on results do not qualify, even if they handle diverse inputs. Examples: basic thermostats (fixed on/off rules), static pattern matchers, rigid workflows that do not adjust to failures.
 
@@ -117,7 +127,7 @@ These six properties emerged from decades of agent research as commonly recogniz
 
 With all six properties defined, we can identify agentic systems across professional domains:
 
-\begin{examplebox}[title={Agentic Systems in Professional Practice}]
+\begin{examplebox}[title={Agentic Systems in Professional Practice}, breakable=false]
 \begin{itemize}[nosep,leftmargin=1.5em]
 \item \textbf{Legal research assistant}: Iterates through queries, adapts based on results, terminates when scope exhausted
 \item \textbf{Contract analysis}: Iterates clause-by-clause, adapts to document type, terminates with risk report
@@ -132,7 +142,7 @@ This operational framework now raises the implementation question: \textit{How} 
 
 \subsection{Level 2: Traditional Agentic Software}
 
-Level 2 represents the first computational instantiation of agentic systems. These systems achieve all six operational properties through explicit programming—rules, conditional logic, algorithms, and control flow. What defines Level 2 is runtime behavior: decisions flow through programmed logic paths rather than learned models. Whether a system was coded decades ago or yesterday, if its decision-making follows deterministic rules at runtime, it operates at Level 2.
+Level 2 represents the first computational instantiation of agentic systems. These systems achieve all six operational properties through explicit programming: rules, conditional logic, algorithms, and control flow. What defines Level 2 is runtime behavior: decisions flow through programmed logic paths rather than learned models. Whether a system was coded decades ago or yesterday, if its decision-making follows deterministic rules at runtime, it operates at Level 2.
 
 \begin{definitionbox}[unbreakable,title={\textbf{Level 2: Traditional Agentic Software}}]
 \glsadd{agentic-system}
@@ -142,15 +152,15 @@ Level 2 represents the first computational instantiation of agentic systems. The
 
 	\textbf{Additional properties beyond agentic systems:}
 	\begin{itemize}[nosep,leftmargin=1.5em]
-		\item \textit{No new properties --- same 6 as agentic systems}
+		\item \textit{No new properties (same 6 as agentic systems)}
 	\end{itemize}
 \end{definitionbox}
 
-Traditional agentic software uses rules, algorithms, or deterministic logic to implement all six properties. Planning and orchestration are explicitly coded through conditional logic, state machines, or control systems. Level 2 systems can be extremely sophisticated: a conflict checking system might employ graph analysis for relationship detection, fuzzy matching for entity resolution, and adaptive threshold tuning—all implemented through traditional programming techniques. The key architectural characteristic is that decision logic is specified by programmers at design time.
+Traditional agentic software uses rules, algorithms, or deterministic logic to implement all six properties. Planning and orchestration are explicitly coded through conditional logic, state machines, or control systems. Level 2 systems can be extremely sophisticated: a conflict checking system might employ graph analysis for relationship detection, fuzzy matching for entity resolution, and adaptive threshold tuning, all implemented through traditional programming techniques. The key architectural characteristic is that decision logic is specified by programmers at design time.
 
-To illustrate, a conflicts checking system exemplifies Level 2: it has goals (identify potential conflicts), perception (scans firm databases for client/matter relationships), action (flags matches and escalates to ethics committee), iteration (continuous monitoring as new matters are opened), adaptation (adjusts matching thresholds based on false positive rates), and termination (stops when matter is cleared or rejected). The entity achieves these properties through explicitly programmed logic—rules for relationship detection, graph traversal algorithms for indirect conflicts, configurable thresholds for fuzzy name matching.
+To illustrate, a conflicts checking system exemplifies Level 2: it has goals (identify potential conflicts), perception (scans firm databases for client/matter relationships), action (flags matches and escalates to ethics committee), iteration (continuous monitoring as new matters are opened), adaptation (adjusts matching thresholds based on false positive rates), and termination (stops when matter is cleared or rejected). The entity achieves these properties through explicitly programmed logic like rules for relationship detection, graph traversal algorithms for indirect conflicts, and configurable thresholds for fuzzy name matching.
 
-Level 2 systems achieve all six operational properties through traditional software engineering. Their performance depends on design quality, domain expertise, and implementation rigor—not on whether they employ AI/ML techniques. A well-engineered Level 2 system can substantially outperform a poorly designed Level 3 system in reliability, predictability, and effectiveness for its intended domain. Beyond conflicts checking, traditional agentic software appears throughout professional practice:
+Level 2 systems achieve all six operational properties through traditional software engineering. Their performance depends on design quality, domain expertise, and implementation rigor, not on whether they employ AI/ML techniques. A well-engineered Level 2 system can substantially outperform a poorly designed Level 3 system in reliability, predictability, and effectiveness for its intended domain. Beyond conflicts checking, traditional agentic software appears throughout professional practice:
 
 \begin{examplebox}[title={Traditional Agentic Software Examples}]
 \begin{itemize}[nosep,leftmargin=1.5em]
@@ -161,23 +171,23 @@ Level 2 systems achieve all six operational properties through traditional softw
 
 \subsection{Level 3: AI-Powered Agentic Systems}
 
-\glsadd{llm}Level 3 systems use AI/ML—particularly large language models—to manage planning, orchestration, and adaptation. The architectural distinction from Level 2 is straightforward: where Level 2 systems execute explicitly programmed decision logic, Level 3 systems employ neural networks (especially LLMs) or other learned models for these functions. In practice, modern Level 3 systems are typically hybrid: LLMs handle high-level planning and natural language interaction, while traditional code manages structured operations like database queries or API calls. This is what most practitioners mean by ``AI agents.''
+\glsadd{llm}Level 3 systems use AI/ML, particularly large language models, to manage planning, orchestration, and adaptation. The architectural distinction from Level 2 is straightforward: where Level 2 systems execute explicitly programmed decision logic, Level 3 systems employ neural networks (especially LLMs) or other learned models for these functions. In practice, modern Level 3 systems are typically hybrid: LLMs handle high-level planning and natural language interaction, while traditional code manages structured operations like database queries or API calls. This is what most practitioners mean by ``AI agents.''
 
 \begin{definitionbox}[unbreakable,title={\textbf{Level 3: AI-Powered Agentic Systems}}]
 \glsadd{ai-agent}
-	AI-powered agentic systems implement the six operational properties through strategic integration of artificial intelligence—typically neural network models such as large language models (LLMs) and vision-language models (VLMs)—with traditional computational components.
+	AI-powered agentic systems implement the six operational properties through strategic integration of artificial intelligence, typically neural network models such as large language models (LLMs) and vision-language models (VLMs), with traditional computational components.
 
 	\textcolor{border-neutral}{\rule{\linewidth}{0.4pt}}
 
 	\textbf{Additional properties beyond agentic systems:}
 	\begin{itemize}[nosep,leftmargin=1.5em]
-		\item \textit{No new properties --- same 6 as agentic systems}
+		\item \textit{No new properties (same 6 as agentic systems)}
 	\end{itemize}
 \end{definitionbox}
 
-The architectural choice to use AI/ML for planning and orchestration has practical implications. LLMs enable natural language interfaces—users can specify goals conversationally rather than through structured formats. These neural network models handle pattern recognition tasks that would require extensive rule engineering. Yet this approach trades some predictability for flexibility: LLM outputs can vary across runs, and behavior may be harder to audit than explicit rule chains.\glsadd{llm-as-agent} The boundary between Level 2 and Level 3 can blur—is a system using gradient boosting for fraud detection Level 2 or Level 3? Today's practical dividing line focuses on whether LLMs manage high-level planning and orchestration.
+The architectural choice to use AI/ML for planning and orchestration has practical implications. LLMs enable natural language interfaces so users can specify goals conversationally rather than through structured formats. These neural network models handle pattern recognition tasks that would require extensive rule engineering. Yet this approach trades some predictability for flexibility: LLM outputs can vary across runs, and behavior may be harder to audit than explicit rule chains.\glsadd{llm-as-agent} The boundary between Level 2 and Level 3 can blur: is a system using gradient boosting for fraud detection Level 2 or Level 3? Today's practical dividing line focuses on whether LLMs manage high-level planning and orchestration.
 
-Take an AI contract risk analyzer as a Level 3 exemplar. It possesses all six operational properties: goals (identifies and assesses contract risks), perception (reads contract text and clause context), action (flags problematic provisions, generates risk assessments), iteration (reviews document section by section), adaptation (adjusts risk scoring based on clause combinations and jurisdiction), and termination (stops when complete review is done or high-severity risk triggers immediate escalation). The LLM manages high-level planning—deciding which clauses merit detailed analysis, how to interpret ambiguous language, when to flag issues versus when to request human review—while traditional code handles document parsing, clause extraction, jurisdiction lookup, and risk score calculation. This hybrid architecture is typical of Level 3 systems: AI handles interpretation and strategic decisions, traditional programming handles structured data operations. Beyond contract analysis, AI-powered agentic systems are emerging across professional domains:
+Take an AI contract risk analyzer as a Level 3 exemplar. It possesses all six operational properties: goals (identifies and assesses contract risks), perception (reads contract text and clause context), action (flags problematic provisions, generates risk assessments), iteration (reviews document section by section), adaptation (adjusts risk scoring based on clause combinations and jurisdiction), and termination (stops when complete review is done or high-severity risk triggers immediate escalation). The LLM manages high-level planning such as deciding which clauses merit detailed analysis, how to interpret ambiguous language, and when to flag issues versus when to request human review, while traditional code handles document parsing, clause extraction, jurisdiction lookup, and risk score calculation. This hybrid architecture is typical of Level 3 systems: AI handles interpretation and strategic decisions, traditional programming handles structured data operations. Beyond contract analysis, AI-powered agentic systems are emerging across professional domains:
 
 \begin{examplebox}[title={AI-Powered Agentic System Examples}]
 \begin{itemize}[nosep,leftmargin=1.5em]
@@ -238,12 +248,12 @@ While Levels 2 and 3 share identical property requirements, they differ fundamen
 
 \subsection{Key Distinctions}
 
-Having traced the progression from minimal agency (three properties) through agentic systems (six properties) to implementation paradigms (traditional vs. AI), we can now synthesize what this hierarchy reveals. Level 1 establishes conceptual qualification, the operational definition adds production-readiness requirements, and Levels 2--3 distinguish implementation paradigms. This structure clarifies three critical distinctions that cut through definitional confusion:
+Having traced the progression from minimal agency (three properties) through agentic systems (six properties) to implementation paradigms (traditional vs. AI), we can now synthesize what this hierarchy reveals. Level 1 establishes conceptual qualification, the operational definition adds production-readiness requirements, and Levels 2 and 3 distinguish implementation paradigms. This structure clarifies three critical distinctions that cut through definitional confusion:
 
 The critical distinction lies between \textit{properties} and \textit{implementation}. The major jump in capability occurs between Level 1 (three properties) and agentic systems (six properties). Levels 2 and 3, by contrast, have \textit{identical property requirements}, differing only in how those properties are implemented: through explicit rules and logic (Level 2) or through AI/ML models (Level 3).
 
 This hierarchy permits precise terminology. An \textbf{``agent''} (noun) refers to anything that exhibits Level 1's three minimal properties. The adjective \textbf{``agentic''} describes systems meeting all six operational properties at the system level; we may also use it descriptively at the feature or behavior level (e.g., ``agentic behavior'' or ``agentic properties''), but reserve ``agentic system'' for six-of-six conformance. Finally, an \textbf{``AI agent''} is an agentic system specifically powered by AI/ML capabilities (Level 3).
 
-These definitions allow clear exclusions. Compilers and databases lack goals entirely, failing even Level 1's minimal requirements. A single chatbot response, however sophisticated, lacks iteration and therefore does not qualify as an operational agentic system. Traditional ML classifiers—image recognizers, spam filters, sentiment analyzers—lack both iteration and autonomous goals, processing inputs without pursuing objectives across perceive-act cycles. Rule-based expert systems present a more nuanced case: they can be fully agentic (meeting all six operational properties) but are not AI-powered, placing them at Level 2 rather than Level 3.
+These definitions allow clear exclusions. Compilers and databases lack goals entirely, failing even Level 1's minimal requirements. A single chatbot response, however sophisticated, lacks iteration and therefore does not qualify as an operational agentic system. Traditional ML classifiers (image recognizers, spam filters, sentiment analyzers) lack both iteration and autonomous goals, processing inputs without pursuing objectives across perceive-act cycles. Rule-based expert systems present a more nuanced case: they can be fully agentic (meeting all six operational properties) but are not AI-powered, placing them at Level 2 rather than Level 3.
 
 This framework provides scaffolding for the historical and theoretical analysis that follows. Section~\ref{sec:practical} provides a practical decision rubric for immediate application. The remaining sections trace where these definitions came from and why they take this particular form, building toward the professional implications explored in Section~\ref{sec:furtherlearning}.

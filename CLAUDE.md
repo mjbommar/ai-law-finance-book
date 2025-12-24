@@ -422,6 +422,7 @@ Examples:
 ### LaTeX
 ✅ Compiles without errors (`make pdf`)
 ✅ No undefined references (`make validate`)
+✅ No HIGH severity margin violations (`scripts/check_margins.py`)
 ✅ Semantic color names (not legacy)
 ✅ Figures labeled, captioned, referenced
 
@@ -510,6 +511,37 @@ uv run --with rich,typer python scripts/tex_chunks.py chapters/07-agents-part-2/
 ```
 
 All tools output clickable `file:line` locations and support multiple formats: `table` (default), `json`, `jsonl`, `csv`.
+
+### PDF Margin Checker
+
+**`scripts/check_margins.py`** — Detect content bleeding into PDF margins (overfull hboxes, oversized images):
+
+Requires `pillow`, `pypdfium2`, `numpy`, `rich`, `typer` — run with `uv run --with pillow,pypdfium2,numpy,rich,typer`.
+
+```bash
+# Check margins (skip first/last pages as covers, skip top margin for headers)
+uv run --with pillow,pypdfium2,numpy,rich,typer python scripts/check_margins.py check main.pdf --no-top
+
+# Generate annotated debug images for specific pages
+uv run --with pillow,pypdfium2,numpy,rich,typer python scripts/check_margins.py check main.pdf --debug-pages 38,205 --no-top
+
+# Check with custom margins (inches) - matches LaTeX geometry settings
+uv run --with pillow,pypdfium2,numpy,rich,typer python scripts/check_margins.py check main.pdf \
+  --inner 0.75 --outer 0.625 --top 0.7 --bottom 0.8 --no-top
+```
+
+**Features**:
+- Renders PDF pages at configurable DPI and analyzes margin regions for non-white pixels
+- Supports twoside documents (inner/outer margins swap on odd/even pages)
+- Skip zones for headers, footers, and page numbers
+- Severity levels: LOW (<0.5% coverage), MEDIUM (0.5-3%), HIGH (>3%)
+- Debug mode generates annotated PNGs with colored boxes showing violations
+
+**Default settings** (US Trade 6"×9" format):
+- Page size: 6.0" × 9.0"
+- Inner margin: 0.75", Outer margin: 0.625"
+- Top margin: 0.7", Bottom margin: 0.8"
+- Twoside document: enabled
 
 ### Validation Scripts
 

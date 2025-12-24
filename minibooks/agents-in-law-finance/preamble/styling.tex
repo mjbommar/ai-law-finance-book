@@ -10,11 +10,11 @@
 % ============================================================================
 
 \titleformat{\section}
-  {\Large\bfseries\color{primary}}
+  {\fontsize{13pt}{15.6pt}\selectfont\bfseries\color{primary}}
   {\thesection}{1em}{}
 
 \titleformat{\subsection}
-  {\large\bfseries\color{primary}}
+  {\fontsize{11pt}{13.2pt}\selectfont\bfseries\color{primary}}
   {\thesubsection}{1em}{}
 
 \titleformat{\subsubsection}
@@ -26,6 +26,19 @@
   {}{0em}{}[.]
 \titlespacing*{\paragraph}{0pt}{1em}{0.5em}
 
+% --- Section Heading Protection ---
+% Ensure section headings stay with their content by requiring minimum space.
+% Uses \Needspace (capital N) which works correctly with section commands.
+% Values chosen to accommodate heading + at least 3-4 lines of body text.
+\let\originalsection\section
+\renewcommand{\section}{\Needspace{5\baselineskip}\originalsection}
+
+\let\originalsubsection\subsection
+\renewcommand{\subsection}{\Needspace{4\baselineskip}\originalsubsection}
+
+\let\originalsubsubsection\subsubsection
+\renewcommand{\subsubsection}{\Needspace{3\baselineskip}\originalsubsubsection}
+
 % ============================================================================
 % TABLE OF CONTENTS
 % ============================================================================
@@ -34,13 +47,13 @@
 \setcounter{tocdepth}{2}
 
 \renewcommand{\contentsname}{%
-  {\color{primary}\Large\bfseries Contents}%
+  {\color{primary}\normalsize\bfseries Contents}%
 }
 
 % Chapter entries
 \titlecontents{chapter}
   [0em]
-  {\vspace{1em}\large\bfseries}
+  {\vspace{1em}\normalsize\bfseries}
   {\color{primary}\contentslabel{2em}}
   {\color{primary}}
   {\titlerule*[0.75pc]{.}\contentspage}
@@ -81,11 +94,11 @@
       \renewcommand{\arraystretch}{1.15}%
       \small%
       \begin{longtable}{%
-        @{}%
-        >{\raggedright\arraybackslash}p{0.22\textwidth}%
-        >{\arraybackslash}p{0.65\textwidth}%
-        >{\raggedright\arraybackslash}p{0.11\textwidth}%
-        @{}%
+        @{\hspace{2pt}}%
+        >{\raggedright\arraybackslash}p{0.19\textwidth}%
+        >{\arraybackslash}p{0.60\textwidth}%
+        >{\raggedleft\arraybackslash}p{0.09\textwidth}%
+        @{\hspace{2pt}}%
       }%
     }%
     {%

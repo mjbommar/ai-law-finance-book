@@ -13,7 +13,7 @@ With architectural literacy, you can evaluate vendor claims with precision. When
 
 You can specify requirements in terms that technical teams understand. Rather than vague requests for ``AI that helps with research,'' you can describe perception tools for specific databases, action controls with appropriate approval gates, memory systems with client isolation, and escalation triggers for low-confidence situations. Shared vocabulary bridges the gap between professional requirements and technical implementation.
 
-You can demand governance artifacts, not governance promises. If a vendor cannot demonstrate what the agent accessed, what it did, and why it stopped, the system is not ready for regulated practice. The governance surface requirements from \Cref{sec:agents2-governance-surface}---structured logging, override mechanisms, state snapshots, least privilege enforcement, reliable escalation---are your checklist for what must be demonstrable before deployment.
+You can demand governance artifacts, not governance promises. If a vendor cannot demonstrate what the agent accessed, what it did, and why it stopped, the system is not ready for regulated practice. The governance surface requirements from \Cref{sec:agents2-governance-surface} (structured logging, override mechanisms, state snapshots, least privilege enforcement, reliable escalation) are your checklist for what must be demonstrable before deployment.
 
 % ----------------------------------------------------------------------------
 % Calibration and Judgment
@@ -22,17 +22,17 @@ You can demand governance artifacts, not governance promises. If a vendor cannot
 \subsection{Tradeoffs Require Judgment}
 \label{sec:agents2-tradeoffs-judgment}
 
-Every architectural capability involves tradeoffs. Richer memory improves context but increases latency and cost. Aggressive escalation improves safety but reduces throughput. Tighter approval gates reduce risk but slow execution. There are no universally correct answers---only choices calibrated to your context, risk tolerance, and professional obligations.
+Every architectural capability involves tradeoffs. Richer memory improves context but increases latency and cost. Aggressive escalation improves safety but reduces throughput. Tighter approval gates reduce risk but slow execution. There are no universally correct answers, only choices calibrated to your context, risk tolerance, and professional obligations.
 
 Current limitations make this calibration essential. Today's agents perform well on constrained, well-defined tasks but struggle as complexity increases. The ``reliability cliff'' discussed in \Cref{sec:agents2-reliability} is real: success rates degrade as tasks grow longer and more open-ended. These limitations argue for scoping agents appropriately, adding checkpoints, and designing for human oversight.
 
-For now, agents are best treated as capable assistants that amplify human judgment---handling the routine so professionals can focus on the consequential. As technology improves, the tradeoffs will shift, but the architectural questions will remain relevant.
+For now, agents are best treated as capable assistants that amplify human judgment: handling the routine so professionals can focus on the consequential. As technology improves, the tradeoffs will shift, but the architectural questions will remain relevant.
 
 % ----------------------------------------------------------------------------
 % Bridge to Chapter 3
 % ----------------------------------------------------------------------------
 
-Architecture enables governance without determining governance. The governance surface provides technical means---logging, overrides, state management, privileges, escalation---but policy determines how those means are used. How should approval thresholds be set? Who is accountable when an agent errs? What documentation must be maintained? These questions require policy, regulation, and professional responsibility to answer.
+Architecture enables governance without determining governance. The governance surface provides technical means, such as logging, overrides, state management, privileges, and escalation, but policy determines how those means are used. How should approval thresholds be set? Who is accountable when an agent errs? What documentation must be maintained? These questions require policy, regulation, and professional responsibility to answer.
 
 Chapter~3 addresses these questions directly, providing a five-layer regulatory framework and a dimensional approach to calibrating controls. You are equipped to engage with those frameworks because you now understand what architecture can make observable and enforceable.
 

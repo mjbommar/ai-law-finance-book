@@ -5,7 +5,7 @@ This chapter established the conceptual foundations for understanding agency. Yo
 
 \subsection{Why These Foundations Matter}
 
-The distinction between marketing labels and architectural reality has direct professional consequences. These foundations enable \textbf{clearer evaluation}: when vendors claim ``AI agents,'' you can demand evidence of iteration, adaptation, and termination---not just conversational ability. They enable \textbf{better coordination}: scholars and practitioners can specify which properties their systems exhibit rather than relying on ambiguous labels. They enable \textbf{informed regulation}: policies can target measurable capabilities rather than product categories that shift with each press release. And they enable \textbf{accountability}: procurement shifts from marketing promises to verified capabilities when you can test claims against the six-property framework.
+The distinction between marketing labels and architectural reality has direct professional consequences. These foundations enable \textbf{clearer evaluation}: when vendors claim ``AI agents,'' you can demand evidence of iteration, adaptation, and termination, not just conversational ability. They enable \textbf{better coordination}: scholars and practitioners can specify which properties their systems exhibit rather than relying on ambiguous labels. They enable \textbf{informed regulation}: policies can target measurable capabilities rather than product categories that shift with each press release. And they enable \textbf{accountability}: procurement shifts from marketing promises to verified capabilities when you can test claims against the six-property framework.
 
 The stakes are particularly high in professional domains like law and finance, where autonomous action by AI systems raises questions of liability, professional responsibility, and public safety. Without shared definitions linking architectural properties to operational requirements, we cannot write enforceable contracts, establish professional standards, or hold entities accountable when things go wrong.
 
@@ -13,7 +13,7 @@ The stakes are particularly high in professional domains like law and finance, w
 
 With conceptual foundations established, the practical questions become urgent: How do you actually build an agentic system? And once built, how do you govern it responsibly?
 
-\Cref{ch:how-to-design} addresses the first question through ten design decisions every agentic system must resolve. How does the agent get activated? How does it understand what you want? How does it gather information and take action? How does it remember across sessions? How does it plan multi-step tasks? How does it know when to stop---and when to ask for help? How do multiple agents coordinate? And critically, how do you design systems that \textit{can} be governed? Each question maps directly to the six properties introduced here: triggers and intent extraction implement goals; perception tools implement sensing; action controls implement environmental effects; memory systems enable iteration and adaptation; termination conditions and escalation pathways complete the operational requirements.
+\Cref{ch:how-to-design} addresses the first question through ten design decisions every agentic system must resolve. How does the agent get activated? How does it understand what you want? How does it gather information and take action? How does it remember across sessions? How does it plan multi-step tasks? How does it know when to stop, and when to ask for help? How do multiple agents coordinate? And critically, how do you design systems that \textit{can} be governed? Each question maps directly to the six properties introduced here: triggers and intent extraction implement goals; perception tools implement sensing; action controls implement environmental effects; memory systems enable iteration and adaptation; termination conditions and escalation pathways complete the operational requirements.
 
 \Cref{ch:how-to-govern} addresses the second question by mapping the regulatory landscape onto the governance controls that deployed agents must satisfy. Where \Cref{ch:how-to-design} establishes how to build governance-aware architecture, \Cref{ch:how-to-govern} establishes what that architecture must accomplish: risk assessment, human oversight, audit logging, explainability, vendor management, and incident response. The chapter examines how to calibrate controls to autonomy levels, assign organizational accountability, and navigate liability when agents cause harm.
 
@@ -21,21 +21,15 @@ Together, these three chapters form a complete arc: understanding what agents ar
 
 \subsection{Further Learning}
 
-For deeper exploration of the foundations synthesized in this chapter:
+For practitioners seeking deeper engagement with these foundations:
 
 \begin{itemize}
-  \item \textbf{\textcite{bratman1987intention}, Intention, Plans, and Practical Reason.} The philosophical foundation for the Belief-Desire-Intention (BDI) model underlying modern agent architectures.
+  \item \textbf{\textcite{restatement2006agency}, Restatement (Third) of Agency.} The authoritative legal framework for agency relationships, fiduciary duties, and attribution---essential for liability analysis and professional responsibility questions.
 
-  \item \textbf{\textcite{bandura1989human}, Human Agency in Social Cognitive Theory.} Psychological foundations for agency, including self-regulation and the interplay between cognition and action.
+  \item \textbf{\textcite{jensen1976theory}, Theory of the Firm.} Principal-agent economics explaining information asymmetry, incentive alignment, and monitoring costs; directly applicable to governance design.
 
-  \item \textbf{\textcite{restatement2006agency}, Restatement (Third) of Agency.} The authoritative legal framework for agency relationships, fiduciary duties, and attribution---critical for liability and professional responsibility.
+  \item \textbf{\textcite{wooldridge2009introduction}, An Introduction to MultiAgent Systems.} Coordination, negotiation, and communication between agents; practical guidance for enterprise deployments involving multiple specialized agents.
 
-  \item \textbf{\textcite{jensen1976theory}, Theory of the Firm.} Foundational principal-agent economics explaining information asymmetry, incentive alignment, and monitoring costs.
-
-  \item \textbf{\textcite{russell2010artificial}, Artificial Intelligence: A Modern Approach.} Comprehensive treatment of agent architectures from simple reflex agents to learning agents.
-
-  \item \textbf{\textcite{wooldridge2009introduction}, An Introduction to MultiAgent Systems.} Coordination, negotiation, and communication between agents---essential for enterprise deployments.
-
-  \item \textbf{\textcite{xi2023rise}, The Rise and Potential of Large Language Model Based Agents.} Contemporary survey bridging historical agent concepts with current LLM-based implementations.
+  \item \textbf{\textcite{xi2023rise}, The Rise and Potential of Large Language Model Based Agents.} Contemporary survey connecting classical agent concepts to current LLM-based implementations.
 \end{itemize}
 

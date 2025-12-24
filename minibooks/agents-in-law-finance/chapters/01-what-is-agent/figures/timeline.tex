@@ -3,15 +3,18 @@
 % Expanded canvas with 8 distinct visual markers
 
 % Full-page rotated figure for better readability
-% Uses sidewaysfigure from rotating package (reader rotates book 90° counterclockwise)
-% Scaled to 0.85\textheight to leave margin for binding
-\begin{sidewaysfigure}
+% Uses manual rotation (reader rotates book 90° counterclockwise, top toward spine)
+% Scaled to 0.80\textheight to leave margin for binding
+\begin{figure}[p]
 \centering
-\resizebox{0.85\textheight}{!}{%
+\rotatebox{90}{%
+\parbox{0.80\textheight}{%
+\centering
+\resizebox{0.80\textheight}{!}{%
 \begin{tikzpicture}[
     node distance=0.7cm,
     decadebox/.style={
-        font=\bfseries\large,
+        font=\bfseries\large\sffamily,
         text=white,
         fill=definition-dark,
         rounded corners=4pt,
@@ -21,7 +24,7 @@
         drop shadow={shadow scale=1.1, shadow xshift=0.5pt, shadow yshift=-0.5pt}
     },
     event/.style={
-        font=\small,
+        font=\small\sffamily,
         align=center,
         text width=3.8cm,
         rounded corners=3pt,
@@ -93,14 +96,14 @@
     }
 ]
 
-% Timeline header
-\node[font=\bfseries\large\color{primary}, anchor=west] at (0, 10.5) {Evolution of Agent Definitions (1957--2025)};
+% Timeline header (shifted right 0.3 for margin balance)
+\node[font=\bfseries\large\sffamily\color{primary}, anchor=west] at (0.3, 10.5) {Evolution of Agent Definitions (1957--2025)};
 
-% Horizontal timeline line - OPTIMIZED WIDTH
-\draw[timeline, rounded corners=1pt] (0.5, 9.8) -- (22.5, 9.8);
+% Horizontal timeline line - OPTIMIZED WIDTH (shifted right 0.3)
+\draw[timeline, rounded corners=1pt] (0.8, 9.8) -- (22.8, 9.8);
 
-% 1950s-1960s - Column 1
-\node[decadebox] (d50) at (2,9.3) {1950s--60s};
+% 1950s-1960s - Column 1 (shifted right 0.3)
+\node[decadebox] (d50) at (2.3,9.3) {1950s--60s};
 \node[event, phil, below=0.5cm of d50] (e57) {\textbf{1957} Anscombe\\ Intention};
 \node[event, law, below=0.5cm of e57] (e58) {\textbf{1958} Restatement\\ of the Law of Agency (2nd)};
 \node[event, phil, below=0.5cm of e58] (e63) {\textbf{1963} Davidson\\ Causal Theory};
@@ -108,8 +111,8 @@
 % Connecting lines from decade to events
 \draw[border-neutral, line width=0.5pt, opacity=0.3] (d50.south) -- (e57.north);
 
-% 1970s-1980s - Column 2
-\node[decadebox] (d70) at (7,9.3) {1970s--80s};
+% 1970s-1980s - Column 2 (shifted right 0.3)
+\node[decadebox] (d70) at (7.3,9.3) {1970s--80s};
 \node[event, psych, below=0.5cm of d70] (e74) {\textbf{1974} Milgram\\ Agentic State};
 \node[event, econ, below=0.5cm of e74] (e76) {\textbf{1976} Jensen \& Meckling\\ Principal-Agent};
 \node[event, cog, below=0.5cm of e76] (e86) {\textbf{1986} Minsky\\ Society of Mind};
@@ -118,8 +121,8 @@
 
 \draw[border-neutral, line width=0.5pt, opacity=0.3] (d70.south) -- (e74.north);
 
-% 1990s - The computational revolution - Column 3
-\node[decadebox] (d90) at (12,9.3) {1990s};
+% 1990s - The computational revolution - Column 3 (shifted right 0.3)
+\node[decadebox] (d90) at (12.3,9.3) {1990s};
 \node[event, cs, below=0.5cm of d90] (e91) {\textbf{1991} Shoham\\ AGENT0, AOP};
 \node[event, cs, below=0.5cm of e91] (e94) {\textbf{1994} Maes\\ Software Agents};
 \node[event, ai, below=0.5cm of e94] (e95a) {\textbf{1995} Russell \& Norvig\\ Perception-Action};
@@ -129,16 +132,16 @@
 
 \draw[border-neutral, line width=0.5pt, opacity=0.3] (d90.south) -- (e91.north);
 
-% 2000s-2010s - Column 4
-\node[decadebox] (d00) at (17,9.3) {2000s--10s};
+% 2000s-2010s - Column 4 (shifted right 0.3)
+\node[decadebox] (d00) at (17.3,9.3) {2000s--10s};
 \node[event, ai, below=0.5cm of d00] (e01) {\textbf{2001} AOSE Roadmap\\ Software Agents};
 \node[event, complex, below=0.5cm of e01] (e02) {\textbf{2002} Bonabeau\\ Agent-Based Models};
 \node[event, law, below=0.5cm of e02] (e06) {\textbf{2006} Restatement (Third)\\ Updated Law};
 
 \draw[border-neutral, line width=0.5pt, opacity=0.3] (d00.south) -- (e01.north);
 
-% 2020s - Modern convergence - Column 5
-\node[decadebox] (d20) at (22,9.3) {2020s};
+% 2020s - Modern convergence - Column 5 (shifted right 0.3)
+\node[decadebox] (d20) at (22.3,9.3) {2020s};
 \node[event, ai, below=0.5cm of d20] (e22) {\textbf{2022} Yao et al.\\ ReAct};
 \node[event, ai, below=0.5cm of e22] (e23) {\textbf{2023} Park et al.\\ Generative Agents};
 \node[event, ai, below=0.5cm of e23] (e24) {\textbf{2024} IBM, Google\\ Agentic AI};
@@ -152,40 +155,43 @@
 }
 
 % LEGEND with 8 DISTINCT VISUAL MARKERS
-% Positioned with generous spacing from timeline for clarity
-\node[font=\small\bfseries, anchor=north west, color=primary] at (0.5, -2.5) {Legend (8 Disciplines):};
+% Positioned with generous spacing from timeline for clarity (shifted right 0.3)
+\node[font=\small\bfseries\sffamily, anchor=north west, color=primary] at (0.8, -2.5) {Legend (8 Disciplines):};
 
-% Row 1: Philosophy, Psychology, Law, Economics
-\node[rectangle, fill=bg-definition, draw=border-definition, line width=1.5pt, minimum width=0.6cm, minimum height=0.4cm] at (0.8, -3.3) {};
-\node[font=\footnotesize, anchor=west] at (1.3, -3.3) {Philosophy};
+% Row 1: Philosophy, Psychology, Law, Economics (shifted right 0.3)
+\node[rectangle, fill=bg-definition, draw=border-definition, line width=1.5pt, minimum width=0.6cm, minimum height=0.4cm] at (1.1, -3.3) {};
+\node[font=\footnotesize\sffamily, anchor=west] at (1.6, -3.3) {Philosophy};
 
-\node[rectangle, fill=bg-definition, draw=border-definition, line width=1.5pt, dashed, dash pattern=on 3pt off 2pt, minimum width=0.6cm, minimum height=0.4cm] at (5, -3.3) {};
-\node[font=\footnotesize, anchor=west] at (5.5, -3.3) {Psychology};
+\node[rectangle, fill=bg-definition, draw=border-definition, line width=1.5pt, dashed, dash pattern=on 3pt off 2pt, minimum width=0.6cm, minimum height=0.4cm] at (5.3, -3.3) {};
+\node[font=\footnotesize\sffamily, anchor=west] at (5.8, -3.3) {Psychology};
 
-\node[rectangle, fill=bg-key, draw=border-key, line width=1.5pt, minimum width=0.6cm, minimum height=0.4cm] at (9.5, -3.3) {};
-\node[font=\footnotesize, anchor=west] at (10, -3.3) {Law};
+\node[rectangle, fill=bg-key, draw=border-key, line width=1.5pt, minimum width=0.6cm, minimum height=0.4cm] at (9.8, -3.3) {};
+\node[font=\footnotesize\sffamily, anchor=west] at (10.3, -3.3) {Law};
 
-\node[rectangle, fill=bg-key, draw=border-key, line width=1.5pt, dashed, dash pattern=on 3pt off 2pt, minimum width=0.6cm, minimum height=0.4cm] at (13.5, -3.3) {};
-\node[font=\footnotesize, anchor=west] at (14, -3.3) {Economics};
+\node[rectangle, fill=bg-key, draw=border-key, line width=1.5pt, dashed, dash pattern=on 3pt off 2pt, minimum width=0.6cm, minimum height=0.4cm] at (13.8, -3.3) {};
+\node[font=\footnotesize\sffamily, anchor=west] at (14.3, -3.3) {Economics};
 
-% Row 2: Cognitive Sci, Complex Systems, Comp Sci, AI
-\node[rectangle, fill=bg-definition, draw=border-definition, line width=1.5pt, dotted, minimum width=0.6cm, minimum height=0.4cm] at (0.8, -4.1) {};
-\node[font=\footnotesize, anchor=west] at (1.3, -4.1) {Cognitive Sci};
+% Row 2: Cognitive Sci, Complex Systems, Comp Sci, AI (shifted right 0.3)
+\node[rectangle, fill=bg-definition, draw=border-definition, line width=1.5pt, dotted, minimum width=0.6cm, minimum height=0.4cm] at (1.1, -4.1) {};
+\node[font=\footnotesize\sffamily, anchor=west] at (1.6, -4.1) {Cognitive Sci};
 
-\node[rectangle, fill=bg-key, draw=border-key, line width=1.5pt, dotted, minimum width=0.6cm, minimum height=0.4cm] at (5, -4.1) {};
-\node[font=\footnotesize, anchor=west] at (5.5, -4.1) {Complex Systems};
+\node[rectangle, fill=bg-key, draw=border-key, line width=1.5pt, dotted, minimum width=0.6cm, minimum height=0.4cm] at (5.3, -4.1) {};
+\node[font=\footnotesize\sffamily, anchor=west] at (5.8, -4.1) {Complex Systems};
 
-\node[rectangle, fill=bg-definition, draw=border-definition, line width=1.5pt, double, double distance=0.5pt, minimum width=0.6cm, minimum height=0.4cm] at (9.5, -4.1) {};
-\node[font=\footnotesize, anchor=west] at (10, -4.1) {Comp Sci};
+\node[rectangle, fill=bg-definition, draw=border-definition, line width=1.5pt, double, double distance=0.5pt, minimum width=0.6cm, minimum height=0.4cm] at (9.8, -4.1) {};
+\node[font=\footnotesize\sffamily, anchor=west] at (10.3, -4.1) {Comp Sci};
 
-\node[rectangle, fill=bg-key, draw=border-key, line width=2.5pt, minimum width=0.6cm, minimum height=0.4cm] at (13.5, -4.1) {};
-\node[font=\footnotesize, anchor=west] at (14, -4.1) {AI};
+\node[rectangle, fill=bg-key, draw=border-key, line width=2.5pt, minimum width=0.6cm, minimum height=0.4cm] at (13.8, -4.1) {};
+\node[font=\footnotesize\sffamily, anchor=west] at (14.3, -4.1) {AI};
 
 \end{tikzpicture}%
 }% end resizebox
 
-\vspace{1em}
+\vspace{0.8em}
 
-\caption{Timeline of key milestones in agent definitions across eight disciplines (1957--2025). The figure traces the intellectual evolution of ``agency'' from philosophical accounts of intentionality (1950s--80s) through the computational revolution (1990s) and toward modern convergence around LLM-based agentic systems (2020s). Each discipline has a distinct visual marker combining border patterns (solid, dashed, dotted, double, thick) with color families: blue for theoretical foundations (philosophy, psychology, cognitive science, computer science) and orange for applied domains (law, economics, complex systems, AI engineering).}
+\captionsetup{width=0.78\textheight}
+\captionof{figure}{Timeline of key milestones in agent definitions across eight disciplines (1957--2025), tracing the evolution from philosophical foundations through computational revolution to modern LLM-based convergence. Blue tones denote theoretical disciplines; orange denotes applied domains. Border patterns distinguish individual fields.}
 \label{fig:timeline}
-\end{sidewaysfigure}
+}% end parbox
+}% end rotatebox
+\end{figure}

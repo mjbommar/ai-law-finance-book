@@ -10,11 +10,11 @@
         fill=white,
         minimum width=2.2cm,
         minimum height=1.5cm,
-        font=\small,
+        font=\small\sffamily,
         align=center
     },
-    metric value/.style={font=\large\bfseries},
-    metric label/.style={font=\scriptsize, text=gray-600},
+    metric value/.style={font=\large\bfseries\sffamily},
+    metric label/.style={font=\scriptsize\sffamily, text=gray-600},
     alert box/.style={
         rounded corners=3pt,
         draw=#1,
@@ -22,7 +22,7 @@
         fill=#1!8,
         text width=9.5cm,
         inner sep=6pt,
-        font=\footnotesize
+        font=\footnotesize\sffamily
     },
     section header/.style={
         font=\small\bfseries\sffamily,
@@ -144,7 +144,7 @@
 \node[status indicator, fill=gray-500] at ([xshift=-0.3cm]a5.west) {};
 
 % Legend
-\node[font=\scriptsize, text=gray-600, anchor=north west] at (-5.0,-10.3) {
+\node[font=\scriptsize\sffamily, text=gray-600, anchor=north west] at (-5.0,-10.3) {
     \tikz\node[status indicator, fill=example-base] {}; Normal~~
     \tikz\node[status indicator, fill=key-base] {}; Elevated~~
     \tikz\node[status indicator, fill=caution-base] {}; Critical~~

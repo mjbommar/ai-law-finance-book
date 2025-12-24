@@ -31,7 +31,7 @@
 \usepackage[
   papersize={6in,9in},
   inner=0.75in,       % Gutter margin (for binding)
-  outer=0.625in,      % Outside margin
+  outer=0.5in,        % Outside margin
   top=0.7in,
   bottom=0.8in,
   footskip=0.35in
@@ -58,6 +58,26 @@
 % Auto-detects engine and uses fontspec with LuaLaTeX
 \usepackage{libertinus}
 \usepackage{libertinust1math} % Math support for Libertinus
+
+% Match monospaced font to Libertinus for consistent kerning/sizing
+% Fall back safely if the mono font is not installed.
+\ifxetex
+  \IfFontExistsTF{Libertinus Mono}
+    {\setmonofont{Libertinus Mono}[Scale=MatchLowercase]}
+    {\IfFontExistsTF{LibertinusMono}
+      {\setmonofont{LibertinusMono}[Scale=MatchLowercase]}
+      {\IfFileExists{LibertinusMono-Regular.otf}
+        {\setmonofont{LibertinusMono-Regular.otf}[Scale=MatchLowercase]}
+        {\setmonofont{Latin Modern Mono}[Scale=MatchLowercase]}}}
+\else\ifluatex
+  \IfFontExistsTF{Libertinus Mono}
+    {\setmonofont{Libertinus Mono}[Scale=MatchLowercase]}
+    {\IfFontExistsTF{LibertinusMono}
+      {\setmonofont{LibertinusMono}[Scale=MatchLowercase]}
+      {\IfFileExists{LibertinusMono-Regular.otf}
+        {\setmonofont{LibertinusMono-Regular.otf}[Scale=MatchLowercase]}
+        {\setmonofont{Latin Modern Mono}[Scale=MatchLowercase]}}}
+\fi\fi
 
 % Typography enhancements
 \usepackage{microtype}  % Improved typography and spacing
@@ -170,6 +190,7 @@
 \definecolor{gray-400}{RGB}{173,181,189}        % Medium-light gray - subtle dividers
 \definecolor{gray-300}{RGB}{210,215,220}        % Light gray - soft borders
 \definecolor{gray-200}{RGB}{233,236,239}        % Very light gray - hover states
+\definecolor{gray-50}{RGB}{252,253,254}         % Near white - ultra subtle backgrounds
 \definecolor{gray-100}{RGB}{247,248,250}        % Near white - subtle backgrounds
 
 % --- WARM NEUTRALS ---

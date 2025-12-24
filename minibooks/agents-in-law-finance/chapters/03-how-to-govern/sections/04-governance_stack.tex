@@ -1,5 +1,5 @@
 % ============================================================================
-% The Governance Stack — Chapter 3 - How to Govern an Agent
+% The Governance Stack---Chapter 3 - How to Govern an Agent
 % Purpose: Synthesize regulatory landscape into five-layer framework
 % Label: sec:agents3-governance-stack
 % ============================================================================
@@ -7,7 +7,7 @@
 \section{The Governance Stack}
 \label{sec:agents3-governance-stack}
 
-With dimensional calibration principles established in Section~\ref{sec:agents3-dimensional}, we now map the overlapping obligations in the regulatory landscape those controls must satisfy. Where Chapter~1 established what agents are and Chapter~2 addressed how to design them, this chapter examines how to govern them in practice. Organizations deploying agentic systems in regulated domains face a complex, overlapping web of legal and professional obligations. There is no single ``AI governance law'' that comprehensively addresses all requirements. Instead, governance emerges from the interaction of five layers: foundational law, professional and ethical obligations, sector-specific regulation, AI-specific regulation, and voluntary governance frameworks. Understanding this layered structure—and why no single layer suffices—is essential for designing governance proportionate to organizational risk.
+With dimensional calibration principles established in Section~\ref{sec:agents3-dimensional}, we now map the overlapping obligations in the regulatory landscape those controls must satisfy. Where Chapter~1 established what agents are and Chapter~2 addressed how to design them, this chapter examines how to govern them in practice. Organizations deploying agentic systems in regulated domains face a complex, overlapping web of legal and professional obligations. There is no single ``AI governance law'' that comprehensively addresses all requirements. Instead, governance emerges from the interaction of five layers: foundational law, professional and ethical obligations, sector-specific regulation, AI-specific regulation, and voluntary governance frameworks. Understanding this layered structure (and why no single layer suffices) is essential for designing governance proportionate to organizational risk.
 
 \subsection{Five-Layer Framework}
 \label{sec:agents3-five-layers}
@@ -15,7 +15,7 @@ With dimensional calibration principles established in Section~\ref{sec:agents3-
 We organize governance obligations into five layers, each building on the foundation below:
 
 \begin{enumerate}
-\item \textbf{Foundational Law}: Broadly applicable legal obligations governing data protection, discrimination, consumer protection, and contracts. This layer encompasses not only statutes—such as the General Data Protection Regulation (GDPR), Equal Credit Opportunity Act (ECOA), and state consumer protection statutes—but also tort law as well as other common law principles. Common law doctrines provide protections that predate and operate independently of statutory schemes and include:
+\item \textbf{Foundational Law}: Broadly applicable legal obligations governing data protection, discrimination, consumer protection, and contracts. This layer encompasses not only statutes (such as the General Data Protection Regulation (GDPR), Equal Credit Opportunity Act (ECOA), and state consumer protection statutes) but also tort law as well as other common law principles. Common law doctrines provide protections that predate and operate independently of statutory schemes and include:
 \begin{itemize}
 \item Defamation law constrains AI-generated content that makes false statements of fact about identifiable individuals.
 \item Negligence principles may impose duties of care when deploying systems that foreseeably cause harm.
@@ -23,9 +23,9 @@ We organize governance obligations into five layers, each building on the founda
 \end{itemize}
 These legal foundations establish baselines that apply regardless of whether AI is involved.
 
-\item \textbf{Professional and Ethical Obligations}: Duties imposed on licensed professionals—attorneys, investment advisers, auditors, accountants—by their governing bodies, bar associations, or regulatory agencies. These obligations are often more stringent than general law and impose fiduciary duties, confidentiality requirements, and competence standards.
+\item \textbf{Professional and Ethical Obligations}: Duties imposed on licensed professionals (attorneys, investment advisers, auditors, accountants) by their governing bodies, bar associations, or regulatory agencies. These obligations are often more stringent than general law and impose fiduciary duties, confidentiality requirements, and competence standards.
 
-\item \textbf{Sector-Specific Regulation}: Rules tailored to particular industries—banking, securities, insurance, healthcare—that address operational risks, supervision, and consumer protection in those domains. Examples include Federal Reserve guidance on model risk management (SR 11-7), Financial Industry Regulatory Authority (FINRA) rules on automated systems, and Public Company Accounting Oversight Board (PCAOB) auditing standards.
+\item \textbf{Sector-Specific Regulation}: Rules tailored to particular industries (banking, securities, insurance, healthcare) that address operational risks, supervision, and consumer protection in those domains. Examples include Federal Reserve guidance on model risk management (SR 11-7), Financial Industry Regulatory Authority (FINRA) rules on automated systems, and Public Company Accounting Oversight Board (PCAOB) auditing standards.
 
 \item \textbf{AI-Specific Regulation}: Laws and regulations explicitly targeting artificial intelligence systems. The European Union's AI Act is the most comprehensive example, establishing risk-based requirements for high-risk AI systems. U.S. states (Colorado, California, New York City) are enacting their own AI-specific rules addressing bias, transparency, and impact assessments.
 
@@ -39,10 +39,8 @@ No single framework fully satisfies all governance requirements. The EU AI Act e
 
 \begin{table}[htbp]
 \centering
-\caption{Summary of the Five-Layer Governance Framework}
-\label{tab:agents3-five-layers}
 \small
-\begin{tabular}{>{\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}p{3.5cm} >{\raggedright\arraybackslash}p{4.3cm}}
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.0cm} >{\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}p{3.8cm}}
 \toprule
 \textbf{Layer} & \textbf{Source} & \textbf{Key Examples} \\
 \midrule
@@ -57,6 +55,8 @@ No single framework fully satisfies all governance requirements. The EU AI Act e
 5. Voluntary Frameworks & Standards bodies & NIST AI RMF, ISO 42001, SOC 2 \\
 \bottomrule
 \end{tabular}
+\caption{Summary of the Five-Layer Governance Framework}
+\label{tab:agents3-five-layers}
 \end{table}
 
 \input{chapters/03-how-to-govern/figures/fig-five-layer-framework}
@@ -69,9 +69,9 @@ The remainder of this section examines each layer in detail, identifying key req
 Foundational law provides the baseline for governance, applicable to all organizations regardless of industry or use case. Three domains are especially relevant:
 
 \paragraph{Data Protection and Privacy: GDPR Article 22 and Stateful Agentic Systems}
-The GDPR establishes rights and obligations for processing personal data of EU residents. Article 22 addresses automated decision-making: individuals have the right not to be subject to decisions based solely on automated processing that produce legal or similarly significant effects \parencite{gdpr-article-22}. While not an absolute prohibition—automated decisions are permitted with explicit consent, contractual necessity, or legal authorization—Article 22 requires organizations to implement ``suitable measures'' to safeguard the data subject's rights, including the right to obtain human intervention and contest the decision.
+The GDPR establishes rights and obligations for processing personal data of EU residents. Article 22 addresses automated decision-making: individuals have the right not to be subject to decisions based solely on automated processing that produce legal or similarly significant effects \parencite{gdpr-article-22}. While not an absolute prohibition (automated decisions are permitted with explicit consent, contractual necessity, or legal authorization), Article 22 requires organizations to implement ``suitable measures'' to safeguard the data subject's rights, including the right to obtain human intervention and contest the decision.
 
-\textbf{Agentic-Specific Challenge—Stateful Decision Accumulation}: Article 22's human intervention requirement becomes complex for stateful agentic systems that accumulate context across multiple cycles. Generic AI guidance suggests ``add a button for human review,'' but this is insufficient for agentic systems. Building on Chapter~1's analysis of iteration and adaptation, meaningful human intervention requires access to the system's accumulated internal state: how the agent's understanding evolved across iterations, what adaptations occurred, and what termination logic triggered the final decision. Without comprehensive state logging (capturing perception, action, and rationale at each cycle), human reviewers cannot meaningfully intervene or contest decisions because they lack visibility into how the agent reached its conclusion.
+\textbf{Agentic-Specific Challenge: Stateful Decision Accumulation}: Article 22's human intervention requirement becomes complex for stateful agentic systems that accumulate context across multiple cycles. Generic AI guidance suggests ``add a button for human review,'' but this is insufficient for agentic systems. Building on Chapter~1's analysis of iteration and adaptation, meaningful human intervention requires access to the system's accumulated internal state: how the agent's understanding evolved across iterations, what adaptations occurred, and what termination logic triggered the final decision. Without comprehensive state logging (capturing perception, action, and rationale at each cycle), human reviewers cannot meaningfully intervene or contest decisions because they lack visibility into how the agent reached its conclusion.
 
 \emph{Governance Implication}: For agentic systems subject to GDPR Article 22, human intervention controls must be paired with state logging requirements (cross-cycle audit trails). Organizations cannot satisfy Article 22 by providing post-hoc review without the ability to reconstruct the agent's iterative decision process. This links directly to the State Logging control discussed in Section~\ref{sec:agents3-audit-logging}.
 
@@ -80,11 +80,11 @@ Article 32 requires appropriate technical and organizational security measures, 
 For organizations operating globally, GDPR compliance often sets the de facto standard. Even organizations without EU operations may face GDPR obligations if they offer services to EU residents or monitor their behavior.
 
 \paragraph{Anti-Discrimination and Fair Lending: ECOA and Process-Based Discrimination}
-The Equal Credit Opportunity Act (ECOA) prohibits credit discrimination based on race, color, religion, national origin, sex, marital status, age, or receipt of public assistance \parencite{ecoa}. Regulation B, which implements ECOA, requires creditors to provide ``principal reasons'' for adverse credit decisions \parencite{ecoa-reg-b}. This explainability requirement is more specific than generic AI transparency guidance: applicants must receive concrete, understandable reasons tied to the factors that most significantly influenced the decision.
+The Equal Credit Opportunity Act (ECOA) prohibits credit discrimination based on race, color, religion, national origin, sex, marital status, age, or receipt of public assistance \parencite{ecoa}. Regulation B, which implements ECOA, requires creditors to provide ``principal reasons'' for adverse credit decisions \parencite{ecoa-reg-b}. This explainability requirement is more specific than generic AI transparency guidance; applicants must receive concrete, understandable reasons tied to the factors that most significantly influenced the decision.
 
 ECOA applies regardless of whether the decision was made by a human, an algorithm, or a hybrid system. Courts have applied \emph{disparate impact} theory: even facially neutral criteria can violate ECOA if they disproportionately harm protected classes without adequate business justification.
 
-\textbf{Agentic-Specific Challenge—Process-Based Discrimination}: Traditional fairness testing focuses on \emph{outcome parity} (do protected classes receive approvals at comparable rates?). For agentic credit underwriting systems that iteratively investigate applications across multiple cycles, discrimination can emerge through the \emph{investigation process} itself, not just final decisions. An agentic system might:
+\textbf{Agentic-Specific Challenge: Process-Based Discrimination}: Traditional fairness testing focuses on \emph{outcome parity} (do protected classes receive approvals at comparable rates?). For agentic credit underwriting systems that iteratively investigate applications across multiple cycles, discrimination can emerge through the \emph{investigation process} itself, not just final decisions. An agentic system might:
 \begin{itemize}
 \item Adapt to request more verification cycles from applicants with characteristics correlated with protected classes (e.g., shorter U.S. employment tenure as a proxy for national origin).
 \item Impose higher process burdens (more documentation requests, longer investigation timelines) on protected groups, causing application abandonment even if the system would ultimately approve.
@@ -98,7 +98,7 @@ ECOA applies regardless of whether the decision was made by a human, an algorith
 \item Application abandonment rates during multi-cycle investigation (ensure verification burdens do not disproportionately affect protected classes).
 \end{itemize}
 
-Systems require controls ensuring that dynamic investigation strategies do not introduce prohibited discrimination—a challenge that does not arise with single-shot credit scoring models. See Section~\ref{sec:agents3-monitoring-incident} for a worked example of process-based discrimination detected in agentic underwriting.
+Systems require controls ensuring that dynamic investigation strategies do not introduce prohibited discrimination, a challenge that does not arise with single-shot credit scoring models. See Section~\ref{sec:agents3-monitoring-incident} for a worked example of process-based discrimination detected in agentic underwriting.
 
 \paragraph{Consumer Protection}
 State consumer protection statutes (e.g., Unfair and Deceptive Acts and Practices laws) prohibit misleading representations and unfair business practices. If an AI chatbot misrepresents its capabilities, provides inaccurate information, or fails to disclose material limitations, the organization may face consumer protection enforcement regardless of whether the misrepresentation was intentional or the result of a model hallucination.
@@ -112,7 +112,7 @@ Licensed professionals face heightened obligations that governance systems must 
 Most U.S. jurisdictions have adopted versions of the American Bar Association's Model Rules of Professional Conduct. Three rules are especially salient for AI governance:
 
 \begin{itemize}
-\item \textbf{Rule 1.1 (Competence)}: An attorney must provide competent representation, requiring ``the legal knowledge, skill, thoroughness and preparation reasonably necessary for the representation.'' ABA Formal Opinion 512 (July 2024) clarifies that competence includes understanding AI tools' capabilities and limitations \parencite{aba-formal-opinion-512}. Attorneys cannot delegate legal analysis to AI without independent verification.
+\item \textbf{Rule 1.1 (Competence)}: An attorney must provide competent representation, requiring ``the legal knowledge, skill, thoroughness and preparation reasonably necessary for the representation.'' ABA Formal Opinion 512 (July 2024) clarifies that competence includes understanding AI tools' capabilities and limitations \parencite{aba-formal-opinion-512}; attorneys cannot delegate legal analysis to AI without independent verification.
 
 \item \textbf{Rule 1.6 (Confidentiality)}: An attorney must not reveal information relating to representation of a client unless the client gives informed consent. Using AI tools that transmit client data to third-party vendors, train models on client information, or store data insecurely may violate confidentiality obligations. Organizations must assess vendor data handling practices and obtain client consent where necessary.
 
@@ -132,13 +132,13 @@ Rule 5.3 addresses supervision of nonlawyer assistants, a framework some jurisdi
 
 FINRA (Financial Industry Regulatory Authority) Rule 2111 imposes a similar suitability obligation on broker-dealers. Rule 3110 requires firms to supervise associated persons and establish procedures to ensure compliance. For AI systems that generate investment recommendations or execute trades, governance must include supervisory review procedures, monitoring for suitability violations, and escalation protocols.
 
-\paragraph{Audit and Accounting: Independence and Professional Skepticism}
+\paragraph{Audit and Accounting: Independence and Skepticism}
 The AICPA Code of Professional Conduct and PCAOB auditing standards impose strict independence and competence requirements on auditors:
 
 \begin{itemize}
-\item \textbf{Independence}: Auditors must maintain both independence in fact and independence in appearance. If an AI tool is provided by the audit client, an affiliate, or a vendor with financial ties to the client, independence may be impaired. The SEC and PCAOB closely scrutinize auditor-provided tools that could create management decision-making or self-review threats.
+\item \textbf{Independence}: Auditors must maintain both independence in fact and independence in appearance. If an AI tool is provided by the audit client, an affiliate, or a vendor with financial ties to the client, independence may be impaired; the SEC and PCAOB closely scrutinize auditor-provided tools that could create management decision-making or self-review threats.
 
-\item \textbf{Professional Skepticism}: PCAOB Auditing Standard 1015 requires auditors to exercise professional skepticism—a questioning mind and critical assessment of audit evidence. Auditors cannot accept AI outputs uncritically; they must understand the tool's methodology, validate its logic, and assess whether results are consistent with other evidence.
+\item \textbf{Professional Skepticism}: PCAOB Auditing Standard 1015 requires auditors to exercise professional skepticism: a questioning mind and critical assessment of audit evidence. Auditors cannot accept AI outputs uncritically; they must understand the tool's methodology, validate its logic, and assess whether results are consistent with other evidence.
 
 \item \textbf{Documentation}: AS 1215 (Audit Documentation) requires auditors to document the nature, timing, extent, and results of audit procedures. If AI is used for sampling, risk assessment, or analytical procedures, the workpapers must explain the tool's logic, parameters, and the auditor's rationale for relying on its output \parencite{pcaob-as1215}.
 \end{itemize}
@@ -151,13 +151,13 @@ These professional obligations are non-delegable. Governance systems must operat
 Sector regulators impose industry-tailored requirements that general frameworks do not address:
 
 \paragraph{Banking: Model Risk Management}
-The Federal Reserve, Office of the Comptroller of the Currency (OCC), and Federal Deposit Insurance Corporation (FDIC) issued joint guidance SR 11-7 on model risk management \parencite{fed-sr11-7}. SR 11-7 applies broadly to model risk management in banking. Key requirements include:
+The Federal Reserve, Office of the Comptroller of the Currency (OCC), and Federal Deposit Insurance Corporation (FDIC) issued SR 11-7 on model risk management \parencite{fed-sr11-7}. SR 11-7 applies broadly to model risk management in banking. Key requirements include:
 
 \begin{itemize}
 \item \textbf{Model Inventory}: Maintain a comprehensive inventory of models, classified by risk.
 \item \textbf{Independent Validation}: Models must be validated by a function independent of the model's development and use. Validation includes conceptual soundness review, ongoing monitoring, and outcomes analysis.
 \item \textbf{Model Governance}: Establish board and senior management oversight, clear roles and responsibilities, and policies for model development, implementation, and use.
-\item \textbf{Documentation}: Maintain complete documentation of model logic, data sources, assumptions, limitations, and validation results.
+\item \textbf{Documentation}: Maintain complete documentation of model logic, data sources, assumptions, limitations, and validation.
 \end{itemize}
 
 \textbf{Application to Agentic Systems}: For agentic systems deployed in banking (e.g., iterative credit underwriting agents that gather information across multiple cycles, adapt criteria based on discovered patterns, and escalate edge cases), SR 11-7 requires documentation of all six operational properties. Unlike traditional one-shot credit models that execute fixed logic, agentic systems must document iteration logic (when does the system gather more data?), adaptation mechanisms (how do criteria evolve?), and termination conditions (when does it escalate to humans?).
@@ -182,7 +182,7 @@ The PCAOB has not issued AI-specific guidance, but existing auditing standards a
 \item Documentation of adaptation mechanisms: When and why does the system adjust risk assessments or expand sample sizes?
 \item Documentation of termination criteria: What triggers the system to conclude its work or escalate to human auditors?
 \item Understanding the tool's methodology and assumptions across all six GPA+IAT properties.
-\item Professional skepticism maintained throughout—auditors cannot delegate professional judgment to autonomous systems.
+\item Professional skepticism maintained throughout; auditors cannot delegate professional judgment to autonomous systems.
 \end{itemize}
 
 AS 2315 (Audit Sampling) requires auditors to design samples that provide a reasonable basis for conclusions. Agentic sampling systems must document how iteration and adaptation enhance (rather than compromise) statistical validity.
@@ -212,13 +212,13 @@ The EU AI Act, which entered into force in August 2024, establishes a risk-based
 \item \textbf{Limited-Risk and Minimal-Risk Systems}: Lower-risk systems face transparency obligations (e.g., chatbots must disclose they are AI) but not the full high-risk requirements.
 \end{itemize}
 
-Penalties for non-compliance are severe: up to €35~million or 7\% of global annual turnover for prohibited practices; up to €15~million or 3\% for high-risk system violations. Organizations operating in or serving EU markets must assess whether their agentic systems fall within high-risk categories and implement Article 9--15 requirements.
+Penalties for non-compliance are severe: up to €35~million or 7\% of global annual turnover for prohibited practices, and up to €15~million or 3\% for high-risk system violations. Organizations operating in or serving EU markets must assess whether their agentic systems fall within high-risk categories and implement Article 9--15 requirements.
 
 \paragraph{U.S. State and Local AI Laws}
 In the absence of comprehensive federal AI legislation, U.S. states and cities are enacting targeted rules:
 
 \begin{itemize}
-\item \textbf{Colorado AI Act (SB 24-205)}: Effective January 1, 2026, Colorado's law prohibits algorithmic discrimination—deployment of high-risk AI systems that result in unlawful differential treatment or impact based on protected classifications \parencite{colorado-ai-act}. Deployers must conduct impact assessments documenting the system's purpose, data sources, intended benefits, known limitations, and measures to mitigate discrimination. A rebuttable presumption of compliance applies if deployers complete a reasonable impact assessment in good faith.
+\item \textbf{Colorado AI Act (SB 24-205)}: Effective January 1, 2026, Colorado's law prohibits algorithmic discrimination: deployment of high-risk AI systems that result in unlawful differential treatment or impact based on protected classifications \parencite{colorado-ai-act}. Deployers must conduct impact assessments documenting the system's purpose, data sources, intended benefits, known limitations, and measures to mitigate discrimination. A rebuttable presumption of compliance applies if deployers complete a reasonable impact assessment in good faith.
 
 \item \textbf{New York City Local Law 144 (Automated Employment Decision Tools)}: Effective since July 2023, NYC requires employers using AI for hiring or promotion to conduct annual bias audits, publish summary results, and notify candidates that an automated tool is in use. Employers must also allow candidates to request alternative evaluation processes.
 
@@ -286,11 +286,11 @@ Despite structural differences, all governance frameworks converge on seven comm
 \begin{enumerate}
 \item \textbf{Risk Assessment and Management}: Identify, assess, prioritize, and mitigate AI-related risks throughout the system lifecycle. Risk assessment is the foundation for all subsequent governance activities.
 
-\item \textbf{Human Oversight}: Implement oversight mechanisms proportionate to system autonomy and risk. Human-in-the-loop (pre-approval for high-stakes decisions), human-on-the-loop (monitoring with intervention capability), or human-in-command (strategic oversight with emergency stop authority).
+\item \textbf{Human Oversight}: Implement oversight mechanisms proportionate to system autonomy and risk: human-in-the-loop (pre-approval for high-stakes decisions), human-on-the-loop (monitoring with intervention capability), or human-in-command (strategic oversight with emergency stop authority).
 
 \item \textbf{Audit Logging and Traceability}: Maintain tamper-evident logs that capture inputs, outputs, decisions, and human interventions. Logs must enable reconstruction of decisions for audit, investigation, and regulatory review.
 
-\item \textbf{Explainability and Transparency}: Provide stakeholders—users, auditors, regulators—with understandable information about how the system operates, what factors influence decisions, and what limitations exist. Explainability techniques must be validated for faithfulness (reflects actual model logic), completeness (material factors included), and usefulness (enables informed decisions).
+\item \textbf{Explainability and Transparency}: Provide stakeholders (users, auditors, regulators) with understandable information about how the system operates, what factors influence decisions, and what limitations exist. Explainability techniques must be validated for faithfulness (reflects actual model logic), completeness (material factors included), and usefulness (enables informed decisions).
 
 \item \textbf{Vendor Management}: Assess, monitor, and manage third-party AI vendors. Vendor due diligence, contract negotiation, ongoing monitoring, and escalation procedures are essential because vendor risks cascade into organizational liability.
 

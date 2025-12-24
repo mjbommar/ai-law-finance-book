@@ -64,12 +64,14 @@ Capture for each citation: title, authors, venue/body, date, stable URL/DOI, and
 - For code/data claims, add minimal runnable artifacts (script or notebook) or clearly mark as conceptual.
 - Keep drafts LaTeX‑ready; write section stubs with labels and TODOs rather than leaving placeholders in prose.
 - Use `scripts/tex_*.py` tools to analyze prose quality (see [CLAUDE.md](CLAUDE.md) for usage).
+- Use `scripts/check_margins.py` to detect content bleeding into PDF margins (overfull hboxes, oversized images).
 
 ## Quality Gates (PR checklist)
 - [ ] Compiles without error (`make pdf`), no undefined refs (`make validate`).
 - [ ] Conforms to [`docs/style-guide.md`](docs/style-guide.md); consistent person/voice and tense.
 - [ ] Claims are cited; time‑sensitive items have dates.
 - [ ] Figures/tables labeled, referenced, and captioned; alt text present.
+- [ ] No HIGH severity margin violations (`scripts/check_margins.py check main.pdf --no-top`).
 - [ ] No problematic data or licenses; sources have clear reuse rights or are referenced, not embedded.
 
 ## Commit Hygiene

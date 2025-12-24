@@ -13,7 +13,7 @@
 
 \textit{How does an agent make things happen?} A junior associate's role extends beyond research to producing work product. They draft memos, send emails, file documents, and schedule meetings. A trader's role extends beyond analysis to execution. They enter orders, route trades, and confirm allocations. Value derives from action, not just observation.
 
-Agentic systems face the same imperative. Where Chapter~1 distinguished perception (observing the world) from action (changing it), we now examine how to design and govern action capabilities. An agent that only reads---searching databases, retrieving documents, analyzing information---produces no deliverable. To complete tasks, agents must \textit{act}: generate documents, send communications, update systems, or execute transactions. This action capability transforms agents from passive research tools into systems that deliver concrete work product.
+Agentic systems face the same imperative. Where Chapter~1 distinguished perception (observing the world) from action (changing it), we now examine how to design and govern action capabilities. An agent that only reads (searching databases, retrieving documents, analyzing information) produces no deliverable. To complete tasks, agents must \textit{act}: generate documents, send communications, update systems, or execute transactions. This action capability transforms agents from passive research tools into systems that deliver concrete work product.
 
 \begin{definitionbox}[title={Action Tools}, breakable=false]
 \glsadd{action}
@@ -33,17 +33,17 @@ Before examining specific action tools, we establish the conceptual foundations 
 
 \paragraph{Actions as State Transitions}
 
-From a logical perspective, actions are state transitions: operations that move the world from one configuration to another. Before the filing, the motion was not on the court docket; after the filing, it is. Before the trade, the portfolio held one set of positions; after the trade, it holds another. This framing---common in computer science, philosophy, and AI planning research---highlights that actions have preconditions that must hold before they can execute and postconditions that describe the world after they complete.
+From a logical perspective, actions are state transitions: operations that move the world from one configuration to another. Before the filing, the motion was not on the court docket; after the filing, it is. Before the trade, the portfolio held one set of positions; after the trade, it holds another. This framing, which is common in computer science, philosophy, and AI planning research, highlights that actions have preconditions that must hold before they can execute and postconditions that describe the world after they complete.
 
-This state-transition view raises a crucial question that philosophers and AI researchers call the \keyterm{frame problem}: when an action occurs, what exactly changes, and what stays the same \parencite{mccarthy1969frame}? Filing a document changes the court record, but it should not change the client's contact information, the matter's billing status, or the contents of unrelated files. The frame problem is surprisingly difficult to solve in general, but well-designed action tools address it by making their effects explicit---specifying what they modify, what they preserve, and what conditions must hold for the action to succeed.
+This state-transition view raises a crucial question that philosophers and AI researchers call the \keyterm{frame problem}: when an action occurs, what exactly changes, and what stays the same \parencite{mccarthy1969frame}? Filing a document changes the court record, but it should not change the client's contact information, the matter's billing status, or the contents of unrelated files. The frame problem is surprisingly difficult to solve in general, but well-designed action tools address it by making their effects explicit: specifying what they modify, what they preserve, and what conditions must hold for the action to succeed.
 
 \paragraph{Performative Actions}
 
-Some actions are \textit{performative} in the sense developed by philosophers of language \parencite{austin1962speech}: they do not merely describe or report on the world but constitute changes to it. When a judge says ``I sentence you to five years,'' the utterance does not describe a sentencing---it \textit{is} the sentencing. When parties sign a contract, the signatures do not report that an agreement exists---they bring the agreement into existence.
+Some actions are \textit{performative} in the sense developed by philosophers of language \parencite{austin1962speech}: they do not merely describe or report on the world but constitute changes to it. When a judge says ``I sentence you to five years,'' the utterance does not describe a sentencing; it \textit{is} the sentencing. When parties sign a contract, the signatures do not report that an agreement exists; they bring the agreement into existence.
 
 Many professional actions share this performative character. Filing a motion is not a report about legal status; it is an act that changes legal status. Executing a trade is not an observation about ownership; it is a transfer of ownership. Sending a legal opinion creates reliance that may give rise to liability.
 
-Large language models are fundamentally text generators. In most domains, generated text is relatively harmless because words do not change the world: a recipe for cake does not create a cake. The text merely describes---action requires something more. Law and finance are different.
+Large language models are fundamentally text generators. In most domains, generated text is relatively harmless because words do not change the world: a recipe for cake does not create a cake. The text merely describes; action requires something more. Law and finance are different.
 
 \begin{cautionbox}[title={Text Is Action in Law and Finance}]
 In professional practice, text often \textit{is} action. A contract clause creates binding obligations. A court filing changes legal status. A trade order transfers ownership. An email to opposing counsel may waive privilege or create estoppel. The gap between ``saying'' and ``doing'' that protects most LLM applications collapses here.
@@ -56,14 +56,14 @@ This performative quality explains why action governance must be stricter than p
 Computer science formalizes an important property of operations that matters greatly for agentic systems.
 
 \begin{definitionbox}[title={Idempotency}, breakable=false]
-An operation is \keyterm{idempotent} if performing it multiple times produces the same result as performing it once. Reading a file is idempotent---reading ten times leaves the file unchanged. Retrieving a case from Westlaw is idempotent. But sending an email is not idempotent: sending the same message ten times produces ten emails in the recipient's inbox. Executing a trade is not idempotent: executing the same order ten times produces ten separate transactions.
+An operation is \keyterm{idempotent} if performing it multiple times produces the same result as performing it once. Reading a file is idempotent; reading ten times leaves the file unchanged. Retrieving a case from Westlaw is idempotent. But sending an email is not idempotent: sending the same message ten times produces ten emails in the recipient's inbox. Executing a trade is not idempotent: executing the same order ten times produces ten separate transactions.
 \end{definitionbox}
 
-Idempotency matters enormously for error recovery and system reliability. When an agent's connection drops mid-operation, or when a timeout occurs before confirmation arrives, the agent faces a difficult question: did the action complete? For idempotent operations, the answer does not matter---the agent can safely retry. For non-idempotent operations, retry might cause duplicate actions with serious consequences: double payments, duplicate filings, repeated client communications. Robust action tools must either be designed for idempotency from the start---typically by using unique transaction identifiers that allow the system to detect and reject duplicates---or must provide explicit confirmation mechanisms that let the agent verify whether the action completed before deciding whether to retry.
+Idempotency matters enormously for error recovery and system reliability. When an agent's connection drops mid-operation, or when a timeout occurs before confirmation arrives, the agent faces a difficult question: did the action complete? For idempotent operations, the answer does not matter; the agent can safely retry. For non-idempotent operations, retry might cause duplicate actions with serious consequences, such as double payments, duplicate filings, or repeated client communications. Robust action tools must either be designed for idempotency from the start (typically by using unique transaction identifiers that allow the system to detect and reject duplicates) or must provide explicit confirmation mechanisms that let the agent verify whether the action completed before deciding whether to retry.
 
 \paragraph{Implications for Tool Design}
 
-These conceptual foundations have practical implications for how we design and evaluate action tools. Tools should document their preconditions (what must be true before the action can execute), their postconditions (what will be true after successful execution), and their effects on system state (what changes and what remains unchanged). Tools should indicate whether they are idempotent and, if not, what mechanisms exist to prevent duplicate execution. Tools should distinguish between actions that are truly performative---creating new legal or financial realities---and those that merely update internal records. These distinctions inform the governance frameworks developed throughout this section.
+These conceptual foundations have practical implications for how we design and evaluate action tools. Tools should document their preconditions (what must be true before the action can execute), their postconditions (what will be true after successful execution), and their effects on system state (what changes and what remains unchanged). Tools should indicate whether they are idempotent and, if not, what mechanisms exist to prevent duplicate execution. Tools should distinguish between actions that are truly performative (creating new legal or financial realities) and those that merely update internal records. These distinctions inform the governance frameworks developed throughout this section.
 
 % ----------------------------------------------------------------------------
 % Action Tool Categories
@@ -114,7 +114,7 @@ Reversibility dictates oversight structure. Examine how you delegate to a junior
 \end{table}
 
 \begin{keybox}[title={Reversibility Determines Governance}, breakable=false]
-The reversibility of an action directly determines the appropriate level of oversight. Fully reversible actions (research, drafting) can proceed with post-hoc review. Irreversible actions (trades, wire transfers) require multi-party approval before execution. This mapping is not abstract---it operationalizes the professional judgment that experienced practitioners apply instinctively when delegating work.
+The reversibility of an action directly determines the appropriate level of oversight. Fully reversible actions (research, drafting) can proceed with post-hoc review. Irreversible actions (trades, wire transfers) require multi-party approval before execution. This mapping is not abstract; it operationalizes the professional judgment that experienced practitioners apply instinctively when delegating work.
 \end{keybox}
 
 The following subsections operationalize these oversight tiers.
@@ -226,15 +226,28 @@ Circuit breakers transform runaway failures into controlled pauses, buying time 
 \subsection{Evaluation}
 \label{sec:agents2-action-eval}
 
-When evaluating agentic systems, assess action capabilities against professional standards.
+Action evaluation differs fundamentally from perception evaluation. Perception errors are internal: the agent retrieved wrong information, but no external harm occurred. Action errors are external: the agent filed wrong documents, sent wrong communications, or executed wrong transactions. The consequences escape your control. This asymmetry, introduced at the start of this section, should shape how you evaluate action capabilities.
 
-\textbf{Inventory:} Map all available action tools against workflow requirements. Verify that no "unnecessary" tools are enabled (Least Privilege).
+The organizing question is whether governance matches reversibility. Consider how you would evaluate delegation to a junior associate. For reversible work (research, drafting), you review output quality. For partially reversible work (internal communications), you spot-check and monitor. For irreversible work (filings, client communications, transactions), you verify that approval gates are in place and functioning. The same logic applies to agents.
 
-\textbf{Classification:} Verify that each tool is correctly classified by reversibility. Ensure that "delete database" is not classified as "fully reversible."
+\textit{Classification accuracy} is the foundation. Every action tool must be correctly classified along the reversibility spectrum. The most dangerous error is misclassification: treating an irreversible action as reversible and allowing it to proceed without appropriate approval. Verify that filing tools, transaction tools, and external communication tools are all flagged for pre-approval. Verify that the system cannot be tricked into treating a high-stakes action as routine.
 
-\textbf{Controls:} Confirm that approval gates exist for all irreversible actions. Verify that approvers receive sufficient context. Check authentication and audit logging.
+\textit{Approval workflow alignment} ensures that oversight matches risk. Single-approver patterns should govern routine irreversible actions. Multi-party patterns should govern high-exposure actions. Escalating patterns should adjust authority based on magnitude. For each action category, trace the approval path and confirm it matches the framework in \Cref{sec:agents2-approval}.
 
-\textbf{Safety:} Test rate limits and circuit breakers. Simulate a "runaway agent" scenario to ensure the system locks down. Verify rollback procedures: if an action fails, can you recover?
+\textit{Defense-in-depth verification} confirms that security controls are layered, not isolated. Authentication should prevent unauthorized agents from acting. Authorization should limit each agent to its assigned scope. Input validation should reject malformed requests. Approval gates should catch errors before execution. Audit logging should capture context for post-hoc review. Test each layer independently; then test whether failures in one layer are caught by others.
+
+\textit{Failure-mode testing} addresses the unique risks of non-idempotent actions. What happens when a connection drops mid-transaction? Does the system detect duplicates? Do circuit breakers actually trip under simulated runaway conditions? Do rate limits actually pause execution when thresholds are reached? Passive documentation review cannot answer these questions. Active testing must.
+
+\begin{practicebox}[title={\textbf{Action Capability Checklist}},breakable=false]
+\begin{itemize}[leftmargin=1.5em,nosep]
+\item[$\square$] \textbf{Reversibility classification:} Each tool correctly classified; performative actions (filings, trades, external communications) flagged for pre-approval
+\item[$\square$] \textbf{Approval workflows:} Appropriate pattern (single, multi-party, escalating) mapped to each action category based on risk
+\item[$\square$] \textbf{Operational safeguards:} Rate limits, circuit breakers, and duplicate detection tested under failure conditions
+\item[$\square$] \textbf{Audit and recovery:} Every action logged with full context; rollback procedures documented for each reversibility tier
+\end{itemize}
+\end{practicebox}
+
+In law and finance, text is action. A contract clause creates obligations. A filing changes legal status. A trade order transfers ownership. This performative quality demands that action evaluation be treated as seriously as you would treat oversight of any process that creates binding legal or financial consequences. The goal is not to confirm that controls exist on paper but to confirm they function when the agent attempts something it should not do.
 
 % ----------------------------------------------------------------------------
 % Connection to Other Questions
@@ -244,4 +257,4 @@ Action tools are where agentic systems create real-world consequences. Governanc
 
 Perception risks (accessing wrong data) are internal. Action risks (sending wrong emails, executing wrong trades) are external and potentially irreversible. This section established the architectural controls: the Reversibility Framework, approval workflows, and circuit breakers.
 
-\Cref{sec:agents2-memory} addresses memory: how agents maintain context across sessions and learn from experience. Later, \Cref{sec:agents2-escalation} examines when agents should \textit{not} act---recognizing situations that require human decision-making. The interplay between action capability and escalation judgment is central to safety. These capabilities---action controls, memory, and escalation judgment---are then integrated into the governance architecture developed in \Cref{sec:agents2-governance}. As Chapter~3 (\textit{How to Govern an Agent}) emphasizes, governance policy without governance-aware architecture is unenforceable; the controls established in this section provide the foundation that policy requires.
+\Cref{sec:agents2-memory} addresses memory: how agents maintain context across sessions and learn from experience. Later, \Cref{sec:agents2-escalation} examines when agents should \textit{not} act, recognizing situations that require human decision-making. The interplay between action capability and escalation judgment is central to safety. These capabilities (action controls, memory, and escalation judgment) are then integrated into the governance architecture developed in \Cref{sec:agents2-governance}. As Chapter~3 emphasizes, governance policy without governance-aware architecture is unenforceable; the controls established in this section provide the foundation that policy requires.

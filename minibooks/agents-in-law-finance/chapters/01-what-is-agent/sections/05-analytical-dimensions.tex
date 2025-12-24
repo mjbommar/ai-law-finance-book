@@ -38,8 +38,8 @@ The Restatement (Second) of Agency (1958) exemplifies this end: agents execute t
 \paragraph{Learning Loop Owners (High Autonomy)}
 \textcite{suttonbarto1998rl}'s reinforcement learning agents experiment with actions and update policies from reward signals without human step-by-step guidance. The agent owns the exploration-exploitation trade-off.
 
-\paragraph{Tool Orchestrators (Very High Autonomy)}
-Modern tool-use APIs (2025), whether implemented through AI/ML or traditional logic, choose when and how to invoke tools\glsadd{tool-orchestration}, integrating outputs into their reasoning loops. Contemporary LLM frameworks provide one implementation approach for this architectural pattern, ``independently accomplish[ing] tasks on behalf of users,'' planning, sequencing, and completing multi-step workflows before reporting back.
+\paragraph{Tool Orchestrators (Very High)}
+Modern tool-use APIs (2025) choose when and how to invoke tools\glsadd{tool-orchestration}, integrating outputs into their reasoning loops. Contemporary LLM frameworks provide one implementation approach for this architectural pattern, ``independently accomplish[ing] tasks on behalf of users,'' planning, sequencing, and completing multi-step workflows before reporting back.
 
 \bigskip
 
@@ -71,7 +71,7 @@ Table~\ref{tab:autonomy} summarizes this progression.
 
 This dimension correlates with but differs from technological capability. Rule-based expert systems can exhibit moderate autonomy (goal-directed loops), while capable neural networks, including LLMs, operating in single-shot mode exhibit none. Autonomy is architectural, not merely a function of model sophistication.
 
-\textbf{Autonomy and Governance:} The autonomy level directly determines governance requirements. Low-autonomy agents (delegated proxies, contract-bound delegates) operate under tight principal control with lighter oversight burdens---the principal validates each step or constrains choices through explicit contracts. High-autonomy agents (tool orchestrators, independent finishers) make consequential decisions with minimal intervention, demanding mandatory precommit limits (resource budgets, scope boundaries), explicit escalation triggers (confidence thresholds, high-stakes decisions), and robust audit trails.
+\textbf{Autonomy and Governance:} The autonomy level directly determines governance requirements. Low-autonomy agents (delegated proxies, contract-bound delegates) operate under tight principal control with lighter oversight burdens: the principal validates each step or constrains choices through explicit contracts. High-autonomy agents (tool orchestrators, independent finishers) make consequential decisions with minimal intervention, demanding mandatory precommit limits (resource budgets, scope boundaries), explicit escalation triggers (confidence thresholds, high-stakes decisions), and robust audit trails.
 \glsadd{escalation}\glsadd{tools} \textit{Governance principle:} Oversight rigor must scale with autonomy level. An agent that independently orchestrates tools and completes multi-step tasks requires explicit termination mechanisms, human-in-the-loop checkpoints for irreversible actions, and clear accountability mapping. These safeguards are unnecessary for agents executing predefined scripts under direct supervision.
 
 \subsection{Entity Frames}
@@ -79,15 +79,13 @@ This dimension correlates with but differs from technological capability. Rule-b
 Agent definitions often talk past each other because they quietly assume different kinds of \keyterm{entities}\glsadd{entity-frame}. We identify three clusters:
 
 \paragraph{Human-Centered}
-These definitions privilege individual humans and their cognition or morality. \textcite{anscombe1957intention}'s intentional action explores agency as practical knowledge held by persons. \textcite{milgram1974obedience}'s agentic state examines how people respond to authority. \textcite{bandura1989human}'s human agency emphasizes internal cognitive machinery---intentionality, forethought, self-reactiveness, self-reflectiveness. The hallmark questions: \textit{What intentions animate the person? How is responsibility assigned?}
+These definitions privilege individual humans and their cognition or morality. \textcite{anscombe1957intention}'s intentional action explores agency as practical knowledge held by persons. \textcite{milgram1974obedience}'s agentic state examines how people respond to authority. \textcite{bandura1989human}'s human agency emphasizes internal cognitive machinery such as intentionality, forethought, self-reactiveness, and self-reflectiveness. The hallmark questions: \textit{What intentions animate the person? How is responsibility assigned?}
 
 \paragraph{Institutional/Hybrid}
 These definitions situate agency in socio-technical collectives, such as humans embedded in contracts, firms, or organizational structures. The Restatement of Agency (1958) defines the principal-agent pair, not isolated individuals. \textcite{jensen1976theory}'s economic model examines ``manager-with-contract'' as the effective actor. \textcite{epstein1996growing}'s agent-based models simulate rule-following individuals shaped by local interactions. The hallmark questions: \textit{What structure channels decisions? How are incentives and authority shared?}
 
 \paragraph{Machine-Centered}
-These definitions assign agency to computational entities managing perception\-/action loops. \textcite{russellnorvig1995ai}'s AI agents can be any entity perceiving through sensors and acting via actuators. \textcite{franklin-graesser-1997}'s autonomous agents are persistent computational entities pursuing agendas. Contemporary LLM frameworks (2025) are explicitly software coordinating tools. The hallmark questions: \textit{How does the entity sense, plan, and act? What loop keeps it going?}
-
-Table~\ref{tab:entities} summarizes representative examples.
+These definitions assign agency to computational entities managing perception\-/action loops. \textcite{russellnorvig1995ai}'s AI agents perceive through sensors and act via actuators. \textcite{franklin-graesser-1997}'s autonomous agents are persistent systems pursuing agendas. Contemporary LLM frameworks (2025) are explicitly software coordinating tools. The hallmark questions: \textit{How does the entity sense, plan, and act? What loop keeps it going?}
 
 \begin{table}[ht]
 	\centering
@@ -106,7 +104,7 @@ Table~\ref{tab:entities} summarizes representative examples.
 	\label{tab:entities}
 \end{table}
 
-Importantly, these frames are not mutually exclusive. Contemporary ``agentic AI'' often involves hybrid entities: AI systems acting on behalf of human principals, with goals supplied by humans but tactics chosen by machines. The legal and ethical challenges arise precisely at these boundaries.
+Table~\ref{tab:entities} summarizes representative examples. Importantly, these frames are not mutually exclusive. Contemporary ``agentic AI'' often involves hybrid entities: AI systems acting on behalf of human principals, with goals supplied by humans but tactics chosen by machines. The legal and ethical challenges arise precisely at these boundaries.
 
 \subsection{Goal Dynamics}
 
@@ -147,7 +145,7 @@ This dimension has direct implications for legal accountability. If an AI agent 
 Two additional dimensions merit brief mention:
 
 \paragraph{Temporal Persistence}
-\textcite{franklin-graesser-1997} distinguish programs from agents partly on \keyterm{persistence}\glsadd{persistence}—agents maintain state and pursue objectives over extended periods. This contrasts with reactive systems that respond to inputs without memory. Modern LLM agents incorporate conversation history and tool-use results, creating persistence within sessions. As discussed in Section~\ref{sec:intro}, single-shot LLM usage lacks the persistent goal pursuit that characterizes agentic systems.
+\textcite{franklin-graesser-1997} distinguish programs from agents partly on \keyterm{persistence}\glsadd{persistence}; agents maintain state and pursue objectives over extended periods. This contrasts with reactive systems that respond to inputs without memory. Modern LLM agents incorporate conversation history and tool-use results, creating persistence within sessions. As discussed in Section~\ref{sec:intro}, single-shot LLM usage lacks the persistent goal pursuit that characterizes agentic systems.
 
 \paragraph{Embodiment}
 \textcite{kauffman2000investigations}'s autonomous agents require physical \keyterm{embodiment} capable of performing thermodynamic work cycles. This biological grounding contrasts sharply with purely virtual agents. Robotics and embodied AI represent one implementation; cloud-based LLM agents represent another. Whether virtual agents merit the term ``agent'' in the fullest sense remains philosophically contentious, though pragmatically settled in favor of inclusion.
@@ -158,16 +156,14 @@ Two additional dimensions merit brief mention:
 \glsadd{goal-dynamics}
 \glsadd{persistence}
 
-These four dimensions---autonomy, entity frames, goal dynamics, persistence---provide organizing principles for evaluating contemporary systems.
-
-When someone claims an entity is ``agentic,'' four questions create a shared, falsifiable basis for evaluation.
+These four dimensions (autonomy, entity frames, goal dynamics, persistence) provide organizing principles for evaluating contemporary systems. When someone claims an entity is ``agentic,'' four questions create a shared, falsifiable basis for evaluation.
 
 \begin{questionbox}[title={\textbf{Question 1: Autonomy}}]
 How much \textbf{discretion} does the entity have in selecting \textbf{goals} and \textbf{tactics}, and where does \textbf{accountability} reside when outcomes go wrong? Describe the locus of \textbf{control} and any \textbf{constraints} (contracts, prompts, policies).
 \end{questionbox}
 
 \begin{questionbox}[title={\textbf{Question 2: Entity}}]
-What kind of \textbf{entity} are we evaluating: a pure \textbf{machine} entity, a \textbf{human–AI} team, or an \textbf{institution}al arrangement? Clarifying the entity prevents conflating a tool with the broader organization that wields it.
+What kind of \textbf{entity} are we evaluating: a pure \textbf{machine} entity, a \textbf{human--AI} team, or an \textbf{institution}al arrangement? Clarifying the entity prevents conflating a tool with the broader organization that wields it.
 \end{questionbox}
 
 \begin{questionbox}[title={\textbf{Question 3: Goals}}]
@@ -175,7 +171,7 @@ Does the entity merely accept \textbf{goals}, \textbf{adapt} them through interp
 \end{questionbox}
 
 \begin{questionbox}[title={\textbf{Question 4: Persistence}}]
-Does the entity maintain \textbf{state} and pursue \textbf{objectives} across multiple steps or sessions, or does it operate in \textbf{single‑shot} mode? Specify how \textbf{memory}, \textbf{logs}, or \textbf{context windows} support continuity.
+Does the entity maintain \textbf{state} and pursue \textbf{objectives} across multiple steps or sessions, or does it operate in \textbf{single-shot} mode? Specify how \textbf{memory}, \textbf{logs}, or \textbf{context windows} support continuity.
 \end{questionbox}
 
 These questions cut across the marketing hype and disciplinary jargon, providing a shared vocabulary for more precise discourse. The next section synthesizes these insights into a working definition grounded in theoretical foundations.
