@@ -27,6 +27,10 @@ COVER = lulu-cover
 COVER_TEX = $(COVER).tex
 COVER_PDF = $(COVER).pdf
 COVER_VARS = front-matter/cover/cover-vars.tex
+COVER_FRONT_TEX = covers/cover-front.tex
+COVER_BACK_TEX = covers/cover-back.tex
+COVER_FRONT_PDF = covers/cover-front.pdf
+COVER_BACK_PDF = covers/cover-back.pdf
 INTERIOR_PDF = lulu-interior.pdf
 
 # LaTeX tools - using XeLaTeX for fontspec support (works with standalone+tikz)
@@ -81,7 +85,7 @@ pdf: $(PDFFILE)
 TEX_DEPS = $(TEXFILE) $(BIBFILE) \
 	preamble/*.tex \
 	front-matter/*.tex \
-	front-matter/*/*.tex \
+	$(filter-out $(COVER_VARS),$(wildcard front-matter/*/*.tex)) \
 	chapters/*/chapter.tex \
 	chapters/*/sections/*.tex \
 	chapters/*/figures/*.tex \
@@ -205,6 +209,9 @@ clean:
 	@rm -f $(COVER).aux $(COVER).log $(COVER).out
 	@rm -f $(COVER).fdb_latexmk $(COVER).fls $(COVER).toc
 	@rm -f $(COVER).synctex.gz $(COVER).synctex $(COVER).xdv
+	@rm -f covers/*.aux covers/*.log covers/*.out covers/*.fdb_latexmk
+	@rm -f covers/*.fls covers/*.synctex.gz covers/*.synctex covers/*.xdv
+	@rm -f covers/*.toc
 	@rm -f texput.log
 	@# Clean glossary files
 	@rm -f $(MAIN).glo $(MAIN).gls $(MAIN).glg $(MAIN).ist
@@ -217,7 +224,7 @@ clean:
 cleanall: clean
 	@echo "$(BOLD)$(BLUE)$(ARROW) Removing PDF...$(RESET)"
 	@rm -f $(PDFFILE)
-	@rm -f $(COVER_PDF) $(INTERIOR_PDF)
+	@rm -f $(COVER_PDF) $(COVER_FRONT_PDF) $(COVER_BACK_PDF) $(INTERIOR_PDF)
 	@echo "$(GREEN)$(CHECK) Removed $(PDFFILE)$(RESET)"
 
 # ----------------------------------------------------------------------------
@@ -260,10 +267,28 @@ $(COVER_VARS): $(INTERIOR_PDF) scripts/update_cover_vars.py
 .PHONY: cover
 cover: $(COVER_PDF)
 
-$(COVER_PDF): $(COVER_TEX) $(COVER_VARS) \
+.PHONY: cover-front
+cover-front: $(COVER_FRONT_PDF)
+
+$(COVER_FRONT_PDF): $(COVER_FRONT_TEX) \
 	preamble/*.tex \
-	front-matter/cover/*.tex \
-	back-matter/*.tex
+	front-matter/cover/*.tex
+	@echo "$(BOLD)$(BLUE)$(ARROW) Building front cover PDF...$(RESET)"
+	$(LATEX) $(LATEX_OPTS) -output-directory=covers $(COVER_FRONT_TEX)
+	@echo "$(BOLD)$(GREEN)$(CHECK) Cover built: $(COVER_FRONT_PDF)$(RESET)"
+
+.PHONY: cover-back
+cover-back: $(COVER_BACK_PDF)
+
+$(COVER_BACK_PDF): $(COVER_BACK_TEX) \
+	preamble/*.tex \
+	back-matter/*.tex \
+	front-matter/cover/*.tex
+	@echo "$(BOLD)$(BLUE)$(ARROW) Building back cover PDF...$(RESET)"
+	$(LATEX) $(LATEX_OPTS) -output-directory=covers $(COVER_BACK_TEX)
+	@echo "$(BOLD)$(GREEN)$(CHECK) Cover built: $(COVER_BACK_PDF)$(RESET)"
+
+$(COVER_PDF): $(COVER_TEX) $(COVER_VARS) $(COVER_FRONT_PDF) $(COVER_BACK_PDF)
 	@echo "$(BOLD)$(BLUE)$(ARROW) Building Lulu wrap cover...$(RESET)"
 	$(LATEX) $(LATEX_OPTS) $(COVER_TEX)
 	@echo "$(BOLD)$(GREEN)$(CHECK) Cover built: $(COVER_PDF)$(RESET)"
@@ -317,6 +342,8 @@ help:
 	@echo "  $(CYAN)pdf$(RESET)        Build the complete mini-book PDF (default)"
 	@echo "  $(CYAN)interior$(RESET)   Build Lulu interior PDF (strip covers)"
 	@echo "  $(CYAN)cover-vars$(RESET) Update Lulu cover variables from interior"
+	@echo "  $(CYAN)cover-front$(RESET)Build front cover PDF (6x9)"
+	@echo "  $(CYAN)cover-back$(RESET) Build back cover PDF (6x9)"
 	@echo "  $(CYAN)cover$(RESET)      Build Lulu wrap cover PDF"
 	@echo "  $(CYAN)cover-check$(RESET)Verify cover PDF dimensions"
 	@echo "  $(CYAN)quick$(RESET)      Single-pass build for minor edits"

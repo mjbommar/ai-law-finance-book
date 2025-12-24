@@ -10,6 +10,7 @@
 % LOAD PREAMBLE (packages, colors, tikz, boxes, styling, commands)
 % ==========================================================================
 \input{preamble/main}
+\usepackage{pgfornament}
 
 % ==========================================================================
 % COVER VARIABLES (trim size, bleed, spine width)
@@ -26,6 +27,9 @@
 \newlength{\CoverFrontX}
 \newlength{\CoverCenterY}
 \newlength{\CoverSpineCenterX}
+\newlength{\SpineOrnamentInset}
+\newlength{\SpineOrnamentTopY}
+\newlength{\SpineOrnamentBottomY}
 
 \setlength{\CoverWidth}{\CoverTrimWidth}
 \addtolength{\CoverWidth}{\CoverTrimWidth}
@@ -51,17 +55,32 @@
 \divide\CoverSpineCenterX by 2
 \addtolength{\CoverSpineCenterX}{\CoverSpineX}
 
+\setlength{\SpineOrnamentInset}{0.35in}
+\setlength{\SpineOrnamentTopY}{\CoverHeight}
+\addtolength{\SpineOrnamentTopY}{-\CoverBleed}
+\addtolength{\SpineOrnamentTopY}{-\SpineOrnamentInset}
+\setlength{\SpineOrnamentBottomY}{\CoverBleed}
+\addtolength{\SpineOrnamentBottomY}{\SpineOrnamentInset}
+
 % ==========================================================================
 % SPINE TEXT (optional)
 % ==========================================================================
 \newif\ifcoverspine
 \coverspinetrue
 \newcommand{\CoverSpineTitle}{Agentic AI in Law and Finance}
+\newcommand{\SpineTitleMain}{%
+	A\kern0.06em G\kern0.06em E\kern0.06em N\kern0.06em T\kern0.06em I\kern0.06em C\kern0.12em\kern0.12em A\kern0.06em I%
+}
+\newcommand{\SpineTitleSub}{%
+	I\kern0.05em N\kern0.12em\kern0.12em L\kern0.05em A\kern0.05em W\kern0.12em\kern0.12em \&\kern0.12em\kern0.12em F\kern0.05em I\kern0.05em N\kern0.05em A\kern0.05em N\kern0.05em C\kern0.05em E%
+}
+\newcommand{\SpineOrnamentId}{61}
+\newcommand{\SpineOrnamentSize}{0.45in}
+
+% Set page size for wrap cover before document starts.
+\geometry{paperwidth=\CoverWidth, paperheight=\CoverHeight, margin=0pt}
 
 \begin{document}
-
-% Explicit page size for the wrap cover
-\newgeometry{paperwidth=\CoverWidth, paperheight=\CoverHeight, margin=0pt}
 \thispagestyle{empty}
 
 \begin{tikzpicture}[remember picture, overlay]
@@ -69,23 +88,42 @@
 
 		% Base background to ensure full bleed coverage
 		\shade[top color=MidSlate, bottom color=DeepSlate]
-			(0,0) rectangle (\CoverWidth, \CoverHeight);
+		(0,0) rectangle (\CoverWidth, \CoverHeight);
 
 		% Back cover (left)
-		\begin{scope}[shift={(\CoverBackX, \CoverBleed)}]
-			\input{back-matter/back-cover-art}
-		\end{scope}
+		\node[anchor=south west, inner sep=0pt] at (\CoverBackX, \CoverBleed) {%
+			\includegraphics[width=\CoverTrimWidth, height=\CoverTrimHeight]{covers/cover-back.pdf}%
+		};
 
 		% Front cover (right)
-		\begin{scope}[shift={(\CoverFrontX, \CoverBleed)}]
-			\input{front-matter/cover/front-cover-art}
+		\node[anchor=south west, inner sep=0pt] at (\CoverFrontX, \CoverBleed) {%
+			\includegraphics[width=\CoverTrimWidth, height=\CoverTrimHeight]{covers/cover-front.pdf}%
+		};
+
+		% Spine decoration (subtle two-tone band + concentric rings)
+		\shade[left color=DeepSlate, right color=MidSlate, opacity=0.55]
+		(\CoverSpineX, 0) rectangle ++(\CoverSpineWidth, \CoverHeight);
+		\begin{scope}[shift={(\CoverSpineCenterX, \CoverCenterY)}]
+			\draw[CircleLight, opacity=0.18, line width=0.6pt] (0, 0) circle (0.28in);
+			\draw[CircleMid, opacity=0.22, line width=0.6pt] (0, 0) circle (0.18in);
 		\end{scope}
+
+		% Vectorian ornaments (pgfornament) - top and bottom of spine
+		\node[inner sep=0pt, rotate=0] at (\CoverSpineCenterX, \SpineOrnamentTopY) {%
+			\pgfornament[width=\SpineOrnamentSize, color=CopperLight, opacity=0.33]{\SpineOrnamentId}%
+		};
+		\node[inner sep=0pt, rotate=90] at (\CoverSpineCenterX, \SpineOrnamentBottomY) {%
+			\pgfornament[width=\SpineOrnamentSize, color=CopperLight, opacity=0.33]{\SpineOrnamentId}%
+		};
 
 		% Spine text (rotate -90 for top-to-bottom reading)
 		\ifcoverspine
-		\node[rotate=-90, align=center] at (\CoverSpineCenterX, \CoverCenterY) {
-			{\rmfamily\fontsize{9}{11}\selectfont\color{TextSoft}\textsc{\CoverSpineTitle}}
-		};
+			\node[rotate=270, align=center, inner sep=0pt] at (\CoverSpineCenterX, \CoverCenterY) {%
+			\shortstack[c]{%
+			{\rmfamily\bfseries\fontsize{16}{19}\selectfont\color{TextPure}\SpineTitleMain}\\[3pt]
+			{\rmfamily\fontsize{14}{16}\selectfont\color{CopperLight}\SpineTitleSub}%
+			}%
+			};
 		\fi
 
 	\end{scope}

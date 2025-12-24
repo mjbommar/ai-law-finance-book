@@ -72,15 +72,36 @@ def size_from_mutool(pdf_path: Path) -> tuple[float, float, int | None]:
         raise RuntimeError("mutool not found")
     output = run_cmd(["mutool", "info", "-M", str(pdf_path)])
     match = re.search(r"\[\s*([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)\s*\]", output)
-    if not match:
-        raise RuntimeError("mutool: mediabox not found")
-    llx, lly, urx, ury = (float(match.group(i)) for i in range(1, 5))
-    width_pt = urx - llx
-    height_pt = ury - lly
     pages = None
     pages_match = re.search(r"^Pages:\s+(\d+)\s*$", output, re.MULTILINE)
     if pages_match:
         pages = int(pages_match.group(1))
+    if match:
+        llx, lly, urx, ury = (float(match.group(i)) for i in range(1, 5))
+        width_pt = urx - llx
+        height_pt = ury - lly
+        return width_pt, height_pt, pages
+
+    # Fallback: extract MediaBox from pages tree.
+    catalog = run_cmd(["mutool", "show", str(pdf_path), "1"])
+    pages_ref = re.search(r"/Pages\s+(\d+)\s+0\s+R", catalog)
+    if not pages_ref:
+        raise RuntimeError("mutool: pages reference not found")
+    pages_obj = pages_ref.group(1)
+    pages_obj_data = run_cmd(["mutool", "show", str(pdf_path), pages_obj])
+    mediabox = re.search(
+        r"/MediaBox\s*\[\s*([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)\s*\]",
+        pages_obj_data,
+    )
+    if not mediabox:
+        raise RuntimeError("mutool: mediabox not found")
+    llx, lly, urx, ury = (float(mediabox.group(i)) for i in range(1, 5))
+    width_pt = urx - llx
+    height_pt = ury - lly
+    if pages is None:
+        count_match = re.search(r"/Count\s+(\d+)", pages_obj_data)
+        if count_match:
+            pages = int(count_match.group(1))
     return width_pt, height_pt, pages
 
 

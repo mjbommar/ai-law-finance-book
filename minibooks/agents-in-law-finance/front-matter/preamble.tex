@@ -29,24 +29,24 @@
 % US Trade size: 6in × 9in (standard for professional/technical books)
 % Margins optimized for readability and POD printing
 \usepackage[
-  papersize={6in,9in},
-  inner=0.75in,       % Gutter margin (for binding)
-  outer=0.5in,        % Outside margin
-  top=0.7in,
-  bottom=0.8in,
-  footskip=0.35in
+	papersize={6in,9in},
+	inner=0.75in,       % Gutter margin (for binding)
+	outer=0.5in,        % Outside margin
+	top=0.7in,
+	bottom=0.8in,
+	footskip=0.35in
 ]{geometry}
 % Font encoding - conditional for XeLaTeX/LuaLaTeX vs pdfLaTeX compatibility
 \usepackage{iftex}
 \ifxetex
-  % XeLaTeX: use fontspec (loaded automatically by libertinus)
+	% XeLaTeX: use fontspec (loaded automatically by libertinus)
 \else\ifluatex
-  % LuaLaTeX: use fontspec (loaded automatically by libertinus)
-\else
-  % pdfLaTeX: use traditional encoding
-  \usepackage[utf8]{inputenc}
-  \usepackage[T1]{fontenc}
-\fi\fi
+		% LuaLaTeX: use fontspec (loaded automatically by libertinus)
+	\else
+		% pdfLaTeX: use traditional encoding
+		\usepackage[utf8]{inputenc}
+		\usepackage[T1]{fontenc}
+	\fi\fi
 
 % ============================================================================
 % MATHEMATICS AND SYMBOLS (load before libertinus to avoid conflicts)
@@ -62,22 +62,22 @@
 % Match monospaced font to Libertinus for consistent kerning/sizing
 % Fall back safely if the mono font is not installed.
 \ifxetex
-  \IfFontExistsTF{Libertinus Mono}
-    {\setmonofont{Libertinus Mono}[Scale=MatchLowercase]}
-    {\IfFontExistsTF{LibertinusMono}
-      {\setmonofont{LibertinusMono}[Scale=MatchLowercase]}
-      {\IfFileExists{LibertinusMono-Regular.otf}
-        {\setmonofont{LibertinusMono-Regular.otf}[Scale=MatchLowercase]}
-        {\setmonofont{Latin Modern Mono}[Scale=MatchLowercase]}}}
+	\IfFontExistsTF{Libertinus Mono}
+	{\setmonofont{Libertinus Mono}[Scale=MatchLowercase]}
+	{\IfFontExistsTF{LibertinusMono}
+		{\setmonofont{LibertinusMono}[Scale=MatchLowercase]}
+		{\IfFileExists{LibertinusMono-Regular.otf}
+			{\setmonofont{LibertinusMono-Regular.otf}[Scale=MatchLowercase]}
+			{\setmonofont{Latin Modern Mono}[Scale=MatchLowercase]}}}
 \else\ifluatex
-  \IfFontExistsTF{Libertinus Mono}
-    {\setmonofont{Libertinus Mono}[Scale=MatchLowercase]}
-    {\IfFontExistsTF{LibertinusMono}
-      {\setmonofont{LibertinusMono}[Scale=MatchLowercase]}
-      {\IfFileExists{LibertinusMono-Regular.otf}
-        {\setmonofont{LibertinusMono-Regular.otf}[Scale=MatchLowercase]}
-        {\setmonofont{Latin Modern Mono}[Scale=MatchLowercase]}}}
-\fi\fi
+		\IfFontExistsTF{Libertinus Mono}
+		{\setmonofont{Libertinus Mono}[Scale=MatchLowercase]}
+		{\IfFontExistsTF{LibertinusMono}
+			{\setmonofont{LibertinusMono}[Scale=MatchLowercase]}
+			{\IfFileExists{LibertinusMono-Regular.otf}
+				{\setmonofont{LibertinusMono-Regular.otf}[Scale=MatchLowercase]}
+				{\setmonofont{Latin Modern Mono}[Scale=MatchLowercase]}}}
+	\fi\fi
 
 % Typography enhancements
 \usepackage{microtype}  % Improved typography and spacing
@@ -101,6 +101,12 @@
 \usepackage{graphicx}
 \usepackage{pdfpages}   % Include external PDF pages (for cover)
 \usepackage{float}      % Better float control
+
+% ============================================================================
+% BARCODE GENERATION (PSTricks-based, requires --shell-escape)
+% ============================================================================
+\usepackage{pst-barcode}
+\usepackage{auto-pst-pdf}
 
 % ============================================================================
 % COLOR SYSTEM - Educational Semantic Palette
@@ -355,286 +361,286 @@
 % Listings package for code formatting
 \usepackage{listings}
 \lstset{
-  basicstyle=\small\ttfamily\color{gray-900},
-  breaklines=true,
-  breakatwhitespace=false,
-  columns=flexible,
-  keepspaces=true,
-  showstringspaces=false,
-  tabsize=2,
-  xleftmargin=0pt,
-  framexleftmargin=0pt,
-  % Syntax highlighting colors (from chapter 07)
-  keywordstyle=\color{slate-700}\bfseries,
-  stringstyle=\color{green-900},
-  commentstyle=\color{gray-600}\itshape,
-  emphstyle=\color{amber-900},
+	basicstyle=\small\ttfamily\color{gray-900},
+	breaklines=true,
+	breakatwhitespace=false,
+	columns=flexible,
+	keepspaces=true,
+	showstringspaces=false,
+	tabsize=2,
+	xleftmargin=0pt,
+	framexleftmargin=0pt,
+	% Syntax highlighting colors (from chapter 07)
+	keywordstyle=\color{slate-700}\bfseries,
+	stringstyle=\color{green-900},
+	commentstyle=\color{gray-600}\itshape,
+	emphstyle=\color{amber-900},
 }
 
 % Importance scaling for tcolorbox environments (book-wide)
 % Usage in any box: [importance=low|medium|high]
 \tcbset{
-  importance/.is choice,
-  importance/high/.style={
-    boxrule=2pt,
-    top=10pt,bottom=10pt,left=12pt,right=12pt
-  },
-  importance/medium/.style={},
-  importance/low/.style={
-    boxrule=0.8pt,
-    opacityback=0.92,
-    opacityframe=0.6,
-    boxed title style={opacityback=0.85},
-    top=6pt,bottom=6pt,left=8pt,right=8pt
-  },
-  importance/.default=medium
+	importance/.is choice,
+	importance/high/.style={
+			boxrule=2pt,
+			top=10pt,bottom=10pt,left=12pt,right=12pt
+		},
+	importance/medium/.style={},
+	importance/low/.style={
+			boxrule=0.8pt,
+			opacityback=0.92,
+			opacityframe=0.6,
+			boxed title style={opacityback=0.85},
+			top=6pt,bottom=6pt,left=8pt,right=8pt
+		},
+	importance/.default=medium
 }
 
 % Definition box style - Most prominent, formal definitions
 \newtcolorbox{definitionbox}[1][]{
-  enhanced,
-  colback=bg-definition,
-  colframe=border-definition,
-  fonttitle=\bfseries\large,
-  coltitle=white,
-  boxrule=1.5pt,
-  arc=3pt,
-  left=8pt,
-  right=8pt,
-  top=8pt,
-  bottom=8pt,
-  breakable,
-  attach boxed title to top left={yshift=-2mm, xshift=4mm},
-  boxed title style={
-    colback=definition-dark,
-    colframe=definition-dark,
-    arc=2pt,
-    boxrule=0pt
-  },
-  #1
+	enhanced,
+	colback=bg-definition,
+	colframe=border-definition,
+	fonttitle=\bfseries\large,
+	coltitle=white,
+	boxrule=1.5pt,
+	arc=3pt,
+	left=8pt,
+	right=8pt,
+	top=8pt,
+	bottom=8pt,
+	breakable,
+	attach boxed title to top left={yshift=-2mm, xshift=4mm},
+	boxed title style={
+			colback=definition-dark,
+			colframe=definition-dark,
+			arc=2pt,
+			boxrule=0pt
+		},
+	#1
 }
 
 % Example box style - Concrete examples and demonstrations
 \newtcolorbox{examplebox}[1][]{
-  enhanced,
-  colback=bg-example,
-  colframe=border-example,
-  fonttitle=\bfseries\large,
-  coltitle=white,
-  boxrule=1.5pt,
-  arc=3pt,
-  left=8pt,
-  right=8pt,
-  top=8pt,
-  bottom=8pt,
-  breakable,
-  borderline west={3pt}{0pt}{example-base},
-  attach boxed title to top left={yshift=-2mm, xshift=4mm},
-  boxed title style={
-    colback=example-dark,
-    colframe=example-dark,
-    arc=2pt,
-    boxrule=0pt
-  },
-  #1
+	enhanced,
+	colback=bg-example,
+	colframe=border-example,
+	fonttitle=\bfseries\large,
+	coltitle=white,
+	boxrule=1.5pt,
+	arc=3pt,
+	left=8pt,
+	right=8pt,
+	top=8pt,
+	bottom=8pt,
+	breakable,
+	borderline west={3pt}{0pt}{example-base},
+	attach boxed title to top left={yshift=-2mm, xshift=4mm},
+	boxed title style={
+			colback=example-dark,
+			colframe=example-dark,
+			arc=2pt,
+			boxrule=0pt
+		},
+	#1
 }
 
 % Highlight box style - Warm, inviting context and notes
 \newtcolorbox{highlightbox}[1][]{
-  enhanced,
-  colback=bg-note,
-  colframe=border-note,
-  fonttitle=\bfseries,
-  coltitle=note-dark,
-  boxrule=1pt,
-  arc=2.5pt,
-  left=10pt,
-  right=10pt,
-  top=8pt,
-  bottom=8pt,
-  breakable,
-  #1
+	enhanced,
+	colback=bg-note,
+	colframe=border-note,
+	fonttitle=\bfseries,
+	coltitle=note-dark,
+	boxrule=1pt,
+	arc=2.5pt,
+	left=10pt,
+	right=10pt,
+	top=8pt,
+	bottom=8pt,
+	breakable,
+	#1
 }
 
 % Key takeaway box - Stands out for important points
 \newtcolorbox{keybox}[1][]{
-  enhanced,
-  colback=bg-key,
-  colframe=key-base,
-  fonttitle=\bfseries\large,
-  coltitle=white,
-  boxrule=2pt,
-  arc=3pt,
-  left=8pt,
-  right=8pt,
-  top=8pt,
-  bottom=8pt,
-  breakable,
-  borderline west={3pt}{0pt}{key-base},
-  attach boxed title to top left={yshift=-2mm, xshift=4mm},
-  boxed title style={
-    colback=key-base,
-    colframe=key-base,
-    arc=2pt,
-    boxrule=0pt
-  },
-  #1
+	enhanced,
+	colback=bg-key,
+	colframe=key-base,
+	fonttitle=\bfseries\large,
+	coltitle=white,
+	boxrule=2pt,
+	arc=3pt,
+	left=8pt,
+	right=8pt,
+	top=8pt,
+	bottom=8pt,
+	breakable,
+	borderline west={3pt}{0pt}{key-base},
+	attach boxed title to top left={yshift=-2mm, xshift=4mm},
+	boxed title style={
+			colback=key-base,
+			colframe=key-base,
+			arc=2pt,
+			boxrule=0pt
+		},
+	#1
 }
 
 % Question box style - Distinct professional style for evaluation questions
 \newtcolorbox{questionbox}[1][]{
-  enhanced,
-  colback=gray-100,
-  colframe=gray-600,
-  fonttitle=\bfseries,
-  coltitle=white,
-  boxrule=1.5pt,
-  arc=2pt,
-  left=10pt,
-  right=10pt,
-  top=8pt,
-  bottom=8pt,
-  breakable,
-  borderline west={4pt}{0pt}{slate-700},
-  attach boxed title to top left={yshift=-2mm, xshift=4mm},
-  boxed title style={
-    colback=slate-700,
-    colframe=slate-700,
-    arc=2pt,
-    boxrule=0pt
-  },
-  #1
+	enhanced,
+	colback=gray-100,
+	colframe=gray-600,
+	fonttitle=\bfseries,
+	coltitle=white,
+	boxrule=1.5pt,
+	arc=2pt,
+	left=10pt,
+	right=10pt,
+	top=8pt,
+	bottom=8pt,
+	breakable,
+	borderline west={4pt}{0pt}{slate-700},
+	attach boxed title to top left={yshift=-2mm, xshift=4mm},
+	boxed title style={
+			colback=slate-700,
+			colframe=slate-700,
+			arc=2pt,
+			boxrule=0pt
+		},
+	#1
 }
 
 % Theorem box style - For formal logical statements and proofs
 \newtcolorbox{theorembox}[1][]{
-  enhanced,
-  colback=bg-theorem,
-  colframe=border-theorem,
-  fonttitle=\bfseries\large,
-  coltitle=white,
-  boxrule=1.5pt,
-  arc=3pt,
-  left=8pt,
-  right=8pt,
-  top=8pt,
-  bottom=8pt,
-  breakable,
-  attach boxed title to top left={yshift=-2mm, xshift=4mm},
-  boxed title style={
-    colback=theorem-dark,
-    colframe=theorem-dark,
-    arc=2pt,
-    boxrule=0pt
-  },
-  #1
+	enhanced,
+	colback=bg-theorem,
+	colframe=border-theorem,
+	fonttitle=\bfseries\large,
+	coltitle=white,
+	boxrule=1.5pt,
+	arc=3pt,
+	left=8pt,
+	right=8pt,
+	top=8pt,
+	bottom=8pt,
+	breakable,
+	attach boxed title to top left={yshift=-2mm, xshift=4mm},
+	boxed title style={
+			colback=theorem-dark,
+			colframe=theorem-dark,
+			arc=2pt,
+			boxrule=0pt
+		},
+	#1
 }
 
 % Caution box style - For warnings and critical alerts
 \newtcolorbox{cautionbox}[1][]{
-  enhanced,
-  colback=bg-caution,
-  colframe=border-caution,
-  fonttitle=\bfseries\large,
-  coltitle=white,
-  boxrule=1.5pt,
-  arc=3pt,
-  left=8pt,
-  right=8pt,
-  top=8pt,
-  bottom=8pt,
-  breakable,
-  borderline west={4pt}{0pt}{caution-dark},
-  attach boxed title to top left={yshift=-2mm, xshift=4mm},
-  boxed title style={
-    colback=caution-dark,
-    colframe=caution-dark,
-    arc=2pt,
-    boxrule=0pt
-  },
-  #1
+	enhanced,
+	colback=bg-caution,
+	colframe=border-caution,
+	fonttitle=\bfseries\large,
+	coltitle=white,
+	boxrule=1.5pt,
+	arc=3pt,
+	left=8pt,
+	right=8pt,
+	top=8pt,
+	bottom=8pt,
+	breakable,
+	borderline west={4pt}{0pt}{caution-dark},
+	attach boxed title to top left={yshift=-2mm, xshift=4mm},
+	boxed title style={
+			colback=caution-dark,
+			colframe=caution-dark,
+			arc=2pt,
+			boxrule=0pt
+		},
+	#1
 }
 
 % Technical detail box - For optional deeper mechanics (algorithms, protocols, internals)
 % Uses indigo/theorem colors to distinguish from practice boxes
 \newtcolorbox{technicalbox}[1][]{
-  enhanced,
-  colback=bg-theorem,
-  colframe=border-theorem,
-  fonttitle=\bfseries\large,
-  coltitle=white,
-  boxrule=1.5pt,
-  arc=3pt,
-  left=8pt,
-  right=8pt,
-  top=8pt,
-  bottom=8pt,
-  breakable,
-  borderline west={4pt}{0pt}{theorem-dark},
-  attach boxed title to top left={yshift=-2mm, xshift=4mm},
-  boxed title style={
-    colback=theorem-dark,
-    colframe=theorem-dark,
-    arc=2pt,
-    boxrule=0pt
-  },
-  #1
+	enhanced,
+	colback=bg-theorem,
+	colframe=border-theorem,
+	fonttitle=\bfseries\large,
+	coltitle=white,
+	boxrule=1.5pt,
+	arc=3pt,
+	left=8pt,
+	right=8pt,
+	top=8pt,
+	bottom=8pt,
+	breakable,
+	borderline west={4pt}{0pt}{theorem-dark},
+	attach boxed title to top left={yshift=-2mm, xshift=4mm},
+	boxed title style={
+			colback=theorem-dark,
+			colframe=theorem-dark,
+			arc=2pt,
+			boxrule=0pt
+		},
+	#1
 }
 
 % Practice box style - Exercises and hands-on activities
 \newtcolorbox{practicebox}[1][]{
-  enhanced,
-  colback=bg-practice,
-  colframe=border-practice,
-  fonttitle=\bfseries\large,
-  coltitle=white,
-  boxrule=1.5pt,
-  arc=3pt,
-  left=8pt,
-  right=8pt,
-  top=8pt,
-  bottom=8pt,
-  breakable,
-  borderline west={4pt}{0pt}{practice-dark},
-  attach boxed title to top left={yshift=-2mm, xshift=4mm},
-  boxed title style={
-    colback=practice-dark,
-    colframe=practice-dark,
-    arc=2pt,
-    boxrule=0pt
-  },
-  #1
+	enhanced,
+	colback=bg-practice,
+	colframe=border-practice,
+	fonttitle=\bfseries\large,
+	coltitle=white,
+	boxrule=1.5pt,
+	arc=3pt,
+	left=8pt,
+	right=8pt,
+	top=8pt,
+	bottom=8pt,
+	breakable,
+	borderline west={4pt}{0pt}{practice-dark},
+	attach boxed title to top left={yshift=-2mm, xshift=4mm},
+	boxed title style={
+			colback=practice-dark,
+			colframe=practice-dark,
+			arc=2pt,
+			boxrule=0pt
+		},
+	#1
 }
 
 % Listing box style - For code examples, API signatures, and technical content
 \newtcblisting{listingbox}[1][]{
-  enhanced,
-  colback=gray-100,
-  colframe=gray-400,
-  fonttitle=\bfseries\sffamily,
-  coltitle=gray-800,
-  boxrule=1pt,
-  arc=2pt,
-  left=8pt,
-  right=8pt,
-  top=6pt,
-  bottom=6pt,
-  breakable,
-  listing only,
-  listing options={
-    basicstyle=\small\ttfamily\color{gray-900},
-    breaklines=true,
-    columns=flexible,
-    keepspaces=true,
-  },
-  attach boxed title to top left={yshift=-2mm, xshift=4mm},
-  boxed title style={
-    colback=gray-500,
-    colframe=gray-500,
-    arc=2pt,
-    boxrule=0pt
-  },
-  #1
+	enhanced,
+	colback=gray-100,
+	colframe=gray-400,
+	fonttitle=\bfseries\sffamily,
+	coltitle=gray-800,
+	boxrule=1pt,
+	arc=2pt,
+	left=8pt,
+	right=8pt,
+	top=6pt,
+	bottom=6pt,
+	breakable,
+	listing only,
+	listing options={
+			basicstyle=\small\ttfamily\color{gray-900},
+			breaklines=true,
+			columns=flexible,
+			keepspaces=true,
+		},
+	attach boxed title to top left={yshift=-2mm, xshift=4mm},
+	boxed title style={
+			colback=gray-500,
+			colframe=gray-500,
+			arc=2pt,
+			boxrule=0pt
+		},
+	#1
 }
 
 % ============================================================================
@@ -642,19 +648,19 @@
 % ============================================================================
 \usepackage{enumitem}
 \setlist{
-  itemsep=0.4em,
-  parsep=0.2em,
-  topsep=0.5em,
-  leftmargin=1.5em
+	itemsep=0.4em,
+	parsep=0.2em,
+	topsep=0.5em,
+	leftmargin=1.5em
 }
 
 % Custom list for evaluation questions
 \newlist{evallist}{enumerate}{1}
 \setlist[evallist]{
-  label=\textbf{Q\arabic*.},
-  leftmargin=2em,
-  itemsep=0.5em,
-  labelsep=0.5em
+	label=\textbf{Q\arabic*.},
+	leftmargin=2em,
+	itemsep=0.5em,
+	labelsep=0.5em
 }
 
 % ============================================================================
@@ -662,15 +668,15 @@
 % ============================================================================
 \usepackage{tikz}
 \usetikzlibrary{
-  positioning,
-  arrows.meta,
-  shapes.geometric,
-  shapes.misc,
-  calc,
-  decorations.pathreplacing,
-  backgrounds,
-  fit,
-  shadows.blur
+	positioning,
+	arrows.meta,
+	shapes.geometric,
+	shapes.misc,
+	calc,
+	decorations.pathreplacing,
+	backgrounds,
+	fit,
+	shadows.blur
 }
 
 % Note: Do NOT override TikZ node fonts globally here.
@@ -685,25 +691,25 @@
 
 % Section formatting
 \titleformat{\section}
-  {\Large\bfseries\color{primary}}
-  {\thesection}{1em}{}
-  [\vspace{0.3em}{\color{primary}\titlerule[1.5pt]}\vspace{0.5em}]
+{\Large\bfseries\color{primary}}
+{\thesection}{1em}{}
+[\vspace{0.3em}{\color{primary}\titlerule[1.5pt]}\vspace{0.5em}]
 
 % Subsection formatting
 \titleformat{\subsection}
-  {\large\bfseries\color{primary}}
-  {\thesubsection}{1em}{}
-  [\vspace{-0.3em}]
+{\large\bfseries\color{primary}}
+{\thesubsection}{1em}{}
+[\vspace{-0.3em}]
 
 % Subsubsection formatting
 \titleformat{\subsubsection}
-  {\normalsize\bfseries\color{text-secondary}}
-  {\thesubsubsection}{1em}{}
+{\normalsize\bfseries\color{text-secondary}}
+{\thesubsubsection}{1em}{}
 
 % Paragraph formatting (for \paragraph)
 \titleformat{\paragraph}[runin]
-  {\normalsize\bfseries\color{primary}}
-  {}{0em}{}[.]
+{\normalsize\bfseries\color{primary}}
+{}{0em}{}[.]
 \titlespacing*{\paragraph}{0pt}{1em}{0.5em}
 
 % ============================================================================
@@ -711,42 +717,42 @@
 % ============================================================================
 % Customize ToC title
 \renewcommand{\contentsname}{%
-  {\color{primary}\Large\bfseries Contents}%
+	{\color{primary}\Large\bfseries Contents}%
 }
 
 % Chapter entries in ToC (for book class)
 \titlecontents{chapter}
-  [0em]                            % left margin
-  {\vspace{1em}\large\bfseries}    % above code
-  {\color{primary}\contentslabel{2em}}  % numbered entry format
-  {\color{primary}}                % numberless entry format (Preface, etc.)
-  {\titlerule*[0.75pc]{.}\contentspage}  % filler and page
+[0em]                            % left margin
+{\vspace{1em}\large\bfseries}    % above code
+{\color{primary}\contentslabel{2em}}  % numbered entry format
+{\color{primary}}                % numberless entry format (Preface, etc.)
+{\titlerule*[0.75pc]{.}\contentspage}  % filler and page
 
 % Section entries in ToC (with chapter.section numbering like 2.12)
 \titlecontents{section}
-  [2em]                            % left margin (indented from chapter)
-  {\vspace{0.3em}}                 % above code
-  {\color{primary}\contentslabel{2.5em}}  % numbered entry format (wider for X.XX)
-  {}                               % numberless entry format
-  {\titlerule*[0.75pc]{.}\contentspage}  % filler and page
+[2em]                            % left margin (indented from chapter)
+{\vspace{0.3em}}                 % above code
+{\color{primary}\contentslabel{2.5em}}  % numbered entry format (wider for X.XX)
+{}                               % numberless entry format
+{\titlerule*[0.75pc]{.}\contentspage}  % filler and page
 
 % Subsection entries in ToC (with chapter.section.subsection numbering like 2.12.3)
 \titlecontents{subsection}
-  [4.5em]                          % left margin (indented from section)
-  {\vspace{0.1em}}                 % above code
-  {\contentslabel{3.2em}}          % numbered entry format (wider for X.XX.X)
-  {}                               % numberless entry format
-  {\titlerule*[0.75pc]{.}\contentspage}  % filler and page
+[4.5em]                          % left margin (indented from section)
+{\vspace{0.1em}}                 % above code
+{\contentslabel{3.2em}}          % numbered entry format (wider for X.XX.X)
+{}                               % numberless entry format
+{\titlerule*[0.75pc]{.}\contentspage}  % filler and page
 
 % ============================================================================
 % CAPTIONS - Cleaner appearance
 % ============================================================================
 \usepackage[
-  font={small},
-  labelfont={bf,color=primary},
-  format=plain,
-  justification=justified,
-  skip=8pt
+	font={small},
+	labelfont={bf,color=primary},
+	format=plain,
+	justification=justified,
+	skip=8pt
 ]{caption}
 
 % ============================================================================
@@ -754,12 +760,12 @@
 % ============================================================================
 \usepackage{hyperref}
 \hypersetup{
-  colorlinks=true,
-  linkcolor=primary,
-  citecolor=accent,
-  urlcolor=primary,
-  bookmarksnumbered=true,
-  pdfborder={0 0 0}
+	colorlinks=true,
+	linkcolor=primary,
+	citecolor=accent,
+	urlcolor=primary,
+	bookmarksnumbered=true,
+	pdfborder={0 0 0}
 }
 
 % ============================================================================
@@ -771,10 +777,10 @@
 %
 % Note: glossaries recommends loading hyperref before glossaries.
 \usepackage[
-  toc,                    % Add glossary to table of contents
-  section=chapter,        % Format glossary as chapter-level
-  nopostdot,              % No period after descriptions
-  automake=immediate      % Auto-run makeglossaries via shell escape
+	toc,                    % Add glossary to table of contents
+	section=chapter,        % Format glossary as chapter-level
+	nopostdot,              % No period after descriptions
+	automake=immediate      % Auto-run makeglossaries via shell escape
 ]{glossaries}
 \usepackage{glossary-longbooktabs} % Beautiful longtable + booktabs glossary styles
 
@@ -787,47 +793,47 @@
 \renewcommand*{\glsnumberformat}[1]{\textcolor{text-secondary}{\glshypernumber{#1}}}
 
 \newglossarystyle{lawfin-long3col}{%
-  \setglossarystyle{longragged3col-booktabs}%
-  \renewenvironment{theglossary}%
-    {%
-      \begingroup
-      \setlength{\LTleft}{0pt}%
-      \setlength{\LTright}{0pt}%
-      \setlength{\LTpre}{-0.5em}%  % Reduce top margin
-      \setlength{\LTpost}{-0.5em}% % Reduce bottom margin
-      \setlength{\tabcolsep}{5pt}% % Tighter column spacing
-      \renewcommand{\arraystretch}{1.15}% % Slightly tighter row spacing
-      \small% Reduce glossary font size
-      \begin{longtable}{%
-        @{}%
-        >{\raggedright\arraybackslash}p{0.22\textwidth}%
-        >{\arraybackslash}p{0.65\textwidth}%  % Justified text for descriptions
-        >{\raggedright\arraybackslash}p{0.11\textwidth}%
-        @{}%
-      }%
-    }%
-    {%
-      \end{longtable}%
-      \endgroup
-    }%
-  \renewcommand{\glossentry}[2]{%
-    \glsentryitem{##1}\glstarget{##1}{\glossentryname{##1}} &
-    \glossentrydesc{##1} &
-    ##2\tabularnewline[0.35em]%
-  }%
-  \renewcommand{\subglossentry}[3]{%
-    &%
-    \glssubentryitem{##2}\glstarget{##2}{\strut}\glossentrydesc{##2} &
-    ##3\tabularnewline[0.35em]%
-  }%
-  \renewcommand*{\glossaryheader}{%
-    \toprule
-    \bfseries\color{primary}\entryname &
-    \bfseries\color{primary}\descriptionname &
-    \bfseries\color{primary}\pagelistname\tabularnewline
-    \midrule\endhead
-    \bottomrule\endfoot
-  }%
+	\setglossarystyle{longragged3col-booktabs}%
+	\renewenvironment{theglossary}%
+	{%
+		\begingroup
+		\setlength{\LTleft}{0pt}%
+		\setlength{\LTright}{0pt}%
+		\setlength{\LTpre}{-0.5em}%  % Reduce top margin
+		\setlength{\LTpost}{-0.5em}% % Reduce bottom margin
+		\setlength{\tabcolsep}{5pt}% % Tighter column spacing
+		\renewcommand{\arraystretch}{1.15}% % Slightly tighter row spacing
+		\small% Reduce glossary font size
+		\begin{longtable}{%
+			@{}%
+			>{\raggedright\arraybackslash}p{0.22\textwidth}%
+			>{\arraybackslash}p{0.65\textwidth}%  % Justified text for descriptions
+			>{\raggedright\arraybackslash}p{0.11\textwidth}%
+			@{}%
+			}%
+			}%
+			{%
+		\end{longtable}%
+		\endgroup
+	}%
+	\renewcommand{\glossentry}[2]{%
+		\glsentryitem{##1}\glstarget{##1}{\glossentryname{##1}} &
+		\glossentrydesc{##1} &
+		##2\tabularnewline[0.35em]%
+	}%
+	\renewcommand{\subglossentry}[3]{%
+		&%
+		\glssubentryitem{##2}\glstarget{##2}{\strut}\glossentrydesc{##2} &
+		##3\tabularnewline[0.35em]%
+	}%
+	\renewcommand*{\glossaryheader}{%
+		\toprule
+		\bfseries\color{primary}\entryname &
+		\bfseries\color{primary}\descriptionname &
+		\bfseries\color{primary}\pagelistname\tabularnewline
+		\midrule\endhead
+		\bottomrule\endfoot
+	}%
 }
 \setglossarystyle{lawfin-long3col}
 
@@ -842,14 +848,14 @@
 % BIBLIOGRAPHY
 % ============================================================================
 \usepackage[
-  backend=biber,
-  style=authoryear,
-  maxcitenames=2,
-  maxbibnames=99,
-  uniquename=false,
-  uniquelist=false,
-  sorting=nyt,
-  dashed=false
+	backend=biber,
+	style=authoryear,
+	maxcitenames=2,
+	maxbibnames=99,
+	uniquename=false,
+	uniquelist=false,
+	sorting=nyt,
+	dashed=false
 ]{biblatex}
 
 % Citation formatting

@@ -54,7 +54,7 @@
 		% ============================================================================
 
 		% Glass box for book summary - more prominent
-		\begin{scope}[shift={(0.45in, 3.15in)}]
+		\begin{scope}[shift={(0.45in, 3.60in)}]
 			% Multi-layer glass effect for depth and text contrast with drop shadow
 			% Shadow layer (beneath boxes for 3D lift)
 			\fill[black, opacity=0.08, rounded corners=6pt]
@@ -125,7 +125,7 @@
 		% Padding matched to book summary: top=0.25in, left=0.2in, right=0.2in, bottom≈0.26in
 		% Box positioned to align with book summary box (same x coordinates)
 
-		\begin{scope}[shift={(0.45in, 0.65in)}]
+		\begin{scope}[shift={(0.45in, 1.10in)}]
 			% Glass box for authors section - multi-layer effect with drop shadow
 			% Height: 2.3in (matches content needs with proper padding)
 			% Shadow layer (beneath boxes for 3D lift)
@@ -188,14 +188,17 @@
 		\end{scope}
 
 		% ----------------------------------------------------------------------------
-		% FOOTER: Website (bottom left) and ISBN (bottom right)
+		% FOOTER: Website (bottom left) and ISBN Barcode (bottom right)
 		% ----------------------------------------------------------------------------
-		\node[anchor=south west, inner sep=0pt] at (0.45in, 0.2in) {
-			{\rmfamily\fontsize{7.5}{9}\selectfont\bfseries\color{TextPure}\textsc{ai4lf.com}}
+		\node[anchor=south west, inner sep=0pt] at (0.75in, 0.5in) {
+			{\rmfamily\fontsize{9}{11}\selectfont\bfseries\color{TextPure}\textsc{ai4lf.com}}
 		};
-		\node[anchor=south east, inner sep=0pt] at (5.55in, 0.2in) {
-			{\rmfamily\fontsize{7.5}{9}\selectfont\color{TextMuted}ISBN 979-8-9943457-0-2}
-		};
+		% ISBN Barcode
+		\begin{scope}[shift={(5.55in, 0.13in)}]
+			\node[anchor=south east, inner sep=0pt] at (0, 0) {
+				\includegraphics[height=0.75in]{back-matter/isbn-barcode.pdf}
+			};
+		\end{scope}
 
 	\end{scope}
 \end{tikzpicture}
