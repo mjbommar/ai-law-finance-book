@@ -291,6 +291,11 @@ tmp/
 *.zip
 *-overleaf-*/
 
+# Large print-ready PDFs (use external distribution)
+*lulu*.pdf
+*-bleed.pdf
+*-interior-bleed.pdf
+
 # ============================================================================
 # KEEP These Files (Override patterns above)
 # ============================================================================
