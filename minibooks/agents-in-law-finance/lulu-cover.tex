@@ -20,6 +20,16 @@
 % ==========================================================================
 % DERIVED SIZES
 % ==========================================================================
+% These calculations work for both paperback (WrapArea=0) and hardcover
+% case wrap (WrapArea=0.75"). The cover layout is:
+%
+% Paperback:    [Bleed][Back][Spine][Front][Bleed]
+% Hardcover:    [Bleed][Wrap][Back][Spine][Front][Wrap][Bleed]
+%
+% The front/back cover PDFs are always TrimWidth × TrimHeight.
+% For hardcover, the wrap area extends the background around the boards.
+% ==========================================================================
+
 \newlength{\CoverWidth}
 \newlength{\CoverHeight}
 \newlength{\CoverBackX}
@@ -27,39 +37,62 @@
 \newlength{\CoverFrontX}
 \newlength{\CoverCenterY}
 \newlength{\CoverSpineCenterX}
+\newlength{\CoverContentY}
 \newlength{\SpineOrnamentInset}
 \newlength{\SpineOrnamentTopY}
 \newlength{\SpineOrnamentBottomY}
 
+% Total cover width: 2×(TrimWidth + WrapArea) + Spine + 2×Bleed
 \setlength{\CoverWidth}{\CoverTrimWidth}
+\addtolength{\CoverWidth}{\CoverWrapArea}
 \addtolength{\CoverWidth}{\CoverTrimWidth}
+\addtolength{\CoverWidth}{\CoverWrapArea}
 \addtolength{\CoverWidth}{\CoverSpineWidth}
 \addtolength{\CoverWidth}{\CoverBleed}
 \addtolength{\CoverWidth}{\CoverBleed}
 
+% Total cover height: TrimHeight + 2×WrapArea + 2×Bleed
 \setlength{\CoverHeight}{\CoverTrimHeight}
+\addtolength{\CoverHeight}{\CoverWrapArea}
+\addtolength{\CoverHeight}{\CoverWrapArea}
 \addtolength{\CoverHeight}{\CoverBleed}
 \addtolength{\CoverHeight}{\CoverBleed}
 
+% X position for back cover: Bleed + WrapArea
 \setlength{\CoverBackX}{\CoverBleed}
-\setlength{\CoverSpineX}{\CoverBleed}
+\addtolength{\CoverBackX}{\CoverWrapArea}
+
+% X position for spine: Bleed + WrapArea + TrimWidth
+\setlength{\CoverSpineX}{\CoverBackX}
 \addtolength{\CoverSpineX}{\CoverTrimWidth}
+
+% X position for front cover: Bleed + WrapArea + TrimWidth + Spine
 \setlength{\CoverFrontX}{\CoverSpineX}
 \addtolength{\CoverFrontX}{\CoverSpineWidth}
 
+% Y position for content (back/front covers): Bleed + WrapArea
+\setlength{\CoverContentY}{\CoverBleed}
+\addtolength{\CoverContentY}{\CoverWrapArea}
+
+% Center Y for spine text: (TrimHeight/2) + Bleed + WrapArea
 \setlength{\CoverCenterY}{\CoverTrimHeight}
 \divide\CoverCenterY by 2
 \addtolength{\CoverCenterY}{\CoverBleed}
+\addtolength{\CoverCenterY}{\CoverWrapArea}
 
+% Spine center X: SpineX + (SpineWidth/2)
 \setlength{\CoverSpineCenterX}{\CoverSpineWidth}
 \divide\CoverSpineCenterX by 2
 \addtolength{\CoverSpineCenterX}{\CoverSpineX}
 
+% Ornament positions (relative to content area, not bleed)
 \setlength{\SpineOrnamentInset}{0.35in}
 \setlength{\SpineOrnamentTopY}{\CoverHeight}
 \addtolength{\SpineOrnamentTopY}{-\CoverBleed}
+\addtolength{\SpineOrnamentTopY}{-\CoverWrapArea}
 \addtolength{\SpineOrnamentTopY}{-\SpineOrnamentInset}
 \setlength{\SpineOrnamentBottomY}{\CoverBleed}
+\addtolength{\SpineOrnamentBottomY}{\CoverWrapArea}
 \addtolength{\SpineOrnamentBottomY}{\SpineOrnamentInset}
 
 % ==========================================================================
@@ -90,13 +123,13 @@
 		\shade[top color=MidSlate, bottom color=DeepSlate]
 		(0,0) rectangle (\CoverWidth, \CoverHeight);
 
-		% Back cover (left)
-		\node[anchor=south west, inner sep=0pt] at (\CoverBackX, \CoverBleed) {%
+		% Back cover (left) - positioned at (BackX, ContentY)
+		\node[anchor=south west, inner sep=0pt] at (\CoverBackX, \CoverContentY) {%
 			\includegraphics[width=\CoverTrimWidth, height=\CoverTrimHeight]{covers/cover-back.pdf}%
 		};
 
-		% Front cover (right)
-		\node[anchor=south west, inner sep=0pt] at (\CoverFrontX, \CoverBleed) {%
+		% Front cover (right) - positioned at (FrontX, ContentY)
+		\node[anchor=south west, inner sep=0pt] at (\CoverFrontX, \CoverContentY) {%
 			\includegraphics[width=\CoverTrimWidth, height=\CoverTrimHeight]{covers/cover-front.pdf}%
 		};
 

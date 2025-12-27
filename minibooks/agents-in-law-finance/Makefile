@@ -36,6 +36,13 @@ INTERIOR_BLEED_JOB = interior-bleed
 INTERIOR_BLEED_PDF = lulu-interior-bleed.pdf
 BLEED_INPUT = \\def\\BleedMode{1}\\input{$(TEXFILE)}
 
+# Hardcover Case Wrap configuration
+# The same lulu-cover.tex template works for both bindings;
+# only the cover-vars differ (hardcover has 0.75" wrap area)
+COVER_HC_VARS = front-matter/cover/cover-vars-hardcover.tex
+COVER_HC_PDF = lulu-cover-hardcover.pdf
+COVER_HC_JOB = lulu-cover-hardcover
+
 # LaTeX tools - using XeLaTeX for fontspec support (works with standalone+tikz)
 LATEX = xelatex
 BIBER = biber
@@ -212,6 +219,9 @@ clean:
 	@rm -f $(COVER).aux $(COVER).log $(COVER).out
 	@rm -f $(COVER).fdb_latexmk $(COVER).fls $(COVER).toc
 	@rm -f $(COVER).synctex.gz $(COVER).synctex $(COVER).xdv
+	@rm -f $(COVER_HC_JOB).aux $(COVER_HC_JOB).log $(COVER_HC_JOB).out
+	@rm -f $(COVER_HC_JOB).fdb_latexmk $(COVER_HC_JOB).fls $(COVER_HC_JOB).toc
+	@rm -f $(COVER_HC_JOB).synctex.gz $(COVER_HC_JOB).synctex $(COVER_HC_JOB).xdv
 	@rm -f covers/*.aux covers/*.log covers/*.out covers/*.fdb_latexmk
 	@rm -f covers/*.fls covers/*.synctex.gz covers/*.synctex covers/*.xdv
 	@rm -f covers/*.toc
@@ -228,6 +238,8 @@ cleanall: clean
 	@echo "$(BOLD)$(BLUE)$(ARROW) Removing PDF...$(RESET)"
 	@rm -f $(PDFFILE)
 	@rm -f $(COVER_PDF) $(COVER_FRONT_PDF) $(COVER_BACK_PDF) $(INTERIOR_PDF)
+	@rm -f $(COVER_HC_PDF) $(COVER_HC_VARS)
+	@rm -f $(INTERIOR_BLEED_PDF)
 	@echo "$(GREEN)$(CHECK) Removed $(PDFFILE)$(RESET)"
 
 # ----------------------------------------------------------------------------
@@ -258,15 +270,8 @@ $(INTERIOR_PDF): $(PDFFILE)
 	fi; \
 	last=$$((pages-1)); \
 	mutool merge -o $(INTERIOR_PDF) $(PDFFILE) 3-$$last
-	@if command -v gs >/dev/null 2>&1; then \
-		echo "$(CYAN)   Flattening transparency (Ghostscript PDF 1.3)...$(RESET)"; \
-		tmp="$(INTERIOR_PDF).tmp"; \
-		gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.3 -dNOPAUSE -dBATCH -dSAFER \
-			-dPDFSETTINGS=/prepress -sOutputFile="$$tmp" "$(INTERIOR_PDF)" >/dev/null 2>&1; \
-		mv "$$tmp" "$(INTERIOR_PDF)"; \
-	else \
-		echo "$(YELLOW)   gs not found; skipping flattening$(RESET)"; \
-	fi
+	@# NOTE: Ghostscript flattening disabled for interior - it rasterizes pages
+	@# and creates 100x larger files that Lulu may reject. The native PDF works.
 	@echo "$(BOLD)$(GREEN)$(CHECK) Interior built: $(INTERIOR_PDF)$(RESET)"
 
 .PHONY: interior-bleed
@@ -297,15 +302,7 @@ $(INTERIOR_BLEED_PDF): $(TEX_DEPS)
 	fi; \
 	last=$$((pages-1)); \
 	mutool merge -o $(INTERIOR_BLEED_PDF) $(INTERIOR_BLEED_JOB).pdf 3-$$last
-	@if command -v gs >/dev/null 2>&1; then \
-		echo "$(CYAN)   Flattening transparency (Ghostscript PDF 1.3)...$(RESET)"; \
-		tmp="$(INTERIOR_BLEED_PDF).tmp"; \
-		gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.3 -dNOPAUSE -dBATCH -dSAFER \
-			-dPDFSETTINGS=/prepress -sOutputFile="$$tmp" "$(INTERIOR_BLEED_PDF)" >/dev/null 2>&1; \
-		mv "$$tmp" "$(INTERIOR_BLEED_PDF)"; \
-	else \
-		echo "$(YELLOW)   gs not found; skipping flattening$(RESET)"; \
-	fi
+	@# NOTE: Ghostscript flattening disabled - it rasterizes pages
 	@echo "$(BOLD)$(GREEN)$(CHECK) Interior built: $(INTERIOR_BLEED_PDF)$(RESET)"
 
 .PHONY: cover-vars
@@ -344,10 +341,9 @@ $(COVER_PDF): $(COVER_TEX) $(COVER_VARS) $(COVER_FRONT_PDF) $(COVER_BACK_PDF)
 	$(LATEX) $(LATEX_OPTS) $(COVER_TEX)
 	@if command -v gs >/dev/null 2>&1; then \
 		echo "$(CYAN)   Flattening transparency (Ghostscript PDF 1.3)...$(RESET)"; \
-		tmp="$(COVER_PDF).tmp"; \
 		gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.3 -dNOPAUSE -dBATCH -dSAFER \
-			-dPDFSETTINGS=/prepress -sOutputFile="$$tmp" "$(COVER_PDF)" >/dev/null 2>&1; \
-		mv "$$tmp" "$(COVER_PDF)"; \
+			-dPDFSETTINGS=/prepress -sOutputFile=/tmp/gs-flatten-cov.pdf "$(COVER_PDF)" >/dev/null 2>&1 && \
+		mv /tmp/gs-flatten-cov.pdf "$(COVER_PDF)"; \
 	else \
 		echo "$(YELLOW)   gs not found; skipping flattening$(RESET)"; \
 	fi
@@ -357,6 +353,80 @@ $(COVER_PDF): $(COVER_TEX) $(COVER_VARS) $(COVER_FRONT_PDF) $(COVER_BACK_PDF)
 cover-check: $(COVER_PDF)
 	@echo "$(BOLD)$(BLUE)$(ARROW) Checking cover dimensions...$(RESET)"
 	@python3 scripts/check_pdf_dimensions.py $(COVER_PDF) --vars $(COVER_VARS) --pages 1
+
+# ----------------------------------------------------------------------------
+# Hardcover Case Wrap targets
+# ----------------------------------------------------------------------------
+# Hardcover uses the same interior PDF but a different cover with:
+#   - Thicker spine (discrete table lookup vs formula)
+#   - 0.75" wrap area on all edges (wraps around boards)
+#   - Larger total cover dimensions
+# ----------------------------------------------------------------------------
+
+.PHONY: cover-vars-hardcover
+cover-vars-hardcover: $(COVER_HC_VARS)
+
+$(COVER_HC_VARS): $(INTERIOR_PDF) scripts/update_cover_vars.py
+	@echo "$(BOLD)$(BLUE)$(ARROW) Generating hardcover cover variables...$(RESET)"
+	@python3 scripts/update_cover_vars.py \
+		--pdf $(INTERIOR_PDF) \
+		--binding hardcover \
+		--output $(COVER_HC_VARS)
+	@echo "$(BOLD)$(GREEN)$(CHECK) Hardcover variables: $(COVER_HC_VARS)$(RESET)"
+
+.PHONY: cover-hardcover
+cover-hardcover: $(COVER_HC_PDF)
+
+# Build hardcover cover by compiling lulu-cover.tex with hardcover variables
+# We use a different jobname to output to a different PDF file
+$(COVER_HC_PDF): $(COVER_TEX) $(COVER_HC_VARS) $(COVER_FRONT_PDF) $(COVER_BACK_PDF)
+	@echo "$(BOLD)$(BLUE)$(ARROW) Building Lulu hardcover case wrap cover...$(RESET)"
+	@# Temporarily swap cover-vars to use hardcover dimensions
+	@cp $(COVER_VARS) $(COVER_VARS).bak 2>/dev/null || true
+	@cp $(COVER_HC_VARS) $(COVER_VARS)
+	$(LATEX) $(LATEX_OPTS) -jobname=$(COVER_HC_JOB) $(COVER_TEX)
+	@# Restore original cover-vars
+	@mv $(COVER_VARS).bak $(COVER_VARS) 2>/dev/null || true
+	@if command -v gs >/dev/null 2>&1; then \
+		echo "$(CYAN)   Flattening transparency (Ghostscript PDF 1.3)...$(RESET)"; \
+		gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.3 -dNOPAUSE -dBATCH -dSAFER \
+			-dPDFSETTINGS=/prepress -sOutputFile=/tmp/gs-flatten-hc.pdf "$(COVER_HC_PDF)" >/dev/null 2>&1 && \
+		mv /tmp/gs-flatten-hc.pdf "$(COVER_HC_PDF)"; \
+	else \
+		echo "$(YELLOW)   gs not found; skipping flattening$(RESET)"; \
+	fi
+	@echo "$(BOLD)$(GREEN)$(CHECK) Hardcover cover built: $(COVER_HC_PDF)$(RESET)"
+
+.PHONY: cover-hardcover-check
+cover-hardcover-check: $(COVER_HC_PDF)
+	@echo "$(BOLD)$(BLUE)$(ARROW) Checking hardcover cover dimensions...$(RESET)"
+	@python3 scripts/check_pdf_dimensions.py $(COVER_HC_PDF) --vars $(COVER_HC_VARS) --pages 1
+
+# Convenience target: build all hardcover Lulu files
+.PHONY: lulu-hardcover
+lulu-hardcover: $(INTERIOR_PDF) $(COVER_HC_PDF)
+	@echo ""
+	@echo "$(BOLD)$(GREEN)$(STAR) Hardcover Case Wrap files ready for Lulu:$(RESET)"
+	@echo "$(CYAN)   Interior: $(INTERIOR_PDF)$(RESET)"
+	@echo "$(CYAN)   Cover:    $(COVER_HC_PDF)$(RESET)"
+	@if command -v pdfinfo >/dev/null 2>&1; then \
+		pages=$$(pdfinfo $(INTERIOR_PDF) 2>/dev/null | grep Pages | awk '{print $$2}'); \
+		echo "$(CYAN)   Pages:   $$pages$(RESET)"; \
+	fi
+	@echo ""
+
+# Convenience target: build all paperback Lulu files
+.PHONY: lulu-paperback
+lulu-paperback: $(INTERIOR_PDF) $(COVER_PDF)
+	@echo ""
+	@echo "$(BOLD)$(GREEN)$(STAR) Paperback Perfect Bound files ready for Lulu:$(RESET)"
+	@echo "$(CYAN)   Interior: $(INTERIOR_PDF)$(RESET)"
+	@echo "$(CYAN)   Cover:    $(COVER_PDF)$(RESET)"
+	@if command -v pdfinfo >/dev/null 2>&1; then \
+		pages=$$(pdfinfo $(INTERIOR_PDF) 2>/dev/null | grep Pages | awk '{print $$2}'); \
+		echo "$(CYAN)   Pages:   $$pages$(RESET)"; \
+	fi
+	@echo ""
 
 # ----------------------------------------------------------------------------
 # Export targets
@@ -398,22 +468,42 @@ help:
 	@echo "$(BOLD)Usage:$(RESET)"
 	@echo "  make [target]"
 	@echo ""
-	@echo "$(BOLD)Targets:$(RESET)"
-	@echo "  $(CYAN)pdf$(RESET)        Build the complete mini-book PDF (default)"
-	@echo "  $(CYAN)interior$(RESET)   Build Lulu interior PDF (strip covers)"
-	@echo "  $(CYAN)cover-vars$(RESET) Update Lulu cover variables from interior"
-	@echo "  $(CYAN)cover-front$(RESET)Build front cover PDF (6x9)"
-	@echo "  $(CYAN)cover-back$(RESET) Build back cover PDF (6x9)"
-	@echo "  $(CYAN)cover$(RESET)      Build Lulu wrap cover PDF"
-	@echo "  $(CYAN)cover-check$(RESET)Verify cover PDF dimensions"
-	@echo "  $(CYAN)quick$(RESET)      Single-pass build for minor edits"
-	@echo "  $(CYAN)watch$(RESET)      Continuous compilation on file changes"
-	@echo "  $(CYAN)validate$(RESET)   Check for undefined references and citations"
-	@echo "  $(CYAN)view$(RESET)       Open the PDF in default viewer"
-	@echo "  $(CYAN)wordcount$(RESET)  Approximate word count of content"
-	@echo "  $(CYAN)clean$(RESET)      Remove auxiliary files (keep PDF)"
-	@echo "  $(CYAN)cleanall$(RESET)   Remove all generated files including PDF"
-	@echo "  $(CYAN)png$(RESET)        Convert PDF pages to PNG images"
-	@echo "  $(CYAN)zip$(RESET)        Create distribution ZIP archive"
-	@echo "  $(CYAN)help$(RESET)       Display this help message"
+	@echo "$(BOLD)Build Targets:$(RESET)"
+	@echo "  $(CYAN)pdf$(RESET)              Build the complete mini-book PDF (default)"
+	@echo "  $(CYAN)quick$(RESET)            Single-pass build for minor edits"
+	@echo "  $(CYAN)watch$(RESET)            Continuous compilation on file changes"
+	@echo "  $(CYAN)validate$(RESET)         Check for undefined references and citations"
+	@echo ""
+	@echo "$(BOLD)Lulu Publishing - Paperback:$(RESET)"
+	@echo "  $(CYAN)lulu-paperback$(RESET)   Build all paperback files (interior + cover)"
+	@echo "  $(CYAN)interior$(RESET)         Build Lulu interior PDF (strip covers)"
+	@echo "  $(CYAN)cover-vars$(RESET)       Generate paperback cover variables"
+	@echo "  $(CYAN)cover$(RESET)            Build paperback wrap cover PDF"
+	@echo "  $(CYAN)cover-check$(RESET)      Verify paperback cover dimensions"
+	@echo ""
+	@echo "$(BOLD)Lulu Publishing - Hardcover Case Wrap:$(RESET)"
+	@echo "  $(CYAN)lulu-hardcover$(RESET)   Build all hardcover files (interior + cover)"
+	@echo "  $(CYAN)cover-vars-hardcover$(RESET)"
+	@echo "                     Generate hardcover cover variables"
+	@echo "  $(CYAN)cover-hardcover$(RESET)  Build hardcover case wrap cover PDF"
+	@echo "  $(CYAN)cover-hardcover-check$(RESET)"
+	@echo "                     Verify hardcover cover dimensions"
+	@echo ""
+	@echo "$(BOLD)Cover Components:$(RESET)"
+	@echo "  $(CYAN)cover-front$(RESET)      Build front cover PDF (6x9)"
+	@echo "  $(CYAN)cover-back$(RESET)       Build back cover PDF (6x9)"
+	@echo ""
+	@echo "$(BOLD)Utilities:$(RESET)"
+	@echo "  $(CYAN)view$(RESET)             Open the PDF in default viewer"
+	@echo "  $(CYAN)wordcount$(RESET)        Approximate word count of content"
+	@echo "  $(CYAN)clean$(RESET)            Remove auxiliary files (keep PDF)"
+	@echo "  $(CYAN)cleanall$(RESET)         Remove all generated files including PDF"
+	@echo "  $(CYAN)png$(RESET)              Convert PDF pages to PNG images"
+	@echo "  $(CYAN)zip$(RESET)              Create distribution ZIP archive"
+	@echo "  $(CYAN)help$(RESET)             Display this help message"
+	@echo ""
+	@echo "$(BOLD)Hardcover vs Paperback Differences:$(RESET)"
+	@echo "  Hardcover case wrap has a 0.75\" wrap area that extends around"
+	@echo "  the boards, resulting in a larger cover PDF. The spine is also"
+	@echo "  thicker (calculated via table lookup instead of formula)."
 	@echo ""

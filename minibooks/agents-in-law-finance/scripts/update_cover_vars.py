@@ -1,9 +1,19 @@
 #!/usr/bin/env python3
 """Update Lulu cover variables based on interior page count.
 
-Calculates spine width using Lulu's Book Creation Guide:
-- Paperback: spine_in = (pages / 444) + 0.06
-- Hardcover: spine width via table
+Calculates spine width and cover dimensions using Lulu's Book Creation Guide.
+
+Paperback:
+- Spine: (pages / 444) + 0.06 inches
+- Cover: 2×TrimWidth + Spine + 2×Bleed
+
+Hardcover Case Wrap:
+- Spine: discrete table lookup (thicker spines)
+- Wrap area: 0.75" on all edges (wraps around hardcover boards)
+- Cover: 2×(TrimWidth + WrapArea) + Spine + 2×Bleed (width)
+         TrimHeight + 2×WrapArea + 2×Bleed (height)
+
+Reference: https://help.lulu.com/en/support/solutions/articles/64000308572
 """
 
 from __future__ import annotations
@@ -16,7 +26,13 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+# Lulu hardcover case wrap specifications
+HARDCOVER_WRAP_AREA = 0.75  # inches - wraps around boards
+HARDCOVER_OVERHANG = 0.125  # inches - cover extends past pages
+STANDARD_BLEED = 0.125  # inches - trimmed off during manufacturing
 
+# Hardcover spine width table (page_min, page_max, spine_inches)
+# From Lulu Book Creation Guide
 HARDCOVER_TABLE = [
     (24, 84, 0.25),
     (85, 140, 0.5),
@@ -84,13 +100,33 @@ def spine_width_hardcover(pages: int) -> float:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Update Lulu cover variables")
+    parser = argparse.ArgumentParser(
+        description="Update Lulu cover variables",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  # Paperback (default)
+  python update_cover_vars.py --pdf lulu-interior.pdf
+
+  # Hardcover case wrap
+  python update_cover_vars.py --pdf lulu-interior.pdf --binding hardcover
+
+  # Hardcover with custom output file
+  python update_cover_vars.py --pdf lulu-interior.pdf --binding hardcover \\
+      --output front-matter/cover/cover-vars-hardcover.tex
+""",
+    )
     parser.add_argument("--pdf", type=Path, help="Interior PDF for page count")
-    parser.add_argument("--page-count", type=int, help="Interior page count")
-    parser.add_argument("--binding", choices=["paperback", "hardcover"], default="paperback")
-    parser.add_argument("--trim-width", type=float, default=6.0, help="Trim width in inches")
-    parser.add_argument("--trim-height", type=float, default=9.0, help="Trim height in inches")
-    parser.add_argument("--bleed", type=float, default=0.125, help="Bleed in inches")
+    parser.add_argument("--page-count", type=int, help="Interior page count (alternative to --pdf)")
+    parser.add_argument(
+        "--binding",
+        choices=["paperback", "hardcover"],
+        default="paperback",
+        help="Binding type (default: paperback)",
+    )
+    parser.add_argument("--trim-width", type=float, default=6.0, help="Trim width in inches (default: 6.0)")
+    parser.add_argument("--trim-height", type=float, default=9.0, help="Trim height in inches (default: 9.0)")
+    parser.add_argument("--bleed", type=float, default=STANDARD_BLEED, help=f"Bleed in inches (default: {STANDARD_BLEED})")
     parser.add_argument(
         "--output",
         type=Path,
@@ -99,6 +135,7 @@ def main() -> int:
     )
     args = parser.parse_args()
 
+    # Determine page count
     if args.page_count is None:
         if not args.pdf:
             parser.error("provide --pdf or --page-count")
@@ -108,43 +145,75 @@ def main() -> int:
     else:
         pages = args.page_count
 
+    # Calculate spine width based on binding type
     if args.binding == "paperback":
         spine_in = spine_width_paperback(pages)
+        wrap_in = 0.0  # No wrap area for paperback
     else:
         spine_in = spine_width_hardcover(pages)
+        wrap_in = HARDCOVER_WRAP_AREA  # 0.75" wrap for hardcover case wrap
 
-    cover_width_in = (2 * args.trim_width) + spine_in + (2 * args.bleed)
-    cover_height_in = args.trim_height + (2 * args.bleed)
+    # Calculate total cover dimensions
+    # Paperback: 2×TrimWidth + Spine + 2×Bleed
+    # Hardcover: 2×(TrimWidth + WrapArea) + Spine + 2×Bleed
+    cover_width_in = (2 * (args.trim_width + wrap_in)) + spine_in + (2 * args.bleed)
+    cover_height_in = args.trim_height + (2 * wrap_in) + (2 * args.bleed)
 
     output = args.output
     output.parent.mkdir(parents=True, exist_ok=True)
 
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # Build header comment with specifications
+    if args.binding == "hardcover":
+        spec_comment = (
+            f"% Hardcover Case Wrap Specifications:\n"
+            f"%   - Wrap area: {wrap_in}\" (wraps around boards)\n"
+            f"%   - Spine width: {spine_in:.3f}\" (from table lookup)\n"
+            f"%   - Total cover: {cover_width_in:.3f}\" × {cover_height_in:.3f}\"\n"
+            f"%   - Interior trim: {args.trim_width}\" × {args.trim_height}\"\n"
+        )
+    else:
+        spec_comment = (
+            f"% Paperback Perfect Bound Specifications:\n"
+            f"%   - Spine width: {spine_in:.3f}\" (formula: pages/444 + 0.06)\n"
+            f"%   - Total cover: {cover_width_in:.3f}\" × {cover_height_in:.3f}\"\n"
+            f"%   - Interior trim: {args.trim_width}\" × {args.trim_height}\"\n"
+        )
+
     content = (
         "% ============================================================================\n"
         "% COVER VARIABLES - Generated for Lulu wrap cover\n"
         "% ============================================================================\n"
         f"% Generated: {now}\n"
         f"% Binding: {args.binding} | Pages: {pages}\n"
+        f"{spec_comment}"
         "% ============================================================================\n\n"
         "\\newlength{\\CoverTrimWidth}\n"
         "\\newlength{\\CoverTrimHeight}\n"
         "\\newlength{\\CoverBleed}\n"
         "\\newlength{\\CoverSpineWidth}\n"
+        "\\newlength{\\CoverWrapArea}\n"
         f"\\newcommand{{\\CoverPageCount}}{{{pages}}}\n"
         f"\\newcommand{{\\CoverBinding}}{{{args.binding}}}\n\n"
         f"\\setlength{{\\CoverTrimWidth}}{{{args.trim_width:.3f}in}}\n"
         f"\\setlength{{\\CoverTrimHeight}}{{{args.trim_height:.3f}in}}\n"
         f"\\setlength{{\\CoverBleed}}{{{args.bleed:.3f}in}}\n"
-        f"\\setlength{{\\CoverSpineWidth}}{{{spine_in:.6f}in}}\n\n"
-        f"% Derived sizes (inches): cover_width={cover_width_in:.6f}, cover_height={cover_height_in:.3f}\n"
+        f"\\setlength{{\\CoverSpineWidth}}{{{spine_in:.6f}in}}\n"
+        f"\\setlength{{\\CoverWrapArea}}{{{wrap_in:.3f}in}}\n\n"
+        f"% Derived dimensions (inches):\n"
+        f"%   Total cover width:  {cover_width_in:.6f}\n"
+        f"%   Total cover height: {cover_height_in:.3f}\n"
     )
     output.write_text(content)
 
     print(f"Wrote {output}")
+    print(f"Binding: {args.binding}")
     print(f"Pages: {pages}")
-    print(f"Spine width (in): {spine_in:.6f}")
-    print(f"Cover size (in): {cover_width_in:.6f} x {cover_height_in:.3f}")
+    print(f"Spine width: {spine_in:.3f}\"")
+    if wrap_in > 0:
+        print(f"Wrap area: {wrap_in:.3f}\"")
+    print(f"Total cover: {cover_width_in:.3f}\" × {cover_height_in:.3f}\"")
     return 0
 
 
