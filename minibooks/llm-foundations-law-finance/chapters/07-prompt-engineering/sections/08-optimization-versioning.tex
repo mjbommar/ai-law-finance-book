@@ -45,7 +45,7 @@ Despite these parallels, prompts differ from traditional code in important ways:
 
 \paragraph{Non-Deterministic Outputs.} Code is deterministic: given the same inputs, it produces the same outputs. Prompts are probabilistic: even with temperature 0, outputs vary across calls. This means testing requires statistical methods, not exact assertions.
 
-\paragraph{Model Dependency.} Prompts are coupled to specific model versions. A prompt tuned for GPT-4 may perform poorly on Claude or Gemini. Model updates (even minor version bumps) can change behavior, requiring re-validation.
+\paragraph{Model Dependency.} Prompts are coupled to specific model versions. A prompt tuned for one model may perform poorly on another. Model updates (even minor version bumps) can change behavior, requiring re-validation.
 
 \paragraph{Context Sensitivity.} Prompts depend on context: retrieved documents, user history, system state. Small changes in context can produce large changes in output. Testing must cover the range of realistic contexts.
 
@@ -58,7 +58,7 @@ Versioning prompts alone is insufficient. A complete prompt system includes temp
 \begin{table}[htbp]
 \centering
 \small
-\begin{tabular}{p{2.8cm}p{4.2cm}p{3.8cm}}
+\begin{tabular}{@{}p{2.8cm}p{4.0cm}p{3.7cm}@{}}
 \toprule
 \textbf{Artifact Type} & \textbf{What to Version} & \textbf{Why} \\
 \midrule
@@ -150,10 +150,10 @@ If you use modular versioning, maintain a \keyterm{compatibility matrix} that sp
 \toprule
 \textbf{Template} & \textbf{Exemplars} & \textbf{Config} & \textbf{Model} & \textbf{Status} \\
 \midrule
-v1.2 & v3.0 & v1.1 & gpt-4-0613 & Production \\
-v1.3 & v3.0 & v1.1 & gpt-4-0613 & Staging \\
-v1.2 & v3.1 & v1.1 & gpt-4-0613 & Deprecated \\
-v1.3 & v3.1 & v1.2 & gpt-4-1106 & Testing \\
+v1.2 & v3.0 & v1.1 & gpt-5-2025-06 & Production \\
+v1.3 & v3.0 & v1.1 & gpt-5-2025-06 & Staging \\
+v1.2 & v3.1 & v1.1 & gpt-5-2025-06 & Deprecated \\
+v1.3 & v3.1 & v1.2 & gpt-5-mini-2025-06 & Testing \\
 \bottomrule
 \end{tabular}
 \caption{Example compatibility matrix for modular versioning. Each row specifies a tested combination of components and deployment status.}
@@ -293,7 +293,7 @@ A \keyterm{prompt registry} is a versioned catalog of all production prompts, co
   "status": "production",
   "deployed": "2024-11-15T14:30:00Z",
   "approved_by": "alice@example.com",
-  "model": "gpt-4-1106-preview",
+  "model": "gpt-5-2025-06",
   "artifacts": {
     "template": "templates/contract-v3.2.txt",
     "exemplars": "exemplars/contract-v2.1.json",

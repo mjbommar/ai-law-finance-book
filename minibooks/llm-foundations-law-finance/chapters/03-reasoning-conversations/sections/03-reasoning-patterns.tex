@@ -208,7 +208,7 @@ For professional applications, always separate the model's final answer from the
 
 From a governance perspective, the complete ReAct trace provides an audit trail: which tools were called, what information was retrieved, and how the model synthesized its response. This is invaluable for compliance review and debugging.
 
-\begin{highlightbox}[title={ReAct as Proto-Agentic Pattern}]
+\begin{highlightbox}[title={ReAct Pattern}]
 The ReAct pattern---reasoning interleaved with action---represents a proto-agentic architecture. Our companion volume, \textit{Agentic AI in Law and Finance}, formalizes when such systems qualify as genuine agents and how to architect them, providing a rigorous framework distinguishing agents from tool-using systems and addressing how agents decompose tasks and execute tool calls.
 \end{highlightbox}
 
@@ -284,7 +284,7 @@ A more systematic version is the \keyterm{critique-and-revision loop}:
   \item \textbf{Revise}: Model generates a revised version based on its critique
 \end{enumerate}
 
-\begin{highlightbox}[title={Self-Reflection Example: Investment Recommendation}]
+\begin{highlightbox}[title={Self-Reflection Example}]
 \textbf{Initial response}: ``You should invest in technology stocks for growth.''
 
 \textbf{Critique prompt}: ``Critique the above advice for any financial risks or missing considerations.''
@@ -502,7 +502,7 @@ Patterns that aggregate or compress reasoning (like majority voting without trac
 
 With this toolkit of reasoning patterns, how do you decide which to use? The next section provides a decision framework, but here are initial heuristics:
 
-\begin{keybox}[title={Reasoning Pattern Selection Heuristics}]
+\begin{keybox}[title={Pattern Selection}]
 \begin{itemize}
   \item \textbf{If the task is straightforward}: Use direct prompting (zero-shot or simple few-shot). Don't complicate unnecessarily.
 

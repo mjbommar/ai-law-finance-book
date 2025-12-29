@@ -15,7 +15,7 @@ In legal and financial workflows, tool use enables AI systems to bridge the gap 
 
 Large Language Models store knowledge in their parameters---the billions of weights learned during training. This \keyterm{parametric knowledge} enables impressive capabilities, but it has fundamental limitations that make tools essential for professional applications.
 
-\begin{definitionbox}[title={Parametric vs. Non-Parametric Knowledge}]
+\begin{definitionbox}[title={Knowledge Types}]
 \textbf{Parametric knowledge} is information encoded in a model's weights during training. It is static, probabilistic, and cannot be updated without retraining.
 
 \textbf{Non-parametric knowledge} is external information accessed through tools and retrieval systems. It is dynamic, deterministic when needed, and can be updated independently of the model.
@@ -325,7 +325,7 @@ For mathematical reasoning tasks, PAL achieves state-of-the-art results. On the 
   \item \textbf{Date arithmetic:} Compute filing deadlines, statute of limitations, and contractual milestones
 \end{itemize}
 
-\begin{keybox}[title={When to Use Neuro-Symbolic Approaches}]
+\begin{keybox}[title={Neuro-Symbolic Use}]
 Consider Chain of Code or PAL when tasks require:
 \begin{itemize}
   \item Multi-step arithmetic or algorithmic logic
@@ -616,7 +616,7 @@ For financial and legal applications, include validation against known ground tr
   \item Test edge cases (leap years, negative values, boundary conditions)
 \end{itemize}
 
-\begin{keybox}[title={Tool Use Best Practices Summary}]
+\begin{keybox}[title={Best Practices}]
 \begin{itemize}
   \item Define explicit contracts with types, constraints, and governance metadata
   \item Enforce least privilege: grant only necessary capabilities

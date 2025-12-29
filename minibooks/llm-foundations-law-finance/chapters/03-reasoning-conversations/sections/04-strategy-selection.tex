@@ -15,19 +15,19 @@ Different tasks call for different approaches. The following matrix provides gui
 
 \begin{center}
 \small
-\begin{tabular}{>{\raggedright}p{2.4cm}p{2.8cm}p{2.5cm}p{3.8cm}}
+\begin{tabular}{@{}>{\raggedright}p{2.2cm}p{2.2cm}p{2.2cm}p{3.6cm}@{}}
 \toprule
-\textbf{Task Type} & \textbf{Recommended Strategy} & \textbf{Context/Memory} & \textbf{Rationale} \\
+\textbf{Task Type} & \textbf{Strategy} & \textbf{Context} & \textbf{Rationale} \\
 \midrule
-Chatbots / Creative Writing & Zero-shot or few-shot & Sliding window / Summarization & Latency is critical. Reasoning errors are low-risk. \\
+Chatbots / Creative & Zero/few-shot & Sliding window & Latency critical; errors low-risk \\
 \addlinespace
-Math Tutoring / Coding & Chain-of-Thought & K-NN few-shot selection & Precision is key. Users tolerate slight delay for correctness. \\
+Math / Coding & Chain-of-Thought & K-NN few-shot & Precision key; users tolerate delay \\
 \addlinespace
-Medical / Financial Analysis & Self-Consistency & Vector retrieval (high recall) & \textbf{High risk}. Error cost outweighs compute cost. \\
+Medical / Finance & Self-Consistency & Vector retrieval & \textbf{High risk}; error cost high \\
 \addlinespace
-Research Assistants & ReAct & Long-term vector memory & Model must interact with tools for real-time data. \\
+Research Assist. & ReAct & Long-term memory & Tools needed for live data \\
 \addlinespace
-Complex Planning / Discovery & Tree of Thoughts & Full context replay & Exploration is needed. High latency acceptable. \\
+Complex Planning & Tree of Thoughts & Full replay & Exploration; latency acceptable \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -124,7 +124,7 @@ Before each call, verify your token allocation:
 
 \subsubsection{Legal Applications}
 
-\begin{keybox}[title={Legal AI Strategy Recommendations}]
+\begin{keybox}[title={Legal AI Strategies}]
 \begin{itemize}
   \item \textbf{Legal research}: ReAct with access to case databases; cite all sources
   \item \textbf{Document review}: Few-shot with domain-specific examples; CoT for analysis
@@ -136,7 +136,7 @@ Before each call, verify your token allocation:
 
 \subsubsection{Financial Applications}
 
-\begin{keybox}[title={Financial AI Strategy Recommendations}]
+\begin{keybox}[title={Financial AI Strategies}]
 \begin{itemize}
   \item \textbf{Market data queries}: ReAct with API access; never use training data for prices
   \item \textbf{Risk analysis}: Self-consistency for quantitative assessments

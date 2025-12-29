@@ -78,14 +78,15 @@ where $z_i$ are the raw logits. As $T \to 0$, the distribution approaches a one-
 \centering
 \caption{Temperature Settings by Use Case}
 \label{tab:llm1-temperature}
-\begin{tabular}{@{}llp{5cm}@{}}
+\small
+\begin{tabular}{@{}llp{3.5cm}@{}}
 \toprule
-\textbf{Temperature} & \textbf{Use Case} & \textbf{Rationale} \\
+\textbf{Temp.} & \textbf{Use Case} & \textbf{Rationale} \\
 \midrule
-0.0--0.2 & Data extraction, JSON output, legal analysis & Maximum consistency; minimal hallucination risk \\
-0.2--0.5 & Summarization, drafting, technical writing & Some variety while maintaining accuracy \\
-0.5--0.8 & Creative drafting, brainstorming, ideation & Explores alternative phrasings and ideas \\
-0.8--1.2 & Fiction writing, marketing copy, exploration & Maximum creativity; requires human review \\
+0.0--0.2 & Extraction, JSON, legal & Max consistency; minimal hallucination \\
+0.2--0.5 & Summarization, drafting & Variety while maintaining accuracy \\
+0.5--0.8 & Creative, brainstorming & Explores alternatives and ideas \\
+0.8--1.2 & Fiction, marketing & Max creativity; needs human review \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -115,7 +116,7 @@ Instead of considering all possible tokens, top-p considers only the smallest se
 
 This adaptivity makes top-p generally preferable to fixed-$k$ approaches (top-$k$ sampling), which always consider exactly $k$ tokens regardless of the distribution shape.
 
-\begin{keybox}[title={Recommended Defaults for Regulated Applications}]
+\begin{keybox}[title={Recommended Defaults}]
 \begin{itemize}
   \item \textbf{Temperature:} 0.0--0.2 for extraction and structured output; 0.2--0.4 for analysis
   \item \textbf{Top-p:} 0.9--0.95 (truncates only the extreme long tail)
@@ -161,7 +162,7 @@ Even with identical prompts and temperature = 0:
 
 \paragraph{GPU Non-Determinism.} Modern GPUs perform parallel floating-point operations that are not always associative at high precision. The computation $A + B + C$ may yield a slightly different result than $A + C + B$ at the least significant bits. These microscopic differences can cascade: a tiny change in logits might flip which token has the maximum probability, especially when two tokens are nearly tied.
 
-\paragraph{Model Updates.} Cloud-hosted models are updated periodically. What you call ``GPT-4'' today may be a subtly different model than what you called ``GPT-4'' last month. Behavior can change even with identical prompts.
+\paragraph{Model Updates.} Cloud-hosted models are updated periodically. What you call a model today may be a subtly different version than what you called it last month. Behavior can change even with identical prompts.
 
 \paragraph{Infrastructure Variation.} Different server hardware, different load balancing, different batching decisions---all can introduce variation in how prompts are processed.
 
@@ -178,7 +179,7 @@ For contexts requiring audit trails (regulatory filings, legal analysis, financi
 
   \item \textbf{Store the output.} Don't assume you can regenerate it---keep the actual output.
 
-  \item \textbf{Document model version.} Note the specific model identifier, not just ``GPT-4'' but ``gpt-4-0613'' or equivalent.
+  \item \textbf{Document model version.} Note the specific model identifier, not just ``GPT-5'' but ``gpt-5-2025-06'' or equivalent.
 
   \item \textbf{Accept near-determinism.} For many applications, outputs that are 99\% identical across runs are sufficient; plan for the 1\% variation in your validation workflows.
 \end{enumerate}
@@ -188,7 +189,7 @@ For regulatory purposes, log:
 \begin{verbatim}
 {
   "timestamp": "2024-12-20T14:30:00Z",
-  "model": "claude-3-sonnet-20241022",
+  "model": "claude-sonnet-4.5-20251015",
   "temperature": 0.1,
   "top_p": 0.95,
   "seed": 42,
@@ -308,16 +309,16 @@ We summarize recommended configurations for common regulated-domain use cases:
 \centering
 \caption{Sampling Configurations by Application}
 \label{tab:llm1-sampling-configs}
-\begin{tabular}{@{}p{3.5cm}cccp{4cm}@{}}
+\begin{tabular}{@{}p{2.8cm}ccp{1.8cm}p{3.2cm}@{}}
 \toprule
-\textbf{Application} & \textbf{Temp} & \textbf{Top-p} & \textbf{Max Tokens} & \textbf{Notes} \\
+\textbf{Application} & \textbf{Temp} & \textbf{Top-p} & \textbf{Max Tok.} & \textbf{Notes} \\
 \midrule
-JSON extraction & 0.0 & 1.0 & Schema-based & Use structured output mode \\
-Legal summarization & 0.2 & 0.9 & 500--1000 & Set clear length instruction \\
-Document classification & 0.0 & 1.0 & 50 & Single word/phrase output \\
+JSON extraction & 0.0 & 1.0 & Schema & Structured output mode \\
+Legal summarization & 0.2 & 0.9 & 500--1000 & Clear length instruction \\
+Document classif. & 0.0 & 1.0 & 50 & Single word/phrase \\
 Contract drafting & 0.3 & 0.95 & 2000+ & Review all output \\
 Risk analysis & 0.2 & 0.9 & 1000 & Consider self-consistency \\
-Brainstorming & 0.7 & 0.95 & 1000 & Expect variety; human curation \\
+Brainstorming & 0.7 & 0.95 & 1000 & Human curation needed \\
 \bottomrule
 \end{tabular}
 \end{table}

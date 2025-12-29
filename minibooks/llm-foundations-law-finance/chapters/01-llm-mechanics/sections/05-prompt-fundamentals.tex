@@ -37,7 +37,7 @@ A \keyterm{prompt} is the text input you provide to an LLM. While it might seem 
   \item \textbf{Modularity:} You can swap context or inputs without rewriting instructions
 \end{itemize}
 
-\begin{highlightbox}[title={Example: Contract Summarization Prompt}]
+\begin{highlightbox}[title={Contract Summary Example}]
 \textbf{System:}
 \begin{verbatim}
 You are a legal document analysis assistant. Your task is
@@ -90,7 +90,7 @@ In practice, some systems merge these categories or represent them differently (
   \item \textbf{Novel output structures:} Custom JSON schemas, proprietary data formats
 \end{itemize}
 
-\begin{highlightbox}[title={Zero-Shot Example: Document Classification}]
+\begin{highlightbox}[title={Zero-Shot Classification}]
 \textbf{Prompt:}
 \begin{verbatim}
 Classify the following SEC filing as one of: 10-K, 10-Q,
@@ -154,21 +154,21 @@ The model sees this as a pattern to continue. The quality and relevance of the e
   \item \textbf{Improve consistency:} Anchoring the model to examples reduces variation across inputs
 \end{itemize}
 
-\begin{highlightbox}[title={Few-Shot Example: Legal Citation Extraction}]
+\begin{highlightbox}[title={Few-Shot Citations}]
 \textbf{Prompt:}
 \begin{verbatim}
-Extract all case citations from the text and return as JSON.
+Extract all case citations from text and return as JSON.
 
 Example 1:
-Input: "Pursuant to Brown v. Board of Education, 347 U.S. 483
-(1954), segregation is unconstitutional."
-Output: {"citations": [{"case": "Brown v. Board of Education",
-"reporter": "347 U.S. 483", "year": 1954}]}
+Input: "Pursuant to Brown v. Board, 347 U.S. 483 (1954),
+segregation is unconstitutional."
+Output: {"citations": [{"case": "Brown v. Board",
+  "reporter": "347 U.S. 483", "year": 1954}]}
 
 Example 2:
 Input: "See also Roe v. Wade, 410 U.S. 113 (1973)."
 Output: {"citations": [{"case": "Roe v. Wade",
-"reporter": "410 U.S. 113", "year": 1973}]}
+  "reporter": "410 U.S. 113", "year": 1973}]}
 
 Example 3:
 Input: "No citations in this text."
@@ -205,15 +205,16 @@ As prompts evolve from exploratory prototypes to production systems, they follow
 \centering
 \caption{The Five-Phase Prompt Maturity Model}
 \label{tab:llm1-prompt-maturity}
-\begin{tabular}{@{}clp{4cm}p{3cm}l@{}}
+\small
+\begin{tabular}{@{}clp{2.5cm}p{2.2cm}l@{}}
 \toprule
-\textbf{Phase} & \textbf{Input} & \textbf{Output} & \textbf{Testability} & \textbf{Chapters} \\
+\textbf{Phase} & \textbf{Input} & \textbf{Output} & \textbf{Testability} & \textbf{Ch.} \\
 \midrule
-1: Zero-shot & Freeform text & Freeform text & None (manual review) & 1--3 \\
-2: Few-shot & Examples + text & Freeform text & Low (human eval) & 2--3 \\
-3: Structured Input & JSON/XML input & Freeform text & Medium (input validation) & 4, 7 \\
-4: Structured I/O & JSON/XML input & JSON/XML output & High (schema validation) & 4, 7 \\
-5: Modular & Decomposed pipeline & Structured, composable & Full (unit + integration tests) & 7 \\
+1: Zero-shot & Freeform & Freeform & None (manual) & 1--3 \\
+2: Few-shot & Examples & Freeform & Low (human) & 2--3 \\
+3: Struct.\ In & JSON/XML & Freeform & Medium (input) & 4, 7 \\
+4: Struct.\ I/O & JSON/XML & JSON/XML & High (schema) & 4, 7 \\
+5: Modular & Decomposed & Structured & Full (tests) & 7 \\
 \bottomrule
 \end{tabular}
 \end{table}

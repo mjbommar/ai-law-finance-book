@@ -13,7 +13,7 @@ Moving from experimental prototypes to production systems in legal and financial
 \subsection{Common Pitfalls to Avoid}
 \label{sec:llmC-pitfalls-avoid}
 
-\begin{cautionbox}[title={Pitfall 1: Free-Form Outputs in High-Stakes Workflows}]
+\begin{cautionbox}[title={Pitfall 1}]
 One of the most common and dangerous mistakes is allowing an LLM to provide free-form narrative answers when structured data is required downstream. Consider this real scenario from a financial institution: a compliance team deployed an AI to flag suspicious transactions for review. The system was asked to output a list of flagged transaction IDs with risk scores. Instead of enforcing a structured format like JSON or CSV, they relied on prompting: \emph{``Please list the flagged transactions.''} The AI obliged---with a well-formatted paragraph describing the transactions in prose.
 
 The result? An analyst manually copied transaction IDs from the narrative, missing several entries and introducing transcription errors. One high-risk transaction was overlooked entirely because it appeared mid-sentence rather than in a bulleted list. The error was only discovered weeks later during an audit, by which time the suspicious activity had escalated.
@@ -23,7 +23,7 @@ The result? An analyst manually copied transaction IDs from the narrative, missi
 \textbf{The fix:} Always use structured output formats (JSON, XML, CSV) with explicit schemas when the data will be consumed by another system or when completeness is mandatory. Use function calling or constrained decoding to guarantee format adherence. Never rely on humans to manually extract data from AI-generated text in regulated workflows.
 \end{cautionbox}
 
-\begin{cautionbox}[title={Pitfall 2: Tool Use Without Governance Metadata}]
+\begin{cautionbox}[title={Pitfall 2}]
 Enabling an AI to call external tools or functions without proper logging and metadata is a compliance nightmare waiting to happen. Imagine an AI agent that can query customer databases, retrieve financial records, and send notifications. If these tool calls are not logged with sufficient context---who requested the action, why it was performed, what data was accessed---you have no audit trail.
 
 In one case, a law firm deployed an AI assistant that could search case files and email summaries to attorneys. When a client later questioned how their confidential information was handled, the firm could not produce records showing which AI queries touched which files, or who authorized the searches. The lack of provenance severely damaged client trust and exposed the firm to potential malpractice claims.
@@ -33,7 +33,7 @@ In one case, a law firm deployed an AI assistant that could search case files an
 \textbf{The fix:} Every tool invocation must carry governance metadata including user identity, purpose (mapped to a policy category), privilege level, jurisdiction/regulatory context, and a unique correlation ID. Log these details in an immutable, tamper-evident store. As one practitioner noted, treating every agent action as ``flight data worth preserving'' ensures you can defend and explain AI decisions years later.
 \end{cautionbox}
 
-\begin{cautionbox}[title={Pitfall 3: Schema Changes Without Versioning}]
+\begin{cautionbox}[title={Pitfall 3}]
 Evolving your output schemas or tool interfaces without proper versioning leads to silent failures and data mismatches. For example, a bank might start with a \texttt{compute\_interest} function that takes three parameters: principal, rate, and days. Later, they realize they need to support different compounding frequencies and add a fourth parameter.
 
 If the AI's prompts and the consuming systems are not updated in lockstep, chaos ensues. The AI might call the old three-parameter version, the system expects four parameters and throws an error, or worse, the system assumes a default value that produces incorrect calculations. In one incident, a financial reporting system used outdated schema definitions for six months, generating subtly incorrect interest calculations that went unnoticed until a regulatory filing was rejected.
@@ -43,7 +43,7 @@ If the AI's prompts and the consuming systems are not updated in lockstep, chaos
 \textbf{The fix:} Version all schemas and tool interfaces explicitly (e.g., \texttt{v2.1}). Include the version number in function names or metadata. Maintain backward compatibility during transitions, and log which version was used for each call. Deprecate old versions with clear timelines and monitoring to ensure no calls to outdated versions occur in production. Treat schema changes like database migrations: planned, tested, and reversible.
 \end{cautionbox}
 
-\begin{cautionbox}[title={Pitfall 4: Ignoring Rate Limits and Scalability}]
+\begin{cautionbox}[title={Pitfall 4}]
 AI agents that call external APIs or tools can quickly overwhelm systems when rate limits and concurrency are not managed. Consider an AI that searches a legal database for relevant cases. If the agent is uncertain about which search terms to use, it might issue dozens of queries in rapid succession---hitting the database provider's rate limit and getting throttled or blocked entirely.
 
 In a worst-case scenario, one organization's AI agent entered a ``retry storm'': when searches failed due to rate limiting, the retry logic kicked in for all failed requests simultaneously, creating an exponential explosion of traffic. The API provider temporarily banned their account, halting all operations.
@@ -53,7 +53,7 @@ In a worst-case scenario, one organization's AI agent entered a ``retry storm'':
 \textbf{The fix:} Implement adaptive rate limiting and circuit breakers. Set maximum call limits per query (e.g., no more than 3 searches per user question). Use exponential backoff for retries, and implement circuit breakers that stop calling a failing service after a threshold of errors. Monitor tool usage in real-time and alert on anomalies. For high-throughput scenarios, use queuing and load balancing to smooth out demand spikes.
 \end{cautionbox}
 
-\begin{cautionbox}[title={Pitfall 5: Data Privacy and Residency Violations}]
+\begin{cautionbox}[title={Pitfall 5}]
 Legal and financial data is often subject to strict \keyterm{data residency} and privacy regulations. Sending this data to a third-party LLM API without proper safeguards can violate GDPR, HIPAA, or contractual confidentiality obligations. In one case, a European legal tech startup used a U.S.-based LLM API to analyze client contracts. The API provider's servers were in the United States, and personal data from European citizens was transmitted without explicit consent or adequate safeguards---a clear GDPR violation discovered during a regulatory audit.
 
 Similarly, an AI assistant might retrieve a document containing social security numbers, account numbers, or health information, then send that entire document text to an external model for summarization. Even if the summary doesn't include the sensitive data, the raw text was exposed to the model provider, potentially violating privacy laws or client agreements.
@@ -63,7 +63,7 @@ Similarly, an AI assistant might retrieve a document containing social security 
 \textbf{The fix:} Before sending any data to an external LLM, redact or pseudonymize personally identifiable information (PII). Use tools like Microsoft Presidio or custom regex filters to detect and mask sensitive fields. For highly confidential data, deploy models on-premises or in a private cloud environment within the required jurisdiction. Label all documents and queries with data classification levels (public, confidential, restricted) and enforce policies that prevent restricted data from leaving your controlled environment. When using third-party APIs, verify their data handling policies, ensure they do not retain or train on your data, and confirm they operate in compliant regions.
 \end{cautionbox}
 
-\begin{cautionbox}[title={Pitfall 6: Lack of Human Fallback Mechanisms}]
+\begin{cautionbox}[title={Pitfall 6}]
 No AI system is perfect. There will always be edge cases, ambiguous queries, or situations where the AI simply cannot provide a reliable answer. Failing to design a graceful fallback to human expertise can lead to the AI ``guessing'' or worse, refusing to respond at all, leaving users frustrated or making poor decisions based on uncertain outputs.
 
 For example, a contract analysis AI might be asked to interpret an unusual clause it has never encountered in its training data. If the system has no fallback, it might hallucinate an interpretation, present it confidently, and the user---trusting the AI---acts on incorrect information. In a high-stakes negotiation, this could cost millions.
@@ -73,7 +73,7 @@ For example, a contract analysis AI might be asked to interpret an unusual claus
 \textbf{The fix:} Implement explicit human-in-the-loop checkpoints for high-stakes or low-confidence scenarios. If the AI's confidence score (if available) is below a threshold, or if a query falls outside known patterns, the system should flag it for human review rather than guessing. Provide clear signals to users when the AI is uncertain (e.g., ``I found limited information on this; please consult a legal expert''). For critical actions like financial transactions or legal filings, always require human approval before execution. Log all fallback events to identify patterns and improve the system over time.
 \end{cautionbox}
 
-\begin{cautionbox}[title={Pitfall 7: Over-Trusting AI Outputs Without Verification}]
+\begin{cautionbox}[title={Pitfall 7}]
 Even when an AI provides citations and structured outputs, the underlying information can still be incorrect or misinterpreted. One common failure mode is when an AI cites a real source but misrepresents what it says. For instance, an AI might cite a statute correctly but then state an interpretation that is not supported by the statute's text. If users trust the citation without reading the source, the error propagates.
 
 In a financial context, an AI might retrieve correct earnings data but perform an incorrect calculation or comparison, then present the result alongside the source data. The presence of a citation creates false confidence that the entire answer is verified, when in fact only the input data was sourced---the reasoning was flawed.
@@ -87,7 +87,7 @@ In a financial context, an AI might retrieve correct earnings data but perform a
 \subsection{Best Practices for Production Systems}
 \label{sec:llmC-pitfalls-practices}
 
-\begin{keybox}[title={Best Practice 1: Three-Layer Validation for Structured Outputs}]
+\begin{keybox}[title={Practice 1}]
 Implement validation at three distinct layers to ensure reliability:
 
 \begin{enumerate}
@@ -101,7 +101,7 @@ Implement validation at three distinct layers to ensure reliability:
 If any layer fails, the system should retry with refined prompts or fallback to human review. By catching errors at multiple levels, you prevent invalid data from entering your systems and improve the AI's reliability over time through feedback.
 \end{keybox}
 
-\begin{keybox}[title={Best Practice 2: Governance Metadata on Every Tool Call}]
+\begin{keybox}[title={Practice 2}]
 Treat every tool invocation as a legally significant event. Attach the following metadata to each call:
 
 \begin{itemize}
@@ -116,7 +116,7 @@ Treat every tool invocation as a legally significant event. Attach the following
 Store these records in an append-only, tamper-evident log (consider using cryptographic hashing or blockchain-style chaining for high-assurance environments). This creates a complete audit trail that can satisfy regulators, courts, and clients demanding transparency.
 \end{keybox}
 
-\begin{keybox}[title={Best Practice 3: Schema Versioning and Migration Procedures}]
+\begin{keybox}[title={Practice 3}]
 Manage schemas like you manage code or databases: with version control and migration plans.
 
 \begin{itemize}
@@ -130,7 +130,7 @@ Manage schemas like you manage code or databases: with version control and migra
 This discipline prevents the silent breakage that occurs when one part of the system expects version 2 while another still uses version 1, and it provides a clear history for audits and debugging.
 \end{keybox}
 
-\begin{keybox}[title={Best Practice 4: Rate Limiting with Circuit Breakers}]
+\begin{keybox}[title={Practice 4}]
 Protect your infrastructure and external APIs from overload through intelligent rate limiting and fault tolerance.
 
 \begin{itemize}
@@ -146,7 +146,7 @@ Protect your infrastructure and external APIs from overload through intelligent 
 These patterns, borrowed from distributed systems engineering, ensure your AI agents can handle production load gracefully and fail safely when things go wrong.
 \end{keybox}
 
-\begin{keybox}[title={Best Practice 5: PII Redaction Before External Calls}]
+\begin{keybox}[title={Practice 5}]
 Protect sensitive data by redacting personally identifiable information (PII) before it leaves your secure environment.
 
 \begin{itemize}
@@ -162,7 +162,7 @@ Protect sensitive data by redacting personally identifiable information (PII) be
 This approach satisfies data protection regulations (GDPR, CCPA, HIPAA) and minimizes the risk of accidental data exposure through AI systems.
 \end{keybox}
 
-\begin{keybox}[title={Best Practice 6: Human-in-the-Loop for High-Stakes Decisions}]
+\begin{keybox}[title={Practice 6}]
 Reserve final decision authority for humans in situations where errors have serious consequences.
 
 \begin{itemize}
@@ -178,7 +178,7 @@ Reserve final decision authority for humans in situations where errors have seri
 This practice aligns with ethical AI principles and emerging regulations that emphasize human oversight in automated decision-making, particularly in areas affecting legal rights or financial outcomes.
 \end{keybox}
 
-\begin{keybox}[title={Best Practice 7: Staff Training on AI Capabilities and Limitations}]
+\begin{keybox}[title={Practice 7}]
 Technology alone cannot ensure responsible AI use; the people operating the systems must understand what the AI can and cannot do.
 
 \begin{itemize}
@@ -194,7 +194,7 @@ Technology alone cannot ensure responsible AI use; the people operating the syst
 Well-trained users are the first line of defense against AI misuse and the most effective champions of AI adoption when they understand and trust the technology.
 \end{keybox}
 
-\begin{keybox}[title={Best Practice 8: Monitoring and Distribution Drift Detection}]
+\begin{keybox}[title={Practice 8}]
 AI systems degrade over time as data distributions change, regulations evolve, and external APIs are updated. Continuous monitoring is essential.
 
 \begin{itemize}

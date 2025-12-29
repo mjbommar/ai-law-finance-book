@@ -104,7 +104,7 @@ Use retrieval-augmented generation to ground responses in authoritative document
 RAG reduces (but does not eliminate) hallucination and addresses knowledge cutoff.
 \end{keybox}
 
-\begin{keybox}[title={Principle 3: Control the Stochasticity}]
+\begin{keybox}[title={Control Stochasticity}]
 Match sampling parameters to your reliability requirements:
 \begin{itemize}
   \item Use low temperature for regulated outputs
@@ -126,7 +126,7 @@ Implement multiple overlapping safeguards:
 No single safeguard is sufficient; assume each layer will occasionally fail.
 \end{keybox}
 
-\begin{keybox}[title={Principle 5: Maintain Human Oversight}]
+\begin{keybox}[title={Human Oversight}]
 Keep humans in the loop for consequential decisions:
 \begin{itemize}
   \item Design review workflows for LLM-generated content
@@ -146,17 +146,17 @@ Different regulatory requirements map to different mechanical concerns:
 \centering
 \caption{Regulatory Requirements and LLM Mechanics}
 \label{tab:llm1-requirements-mapping}
-\begin{tabular}{@{}p{3.5cm}p{4cm}p{4cm}@{}}
+\begin{tabular}{@{}p{2.8cm}p{3.8cm}p{3.8cm}@{}}
 \toprule
-\textbf{Requirement} & \textbf{Relevant Mechanics} & \textbf{Implementation Approach} \\
+\textbf{Requirement} & \textbf{Relevant Mechanics} & \textbf{Implementation} \\
 \midrule
-Auditability & Sampling determinism, logging & Low temperature, seed, full logging \\
-Accuracy & Hallucination mitigation & RAG, citation requirements, verification \\
-Currency & Knowledge cutoff & Retrieval of current documents \\
+Auditability & Sampling determinism, logging & Low temp, seed, full logging \\
+Accuracy & Hallucination mitigation & RAG, citations, verification \\
+Currency & Knowledge cutoff & Retrieval of current docs \\
 Reproducibility & Sampling parameters & Fixed seeds, versioned prompts \\
 Security & Prompt injection & Input sanitization, sandboxing \\
-Privacy & Training data, embeddings & On-premises deployment, data governance \\
-Explainability & Output structure & Structured outputs, citation trails \\
+Privacy & Training data, embeddings & On-prem deployment, governance \\
+Explainability & Output structure & Structured outputs, citations \\
 \bottomrule
 \end{tabular}
 \end{table}

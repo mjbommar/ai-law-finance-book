@@ -42,7 +42,7 @@ Consider a simple illustration. If your prompt contains:
 
 The model will likely continue with a citation in the same format because the preceding pattern establishes a template. This same mechanism operates at much higher levels of abstraction: providing legal analysis examples shapes how the model structures its own analysis, and providing financial data shapes how the model reasons about financial questions.
 
-\begin{keybox}[title={The Context Window as a Programming Interface}]
+\begin{keybox}[title={Context as Interface}]
 What you put in the context window directly shapes model behavior. This is not a bug or a quirk---it is the fundamental mechanism by which we customize LLM behavior without training. Few-shot examples, retrieved documents, system instructions, and conversation history all work through in-context learning.
 \end{keybox}
 
@@ -119,8 +119,8 @@ ICL enables a continuum of grounding strategies, ranging from no grounding (pure
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[
-    node distance=0.3cm,
-    box/.style={rectangle, draw=definition-dark, fill=definition-light, minimum width=3.2cm, minimum height=1.2cm, align=center, font=\small},
+    node distance=0.2cm,
+    box/.style={rectangle, draw=definition-dark, fill=definition-light, minimum width=2.5cm, minimum height=1.1cm, align=center, font=\footnotesize},
     arrow/.style={->, >=stealth, thick, definition-dark}
 ]
 % Boxes
@@ -188,7 +188,7 @@ Understanding ICL has immediate practical implications for legal and financial p
 
 \paragraph{Context Window Size Is a Hard Constraint.} All grounding operates within the context window. You cannot retrieve infinite documents or maintain infinite conversation history. Systems must be designed to work within these limits, prioritizing the most relevant content.
 
-\begin{cautionbox}[title={ICL Does Not Guarantee Factual Accuracy}]
+\begin{cautionbox}[title={ICL Accuracy Limits}]
 In-context learning means the model adapts to its context; it does not mean the model verifies what it learns. If you retrieve documents containing errors, the model will learn from those errors. If your few-shot examples demonstrate incorrect reasoning, the model may replicate that reasoning. ICL is a mechanism for adaptation, not verification. Verification requires additional safeguards discussed in Chapter~3.
 \end{cautionbox}
 

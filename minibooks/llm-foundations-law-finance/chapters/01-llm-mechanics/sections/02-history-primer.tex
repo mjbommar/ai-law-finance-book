@@ -32,7 +32,7 @@ Consider the legal sentence: ``The defendant corporation, which was incorporated
 \textbf{Attention-based processing:} Every token can directly attend to every other token in the sequence. Information flow is parallel, not sequential.
 \end{definitionbox}
 
-\begin{technicalbox}[title={Technical Intuition (Optional): Numbers, Tables, and ``Tensors''}]
+\begin{technicalbox}[title={Tensors Explained}]
 This book does \emph{not} require tensor arithmetic. However, the vocabulary is useful for understanding why GPUs/TPUs matter and why modern LLMs scale.
 
 \begin{itemize}
@@ -133,7 +133,7 @@ The key finding: for compute-optimal training, model size and dataset size shoul
 \paragraph{Practical Implications.} This insight explains the current landscape:
 
 \begin{itemize}
-  \item \textbf{Efficient small models:} We now have high-performance ``small'' models (Llama 3 8B, Mistral 7B, Gemma 2B) trained on trillions of tokens. These models can run on local hardware or single GPUs, enabling deployment within private financial infrastructure without sending data to external APIs.
+  \item \textbf{Efficient small models:} We now have high-performance ``small'' models (Llama 4 Scout 17B, Gemini 3 Flash) trained on trillions of tokens. These models can run on local hardware or single GPUs, enabling deployment within private financial infrastructure without sending data to external APIs.
 
   \item \textbf{Data as moat:} Unique, high-quality training data has become as valuable as compute. Legal and financial corpora---case law, SEC filings, contracts---are strategic assets for building domain-specific models.
 
@@ -306,7 +306,7 @@ For legal and financial practitioners, this critique reinforces the importance o
 
 While this chapter focuses on text-based LLMs, we briefly note the expanding frontier. Modern LLMs can be configured to use external tools---calculators, databases, web search---by generating structured ``tool calls'' executed by surrounding systems. This is not built into the LLM itself but achieved through system design that routes structured requests to appropriate tools.
 
-Similarly, advanced models (GPT-4o, Claude, Gemini) can process images, PDFs, and audio alongside text, enabling analysis of scanned documents, charts, and visual content.
+Similarly, advanced models (GPT-5, Claude 4.5, Gemini 3) can process images, PDFs, and audio alongside text, enabling analysis of scanned documents, charts, and visual content.
 
 \paragraph{Forward References.} Chapter~5 covers tool use and function calling in detail. Chapter~6 addresses multimodal document processing for PDFs, tables, charts, and audio. The synthesis section (\Cref{sec:llm1-synthesis-ahead}) provides a complete roadmap of upcoming chapters.
 

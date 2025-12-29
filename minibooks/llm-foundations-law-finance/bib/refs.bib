@@ -1437,3 +1437,62 @@
   urldate = {2024-12-29},
   note = {Foundational paper establishing precision and recall as standard measures for e-discovery retrieval effectiveness.}
 }
+
+% =====================================================
+% ADDITIONAL IN-CONTEXT LEARNING AND RETRIEVAL SOURCES
+% =====================================================
+
+@inproceedings{min2022rethinking,
+  author = {Min, Sewon and Lyu, Xinxi and Holtzman, Ari and Artetxe, Mikel and Lewis, Mike and Hajishirzi, Hannaneh and Zettlemoyer, Luke},
+  title = {Rethinking the Role of Demonstrations: What Makes In-Context Learning Work?},
+  booktitle = {Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
+  pages = {11048--11064},
+  year = {2022},
+  doi = {10.18653/v1/2022.emnlp-main.759},
+  url = {https://aclanthology.org/2022.emnlp-main.759/},
+  urldate = {2024-12-29},
+  note = {Shows that ground truth labels in demonstrations are not required for ICL; format and distribution matter more than correctness.}
+}
+
+@inproceedings{garg2022transformers,
+  author = {Garg, Shivam and Tsipras, Dimitris and Liang, Percy and Valiant, Gregory},
+  title = {What Can Transformers Learn In-Context? A Case Study of Simple Function Classes},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  volume = {35},
+  pages = {30583--30598},
+  year = {2022},
+  url = {https://arxiv.org/abs/2208.01066},
+  urldate = {2024-12-29},
+  note = {Shows transformers can be trained to perform in-context learning of simple function classes, providing theoretical foundations.}
+}
+
+@misc{openai2022embedding,
+  author = {{OpenAI}},
+  title = {New and Improved Embedding Model},
+  howpublished = {OpenAI Blog},
+  year = {2022},
+  month = dec,
+  url = {https://openai.com/blog/new-and-improved-embedding-model},
+  urldate = {2024-12-29},
+  note = {Introduces text-embedding-ada-002, a cost-effective 1536-dimensional embedding model widely used for semantic search and RAG.}
+}
+
+@article{asai2023selfrag,
+  author = {Asai, Akari and Wu, Zeqiu and Wang, Yizhong and Sil, Avirup and Hajishirzi, Hannaneh},
+  title = {Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection},
+  journal = {arXiv preprint arXiv:2310.11511},
+  year = {2023},
+  url = {https://arxiv.org/abs/2310.11511},
+  urldate = {2024-12-29},
+  note = {Introduces self-reflective retrieval where the model decides when to retrieve and critiques its own generations.}
+}
+
+@article{bohnet2022attributed,
+  author = {Bohnet, Bernd and Tran, Vinh Q. and Verga, Pat and Aharoni, Roee and Andor, Daniel and Soares, Livio Baldini and Ciaramita, Massimiliano and Eisenstein, Jacob and Ganchev, Kuzman and Herzig, Jonathan and Hui, Kai and Kwiatkowski, Tom and Ma, Ji and Ni, Jianmo and Sestorain Saralegui, Lierni and Schuster, Tal and Cohen, William W.},
+  title = {Attributed Question Answering: Evaluation and Modeling for Attributed Large Language Models},
+  journal = {arXiv preprint arXiv:2212.08037},
+  year = {2022},
+  url = {https://arxiv.org/abs/2212.08037},
+  urldate = {2024-12-29},
+  note = {Defines attributed QA where answers include citations to supporting evidence; foundational for verifiable RAG.}
+}

@@ -18,7 +18,7 @@ Table extraction has evolved from rule-based approaches to sophisticated vision-
 
 \paragraph{Vision-Based Extraction.} State-of-the-art approaches utilize vision-language models (VLMs) to parse tables. Instead of reconstructing the table from text coordinates, the system sends an image of the table to a VLM with a prompt to ``transcribe this table to Markdown'' or ``convert to HTML.'' This preserves merged cells and complex headers far better than heuristic parsers.
 
-\begin{highlightbox}[title={Vision-Based Table Extraction Prompt}]
+\begin{highlightbox}[title={Table Extraction}]
 \begin{verbatim}
 Extract this table to Markdown format.
 Preserve:

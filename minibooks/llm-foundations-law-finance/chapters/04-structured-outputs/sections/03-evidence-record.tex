@@ -17,7 +17,7 @@ The \keyterm{Canonical Evidence Record} is a standardized, schema-driven log tha
 
 In traditional software systems, outputs are deterministic and traceable through code paths. An SQL query returns specific rows based on defined logic; a calculation follows a fixed formula. Large Language Models, by contrast, are probabilistic systems. Given the same input, they may produce different outputs across runs. This stochastic nature poses profound challenges for domains where every decision must be justified and auditable.
 
-\begin{keybox}[title={Core Requirements for Evidence Records}]
+\begin{keybox}[title={Evidence Requirements}]
 \begin{itemize}
   \item \textbf{Legal Defensibility}: In litigation or regulatory proceedings, you must be able to reconstruct exactly what information the AI accessed, what reasoning it applied, and what sources it relied upon. Without complete records, the AI's conclusions are merely assertions—impossible to verify or defend.
   \item \textbf{Audit Requirements}: Financial services firms face stringent audit requirements under regulations like SOX, Dodd-Frank, and Basel III. Auditors must trace every material decision to its supporting evidence. AI-generated recommendations for loan approvals, trading strategies, or risk assessments require the same standard.
@@ -38,7 +38,7 @@ As one governance framework notes, ``you open the logs and find... nothing... Yo
 
 A \keyterm{Canonical Evidence Record} is a structured data object that accompanies every significant AI action or claim. It serves as both a technical artifact (enabling debugging and monitoring) and a legal document (supporting audit and compliance). The schema must balance completeness with practicality: capturing enough detail for forensic reconstruction without creating unmanageable data volumes.
 
-\begin{definitionbox}[title={Evidence Record Schema---Part 1: Context and Risk}]
+\begin{definitionbox}[title={Schema: Context/Risk}]
 The canonical schema comprises the following required and recommended fields. This first part covers identity, context, and risk classification.
 
 \textbf{Identity and Context}
@@ -72,7 +72,7 @@ The canonical schema comprises the following required and recommended fields. Th
 
 \clearpage% Force page break before Part 2
 
-\begin{definitionbox}[title={Evidence Record Schema---Part 2: Actions}]
+\begin{definitionbox}[title={Schema: Actions}]
 This second part covers action execution and validation.
 
 \textbf{Action and Tool Execution}
@@ -92,7 +92,7 @@ This second part covers action execution and validation.
 \end{itemize}
 \end{definitionbox}
 
-\begin{definitionbox}[title={Evidence Record Schema---Part 3: Evidence and Model}]
+\begin{definitionbox}[title={Schema: Evidence/Model}]
 This third part covers evidence provenance and model parameters.
 
 \textbf{Evidence and Provenance}
@@ -106,7 +106,7 @@ This third part covers evidence provenance and model parameters.
 
 \textbf{Model and Parameters}
 \begin{itemize}
-  \item \textbf{model}: Full model identifier (name, version, provider). Example: \texttt{GPT-4o-2024-11-01}, \texttt{Claude-Opus-4.5}.
+  \item \textbf{model}: Full model identifier (name, version, provider). Example: \texttt{GPT-5-2025-06-15}, \texttt{Claude-Opus-4.5}.
   \item \textbf{parameters}: Sampling configuration (temperature, top\_p, seed, max\_tokens). These settings affect output variability and reproducibility.
   \item \textbf{tokens}: Input and output token counts (for cost tracking and rate limit monitoring).
 \end{itemize}
@@ -114,7 +114,7 @@ This third part covers evidence provenance and model parameters.
 
 This schema is intentionally comprehensive. Not every field will be populated for every event—simple retrieval may omit tool calls, while read-only queries may not require hazard classification. However, the schema must be \emph{capable} of capturing any field that might be needed for forensic reconstruction or compliance demonstration.
 
-\begin{highlightbox}[title={JSON Example: Mortgage Approval Agent}]
+\begin{highlightbox}[title={Mortgage Agent Example}]
 \footnotesize
 \begin{verbatim}
 {
@@ -155,7 +155,7 @@ This schema is intentionally comprehensive. Not every field will be populated fo
     }
   ],
   "model": {
-    "name": "GPT-4o-2024-11-01",
+    "name": "GPT-5-2025-06-15",
     "temperature": 0.1,
     "top_p": 0.9,
     "seed": 42
@@ -217,7 +217,7 @@ The \keyterm{Canonical Data Model} (CDM) concept extends beyond individual evide
 
 A CDM acts as a ``universal translator'' for AI audit data. All agents, regardless of implementation, emit records conforming to the canonical schema. Audit analytics, compliance checks, and monitoring tools consume this standardized format. When a new regulation requires tracking a specific field (e.g., the EU AI Act mandates recording user consent for certain high-risk applications), organizations add the field to the CDM schema, and all agents automatically begin reporting it—no custom code per-agent.
 
-\begin{keybox}[title={Benefits of a Canonical Data Model}]
+\begin{keybox}[title={CDM Benefits}]
 \begin{itemize}
   \item \textbf{Decoupling}: Audit logic is independent of agent implementation. Switch from LangChain to a custom framework without rewriting compliance checks.
   \item \textbf{Aggregation}: Centralized dashboards aggregate evidence records across all agents, providing organization-wide visibility into AI operations.
@@ -261,7 +261,7 @@ Several architectural patterns support tamper-evident logging:
   \item \textbf{Write-Once Storage}: Cloud providers offer WORM (Write Once, Read Many) storage modes (e.g., AWS S3 Object Lock, Azure Immutable Blob Storage). Records written to these backends cannot be deleted or overwritten, even by privileged administrators.
 \end{itemize}
 
-\begin{cautionbox}[title={Balancing Security and Practicality}]
+\begin{cautionbox}[title={Security vs. Practicality}]
 While blockchain-based or distributed ledger approaches provide maximum assurance, they introduce operational complexity and cost. For many organizations, a pragmatic approach suffices:
 \begin{itemize}
   \item Use a time-series database with append-only semantics and role-based access controls.
@@ -306,9 +306,9 @@ To illustrate the complete evidence record chain, consider an AI agent assisting
   \item It searches the vector index, retrieves the relevant section (page 5, section 3.2), and records:
     \begin{itemize}
       \item \texttt{action.type: retrieval}
-      \item \texttt{evidence.source: https://bank.example/policy/underwriting-2025-Q4}
+      \item \texttt{evidence.source: bank.example/policy/underwriting-Q4}
       \item \texttt{evidence.locator: \{page: 5, section: "3.2"\}}
-      \item \texttt{evidence.quote: "Applicants with credit scores >=700 qualify for standard rates..."}
+      \item \texttt{evidence.quote: "Scores >=700 qualify..."}
       \item \texttt{evidence.date: 2025-10-01}
       \item \texttt{evidence.hash: sha256:a3f5b8c...}
     \end{itemize}
@@ -320,7 +320,7 @@ To illustrate the complete evidence record chain, consider an AI agent assisting
   \item This intermediate reasoning step is logged:
     \begin{itemize}
       \item \texttt{action.type: generation}
-      \item \texttt{action.reasoning: "Credit score 720 meets minimum threshold. DTI 35\% within acceptable range. No adverse credit events in 24 months."}
+      \item \texttt{action.reasoning: "Score 720 OK. DTI 35\% OK."}
       \item \texttt{hazard: ["Financial\_Advice"]}
     \end{itemize}
 \end{itemize}
@@ -336,10 +336,10 @@ To illustrate the complete evidence record chain, consider an AI agent assisting
     \end{itemize}
   \item Final evidence record:
     \begin{itemize}
-      \item \texttt{validation\_result: \{schema\_valid: true, pii\_scrubbed: true, policy\_compliant: true\}}
+      \item \texttt{validation: \{schema: true, pii: true, policy: true\}}
       \item \texttt{action.type: generation}
       \item \texttt{action.output: "Approve with standard rate (6.5\%)"}
-      \item \texttt{model: \{name: "GPT-4o-2024-11-01", temperature: 0.1, seed: 42\}}
+      \item \texttt{model: \{name: "GPT-5", temp: 0.1, seed: 42\}}
       \item \texttt{tokens: \{input: 1200, output: 350\}}
       \item \texttt{timestamp: 2025-12-21T14:32:45-05:00}
     \end{itemize}
@@ -349,7 +349,8 @@ To illustrate the complete evidence record chain, consider an AI agent assisting
 Six months later, the applicant disputes the approval rate, claiming it should have been lower based on promotional offers. The audit team queries the evidence record store:
 
 \begin{verbatim}
-SELECT * FROM evidence_records WHERE correlationId = 'mtg-2025-12-21-abc123'
+SELECT * FROM evidence_records
+WHERE correlationId = 'mtg-2025-12-21-abc123'
 \end{verbatim}
 
 They retrieve the complete chain: the initial request, the credit score (720), the policy version in effect (2025-Q4), the exact policy text quoted, the classification logic, and the validation results. The cryptographic hash of the policy document confirms it has not been altered. The time-stamped log entries prove the approval occurred on December 21, 2025, using the policy effective October 1, 2025—before the disputed promotional offers took effect on January 1, 2026.
@@ -370,7 +371,7 @@ Implementing evidence records requires careful architectural planning. Common pi
   \item \textbf{Inadequate Retention Policies}: Deleting logs too early. Legal and regulatory retention requirements (often 7-10 years for financial records) must inform log lifecycle management. Implement automated archival to cold storage, but never delete prematurely.
 \end{itemize}
 
-\begin{keybox}[title={Evidence Record Best Practices}]
+\begin{keybox}[title={Best Practices}]
 \begin{enumerate}
   \item \textbf{Schema-First Design}: Define the canonical schema before deploying agents. Use a schema registry and validation layer to enforce conformance.
   \item \textbf{Correlate Everything}: Every action must include a \texttt{correlationId} linking it to the initiating request. This enables end-to-end tracing across distributed systems.

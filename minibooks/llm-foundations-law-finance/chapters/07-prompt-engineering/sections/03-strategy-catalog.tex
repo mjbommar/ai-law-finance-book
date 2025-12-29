@@ -16,7 +16,7 @@ This section provides a comprehensive catalog of strategies, decision frameworks
 
 Before diving into specific strategies, we establish a high-level decision framework based on task characteristics and risk tolerance.
 
-\begin{keybox}[title={Strategy Selection Decision Table}]
+\begin{keybox}[title={Strategy Selection}]
 \begin{itemize}
   \item \textbf{Low-risk, fast turnaround, simple tasks}: Direct prompting with minimal constraints. Use when output variability is acceptable and human review is expected.
 
@@ -39,19 +39,19 @@ Before diving into specific strategies, we establish a high-level decision frame
 \caption{Reasoning Strategy Overview}
 \label{tab:llmE-strategy-overview}
 \small
-\begin{tabular}{@{}p{2cm}p{2.2cm}p{1.8cm}p{1.6cm}p{3.5cm}@{}}
+\begin{tabular}{@{}p{1.8cm}p{1.9cm}p{1.4cm}p{1.4cm}p{3.0cm}@{}}
 \toprule
 \textbf{Strategy} & \textbf{Reasoning} & \textbf{Latency} & \textbf{Cost} & \textbf{Use Case} \\
 \midrule
 Direct & Implicit & Low & Low & Simple, low-risk tasks \\
 \addlinespace
-CoT & Explicit (1 path) & Medium & Medium & Multi-step reasoning \\
+CoT & Explicit (1) & Medium & Medium & Multi-step reasoning \\
 \addlinespace
-Self-Consistency & Explicit (N paths) & High & High & Critical decisions \\
+Self-Consist. & Explicit (N) & High & High & Critical decisions \\
 \addlinespace
-ReAct & Explicit + Tools & Med-High & Med-High & Tool-using workflows \\
+ReAct & Explicit+Tools & Med-High & Med-High & Tool workflows \\
 \addlinespace
-ToT/GoT & Explicit (branching) & Very High & Very High & Exploration, planning \\
+ToT/GoT & Branching & Very High & Very High & Exploration, planning \\
 \addlinespace
 Modular & Per-module & Medium & Medium & Production systems \\
 \bottomrule
@@ -151,7 +151,7 @@ A \keyterm{modular pipeline} decomposes the task into specialized modules, each 
   \item Long-running processes with checkpointing and resumption
 \end{itemize}
 
-\begin{keybox}[title={Modular Architecture is the Production Standard}]
+\begin{keybox}[title={Modular Architecture}]
 For legal and financial production systems, modular architecture (Phase 5) is the standard. The benefits in testability, debuggability, and maintainability far outweigh the engineering cost. Monolithic prompts are appropriate only for simple, low-risk tasks.
 \end{keybox}
 
@@ -495,7 +495,7 @@ results = intent_classifier_batch(inputs)  # Single API call
 
 The modular pipeline patterns introduced in this section form the foundation for \keyterm{agentic architectures}, where agents dynamically select and compose modules based on task requirements.
 
-\begin{highlightbox}[title={Looking Ahead: Delegation Pattern}]
+\begin{highlightbox}[title={Delegation Pattern}]
 Our companion volume, \textit{Agentic AI in Law and Finance}, introduces the \keyterm{Delegation pattern}, where a meta-agent (the ``orchestrator'') delegates tasks to specialized sub-agents, each of which may itself be a modular pipeline. Key architectural questions for agentic systems include:
 
 \begin{itemize}
@@ -526,7 +526,7 @@ This section cataloged reasoning strategies and architectural patterns for promp
   \item \textbf{Modular pipelines}: Decomposes tasks into testable, maintainable modules. Use for production systems in regulated industries.
 \end{itemize}
 
-\begin{keybox}[title={Strategy Selection: Start Simple, Scale Complexity}]
+\begin{keybox}[title={Start Simple}]
 \textbf{Recommended progression}:
 \begin{enumerate}
   \item Start with direct prompting for prototyping

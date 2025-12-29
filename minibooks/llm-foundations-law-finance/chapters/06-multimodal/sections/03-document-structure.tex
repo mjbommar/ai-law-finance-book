@@ -19,7 +19,7 @@ Modern document parsing spans a spectrum from simple text extraction to sophisti
   \item[Text Stream (Legacy)] Extract characters via libraries like \texttt{pypdf}. Fast and cheap, but destroys tables, columns, and reading order.
   \item[Heuristic Parsing] Rule-based approaches using whitespace and line detection (e.g., \texttt{pdfplumber}). Better table support but brittle on borderless or complex tables.
   \item[Layout Models (AI)] Neural models like \keyterm{LayoutLM} or \keyterm{DocLayout-YOLO} that identify structural elements through bounding boxes. Identifies headers versus body text but requires GPU resources.
-  \item[Vision-First (VLM)] Screenshot pages and process through vision-language models like GPT-4V. ``Human-like'' understanding of layout but slow, expensive, and limited by context windows.
+  \item[Vision-First (VLM)] Screenshot pages and process through frontier vision-language models. ``Human-like'' understanding of layout but slow, expensive, and limited by context windows.
 \end{description}
 \end{definitionbox}
 
@@ -39,7 +39,7 @@ To solve the PDF problem, modern pipelines employ \keyterm{layout analysis model
 
 Regardless of the parsing approach, the goal is to preserve sufficient structure for downstream tasks:
 
-\begin{highlightbox}[title={Structure Preservation Checklist}]
+\begin{highlightbox}[title={Structure Checklist}]
 \begin{itemize}
   \item \textbf{Reading order}: Reconstruct the logical sequence for multi-column layouts.
   \item \textbf{Hierarchy}: Preserve heading levels, section numbering, and nested lists.

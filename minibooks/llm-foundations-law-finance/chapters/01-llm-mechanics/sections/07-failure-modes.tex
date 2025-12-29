@@ -260,7 +260,7 @@ As contexts approach their maximum length, several problems emerge:
 
 \paragraph{Latency Increase.} Processing time scales with context length, potentially causing timeouts.
 
-\begin{highlightbox}[title={Context Management Best Practices}]
+\begin{highlightbox}[title={Context Management}]
 \begin{enumerate}
   \item Monitor token counts; stay within safe margins (e.g., 80\% of limit)
   \item Use retrieval to inject only relevant content, not entire documents
@@ -329,7 +329,7 @@ We summarize the failure modes, their causes, and primary mitigations:
 \centering
 \caption{LLM Failure Mode Summary}
 \label{tab:llm1-failure-summary}
-\begin{tabular}{@{}p{2.5cm}p{4cm}p{4.5cm}@{}}
+\begin{tabular}{@{}p{2.3cm}p{3.6cm}p{4.2cm}@{}}
 \toprule
 \textbf{Failure Mode} & \textbf{Root Cause} & \textbf{Primary Mitigation} \\
 \midrule

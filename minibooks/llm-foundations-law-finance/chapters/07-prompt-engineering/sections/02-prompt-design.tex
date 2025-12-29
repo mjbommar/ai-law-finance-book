@@ -169,7 +169,7 @@ The prompt instructions would specify how to interpret this schema, while the ou
 
 \keyterm{Structured I/O prompting} enforces formal schemas for both inputs and outputs. This is the \emph{minimum acceptable standard for production systems} in legal and financial contexts.
 
-\begin{definitionbox}[title={Phase 4: Structured I/O (Production Minimum)}]
+\begin{definitionbox}[title={Phase 4: Structured I/O}]
 \textbf{Characteristics}:
 \begin{itemize}
   \item Both input and output conform to formal schemas
@@ -239,7 +239,7 @@ The system validates both input and output, rejecting malformed responses and tr
   \item \textbf{Post-generation validation}: Parse output and retry if schema is violated
 \end{itemize}
 
-\begin{keybox}[title={Phase 4 is the Production Minimum}]
+\begin{keybox}[title={Production Minimum}]
 Structured I/O is not optional for production legal and financial systems. It is the minimum standard for:
 \begin{itemize}
   \item \textbf{Auditability}: Structured outputs can be logged, indexed, and searched
@@ -313,7 +313,7 @@ Each module has:
   \item \textbf{Engineering cost}: Requires significant upfront design and testing
 \end{itemize}
 
-\begin{highlightbox}[title={Looking Ahead: Agentic Architectures}]
+\begin{highlightbox}[title={Agentic Architectures}]
 Our companion volume, \textit{Agentic AI in Law and Finance}, extends modular architectures to autonomous agents using the \keyterm{Delegation pattern}, where agents dynamically select and compose modules based on task requirements. The architectural principles established here---clear interfaces, validation, and composability---form the foundation for agentic reasoning systems.
 \end{highlightbox}
 
@@ -326,19 +326,19 @@ Our companion volume, \textit{Agentic AI in Law and Finance}, extends modular ar
 \caption{Prompt Design Maturity Model: Five Phases}
 \label{tab:llmD-maturity-model}
 \small
-\begin{tabular}{@{}p{2.0cm}p{2.5cm}p{2.5cm}p{2.5cm}p{3.0cm}@{}}
+\begin{tabular}{@{}p{1.6cm}p{1.8cm}p{1.8cm}p{1.6cm}p{2.8cm}@{}}
 \toprule
 \textbf{Phase} & \textbf{Input} & \textbf{Output} & \textbf{Testability} & \textbf{Use Case} \\
 \midrule
-1. Zero-Shot & Unstructured text & Freeform text & Very Low & Exploration, prototyping \\
+1. Zero-Shot & Unstructured & Freeform text & Very Low & Exploration, prototyping \\
 \addlinespace
-2. Few-Shot & Text + examples & Guided text & Low & Format teaching, pattern establishment \\
+2. Few-Shot & Text + examples & Guided text & Low & Format teaching \\
 \addlinespace
-3. Structured Input & JSON/XML & Freeform text & Medium & Analysis tasks with defined inputs \\
+3. Struct. Input & JSON/XML & Freeform text & Medium & Defined input analysis \\
 \addlinespace
-4. Structured I/O & JSON/XML & JSON/XML (validated) & High & \textbf{Production minimum} for regulated industries \\
+4. Struct. I/O & JSON/XML & JSON/XML & High & \textbf{Production min.} \\
 \addlinespace
-5. Modular & JSON/XML (per module) & JSON/XML (per module) & Very High & Mission-critical, complex workflows \\
+5. Modular & JSON/XML & JSON/XML & Very High & Mission-critical \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -425,21 +425,21 @@ Once structured prompting is adopted (Phase 3+), the choice of \keyterm{containe
 \caption{Container Format Selection Decision Matrix}
 \label{tab:llmD-container-decision}
 \small
-\begin{tabular}{@{}p{3.5cm}p{4.0cm}p{5.0cm}@{}}
+\begin{tabular}{@{}p{3.0cm}p{3.2cm}p{4.5cm}@{}}
 \toprule
-\textbf{Use Case} & \textbf{Recommended Format} & \textbf{Rationale} \\
+\textbf{Use Case} & \textbf{Recommended} & \textbf{Rationale} \\
 \midrule
 Task instructions & Markdown & Human-readable, hierarchical \\
 \addlinespace
-Input data & JSON & Compact, machine-parseable, widely supported \\
+Input data & JSON & Compact, machine-parseable \\
 \addlinespace
-Output schema & JSON & Validation, integration with application code \\
+Output schema & JSON & Validation, app integration \\
 \addlinespace
-Legacy system integration & XML & Compatibility with existing standards \\
+Legacy integration & XML & Compatibility with standards \\
 \addlinespace
-Legal document markup & XML (if mandated) & Explicit structure, schema validation \\
+Legal doc markup & XML (if mandated) & Explicit structure, validation \\
 \addlinespace
-Few-shot examples & Markdown + JSON & Markdown for explanation, JSON for data \\
+Few-shot examples & Markdown + JSON & Markdown for text, JSON for data \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -624,7 +624,7 @@ Few-shot examples are the most powerful mechanism for teaching LLMs task-specifi
 
 \subsubsection{Principles of Effective Exemplar Design}
 
-\begin{keybox}[title={Few-Shot Exemplar Design Principles}]
+\begin{keybox}[title={Exemplar Design}]
 \begin{enumerate}
   \item \textbf{Diversity}: Examples should span the range of expected inputs (simple, complex, edge cases)
   \item \textbf{Representativeness}: Examples should reflect real-world distribution, not just easy cases
@@ -724,8 +724,8 @@ exemplars/
   "added_date": "2025-01-15",
   "source": "synthetic",
   "performance_metrics": {
-    "gpt-4": {"accuracy": 1.0},
-    "claude-opus": {"accuracy": 1.0}
+    "gpt-5": {"accuracy": 1.0},
+    "claude-opus-4.5": {"accuracy": 1.0}
   }
 }
 \end{lstlisting}
@@ -806,7 +806,7 @@ This technique (sometimes called ``Self-Instruct'') allows rapid creation of hig
 
 \clearpage% Start checklist on fresh page to prevent bottom overflow
 
-\begin{keybox}[title={Prompt Design Checklist (Part 1: Design)}]
+\begin{keybox}[title={Design Checklist}]
 Before deploying a prompt to production, verify:
 
 \textbf{1. Task Definition}
@@ -841,7 +841,7 @@ Before deploying a prompt to production, verify:
 \end{itemize}
 \end{keybox}
 
-\begin{keybox}[title={Prompt Design Checklist (Part 2: Operations)}]
+\begin{keybox}[title={Operations Checklist}]
 \textbf{5. Architecture (Monolithic vs Modular)}
 \begin{itemize}
   \item[$\square$] Complexity justified: monolithic for simple tasks, modular for complex
