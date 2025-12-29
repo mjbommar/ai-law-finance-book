@@ -1,0 +1,43 @@
+% =============================================================================
+% Introduction — Multimodal Fundamentals
+% Purpose: Scope and bridge from Structured/Tools
+% Label: sec:llmD2-intro
+% =============================================================================
+
+\section{Introduction and Scope}
+\label{sec:llmD2-intro}
+
+Retrieval-augmented generation has evolved from simple text chunking to sophisticated \keyterm{multimodal RAG} pipelines capable of processing complex documents, images, and rich media. The ``text-only'' RAG pipeline is increasingly seen as legacy architecture, insufficient for enterprise data locked in PDFs, charts, slide decks, and recorded proceedings.
+
+This chapter addresses practical multimodal inputs common to legal and finance: preserving structure in PDFs, extracting tables and charts, interpreting images and screenshots, and summarizing audio and video. We also highlight privacy and redaction patterns that must be applied before sensitive content enters AI systems.
+
+\subsection{The Multimodal Imperative}
+\label{sec:llmD2-imperative}
+
+Legal and financial workflows are inherently multimodal:
+
+\begin{itemize}
+  \item \textbf{SEC filings}: Combine narrative text with financial tables, charts, and embedded images.
+  \item \textbf{Contracts}: May include scanned signatures, attached exhibits, and referenced schedules.
+  \item \textbf{Litigation materials}: Span depositions (audio/video), exhibits (images, documents), and transcripts.
+  \item \textbf{Regulatory correspondence}: Often arrives as scanned PDFs requiring OCR.
+  \item \textbf{Research reports}: Integrate text analysis with data visualizations.
+\end{itemize}
+
+A system that can only process plain text misses critical information encoded in these other modalities---and may produce incomplete or misleading analysis.
+
+\subsection{Building on Prior Foundations}
+\label{sec:llmD2-foundations}
+
+This chapter builds directly on concepts from earlier chapters:
+
+\begin{itemize}
+  \item \textbf{Embeddings} (Chapter~1): Vector representations extend beyond text to images, tables, and audio transcripts. Models like CLIP project multiple modalities into shared embedding spaces.
+  \item \textbf{Structured outputs} (Chapter~3): Extracted tables and metadata should conform to defined schemas for downstream integration.
+  \item \textbf{Tool use} (Chapter~3): Document parsers, OCR engines, and ASR models act as tools that preprocessing agents invoke.
+  \item \textbf{Evidence records} (Chapter~3): Multimodal processing steps---redaction, extraction, transcription---must be logged with the same rigor as LLM inference.
+\end{itemize}
+
+\begin{highlightbox}[title={Chapter Scope}]
+We focus on \emph{ingestion and preprocessing}---getting multimodal content into a form suitable for LLM processing and retrieval. Generation of multimodal outputs (images, audio synthesis) is beyond our current scope, though content authenticity standards apply to both directions.
+\end{highlightbox}

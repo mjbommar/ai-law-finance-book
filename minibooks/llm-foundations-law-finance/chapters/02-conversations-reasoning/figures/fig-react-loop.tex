@@ -1,0 +1,76 @@
+% =============================================================================
+% Figure: ReAct Loop
+% Shows the Thought-Action-Observation cycle
+% =============================================================================
+
+\begin{tikzpicture}[
+  node distance=1.8cm,
+  state/.style={
+    rectangle,
+    draw=#1,
+    fill=#1!15,
+    rounded corners=6pt,
+    minimum width=2.8cm,
+    minimum height=1cm,
+    font=\small\bfseries,
+    text=text-primary,
+    align=center
+  },
+  arrow/.style={
+    ->,
+    >=stealth,
+    very thick,
+    draw=text-secondary
+  },
+  label/.style={
+    font=\footnotesize,
+    text=text-muted,
+    align=center
+  },
+  external/.style={
+    rectangle,
+    draw=border-note,
+    fill=bg-note,
+    rounded corners=4pt,
+    minimum width=2.5cm,
+    minimum height=0.8cm,
+    font=\small,
+    text=text-secondary
+  }
+]
+
+% Main states in a triangle/cycle
+\node[state=definition-base] (thought) {Thought};
+\node[state=key-base, below right=1.5cm and 2cm of thought] (action) {Action};
+\node[state=example-base, below left=1.5cm and 2cm of thought] (observation) {Observation};
+
+% External elements
+\node[external, right=1.5cm of action, align=center] (tools) {External Tools};
+\node[state=caution-base, below=1.5cm of observation, xshift=1.5cm] (answer) {Final Answer};
+
+% Arrows for cycle
+\draw[arrow, draw=definition-base] (thought) -- (action)
+  node[label, midway, above right] {Decide what\\to do};
+\draw[arrow, draw=key-base] (action) -- (tools);
+\draw[arrow, draw=key-base] (tools) |- (observation)
+  node[label, pos=0.25, right] {Execute};
+\draw[arrow, draw=example-base] (observation) -- (thought)
+  node[label, midway, above left] {Process\\result};
+
+% Arrow to answer
+\draw[arrow, draw=caution-base, dashed] (thought) -- (answer)
+  node[label, midway, right, xshift=0.3cm] {When\\complete};
+
+% User input
+\node[external, above=1cm of thought] (user) {User Query};
+\draw[arrow] (user) -- (thought);
+
+% Annotations
+\node[label, below=0.3cm of thought, xshift=-0.5cm] {``I need to search\\for case law...''};
+\node[label, below=0.1cm of action] {Search[query]};
+\node[label, below=0.1cm of observation] {``Found: Dobbs v.\\Jackson (2022)...''};
+
+% Title
+\node[above=0.5cm of user, font=\bfseries\small, text=text-primary] {The ReAct Loop: Reasoning + Acting};
+
+\end{tikzpicture}

@@ -1,0 +1,74 @@
+% =============================================================================
+% Introduction — Conversations & Reasoning
+% Purpose: Scope, motivation, and chapter roadmap
+% Label: sec:llmB-intro
+% =============================================================================
+
+\section{Introduction and Scope}
+\label{sec:llmB-intro}
+
+The architectural evolution of Large Language Models from static, single-turn text completion engines to dynamic, stateful conversational agents represents a fundamental paradigm shift in artificial intelligence. At its core, a pre-trained Transformer model is a \emph{stateless function}: it accepts an input array (often called a \emph{tensor}) of token IDs and outputs a probability distribution for the subsequent token, retaining no memory of the transaction once the inference cycle concludes \parencite{vaswani2017attention}. To engineer the illusion of a continuous, coherent dialogue---and, more importantly, to instill the capacity for multi-step reasoning---developers must construct a sophisticated orchestration layer that manages context, creates artificial state, and enforces logical structure upon the stochastic generation process.
+
+This chapter provides a comprehensive analysis of the mechanisms required to transform a raw language model into a reliable conversational partner and a rigorous reasoning engine. We extend the view from single-turn prompt engineering into the complex domain of multi-turn workflows, where the challenges of context window management, information retrieval, and state retention become paramount.
+
+\subsection{Why Conversations and Reasoning Matter for Professionals}
+
+For legal and financial professionals, the limitations of single-turn prompts become apparent almost immediately in practice. Consider these common scenarios:
+
+\paragraph{Legal Research.} An attorney researching case law needs to refine queries iteratively based on results, maintain awareness of jurisdiction constraints established early in the session, and synthesize findings across multiple exchanges. A single-turn model cannot remember that the research is limited to Ninth Circuit precedents or that the client's situation involves specific statutory provisions discussed three turns earlier.
+
+\paragraph{Financial Analysis.} A portfolio manager analyzing market conditions needs to establish baseline assumptions, explore alternative scenarios, and refine recommendations based on client risk tolerance---all while maintaining consistency with constraints defined at the start of the session. The model must ``remember'' that the client has a 10-year investment horizon and moderate risk tolerance when generating subsequent analyses.
+
+\paragraph{Due Diligence.} A compliance officer reviewing vendor documentation needs to track issues identified across multiple documents, maintain a running list of concerns, and ensure that follow-up questions reference findings from earlier in the review. The conversation must maintain coherent state across potentially dozens of exchanges.
+
+These scenarios share a common requirement: the AI system must maintain \emph{conversational state} that persists across turns, even though the underlying model has no inherent memory capability.
+
+\subsection{The Dual Challenge: State and Reasoning}
+
+This chapter addresses two interconnected challenges that emerge when deploying LLMs in professional contexts:
+
+\begin{definitionbox}[title={Challenge 1: Conversational State}]
+How do we create the illusion of persistent memory in a fundamentally stateless system? This involves managing the conversation history, handling context window limitations, and ensuring that critical information established early in a dialogue remains accessible and influential throughout the interaction.
+\end{definitionbox}
+
+\begin{definitionbox}[title={Challenge 2: Structured Reasoning}]
+How do we move beyond pattern-matching to enable genuine multi-step reasoning? Standard ``zero-shot'' prompting often fails on complex tasks because the model attempts to map input directly to output in a single forward pass, relying on surface-level statistical correlations rather than causal logic \parencite{wei2022cot}. This leads to frequent hallucinations on math, logic, and planning tasks.
+\end{definitionbox}
+
+These challenges are deeply interrelated. Effective reasoning often requires maintaining state across reasoning steps, while conversational coherence depends on the system's ability to reason about what information is relevant to the current exchange. The techniques we introduce---from role-based prompt engineering to chain-of-thought reasoning to tool-augmented generation---address both challenges in an integrated framework.
+
+\subsection{The Emergence of Reasoning Capabilities}
+
+Recent research has demonstrated that forcing a model to externalize its latent logic significantly enhances performance on symbolic and arithmetic tasks. The emergence of intermediate reasoning topologies---specifically Chain-of-Thought (CoT), Self-Consistency, and ReAct---has fundamentally changed what we can expect from LLM-based systems \parencite{wei2022cot, wang2023selfconsistency, yao2023react}.
+
+However, these capabilities introduce new variables into the system architecture. Reasoning traces consume tokens from the limited context window. Multi-path verification (self-consistency) multiplies inference costs. Tool-augmented reasoning (ReAct) introduces network latency and external dependencies. Most critically, the ``Lost in the Middle'' phenomenon \parencite{liu2024lostmiddle} means that retrieval accuracy degrades in long contexts, requiring careful attention to how we construct prompts and manage conversation history.
+
+\subsection{Chapter Roadmap}
+
+We will systematically examine the components of a modern conversational architecture:
+
+\paragraph{\Cref{sec:llmB-convo}: Conversational Models and State.} We begin with the definition of roles (System, User, Assistant) and the management of short-term versus long-term memory. We examine how the system prompt functions as an ``immutable constitution'' for agent behavior, and how context window limitations necessitate active memory management strategies including sliding windows, recursive summarization, and vector-enhanced retrieval.
+
+\paragraph{\Cref{sec:llmB-reason}: Reasoning Patterns.} We proceed to a rigorous evaluation of reasoning strategies, analyzing the computational trade-offs between linear reasoning (Chain-of-Thought), ensemble verification (Self-Consistency), tool-augmented reasoning (ReAct), and graph-based exploration (Tree and Graph of Thoughts). We examine when to keep reasoning traces private versus visible, and how few-shot examples can bootstrap reasoning capabilities.
+
+\paragraph{\Cref{sec:llmB-strategy}: Strategy Selection.} We synthesize these elements into a decision framework for strategy selection, guiding architectural decisions based on task complexity, risk tolerance, and the immutable constraints of cost and compute.
+
+\paragraph{\Cref{sec:llmB-synthesis}: Synthesis.} We integrate the concepts and prepare the transition to structured outputs, tool use, and multimodal inputs covered in subsequent chapters.
+
+\subsection{A Note on Terminology}
+
+Throughout this chapter, we use several terms with specific technical meanings:
+
+\begin{itemize}
+  \item \keyterm{Context window}: The maximum number of tokens the model can consider in a single inference call. This includes both the input (prompt, history, retrieved content) and the output (generated response).
+
+  \item \keyterm{State} or \keyterm{memory}: Information that persists across conversation turns. Since LLMs are stateless, ``memory'' is an illusion created by re-injecting previous context into each new prompt.
+
+  \item \keyterm{Reasoning trace} or \keyterm{scratchpad}: The intermediate steps a model generates when solving a problem. These may be visible to users (for explainability) or kept private (for safety and simplicity).
+
+  \item \keyterm{Orchestration layer}: The software infrastructure that manages conversation state, constructs prompts, invokes the model, and processes outputs. This layer transforms a stateless model into a stateful conversational system.
+
+  \item \keyterm{Guardrails}: Safety mechanisms that constrain model behavior, typically implemented through system prompts, output classifiers, or Constitutional AI principles.
+\end{itemize}
+
+With these foundations established, we turn to the mechanics of conversational state management.

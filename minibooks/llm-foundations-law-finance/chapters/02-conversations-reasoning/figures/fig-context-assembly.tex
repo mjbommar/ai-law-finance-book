@@ -1,0 +1,57 @@
+% =============================================================================
+% Figure: Context Assembly Order
+% Shows the layered structure of prompt construction
+% =============================================================================
+
+\begin{tikzpicture}[
+  node distance=0.4cm,
+  layer/.style={
+    rectangle,
+    draw=border-definition,
+    fill=bg-definition,
+    rounded corners=3pt,
+    minimum width=10cm,
+    minimum height=0.8cm,
+    font=\small,
+    text=text-primary
+  },
+  arrow/.style={
+    ->,
+    >=stealth,
+    thick,
+    draw=text-secondary
+  },
+  label/.style={
+    font=\footnotesize\itshape,
+    text=text-muted
+  }
+]
+
+% Layers from bottom to top
+\node[layer, fill=definition-light] (system) {System Prompt: Identity, Constraints, Safety Rules};
+\node[layer, fill=example-light, above=of system] (examples) {Few-Shot Exemplars (K-NN + MMR selected)};
+\node[layer, fill=note-light, above=of examples] (retrieved) {Retrieved Context (RAG documents, prior knowledge)};
+\node[layer, fill=note-light, above=of retrieved] (history) {Conversation History (summarized + active window)};
+\node[layer, fill=example-light, above=of history] (query) {Current User Query};
+\node[layer, fill=key-light, above=of query] (reminder) {Final Reminder: Output constraints, critical rules};
+
+% Arrows indicating attention
+\draw[arrow, draw=definition-base] ([xshift=-4.5cm]system.west) -- ([xshift=-0.5cm]system.west)
+  node[label, pos=0, left] {High attention (primacy)};
+\draw[arrow, draw=caution-base] ([xshift=-4.5cm]history.west) -- ([xshift=-0.5cm]history.west)
+  node[label, pos=0, left] {Lower attention (middle)};
+\draw[arrow, draw=key-base] ([xshift=-4.5cm]reminder.west) -- ([xshift=-0.5cm]reminder.west)
+  node[label, pos=0, left] {Highest attention (recency)};
+
+% Right-side labels
+\node[label, right=0.3cm of system] {Immutable constitution};
+\node[label, right=0.3cm of examples] {Teaching by demonstration};
+\node[label, right=0.3cm of retrieved] {Grounding in documents};
+\node[label, right=0.3cm of history] {Conversational state};
+\node[label, right=0.3cm of query] {Current task};
+\node[label, right=0.3cm of reminder] {Reinforce constraints};
+
+% Title
+\node[above=0.6cm of reminder, font=\bfseries\small, text=text-primary] {Context Assembly Order (Bottom to Top in Prompt)};
+
+\end{tikzpicture}

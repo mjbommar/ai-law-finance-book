@@ -1,0 +1,80 @@
+% ============================================================================
+% PREFACE
+% ============================================================================
+
+\chapter*{Preface}
+\addcontentsline{toc}{chapter}{Preface}
+\markboth{Preface}{}
+
+\section*{Why This Book}
+
+Large language models have arrived in law and finance. Attorneys draft contracts with AI assistance, financial analysts summarize earnings calls in seconds, and compliance teams scan thousands of documents for regulatory violations. The technology works well enough that ignoring it is no longer an option.
+
+But ``works well enough'' hides a multitude of sins. Models hallucinate citations that do not exist. They confidently misinterpret financial statements. They generate plausible-sounding analysis that falls apart under scrutiny. Professionals who deploy these tools without understanding them court embarrassment, malpractice, and worse.
+
+This book provides the understanding you need. We explain how LLMs actually work---not at the level of neural network mathematics, but at the practical level that matters for deployment decisions. You will learn what tokens are and why they cause subtle errors, how to structure prompts that produce reliable results, how to validate outputs before trusting them, and how to systematically improve your workflows over time.
+
+\section*{Who This Book Is For}
+
+We wrote this book for professionals who use or will use LLMs in their daily work:
+
+\begin{itemize}
+  \item \textbf{Legal practitioners} deploying AI for research, drafting, and document review;
+  \item \textbf{Financial professionals} using LLMs for analysis, reporting, and compliance;
+  \item \textbf{Technology leaders} making tool selection and integration decisions;
+  \item \textbf{Risk and compliance officers} evaluating AI systems for deployment;
+  \item \textbf{Regulators and policymakers} seeking to understand the technology they oversee; and
+  \item \textbf{Anyone} whose professional reputation depends on the quality of AI-assisted output.
+\end{itemize}
+
+We assume you can use a computer competently but not that you have a technical background. Legal professionals need not be engineers; technologists need not be lawyers. The goal is practical fluency, not theoretical depth.
+
+\section*{What You Will Learn}
+
+The five chapters follow a practitioner's journey from understanding to mastery:
+
+\textbf{Chapter~1} answers ``What am I working with?'' by explaining tokens, sampling, embeddings, and the failure modes that trip up professionals. You cannot use a tool well without knowing what it actually does.
+
+\textbf{Chapter~2} addresses ``How do I get it to reason?'' through conversation patterns, context management, and structured reasoning techniques like chain-of-thought. This transforms casual chat into professional analysis.
+
+\textbf{Chapter~3} tackles ``How do I get reliable output?'' with structured outputs, tool use, retrieval-augmented generation, and audit trails. When your work must survive scrutiny, these techniques matter.
+
+\textbf{Chapter~4} covers ``How do I handle real documents?'' including contracts, financial statements, images, tables, and audio. Multimodal capabilities bring LLMs to the materials you work with daily.
+
+\textbf{Chapter~5} explains ``How do I improve systematically?'' through evaluation, versioning, threat modeling, and optimization. This moves you from ad-hoc prompting to disciplined engineering.
+
+\section*{A Note on Scope}
+
+This book is extracted from a forthcoming textbook, \textit{Artificial Intelligence for Law and Finance}, and revised to stand alone. The full work extends into agentic systems---AI that acts autonomously---and covers topics like multi-agent coordination, governance frameworks, and knowledge graphs. A companion volume, \textit{Agentic AI in Law and Finance}, addresses those more advanced topics.
+
+This volume focuses on foundations. Everything here applies whether you are typing prompts manually, building automated pipelines, or deploying sophisticated agent systems. Master these fundamentals first; the advanced applications will follow naturally.
+
+For hands-on implementation, the companion website offers working source code, interactive exercises, and practical tutorials. The source code for this book itself is also freely available.
+
+\medskip
+\noindent\textbf{Online Resources}
+\begin{itemize}[leftmargin=1.5em, itemsep=0.2em, topsep=0.3em]
+  \item Project website: \url{https://ai4lf.com}
+  \item Source code: \url{https://github.com/mjbommar/ai-law-finance-book}
+\end{itemize}
+
+\section*{A Book Written with LLMs}
+
+We should acknowledge what will be obvious to attentive readers: this book about LLMs was written with substantial assistance from LLMs.
+
+Our previous textbook took three years to complete, even with professional support from Cambridge University Press. This book took under three months from conception to completion. The difference is not that we worked harder or faster. The difference is that we applied the techniques we describe in these chapters.
+
+Throughout the drafting, editing, and production process, we used Claude, GPT-4, and Gemini to assist with research synthesis, bibliographic work, figure generation, LaTeX formatting, and iterative revision. These tools helped us locate and integrate sources, maintain consistent terminology, and identify gaps in our arguments.
+
+We do not claim that LLMs wrote this book. The intellectual framework, the selection and interpretation of sources, the judgments about what matters and why---these remain human contributions. But the production process has been fundamentally transformed.
+
+If you find value in this book, you are experiencing what disciplined LLM collaboration can produce. If you find errors, you are experiencing why the validation techniques in Chapter~3 matter.
+
+\section*{Acknowledgments}
+
+This work synthesizes insights from across the machine learning, natural language processing, legal technology, and financial technology communities. We are grateful to the researchers whose foundational work made this synthesis possible, and to the practitioners whose deployment experiences informed our practical recommendations.
+
+\vspace{1em}
+
+\noindent\textit{Michael J. Bommarito II, Daniel Martin Katz, and Jillian Bommarito}\\
+\noindent\textit{December 2025}

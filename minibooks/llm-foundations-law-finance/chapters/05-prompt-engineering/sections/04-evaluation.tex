@@ -1,0 +1,421 @@
+% =============================================================================
+% Evaluation — Prompt Design, Evaluation, Optimization
+% Purpose: Quick, repeatable tests; logging
+% Label: sec:llmD-eval
+% =============================================================================
+
+\section{Prompt Evaluation and Test Sets}
+\label{sec:llmD-eval}
+
+% Outline (comments): gold sets; correctness; citation fidelity; robustness; offline/online; logging
+
+Testing prompt-driven systems requires a different mindset than testing traditional software. Because LLM outputs vary across calls even with identical inputs, we cannot rely solely on deterministic assertions. Instead, we build test suites that measure statistical properties, validate structural constraints, and detect meaningful regressions across prompt versions.
+
+A robust evaluation strategy combines three elements: \keyterm{gold standard test sets} with known-good answers, \keyterm{automated metrics} that capture task-specific correctness, and \keyterm{multi-call consistency patterns} that account for output variance. Together, these techniques allow you to iterate confidently on prompts, exemplars, and model configurations while maintaining quality and cost discipline.
+
+\begin{keybox}[title={Minimal Viable Test Suite}]
+Every prompt-driven system needs at least:
+\begin{itemize}
+  \item \textbf{Correctness:} Task-specific checks on outputs, including date/jurisdiction verification for legal and financial tasks.
+  \item \textbf{Citation Fidelity:} Validate quotes, page IDs, timestamps, and stable URLs against source documents.
+  \item \textbf{Robustness:} Adversarial inputs testing format variations, missing fields, and time-shifted facts.
+  \item \textbf{Schema Validation:} Automated checks that outputs conform to expected structure (JSON, XML, specific fields).
+  \item \textbf{Cost and Latency:} Track token usage (input, cached, output, reasoning) and response time across percentiles.
+\end{itemize}
+These five categories form the foundation for any prompt evaluation harness. Without them, you are flying blind.
+\end{keybox}
+
+\subsection{Key Metrics That Matter}
+
+Not all metrics carry equal weight in production systems. The following table identifies the essential measurements for prompt-driven applications in law and finance, where correctness, auditability, and cost control are non-negotiable.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{p{3.5cm}p{5.5cm}p{5cm}}
+\toprule
+\textbf{Metric} & \textbf{Why It Matters} & \textbf{How to Measure} \\
+\midrule
+\textbf{Input Tokens} & Primary cost driver; impacts cache hit potential & Count tokens in system prompt + user input + context \\
+\addlinespace
+\textbf{Cached Tokens} & Reduces marginal cost; rewards prompt stability & Track cache hit rate via API headers or logs \\
+\addlinespace
+\textbf{Output Tokens} & Drives latency and cost; uncapped outputs inflate bills & Set \texttt{max\_tokens} cap; monitor p95 output length \\
+\addlinespace
+\textbf{Reasoning Tokens} & Extended thinking improves quality but increases cost & Track separately if model exposes reasoning token count \\
+\addlinespace
+\textbf{Response Time (p50/p95)} & User experience and SLA compliance & Measure end-to-end latency; alert on p95 thresholds \\
+\addlinespace
+\textbf{Schema Validation Pass Rate} & Output reliability and downstream integration & Parse outputs; report \% passing schema checks \\
+\addlinespace
+\textbf{Accuracy on Gold Set} & Task correctness; regression detection & Compare outputs to labeled test cases; F1, exact match, or domain metric \\
+\addlinespace
+\textbf{Citation Fidelity} & Source grounding; reduces hallucination risk & Check quotes against sources; verify locators (page, section) \\
+\bottomrule
+\end{tabular}
+\caption{Essential metrics for prompt evaluation in legal and financial applications. Each metric addresses a different dimension of system performance: cost, latency, reliability, or correctness.}
+\label{tab:llmD-eval-metrics}
+\end{table}
+
+\begin{keybox}[title={Essential Metrics Dashboard}]
+Track these metrics together as a dashboard:
+\begin{itemize}
+  \item \textbf{Cost per call} = (input tokens $\times$ input rate) + (output tokens $\times$ output rate) + (reasoning tokens $\times$ reasoning rate)
+  \item \textbf{Quality score} = weighted average of accuracy, schema pass rate, and citation fidelity
+  \item \textbf{Latency SLA} = percentage of calls completing within p95 threshold
+\end{itemize}
+A single metric optimizes for the wrong thing. Use a balanced scorecard that reflects your actual constraints.
+\end{keybox}
+
+\subsection{Multi-Call Consistency Patterns}
+
+LLM outputs vary across calls, even with identical inputs and temperature settings near zero. This non-determinism creates challenges for validation, debugging, and user trust. Rather than treating variance as a defect, we design \keyterm{multi-call consistency patterns} that measure and control output stability.
+
+\begin{definitionbox}[title={Multi-Call Consistency}]
+Multi-call consistency refers to the degree to which an LLM produces semantically equivalent outputs across multiple calls with the same input. High consistency does not mean identical strings---it means stable answers to the underlying question, even if phrasing varies.
+\end{definitionbox}
+
+\subsubsection{The Problem: Output Variance}
+
+Consider a prompt that extracts named entities from a contract. Called twice with the same document, the model might return:
+\begin{itemize}
+  \item Call 1: \texttt{["Acme Corp", "GlobalBank LLC"]}
+  \item Call 2: \texttt{["Acme Corporation", "GlobalBank LLC"]}
+\end{itemize}
+The entities are semantically identical, but string comparison fails. Worse, in some cases the model may hallucinate an entity on one call and not the other, or vary in how it normalizes names.
+
+This variance stems from:
+\begin{itemize}
+  \item \textbf{Sampling}: Even at low temperature, models sample from a probability distribution, not a deterministic function.
+  \item \textbf{Context order}: Slight differences in context or prompt order can shift outputs.
+  \item \textbf{Model updates}: Provider-side model changes introduce drift over time.
+\end{itemize}
+
+\subsubsection{Verification Patterns}
+
+Verification patterns increase confidence in individual outputs without requiring multiple calls. Use these when consistency is critical but cost or latency precludes redundant calls.
+
+\paragraph{Echo Back.} Ask the model to repeat key fields in a structured format before finalizing its answer. This forces internal consistency within a single call:
+\begin{quote}
+\textit{``Before providing your final answer, list the three key entities you identified, then confirm each with a page reference.''}
+\end{quote}
+If the echo step produces different entities than the final output, flag the call for review.
+
+\paragraph{Deterministic Seed.} Some APIs allow setting a random seed for reproducibility. Use the same seed across evaluation runs to eliminate sampling variance during development. Note that seeds do not guarantee stability across model versions or providers.
+
+\paragraph{Schema Validation.} Define strict output schemas (JSON Schema, XML DTD) and reject outputs that fail validation. Schema failures often indicate the model misunderstood the task or encountered a formatting edge case. Log failures and retry with clarified instructions.
+
+\subsubsection{Validation Patterns}
+
+Validation patterns require multiple calls to the same input, trading cost for confidence. Use these when correctness is paramount or when you need to measure output stability.
+
+\paragraph{Cross-Check with Second Call.} Issue the same prompt twice and compare outputs semantically (not string-exact). If answers differ materially, escalate to human review or use the validation patterns below.
+
+\paragraph{Majority Voting (Self-Consistency).} Generate three to five outputs for the same input and select the most common answer. This \keyterm{self-consistency} approach improves accuracy on reasoning tasks but increases cost linearly with the number of calls. See \textcite{wang2022selfconsistency} for empirical results on chain-of-thought tasks.
+
+\paragraph{Human Spot-Check Sampling.} Randomly sample a percentage of outputs for human review. Track agreement rates between model and human judgments. If agreement drops below a threshold, trigger a full re-evaluation of the prompt or model.
+
+\subsubsection{Retry Strategies}
+
+Not all failures are equal. Design retry logic that distinguishes transient errors from systematic failures, and escalate appropriately.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{p{4cm}p{6cm}p{4.5cm}}
+\toprule
+\textbf{Failure Type} & \textbf{Retry Strategy} & \textbf{Fallback Action} \\
+\midrule
+\textbf{Schema Validation Failure} & Retry with error message appended: ``Your previous output failed schema validation because [reason]. Please retry.'' & After 2 failures, escalate to human or use default \\
+\addlinespace
+\textbf{Timeout} & Reduce \texttt{max\_tokens} by 25\% and retry & After 2 timeouts, return partial result with warning \\
+\addlinespace
+\textbf{Content Filter Trigger} & Rephrase input to remove potential triggers; retry & After 1 failure, escalate to human review \\
+\addlinespace
+\textbf{Rate Limit} & Exponential backoff with jitter; retry & After 5 retries, queue for async processing \\
+\addlinespace
+\textbf{Model Refusal} & Accept refusal; log for audit & Do not retry; treat as valid abstention \\
+\bottomrule
+\end{tabular}
+\caption{Retry strategies by failure type. Each strategy respects rate limits and avoids infinite loops by capping retries and defining fallback actions.}
+\label{tab:llmD-eval-retry}
+\end{table}
+
+\paragraph{Max Retry Limit.} Never retry indefinitely. Set a global retry limit (e.g., 3 attempts) and define a fallback for exhausted retries: escalate to human, return an error, or use a cached default answer. Log all retry sequences for later analysis.
+
+\subsection{Metrics and Protocols}
+
+Choosing the right evaluation metric depends on your task. Generic metrics like accuracy or F1 may suffice for classification, but specialized legal and financial tasks often require custom scoring functions that account for domain-specific constraints.
+
+\subsubsection{Task-Appropriate Metrics}
+
+\paragraph{Exact Match.} For structured extraction tasks (dates, entity IDs, jurisdiction codes), exact match measures whether the model's output matches the gold answer character-for-character. Strict but brittle: ``January 1, 2024'' and ``2024-01-01'' are semantically identical but fail exact match.
+
+\paragraph{F1 Score.} For multi-label classification or entity recognition, F1 balances precision (fraction of predicted entities that are correct) and recall (fraction of true entities that were found). Especially useful when false positives and false negatives carry different costs.
+
+\paragraph{BLEU and ROUGE.} For summarization or paraphrasing tasks, BLEU and ROUGE compare n-gram overlap between generated and reference texts. Both are imperfect proxies for semantic similarity but provide automated baselines. ROUGE-L (longest common subsequence) is often more robust than BLEU for legal text.
+
+\paragraph{Citation Metrics.} For tasks requiring source attribution, define precision (fraction of cited passages that appear in source documents) and recall (fraction of relevant source passages that were cited). Track \keyterm{citation hallucination rate}: the percentage of citations that point to nonexistent or misquoted sources.
+
+\subsubsection{Evaluation Protocols}
+
+\keyterm{Evaluation protocols} standardize how you measure model performance, ensuring reproducibility across prompt versions and time.
+
+\paragraph{Fixed Seed and Temperature.} During evaluation, set temperature to 0 (or near-zero) and use a fixed random seed if the API supports it. This reduces sampling variance and makes results comparable across runs.
+
+\paragraph{Stratified Test Sets.} Ensure your test set represents the distribution of real inputs: include common cases, edge cases, and adversarial examples in proportion to their expected frequency. For legal tasks, stratify by jurisdiction, document type, and time period.
+
+\paragraph{Versioned Gold Sets.} Tag each test set with a version number and creation date. When you discover a new failure mode, add it to the test set and increment the version. Never retroactively change gold labels without documenting the change.
+
+\paragraph{Baseline Comparison.} Always compare new prompts against a baseline: either the previous production prompt or a simple heuristic. Report relative improvement, not just absolute scores. A prompt that achieves 85\% accuracy is impressive only if the baseline was 70\%, not if it was 90\%.
+
+\subsection{Human Review and Agreement}
+
+Automated metrics provide quick feedback, but human review remains essential for tasks where correctness is subtle, contextual, or adversarial. Legal and financial applications often require expert judgment to validate nuanced interpretations or detect plausible-sounding errors.
+
+\subsubsection{Calibration with Expert Review}
+
+Before trusting automated metrics, calibrate them against expert human judgments on a sample of outputs. Select 50--100 diverse examples, have domain experts label them, and measure correlation between human labels and automated scores. If correlation is low, your automated metric may be measuring the wrong thing.
+
+\paragraph{Inter-Rater Agreement.} When multiple experts review the same outputs, measure \keyterm{inter-rater agreement} using Cohen's kappa or Fleiss' kappa. Low agreement (kappa $< 0.6$) suggests the task is ambiguous or the rubric is underspecified. Refine the rubric and re-train reviewers until agreement improves.
+
+\paragraph{Label Quality.} Experts make mistakes, especially on tedious annotation tasks. Implement quality checks: have a senior reviewer audit a random sample of labels, or use a ``honeypot'' technique with known-correct examples mixed into the review queue. Track per-reviewer accuracy and provide feedback.
+
+\subsubsection{Tie-Breaker Rules}
+
+When experts disagree, define explicit tie-breaker rules:
+\begin{itemize}
+  \item \textbf{Majority vote}: Use the label chosen by the majority of reviewers.
+  \item \textbf{Senior arbitration}: Escalate to a senior expert or panel.
+  \item \textbf{Conservative default}: Default to the safer label (e.g., ``uncertain'' or ``requires further review'').
+\end{itemize}
+Document tie-breaker decisions in the test set metadata so future reviewers understand how ambiguous cases were resolved.
+
+\subsection{Adversarial and Robustness Tests}
+
+Prompt-driven systems fail in creative ways when inputs deviate from the training distribution. \keyterm{Adversarial tests} deliberately stress the system with malformed, misleading, or edge-case inputs to expose weaknesses before they reach production.
+
+\subsubsection{Adversarial Input Categories}
+
+\paragraph{Malformed Inputs.} Include inputs with formatting errors: missing required fields, unexpected data types, extraneous whitespace, or encoding issues (e.g., Unicode normalization). Legal documents especially suffer from OCR errors, scanned images, and inconsistent formatting across jurisdictions.
+
+\paragraph{Time-Shifted Facts.} Inject inputs where temporal context matters but is subtly wrong. For example, ask the model to apply a regulation that was amended after the model's knowledge cutoff, or provide a contract dated in the future. Track whether the model detects anachronisms or applies outdated rules.
+
+\paragraph{Formatting Noise.} Vary capitalization, punctuation, and whitespace in ways that should not change semantic meaning. A robust system should treat ``UNITED STATES DISTRICT COURT'' and ``United States District Court'' equivalently.
+
+\paragraph{Boundary Cases.} Test numeric boundaries (zero, negative values, very large numbers), empty strings, null values, and missing optional fields. Financial calculations are especially prone to edge-case bugs with zero balances or division by zero.
+
+\subsubsection{Tracking Abstention and Refusal Rates}
+
+Models should refuse to answer when they lack confidence or when the input is unsafe. Track \keyterm{refusal rate} (percentage of inputs where the model explicitly abstains) and \keyterm{abstention rate} (percentage of inputs where the model returns low confidence or incomplete answers).
+
+High refusal rates on legitimate inputs suggest the prompt is too cautious or the model lacks coverage of the domain. High rates of confident but wrong answers suggest the model is overconfident. Calibrate the abstention threshold to balance false refusals against false confidence.
+
+\paragraph{Escalation Triggers.} Define explicit conditions that trigger human escalation: confidence below a threshold, schema validation failure, citation hallucination detected, or adversarial input pattern recognized. Log all escalations with context for post-hoc analysis.
+
+\subsection{Confidence and Abstention}
+
+Many LLM APIs do not expose token-level probabilities or confidence scores, making it difficult to assess output reliability directly. However, you can design prompts that encourage the model to express uncertainty explicitly, and you can infer confidence from output structure and consistency.
+
+\subsubsection{Self-Reported Confidence}
+
+Instruct the model to include a confidence indicator in its output:
+\begin{quote}
+\textit{``After your answer, provide a confidence level: HIGH, MEDIUM, or LOW. Use LOW if you are uncertain, lack relevant knowledge, or if the question is ambiguous.''}
+\end{quote}
+
+Self-reported confidence is imperfect---models can be miscalibrated, reporting high confidence on incorrect answers or low confidence on correct ones. However, explicit confidence signals provide a starting point for filtering outputs and triggering escalation.
+
+\subsubsection{Abstention as a Design Pattern}
+
+Prefer systems where the model can explicitly abstain rather than guessing. Include ``UNCERTAIN'' or ``INSUFFICIENT\_INFORMATION'' as valid output values. In legal and financial contexts, admitting uncertainty is safer than providing plausible but incorrect answers.
+
+\paragraph{Enforcing Escalation on Low Confidence.} When the model reports low confidence or abstains, automatically escalate to human review. Track the \keyterm{escalation rate} (percentage of inputs requiring human intervention) and monitor for changes over time. Rising escalation rates may indicate prompt drift, model degradation, or distribution shift in inputs.
+
+\subsection{Logging for Explainability}
+
+Comprehensive logging is essential for debugging, auditing, and regulatory compliance. In legal and financial applications, you may need to reconstruct exactly what the model was shown and how it arrived at an answer months or years after the fact.
+
+\subsubsection{What to Log}
+
+\paragraph{Prompts and Inputs.} Record the full prompt template, filled-in variables, and all input data. Hash sensitive fields for privacy while preserving the ability to detect duplicates.
+
+\paragraph{Model Configuration.} Log model identifier and version, temperature, top-p, max\_tokens, stop sequences, and any other parameters. Include API version and provider if using third-party services.
+
+\paragraph{Outputs and Metadata.} Store raw model outputs, parsed structured data, and any post-processing steps. Include timestamps (UTC), request IDs, and latency measurements.
+
+\paragraph{Citations and Retrieval.} If the prompt includes retrieved documents or citations, log the retrieval query, returned document IDs, and relevance scores. This allows you to verify that the model was shown the correct sources.
+
+\subsubsection{Privacy and Retention Policies}
+
+Legal and financial data often includes personally identifiable information (PII), confidential client data, or material non-public information (MNPI). Design logging policies that respect these constraints:
+\begin{itemize}
+  \item \textbf{Redact PII}: Hash or pseudonymize names, addresses, and identifiers before logging.
+  \item \textbf{Encrypt at rest}: Store logs in encrypted storage with access controls.
+  \item \textbf{Retention limits}: Define retention periods (e.g., 90 days for debugging, 7 years for regulatory compliance) and auto-delete logs after expiration.
+  \item \textbf{Audit access}: Log who accesses logs and for what purpose.
+\end{itemize}
+
+\subsection{Leakage Controls for Few-Shot and Bootstrapped Data}
+
+\keyterm{Data leakage} occurs when information from the test set appears in the training data, exemplars, or context, artificially inflating evaluation scores. Leakage is especially pernicious in prompt engineering because exemplars and test cases are often drawn from the same pool of annotated data.
+
+\subsubsection{Separation Principles}
+
+\paragraph{Separate Evaluation from Examples.} Never use the same data for few-shot exemplars and test cases. Maintain strict boundaries: exemplars come from a curated library, test sets from a separate holdout.
+
+\paragraph{Avoid Reusing Exemplars in Tests.} If you iterate on exemplars based on test performance, you risk overfitting to the test set. Use a validation set for exemplar selection and reserve the test set for final evaluation only.
+
+\paragraph{Time-Based Splits.} For tasks involving time-sensitive data (regulatory changes, market events), split data chronologically: train and tune on older data, test on newer data. This mimics real-world deployment where the model must generalize to future inputs.
+
+\subsubsection{Monitoring for Contamination}
+
+Even with careful separation, contamination can creep in. Periodically audit for near-duplicates between exemplar libraries and test sets:
+\begin{itemize}
+  \item Compute embedding similarity between exemplars and test cases; flag pairs with cosine similarity $> 0.95$.
+  \item Search for exact substring matches (e.g., boilerplate clauses copied across documents).
+  \item Track test performance over time; sudden jumps may indicate accidental leakage.
+\end{itemize}
+
+\subsection{Measuring Exemplar Effects}
+
+Few-shot exemplars improve task performance but increase token cost and latency. Measure the cost-benefit tradeoff explicitly to decide how many exemplars to include and which selection strategy to use.
+
+\subsubsection{A/B Testing Exemplars}
+
+Run controlled experiments comparing prompts with and without exemplars:
+\begin{itemize}
+  \item \textbf{Zero-shot baseline}: No exemplars; rely on instruction clarity alone.
+  \item \textbf{Few-shot (3 exemplars)}: Include 3 diverse examples.
+  \item \textbf{Few-shot (5 exemplars)}: Include 5 diverse examples.
+\end{itemize}
+
+Measure accuracy, schema validation pass rate, and citation fidelity for each condition. Track token cost and latency. Report results as a table:
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Condition} & \textbf{Accuracy} & \textbf{Avg. Tokens} & \textbf{Latency (p95)} & \textbf{Cost per 1k calls} \\
+\midrule
+Zero-shot & 72\% & 450 & 1.2s & \$18 \\
+Few-shot (3) & 81\% & 720 & 1.8s & \$29 \\
+Few-shot (5) & 83\% & 950 & 2.3s & \$38 \\
+\bottomrule
+\end{tabular}
+\caption{Example A/B test results for few-shot exemplars. Adding exemplars improves accuracy but increases cost and latency. Diminishing returns suggest 3 exemplars is optimal for this task.}
+\label{tab:llmD-eval-exemplar-ab}
+\end{table}
+
+\subsubsection{Varying Selection Strategies}
+
+If you maintain a large exemplar library, experiment with different selection strategies:
+\begin{itemize}
+  \item \textbf{Random sampling}: Choose exemplars uniformly at random from the library.
+  \item \textbf{Diversity sampling}: Select exemplars that maximize coverage of input space (e.g., different document types, jurisdictions).
+  \item \textbf{Similarity-based retrieval}: Embed the input and retrieve the $k$ most similar exemplars from the library.
+\end{itemize}
+
+Track whether retrieval-based selection improves performance compared to random or diversity sampling. Similarity-based retrieval works well when exemplars capture task-specific patterns but may overfit if the library is small or unrepresentative.
+
+\subsection{Eval Harness Pattern (Minimal)}
+
+An \keyterm{evaluation harness} automates the process of running test cases, scoring outputs, and aggregating results. Even a minimal harness saves time and reduces human error compared to manual testing.
+
+\begin{highlightbox}[title={Inputs → Checks → Verdict}]
+\textbf{Inputs:} prompt template + params, test items, expected fields.\\
+\textbf{Checks:} schema validation, correctness rules, citation fidelity.\\
+\textbf{Verdict:} pass/fail per case; aggregate metrics; store run metadata.
+\end{highlightbox}
+
+\subsubsection{Minimal Harness Implementation}
+
+A basic harness follows this pattern:
+\begin{enumerate}
+  \item \textbf{Load test cases}: Read test items from a file (JSON, CSV) with input data and expected outputs.
+  \item \textbf{Run prompts}: For each test case, fill the prompt template and call the LLM API.
+  \item \textbf{Validate outputs}: Parse the response and run validation checks (schema, correctness, citations).
+  \item \textbf{Score results}: Compute per-case pass/fail and aggregate metrics (accuracy, F1, latency).
+  \item \textbf{Store metadata}: Log run ID, timestamp, prompt version, model config, and results.
+\end{enumerate}
+
+\paragraph{Example Test Case Format.} Store test cases in JSON with input, expected output, and metadata:
+\begin{lstlisting}[basicstyle=\small\ttfamily]
+{
+  "test_id": "contract-001",
+  "input": {
+    "document": "This Agreement...",
+    "question": "What is the governing law?"
+  },
+  "expected": {
+    "jurisdiction": "Delaware",
+    "confidence": "HIGH"
+  },
+  "metadata": {
+    "document_type": "contract",
+    "date_added": "2024-10-15"
+  }
+}
+\end{lstlisting}
+
+\paragraph{Versioning Test Runs.} Tag each test run with a version identifier that includes prompt version, model version, and configuration hash. This allows you to compare results across iterations and detect regressions when you change prompts or models.
+
+\subsection{Retrieval Sanity Checks (Quick)}
+\label{sec:llmD-eval-retrieval-quick}
+
+Before building complex retrieval-augmented generation (RAG) systems, validate that your retrieval component works correctly on simple, known cases. \keyterm{Retrieval sanity checks} catch basic errors---wrong corpus, missing metadata, broken embeddings---before they cascade into downstream failures.
+
+\subsubsection{Known Q\&A Recall Tests}
+
+Create a small set of question-answer pairs where you know which documents should be retrieved. For each question, run the retrieval system and check:
+\begin{itemize}
+  \item \textbf{Recall@k}: Does the expected document appear in the top $k$ results?
+  \item \textbf{Rank}: What rank is the expected document? Ideally it appears in the top 3.
+  \item \textbf{Score distribution}: Are relevant documents scored significantly higher than irrelevant ones?
+\end{itemize}
+
+If recall@5 is below 80\% on known-good cases, your retrieval system has fundamental issues (wrong embeddings, corpus mismatch, query reformulation bugs).
+
+\subsubsection{Metadata Propagation}
+
+Legal and financial documents require metadata for proper interpretation: effective dates, jurisdictions, amendment status, and document type. Verify that retrieved passages carry this metadata forward:
+\begin{itemize}
+  \item Check that each retrieved chunk includes \texttt{date}, \texttt{jurisdiction}, and \texttt{doc\_type} fields.
+  \item Confirm that dates are in ISO 8601 format (YYYY-MM-DD) and jurisdictions use standard codes.
+  \item Test edge cases: amended documents, documents spanning multiple dates, and cross-jurisdictional references.
+\end{itemize}
+
+\subsubsection{Quote and Locator Verification}
+
+When the prompt includes retrieved passages, verify that citations can be traced back to source documents:
+\begin{itemize}
+  \item \textbf{Exact quote match}: If the model quotes a passage, confirm the quote appears verbatim in the source.
+  \item \textbf{Page/section locators}: If the model cites a page or section number, verify the reference is correct.
+  \item \textbf{Stable URLs}: Confirm that document URLs or identifiers are stable and resolvable.
+\end{itemize}
+
+Use the evidence record pattern from Chapter~3, Section~\ref{sec:llmC-evidence}
+to track retrieval provenance and validate citations systematically.
+
+\subsubsection{Temporal Validity Checks}
+
+Design retrieval tests that make temporal validity explicit. For example:
+\begin{itemize}
+  \item Ask: ``What was the SEC reporting threshold in 2018?'' and confirm the retrieval system returns the rule in effect in 2018, not the current version.
+  \item Inject a document dated in the future and verify the system flags it as anachronistic.
+  \item Test boundary cases: rules effective January 1, 2024 should not apply to transactions dated December 31, 2023.
+\end{itemize}
+
+These checks ensure the system respects temporal semantics, which is critical for legal and financial accuracy.
+
+\subsection{Scaling Considerations}
+
+The evaluation techniques in this section focus on individual prompt calls and small-scale test sets. As systems scale to production, additional concerns arise:
+\begin{itemize}
+  \item \textbf{Continuous evaluation}: Telemetry and monitoring patterns address how to track quality in production with live traffic.
+  \item \textbf{Governance and auditability}: Structured logging and auditability become architectural requirements for agentic systems.
+  \item \textbf{Versioning at scale}: The next section (\Cref{sec:llmD-opt}) covers how versioning practices scale to multi-component systems and what to version beyond prompts.
+\end{itemize}
+
+Our companion volume, \textit{Agentic AI in Law and Finance}, addresses these production-scale concerns in depth.

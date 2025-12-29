@@ -1,0 +1,194 @@
+% =============================================================================
+% Further Learning — Prompt Design, Evaluation, Optimization
+% Purpose: Primary sources and curated resources
+% Label: sec:llmD-further
+% =============================================================================
+
+\section{Further Learning}
+\label{sec:llmD-further}
+
+This section provides an annotated guide to primary sources and resources for readers who wish to deepen their understanding of prompt engineering, evaluation, and optimization. We organize resources by topic, with brief annotations explaining the relevance and accessibility of each source.
+
+\subsection{Prompt Engineering Foundations}
+\label{sec:llmD-further-prompting}
+
+\paragraph{Chain-of-Thought Prompting.}
+\textcite{wei2022chainofthought} introduced chain-of-thought prompting, demonstrating that explicit reasoning steps significantly improve performance on complex tasks. This paper establishes the theoretical basis for structured reasoning in prompts.
+
+\paragraph{Self-Consistency Decoding.}
+\textcite{wang2022selfconsistency} presents self-consistency, where multiple reasoning paths are sampled and the most common answer is selected. The technique provides a simple but effective way to improve reliability on reasoning tasks.
+
+\paragraph{ReAct: Reasoning and Acting.}
+\textcite{yao2022react} combines reasoning traces with tool use, enabling models to interleave thinking with external actions. This pattern is foundational for tool-augmented prompt systems.
+
+\paragraph{Tree of Thoughts.}
+\textcite{yao2023treeofthoughts} extends chain-of-thought to tree-structured exploration, enabling backtracking and systematic search through solution spaces. Relevant for complex planning and multi-step reasoning.
+
+\subsection{Evaluation and Benchmarks}
+\label{sec:llmD-further-eval}
+
+\paragraph{Holistic Evaluation of Language Models (HELM).}
+\textcite{liang2022helm} provides a comprehensive evaluation framework covering accuracy, calibration, robustness, fairness, and efficiency across diverse tasks. Essential reading for understanding multi-dimensional LLM evaluation.
+
+\paragraph{LegalBench.}
+\textcite{guha2023legalbench} presents a benchmark for legal reasoning tasks, including issue spotting, rule application, and interpretation. Directly relevant for evaluating legal AI applications.
+
+\paragraph{FinanceBench.}
+\textcite{islam2023financebench} provides a benchmark for financial question answering, including numerical reasoning and document comprehension. Useful for evaluating financial AI systems.
+
+\paragraph{TruthfulQA.}
+\textcite{lin2022truthfulqa} measures the tendency of models to generate false but plausible-sounding answers. Critical for understanding hallucination risks in professional contexts.
+
+\subsection{Structured Outputs and Validation}
+\label{sec:llmD-further-structured}
+
+\paragraph{JSON Mode and Function Calling.}
+OpenAI's function calling documentation provides practical guidance on structured output generation. While vendor-specific, the patterns apply broadly.
+
+\paragraph{Constrained Decoding.}
+\textcite{willard2023outlines} presents grammar-constrained decoding, ensuring outputs conform to specified schemas. Relevant for high-reliability structured output requirements.
+
+\paragraph{Pydantic and Instructor.}
+The Instructor library (\url{https://github.com/jxnl/instructor}) provides Python tooling for structured outputs with Pydantic validation. Practical resource for implementation.
+
+\subsection{Security and Red-Teaming}
+\label{sec:llmD-further-security}
+
+\paragraph{OWASP Top 10 for LLMs.}
+The OWASP Foundation's Top 10 for Large Language Model Applications catalogs the most critical security risks, including prompt injection, insecure output handling, and data poisoning. Essential reference for security practitioners.
+
+\paragraph{Prompt Injection Attacks.}
+\textcite{perez2022promptinjection} systematically analyzes prompt injection vulnerabilities and defenses. Foundational for understanding the security landscape.
+
+\paragraph{Red-Teaming Language Models.}
+\textcite{ganguli2022redteaming} describes Anthropic's approach to red-teaming, including methodology and findings. Useful for designing internal red-team programs.
+
+\paragraph{Jailbreak Taxonomies.}
+\textcite{wei2023jailbroken} provides a taxonomy of jailbreak attacks and analyzes why safety training fails. Important for understanding the evolving threat landscape.
+
+\subsection{Optimization and Fine-Tuning}
+\label{sec:llmD-further-optimization}
+
+\paragraph{LoRA: Low-Rank Adaptation.}
+\textcite{hu2021lora} introduces parameter-efficient fine-tuning, enabling adaptation with reduced compute and storage. Relevant for organizations considering fine-tuning.
+
+\paragraph{RLHF: Reinforcement Learning from Human Feedback.}
+\textcite{ouyang2022instructgpt} describes the InstructGPT training process, including RLHF for alignment. Foundational for understanding how instruction-following models are trained.
+
+\paragraph{Constitutional AI.}
+\textcite{bai2022constitutional} presents Anthropic's approach to training helpful and harmless models. Relevant for understanding safety training and its implications.
+
+\paragraph{DSPy: Declarative Self-improving Language Programs.}
+\textcite{khattab2023dspy} introduces a framework for optimizing prompt pipelines programmatically. Relevant for advanced prompt optimization workflows.
+
+\subsection{Domain-Specific Resources}
+\label{sec:llmD-further-domain}
+
+\paragraph{Legal AI Research.}
+The Stanford CodeX center and the Legal AI community produce ongoing research on LLMs for legal applications. Track publications from NeurIPS, ICML, and ACL workshops on legal NLP.
+
+\paragraph{Financial AI Research.}
+The ACM ICAIF conference and FinNLP workshops at major NLP venues cover financial applications. Bloomberg and other financial data providers publish research on LLMs for finance.
+
+\paragraph{Regulatory Guidance.}
+Monitor guidance from financial regulators (SEC, CFTC, FCA, MAS) and data protection authorities (ICO, CNIL) on AI governance. Requirements evolve rapidly.
+
+\subsection{Practical Guides and Documentation}
+\label{sec:llmD-further-practical}
+
+Beyond academic papers, practitioners benefit from vendor documentation and implementation guides:
+
+\begin{itemize}
+  \item \textbf{OpenAI Cookbook}: Practical examples for prompt engineering, function calling, and evaluation. \url{https://github.com/openai/openai-cookbook}
+
+  \item \textbf{Anthropic Prompt Engineering Guide}: Best practices for Claude models. \url{https://docs.anthropic.com/claude/docs/prompt-engineering}
+
+  \item \textbf{LangChain Documentation}: Framework for building LLM applications with composable components. \url{https://docs.langchain.com}
+
+  \item \textbf{LlamaIndex Documentation}: Framework for RAG and data-augmented LLM applications. \url{https://docs.llamaindex.ai}
+
+  \item \textbf{Hugging Face Transformers}: Open-source library for model inference and fine-tuning. \url{https://huggingface.co/docs/transformers}
+\end{itemize}
+
+\subsection{Staying Current}
+\label{sec:llmD-further-current}
+
+Prompt engineering evolves rapidly. Resources for staying current:
+
+\begin{itemize}
+  \item \textbf{arXiv cs.CL and cs.LG}: Pre-print servers where new research appears, often months before formal publication.
+
+  \item \textbf{Major Conferences}: NeurIPS, ICML, ICLR, ACL, EMNLP publish peer-reviewed advances.
+
+  \item \textbf{Research Blogs}: Anthropic, OpenAI, Google DeepMind, and Meta AI publish accessible summaries of research.
+
+  \item \textbf{Industry Reports}: Gartner, Forrester, and McKinsey publish adoption and trend analyses.
+\end{itemize}
+
+Note that the field moves quickly. Always check publication dates and verify that techniques remain current with the latest model versions.
+
+\subsection{Common Misconceptions}
+\label{sec:llmD-further-misconceptions}
+
+Before concluding, several common misconceptions warrant clarification:
+
+\paragraph{Misconception: Prompt engineering is just trial and error.}
+Systematic prompt engineering uses structured specifications, rigorous evaluation, and controlled experimentation. Ad-hoc iteration may find working prompts but cannot ensure reliability or enable improvement.
+
+\paragraph{Misconception: Longer prompts are always better.}
+Prompt length should match task complexity. Overly long prompts waste tokens, may confuse the model, and increase latency. Concise, well-structured prompts often outperform verbose alternatives.
+
+\paragraph{Misconception: Few-shot examples always help.}
+Few-shot examples help when they are high-quality, diverse, and relevant. Poor examples can degrade performance. Zero-shot with good instructions may outperform few-shot with mediocre examples.
+
+\paragraph{Misconception: Fine-tuning solves all problems.}
+Fine-tuning is powerful but costly and creates maintenance burden. Many problems are better solved through prompt engineering, retrieval augmentation, or tool use. Fine-tune only when simpler approaches fail.
+
+\paragraph{Misconception: Security is someone else's problem.}
+Prompt engineers must consider security from the start. Prompt injection, tool misuse, and data exfiltration are engineering problems, not just security team concerns.
+
+\subsection{Exercises for Practitioners}
+\label{sec:llmD-further-exercises}
+
+To solidify understanding of the concepts in this chapter, we recommend the following exercises:
+
+\paragraph{Exercise 1: Prompt Specification.}
+Take an existing ad-hoc prompt from your organization and formalize it using the specification template from Section~\ref{sec:llmD-spec-template}.
+\begin{enumerate}
+  \item Document the task, constraints, and quality criteria.
+  \item Define the input and output schemas.
+  \item Create 3--5 few-shot examples covering common cases.
+  \item Version the specification in your repository.
+\end{enumerate}
+Observe how formalization reveals ambiguities and edge cases.
+
+\paragraph{Exercise 2: Evaluation Harness.}
+Build a minimal evaluation harness for a prompt you use regularly.
+\begin{enumerate}
+  \item Curate 20--50 test cases with expected outputs or quality criteria.
+  \item Implement automated scoring for at least one metric.
+  \item Run the harness and establish a baseline score.
+  \item Modify the prompt and measure the impact.
+\end{enumerate}
+This exercise demonstrates the power of measurement for improvement.
+
+\paragraph{Exercise 3: Red-Team Exercise.}
+Conduct a red-team exercise against an LLM application.
+\begin{enumerate}
+  \item Assemble 10 known prompt injection techniques.
+  \item Test each technique against the application.
+  \item Document which succeed, fail, and partially succeed.
+  \item Propose mitigations for successful attacks.
+\end{enumerate}
+This exercise builds intuition for adversarial thinking.
+
+\paragraph{Exercise 4: Telemetry Design.}
+Design the telemetry schema for a hypothetical legal or financial LLM application.
+\begin{enumerate}
+  \item List the fields you would capture for each request.
+  \item Define retention policies and access controls.
+  \item Sketch a dashboard with key operational metrics.
+  \item Describe how you would ensure tamper-evident storage.
+\end{enumerate}
+This exercise connects operational concepts to practical implementation.
+

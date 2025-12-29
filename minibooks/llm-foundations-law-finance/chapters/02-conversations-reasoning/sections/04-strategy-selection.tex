@@ -1,0 +1,316 @@
+% =============================================================================
+% Strategy Selection — Conversations & Reasoning
+% Purpose: Decision framework for selecting strategies based on constraints
+% Label: sec:llmB-strategy
+% =============================================================================
+
+\section{Choosing Strategies Under Constraints}
+\label{sec:llmB-strategy}
+
+The selection of a conversational model design and reasoning pattern is not a binary choice but a multi-dimensional optimization problem. Every application operates under constraints---time, cost, risk tolerance, accuracy requirements---and the optimal strategy depends on how you weight these factors. In this section, we synthesize the patterns discussed earlier into a practical decision framework.
+
+\subsection{The Decision Matrix}
+
+Different tasks call for different approaches. The following matrix provides guidance based on task type and requirements:
+
+\begin{center}
+\begin{tabular}{>{\raggedright}p{3cm}p{3.5cm}p{3cm}p{4.5cm}}
+\toprule
+\textbf{Task Type} & \textbf{Recommended Strategy} & \textbf{Context/Memory} & \textbf{Rationale} \\
+\midrule
+Chatbots / Creative Writing & Zero-shot or few-shot & Sliding window / Summarization & Latency is critical. Reasoning errors are low-risk. \\
+\addlinespace
+Math Tutoring / Coding & Chain-of-Thought & K-NN few-shot selection & Precision is key. Users tolerate slight delay for correctness. \\
+\addlinespace
+Medical / Financial Analysis & Self-Consistency & Vector retrieval (high recall) & \textbf{High risk}. Error cost outweighs compute cost. \\
+\addlinespace
+Research Assistants & ReAct & Long-term vector memory & Model must interact with tools for real-time data. \\
+\addlinespace
+Complex Planning / Discovery & Tree of Thoughts & Full context replay & Exploration is needed. High latency acceptable. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{The Four Dimensions of Strategy Selection}
+
+When selecting a strategy, consider four key dimensions:
+
+\subsubsection{Accuracy Requirements}
+
+\begin{itemize}
+  \item \textbf{Low-stakes}: Casual conversation, creative writing, brainstorming. Hallucinations are tolerable; speed matters more.
+  \item \textbf{Medium-stakes}: Educational content, summarization, drafting. Errors are undesirable but not catastrophic; can be caught in review.
+  \item \textbf{High-stakes}: Legal advice, medical diagnosis, financial recommendations. Errors can cause real harm; maximum reliability required.
+\end{itemize}
+
+\begin{keybox}[title={High-Stakes Decision Rule}]
+For high-stakes applications:
+\begin{enumerate}
+  \item Always use structured reasoning (CoT or better)
+  \item Consider self-consistency for critical determinations
+  \item Ground in external sources (ReAct + retrieval)
+  \item Include human review in the workflow
+  \item Log everything for audit
+\end{enumerate}
+\end{keybox}
+
+\subsubsection{Latency Tolerance}
+
+\begin{itemize}
+  \item \textbf{Real-time} ($<$ 2 seconds): Chatbots, autocomplete, live assistance. Use direct prompting; minimize reasoning overhead.
+  \item \textbf{Interactive} (2--30 seconds): Research queries, analysis, document review. CoT and single-pass retrieval acceptable.
+  \item \textbf{Batch/Offline} ($>$ 30 seconds): Deep analysis, report generation, complex planning. Full self-consistency, ToT/GoT viable.
+\end{itemize}
+
+\subsubsection{Cost Sensitivity}
+
+\begin{itemize}
+  \item \textbf{Cost-sensitive}: High-volume consumer applications. Minimize tokens; use smaller models where possible.
+  \item \textbf{Moderate budget}: Professional tools with per-query value. Invest in accuracy for high-value queries.
+  \item \textbf{Budget unconstrained}: Mission-critical applications. Maximize accuracy regardless of cost.
+\end{itemize}
+
+The cost of self-consistency scales linearly with samples ($k$ samples = $k \times$ base cost). Token-efficient techniques like Chain of Draft can reduce CoT overhead by 40\%.
+
+\subsubsection{Explainability Requirements}
+
+\begin{itemize}
+  \item \textbf{Black-box acceptable}: Internal tools, automation. Hide reasoning for simplicity.
+  \item \textbf{Explainability preferred}: Professional tools. Offer reasoning on request.
+  \item \textbf{Explainability mandatory}: Regulated domains (finance, healthcare, legal). Must show reasoning for compliance.
+\end{itemize}
+
+\subsection{Context Assembly: The Final Step}
+
+Many conversational failures are, at their root, \emph{context failures}. Before the model even begins to reason, you must construct the prompt correctly. Here is a systematic approach:
+
+\subsubsection{The Context Assembly Recipe}
+
+Assemble your prompt in this order:
+
+\begin{enumerate}
+  \item \textbf{System Prompt}: Identity, constraints, safety rules
+  \item \textbf{Few-Shot Exemplars}: Selected via similarity (K-NN) and diversity (MMR)
+  \item \textbf{Retrieved Context}: Documents, data, or prior knowledge (RAG)
+  \item \textbf{Conversation History}: Summarized older turns + recent active window
+  \item \textbf{Current User Query}: The actual question or request
+  \item \textbf{Final Reminder}: Output constraints, format requirements, critical rules
+\end{enumerate}
+
+\begin{highlightbox}[title={Why Order Matters}]
+Due to the ``Lost in the Middle'' phenomenon:
+\begin{itemize}
+  \item Information at the \textbf{start} (system prompt) is retained well
+  \item Information in the \textbf{middle} (retrieved context, history) is partially degraded
+  \item Information at the \textbf{end} (query + reminder) receives highest attention
+\end{itemize}
+Place your most critical constraints at both the start AND end.
+\end{highlightbox}
+
+\subsubsection{Token Budgeting in Practice}
+
+Before each call, verify your token allocation:
+
+\begin{enumerate}
+  \item \textbf{Check total capacity}: Know your model's context limit (8K, 32K, 128K, etc.)
+  \item \textbf{Reserve for output}: Allocate 1K--4K tokens for the response, depending on expected length
+  \item \textbf{Allocate components}: Divide remaining budget across system prompt, examples, context, and history
+  \item \textbf{Truncate if necessary}: If over budget, compress history first (summarize), then reduce retrieved context (re-rank for relevance), then reduce examples
+  \item \textbf{Never truncate}: System prompt or final reminder (these are non-negotiable)
+\end{enumerate}
+
+\subsection{Application-Specific Guidance}
+
+\subsubsection{Legal Applications}
+
+\begin{keybox}[title={Legal AI Strategy Recommendations}]
+\begin{itemize}
+  \item \textbf{Legal research}: ReAct with access to case databases; cite all sources
+  \item \textbf{Document review}: Few-shot with domain-specific examples; CoT for analysis
+  \item \textbf{Contract analysis}: CoT with explicit checklist prompting; self-consistency for critical clauses
+  \item \textbf{Compliance questions}: ReAct for regulatory lookups; never rely solely on training data for current regulations
+  \item \textbf{Always}: Include disclaimers; acknowledge limitations; recommend human review
+\end{itemize}
+\end{keybox}
+
+\subsubsection{Financial Applications}
+
+\begin{keybox}[title={Financial AI Strategy Recommendations}]
+\begin{itemize}
+  \item \textbf{Market data queries}: ReAct with API access; never use training data for prices
+  \item \textbf{Risk analysis}: Self-consistency for quantitative assessments
+  \item \textbf{Portfolio suggestions}: CoT with explicit constraint checking (risk tolerance, time horizon)
+  \item \textbf{Regulatory queries}: ReAct for up-to-date rule lookups (SEC, FINRA, etc.)
+  \item \textbf{Always}: Include suitability disclaimers; distinguish information from advice
+\end{itemize}
+\end{keybox}
+
+\subsubsection{Customer-Facing Applications}
+
+For general-purpose assistants where latency and user experience matter:
+
+\begin{itemize}
+  \item Use direct prompting or simple few-shot for routine queries
+  \item Escalate to CoT only for detected complexity (e.g., multi-part questions)
+  \item Implement guardrails at both input and output stages
+  \item Keep responses concise; offer to elaborate if user requests
+  \item Use sliding window + summary for conversation history
+\end{itemize}
+
+\subsection{Governance Implications}
+
+Your choice of reasoning strategy has governance implications:
+
+\paragraph{Auditability.} Strategies that produce reasoning traces (CoT, ReAct) provide audit trails. Even if you hide traces from users, log them for compliance review.
+
+\paragraph{Explainability.} Regulated industries may require explanations. CoT provides this naturally; private scratchpads can be disclosed on request.
+
+\paragraph{Reproducibility.} Self-consistency with majority voting is more reproducible than single-sample generation (which varies with temperature). For regulated applications, consider deterministic settings (temperature = 0) or explicit seed values.
+
+\paragraph{Version Control.} Track your system prompts, few-shot examples, and strategy configurations. When issues arise, you need to reproduce the exact conditions that produced a problematic output.
+
+\begin{highlightbox}[title={What Part III Covers}]
+This chapter provides foundational strategies. Part III (Governing AI Agents) expands on:
+\begin{itemize}
+  \item Comprehensive governance frameworks for AI deployment
+  \item Regulatory requirements across jurisdictions
+  \item Risk assessment methodologies
+  \item Incident response and escalation protocols
+  \item Organizational structures for AI oversight
+\end{itemize}
+\end{highlightbox}
+
+\subsection{Decision Flowchart}
+
+When facing a new task, use this simplified decision process:
+
+\begin{enumerate}
+  \item \textbf{Assess stakes}: Is this high-risk (legal, medical, financial) or low-risk?
+  \item \textbf{Check data needs}: Does the task require current information beyond training data?
+  \item \textbf{Evaluate complexity}: Is multi-step reasoning required?
+  \item \textbf{Consider constraints}: What are the latency and cost limits?
+  \item \textbf{Select pattern}:
+  \begin{itemize}
+    \item Low-risk, simple, real-time → Direct prompting
+    \item Low-risk, complex, real-time → CoT
+    \item Any risk, needs current data → ReAct
+    \item High-risk, complex → Self-consistency + CoT
+    \item High-value, complex, offline → ToT/GoT
+  \end{itemize}
+  \item \textbf{Design memory}: Choose appropriate context management for conversation length
+  \item \textbf{Implement guardrails}: Add safety layers appropriate to risk level
+  \item \textbf{Test and iterate}: Validate on representative examples before deployment
+\end{enumerate}
+
+The right strategy is the \emph{simplest one that meets your accuracy and safety requirements}. Over-engineering wastes resources and can introduce unnecessary complexity. Start simple, measure results, and add sophistication only where needed.
+
+\subsection{Case Studies in Strategy Selection}
+
+To illustrate how these principles apply in practice, consider the following scenarios drawn from legal and financial contexts.
+
+\subsubsection{Case Study 1: Legal Research Assistant}
+
+\textbf{Scenario}: A law firm wants to deploy an AI assistant that helps associates research case law and statutes relevant to client matters.
+
+\textbf{Analysis}:
+\begin{itemize}
+  \item \textbf{Stakes}: High. Incorrect legal citations could embarrass the firm or, worse, lead to malpractice.
+  \item \textbf{Data needs}: Critical. Legal research requires access to current case law and statutes.
+  \item \textbf{Complexity}: High. Legal analysis requires multi-step reasoning, analogy, and application of rules to facts.
+  \item \textbf{Constraints}: Moderate latency tolerance (research tasks are not real-time); cost is acceptable for high-value work.
+\end{itemize}
+
+\textbf{Recommended Strategy}:
+\begin{itemize}
+  \item \textbf{ReAct with retrieval}: Absolutely essential. The model must search legal databases rather than rely on training data.
+  \item \textbf{Chain-of-thought with IRAC structure}: Produce reasoning traces that follow the Issue-Rule-Application-Conclusion format familiar to legal professionals.
+  \item \textbf{Self-consistency}: For important conclusions, run multiple reasoning paths and verify agreement.
+  \item \textbf{Private scratchpad}: Keep exploratory reasoning hidden; show only polished analysis to users.
+  \item \textbf{Citation verification guardrail}: Before presenting any case citation, verify it exists and check its subsequent history.
+\end{itemize}
+
+\textbf{Memory Configuration}: Long conversations tracking matter details. Pin client facts, governing jurisdiction, and key deadlines. Use recursive summarization for extended research sessions.
+
+\subsubsection{Case Study 2: Financial News Summarization}
+
+\textbf{Scenario}: An investment firm wants to automatically summarize daily financial news for portfolio managers.
+
+\textbf{Analysis}:
+\begin{itemize}
+  \item \textbf{Stakes}: Moderate. Summaries inform but don't directly drive trades; errors are caught in review.
+  \item \textbf{Data needs}: Critical. News summarization inherently requires current content.
+  \item \textbf{Complexity}: Moderate. Summarization is well within LLM capabilities.
+  \item \textbf{Constraints}: Daily batch processing; cost-sensitive due to high volume; moderate latency tolerance.
+\end{itemize}
+
+\textbf{Recommended Strategy}:
+\begin{itemize}
+  \item \textbf{ReAct with news retrieval}: Fetch articles from trusted sources.
+  \item \textbf{Simple chain-of-thought}: Identify key points, note market implications, synthesize.
+  \item \textbf{Single-pass generation}: Self-consistency is overkill for summarization.
+  \item \textbf{Visible reasoning}: Summary structure naturally shows reasoning.
+  \item \textbf{Topic-based guardrails}: Flag articles about portfolio companies for human attention.
+\end{itemize}
+
+\textbf{Memory Configuration}: Each news item is independent; minimal cross-article context needed. Consider tagging summaries with topics for later retrieval.
+
+\subsubsection{Case Study 3: Client Risk Assessment Chatbot}
+
+\textbf{Scenario}: A wealth management firm wants a chatbot that gathers client information and produces preliminary risk assessments.
+
+\textbf{Analysis}:
+\begin{itemize}
+  \item \textbf{Stakes}: High. Regulatory requirements around suitability assessments; fiduciary duties.
+  \item \textbf{Data needs}: Low. Assessment based on client-provided information, not external data.
+  \item \textbf{Complexity}: Moderate. Structured questionnaire with conditional logic.
+  \item \textbf{Constraints}: Real-time (conversation with client); must feel natural and responsive.
+\end{itemize}
+
+\textbf{Recommended Strategy}:
+\begin{itemize}
+  \item \textbf{Direct prompting with few-shot examples}: Model appropriate conversational patterns for gathering information.
+  \item \textbf{Simple chain-of-thought for classification}: Show reasoning for risk category assignment.
+  \item \textbf{No retrieval}: Assessment based on conversation content only.
+  \item \textbf{Strict guardrails}: Never provide investment advice; only gather information and classify.
+  \item \textbf{Mandatory human review}: Assessment is preliminary; always routed to advisor for confirmation.
+\end{itemize}
+
+\textbf{Memory Configuration}: Track all client responses in current session. Pin stated risk tolerance and investment horizon. Clear session-specific context between clients but maintain templates.
+
+\subsubsection{Case Study 4: Contract Review Workflow}
+
+\textbf{Scenario}: A corporate legal department wants AI assistance reviewing vendor contracts for risk terms.
+
+\textbf{Analysis}:
+\begin{itemize}
+  \item \textbf{Stakes}: High. Missing a problematic clause could expose the company to significant liability.
+  \item \textbf{Data needs}: Moderate. Contract review is primarily about the document itself, but comparison to company playbook may require retrieval.
+  \item \textbf{Complexity}: High. Contracts require careful parsing, cross-reference of definitions, and risk assessment.
+  \item \textbf{Constraints}: Batch processing acceptable; thoroughness valued over speed.
+\end{itemize}
+
+\textbf{Recommended Strategy}:
+\begin{itemize}
+  \item \textbf{Tree of Thoughts}: Explore the contract systematically by section, considering multiple interpretations of ambiguous language.
+  \item \textbf{ReAct for playbook comparison}: Retrieve company's standard positions and risk thresholds for each clause type.
+  \item \textbf{Self-consistency for risk ratings}: Multiple evaluations of high-risk clauses to verify assessment.
+  \item \textbf{Structured output}: Produce standardized risk reports with clause-by-clause analysis.
+  \item \textbf{Escalation triggers}: Automatically flag contracts meeting certain criteria for senior review.
+\end{itemize}
+
+\textbf{Memory Configuration}: Contract context must persist throughout review. Pin key definitions and parties. Maintain session with all identified issues for final summary.
+
+\subsubsection{Lessons from Case Studies}
+
+These examples illustrate several recurring patterns:
+
+\begin{keybox}[title={Strategy Selection Principles}]
+\begin{enumerate}
+  \item \textbf{Match stakes to verification}: Higher stakes justify more expensive verification strategies (self-consistency, human review).
+  \item \textbf{Use retrieval when data matters}: Any task involving facts beyond training data requires tool-augmented reasoning.
+  \item \textbf{Structure reasoning for the audience}: Legal tasks benefit from IRAC; financial tasks from structured scenarios.
+  \item \textbf{Consider the full workflow}: AI is rarely the final word in professional contexts; design for handoff.
+  \item \textbf{Start simple}: Begin with the simplest strategy that might work; add complexity only when measurement shows it's needed.
+\end{enumerate}
+\end{keybox}
+

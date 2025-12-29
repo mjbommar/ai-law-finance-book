@@ -1,0 +1,120 @@
+% =============================================================================
+% Introduction — LLM Primer & Mechanics
+% Purpose: Set scope; establish paradigm shift; link to later chapters
+% Label: sec:llm1-intro
+% =============================================================================
+
+\section{Introduction and Scope}
+\label{sec:llm1-intro}
+
+The integration of Large Language Models into the workflows of regulated industries---specifically law, finance, and enterprise risk management---represents a paradigm shift comparable to the transition from paper ledgers to relational databases. However, unlike the deterministic logic of SQL databases, where a query yields a consistent and mathematically verifiable result, LLMs operate on probabilistic principles. They are stochastic engines, not knowledge bases. For practitioners tasked with deploying these systems, this distinction is not merely academic; it is the fundamental constraint governing system architecture, compliance strategy, and risk mitigation.
+
+\subsection{The Shift from Deterministic to Probabilistic Computing}
+
+In traditional software engineering, the relationship between input and output is fixed. A line of code that calculates compound interest will return the same value for a given set of inputs every time it is executed, barring hardware failure. LLMs break this contract fundamentally.
+
+As we explore in detail in \Cref{sec:llm1-sampling}, a model can---and often will---produce different outputs for identical inputs \parencite{holtzman2020curious}. At low temperature settings, this variance is minimal; at higher temperatures, responses may diverge substantially in phrasing, structure, and even factual content. For a creative writing assistant, this variance is a feature. For a system generating suspicious activity reports (SARs) for banking regulators or drafting disclosure language for securities filings, it is a critical vulnerability that demands architectural controls.
+
+\begin{definitionbox}[title={Deterministic vs. Stochastic Systems}]
+\textbf{Deterministic system:} Given the same input, produces the same output every time. Traditional software, databases, and calculators operate deterministically.
+
+\textbf{Stochastic system:} Given the same input, produces outputs drawn from a probability distribution. LLMs are fundamentally stochastic, though their randomness can be controlled through sampling parameters.
+\end{definitionbox}
+
+This probabilistic nature has profound implications for regulated industries:
+
+\begin{itemize}
+  \item \textbf{Auditability:} How do you demonstrate to a regulator exactly how an AI-generated report was produced if the same prompt could yield different outputs?
+
+  \item \textbf{Reproducibility:} How do you debug a system when the ``bug'' is a statistical artifact that appears in 2\% of runs?
+
+  \item \textbf{Liability:} Who bears responsibility when a model generates plausible but incorrect legal citations or financial projections?
+
+  \item \textbf{Validation:} How do you test a system whose outputs are not deterministic?
+\end{itemize}
+
+This chapter addresses these questions by providing the mechanical understanding necessary to reason about LLM behavior. We examine how prompts become token sequences, how the Transformer architecture processes these sequences to generate continuations, and---critically---the precise structural reasons why these processes sometimes fail.
+
+\subsection{Why Mechanics Matter for Practice}
+
+Understanding LLM mechanics is not an academic exercise. It directly informs practical decisions:
+
+\paragraph{System Design.} Knowledge of context window limitations (see \Cref{sec:llm1-tokens}) determines whether you can process an entire merger agreement in a single pass or must implement chunking strategies. Understanding the ``Lost in the Middle'' phenomenon \parencite{liu2023lostmiddle} explains why naive approaches to document processing produce unreliable results for information buried in long texts.
+
+\paragraph{Cost Optimization.} Token economics drive LLM costs. Knowing that a single legal document might consume 50,000 tokens---at perhaps \$0.01--0.03 per 1,000 input tokens for frontier models---allows you to budget appropriately and design efficient retrieval strategies that minimize unnecessary context.
+
+\paragraph{Quality Control.} Understanding why models hallucinate (see \Cref{sec:llm1-fail}) transforms hallucination from a mysterious failure into a predictable consequence of the model's training objective. This understanding motivates specific mitigations: retrieval-augmented generation, citation requirements, and verification loops.
+
+\paragraph{Vendor Evaluation.} When evaluating competing AI vendors, understanding architecture enables you to ask the right questions: What is the effective context window? How is determinism handled? What tokenizer is used? These technical details have direct implications for reliability in your specific use case.
+
+\subsection{What LLMs Are (and Are Not)}
+
+Before diving into mechanics, we establish what modern LLMs fundamentally are:
+
+\begin{keybox}[title={The Core Insight}]
+An LLM is a \textbf{next-token prediction engine} trained on massive text corpora. It learns statistical patterns in language---grammar, facts, reasoning structures, domain conventions---by learning to predict what comes next. It is not a database of facts, not a search engine, and not a reasoning system in the traditional sense. Its ``knowledge'' is a byproduct of learning to generate plausible text.
+\end{keybox}
+
+This insight explains many observed behaviors:
+
+\begin{itemize}
+  \item \textbf{Why models can write perfect sonnets about non-existent court cases:} They understand the \emph{form} (the statistical structure of a sonnet and legal citation) even when they lack the \emph{substance} (whether a particular case exists).
+
+  \item \textbf{Why models struggle with arithmetic:} Numbers are tokenized as arbitrary symbols, not mathematical quantities. The model has no inherent understanding of place value or numerical operations.
+
+  \item \textbf{Why models ``sound'' authoritative even when wrong:} They are optimized to produce text that looks like the training data---which includes confident, well-structured prose on every topic.
+
+  \item \textbf{Why models have knowledge cutoffs:} Their ``knowledge'' is frozen at the moment training data was collected. They cannot know about events, regulations, or cases that occurred after their training cutoff.
+\end{itemize}
+
+\subsection{Scope of This Chapter}
+
+This chapter covers the foundational mechanics of LLMs:
+
+\begin{enumerate}
+  \item \textbf{Conceptual Primer and History} (\Cref{sec:llm1-history}): The evolution from early NLP through Transformers, scaling laws, and the model lifecycle from pre-training through alignment.
+
+  \item \textbf{Tokens and Tokenization} (\Cref{sec:llm1-tokens}): How text becomes integers, why this matters for cost and capability, and the implications of context windows.
+
+  \item \textbf{Sampling and Decoding} (\Cref{sec:llm1-sampling}): The probabilistic mechanisms that generate text, including temperature, nucleus sampling, and constrained decoding.
+
+  \item \textbf{Representations and Embeddings} (\Cref{sec:llm1-embeddings}): How text becomes vectors, enabling semantic search and retrieval.
+
+  \item \textbf{Failure Modes} (\Cref{sec:llm1-fail}): A taxonomy of how and why LLMs fail, from hallucination to prompt injection.
+\end{enumerate}
+
+\paragraph{What We Do Not Cover.} This chapter deliberately omits:
+
+\begin{itemize}
+  \item Mathematical derivations of attention mechanisms (consult \textcite{vaswani2017attention} directly)
+  \item Implementation details for specific vendors or APIs (these change rapidly)
+  \item Fine-tuning and custom model training (covered in later chapters)
+  \item Multi-modal models beyond brief mention (text remains our focus)
+  \item Agent architectures (covered extensively in Part II)
+\end{itemize}
+
+\subsection{Relationship to Later Chapters}
+
+This chapter establishes vocabulary and mental models that later chapters assume:
+
+\begin{itemize}
+  \item \textbf{Chapter 2 (Conversations and Reasoning):} Builds on token and context concepts to manage multi-turn dialogues. Chain-of-thought prompting \parencite{wei2022chain} is understood through the lens of token generation explored here.
+
+  \item \textbf{Chapter 3 (Retrieval-Augmented Generation):} Extends embedding concepts into full RAG architectures. Understanding why context windows matter is prerequisite for designing retrieval strategies.
+
+  \item \textbf{Part II (Agents):} Agent loops orchestrate LLM calls with tools. Understanding sampling and structured outputs is essential for reliable tool invocation.
+
+  \item \textbf{Governance Chapters:} Risk frameworks build directly on the failure mode taxonomy established here.
+\end{itemize}
+
+\begin{highlightbox}[title={Keep These Questions in Mind}]
+As you read, consider these recurring themes:
+\begin{itemize}
+  \item How does this mechanism affect \textbf{reliability} in regulated contexts?
+  \item What \textbf{failure modes} does this design decision introduce?
+  \item What \textbf{controls} can mitigate identified risks?
+  \item How do \textbf{cost and latency} scale with different choices?
+\end{itemize}
+These questions will guide our analysis throughout.
+\end{highlightbox}
+

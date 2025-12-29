@@ -1,0 +1,31 @@
+# LaTeX auxiliary files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.synctex
+*.toc
+*.lot
+*.lof
+*.listing
+
+# Build output
+*.pdf
+
+# Export directories
+png/
+
+# Editor files
+*~
+*.swp
+*.swo
+.DS_Store
+
+# Temporary files
+texput.log

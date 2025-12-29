@@ -1,0 +1,199 @@
+% ============================================================================
+% BACK COVER - Matching front cover style with glass author boxes
+% ============================================================================
+% Uses same blue/teal background, subtle texture, and glass-effect boxes
+% for author bios. Designed for US Trade 6x9 format.
+% ============================================================================
+
+% Set full-bleed geometry for back cover
+\newgeometry{margin=0pt}
+\thispagestyle{empty}
+
+\begin{tikzpicture}[remember picture, overlay]
+
+	% Position at page origin
+	\begin{scope}[shift={(current page.south west)}]
+
+		% Page dimensions
+		\def\pagewidth{6in}
+		\def\pageheight{9in}
+
+		% Color definitions (matching front cover)
+		\definecolor{DeepTeal}{HTML}{0D3B4C}
+		\definecolor{MidTeal}{HTML}{1A5A6B}
+		\definecolor{AccentGold}{HTML}{D4A84B}
+		\definecolor{TextPure}{HTML}{FFFFFF}
+		\definecolor{TextSoft}{HTML}{E8F0F2}
+
+		% ============================================================================
+		% BACKGROUND - Same as front cover
+		% ============================================================================
+		\shade[top color=MidTeal, bottom color=DeepTeal]
+		(0,0) rectangle (\pagewidth, \pageheight);
+
+		% ============================================================================
+		% SUBTLE TEXTURE - Reduced from front cover
+		% ============================================================================
+		\begin{scope}[scale=0.706, transform shape, shift={(0, 1.4in)}]
+			\pgfmathsetseed{42}
+			\foreach \i in {1,...,320} {
+					\pgfmathsetmacro{\px}{rnd * 8.5}
+					\pgfmathsetmacro{\py}{rnd * 11}
+					\pgfmathsetmacro{\psize}{0.3 + rnd * 0.8}
+					\pgfmathsetmacro{\popacity}{0.015 + rnd * 0.03}
+					\fill[white, opacity=\popacity] (\px in, \py in) circle (\psize pt);
+				}
+			\foreach \i in {1,...,240} {
+					\pgfmathsetmacro{\px}{rnd * 8.5}
+					\pgfmathsetmacro{\py}{rnd * 11}
+					\pgfmathsetmacro{\psize}{0.2 + rnd * 0.5}
+					\pgfmathsetmacro{\popacity}{0.02 + rnd * 0.04}
+					\fill[black, opacity=\popacity] (\px in, \py in) circle (\psize pt);
+				}
+		\end{scope}
+
+		% ============================================================================
+		% BOOK SUMMARY - Main content area
+		% ============================================================================
+
+		% Glass box for book summary
+		\begin{scope}[shift={(0.45in, 3.60in)}]
+			% Shadow layer
+			\fill[black, opacity=0.08, rounded corners=6pt]
+			(0.05in, -0.05in) rectangle (5.15in, 5.05in);
+			% Layer 1: Warm gradient
+			\shade[top color=AccentGold, bottom color=MidTeal, opacity=0.12, rounded corners=6pt]
+			(0, 0) rectangle (5.1in, 5.1in);
+			% Layer 2: Dark gradient
+			\shade[left color=black!40, right color=DeepTeal, opacity=0.22, rounded corners=5.5pt, shading angle=135]
+			(0, 0) rectangle (5.1in, 5.1in);
+			% Layer 3: Frosted overlay
+			\fill[white, opacity=0.04, rounded corners=6.5pt] (0, 0) rectangle (5.1in, 5.1in);
+			% Layer 4: Border
+			\draw[white, opacity=0.15, line width=0.5pt, rounded corners=6pt] (0, 0) rectangle (5.1in, 5.1in);
+
+			% Hook questions
+			\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 4.85in) {
+				{\rmfamily\fontsize{10}{12}\selectfont\color{TextPure}\itshape%
+						How do you use AI tools effectively without understanding how they work? How do you validate outputs you cannot fully explain? How do you build workflows that survive professional scrutiny?}
+			};
+
+			% Problem statement
+			\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 4.17in) {
+				{\rmfamily\fontsize{8.5}{11}\selectfont\color{TextPure}%
+						Large language models have arrived in law and finance. But ``works well enough'' hides a multitude of sins: hallucinated citations, misinterpreted financials, and confident-sounding errors. This book provides the understanding you need to deploy these tools responsibly.}
+			};
+
+			% Arc intro
+			\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 3.47in) {
+				{\rmfamily\fontsize{8.5}{11}\selectfont\color{TextPure}%
+						We move from foundations to mastery---\textbf{\textcolor{AccentGold}{understanding}} how LLMs actually work, \textbf{\textcolor{AccentGold}{communicating}} effectively through prompts and conversations, \textbf{\textcolor{AccentGold}{controlling}} outputs for reliability, and \textbf{\textcolor{AccentGold}{improving}} systematically over time.}
+			};
+
+			% Understand
+			\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 2.85in) {
+				{\rmfamily\fontsize{8.5}{11}\selectfont\color{TextPure}%
+						\textbf{\textcolor{TextPure}{Understand.}} Tokens, sampling, embeddings, and context windows---the mechanics that determine why models behave as they do. Know the failure modes before you deploy.}
+			};
+
+			% Communicate
+			\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 2.24in) {
+				{\rmfamily\fontsize{8.5}{11}\selectfont\color{TextPure}%
+						\textbf{\textcolor{TextPure}{Communicate.}} Conversation patterns, reasoning strategies, and chain-of-thought techniques that transform casual chat into structured professional analysis.}
+			};
+
+			% Control
+			\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 1.63in) {
+				{\rmfamily\fontsize{8.5}{11}\selectfont\color{TextPure}%
+						\textbf{\textcolor{TextPure}{Control.}} Structured outputs, tool use, retrieval-augmented generation, and audit trails. Get results you can actually use and defend under scrutiny.}
+			};
+
+			% Apply
+			\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 1.02in) {
+				{\rmfamily\fontsize{8.5}{11}\selectfont\color{TextPure}%
+						\textbf{\textcolor{TextPure}{Apply.}} Contracts, financials, images, tables, and audio---multimodal workflows for the materials you work with daily. Privacy and redaction for regulated data.}
+			};
+
+			% Audience
+			\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 0.41in) {
+				{\rmfamily\fontsize{8.5}{11}\selectfont\color{TextPure}%
+						Written for legal practitioners, finance professionals, technology leaders, and anyone whose professional reputation depends on the quality of AI-assisted output.}
+			};
+		\end{scope}
+
+		% ============================================================================
+		% ABOUT THE AUTHORS - Glass box section
+		% ============================================================================
+		\begin{scope}[shift={(0.45in, 1.10in)}]
+			% Shadow layer
+			\fill[black, opacity=0.08, rounded corners=6pt]
+			(0.05in, -0.05in) rectangle (5.15in, 2.25in);
+			% Layer 1: Warm gradient
+			\shade[top color=AccentGold, bottom color=MidTeal, opacity=0.12, rounded corners=6pt]
+			(0, 0) rectangle (5.1in, 2.3in);
+			% Layer 2: Dark gradient
+			\shade[left color=black!40, right color=DeepTeal, opacity=0.22, rounded corners=5.5pt, shading angle=135]
+			(0, 0) rectangle (5.1in, 2.3in);
+			% Layer 3: Frosted overlay
+			\fill[white, opacity=0.04, rounded corners=6.5pt] (0, 0) rectangle (5.1in, 2.3in);
+			% Layer 4: Border
+			\draw[white, opacity=0.15, line width=0.5pt, rounded corners=6pt] (0, 0) rectangle (5.1in, 2.3in);
+
+			% Header
+			\node[anchor=north west, inner sep=0pt] at (0.2in, 2.05in) {
+				{\fontsize{13}{15}\selectfont\color{TextSoft}%
+						A\kern0.06em B\kern0.06em O\kern0.06em U\kern0.06em T\ %
+						T\kern0.06em H\kern0.06em E\ %
+						A\kern0.06em U\kern0.06em T\kern0.06em H\kern0.06em O\kern0.06em R\kern0.06em S}
+			};
+
+			% Shared intro
+			\node[anchor=north west, inner sep=0pt] at (0.2in, 1.75in) {
+				\begin{minipage}[t]{4.7in}
+					\rmfamily\fontsize{7.5}{7.5}\selectfont\color{TextPure}%
+					The authors founded legal tech company LexPredict in 2014, exited in 2018, and today lead 273 Ventures.
+				\end{minipage}
+			};
+
+			% Michael
+			\node[anchor=north west, inner sep=0pt] at (0.2in, 1.5in) {
+				\begin{minipage}[t]{4.7in}
+					\rmfamily\fontsize{7.5}{7.5}\selectfont\color{TextPure}%
+					\textbf{\textcolor{TextPure}{Michael J. Bommarito II, MSE, MA}} --- Serial entrepreneur, researcher, and adjunct professor with 25 years of industry experience.
+				\end{minipage}
+			};
+
+			% Daniel
+			\node[anchor=north west, inner sep=0pt] at (0.2in, 1.09in) {
+				\begin{minipage}[t]{4.7in}
+					\rmfamily\fontsize{7.5}{7.5}\selectfont\color{TextPure}%
+					\textbf{\textcolor{TextPure}{Daniel Martin Katz, PhD, JD, MPP}} --- Professor at Illinois Tech - Chicago Kent College of Law, named by the FT as one of the top 20 legal market shapers of the past 20 years.
+				\end{minipage}
+			};
+
+			% Jillian
+			\node[anchor=north west, inner sep=0pt] at (0.2in, 0.68in) {
+				\begin{minipage}[t]{4.7in}
+					\rmfamily\fontsize{7.5}{7.5}\selectfont\color{TextPure}%
+					\textbf{\textcolor{TextPure}{Jillian Bommarito, CPA, CIPP/US/E}} --- Advisor, risk and governance expert, and one of the first certified AI auditors in the world.
+				\end{minipage}
+			};
+		\end{scope}
+
+		% ----------------------------------------------------------------------------
+		% FOOTER: Website (bottom left) and ISBN placeholder (bottom right)
+		% ----------------------------------------------------------------------------
+		\node[anchor=south west, inner sep=0pt] at (0.75in, 0.5in) {
+			{\rmfamily\fontsize{9}{11}\selectfont\bfseries\color{TextPure}\textsc{ai4lf.com}}
+		};
+		% ISBN placeholder - will need actual barcode for print
+		\node[anchor=south east, inner sep=0pt] at (5.25in, 0.5in) {
+			{\rmfamily\fontsize{8}{10}\selectfont\color{TextSoft}ISBN 979-8-9943457-1-9}
+		};
+
+	\end{scope}
+\end{tikzpicture}
+
+% Restore normal geometry
+\restoregeometry
+\clearpage

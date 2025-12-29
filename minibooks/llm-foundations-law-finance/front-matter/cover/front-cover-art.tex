@@ -1,0 +1,117 @@
+% ============================================================================
+% FRONT COVER ART - Drawn at origin for 6x9 trim area
+% ============================================================================
+% Expects to be used inside a tikzpicture; origin at lower-left of trim area.
+% Uses blue/teal tones to differentiate from agents book (slate/copper).
+% Abstract geometric elements instead of network diagrams.
+% ============================================================================
+
+% Page dimensions
+\def\pagewidth{6in}
+\def\pageheight{9in}
+
+% ============================================================================
+% COLOR DEFINITIONS - Blue/Teal palette
+% ============================================================================
+\definecolor{DeepTeal}{HTML}{0D3B4C}
+\definecolor{MidTeal}{HTML}{1A5A6B}
+\definecolor{LightTeal}{HTML}{2D8299}
+\definecolor{CircleTeal}{HTML}{3FA3BD}
+\definecolor{CircleBlue}{HTML}{4B7BA8}
+\definecolor{CircleLight}{HTML}{7EC8D4}
+\definecolor{AccentGold}{HTML}{D4A84B}
+\definecolor{AccentWarm}{HTML}{E8C87A}
+\definecolor{TextPure}{HTML}{FFFFFF}
+\definecolor{TextSoft}{HTML}{E8F0F2}
+\definecolor{TextMuted}{HTML}{A8C8D4}
+
+% ============================================================================
+% BACKGROUND - Full bleed (not scaled)
+% ============================================================================
+\shade[top color=MidTeal, bottom color=DeepTeal]
+    (0,0) rectangle (\pagewidth, \pageheight);
+
+% ============================================================================
+% SCALED CONTENT - Uniform 0.706 scale to preserve circles
+% ============================================================================
+\begin{scope}[scale=0.706, transform shape, shift={(0, 1.4in)}]
+
+% --- Texture ---
+\pgfmathsetseed{42}
+\foreach \i in {1,...,400} {
+    \pgfmathsetmacro{\px}{rnd * 8.5}
+    \pgfmathsetmacro{\py}{rnd * 11}
+    \pgfmathsetmacro{\psize}{0.3 + rnd * 0.8}
+    \pgfmathsetmacro{\popacity}{0.02 + rnd * 0.04}
+    \fill[white, opacity=\popacity] (\px in, \py in) circle (\psize pt);
+}
+\foreach \i in {1,...,300} {
+    \pgfmathsetmacro{\px}{rnd * 8.5}
+    \pgfmathsetmacro{\py}{rnd * 11}
+    \pgfmathsetmacro{\psize}{0.2 + rnd * 0.5}
+    \pgfmathsetmacro{\popacity}{0.03 + rnd * 0.05}
+    \fill[black, opacity=\popacity] (\px in, \py in) circle (\psize pt);
+}
+
+% --- Geometric Circles (abstract, no network diagrams) ---
+\fill[CircleTeal, opacity=0.18] (2.0in, 7.8in) circle (2.6in);
+\fill[CircleBlue, opacity=0.14] (6.4in, 8.4in) circle (2.2in);
+\fill[CircleLight, opacity=0.10] (4.0in, 6.2in) circle (1.9in);
+\fill[CircleTeal, opacity=0.08] (0.8in, 9.2in) circle (1.7in);
+\fill[CircleBlue, opacity=0.06] (7.4in, 7.0in) circle (1.5in);
+\fill[white, opacity=0.02] (3.2in, 7.6in) circle (1.6in);
+\fill[white, opacity=0.015] (5.8in, 8.0in) circle (1.3in);
+
+% --- Abstract geometric elements (lines and arcs) ---
+\draw[TextMuted, opacity=0.15, line width=0.8pt] (1.5in, 5.5in) -- (3.0in, 7.0in);
+\draw[TextMuted, opacity=0.12, line width=0.6pt] (5.5in, 6.0in) -- (7.0in, 7.5in);
+\draw[AccentGold, opacity=0.10, line width=0.4pt] (2.5in, 8.0in) arc (120:60:2in);
+\draw[CircleLight, opacity=0.08, line width=0.5pt] (4.0in, 5.0in) arc (180:270:1.5in);
+
+% --- Small accent dots ---
+\fill[AccentGold, opacity=0.25] (2.8in, 6.8in) circle (3pt);
+\fill[AccentGold, opacity=0.20] (5.2in, 7.2in) circle (2.5pt);
+\fill[AccentGold, opacity=0.15] (6.8in, 6.0in) circle (2pt);
+
+% --- Title ---
+\node[anchor=center, align=center, opacity=0.12] at (4.32in, 3.04in) {
+    {\fontsize{44}{54}\selectfont\color{black}L\kern0.06em L\kern0.06em M\kern0.15em\kern0.15em E\kern0.04em S\kern0.04em S\kern0.04em E\kern0.04em N\kern0.04em T\kern0.04em I\kern0.04em A\kern0.04em L\kern0.04em S}\\[0.35in]
+    {\fontsize{24}{28}\selectfont\color{black}F\kern0.05em O\kern0.05em R\kern0.12em\kern0.12em L\kern0.05em A\kern0.05em W\kern0.12em\kern0.12em \&\kern0.12em\kern0.12em F\kern0.05em I\kern0.05em N\kern0.05em A\kern0.05em N\kern0.05em C\kern0.05em E}
+};
+\node[anchor=center, align=center, opacity=0.25] at (4.28in, 3.08in) {
+    {\fontsize{44}{54}\selectfont\color{DeepTeal}L\kern0.06em L\kern0.06em M\kern0.15em\kern0.15em E\kern0.04em S\kern0.04em S\kern0.04em E\kern0.04em N\kern0.04em T\kern0.04em I\kern0.04em A\kern0.04em L\kern0.04em S}\\[0.35in]
+    {\fontsize{24}{28}\selectfont\color{DeepTeal}F\kern0.05em O\kern0.05em R\kern0.12em\kern0.12em L\kern0.05em A\kern0.05em W\kern0.12em\kern0.12em \&\kern0.12em\kern0.12em F\kern0.05em I\kern0.05em N\kern0.05em A\kern0.05em N\kern0.05em C\kern0.05em E}
+};
+\node[anchor=center, align=center] at (4.25in, 3.14in) {
+    {\fontsize{44}{54}\selectfont\bfseries\color{TextPure}L\kern0.06em L\kern0.06em M\kern0.15em\kern0.15em E\kern0.04em S\kern0.04em S\kern0.04em E\kern0.04em N\kern0.04em T\kern0.04em I\kern0.04em A\kern0.04em L\kern0.04em S}\\[0.35in]
+    {\fontsize{24}{28}\selectfont\color{AccentGold}F\kern0.05em O\kern0.05em R\kern0.12em\kern0.12em L\kern0.05em A\kern0.05em W\kern0.12em\kern0.12em \&\kern0.12em\kern0.12em F\kern0.05em I\kern0.05em N\kern0.05em A\kern0.05em N\kern0.05em C\kern0.05em E}
+};
+
+% --- Divider ---
+\draw[TextMuted, line width=0.4pt, opacity=0.4] (2.6in, 2.31in) -- (3.7in, 2.31in);
+\fill[AccentGold, opacity=0.6] (4.25in, 2.31in) circle (2pt);
+\draw[TextMuted, line width=0.4pt, opacity=0.4] (4.8in, 2.31in) -- (5.9in, 2.31in);
+
+% --- Subtitle ---
+\node[anchor=center, align=center] at (4.25in, 1.61in) {
+    {\fontsize{18}{22}\selectfont\itshape\color{TextSoft}A Practitioner's Guide from}\\[0.14in]
+    {\fontsize{18}{22}\selectfont\itshape\color{TextSoft}Mechanics to Mastery}
+};
+
+% --- Authors (larger, lower) ---
+\node[anchor=center, align=center] at (4.25in, 0.15in) {
+    {\fontsize{13}{15}\selectfont\color{TextSoft}%
+    M\kern0.06em I\kern0.06em C\kern0.06em H\kern0.06em A\kern0.06em E\kern0.06em L\ %
+    J\kern0.06em.\ %
+    B\kern0.06em O\kern0.06em M\kern0.06em M\kern0.06em A\kern0.06em R\kern0.06em I\kern0.06em T\kern0.06em O\ %
+    I\kern0.06em I%
+    \quad \textbullet \quad %
+    D\kern0.06em A\kern0.06em N\kern0.06em I\kern0.06em E\kern0.06em L\ %
+    M\kern0.06em.\ %
+    K\kern0.06em A\kern0.06em T\kern0.06em Z%
+    \quad \textbullet \quad %
+    J\kern0.06em I\kern0.06em L\kern0.06em L\kern0.06em I\kern0.06em A\kern0.06em N\ %
+    B\kern0.06em O\kern0.06em M\kern0.06em M\kern0.06em A\kern0.06em R\kern0.06em I\kern0.06em T\kern0.06em O}
+};
+
+\end{scope}

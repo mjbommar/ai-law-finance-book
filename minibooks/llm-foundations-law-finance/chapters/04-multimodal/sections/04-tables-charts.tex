@@ -1,0 +1,101 @@
+% =============================================================================
+% Tables & Charts — Multimodal Fundamentals
+% Purpose: Accurate extraction and interpretation
+% Label: sec:llmD2-tables
+% =============================================================================
+
+\section{Tables and Charts}
+\label{sec:llmD2-tables}
+
+Tables and charts represent high-density information that requires specialized handling. A financial statement table, regulatory schedule, or litigation exhibit contains relationships between cells, headers, and footnotes that simple text extraction destroys. Similarly, charts encode trends and comparisons visually that cannot be reconstructed from OCR alone.
+
+\subsection{Table Extraction Strategies}
+\label{sec:llmD2-table-extraction}
+
+Table extraction has evolved from rule-based approaches to sophisticated vision-language methods:
+
+\paragraph{Heuristic Parsers.} Libraries like \texttt{pdfplumber} and \texttt{Camelot} detect tables through line detection and whitespace analysis. These work well for clean, bordered tables but fail on borderless tables, merged cells, or complex headers common in legal and financial documents.
+
+\paragraph{Vision-Based Extraction.} State-of-the-art approaches utilize vision-language models (VLMs) to parse tables. Instead of reconstructing the table from text coordinates, the system sends an image of the table to a VLM with a prompt to ``transcribe this table to Markdown'' or ``convert to HTML.'' This preserves merged cells and complex headers far better than heuristic parsers.
+
+\begin{highlightbox}[title={Vision-Based Table Extraction Prompt}]
+\begin{verbatim}
+Extract this table to Markdown format.
+Preserve:
+- All merged cells (span them appropriately)
+- Header hierarchy (multi-row headers)
+- Footnote markers (superscript numbers)
+- Currency symbols and units
+Return only the Markdown table, no explanation.
+\end{verbatim}
+\end{highlightbox}
+
+\paragraph{Structured Output for Tables.} When tables must integrate with downstream systems, request structured output:
+
+\begin{itemize}
+  \item \textbf{JSON with metadata}: Include row/column headers, units, footnotes, and source page numbers.
+  \item \textbf{CSV with context}: Preserve column types and include a header comment with table caption.
+  \item \textbf{HTML tables}: Maintain cell spans and styling for complex structures.
+\end{itemize}
+
+\subsection{Chain-of-Table Reasoning}
+\label{sec:llmD2-chain-of-table}
+
+For reasoning over tables, the \keyterm{Chain-of-Table} framework dynamically plans operations to navigate a table. Rather than ingesting the whole table into the context, the model iteratively generates operations to create a virtual, simplified table that answers the specific query.
+
+\begin{definitionbox}[title={Chain-of-Table Operations}]
+\begin{description}
+  \item[Filter] Select rows matching criteria: ``Year $>$ 2020''
+  \item[Select] Choose specific columns: ``Revenue, Net Income''
+  \item[Aggregate] Compute sums, averages, or counts
+  \item[Sort] Order by column values
+  \item[Join] Combine with another table on a key column
+\end{description}
+\end{definitionbox}
+
+This mimics how an analyst works with a spreadsheet---progressively narrowing the data to answer a question rather than overwhelming the model with the entire table.
+
+\subsection{Chart Understanding}
+\label{sec:llmD2-chart-understanding}
+
+Charts are often ignored in text-based retrieval systems, yet they encode critical information in legal and financial documents: stock price trends, market share comparisons, revenue projections.
+
+\paragraph{The CHARGE Framework.} The Chart-based Question Answering Generation (CHARGE) framework extracts keypoints from charts and verifies them against the text to generate QA pairs. This ensures the model can ``read'' the data trends visually represented in the document, allowing users to ask questions like ``What was the trend in Q3 according to the bar chart?''
+
+\paragraph{Chart-to-Table Conversion.} One practical approach converts charts to structured data:
+
+\begin{enumerate}
+  \item Send the chart image to a VLM with instructions to extract the underlying data.
+  \item Request output as a table (CSV or JSON) with axis labels and values.
+  \item Store both the extracted data and a link to the original chart image.
+  \item During synthesis, the model can reference either the extracted data or describe the visual.
+\end{enumerate}
+
+\begin{cautionbox}[title={Chart Extraction Limitations}]
+Be cautious when reconstructing data from charts:
+\begin{itemize}
+  \item \textbf{Precision loss}: Values read from axis positions are approximate.
+  \item \textbf{Missing data points}: Not all values may be visible or labeled.
+  \item \textbf{Scale ambiguity}: Logarithmic or truncated axes affect interpretation.
+  \item \textbf{Prefer originals}: When available, use the source data files rather than chart extraction.
+\end{itemize}
+\end{cautionbox}
+
+\subsection{Multimodal Embeddings for Tables and Charts}
+\label{sec:llmD2-multimodal-embeddings}
+
+Once content is extracted, it must be indexed for retrieval. Two architectural approaches dominate:
+
+\paragraph{Unified Embeddings.} Models like \keyterm{CLIP} (Contrastive Language-Image Pre-training) and \keyterm{SigLIP} project images and text into a shared vector space. This allows cross-modal retrieval: a user can type a text query (``Show me the graph of rising interest rates'') and retrieve the relevant image from a slide deck.
+
+\paragraph{Late Fusion.} A robust architecture often employs \keyterm{late fusion}. Instead of a single embedding space, the system maintains separate indices for text and images (using specialized models for each). During retrieval, candidates are fetched from both indices, and a re-ranking model fuses the scores to present the most relevant mixed-media results.
+
+\begin{keybox}[title={When to Use Each Approach}]
+\begin{description}
+  \item[Unified embeddings] Best for general cross-modal search where text and images are loosely related.
+  \item[Late fusion] Preferred when the nuance of a specific modality (e.g., OCR text inside an image) is critical, or when you need fine-grained control over retrieval weights.
+\end{description}
+\end{keybox}
+
+For financial documents with complex tables, late fusion often outperforms unified embeddings because it can leverage specialized table understanding models alongside general-purpose text embedders.
+

@@ -1,0 +1,355 @@
+% =============================================================================
+% History & Conceptual Primer — LLM Primer & Mechanics
+% Purpose: Architectural evolution, scaling laws, model lifecycle, governance
+% Label: sec:llm1-history
+% =============================================================================
+
+\section{Conceptual Primer and Brief History}
+\label{sec:llm1-history}
+
+To reason effectively about what LLMs \emph{can} do, one must first understand how they are constructed. The modern LLM is not a database of facts; it is a probabilistic engine that models the statistical structure of language. Its ``knowledge'' is a secondary byproduct of learning to predict the next token in a sequence across massive datasets. This distinction explains why a model can write a perfect legal brief about a non-existent court case: it understands the \emph{form}---the statistical structure of a brief and citation---even when it lacks the \emph{substance}---whether that case actually exists.
+
+\begin{highlightbox}[title={Plain-English Summary}]
+LLMs predict the next token given all previous tokens. Through training on massive text corpora, they learn grammar, facts, and reasoning patterns. Instruction tuning teaches them to follow directions. They are powerful at reading, summarizing, and generating text---but require external grounding for facts and dates because their knowledge is frozen at training time.
+\end{highlightbox}
+
+\subsection{The Pre-Transformer Era: Bottlenecks of Sequential Processing}
+\label{sec:llm1-history-pretransformer}
+
+Before 2017, the dominant architectures for Natural Language Processing (NLP) were \keyterm{Recurrent Neural Networks} (RNNs) and their variants, particularly \keyterm{Long Short-Term Memory} (LSTM) networks. These architectures processed language sequentially, much like a human reading a sentence word by word. To process the word ``defendant'' at the end of a sentence, the model had to have already processed every preceding word in order.
+
+This sequential nature created two profound bottlenecks that limited the scale and capability of language AI:
+
+\paragraph{Computational Inefficiency.} Training could not be effectively parallelized across Graphics Processing Units (GPUs). The computation for the current step depended on the output of the previous step, forcing a serial execution path. This meant that processing a 10,000-word document took roughly 10,000 sequential steps---you could not simply throw more hardware at the problem to make it faster. This limitation constrained the amount of data models could practically be trained on.
+
+\paragraph{The Vanishing Gradient Problem.} As sequences grew longer, the gradient signal used to train the network would ``dilute'' or ``vanish'' by the time it propagated from the end of the sequence back to the beginning. In practical terms, this meant the model would effectively ``forget'' information from the beginning of a long text by the time it reached the end. For a multi-page merger agreement, an RNN-based system might lose track of the parties' names by the time it reached the signature block.
+
+Consider the legal sentence: ``The defendant corporation, which was incorporated in Delaware in 2015 pursuant to the merger agreement described in Exhibit A, hereby warrants that...'' For an RNN processing this sequentially, by the time it reaches ``warrants,'' the information about ``defendant corporation'' has passed through many processing steps and may have degraded.
+
+\begin{definitionbox}[title={Recurrence vs. Attention}]
+\textbf{Recurrent processing:} Information flows sequentially through time steps. Token at position $t$ only has direct access to the output from position $t-1$.
+
+\textbf{Attention-based processing:} Every token can directly attend to every other token in the sequence. Information flow is parallel, not sequential.
+\end{definitionbox}
+
+\begin{technicalbox}[title={Technical Intuition (Optional): Numbers, Tables, and ``Tensors''}]
+This book does \emph{not} require tensor arithmetic. However, the vocabulary is useful for understanding why GPUs/TPUs matter and why modern LLMs scale.
+
+\begin{itemize}
+  \item \textbf{A number} is a single value.
+  \item \textbf{A vector} is a list of numbers (think: a single Excel column of numeric features).
+  \item \textbf{A matrix} is a 2D table of numbers (think: an Excel sheet with rows and columns).
+  \item \textbf{A tensor} is a higher-dimensional array---informally, a stack of tables (e.g., many sheets, or a 3D block of numbers).
+\end{itemize}
+
+\paragraph{Why GPUs/TPUs help.} Much of modern deep learning reduces to repeating the same operations (especially matrix multiplication) across large arrays. GPUs and TPUs are ``parallel calculators'': they execute the same numerical operation across many cells at once, which is exactly what training and running Transformers requires. This is why Transformers unlocked practical scaling: attention and matrix operations map naturally to accelerator hardware.
+\end{technicalbox}
+
+\paragraph{Word Embeddings: A Foundation.} Even before Transformers, a crucial innovation emerged: \keyterm{word embeddings}. Work like Word2Vec \parencite{mikolov2013word2vec} demonstrated that words could be represented as dense vectors where semantic relationships were encoded geometrically. The classic example: the vector for ``king'' minus ``man'' plus ``woman'' approximately equals the vector for ``queen.'' This insight---that meaning could be represented as positions in a continuous vector space---underlies all modern LLM architectures.
+
+However, early embeddings had a critical limitation: each word had exactly one vector representation regardless of context. The word ``bank'' had the same embedding whether used as ``river bank'' or ``investment bank.'' Resolving this ambiguity required context-dependent representations---exactly what Transformers would provide.
+
+\subsection{The Transformer Revolution}
+\label{sec:llm1-history-transformer}
+
+The inflection point for modern generative AI was the publication of ``Attention Is All You Need'' by \textcite{vaswani2017attention} from Google Brain. This paper introduced the \keyterm{Transformer} architecture, which dispensed with recurrence entirely. Instead of processing tokens sequentially, the Transformer processes the entire sequence in parallel.
+
+\subsubsection{Self-Attention: The Engine of Context}
+
+The core innovation of the Transformer is the \keyterm{self-attention} mechanism. Attention allows the model to weigh the relevance of \emph{every} token in a sequence to \emph{every other} token, regardless of their physical distance in the text.
+
+Consider the sentence: ``The attorney handed the revised contract to the client because \textbf{she} had finished reviewing the indemnification clause.''
+
+For a simple statistical model, resolving who ``she'' refers to is difficult. Is it the attorney? The client? The contract? A Transformer calculates ``attention scores'' between ``she'' and every other word in the sentence. Through training, it learns that ``attorney'' is the entity most statistically likely to be associated with ``reviewing'' a clause. It creates a strong attentional link between ``she'' and ``attorney,'' resolving the ambiguity.
+
+This mechanism operates in parallel across all positions: while computing attention for ``she,'' the model simultaneously computes attention for every other token. This parallelization is what enables training on massive datasets---GPUs excel at exactly this kind of parallel computation.
+
+\paragraph{Contextual Embeddings.} Unlike Word2Vec's static embeddings, Transformer embeddings are \keyterm{contextual}. The representation of ``bank'' in ``river bank'' differs from its representation in ``investment bank'' because the attention mechanism incorporates surrounding context into each token's representation. This is why we sometimes call Transformer representations ``contextual embeddings.''
+
+\paragraph{Computational Cost: The Quadratic Challenge.} Self-attention has a computational cost that grows quadratically with sequence length: processing a sequence of length $n$ requires $O(n^2)$ operations because each token attends to each other token. Doubling the context window quadruples the compute required for attention. This is why context window limits exist and why longer-context models are more expensive to run.
+
+Recent optimizations like FlashAttention \parencite{dao2022flashattention} have dramatically improved the practical efficiency of attention computation, but the fundamental $O(n^2)$ scaling remains. This is a key architectural consideration when designing systems that must process long legal or financial documents.
+
+\begin{keybox}[title={Why Transformers Succeeded}]
+Transformers succeeded for three interconnected reasons:
+\begin{enumerate}
+  \item \textbf{Parallelization:} Training can fully utilize GPU parallelism, enabling training on vastly more data.
+  \item \textbf{Long-range dependencies:} Any token can attend to any other token, regardless of distance.
+  \item \textbf{Contextual representations:} Token meanings adjust based on surrounding context.
+\end{enumerate}
+These properties enabled the scaling that produced modern LLMs.
+\end{keybox}
+
+\subsubsection{Encoder-Decoder and Decoder-Only Architectures}
+
+The original Transformer used an \keyterm{encoder-decoder} architecture designed for translation: the encoder processes the input (e.g., French text), and the decoder generates the output (e.g., English translation). Models like BERT \parencite{devlin2019bert} used encoder-only architectures optimized for understanding tasks.
+
+Modern LLMs like GPT, Claude, and Llama use \keyterm{decoder-only} architectures optimized for generation. These models process text left-to-right, predicting each next token based only on preceding tokens. This autoregressive design matches the generation task: at each step, the model sees only what comes before and must predict what comes next.
+
+For practitioners, the decoder-only architecture has important implications:
+
+\begin{itemize}
+  \item \textbf{No ``looking ahead'':} The model cannot see tokens it hasn't yet generated. It cannot revise earlier words based on where the sentence is going.
+
+  \item \textbf{Prompt engineering matters:} Because the model processes left-to-right, the order and phrasing of instructions affects which patterns are activated.
+
+  \item \textbf{Context accumulates:} As the model generates, its outputs become part of the context for subsequent generation. Errors can compound.
+\end{itemize}
+
+\subsection{Scaling Laws: The Economics of Intelligence}
+\label{sec:llm1-history-scaling}
+
+A critical theoretical foundation for the current AI boom is the concept of \keyterm{scaling laws}, first rigorously formalized by \textcite{kaplan2020scaling} at OpenAI. They demonstrated that the performance of a language model---measured by its ability to predict the next token---improves smoothly and predictably as a power-law function of three variables:
+
+\begin{enumerate}
+  \item \textbf{Model Size ($N$):} The number of parameters (learnable weights) in the network.
+  \item \textbf{Dataset Size ($D$):} The number of tokens the model is trained on.
+  \item \textbf{Compute Budget ($C$):} The total computational resources used for training.
+\end{enumerate}
+
+The key insight was that improvements were \emph{predictable}: doubling one of these factors would produce a predictable improvement in performance. This transformed model development from an empirical art into something closer to engineering: you could predict roughly how good a model would be based on how much you invested in its training.
+
+\begin{definitionbox}[title={Scaling Laws (Simplified)}]
+Model performance (measured as loss $L$) follows power laws with model size and data:
+\[
+L \propto N^{-\alpha} \cdot D^{-\beta}
+\]
+Where $\alpha$ and $\beta$ are empirically determined exponents. In practice, this means:
+\begin{itemize}
+  \item 10$\times$ more parameters $\rightarrow$ roughly $2-3\times$ better performance
+  \item 10$\times$ more data $\rightarrow$ roughly $2-3\times$ better performance
+\end{itemize}
+These are approximations; actual values depend on the specific regime.
+\end{definitionbox}
+
+Kaplan's initial work suggested that increasing model size was the most efficient route to performance, leading to an arms race of massive models: GPT-2 (1.5 billion parameters), GPT-3 (175 billion parameters), and beyond. Companies invested billions in training ever-larger models on the assumption that size was the primary driver of capability.
+
+\subsubsection{The Chinchilla Correction}
+
+This understanding was refined in 2022 by the ``Chinchilla'' paper from DeepMind \parencite{hoffmann2022chinchilla}. Hoffmann et al. demonstrated that most large models of that era were ``undertrained''---they used too many parameters relative to their training data.
+
+The key finding: for compute-optimal training, model size and dataset size should be scaled \emph{together} in roughly equal proportions. Specifically, for a given compute budget, you achieve better performance with a smaller model trained on more data than with a larger model trained on less data.
+
+\paragraph{Practical Implications.} This insight explains the current landscape:
+
+\begin{itemize}
+  \item \textbf{Efficient small models:} We now have high-performance ``small'' models (Llama 3 8B, Mistral 7B, Gemma 2B) trained on trillions of tokens. These models can run on local hardware or single GPUs, enabling deployment within private financial infrastructure without sending data to external APIs.
+
+  \item \textbf{Data as moat:} Unique, high-quality training data has become as valuable as compute. Legal and financial corpora---case law, SEC filings, contracts---are strategic assets for building domain-specific models.
+
+  \item \textbf{Training efficiency:} Organizations can achieve strong performance without frontier-scale compute by investing in data quality and training for longer.
+\end{itemize}
+
+\begin{highlightbox}[title={The Practical Takeaway}]
+For enterprise deployment, this means:
+\begin{itemize}
+  \item Smaller, well-trained models may outperform larger, undertrained ones
+  \item Domain-specific fine-tuning on quality data can close gaps with larger general-purpose models
+  \item The ``bigger is always better'' heuristic is incomplete---training efficiency matters
+\end{itemize}
+\end{highlightbox}
+
+\subsection{The Model Lifecycle: From Pre-training to Deployment}
+\label{sec:llm1-history-lifecycle}
+
+Understanding the lifecycle of a model helps explain its behaviors, limitations (especially knowledge cutoffs), and the origins of its capabilities and biases. Modern LLMs go through distinct phases:
+
+\subsubsection{Phase 1: Pre-training (Knowledge Acquisition)}
+
+The first and most expensive phase is \keyterm{pre-training}. The model is exposed to massive text corpora---public web crawls (Common Crawl), books, patents, code (GitHub), and sometimes domain-specific corpora like legal filings or financial reports \parencite{bommasani2021opportunities}. The training objective is simple: \textbf{next-token prediction}.
+
+\begin{itemize}
+  \item \textbf{Input:} ``The ruling of the district court was...''
+  \item \textbf{Target:} ``affirmed'' (or ``reversed'' or ``vacated'')
+\end{itemize}
+
+By minimizing prediction error over trillions of examples, the model learns:
+\begin{itemize}
+  \item Grammar and syntax (how language works)
+  \item World knowledge (facts present in training data)
+  \item Reasoning patterns (how arguments and analyses are structured)
+  \item Domain conventions (how legal briefs, financial reports, or contracts are formatted)
+\end{itemize}
+
+The result is a \keyterm{base model} or \keyterm{foundation model}. Base models are powerful but difficult to control: they are as likely to complete a question with another question (mimicking FAQ pages in training data) as to answer it. They have learned to generate text that looks like their training data---they have not learned to be helpful assistants.
+
+\paragraph{The Training Cutoff.} The model's parametric knowledge---what it ``knows'' intrinsically---is frozen at the moment pre-training ends. If a model was trained on data through December 2023, it has no intrinsic knowledge of a Supreme Court ruling from January 2024. This \keyterm{knowledge cutoff} is a fundamental limitation.
+
+\begin{cautionbox}[title={The Cutoff Problem}]
+Every LLM has a training cutoff date. The model cannot know about:
+\begin{itemize}
+  \item Court decisions issued after the cutoff
+  \item Regulations promulgated after the cutoff
+  \item Financial data (earnings, prices) after the cutoff
+  \item Events, personnel changes, or corporate restructurings after the cutoff
+\end{itemize}
+When the model ``answers'' questions about post-cutoff events, it is not retrieving knowledge---it is \emph{hallucinating} plausible-sounding content.
+\end{cautionbox}
+
+\subsubsection{Phase 2: Supervised Fine-Tuning (Instruction Following)}
+
+To make base models useful assistants, they undergo \keyterm{Supervised Fine-Tuning} (SFT), also called \keyterm{instruction tuning} \parencite{wei2022finetuned, ouyang2022training}. Human annotators create curated datasets of (Instruction, Response) pairs:
+
+\begin{itemize}
+  \item \textbf{Instruction:} ``Summarize this force majeure clause in plain English.''
+  \item \textbf{Response:} [A high-quality, legally accurate summary written by a human expert]
+\end{itemize}
+
+SFT teaches the model the \emph{format} and \emph{intent} of helpful interaction. It learns that when given an instruction, it should produce an answer rather than continuing to generate text in the style of its training data. Crucially, SFT does not necessarily teach new facts---it teaches the model how to access and format the knowledge it acquired during pre-training.
+
+For legal and financial applications, the quality of SFT data matters enormously. Models fine-tuned on expert-written legal analysis will behave differently from those fine-tuned on generic web Q\&A.
+
+\subsubsection{Phase 3: Preference Alignment (RLHF/DPO)}
+
+The final training stage often involves \keyterm{Reinforcement Learning from Human Feedback} (RLHF) or \keyterm{Direct Preference Optimization} (DPO) \parencite{ouyang2022training, rafailov2023dpo}. In this phase:
+
+\begin{enumerate}
+  \item The model generates multiple potential responses to a prompt
+  \item Human raters (or AI judges) rank the responses: ``Response A is safer/more helpful/more accurate than Response B''
+  \item The model is trained to produce outputs more like the preferred responses
+\end{enumerate}
+
+This stage shapes the model's style, safety behaviors, and nuance:
+
+\begin{itemize}
+  \item \textbf{Safety:} Teaching the model to refuse harmful requests (``How do I commit fraud?'')
+  \item \textbf{Tone:} Enforcing a professional, neutral voice suitable for business contexts
+  \item \textbf{Epistemic humility:} Encouraging the model to express uncertainty rather than hallucinate confidently
+  \item \textbf{Format compliance:} Preferring well-structured, clear responses
+\end{itemize}
+
+\paragraph{The Refusal Problem.} Alignment training introduces ``refusal behaviors''---the model declining to answer certain queries. This is generally desirable (you don't want it helping with fraud), but can create friction in legitimate use cases. A model might refuse to discuss hypothetical criminal scenarios in a law school context, or decline to analyze certain financial instruments. Distinguishing between a model refusing due to a safety filter versus refusing due to lack of knowledge is a key operational challenge.
+
+\begin{highlightbox}[title={The Complete Pipeline}]
+\begin{enumerate}
+  \item \textbf{Pre-training:} Learn language and world knowledge from massive text ($\sim$months, billions of dollars for frontier models)
+  \item \textbf{Supervised Fine-Tuning:} Learn to follow instructions ($\sim$days to weeks)
+  \item \textbf{Preference Alignment:} Learn to produce preferred outputs ($\sim$days to weeks)
+  \item \textbf{Deployment Configuration:} System prompts, guardrails, tool access (configuration, not training)
+\end{enumerate}
+\end{highlightbox}
+
+\subsection{Data Governance and Provenance}
+\label{sec:llm1-history-governance}
+
+For legal and financial applications, the opacity of training data is a significant liability. Understanding what a model was trained on---and what it wasn't---is essential for risk assessment.
+
+\subsubsection{Training Data Sources}
+
+Modern LLMs draw on diverse textual sources:
+
+\begin{itemize}
+  \item \textbf{Web crawls:} Common Crawl, which includes essentially everything publicly posted on the internet---good, bad, accurate, and false
+  \item \textbf{Books:} Both public domain (Project Gutenberg) and, controversially, copyrighted works
+  \item \textbf{Code:} GitHub repositories, Stack Overflow
+  \item \textbf{Academic literature:} Papers, patents, preprints
+  \item \textbf{Domain corpora:} Some models include legal databases, financial filings (EDGAR), or medical literature
+\end{itemize}
+
+The diversity of sources is double-edged. It gives models broad knowledge, but content quality varies enormously. An LLM may sound authoritative while actually drawing on an outdated blog post, a satirical article, or an erroneous Stack Overflow answer.
+
+\subsubsection{Legal and Ethical Considerations}
+
+Several legal issues arise from training data practices:
+
+\paragraph{Copyright.} Many LLM training sets include copyrighted text scraped without permission. Whether this constitutes fair use remains actively litigated. For practitioners:
+\begin{itemize}
+  \item LLM outputs might unintentionally replicate copyrighted language (e.g., contract templates from proprietary databases the model saw during training)
+  \item Vendors may face liability exposure that could affect service continuity
+  \item ``Provenance'' of AI-generated text is difficult to establish
+\end{itemize}
+
+\paragraph{Privacy.} Models may have ingested personal data---names, phone numbers, addresses---from web scraping. While they are not designed to output this data, cases exist of models regenerating personal information from training data. In regulated industries, this creates data protection concerns under GDPR, CCPA, and similar regimes.
+
+\paragraph{Confidentiality.} If proprietary or confidential documents were inadvertently included in training data (through leaks, breaches, or scraping of improperly secured content), models might generate content that reflects confidential information. Due diligence on vendor training practices is essential.
+
+\subsubsection{Regulatory Requirements}
+
+The regulatory landscape around AI training data is evolving rapidly:
+
+\begin{itemize}
+  \item \textbf{EU AI Act:} Mandates that providers of general-purpose AI models publish detailed summaries of training data content \parencite{euaiact2024}. This represents a major shift toward transparency.
+
+  \item \textbf{OWASP Top 10 for LLMs:} Identifies training data poisoning and data leakage as top security risks \parencite{owasp2025llm}.
+
+  \item \textbf{Sector-specific requirements:} Financial regulators increasingly expect model risk management practices (per SR 11-7 in the US) to address AI/ML systems, including training data governance.
+\end{itemize}
+
+\begin{keybox}[title={Governance Takeaways}]
+For enterprise deployment:
+\begin{enumerate}
+  \item \textbf{Audit vendor disclosures} about training data sources and filtering
+  \item \textbf{Never assume} the model won't output sensitive information it may have seen during training
+  \item \textbf{Document} your understanding of model provenance for regulatory purposes
+  \item \textbf{Consider on-premises} or private deployment for the most sensitive applications
+\end{enumerate}
+\end{keybox}
+
+\subsection{The ``Stochastic Parrot'' Critique}
+\label{sec:llm1-history-parrot}
+
+A influential critical perspective comes from \textcite{bender2021stochastic}, who coined the term ``stochastic parrots'' to describe LLMs. Their argument: LLMs mimic linguistic forms without understanding meaning, potentially reproducing biases, misinformation, and toxic content found in training data.
+
+This critique highlights important limitations:
+
+\begin{itemize}
+  \item \textbf{No genuine understanding:} Models statistically reproduce patterns; they do not ``know'' in any human sense
+  \item \textbf{Bias amplification:} Training data biases (gender, racial, cultural) are reflected and potentially amplified in outputs
+  \item \textbf{Environmental cost:} Training frontier models requires enormous energy, raising sustainability concerns
+  \item \textbf{Epistemological risk:} Plausible-sounding but incorrect outputs can spread misinformation at scale
+\end{itemize}
+
+For legal and financial practitioners, this critique reinforces the importance of human oversight: models are tools for drafting and analysis, not autonomous decision-makers. Their outputs require verification, especially for facts, legal conclusions, and financial figures.
+
+\subsection{Beyond Text: Tool Use and Multimodal Capabilities}
+\label{sec:llm1-history-beyond}
+
+While this chapter focuses on text, we briefly note the expanding frontier:
+
+\paragraph{Tool Use.} Modern LLMs can be configured to use external tools---calculators, code interpreters, databases, web search---by generating structured ``tool calls'' that are executed by surrounding systems \parencite{lewis2020rag}. This is not built into the LLM itself but achieved through:
+\begin{itemize}
+  \item Training to recognize when external information is needed
+  \item Outputting structured requests (typically JSON) for tool invocation
+  \item Incorporating tool outputs into subsequent responses
+\end{itemize}
+
+For legal practice, this enables retrieval-augmented generation: the LLM queries a case law database, receives relevant precedents, and incorporates them into its analysis. For finance, it enables real-time data access: querying current stock prices or regulatory filings.
+
+Tool use is covered extensively in Part II (Agents). The key point here: the LLM itself operates in text-only mode; tools extend its capabilities through system design.
+
+\paragraph{Multimodal Models.} Some advanced models (GPT-4o, Claude, Gemini) can process images, PDFs, and other modalities alongside text. This enables:
+\begin{itemize}
+  \item Analyzing scanned documents without OCR pre-processing
+  \item Reviewing charts and figures in financial reports
+  \item Processing handwritten notes or annotations
+\end{itemize}
+
+While we do not cover multimodal processing in depth, awareness of these capabilities is relevant for legal and financial applications where documents often include non-text elements.
+
+\subsection{Strengths and Limits for Legal and Financial Tasks}
+\label{sec:llm1-history-strengths}
+
+To conclude this primer, we summarize where LLMs excel and where they require caution:
+
+\begin{table}[htbp]
+\centering
+\caption{LLM Strengths and Limitations in Regulated Domains}
+\label{tab:llm1-strengths}
+\begin{tabular}{@{}p{0.45\textwidth}p{0.45\textwidth}@{}}
+\toprule
+\textbf{Strengths} & \textbf{Limitations} \\
+\midrule
+Summarizing long documents & Hallucinating citations and facts \\
+Extracting structured data (dates, parties, amounts) & Arithmetic and numerical reasoning \\
+Drafting initial text (memos, emails, clauses) & Knowledge cutoff (no post-training events) \\
+Explaining complex concepts in plain language & Precise legal or financial conclusions \\
+Identifying relevant passages via retrieval & Sensitivity to prompt phrasing \\
+Maintaining consistent formatting & Guaranteed reproducibility \\
+Processing at scale (thousands of documents) & Confidentiality of training data \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The overarching principle: LLMs are powerful \emph{assistants} that require human oversight. They can dramatically accelerate drafting and analysis, but their outputs must be verified---especially for factual claims, legal conclusions, and financial figures. The mechanical understanding developed in this chapter explains \emph{why} this verification is necessary: LLMs are next-token predictors, not knowledge bases; they optimize for plausibility, not truth; and their ``knowledge'' is frozen at a particular moment in time.
+
+With this conceptual foundation established, we now turn to the mechanics of how text becomes tokens and how models generate outputs.

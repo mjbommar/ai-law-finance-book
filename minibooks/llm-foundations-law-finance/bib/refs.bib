@@ -1,0 +1,1392 @@
+% =============================================================================
+% Bibliography — Chapter 01: LLM Primer & Mechanics
+% Primary sources with DOI/URL and urldate per AGENTS.md
+% =============================================================================
+
+% =====================================================
+% TRANSFORMER ARCHITECTURE
+% =====================================================
+@inproceedings{vaswani2017attention,
+  author    = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and
+               Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N and
+               Kaiser, Lukasz and Polosukhin, Illia},
+  title     = {Attention Is All You Need},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  volume    = {30},
+  year      = {2017},
+  doi       = {10.48550/arXiv.1706.03762},
+  url       = {https://arxiv.org/abs/1706.03762},
+  urldate   = {2025-12-20},
+  note      = {The seminal paper introducing the Transformer architecture, foundational for all modern LLMs.}
+}
+
+@inproceedings{devlin2019bert,
+  author    = {Devlin, Jacob and Chang, Ming-Wei and Lee, Kenton and Toutanova, Kristina},
+  title     = {{BERT}: Pre-training of Deep Bidirectional Transformers for Language Understanding},
+  booktitle = {Proceedings of the 2019 Conference of the North American Chapter of
+               the Association for Computational Linguistics (NAACL-HLT)},
+  pages     = {4171--4186},
+  year      = {2019},
+  doi       = {10.18653/v1/N19-1423},
+  url       = {https://aclanthology.org/N19-1423/},
+  urldate   = {2025-12-20},
+  note      = {Introduced bidirectional pre-training for language understanding tasks.}
+}
+
+% =====================================================
+% SCALING LAWS
+% =====================================================
+@article{kaplan2020scaling,
+  author  = {Kaplan, Jared and McCandlish, Sam and Henighan, Tom and Brown, Tom B and
+             Chess, Benjamin and Child, Rewon and Gray, Scott and Radford, Alec and
+             Wu, Jeffrey and Amodei, Dario},
+  title   = {Scaling Laws for Neural Language Models},
+  journal = {arXiv preprint arXiv:2001.08361},
+  year    = {2020},
+  doi     = {10.48550/arXiv.2001.08361},
+  url     = {https://arxiv.org/abs/2001.08361},
+  urldate = {2025-12-20},
+  note    = {Establishes power-law relationships between model size, data, and performance.}
+}
+
+@inproceedings{hoffmann2022chinchilla,
+  author    = {Hoffmann, Jordan and Borgeaud, Sebastian and Mensch, Arthur and
+               Buchatskaya, Elena and Cai, Trevor and Rutherford, Eliza and others},
+  title     = {Training Compute-Optimal Large Language Models},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  volume    = {35},
+  year      = {2022},
+  url       = {https://arxiv.org/abs/2203.15556},
+  urldate   = {2025-12-20},
+  note      = {Chinchilla paper; showed optimal training requires more data than previously thought.}
+}
+
+% =====================================================
+% FEW-SHOT LEARNING AND LARGE MODELS
+% =====================================================
+@inproceedings{brown2020fewshot,
+  author    = {Brown, Tom B and Mann, Benjamin and Ryder, Nick and Subbiah, Melanie and
+               Kaplan, Jared and Dhariwal, Prafulla and Neelakantan, Arvind and others},
+  title     = {Language Models are Few-Shot Learners},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  volume    = {33},
+  pages     = {1877--1901},
+  year      = {2020},
+  doi       = {10.48550/arXiv.2005.14165},
+  url       = {https://arxiv.org/abs/2005.14165},
+  urldate   = {2025-12-20},
+  note      = {GPT-3 paper demonstrating emergent few-shot learning capabilities.}
+}
+
+@techreport{openai2023gpt4,
+  author      = {{OpenAI}},
+  title       = {{GPT}-4 Technical Report},
+  year        = {2023},
+  institution = {OpenAI},
+  doi         = {10.48550/arXiv.2303.08774},
+  url         = {https://arxiv.org/abs/2303.08774},
+  urldate     = {2025-12-20},
+  note        = {Technical report for GPT-4, demonstrating state-of-the-art capabilities.}
+}
+
+% =====================================================
+% INSTRUCTION TUNING AND ALIGNMENT
+% =====================================================
+@article{ouyang2022training,
+  author  = {Ouyang, Long and Wu, Jeff and Jiang, Xu and Almeida, Diogo and
+             Wainwright, Carroll L and Mishkin, Pamela and Zhang, Chong and others},
+  title   = {Training Language Models to Follow Instructions with Human Feedback},
+  journal = {Advances in Neural Information Processing Systems (NeurIPS)},
+  volume  = {35},
+  year    = {2022},
+  doi     = {10.48550/arXiv.2203.02155},
+  url     = {https://arxiv.org/abs/2203.02155},
+  urldate = {2025-12-20},
+  note    = {InstructGPT paper; introduces RLHF for instruction following.}
+}
+
+@article{wei2022finetuned,
+  author  = {Wei, Jason and Bosma, Maarten and Zhao, Vincent and Guu, Kelvin and
+             Yu, Adams Wei and Lester, Brian and Du, Nan and Dai, Andrew M and Le, Quoc V},
+  title   = {Finetuned Language Models Are Zero-Shot Learners},
+  journal = {arXiv preprint arXiv:2109.01652},
+  year    = {2022},
+  url     = {https://arxiv.org/abs/2109.01652},
+  urldate = {2025-12-20},
+  note    = {FLAN paper demonstrating instruction tuning for zero-shot generalization.}
+}
+
+@article{rafailov2023dpo,
+  author  = {Rafailov, Rafael and Sharma, Archit and Mitchell, Eric and
+             Ermon, Stefano and Manning, Christopher D and Finn, Chelsea},
+  title   = {Direct Preference Optimization: Your Language Model is Secretly a Reward Model},
+  journal = {arXiv preprint arXiv:2305.18290},
+  year    = {2023},
+  url     = {https://arxiv.org/abs/2305.18290},
+  urldate = {2025-12-20},
+  note    = {Introduces DPO as simpler alternative to RLHF for preference alignment.}
+}
+
+% =====================================================
+% TOKENIZATION
+% =====================================================
+@inproceedings{sennrich2016bpe,
+  author    = {Sennrich, Rico and Haddow, Barry and Birch, Alexandra},
+  title     = {Neural Machine Translation of Rare Words with Subword Units},
+  booktitle = {Proceedings of the 54th Annual Meeting of the Association for
+               Computational Linguistics (ACL)},
+  pages     = {1715--1725},
+  year      = {2016},
+  doi       = {10.18653/v1/P16-1162},
+  url       = {https://aclanthology.org/P16-1162/},
+  urldate   = {2025-12-20},
+  note      = {Introduces Byte Pair Encoding (BPE) for neural machine translation.}
+}
+
+@article{kudo2018sentencepiece,
+  author  = {Kudo, Taku and Richardson, John},
+  title   = {{SentencePiece}: A Simple and Language Independent Subword Tokenizer and Detokenizer for Neural Text Processing},
+  journal = {arXiv preprint arXiv:1808.06226},
+  year    = {2018},
+  url     = {https://arxiv.org/abs/1808.06226},
+  urldate = {2025-12-20},
+  note    = {Language-agnostic tokenization framework used by many modern LLMs.}
+}
+
+% =====================================================
+% SAMPLING AND DECODING
+% =====================================================
+@inproceedings{holtzman2020curious,
+  author    = {Holtzman, Ari and Buys, Jan and Du, Li and Forbes, Maxwell and Choi, Yejin},
+  title     = {The Curious Case of Neural Text Degeneration},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2020},
+  doi       = {10.48550/arXiv.1904.09751},
+  url       = {https://arxiv.org/abs/1904.09751},
+  urldate   = {2025-12-20},
+  note      = {Introduces nucleus (top-p) sampling; analyzes text degeneration issues.}
+}
+
+@article{wang2022selfconsistency,
+  author  = {Wang, Xuezhi and Wei, Jason and Schuurmans, Dale and Le, Quoc V and
+             Chi, Ed H and Zhou, Denny},
+  title   = {Self-Consistency Improves Chain of Thought Reasoning in Language Models},
+  journal = {arXiv preprint arXiv:2203.11171},
+  year    = {2022},
+  doi     = {10.48550/arXiv.2203.11171},
+  url     = {https://arxiv.org/abs/2203.11171},
+  urldate = {2025-12-20},
+  note    = {Demonstrates using multiple sampled reasoning paths for improved accuracy.}
+}
+
+% =====================================================
+% CONTEXT AND LONG DOCUMENTS
+% =====================================================
+@article{liu2023lostmiddle,
+  author  = {Liu, Nelson F and Lin, Kevin and Hewitt, John and Paranjape, Ashwin and
+             Bevilacqua, Michele and Petroni, Fabio and Liang, Percy},
+  title   = {Lost in the Middle: How Language Models Use Long Contexts},
+  journal = {Transactions of the Association for Computational Linguistics},
+  volume  = {12},
+  pages   = {157--173},
+  year    = {2024},
+  doi     = {10.1162/tacl_a_00638},
+  url     = {https://arxiv.org/abs/2307.03172},
+  urldate = {2025-12-20},
+  note    = {Documents U-shaped retrieval performance in long contexts.}
+}
+
+% =====================================================
+% EMBEDDINGS AND RETRIEVAL
+% =====================================================
+@inproceedings{reimers2019sentencebert,
+  author    = {Reimers, Nils and Gurevych, Iryna},
+  title     = {Sentence-BERT: Sentence Embeddings using Siamese {BERT}-Networks},
+  booktitle = {Proceedings of the 2019 Conference on Empirical Methods in
+               Natural Language Processing (EMNLP)},
+  pages     = {3982--3992},
+  year      = {2019},
+  doi       = {10.18653/v1/D19-1410},
+  url       = {https://aclanthology.org/D19-1410/},
+  urldate   = {2025-12-20},
+  note      = {Efficient sentence embeddings for semantic similarity.}
+}
+
+@inproceedings{lewis2020rag,
+  author    = {Lewis, Patrick and Perez, Ethan and Piktus, Aleksandra and
+               Petroni, Fabio and Karpukhin, Vladimir and Goyal, Naman and others},
+  title     = {Retrieval-Augmented Generation for Knowledge-Intensive {NLP} Tasks},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  volume    = {33},
+  pages     = {9459--9474},
+  year      = {2020},
+  doi       = {10.48550/arXiv.2005.11401},
+  url       = {https://arxiv.org/abs/2005.11401},
+  urldate   = {2025-12-20},
+  note      = {Foundational paper on retrieval-augmented generation.}
+}
+
+@inproceedings{karpukhin2020dpr,
+  author    = {Karpukhin, Vladimir and O{\u{g}}uz, Barlas and Min, Sewon and
+               Lewis, Patrick and Wu, Ledell and Edunov, Sergey and Chen, Danqi and Yih, Wen-tau},
+  title     = {Dense Passage Retrieval for Open-Domain Question Answering},
+  booktitle = {Proceedings of the 2020 Conference on Empirical Methods in
+               Natural Language Processing (EMNLP)},
+  pages     = {6769--6781},
+  year      = {2020},
+  doi       = {10.18653/v1/2020.emnlp-main.550},
+  url       = {https://aclanthology.org/2020.emnlp-main.550/},
+  urldate   = {2025-12-20},
+  note      = {Introduces dense passage retrieval for open-domain QA.}
+}
+
+@article{khattab2020colbert,
+  author  = {Khattab, Omar and Zaharia, Matei},
+  title   = {{ColBERT}: Efficient and Effective Passage Search via Contextualized Late Interaction over {BERT}},
+  journal = {arXiv preprint arXiv:2004.12832},
+  year    = {2020},
+  url     = {https://arxiv.org/abs/2004.12832},
+  urldate = {2025-12-20},
+  note    = {Efficient re-ranking for hybrid search systems.}
+}
+
+% =====================================================
+% HALLUCINATION AND FAILURE MODES
+% =====================================================
+@article{ji2023hallucination,
+  author  = {Ji, Ziwei and Lee, Nayeon and Frieske, Rita and Yu, Tiezheng and
+             Su, Dan and Xu, Yan and Ishii, Etsuko and Bang, Yejin and others},
+  title   = {Survey of Hallucination in Natural Language Generation},
+  journal = {ACM Computing Surveys},
+  volume  = {55},
+  number  = {12},
+  pages   = {1--38},
+  year    = {2023},
+  doi     = {10.1145/3571730},
+  url     = {https://dl.acm.org/doi/10.1145/3571730},
+  urldate = {2025-12-20},
+  note    = {Comprehensive taxonomy of hallucination types and mitigation strategies.}
+}
+
+@article{huang2023survey,
+  author  = {Huang, Lei and Yu, Weijiang and Ma, Weitao and Zhong, Weihong and
+             Feng, Zhangyin and Wang, Haotian and Chen, Qianglong and others},
+  title   = {A Survey on Hallucination in Large Language Models: Principles, Taxonomy, Challenges, and Open Questions},
+  journal = {arXiv preprint arXiv:2311.05232},
+  year    = {2023},
+  url     = {https://arxiv.org/abs/2311.05232},
+  urldate = {2025-12-20},
+  note    = {Updated survey on LLM hallucination with taxonomy and challenges.}
+}
+
+% =====================================================
+% PROMPT INJECTION AND SECURITY
+% =====================================================
+@article{liu2023prompt,
+  author  = {Liu, Yi and Deng, Gelei and Li, Yuekang and Wang, Kailong and
+             Wang, Zihao and Wang, Xiaofeng and Zhang, Tianwei and others},
+  title   = {Prompt Injection Attack against {LLM}-integrated Applications},
+  journal = {arXiv preprint arXiv:2306.05499},
+  year    = {2023},
+  doi     = {10.48550/arXiv.2306.05499},
+  url     = {https://arxiv.org/abs/2306.05499},
+  urldate = {2025-12-20},
+  note    = {Analyzes prompt injection vulnerabilities and attack vectors.}
+}
+
+@article{greshake2023youve,
+  author  = {Greshake, Kai and Abdelnabi, Sahar and Mishra, Shailesh and
+             Endres, Christoph and Holz, Thorsten and Fritz, Mario},
+  title   = {Not What You've Signed Up For: Compromising Real-World {LLM}-Integrated Applications with Indirect Prompt Injection},
+  journal = {arXiv preprint arXiv:2302.12173},
+  year    = {2023},
+  url     = {https://arxiv.org/abs/2302.12173},
+  urldate = {2025-12-20},
+  note    = {Documents indirect prompt injection in real-world applications.}
+}
+
+% =====================================================
+% FOUNDATION MODELS AND ETHICS
+% =====================================================
+@article{bommasani2021opportunities,
+  author  = {Bommasani, Rishi and Hudson, Drew A and Adeli, Ehsan and
+             Altman, Russ and Arber, Simran and von Arx, Sydney and others},
+  title   = {On the Opportunities and Risks of Foundation Models},
+  journal = {arXiv preprint arXiv:2108.07258},
+  year    = {2021},
+  doi     = {10.48550/arXiv.2108.07258},
+  url     = {https://arxiv.org/abs/2108.07258},
+  urldate = {2025-12-20},
+  note    = {Comprehensive Stanford report on foundation model capabilities and risks.}
+}
+
+@inproceedings{bender2021stochastic,
+  author    = {Bender, Emily M and Gebru, Timnit and McMillan-Major, Angelina and Shmitchell, Shmargaret},
+  title     = {On the Dangers of Stochastic Parrots: Can Language Models Be Too Big?},
+  booktitle = {Proceedings of the 2021 ACM Conference on Fairness, Accountability, and Transparency (FAccT)},
+  pages     = {610--623},
+  year      = {2021},
+  doi       = {10.1145/3442188.3445922},
+  url       = {https://dl.acm.org/doi/10.1145/3442188.3445922},
+  urldate   = {2025-12-20},
+  note      = {Critical examination of environmental and ethical costs of large LLMs.}
+}
+
+% =====================================================
+% LEGAL AND FINANCIAL APPLICATIONS
+% =====================================================
+@article{kwon2024economists,
+  author  = {Kwon, Byeungchun and Park, Taejin and Perez-Cruz, Fernando and
+             Rungcharoenkitkul, Phurichai},
+  title   = {Large Language Models: A Primer for Economists},
+  journal = {BIS Quarterly Review},
+  pages   = {61--77},
+  year    = {2024},
+  month   = {December},
+  url     = {https://www.bis.org/publ/qtrpdf/r_qt2412b.htm},
+  urldate = {2025-12-20},
+  note    = {Accessible primer on LLMs for economists from the Bank for International Settlements.}
+}
+
+@misc{stanfordlegalai2024,
+  author    = {{Stanford HAI}},
+  title     = {{AI} on Trial: Legal Models Hallucinate in 1 out of 6 (or More) Benchmarking Queries},
+  year      = {2024},
+  url       = {https://hai.stanford.edu/news/ai-trial-legal-models-hallucinate-1-out-6-or-more-benchmarking-queries},
+  urldate   = {2025-12-20},
+  note      = {Empirical analysis of hallucination rates in legal AI applications.}
+}
+
+@misc{matavianca2023,
+  author    = {{United States District Court, Southern District of New York}},
+  title     = {Mata v. Avianca, Inc.},
+  year      = {2023},
+  note      = {Case No. 22-cv-1461 (PKC). Notable case where attorney submitted AI-generated brief with fabricated case citations.}
+}
+
+% =====================================================
+% WORD EMBEDDINGS (HISTORICAL)
+% =====================================================
+@inproceedings{mikolov2013word2vec,
+  author    = {Mikolov, Tomas and Chen, Kai and Corrado, Greg and Dean, Jeffrey},
+  title     = {Efficient Estimation of Word Representations in Vector Space},
+  booktitle = {Proceedings of the International Conference on Learning Representations (ICLR)},
+  year      = {2013},
+  url       = {https://arxiv.org/abs/1301.3781},
+  urldate   = {2025-12-20},
+  note      = {Word2Vec paper; foundational for understanding word embeddings.}
+}
+
+% =====================================================
+% CHAIN-OF-THOUGHT AND REASONING
+% =====================================================
+@article{wei2022chain,
+  author  = {Wei, Jason and Wang, Xuezhi and Schuurmans, Dale and Bosma, Maarten and
+             Ichter, Brian and Xia, Fei and Chi, Ed and Le, Quoc and Zhou, Denny},
+  title   = {Chain-of-Thought Prompting Elicits Reasoning in Large Language Models},
+  journal = {arXiv preprint arXiv:2201.11903},
+  year    = {2022},
+  url     = {https://arxiv.org/abs/2201.11903},
+  urldate = {2025-12-20},
+  note    = {Demonstrates that prompting for step-by-step reasoning improves performance.}
+}
+
+% =====================================================
+% REGULATORY AND GOVERNANCE
+% =====================================================
+@misc{euaiact2024,
+  author    = {{European Parliament and Council}},
+  title     = {Regulation ({EU}) 2024/1689 Laying Down Harmonised Rules on Artificial Intelligence (AI Act)},
+  year      = {2024},
+  url       = {https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689},
+  urldate   = {2025-12-20},
+  note      = {EU AI Act establishing transparency and risk-based AI governance requirements.}
+}
+
+@misc{owasp2025llm,
+  author    = {{OWASP Foundation}},
+  title     = {{OWASP} Top 10 for Large Language Model Applications},
+  year      = {2025},
+  url       = {https://owasp.org/www-project-top-10-for-large-language-model-applications/},
+  urldate   = {2025-12-20},
+  note      = {Security risk taxonomy for LLM-integrated applications.}
+}
+
+% =====================================================
+% PRIMERS AND SURVEYS
+% =====================================================
+@article{johnson2024primer,
+  author  = {Johnson, Sandra and Hyland-Wood, David},
+  title   = {A Primer on Large Language Models and Their Limitations},
+  journal = {arXiv preprint arXiv:2412.04503},
+  year    = {2024},
+  doi     = {10.48550/arXiv.2412.04503},
+  url     = {https://arxiv.org/abs/2412.04503},
+  urldate = {2025-12-20},
+  note    = {Accessible overview of LLM capabilities and limitations for practitioners.}
+}
+
+@article{zhao2023survey,
+  author  = {Zhao, Wayne Xin and Zhou, Kun and Li, Junyi and Tang, Tianyi and
+             Wang, Xiaolei and Hou, Yupeng and Min, Yingqian and others},
+  title   = {A Survey of Large Language Models},
+  journal = {arXiv preprint arXiv:2303.18223},
+  year    = {2023},
+  url     = {https://arxiv.org/abs/2303.18223},
+  urldate = {2025-12-20},
+  note    = {Comprehensive survey covering architecture, training, and applications.}
+}
+
+% =====================================================
+% ATTENTION AND EFFICIENCY
+% =====================================================
+@article{dao2022flashattention,
+  author  = {Dao, Tri and Fu, Daniel Y and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
+  title   = {{FlashAttention}: Fast and Memory-Efficient Exact Attention with IO-Awareness},
+  journal = {arXiv preprint arXiv:2205.14135},
+  year    = {2022},
+  url     = {https://arxiv.org/abs/2205.14135},
+  urldate = {2025-12-20},
+  note    = {Efficient attention implementation enabling longer context windows.}
+}
+% =============================================================================
+% Bibliography for Chapter 02: Conversations and Reasoning
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+% Chain-of-Thought and Reasoning
+% -----------------------------------------------------------------------------
+
+@inproceedings{wei2022cot,
+  author    = {Wei, Jason and Wang, Xuezhi and Schuurmans, Dale and Bosma, Maarten and Ichter, Brian and Xia, Fei and Chi, Ed and Le, Quoc and Zhou, Denny},
+  title     = {Chain-of-Thought Prompting Elicits Reasoning in Large Language Models},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {35},
+  year      = {2022},
+  pages     = {24824--24837},
+  url       = {https://arxiv.org/abs/2201.11903},
+  urldate   = {2025-12-20},
+  note      = {Foundational paper introducing chain-of-thought prompting for improved reasoning in LLMs}
+}
+
+@inproceedings{wang2023selfconsistency,
+  author    = {Wang, Xuezhi and Wei, Jason and Schuurmans, Dale and Le, Quoc and Chi, Ed and Narang, Sharan and Chowdhery, Aakanksha and Zhou, Denny},
+  title     = {Self-Consistency Improves Chain of Thought Reasoning in Language Models},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2203.11171},
+  urldate   = {2025-12-20},
+  note      = {Introduces self-consistency decoding with majority voting to improve reasoning accuracy}
+}
+
+@inproceedings{yao2023react,
+  author    = {Yao, Shunyu and Zhao, Jeffrey and Yu, Dian and Du, Nan and Shafran, Izhak and Narasimhan, Karthik and Cao, Yuan},
+  title     = {ReAct: Synergizing Reasoning and Acting in Language Models},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2210.03629},
+  urldate   = {2025-12-20},
+  note      = {Introduces the ReAct framework combining reasoning traces with tool use}
+}
+
+@inproceedings{yao2023tot,
+  author    = {Yao, Shunyu and Yu, Dian and Zhao, Jeffrey and Shafran, Izhak and Griffiths, Thomas and Cao, Yuan and Narasimhan, Karthik},
+  title     = {Tree of Thoughts: Deliberate Problem Solving with Large Language Models},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {36},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2305.10601},
+  urldate   = {2025-12-20},
+  note      = {Extends chain-of-thought to tree-based exploration with backtracking}
+}
+
+@article{besta2024got,
+  author    = {Besta, Maciej and Blach, Nils and Kubicek, Ales and Gerstenberger, Robert and Podstawski, Michal and Gianinazzi, Lukas and Gajda, Joanna and Lehmann, Tomasz and Nyczyk, Hubert and Iff, Piotr and others},
+  title     = {Graph of Thoughts: Solving Elaborate Problems with Large Language Models},
+  journal   = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume    = {38},
+  number    = {16},
+  pages     = {17682--17690},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2308.09687},
+  urldate   = {2025-12-20},
+  note      = {Introduces graph-based reasoning with aggregation and refinement operations}
+}
+
+@article{besta2025demystifying,
+  author    = {Besta, Maciej and Memedi, Florim and Zhang, Zhenyu and Gerstenberger, Robert and Blach, Nils and Iff, Piotr and Gajda, Joanna and Nyczyk, Hubert and Kubicek, Ales and Gianinazzi, Lukas and others},
+  title     = {Demystifying Chains, Trees, and Graphs of Thoughts},
+  journal   = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  volume    = {47},
+  number    = {12},
+  pages     = {10967--10989},
+  year      = {2025},
+  url       = {https://arxiv.org/abs/2401.14295},
+  urldate   = {2025-12-20},
+  note      = {Comprehensive taxonomy of reasoning topologies in LLMs}
+}
+
+% -----------------------------------------------------------------------------
+% Context and Memory
+% -----------------------------------------------------------------------------
+
+@article{liu2024lostmiddle,
+  author    = {Liu, Nelson F. and Lin, Kevin and Hewitt, John and Paranjape, Ashwin and Bevilacqua, Michele and Petroni, Fabio and Liang, Percy},
+  title     = {Lost in the Middle: How Language Models Use Long Contexts},
+  journal   = {Transactions of the Association for Computational Linguistics},
+  volume    = {12},
+  pages     = {157--173},
+  year      = {2024},
+  url       = {https://aclanthology.org/2024.tacl-1.9/},
+  urldate   = {2025-12-20},
+  note      = {Demonstrates U-shaped retrieval accuracy in long contexts}
+}
+
+@inproceedings{kwon2023pagedattention,
+  author    = {Kwon, Woosuk and Li, Zhuohan and Zhuang, Siyuan and Sheng, Ying and Zheng, Lianmin and Yu, Cody Hao and Gonzalez, Joseph and Zhang, Hao and Stoica, Ion},
+  title     = {Efficient Memory Management for Large Language Model Serving with PagedAttention},
+  booktitle = {Proceedings of the 29th Symposium on Operating Systems Principles},
+  pages     = {611--626},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2309.06180},
+  urldate   = {2025-12-20},
+  note      = {Introduces PagedAttention for efficient KV-cache management in inference}
+}
+
+@article{wang2024recursivesummarizing,
+  author    = {Wang, Qingyue and Fu, Yun and Cao, Yang and others},
+  title     = {Recursively Summarizing Enables Long-Term Dialogue Memory in Large Language Models},
+  journal   = {Neurocomputing},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2308.15022},
+  urldate   = {2025-12-20},
+  note      = {Demonstrates recursive summarization for maintaining long conversation context}
+}
+
+@article{zhang2024memory,
+  author    = {Zhang, Zeyu and others},
+  title     = {From Human Memory to AI Memory: A Survey on Memory Mechanisms in the Era of LLMs},
+  journal   = {arXiv preprint arXiv:2504.15965},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2504.15965},
+  urldate   = {2025-12-20},
+  note      = {Comprehensive survey of memory mechanisms for LLM agents}
+}
+
+% -----------------------------------------------------------------------------
+% Few-Shot Learning and In-Context Learning
+% -----------------------------------------------------------------------------
+
+@inproceedings{brown2020gpt3,
+  author    = {Brown, Tom B. and Mann, Benjamin and Ryder, Nick and Subbiah, Melanie and Kaplan, Jared and Dhariwal, Prafulla and Neelakantan, Arvind and Shyam, Pranav and Sastry, Girish and Askell, Amanda and others},
+  title     = {Language Models are Few-Shot Learners},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {33},
+  pages     = {1877--1901},
+  year      = {2020},
+  url       = {https://arxiv.org/abs/2005.14165},
+  urldate   = {2025-12-20},
+  note      = {GPT-3 paper demonstrating in-context learning capabilities}
+}
+
+@article{zebaze2024icl,
+  author    = {Zebaze Dongmo, Arsene Romain and Sagot, Benoit and Bawden, Rachel},
+  title     = {In-Context Example Selection via Similarity Search Improves Low-Resource Machine Translation},
+  journal   = {arXiv preprint arXiv:2408.00397},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2408.00397},
+  urldate   = {2025-12-20},
+  note      = {Demonstrates semantic search for few-shot example selection}
+}
+
+% -----------------------------------------------------------------------------
+% Self-Reflection and Improvement
+% -----------------------------------------------------------------------------
+
+@article{shinn2023reflexion,
+  author    = {Shinn, Noah and Cassano, Federico and Gopinath, Ashwin and Narasimhan, Karthik and Yao, Shunyu},
+  title     = {Reflexion: Language Agents with Verbal Reinforcement Learning},
+  journal   = {Advances in Neural Information Processing Systems},
+  volume    = {36},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2303.11366},
+  urldate   = {2025-12-20},
+  note      = {Introduces self-reflection for iterative improvement in LLM agents}
+}
+
+@article{li2025selfreflection,
+  author    = {Li, Bo and Zhao, Chen},
+  title     = {Self-reflection enhances large language models towards substantial academic response},
+  journal   = {npj Artificial Intelligence},
+  volume    = {1},
+  number    = {42},
+  year      = {2025},
+  url       = {https://www.nature.com/articles/s44387-025-00045-3},
+  urldate   = {2025-12-20},
+  note      = {Empirical study of self-reflection improving LLM response quality}
+}
+
+@inproceedings{wang2023selfinstruct,
+  author    = {Wang, Yizhong and Kordi, Yeganeh and Mishra, Swaroop and Liu, Alisa and Smith, Noah A. and Khashabi, Daniel and Hajishirzi, Hannaneh},
+  title     = {Self-Instruct: Aligning Language Models with Self-Generated Instructions},
+  booktitle = {Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics},
+  pages     = {13484--13508},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2212.10560},
+  urldate   = {2025-12-20},
+  note      = {Method for bootstrapping instruction-following data from the model itself}
+}
+
+% -----------------------------------------------------------------------------
+% RAG and Retrieval
+% -----------------------------------------------------------------------------
+
+@article{bai2022constitutional,
+  author    = {Bai, Yuntao and Kadavath, Saurav and Kundu, Sandipan and Askell, Amanda and Kernion, Jackson and Jones, Andy and Chen, Anna and Goldie, Anna and Mirhoseini, Azalia and McKinnon, Cameron and others},
+  title     = {Constitutional AI: Harmlessness from AI Feedback},
+  journal   = {arXiv preprint arXiv:2212.08073},
+  year      = {2022},
+  url       = {https://arxiv.org/abs/2212.08073},
+  urldate   = {2025-12-20},
+  note      = {Introduces constitutional AI for alignment via explicit principles}
+}
+
+@article{inan2023llamaguard,
+  author    = {Inan, Hakan and Upasani, Kartikeya and Chi, Jianfeng and Rungta, Rashi and Iyer, Krithika and Mao, Yuning and Tontchev, Michael and Hu, Qing and Fuller, Brian and Testuggine, Davide and others},
+  title     = {Llama Guard: LLM-based Input-Output Safeguard for Human-AI Conversations},
+  journal   = {arXiv preprint arXiv:2312.06674},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2312.06674},
+  urldate   = {2025-12-20},
+  note      = {Classification model for guardrailing LLM inputs and outputs}
+}
+
+@article{dong2024guardrails,
+  author    = {Dong, Yi and Zhao, Ronghui and others},
+  title     = {Building Guardrails for Large Language Models},
+  journal   = {arXiv preprint arXiv:2402.01822},
+  year      = {2024},
+  url       = {https://arxiv.org/abs/2402.01822},
+  urldate   = {2025-12-20},
+  note      = {Survey of guardrail architectures for LLM safety}
+}
+
+% -----------------------------------------------------------------------------
+% Prompt Engineering and System Prompts
+% -----------------------------------------------------------------------------
+
+@article{zheng2023personas,
+  author    = {Zheng, Ming and Pei, Jiahui and Logeswaran, Lajanugen and Lee, Moontae and Jurgens, David},
+  title     = {When ``A Helpful Assistant'' Is Not Really Helpful: Personas in System Prompts Do Not Improve Performances of Large Language Models},
+  journal   = {arXiv preprint arXiv:2311.10054},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2311.10054},
+  urldate   = {2025-12-20},
+  note      = {Empirical study of system prompt persona effects on LLM performance}
+}
+
+@online{touvron2023llama2,
+  author    = {Touvron, Hugo and Martin, Louis and Stone, Kevin and Albert, Peter and Almahairi, Amjad and Babaei, Yasmine and Bashlykov, Nikolay and Batra, Soumya and Bhargava, Prajjwal and Bhosale, Shruti and others},
+  title     = {Llama 2: Open Foundation and Fine-Tuned Chat Models},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2307.09288},
+  urldate   = {2025-12-20},
+  note      = {Technical report on Llama 2 architecture including chat formatting}
+}
+
+% -----------------------------------------------------------------------------
+% Efficient Reasoning
+% -----------------------------------------------------------------------------
+
+@article{xu2025tokenskip,
+  author    = {Xu, Yuxuan and others},
+  title     = {TokenSkip: Controllable Chain-of-Thought Compression in LLMs},
+  journal   = {Proceedings of EMNLP 2025},
+  year      = {2025},
+  url       = {https://aclanthology.org/2025.emnlp-main.165/},
+  urldate   = {2025-12-20},
+  note      = {Method for reducing chain-of-thought token overhead}
+}
+
+@article{xu2025cod,
+  author    = {Xu, Yilun and others},
+  title     = {Chain of Draft: Thinking Faster by Writing Less},
+  journal   = {arXiv preprint arXiv:2502.18600},
+  year      = {2025},
+  url       = {https://arxiv.org/abs/2502.18600},
+  urldate   = {2025-12-20},
+  note      = {Concise reasoning traces for faster inference}
+}
+
+% -----------------------------------------------------------------------------
+% Legal and Financial AI Applications
+% -----------------------------------------------------------------------------
+
+@inproceedings{katz2024gpt4,
+  author    = {Katz, Daniel Martin and Bommarito, Michael J. and Gao, Shang and Arredondo, Pablo},
+  title     = {GPT-4 Passes the Bar Exam},
+  booktitle = {Philosophical Transactions of the Royal Society A},
+  volume    = {382},
+  number    = {2270},
+  year      = {2024},
+  url       = {https://royalsocietypublishing.org/doi/10.1098/rsta.2023.0254},
+  urldate   = {2025-12-20},
+  note      = {Demonstrates LLM performance on legal reasoning tasks}
+}
+
+@article{choi2023chatgptlaw,
+  author    = {Choi, Jonathan H. and Hickman, Kristin E. and Monahan, Amy and Schwarcz, Daniel},
+  title     = {ChatGPT Goes to Law School},
+  journal   = {Journal of Legal Education},
+  volume    = {71},
+  number    = {3},
+  pages     = {387--400},
+  year      = {2023},
+  note      = {Early assessment of LLM capabilities in legal education}
+}
+
+% -----------------------------------------------------------------------------
+% Foundational Transformer and Attention
+% -----------------------------------------------------------------------------
+
+@online{openai2024structured,
+  author = {{OpenAI}},
+  title = {Introducing Structured Outputs in the {API}},
+  year = {2024},
+  month = {8},
+  url = {https://openai.com/index/introducing-structured-outputs-in-the-api/},
+  urldate = {2025-12-21},
+  note = {Announces JSON Schema enforcement in the OpenAI API; reports that GPT-4 with strict schema mode achieved 100\% compliance on internal tests, versus <40\% with prompt format instructions. Essential for understanding how function calling ensures output structure.}
+}
+
+@article{shorten2024structuredrag,
+  author = {Connor Shorten and others},
+  title = {{StructuredRAG}: {JSON} Response Formatting with Large Language Models},
+  journal = {arXiv preprint},
+  year = {2024},
+  eprint = {2408.11061},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.CL},
+  url = {https://arxiv.org/abs/2408.11061},
+  urldate = {2025-12-21},
+  note = {Benchmarks LLMs on structured output tasks, finding an average 82.5\% success but 0--100\% variance across tasks; highlights need for schema-following improvements.}
+}
+
+@online{jsonschema2020,
+  author = {Austin Wright and Henry Andrews and Ben Hutton and Greg Dennis},
+  title = {{JSON Schema}: A Media Type for Describing {JSON} Documents (Draft 2020-12)},
+  year = {2022},
+  month = {6},
+  url = {https://json-schema.org/draft/2020-12},
+  urldate = {2025-12-21},
+  note = {Standards document for JSON Schema. Defines the JSON Schema vocabulary for validating JSON structures, including object properties, data types, and format constraints. Essential reference for designing and implementing schemas for structured LLM outputs.}
+}
+
+@online{pydantic2024,
+  author = {{Pydantic}},
+  title = {Pydantic Documentation},
+  year = {2024},
+  url = {https://docs.pydantic.dev/latest/},
+  urldate = {2025-12-21},
+  note = {Official documentation for Pydantic, the Python data validation library using type hints. Essential for implementing schema validation for LLM outputs in Python.}
+}
+
+@online{brenndoerfer2024constrained,
+  author = {Michael Brenndoerfer},
+  title = {Constrained Decoding: Grammar-Guided Generation for Structured {LLM} Output},
+  year = {2024},
+  url = {https://mbrenndoerfer.com/writing/constrained-decoding-structured-llm-output},
+  urldate = {2025-12-21},
+  note = {Technical analysis of FSM-based constrained decoding mechanisms that enforce structure at the logit level. Explains how constrained generation guarantees syntactic correctness.}
+}
+
+@article{beurerkellner2024constrained,
+  author = {Luca Beurer-Kellner and Marc Fischer and Martin Vechev},
+  title = {Guiding {LLMs} The Right Way: Fast, Non-Invasive Constrained Generation},
+  journal = {arXiv preprint},
+  year = {2024},
+  eprint = {2403.06988},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.CL},
+  url = {https://arxiv.org/abs/2403.06988},
+  urldate = {2025-12-21},
+  note = {Research on efficient constrained decoding algorithms that compile schemas into FSMs and Tries for O(1) valid token lookup per generation step.}
+}
+
+% ============================================================================
+% TOOL USE AND FUNCTION CALLING
+% ============================================================================
+
+@article{schick2023toolformer,
+  author = {Timo Schick and Jane Dwivedi-Yu and Roberto Dessì and Roberta Raileanu and Maria Lomeli and Luke Zettlemoyer and Nicola Cancedda and Thomas Scialom},
+  title = {Toolformer: Language Models Can Teach Themselves to Use Tools},
+  journal = {arXiv preprint},
+  year = {2023},
+  eprint = {2302.04761},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.CL},
+  url = {https://arxiv.org/abs/2302.04761},
+  urldate = {2025-12-21},
+  note = {Demonstrates an LLM that self-learns to call APIs like calculators and search, yielding better performance on arithmetic and QA without increasing model size. Key paper for understanding when and how LLMs decide to use tools.}
+}
+
+@online{openai2024functioncalling,
+  author = {{OpenAI}},
+  title = {Function Calling},
+  year = {2024},
+  url = {https://platform.openai.com/docs/guides/function-calling},
+  urldate = {2025-12-21},
+  note = {Official OpenAI documentation on function calling API. Explains how to define tools with JSON Schema parameters and handle multi-turn function call workflows.}
+}
+
+@online{owasp2024llmtop10,
+  author = {{OWASP Foundation}},
+  title = {{OWASP} Top 10 for Large Language Model Applications},
+  year = {2024},
+  url = {https://owasp.org/www-project-top-10-for-large-language-model-applications/},
+  urldate = {2025-12-21},
+  note = {Security framework identifying critical vulnerabilities in LLM applications, including Excessive Agency (LLM08) and Insecure Plugin Design (LLM07). Essential for secure tool integration.}
+}
+
+@online{runbear2024openapi,
+  author = {{Runbear}},
+  title = {{OpenAPI} Function Calling},
+  year = {2024},
+  url = {https://docs.runbear.io/integrations/apps/openai-assistants/api-calling-openapi},
+  urldate = {2025-12-21},
+  note = {Technical guide on using OpenAPI Specification (OAS) to automatically generate tool definitions for LLM function calling. Explains OAS parsing and integration.}
+}
+
+% ============================================================================
+% NEURO-SYMBOLIC REASONING
+% ============================================================================
+
+@article{gao2023pal,
+  author = {Luyu Gao and Aman Madaan and Shuyan Zhou and Uri Alon and Pengfei Liu and Yiming Yang and Jamie Callan and Graham Neubig},
+  title = {{PAL}: Program-aided Language Models},
+  journal = {Proceedings of the 40th International Conference on Machine Learning (ICML)},
+  year = {2023},
+  eprint = {2211.10435},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.CL},
+  url = {https://arxiv.org/abs/2211.10435},
+  urldate = {2025-12-21},
+  note = {Introduces Program-Aided Language Models where the LLM generates Python programs to solve problems, delegating computation to a runtime. Achieves state-of-the-art results on GSM8K math benchmark.}
+}
+
+@online{li2024chainofcode,
+  author = {Chengshu Li and Jacky Liang and Andy Zeng and Xinyun Chen and Karol Hausman and Dorsa Sadigh and Sergey Levine and Li Fei-Fei and Fei Xia and Brian Ichter},
+  title = {Chain of Code: Reasoning with a Language Model-Augmented Code Emulator},
+  year = {2024},
+  url = {https://chain-of-code.github.io/},
+  urldate = {2025-12-21},
+  note = {Proposes Chain of Code (CoC) which uses an LMulator to execute hybrid code containing both executable Python and semantic pseudocode. Achieves 84\% on BIG-Bench Hard, a 12\% gain over Chain of Thought.}
+}
+
+% ============================================================================
+% RETRIEVAL-AUGMENTED GENERATION (RAG)
+% ============================================================================
+
+@online{nvidia2025rag,
+  author = {Rick Merritt},
+  title = {What Is Retrieval-Augmented Generation aka {RAG}},
+  year = {2025},
+  month = {1},
+  organization = {NVIDIA Blog},
+  url = {https://blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/},
+  urldate = {2025-12-21},
+  note = {Accessible overview of RAG with legal analogy (judge sending clerk to library); emphasizes that RAG provides cited sources to build user trust and reduces hallucinations.}
+}
+
+@online{smith2024chunking,
+  author = {Ben Smith and Anton Troynikov},
+  title = {Evaluating Chunking Strategies for Retrieval},
+  year = {2024},
+  organization = {Chroma Research},
+  url = {https://research.trychroma.com/evaluating-chunking},
+  urldate = {2025-12-21},
+  note = {Empirical study showing that chunking method significantly impacts retrieval efficacy -- up to 9\% difference in recall between strategies. Discusses token-level evaluation for AI retrieval systems.}
+}
+
+@online{weaviate2024chunking,
+  author = {{Weaviate}},
+  title = {Chunking Strategies to Improve Your {RAG} Performance},
+  year = {2024},
+  url = {https://weaviate.io/blog/chunking-strategies-for-rag},
+  urldate = {2025-12-21},
+  note = {Practical guide to chunking strategies for RAG, including semantic chunking, fixed-size with overlap, and sentence-based approaches.}
+}
+
+% ============================================================================
+% MULTIMODAL PROCESSING
+% ============================================================================
+
+@article{xu2020layoutlm,
+  author = {Yiheng Xu and Minghao Li and Lei Cui and Shaohan Huang and Furu Wei and Ming Zhou},
+  title = {{LayoutLM}: Pre-training of Text and Layout for Document Image Understanding},
+  journal = {Proceedings of ACM KDD 2020},
+  year = {2020},
+  eprint = {1912.13318},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.CL},
+  url = {https://arxiv.org/abs/1912.13318},
+  urldate = {2025-12-21},
+  note = {Introduces a multimodal transformer that incorporates text and layout information for documents. Achieves state-of-the-art on form understanding tasks by combining visual and textual features. Important for handling PDFs and scanned documents with AI.}
+}
+
+@article{wang2024chainoftable,
+  author = {Zilong Wang and Hao Zhang and Chun-Liang Li and Julian Martin Eisenschlos and Vincent Perot and Zifeng Wang and Lesly Miculicich and Yasuhisa Fujii and Jingbo Shang and Chen-Yu Lee and Tomas Pfister},
+  title = {Chain-of-Table: Evolving Tables in the Reasoning Chain for Table Understanding},
+  journal = {Proceedings of ICLR 2024},
+  year = {2024},
+  eprint = {2401.04398},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.CL},
+  url = {https://arxiv.org/abs/2401.04398},
+  urldate = {2025-12-21},
+  note = {Framework for reasoning over tables by dynamically planning operations to navigate and transform tables. Mimics how analysts work with spreadsheets for better table QA.}
+}
+
+@online{radford2022whisper,
+  author = {Alec Radford and Jong Wook Kim and Tao Xu and Greg Brockman and Christine McLeavey and Ilya Sutskever},
+  title = {Robust Speech Recognition via Large-Scale Weak Supervision},
+  year = {2022},
+  organization = {OpenAI},
+  eprint = {2212.04356},
+  archivePrefix = {arXiv},
+  url = {https://arxiv.org/abs/2212.04356},
+  urldate = {2025-12-21},
+  note = {Introduces Whisper, a state-of-the-art speech-to-text model trained on 680,000 hours of multilingual data. Essential for audio ingestion in multimodal RAG pipelines.}
+}
+
+@online{azure2024docintel,
+  author = {{Microsoft Azure}},
+  title = {Azure {AI} Document Intelligence: Layout Model},
+  year = {2024},
+  url = {https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/concept/retrieval-augmented-generation},
+  urldate = {2025-12-21},
+  note = {Documentation for Azure's layout analysis models for document parsing in RAG systems. Explains how to extract structured information from PDFs, tables, and forms.}
+}
+
+% ============================================================================
+% GOVERNANCE, AUDIT, AND SECURITY
+% ============================================================================
+
+@online{nist2024airm,
+  author = {{National Institute of Standards and Technology}},
+  title = {{AI} Risk Management Framework ({AI RMF})},
+  year = {2024},
+  url = {https://airc.nist.gov/airmf-resources/playbook/},
+  urldate = {2025-12-21},
+  note = {Official NIST framework for identifying, assessing, and managing AI risks. Provides governance guidance for responsible AI deployment in regulated environments.}
+}
+
+@online{paloalto2024owasp,
+  author = {{Palo Alto Networks}},
+  title = {{OWASP} Top 10 {LLM} Security Risks with Mitigation},
+  year = {2024},
+  url = {https://www.paloaltonetworks.com/resources/infographics/llm-applications-owasp-10},
+  urldate = {2025-12-21},
+  note = {Visual guide to OWASP Top 10 for LLM applications with practical mitigation strategies for each vulnerability category.}
+}
+
+@online{w3cprov2013,
+  author = {{W3C}},
+  title = {{PROV-O}: The {PROV} Ontology},
+  year = {2013},
+  url = {https://www.w3.org/TR/prov-o/},
+  urldate = {2025-12-21},
+  note = {W3C standard for representing provenance information. Defines entities, activities, and agents for tracking data lineage and transformation history. Essential for audit trails in AI systems.}
+}
+
+@online{presidio2024,
+  author = {{Microsoft}},
+  title = {Presidio: Context-aware, Pluggable and Customizable Data Protection and {PII} Anonymization},
+  year = {2024},
+  url = {https://github.com/microsoft/presidio},
+  urldate = {2025-12-21},
+  note = {Open-source framework for detecting and redacting PII in text and structured data. Uses NLP and pattern matching for context-aware anonymization. Essential for protecting sensitive data in RAG systems.}
+}
+
+@online{bronsdon2025governance,
+  author = {Chris Bronsdon},
+  title = {Compliance and Governance for {AI} Agents},
+  year = {2025},
+  month = {9},
+  organization = {Galileo.ai Blog},
+  url = {https://galileo.ai/blog/ai-agent-compliance-governance-audit-trails-risk-management},
+  urldate = {2025-12-21},
+  note = {Covers building audit trails and governance into AI agent deployments. Recommends detailed, tamper-evident logs capturing inputs, tool calls, outputs, with security measures. Provides real-world context for traceability and risk management.}
+}
+
+@online{edwards2025audit,
+  author = {Sarah Edwards},
+  title = {Legal {AI} Audit Trails: Designing for Traceability},
+  year = {2025},
+  month = {4},
+  organization = {Law.co Blog},
+  url = {https://law.co/blog/legal-ai-audit-trails-designing-for-traceability},
+  urldate = {2025-12-21},
+  note = {Discusses why transparency and traceability are vital in legal AI. Advises logging decisions, data, and human oversight to satisfy courts and regulators. Complements technical guidance with legal perspective on audit trails.}
+}
+
+% ============================================================================
+% RELIABILITY AND OPTIMIZATION
+% ============================================================================
+
+@online{microsoft2024circuitbreaker,
+  author = {{Microsoft Azure}},
+  title = {Circuit Breaker Pattern},
+  year = {2024},
+  url = {https://learn.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker},
+  urldate = {2025-12-21},
+  note = {Azure Architecture Center guide to implementing circuit breaker pattern for preventing cascading failures in distributed systems. Essential for reliable LLM agent deployments.}
+}
+
+@online{portkey2024retries,
+  author = {{Portkey.ai}},
+  title = {Retries, Fallbacks, and Circuit Breakers in {LLM} Apps: What to Use When},
+  year = {2024},
+  url = {https://portkey.ai/blog/retries-fallbacks-and-circuit-breakers-in-llm-apps/},
+  urldate = {2025-12-21},
+  note = {Practical guide to error handling patterns in LLM applications. Explains when to use retries with exponential backoff vs. circuit breakers vs. fallback strategies.}
+}
+
+@online{langchain2025speedup,
+  author = {{LangChain}},
+  title = {How Do I Speed Up My {AI} Agent?},
+  year = {2025},
+  url = {https://blog.langchain.com/how-do-i-speed-up-my-agent/},
+  urldate = {2025-12-21},
+  note = {Engineering guide to optimizing LLM agent latency through parallelization, token reduction, and streaming. Includes benchmarks and implementation examples.}
+}
+
+% ============================================================================
+% ADDITIONAL REFERENCES
+% ============================================================================
+
+@online{c2pa2024,
+  author = {{Content Authenticity Initiative}},
+  title = {Content Credentials Overview},
+  year = {2024},
+  url = {https://contentauthenticity.org/},
+  urldate = {2025-12-21},
+  note = {Coalition for Content Provenance and Authenticity (C2PA) standard for cryptographically signing digital media. Provides tamper-evident metadata for AI-generated content verification.}
+}
+
+@online{elastic2024pdfparsing,
+  author = {{Elastic Search Labs}},
+  title = {From {PDF} Tables to Insights: An Alternative Approach for Parsing {PDFs} in {RAG}},
+  year = {2024},
+  url = {https://www.elastic.co/search-labs/blog/alternative-approach-for-parsing-pdfs-in-rag},
+  urldate = {2025-12-21},
+  note = {Technical analysis of PDF parsing strategies for RAG, comparing text extraction, heuristic parsing, layout models, and vision-first approaches.}
+}
+% =============================================================================
+% Bibliography — Multimodal Fundamentals
+% Chapter 04: PDFs, Layout, Tables/Charts, Images, and Audio
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+% Document Layout and Structure
+% -----------------------------------------------------------------------------
+
+@article{huang2022layoutlmv3,
+  author    = {Huang, Yupan and Lv, Tengchao and Cui, Lei and Lu, Yutong and Wei, Furu},
+  title     = {{LayoutLMv3}: Pre-training for Document AI with Unified Text and Image Masking},
+  journal   = {arXiv preprint arXiv:2204.08387},
+  year      = {2022},
+  url       = {https://arxiv.org/abs/2204.08387},
+  urldate   = {2025-12-21},
+  note      = {Extends LayoutLM with unified text-image pre-training.}
+}
+
+@article{scan2025,
+  author    = {{SCAN Authors}},
+  title     = {{SCAN}: Semantic Document Layout Analysis for Textual and Visual Retrieval-Augmented Generation},
+  journal   = {arXiv preprint},
+  year      = {2025},
+  url       = {https://arxiv.org/html/2505.14381v2},
+  urldate   = {2025-12-21},
+  note      = {Recent work on layout analysis for RAG pipelines.}
+}
+
+@online{azure-doc-intel,
+  author    = {{Microsoft}},
+  title     = {Retrieval-Augmented Generation ({RAG}) with Azure Document Intelligence},
+  year      = {2024},
+  url       = {https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/concept/retrieval-augmented-generation},
+  urldate   = {2025-12-21},
+  note      = {Practical guidance on layout analysis and table extraction.}
+}
+
+% -----------------------------------------------------------------------------
+% Table and Chart Understanding
+% -----------------------------------------------------------------------------
+
+@article{charge2025,
+  author    = {{CHARGE Authors}},
+  title     = {Benchmarking Multimodal {RAG} through a Chart-based Document Question-Answering Generation Framework},
+  journal   = {arXiv preprint},
+  year      = {2025},
+  url       = {https://arxiv.org/html/2502.14864v1},
+  urldate   = {2025-12-21},
+  note      = {Framework for chart understanding and QA generation.}
+}
+
+@online{elastic-pdf-tables,
+  author    = {{Elastic Search Labs}},
+  title     = {From {PDF} Tables to Insights: An Alternative Approach for Parsing {PDFs} in {RAG}},
+  year      = {2024},
+  url       = {https://www.elastic.co/search-labs/blog/alternative-approach-for-parsing-pdfs-in-rag},
+  urldate   = {2025-12-21},
+  note      = {Practical vision-based approaches for PDF table extraction.}
+}
+
+% -----------------------------------------------------------------------------
+% Audio and Video RAG
+% -----------------------------------------------------------------------------
+
+@article{radford2023whisper,
+  author    = {Radford, Alec and Kim, Jong Wook and Xu, Tao and Brockman, Greg and McLeavey, Christine and Sutskever, Ilya},
+  title     = {Robust Speech Recognition via Large-Scale Weak Supervision},
+  journal   = {arXiv preprint arXiv:2212.04356},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2212.04356},
+  urldate   = {2025-12-21},
+  note      = {Whisper ASR model with multi-language support and timestamps.}
+}
+
+@article{voxrag2025,
+  author    = {{VoxRAG Authors}},
+  title     = {{VoxRAG}: A Step Toward Transcription-Free {RAG} Systems in Spoken Question Answering},
+  journal   = {arXiv preprint},
+  year      = {2025},
+  url       = {https://arxiv.org/html/2505.17326v1},
+  urldate   = {2025-12-21},
+  note      = {Research on transcription-free audio RAG.}
+}
+
+@article{videorag2025,
+  author    = {{VideoRAG Authors}},
+  title     = {{VideoRAG}: Retrieval-Augmented Generation with Extreme Long-Context Videos},
+  journal   = {arXiv preprint},
+  year      = {2025},
+  url       = {https://arxiv.org/html/2502.01549v1},
+  urldate   = {2025-12-21},
+  note      = {Dual-channel architecture for video understanding.}
+}
+
+@online{learnopencv-videorag,
+  author    = {{LearnOpenCV}},
+  title     = {Video-{RAG}: Training-Free Retrieval for Long-Video {LVLMs}},
+  year      = {2024},
+  url       = {https://learnopencv.com/video-rag-for-long-videos/},
+  urldate   = {2025-12-21},
+  note      = {Practical tutorial on video RAG implementation.}
+}
+
+% -----------------------------------------------------------------------------
+% Multimodal Embeddings
+% -----------------------------------------------------------------------------
+
+@inproceedings{radford2021clip,
+  author    = {Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and Krueger, Gretchen and Sutskever, Ilya},
+  title     = {Learning Transferable Visual Models From Natural Language Supervision},
+  booktitle = {Proceedings of the 38th International Conference on Machine Learning (ICML)},
+  year      = {2021},
+  url       = {https://arxiv.org/abs/2103.00020},
+  urldate   = {2025-12-21},
+  note      = {CLIP model for cross-modal text-image embeddings.}
+}
+
+@online{tds-multimodal-rag,
+  author    = {{Towards Data Science}},
+  title     = {Building a Multimodal {RAG} That Responds with Text, Images, and Tables from Sources},
+  year      = {2024},
+  url       = {https://towardsdatascience.com/building-a-multimodal-rag-with-text-images-tables-from-sources-in-response/},
+  urldate   = {2025-12-21},
+  note      = {Practical guide to multimodal RAG implementation.}
+}
+
+@online{medium-rag-images-tables,
+  author    = {Ashwin},
+  title     = {{RAG} with Images and Tables: Enhancing Retrieval-Augmented Generation for Multimodal Content},
+  year      = {2024},
+  url       = {https://medium.com/@ashwindevelops/rag-with-images-and-tables-enhancing-retrieval-augmented-generation-for-multimodal-content-a18da39571d5},
+  urldate   = {2025-12-21},
+  note      = {Comparison of unified embeddings vs late fusion approaches.}
+}
+
+% -----------------------------------------------------------------------------
+% Privacy and Content Authenticity
+% -----------------------------------------------------------------------------
+
+@online{presidio,
+  author    = {{Microsoft}},
+  title     = {Presidio: An Open-Source Framework for Detecting, Redacting, and Anonymizing Sensitive Data},
+  year      = {2024},
+  url       = {https://github.com/microsoft/presidio},
+  urldate   = {2025-12-21},
+  note      = {PII detection and anonymization framework.}
+}
+
+@online{c2pa-spec,
+  author    = {{Coalition for Content Provenance and Authenticity}},
+  title     = {{C2PA} Specification},
+  year      = {2024},
+  url       = {https://c2pa.org/specifications/specifications/2.0/specs/C2PA_Specification.html},
+  urldate   = {2025-12-21},
+  note      = {Technical specification for content credentials.}
+}
+
+@online{adobe-content-credentials,
+  author    = {{Adobe}},
+  title     = {Content Credentials Overview},
+  year      = {2024},
+  url       = {https://helpx.adobe.com/creative-cloud/apps/adobe-content-authenticity/content-credentials/overview.html},
+  urldate   = {2025-12-21},
+  note      = {Practical guide to implementing content credentials.}
+}
+
+@online{cai-wikipedia,
+  author    = {{Wikipedia}},
+  title     = {Content Authenticity Initiative},
+  year      = {2024},
+  url       = {https://en.wikipedia.org/wiki/Content_Authenticity_Initiative},
+  urldate   = {2025-12-21},
+  note      = {Overview of the CAI consortium and standards.}
+}
+% Bibliography for Chapter 05: Prompt Design, Evaluation, and Optimization
+
+@article{wei2022chainofthought,
+  author = {Wei, Jason and Wang, Xuezhi and Schuurmans, Dale and Bosma, Maarten and Ichter, Brian and Xia, Fei and Chi, Ed and Le, Quoc and Zhou, Denny},
+  title = {Chain-of-Thought Prompting Elicits Reasoning in Large Language Models},
+  journal = {Advances in Neural Information Processing Systems},
+  volume = {35},
+  pages = {24824--24837},
+  year = {2022},
+  url = {https://arxiv.org/abs/2201.11903},
+  urldate = {2024-11-15}
+}
+
+@article{yao2022react,
+  author = {Yao, Shunyu and Zhao, Jeffrey and Yu, Dian and Du, Nan and Shafran, Izhak and Narasimhan, Karthik and Cao, Yuan},
+  title = {{ReAct}: Synergizing Reasoning and Acting in Language Models},
+  journal = {arXiv preprint arXiv:2210.03629},
+  year = {2022},
+  url = {https://arxiv.org/abs/2210.03629},
+  urldate = {2024-11-15}
+}
+
+@article{yao2023treeofthoughts,
+  author = {Yao, Shunyu and Yu, Dian and Zhao, Jeffrey and Shafran, Izhak and Griffiths, Thomas L. and Cao, Yuan and Narasimhan, Karthik},
+  title = {Tree of Thoughts: Deliberate Problem Solving with Large Language Models},
+  journal = {Advances in Neural Information Processing Systems},
+  volume = {36},
+  year = {2023},
+  url = {https://arxiv.org/abs/2305.10601},
+  urldate = {2024-11-15}
+}
+
+@article{liang2022helm,
+  author = {Liang, Percy and Bommasani, Rishi and Lee, Tony and Tsipras, Dimitris and Soylu, Dilara and Yasunaga, Michihiro and Zhang, Yian and Narayanan, Deepak and Wu, Yuhuai and Kumar, Ananya and others},
+  title = {Holistic Evaluation of Language Models},
+  journal = {arXiv preprint arXiv:2211.09110},
+  year = {2022},
+  url = {https://arxiv.org/abs/2211.09110},
+  urldate = {2024-11-15}
+}
+
+@article{guha2023legalbench,
+  author = {Guha, Neel and Nyarko, Julian and Ho, Daniel E. and Ré, Christopher and Chilton, Adam and Chohlas-Wood, Alex and Peters, Austin and Walber, Brandon and Wavering, Brittany and others},
+  title = {{LegalBench}: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  journal = {arXiv preprint arXiv:2308.11462},
+  year = {2023},
+  url = {https://arxiv.org/abs/2308.11462},
+  urldate = {2024-11-15}
+}
+
+@article{islam2023financebench,
+  author = {Islam, Pranab and Kannappan, Anand and Kiber, Daniel and Li, Longfei and Gupta, Tisha and others},
+  title = {{FinanceBench}: A New Benchmark for Financial Question Answering},
+  journal = {arXiv preprint arXiv:2311.11944},
+  year = {2023},
+  url = {https://arxiv.org/abs/2311.11944},
+  urldate = {2024-11-15}
+}
+
+@article{lin2022truthfulqa,
+  author = {Lin, Stephanie and Hilton, Jacob and Evans, Owain},
+  title = {{TruthfulQA}: Measuring How Models Mimic Human Falsehoods},
+  journal = {arXiv preprint arXiv:2109.07958},
+  year = {2022},
+  url = {https://arxiv.org/abs/2109.07958},
+  urldate = {2024-11-15}
+}
+
+@article{willard2023outlines,
+  author = {Willard, Brandon T. and Louf, Rémi},
+  title = {Efficient Guided Generation for Large Language Models},
+  journal = {arXiv preprint arXiv:2307.09702},
+  year = {2023},
+  url = {https://arxiv.org/abs/2307.09702},
+  urldate = {2024-11-15}
+}
+
+@article{perez2022promptinjection,
+  author = {Perez, Fábio and Ribeiro, Ivan},
+  title = {Ignore This Title and {HackAPrompt}: Exposing Systemic Vulnerabilities of {LLMs} through a Global Scale Prompt Hacking Competition},
+  journal = {arXiv preprint arXiv:2311.16119},
+  year = {2022},
+  url = {https://arxiv.org/abs/2311.16119},
+  urldate = {2024-11-15}
+}
+
+@article{ganguli2022redteaming,
+  author = {Ganguli, Deep and Lovitt, Liane and Kernion, Jackson and Askell, Amanda and Bai, Yuntao and Kadavath, Saurav and Mann, Ben and Perez, Ethan and Schiefer, Nicholas and Ndousse, Kamal and others},
+  title = {Red Teaming Language Models to Reduce Harms: Methods, Scaling Behaviors, and Lessons Learned},
+  journal = {arXiv preprint arXiv:2209.07858},
+  year = {2022},
+  url = {https://arxiv.org/abs/2209.07858},
+  urldate = {2024-11-15}
+}
+
+@article{wei2023jailbroken,
+  author = {Wei, Alexander and Haghtalab, Nika and Steinhardt, Jacob},
+  title = {Jailbroken: How Does {LLM} Safety Training Fail?},
+  journal = {Advances in Neural Information Processing Systems},
+  volume = {36},
+  year = {2023},
+  url = {https://arxiv.org/abs/2307.02483},
+  urldate = {2024-11-15}
+}
+
+@article{hu2021lora,
+  author = {Hu, Edward J. and Shen, Yelong and Wallis, Phillip and Allen-Zhu, Zeyuan and Li, Yuanzhi and Wang, Shean and Wang, Lu and Chen, Weizhu},
+  title = {{LoRA}: Low-Rank Adaptation of Large Language Models},
+  journal = {arXiv preprint arXiv:2106.09685},
+  year = {2021},
+  url = {https://arxiv.org/abs/2106.09685},
+  urldate = {2024-11-15}
+}
+
+@article{ouyang2022instructgpt,
+  author = {Ouyang, Long and Wu, Jeff and Jiang, Xu and Almeida, Diogo and Wainwright, Carroll L. and Mishkin, Pamela and Zhang, Chong and Agarwal, Sandhini and Slama, Katarina and Ray, Alex and others},
+  title = {Training language models to follow instructions with human feedback},
+  journal = {Advances in Neural Information Processing Systems},
+  volume = {35},
+  pages = {27730--27744},
+  year = {2022},
+  url = {https://arxiv.org/abs/2203.02155},
+  urldate = {2024-11-15}
+}
+
+@article{khattab2023dspy,
+  author = {Khattab, Omar and Santhanam, Keshav and Li, Xiang Lisa and Hall, David and Liang, Percy and Potts, Christopher and Zaharia, Matei},
+  title = {{DSPy}: Compiling Declarative Language Model Calls into Self-Improving Pipelines},
+  journal = {arXiv preprint arXiv:2310.03714},
+  year = {2023},
+  url = {https://arxiv.org/abs/2310.03714},
+  urldate = {2024-11-15}
+}

@@ -1,0 +1,351 @@
+% =============================================================================
+% Representations and Embeddings — LLM Primer & Mechanics
+% Purpose: Vectors, semantic similarity, dense/sparse retrieval, hybrid search
+% Label: sec:llm1-embeddings
+% =============================================================================
+
+\section{Representations and Embeddings}
+\label{sec:llm1-embeddings}
+
+While tokens are the atomic units of syntax, \keyterm{embeddings} are the atomic units of semantics. Understanding embeddings is essential because they power \keyterm{semantic search}---the primary mechanism used in Retrieval-Augmented Generation (RAG) to ground LLMs in private data such as internal case law, transaction histories, policy documents, or client files.
+
+This section introduces embeddings conceptually and explains their practical applications, particularly the critical choice between sparse (keyword) retrieval, dense (semantic) retrieval, and hybrid approaches. The mechanics introduced here provide the foundation for the full RAG architectures covered in later chapters.
+
+\subsection{From Tokens to Vectors}
+\label{sec:llm1-embeddings-vectors}
+
+As we discussed in \Cref{sec:llm1-tokens}, tokenizers convert text to integers. The integer ``345'' (representing ``contract'') has no inherent mathematical relationship to ``346'' (representing ``agreement'') that captures their conceptual similarity---they are just arbitrary indices in a lookup table.
+
+To capture meaning, models use \keyterm{embedding matrices}: massive lookup tables that map each token ID to a high-dimensional vector---a list of floating-point numbers typically ranging from 768 to 4,096 dimensions.
+
+\begin{definitionbox}[title={Embeddings: The Core Concept}]
+\textbf{Embedding:} A vector (list of numbers) that represents a token, word, sentence, or document in a continuous vector space.
+
+\textbf{Key property:} In a well-trained embedding space, \emph{geometric distance corresponds to semantic similarity}. Concepts that are related in meaning are located close together.
+
+\textbf{Example:}
+\begin{itemize}
+  \item Vector(``attorney'') $\approx$ Vector(``lawyer'') --- very close
+  \item Vector(``attorney'') vs. Vector(``quarterly earnings'') --- far apart
+\end{itemize}
+\end{definitionbox}
+
+\subsubsection{Token Embeddings vs. Text Embeddings}
+
+Models work with embeddings at different levels:
+
+\paragraph{Token Embeddings.} Within the model, each token has an embedding that gets transformed through the Transformer layers. These are the internal representations the model uses during processing. After passing through attention mechanisms, the same token (e.g., ``bank'') will have different representations in different contexts (``river bank'' vs. ``investment bank'')---these are the contextual embeddings discussed in \Cref{sec:llm1-history}.
+
+\paragraph{Text Embeddings.} For retrieval purposes, we typically want a single vector representing an entire passage, document, or query. Specialized \keyterm{embedding models} (like OpenAI's text-embedding-3, Cohere's embed, or open-source models like BGE, E5, or GTE) produce these document-level vectors. They take arbitrary-length text and output a fixed-size vector (commonly 768--3,072 dimensions).
+
+\begin{highlightbox}[title={Embedding Services}]
+To embed text for retrieval, you can use:
+\begin{itemize}
+  \item \textbf{Cloud APIs:} OpenAI Embeddings, Cohere Embed, Google Vertex AI
+  \item \textbf{Open-source models:} Run locally using models like BGE, E5, GTE, or sentence-transformers
+  \item \textbf{Specialized legal/financial models:} Some vendors offer domain-tuned embeddings
+\end{itemize}
+The choice involves trade-offs in quality, cost, latency, and data privacy.
+\end{highlightbox}
+
+\subsection{Measuring Similarity}
+\label{sec:llm1-embeddings-similarity}
+
+Given two text embeddings, how do we quantify their similarity? The standard metrics are:
+
+\paragraph{Cosine Similarity.} The most common metric. It measures the cosine of the angle between two vectors:
+\[
+\text{cosine\_similarity}(\mathbf{a}, \mathbf{b}) = \frac{\mathbf{a} \cdot \mathbf{b}}{\|\mathbf{a}\| \|\mathbf{b}\|}
+\]
+\begin{itemize}
+  \item Result ranges from $-1$ (opposite) to $+1$ (identical direction)
+  \item Value of $0$ means perpendicular (no relationship)
+  \item Insensitive to vector magnitude (length); only considers direction
+\end{itemize}
+
+In practice, well-trained embeddings rarely produce negative cosine similarities for meaningful text; most comparisons fall in the $0.3$--$0.9$ range.
+
+\paragraph{Dot Product.} Simply the sum of element-wise products:
+\[
+\text{dot\_product}(\mathbf{a}, \mathbf{b}) = \mathbf{a} \cdot \mathbf{b} = \sum_i a_i b_i
+\]
+Faster to compute but sensitive to vector magnitude. Some embedding models are trained specifically for dot-product similarity.
+
+\paragraph{Euclidean Distance.} The straight-line distance between points:
+\[
+\text{euclidean}(\mathbf{a}, \mathbf{b}) = \sqrt{\sum_i (a_i - b_i)^2}
+\]
+Lower values mean more similar. Less common for embeddings but used in some systems.
+
+\begin{keybox}[title={Which Metric to Use?}]
+\begin{itemize}
+  \item Check the embedding model's documentation---some are optimized for cosine, others for dot product
+  \item For most general-purpose embeddings, cosine similarity is the safe default
+  \item When in doubt, normalize vectors to unit length; then cosine similarity and dot product are equivalent
+\end{itemize}
+\end{keybox}
+
+\subsection{Semantic Search: Finding Relevant Documents}
+\label{sec:llm1-embeddings-search}
+
+Semantic search uses embeddings to find documents by meaning rather than keywords:
+
+\begin{enumerate}
+  \item \textbf{Index documents:} Convert each document (or chunk) to an embedding vector; store in a vector database
+  \item \textbf{Encode query:} Convert the search query to an embedding using the same model
+  \item \textbf{Find neighbors:} Retrieve the $k$ documents with highest similarity to the query embedding
+  \item \textbf{Return results:} Present the nearest neighbors as search results
+\end{enumerate}
+
+\subsubsection{The Power of Semantic Matching}
+
+Consider searching a legal research database:
+
+\begin{itemize}
+  \item \textbf{Query:} ``breach of fiduciary duty''
+  \item \textbf{Keyword search finds:} Documents containing those exact words
+  \item \textbf{Semantic search also finds:} ``The director violated his obligation of loyalty''---conceptually identical though words differ
+\end{itemize}
+
+Semantic search captures:
+\begin{itemize}
+  \item \textbf{Synonyms:} ``attorney'' matches ``lawyer,'' ``counsel''
+  \item \textbf{Paraphrases:} Different phrasings of the same concept
+  \item \textbf{Related concepts:} Searches for ``force majeure'' might surface ``impossibility of performance''
+  \item \textbf{Language variation:} Different terminology across jurisdictions or time periods
+\end{itemize}
+
+\subsubsection{Vector Databases}
+
+Standard relational databases cannot efficiently search high-dimensional vectors. Specialized \keyterm{vector databases} use approximate nearest-neighbor (ANN) algorithms to search millions of vectors in milliseconds:
+
+\begin{itemize}
+  \item \textbf{Cloud services:} Pinecone, Weaviate Cloud, Qdrant Cloud
+  \item \textbf{Self-hosted:} Milvus, Qdrant, Chroma, pgvector (PostgreSQL extension)
+  \item \textbf{Key capabilities:} Fast similarity search, metadata filtering, hybrid search support
+\end{itemize}
+
+\begin{highlightbox}[title={Vector Database Considerations}]
+When selecting a vector database for legal/financial applications:
+\begin{itemize}
+  \item \textbf{Data residency:} Where is data stored? Relevant for regulatory compliance.
+  \item \textbf{Access control:} Can you implement document-level permissions?
+  \item \textbf{Metadata filtering:} Can you filter by date, client, matter, document type?
+  \item \textbf{Hybrid search:} Does it support combining keyword and vector search?
+  \item \textbf{Scalability:} What is the cost at millions of documents?
+\end{itemize}
+\end{highlightbox}
+
+\subsection{The Limits of Semantic Search}
+\label{sec:llm1-embeddings-limits}
+
+Semantic search is powerful but not perfect. Understanding its limitations is critical for legal and financial applications where precision and recall have real consequences.
+
+\subsubsection{The ``Fuzzy'' Problem}
+
+Embeddings capture semantic proximity, which can sometimes be \emph{too fuzzy}:
+
+\begin{itemize}
+  \item \textbf{Opposite meanings nearby:} ``The court upheld the decision'' and ``The court overturned the decision'' may have similar embeddings because they share topic, structure, and most vocabulary. The crucial distinction (upheld vs. overturned) may not dominate the vector representation.
+
+  \item \textbf{Related but distinct concepts:} A search for ``contract termination'' might retrieve documents about ``contract renewal'' because both involve contract lifecycle---semantically related but practically opposite.
+
+  \item \textbf{Specificity loss:} Embeddings compress meaning into fixed-dimension vectors. Subtle distinctions may be lost, especially for highly technical or nuanced content.
+\end{itemize}
+
+\subsubsection{Entity and Exact Match Failures}
+
+Semantic search struggles with exact specifications:
+
+\begin{itemize}
+  \item \textbf{Specific citations:} ``Section 409A'' should match documents mentioning exactly ``Section 409A,'' but semantic search might surface documents about other tax code sections with similar surrounding text.
+
+  \item \textbf{Names and identifiers:} Searching for ``Acme Corporation'' might retrieve documents about similar-sounding companies or the concept of ``corporations'' generally.
+
+  \item \textbf{Numerical constraints:} ``Transactions over \$1 million'' requires numerical reasoning that embeddings do not capture.
+\end{itemize}
+
+\subsubsection{Precision vs. Recall Trade-offs}
+
+For legal discovery, \keyterm{recall} (finding all relevant documents) is often more critical than \keyterm{precision} (avoiding irrelevant documents). Semantic search tends toward high recall but lower precision---it finds related documents, including some that are merely tangentially related.
+
+Conversely, for regulatory research where you need \emph{exactly} the documents discussing a specific rule, precision matters more. Semantic search's fuzzy matching becomes a liability.
+
+\subsection{Keyword (Sparse) Retrieval: BM25}
+\label{sec:llm1-embeddings-sparse}
+
+Traditional keyword search, typically implemented via algorithms like \keyterm{BM25} (Best Match 25), takes a fundamentally different approach:
+
+\begin{itemize}
+  \item Documents and queries are represented as \emph{sparse} vectors over the vocabulary
+  \item Each dimension corresponds to a word; the value reflects term frequency and inverse document frequency (TF-IDF)
+  \item Matching is based on shared vocabulary: documents containing query words rank higher
+\end{itemize}
+
+\paragraph{Strengths of Keyword Search.}
+\begin{itemize}
+  \item \textbf{Exact matching:} ``Section 409A'' finds exactly documents with that string
+  \item \textbf{Explainability:} You can see which words matched and why
+  \item \textbf{No embedding required:} Works without ML infrastructure
+  \item \textbf{Fast:} Inverted indices enable very fast retrieval
+\end{itemize}
+
+\paragraph{Weaknesses of Keyword Search.}
+\begin{itemize}
+  \item \textbf{Vocabulary mismatch:} ``lawyer'' won't match ``attorney''
+  \item \textbf{No semantic understanding:} Phrases with similar meaning but different words are missed
+  \item \textbf{Brittle to phrasing:} Slight rewording of queries can dramatically change results
+\end{itemize}
+
+\begin{definitionbox}[title={Sparse vs. Dense Retrieval}]
+\textbf{Sparse retrieval} (BM25, TF-IDF):
+\begin{itemize}
+  \item Vectors have many dimensions (vocabulary size) but few non-zero values
+  \item Matches based on shared words
+  \item High precision for specific terms; poor at synonyms
+\end{itemize}
+
+\textbf{Dense retrieval} (embeddings):
+\begin{itemize}
+  \item Vectors have fixed, relatively low dimensions (768--3072) with all values non-zero
+  \item Matches based on semantic similarity
+  \item Good at synonyms and paraphrases; may be too fuzzy for specifics
+\end{itemize}
+\end{definitionbox}
+
+\subsection{Hybrid Search: Best of Both Worlds}
+\label{sec:llm1-embeddings-hybrid}
+
+For robust retrieval in regulated domains, the industry standard is \keyterm{hybrid search}: combining sparse (BM25) and dense (embedding) retrieval to capture both semantic breadth and keyword precision.
+
+\subsubsection{Hybrid Search Architecture}
+
+\begin{enumerate}
+  \item \textbf{Dual retrieval:} Run both BM25 and vector search against the corpus
+  \item \textbf{Result fusion:} Combine the result sets using a fusion algorithm (e.g., reciprocal rank fusion)
+  \item \textbf{Re-ranking:} Apply a sophisticated re-ranker model to the combined top candidates
+  \item \textbf{Final results:} Return the re-ranked top-$k$ documents
+\end{enumerate}
+
+\paragraph{Reciprocal Rank Fusion (RRF).} A simple but effective fusion method:
+\[
+\text{RRF\_score}(d) = \sum_{r \in \text{retrievers}} \frac{1}{k + \text{rank}_r(d)}
+\]
+where $k$ is a constant (typically 60) and $\text{rank}_r(d)$ is document $d$'s rank from retriever $r$. Documents that rank highly in multiple retrievers get boosted.
+
+\subsubsection{Re-ranking with Cross-Encoders}
+
+Initial retrieval (BM25 or dense) uses efficient \keyterm{bi-encoder} architectures: query and documents are embedded independently, enabling fast similarity computation over large corpora.
+
+\keyterm{Re-ranking} uses more expensive \keyterm{cross-encoder} models like ColBERT \parencite{khattab2020colbert} that process the query and document together, enabling much richer interaction modeling. This is too slow for initial retrieval over millions of documents but highly effective for re-scoring the top 50--100 candidates.
+
+\begin{table}[htbp]
+\centering
+\caption{Retrieval Method Comparison}
+\label{tab:llm1-retrieval-methods}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Method} & \textbf{Speed} & \textbf{Precision} & \textbf{Semantic} \\
+\midrule
+BM25 (sparse) & Very fast & High (exact match) & Low \\
+Dense retrieval & Fast & Moderate & High \\
+Hybrid (BM25 + Dense) & Fast & High & High \\
+Hybrid + Re-rank & Moderate & Very high & Very high \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{keybox}[title={Hybrid Search Recommendations}]
+For legal/financial applications:
+\begin{enumerate}
+  \item \textbf{Always use hybrid:} Pure semantic search misses important exact matches
+  \item \textbf{Invest in re-ranking:} The quality improvement justifies the latency cost for important queries
+  \item \textbf{Tune weights:} The relative importance of BM25 vs. dense varies by domain; experiment
+  \item \textbf{Metadata matters:} Filter by date, document type, jurisdiction before retrieval when possible
+\end{enumerate}
+\end{keybox}
+
+\subsection{Chunking: Preparing Documents for Retrieval}
+\label{sec:llm1-embeddings-chunking}
+
+Documents must be divided into \keyterm{chunks} before embedding. The choice of chunking strategy significantly affects retrieval quality.
+
+\paragraph{Why Chunk?}
+\begin{itemize}
+  \item Embedding models have input limits (typically 512--8,192 tokens)
+  \item Long documents dilute specific content---one vector cannot capture a 100-page contract
+  \item Retrieval should return relevant \emph{passages}, not entire documents
+\end{itemize}
+
+\paragraph{Chunking Strategies.}
+\begin{itemize}
+  \item \textbf{Fixed size:} Split every $N$ tokens (e.g., 512). Simple but may split mid-sentence.
+  \item \textbf{Sentence/paragraph boundaries:} Split at natural boundaries. Better coherence but variable sizes.
+  \item \textbf{Semantic chunking:} Use embedding similarity to identify topic boundaries. More sophisticated but slower.
+  \item \textbf{Overlap:} Include overlapping tokens between chunks (e.g., 50-token overlap) to avoid losing context at boundaries.
+\end{itemize}
+
+\paragraph{Legal/Financial Considerations.}
+\begin{itemize}
+  \item Contract sections often have natural boundaries (clauses, articles) worth preserving
+  \item Citations and cross-references may span chunks---maintain metadata linking
+  \item Tables and lists require special handling; naive splitting breaks structure
+\end{itemize}
+
+\subsection{Retrieval-Augmented Generation Preview}
+\label{sec:llm1-embeddings-rag}
+
+The concepts in this section are building blocks for \keyterm{Retrieval-Augmented Generation} (RAG) \parencite{lewis2020rag}, covered fully in later chapters. The basic pattern:
+
+\begin{enumerate}
+  \item User asks a question
+  \item System retrieves relevant document chunks using embeddings
+  \item Retrieved chunks are injected into the LLM prompt as context
+  \item LLM generates an answer grounded in the retrieved content
+\end{enumerate}
+
+\begin{highlightbox}[title={Why RAG Matters for Regulated Domains}]
+\begin{itemize}
+  \item \textbf{Overcomes knowledge cutoff:} Fresh documents provide current information
+  \item \textbf{Enables citation:} Answers can reference specific source passages
+  \item \textbf{Reduces hallucination:} Grounding in actual documents constrains the model
+  \item \textbf{Supports access control:} Retrieval can enforce document-level permissions
+\end{itemize}
+However, RAG introduces new failure modes: retrieved passages may be irrelevant, the model may ignore retrieved context, or the model may hallucinate beyond what sources say. These challenges are addressed in dedicated chapters.
+\end{highlightbox}
+
+\subsection{Practical Embedding Considerations}
+\label{sec:llm1-embeddings-practical}
+
+To conclude, we summarize key practical considerations for using embeddings in legal and financial applications:
+
+\paragraph{Model Selection.}
+\begin{itemize}
+  \item General-purpose embedding models work well for most content
+  \item Domain-specific fine-tuning can help with specialized terminology
+  \item Evaluate on your actual documents; benchmark performance matters more than claims
+\end{itemize}
+
+\paragraph{Index Freshness.}
+\begin{itemize}
+  \item When documents change, their embeddings must be re-computed
+  \item Design indexing pipelines that can update incrementally
+  \item Consider freshness requirements: is stale data acceptable for hours? Days?
+\end{itemize}
+
+\paragraph{Cost.}
+\begin{itemize}
+  \item Embedding APIs charge per token processed
+  \item One-time cost to embed your corpus; query-time costs are lower
+  \item Open-source models eliminate API costs but require infrastructure
+\end{itemize}
+
+\paragraph{Privacy.}
+\begin{itemize}
+  \item Cloud embedding APIs see your text; is this acceptable?
+  \item For highly sensitive content, consider on-premises embedding
+  \item Embedding vectors themselves may leak information about source text
+\end{itemize}
+
+With the mechanics of embeddings established, we now turn to how LLMs fail---the systematic problems that arise from the architectural choices we have examined.
+

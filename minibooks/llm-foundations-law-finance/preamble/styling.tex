@@ -1,0 +1,127 @@
+% ============================================================================
+% STYLING - Section formatting and Table of Contents
+% ============================================================================
+
+\usepackage{titlesec}
+\usepackage{titletoc}
+
+% ============================================================================
+% SECTION FORMATTING
+% ============================================================================
+
+\titleformat{\section}
+  {\fontsize{13pt}{15.6pt}\selectfont\bfseries\color{primary}}
+  {\thesection}{1em}{}
+
+\titleformat{\subsection}
+  {\fontsize{11pt}{13.2pt}\selectfont\bfseries\color{primary}}
+  {\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{text-secondary}}
+  {\thesubsubsection}{1em}{}
+
+\titleformat{\paragraph}[runin]
+  {\normalsize\bfseries\color{primary}}
+  {}{0em}{}[.]
+\titlespacing*{\paragraph}{0pt}{1em}{0.5em}
+
+% --- Section Heading Protection ---
+% Ensure section headings stay with their content by requiring minimum space.
+% Uses \Needspace (capital N) which works correctly with section commands.
+% Values chosen to accommodate heading + at least 3-4 lines of body text.
+\let\originalsection\section
+\renewcommand{\section}{\Needspace{5\baselineskip}\originalsection}
+
+\let\originalsubsection\subsection
+\renewcommand{\subsection}{\Needspace{4\baselineskip}\originalsubsection}
+
+\let\originalsubsubsection\subsubsection
+\renewcommand{\subsubsection}{\Needspace{3\baselineskip}\originalsubsubsection}
+
+% ============================================================================
+% TABLE OF CONTENTS
+% ============================================================================
+
+% Show chapters, sections, and subsections
+\setcounter{tocdepth}{2}
+
+\renewcommand{\contentsname}{%
+  {\color{primary}\normalsize\bfseries Contents}%
+}
+
+% Chapter entries
+\titlecontents{chapter}
+  [0em]
+  {\vspace{1em}\normalsize\bfseries}
+  {\color{primary}\contentslabel{2em}}
+  {\color{primary}}
+  {\titlerule*[0.75pc]{.}\contentspage}
+
+% Section entries (reduced indent to fit within 0.5" outer margin)
+\titlecontents{section}
+  [1.5em]
+  {\vspace{0.3em}}
+  {\color{primary}\contentslabel{2.2em}}
+  {}
+  {\titlerule*[0.75pc]{.}\contentspage}
+
+% Subsection entries (reduced indent to fit within 0.5" outer margin)
+\titlecontents{subsection}
+  [3em]
+  {\vspace{0.1em}}
+  {\contentslabel{2.8em}}
+  {}
+  {\titlerule*[0.75pc]{.}\contentspage}
+
+% ============================================================================
+% GLOSSARY FORMATTING
+% ============================================================================
+
+\renewcommand*{\glsnamefont}[1]{\textbf{\color{primary}#1}}
+\renewcommand*{\glsnumberformat}[1]{\textcolor{text-secondary}{\glshypernumber{#1}}}
+
+\newglossarystyle{lawfin-long3col}{%
+  \setglossarystyle{longragged3col-booktabs}%
+  \renewenvironment{theglossary}%
+    {%
+      \begingroup
+      \setlength{\LTleft}{0pt}%
+      \setlength{\LTright}{0pt}%
+      \setlength{\LTpre}{-0.5em}%
+      \setlength{\LTpost}{-0.5em}%
+      \setlength{\tabcolsep}{5pt}%
+      \renewcommand{\arraystretch}{1.15}%
+      \small%
+      \begin{longtable}{%
+        @{\hspace{2pt}}%
+        >{\raggedright\arraybackslash}p{0.19\textwidth}%
+        >{\arraybackslash}p{0.60\textwidth}%
+        >{\raggedleft\arraybackslash}p{0.09\textwidth}%
+        @{\hspace{2pt}}%
+      }%
+    }%
+    {%
+      \end{longtable}%
+      \endgroup
+    }%
+  \renewcommand{\glossentry}[2]{%
+    \glsentryitem{##1}\glstarget{##1}{\glossentryname{##1}} &
+    \glossentrydesc{##1} &
+    ##2\tabularnewline[0.35em]%
+  }%
+  \renewcommand{\subglossentry}[3]{%
+    &%
+    \glssubentryitem{##2}\glstarget{##2}{\strut}\glossentrydesc{##2} &
+    ##3\tabularnewline[0.35em]%
+  }%
+  \renewcommand*{\glossaryheader}{%
+    \toprule
+    \bfseries\color{primary}\entryname &
+    \bfseries\color{primary}\descriptionname &
+    \bfseries\color{primary}\pagelistname\tabularnewline
+    \midrule\endhead
+    \bottomrule\endfoot
+  }%
+}
+\setglossarystyle{lawfin-long3col}

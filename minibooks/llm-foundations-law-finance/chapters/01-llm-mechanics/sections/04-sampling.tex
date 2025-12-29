@@ -1,0 +1,335 @@
+% =============================================================================
+% Sampling and Decoding — LLM Primer & Mechanics
+% Purpose: Temperature, top-p, determinism, constrained decoding
+% Label: sec:llm1-sampling
+% =============================================================================
+
+\section{Sampling and Decoding: Controlling Generation}
+\label{sec:llm1-sampling}
+
+Once the model processes input tokens through its attention mechanisms, it does not simply ``pick'' the next word. Instead, it computes a probability distribution---called \keyterm{logits}---over its entire vocabulary (often 50,000--100,000 possible tokens) for what should come next. How the system selects the actual next token from this distribution is determined by \keyterm{sampling parameters}. Understanding these parameters is essential for controlling the hallucination rate, reproducibility, and appropriateness of outputs for regulated applications.
+
+\subsection{The Generation Process}
+\label{sec:llm1-sampling-process}
+
+At each generation step, the model:
+
+\begin{enumerate}
+  \item Processes all preceding tokens (prompt + already-generated output) through its Transformer layers
+  \item Produces a probability distribution over the vocabulary for the next token
+  \item Selects one token according to the sampling strategy
+  \item Appends that token to the sequence
+  \item Repeats until a stopping condition is met
+\end{enumerate}
+
+This process is \keyterm{autoregressive}: each token depends on all previous tokens, and the model's own outputs become inputs for subsequent steps. A small error early in generation can cascade through all subsequent tokens.
+
+\begin{highlightbox}[title={Example: Token Probabilities}]
+For the prompt ``The verdict was...'', the model might compute:
+\begin{itemize}
+  \item ``guilty'' --- 45\% probability
+  \item ``not'' --- 30\% probability (likely followed by ``guilty'')
+  \item ``delivered'' --- 10\% probability
+  \item ``unexpected'' --- 5\% probability
+  \item ``rendered'' --- 3\% probability
+  \item ... thousands of other tokens with tiny probabilities ...
+  \item ``banana'' --- 0.0001\% probability
+\end{itemize}
+The sampling strategy determines how likely we are to select ``guilty'' versus ``unexpected'' versus extremely rare options.
+\end{highlightbox}
+
+\subsection{Temperature: The Primary Control}
+\label{sec:llm1-sampling-temperature}
+
+\keyterm{Temperature} is the most important sampling parameter. It scales the logits before they are converted to probabilities through the softmax function. Think of it as controlling how ``peaked'' versus ``flat'' the probability distribution is.
+
+\begin{definitionbox}[title={Temperature Effects}]
+\textbf{Temperature = 0 (or very low):}
+\begin{itemize}
+  \item The highest-probability token is selected with near-certainty
+  \item Output is highly deterministic and consistent
+  \item Generates ``safe'' but potentially repetitive text
+\end{itemize}
+
+\textbf{Temperature = 1.0 (default):}
+\begin{itemize}
+  \item Probabilities are used as-is
+  \item Moderate variety in outputs
+  \item Balance between creativity and coherence
+\end{itemize}
+
+\textbf{Temperature > 1.0 (high):}
+\begin{itemize}
+  \item Probabilities are ``flattened''---less likely tokens get higher chances
+  \item Outputs become more creative, diverse, and surprising
+  \item Significantly higher risk of incoherence and hallucination
+\end{itemize}
+\end{definitionbox}
+
+\paragraph{Mathematical Intuition.} Temperature $T$ modifies the softmax function:
+\[
+P(x_i) = \frac{e^{z_i / T}}{\sum_j e^{z_j / T}}
+\]
+where $z_i$ are the raw logits. As $T \to 0$, the distribution approaches a one-hot vector at the maximum logit. As $T \to \infty$, the distribution approaches uniform over all tokens.
+
+\paragraph{Practical Recommendations.}
+
+\begin{table}[htbp]
+\centering
+\caption{Temperature Settings by Use Case}
+\label{tab:llm1-temperature}
+\begin{tabular}{@{}llp{5cm}@{}}
+\toprule
+\textbf{Temperature} & \textbf{Use Case} & \textbf{Rationale} \\
+\midrule
+0.0--0.2 & Data extraction, JSON output, legal analysis & Maximum consistency; minimal hallucination risk \\
+0.2--0.5 & Summarization, drafting, technical writing & Some variety while maintaining accuracy \\
+0.5--0.8 & Creative drafting, brainstorming, ideation & Explores alternative phrasings and ideas \\
+0.8--1.2 & Fiction writing, marketing copy, exploration & Maximum creativity; requires human review \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For regulated outputs in legal and financial contexts, we generally recommend \textbf{temperature 0.0--0.3}. The small loss in linguistic variety is far outweighed by improved reliability and reproducibility.
+
+\subsection{Top-p (Nucleus Sampling)}
+\label{sec:llm1-sampling-topp}
+
+\keyterm{Top-p} sampling, also called \keyterm{nucleus sampling} \parencite{holtzman2020curious}, is often preferred over simple temperature scaling because it adapts dynamically to the model's confidence.
+
+Instead of considering all possible tokens, top-p considers only the smallest set of tokens whose cumulative probability exceeds a threshold $p$:
+
+\begin{enumerate}
+  \item Sort tokens by probability (highest first)
+  \item Include tokens until their cumulative probability exceeds $p$ (e.g., 0.9 or 90\%)
+  \item Sample only from this ``nucleus'' of tokens
+\end{enumerate}
+
+\paragraph{Dynamic Adaptation.} The power of top-p is its context-sensitivity:
+
+\begin{itemize}
+  \item \textbf{High-confidence predictions:} If the model is confident (e.g., ``The United States of...''), the nucleus might contain only ``America'' (99\% probability). Sampling from this tiny nucleus is effectively deterministic.
+
+  \item \textbf{Low-confidence predictions:} If the model is uncertain (e.g., ``The best approach is...''), the nucleus might contain dozens of viable completions, allowing variety.
+\end{itemize}
+
+This adaptivity makes top-p generally preferable to fixed-$k$ approaches (top-$k$ sampling), which always consider exactly $k$ tokens regardless of the distribution shape.
+
+\begin{keybox}[title={Recommended Defaults for Regulated Applications}]
+\begin{itemize}
+  \item \textbf{Temperature:} 0.0--0.2 for extraction and structured output; 0.2--0.4 for analysis
+  \item \textbf{Top-p:} 0.9--0.95 (truncates only the extreme long tail)
+  \item \textbf{Combined:} Low temperature with moderate top-p provides consistent outputs while avoiding rare degenerate tokens
+\end{itemize}
+This combination is often called ``focused sampling''---deterministic when the model is confident, slightly variable when genuinely uncertain.
+\end{keybox}
+
+\subsection{Top-k Sampling}
+\label{sec:llm1-sampling-topk}
+
+\keyterm{Top-k} sampling restricts consideration to exactly the $k$ most likely tokens, regardless of their probability mass. While simpler than top-p, it has a significant drawback: it does not adapt to the distribution shape.
+
+\begin{itemize}
+  \item If $k = 40$ and only one token is plausible, the model still considers 40 options (potentially including nonsense)
+  \item If $k = 40$ and 100 tokens are equally plausible, the model arbitrarily excludes 60 of them
+\end{itemize}
+
+Top-k is rarely used alone in modern systems but sometimes combined with temperature or top-p as an additional constraint.
+
+\subsection{Greedy Decoding and Beam Search}
+\label{sec:llm1-sampling-greedy}
+
+\keyterm{Greedy decoding} is the simplest strategy: always select the highest-probability token. This is equivalent to temperature = 0. It produces deterministic outputs but can lead to:
+
+\begin{itemize}
+  \item \textbf{Repetition loops:} The model gets stuck repeating phrases
+  \item \textbf{Suboptimal global choices:} The locally highest-probability token at each step may not lead to the globally best sequence
+\end{itemize}
+
+\keyterm{Beam search} partially addresses the global optimization problem by maintaining multiple candidate sequences (``beams'') and selecting the overall highest-probability complete sequence. However, beam search often produces outputs that are technically higher-probability but less natural-sounding than sampled outputs. It is more commonly used in translation than in general text generation.
+
+For most practical applications, we recommend nucleus sampling (top-p) with low temperature rather than greedy or beam search. The slight stochasticity improves output quality while low temperature keeps outputs reliable.
+
+\subsection{Determinism, Seeds, and Reproducibility}
+\label{sec:llm1-sampling-determinism}
+
+A common misconception is that setting temperature = 0 guarantees perfectly reproducible outputs. In theory, it should. In practice, it often does not.
+
+\subsubsection{Sources of Non-Determinism}
+
+Even with identical prompts and temperature = 0:
+
+\paragraph{GPU Non-Determinism.} Modern GPUs perform parallel floating-point operations that are not always associative at high precision. The computation $A + B + C$ may yield a slightly different result than $A + C + B$ at the least significant bits. These microscopic differences can cascade: a tiny change in logits might flip which token has the maximum probability, especially when two tokens are nearly tied.
+
+\paragraph{Model Updates.} Cloud-hosted models are updated periodically. What you call ``GPT-4'' today may be a subtly different model than what you called ``GPT-4'' last month. Behavior can change even with identical prompts.
+
+\paragraph{Infrastructure Variation.} Different server hardware, different load balancing, different batching decisions---all can introduce variation in how prompts are processed.
+
+\subsubsection{Strategies for Reproducibility}
+
+For contexts requiring audit trails (regulatory filings, legal analysis, financial reporting):
+
+\begin{enumerate}
+  \item \textbf{Set a random seed} if the API supports it. This controls the pseudo-random number generator used in sampling.
+
+  \item \textbf{Log the system fingerprint.} Advanced APIs (e.g., OpenAI) return a system fingerprint that identifies the exact backend configuration. Store this with your outputs.
+
+  \item \textbf{Store the full prompt.} Complete reproducibility requires the exact input, not a summary.
+
+  \item \textbf{Store the output.} Don't assume you can regenerate it---keep the actual output.
+
+  \item \textbf{Document model version.} Note the specific model identifier, not just ``GPT-4'' but ``gpt-4-0613'' or equivalent.
+
+  \item \textbf{Accept near-determinism.} For many applications, outputs that are 99\% identical across runs are sufficient; plan for the 1\% variation in your validation workflows.
+\end{enumerate}
+
+\begin{highlightbox}[title={Audit Trail Example}]
+For regulatory purposes, log:
+\begin{verbatim}
+{
+  "timestamp": "2024-12-20T14:30:00Z",
+  "model": "claude-3-sonnet-20241022",
+  "temperature": 0.1,
+  "top_p": 0.95,
+  "seed": 42,
+  "system_fingerprint": "fp_abc123...",
+  "input_tokens": 1547,
+  "output_tokens": 423,
+  "prompt_hash": "sha256:8f3a...",
+  "output_hash": "sha256:2d7b..."
+}
+\end{verbatim}
+This enables demonstrating to auditors how outputs were generated.
+\end{highlightbox}
+
+\subsection{Stop Sequences and Maximum Length}
+\label{sec:llm1-sampling-stops}
+
+LLMs will continue generating tokens until a stopping condition is met. Without explicit controls, models can produce run-on responses, continue past the intended answer, or generate unwanted content.
+
+\subsubsection{Stop Sequences}
+
+A \keyterm{stop sequence} is a string that, when generated, immediately halts further output. Common uses:
+
+\begin{itemize}
+  \item \textbf{Natural terminators:} Stop on double newlines (``\textbackslash n\textbackslash n'') to end at paragraph boundaries
+  \item \textbf{Format delimiters:} Stop on ``\}'' when generating JSON, to halt after closing the object
+  \item \textbf{Custom markers:} Stop on ``END\_RESPONSE'' or similar sentinel tokens you define in your prompt
+\end{itemize}
+
+\paragraph{Practical Tip.} Define stop sequences that would not naturally appear in valid output. If analyzing legal text, ``\#\#\# END ANALYSIS \#\#\#'' is safer than common punctuation.
+
+\subsubsection{Maximum Token Limits}
+
+\keyterm{Max tokens} caps the number of output tokens the model can generate. This serves multiple purposes:
+
+\begin{itemize}
+  \item \textbf{Cost control:} Bounds the maximum expense per request
+  \item \textbf{Latency control:} Long outputs take time; caps keep response times predictable
+  \item \textbf{Quality control:} Prevents rambling; forces conciseness
+\end{itemize}
+
+\paragraph{Warning: Truncation.} If the model hits the max token limit before finishing its thought, output is simply cut off mid-sentence. This is different from a natural completion. Check for truncation by:
+\begin{itemize}
+  \item Examining the finish reason in API responses (``length'' vs. ``stop'')
+  \item Looking for incomplete sentences or missing closing brackets in structured output
+\end{itemize}
+
+\begin{cautionbox}[title={Setting Appropriate Limits}]
+\begin{itemize}
+  \item \textbf{Too low:} Outputs truncated, answers incomplete
+  \item \textbf{Too high:} Unnecessary cost; risk of verbose, off-topic content
+  \item \textbf{Right-sized:} Match expected output length plus margin. For a one-paragraph summary, 200--300 tokens; for detailed analysis, 1,000--2,000 tokens.
+\end{itemize}
+\end{cautionbox}
+
+\subsection{Constrained Decoding: Enforcing Structure}
+\label{sec:llm1-sampling-constrained}
+
+In agentic workflows, LLMs often need to output structured data (JSON, XML, function calls) to integrate with downstream systems. A major failure mode is \keyterm{formatting drift}: the model produces valid JSON 99\% of the time but occasionally:
+
+\begin{itemize}
+  \item Adds conversational preamble: ``Here is the JSON you requested: \{...\}''
+  \item Misses a comma or quote
+  \item Uses integers where strings are expected (or vice versa)
+  \item Outputs markdown code blocks around JSON
+\end{itemize}
+
+Any of these breaks the parser and crashes the integration.
+
+\subsubsection{How Constrained Decoding Works}
+
+\keyterm{Constrained decoding} (or ``structured output'') solves this by manipulating the sampling process itself. At each generation step:
+
+\begin{enumerate}
+  \item The model produces its probability distribution over all tokens
+  \item A grammar-aware layer \emph{masks out} tokens that would be syntactically invalid given the current partial output
+  \item Sampling proceeds only over valid continuations
+\end{enumerate}
+
+\paragraph{Example.} If the model has generated \verb|{"price":|, the next token must be a valid JSON value (number, string quote, bracket, etc.). The constraint layer prevents selecting a closing brace \verb|}| or plain text. Syntactic correctness becomes a \emph{guarantee} rather than a probabilistic hope.
+
+\subsubsection{Implementation Approaches}
+
+Modern systems offer several approaches to structured output:
+
+\begin{itemize}
+  \item \textbf{Native structured output modes:} OpenAI's ``JSON mode'' or ``function calling,'' Anthropic's tool use, etc.
+  \item \textbf{Grammar specifications:} Provide a JSON Schema or grammar; the API enforces it during generation
+  \item \textbf{Post-hoc validation with retry:} Generate output, validate against schema, retry if invalid (less efficient but more flexible)
+\end{itemize}
+
+\begin{keybox}[title={Structured Output Best Practices}]
+For reliable integration:
+\begin{enumerate}
+  \item Use native structured output modes when available
+  \item Provide explicit JSON schemas defining expected fields and types
+  \item Implement validation even with constrained decoding (defense in depth)
+  \item Design schemas with the LLM in mind: use descriptive field names, provide examples
+  \item Log validation failures for debugging and model improvement
+\end{enumerate}
+\end{keybox}
+
+\subsection{Self-Consistency and Multiple Samples}
+\label{sec:llm1-sampling-selfconsistency}
+
+For complex reasoning tasks, \textcite{wang2022selfconsistency} demonstrated that generating multiple independent responses and aggregating them often outperforms a single response. This is a sampling-time technique: it uses the model's stochasticity to probe whether the answer is stable across plausible continuations.
+
+Operationally, it can be viewed as ``sample multiple reasoning paths and vote.'' If the model is confident and the task is well-specified, answers tend to converge; if answers diverge, the disagreement itself is a useful signal to escalate to retrieval, tools, or human review.
+
+\paragraph{Where to go deeper.} Chapter~2 (Conversations and Reasoning) provides the primary treatment of self-consistency as a reasoning reliability strategy, including when to use it (and when not to) in professional workflows.
+
+\subsection{Putting It Together: Sampling Configuration}
+\label{sec:llm1-sampling-configuration}
+
+We summarize recommended configurations for common regulated-domain use cases:
+
+\begin{table}[htbp]
+\centering
+\caption{Sampling Configurations by Application}
+\label{tab:llm1-sampling-configs}
+\begin{tabular}{@{}p{3.5cm}cccp{4cm}@{}}
+\toprule
+\textbf{Application} & \textbf{Temp} & \textbf{Top-p} & \textbf{Max Tokens} & \textbf{Notes} \\
+\midrule
+JSON extraction & 0.0 & 1.0 & Schema-based & Use structured output mode \\
+Legal summarization & 0.2 & 0.9 & 500--1000 & Set clear length instruction \\
+Document classification & 0.0 & 1.0 & 50 & Single word/phrase output \\
+Contract drafting & 0.3 & 0.95 & 2000+ & Review all output \\
+Risk analysis & 0.2 & 0.9 & 1000 & Consider self-consistency \\
+Brainstorming & 0.7 & 0.95 & 1000 & Expect variety; human curation \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+These are starting points. Optimal settings depend on your specific model, task, and tolerance for variation. We recommend:
+
+\begin{enumerate}
+  \item Start conservative (low temperature)
+  \item Evaluate outputs on representative examples
+  \item Increase temperature only if outputs are too rigid or repetitive
+  \item Always implement validation for structured outputs
+  \item Log sampling parameters for reproducibility
+\end{enumerate}
+
+With tokenization and sampling mechanics established, we now turn to how models represent meaning through embeddings---the foundation for semantic search and retrieval-augmented generation.

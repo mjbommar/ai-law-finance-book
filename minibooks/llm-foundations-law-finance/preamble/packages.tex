@@ -1,0 +1,209 @@
+% ============================================================================
+% PACKAGES - Core package loading
+% ============================================================================
+% Load order matters for some packages. Comments indicate dependencies.
+% ============================================================================
+
+% --- Engine Detection ---
+\usepackage{iftex}
+
+% --- Page Geometry ---
+% US Trade size: 6in x 9in (standard for professional/technical books)
+\usepackage[
+  papersize={6in,9in},
+  inner=0.75in,       % Gutter margin (for binding)
+  outer=0.5in,        % Outside margin
+  top=0.7in,
+  bottom=0.8in,
+  footskip=0.35in
+]{geometry}
+
+% Bleed build: expand canvas to 6.25 x 9.25 while preserving trim margins.
+\ifdefined\BleedMode
+  \geometry{
+    paperwidth=6.25in,
+    paperheight=9.25in,
+    inner=0.875in,
+    outer=0.625in,
+    top=0.825in,
+    bottom=0.925in,
+    footskip=0.35in
+  }
+\fi
+
+% --- Font Encoding (pdfLaTeX only) ---
+\ifxetex\else\ifluatex\else
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+\fi\fi
+
+% --- Mathematics (load before libertinus to avoid symbol conflicts) ---
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% --- Fonts ---
+% libertinus package auto-detects engine:
+%   - XeLaTeX/LuaLaTeX: loads libertinus-otf (OpenType fonts + unicode-math)
+%   - pdfLaTeX: loads libertinus-type1 (T1 fonts)
+\usepackage{libertinus}
+
+% Match monospaced font to Libertinus for consistent kerning/sizing
+% Fall back safely if the mono font is not installed.
+\ifxetex
+  \IfFontExistsTF{Libertinus Mono}
+    {\setmonofont{Libertinus Mono}[Scale=MatchLowercase]}
+    {\IfFontExistsTF{LibertinusMono}
+      {\setmonofont{LibertinusMono}[Scale=MatchLowercase]}
+      {\IfFileExists{LibertinusMono-Regular.otf}
+        {\setmonofont{LibertinusMono-Regular.otf}[Scale=MatchLowercase]}
+        {\setmonofont{Latin Modern Mono}[Scale=MatchLowercase]}}}
+\else\ifluatex
+  \IfFontExistsTF{Libertinus Mono}
+    {\setmonofont{Libertinus Mono}[Scale=MatchLowercase]}
+    {\IfFontExistsTF{LibertinusMono}
+      {\setmonofont{LibertinusMono}[Scale=MatchLowercase]}
+      {\IfFileExists{LibertinusMono-Regular.otf}
+        {\setmonofont{LibertinusMono-Regular.otf}[Scale=MatchLowercase]}
+        {\setmonofont{Latin Modern Mono}[Scale=MatchLowercase]}}}
+\fi\fi
+
+% libertinust1math is T1-encoded math for pdfLaTeX only.
+% For XeLaTeX/LuaLaTeX, libertinus-otf already provides math via unicode-math.
+\ifpdftex
+  \usepackage{libertinust1math}
+\fi
+
+% --- Typography ---
+\usepackage{microtype}
+\usepackage{setspace}
+\setstretch{1.1}
+
+% --- Paragraphs ---
+\usepackage{parskip}
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+% --- Language (must come before biblatex) ---
+\usepackage[english]{babel}
+\usepackage{csquotes}
+
+% --- Graphics ---
+\usepackage{graphicx}
+\usepackage{float}
+
+% --- Tables ---
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{colortbl}
+\renewcommand{\arraystretch}{1.3}
+
+% --- Page Layout ---
+\usepackage{pdflscape}
+\usepackage{rotating}
+\usepackage{needspace}  % \needspace{length} to avoid orphaned headings
+
+% --- Vertical Page Alignment ---
+% Use \raggedbottom to prevent ugly vertical stretching between paragraphs
+% when pages have less content. This is preferred for technical books over
+% \flushbottom which forces all pages to the same height by adding space.
+\raggedbottom
+
+% Allow extra stretch to avoid overfull lines (bleed into margins)
+\setlength{\emergencystretch}{2em}
+
+% --- Widow and Orphan Control ---
+% Widows: last line of paragraph alone at top of page
+% Orphans: first line of paragraph alone at bottom of page
+% Penalty of 10000 is "infinite" - TeX tries very hard to avoid these
+\widowpenalty=10000
+\clubpenalty=10000
+\brokenpenalty=10000  % Discourage hyphenation across page breaks
+\tolerance=1500
+\hyphenpenalty=1200
+\exhyphenpenalty=1200
+
+% --- Lists ---
+\usepackage{enumitem}
+\setlist{
+  itemsep=0.4em,
+  parsep=0.2em,
+  topsep=0.5em,
+  leftmargin=1.5em
+}
+
+% Custom evaluation question list
+\newlist{evallist}{enumerate}{1}
+\setlist[evallist]{
+  label=\textbf{Q\arabic*.},
+  leftmargin=2em,
+  itemsep=0.5em,
+  labelsep=0.5em
+}
+
+% --- Captions ---
+\usepackage[
+  font={small},
+  labelfont={bf,color=primary},
+  format=plain,
+  justification=justified,
+  skip=8pt
+]{caption}
+
+% --- Hyperlinks (load before glossaries) ---
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  citecolor=accent,
+  urlcolor=primary,
+  bookmarksnumbered=true,
+  pdfborder={0 0 0},
+  % Fix duplicate destination warnings when page numbering resets
+  plainpages=false,
+  pdfpagelabels=true
+}
+
+% --- Glossary ---
+\usepackage[
+  toc,
+  section=chapter,
+  nopostdot,
+  automake=immediate
+]{glossaries}
+\usepackage{glossary-longbooktabs}
+\makeglossaries
+
+% --- Cross-references ---
+\usepackage{cleveref}
+\crefname{section}{Section}{Sections}
+\crefname{figure}{Figure}{Figures}
+\crefname{table}{Table}{Tables}
+\crefname{chapter}{Chapter}{Chapters}
+
+% --- Bibliography ---
+\usepackage[
+  backend=biber,
+  style=authoryear,
+  maxcitenames=2,
+  maxbibnames=99,
+  uniquename=false,
+  uniquelist=false,
+  sorting=nyt,
+  dashed=false
+]{biblatex}
+
+% Citation formatting
+\DeclareFieldFormat{citetitle}{\mkbibquote{#1}}
+\DeclareFieldFormat[article]{citetitle}{#1}
+\DeclareFieldFormat[inproceedings]{citetitle}{#1}
+\DeclareFieldFormat[book]{citetitle}{\mkbibemph{#1}}
+\DeclareFieldFormat[techreport]{citetitle}{#1}
+\DeclareFieldFormat[misc]{citetitle}{#1}
+
+% Bibliography formatting
+\renewcommand*{\bibfont}{\small}
+\setlength{\bibitemsep}{0.5em}
+\setlength{\bibhang}{1.5em}

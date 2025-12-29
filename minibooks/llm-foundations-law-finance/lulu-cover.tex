@@ -1,0 +1,178 @@
+% ============================================================================
+% LULU WRAP COVER - Single-page cover spread with bleed
+% ============================================================================
+% Builds a single integrated spread (back + spine + front) for Lulu.
+% ============================================================================
+
+\documentclass[10pt]{book}
+
+% ==========================================================================
+% LOAD PREAMBLE (packages, colors, tikz, boxes, styling, commands)
+% ==========================================================================
+\input{preamble/main}
+\usepackage{pgfornament}
+
+% ==========================================================================
+% COVER VARIABLES (trim size, bleed, spine width)
+% ==========================================================================
+\input{front-matter/cover/cover-vars}
+
+% ==========================================================================
+% DERIVED SIZES
+% ==========================================================================
+% These calculations work for both paperback (WrapArea=0) and hardcover
+% case wrap (WrapArea=0.75"). The cover layout is:
+%
+% Paperback:    [Bleed][Back][Spine][Front][Bleed]
+% Hardcover:    [Bleed][Wrap][Back][Spine][Front][Wrap][Bleed]
+%
+% The front/back cover PDFs are always TrimWidth × TrimHeight.
+% For hardcover, the wrap area extends the background around the boards.
+% ==========================================================================
+
+\newlength{\CoverWidth}
+\newlength{\CoverHeight}
+\newlength{\CoverBackX}
+\newlength{\CoverSpineX}
+\newlength{\CoverFrontX}
+\newlength{\CoverCenterY}
+\newlength{\CoverSpineCenterX}
+\newlength{\CoverContentY}
+\newlength{\SpineOrnamentInset}
+\newlength{\SpineOrnamentTopY}
+\newlength{\SpineOrnamentBottomY}
+
+% Total cover width: 2×(TrimWidth + WrapArea) + Spine + 2×Bleed
+\setlength{\CoverWidth}{\CoverTrimWidth}
+\addtolength{\CoverWidth}{\CoverWrapArea}
+\addtolength{\CoverWidth}{\CoverTrimWidth}
+\addtolength{\CoverWidth}{\CoverWrapArea}
+\addtolength{\CoverWidth}{\CoverSpineWidth}
+\addtolength{\CoverWidth}{\CoverBleed}
+\addtolength{\CoverWidth}{\CoverBleed}
+
+% Total cover height: TrimHeight + 2×WrapArea + 2×Bleed
+\setlength{\CoverHeight}{\CoverTrimHeight}
+\addtolength{\CoverHeight}{\CoverWrapArea}
+\addtolength{\CoverHeight}{\CoverWrapArea}
+\addtolength{\CoverHeight}{\CoverBleed}
+\addtolength{\CoverHeight}{\CoverBleed}
+
+% X position for back cover: Bleed + WrapArea
+\setlength{\CoverBackX}{\CoverBleed}
+\addtolength{\CoverBackX}{\CoverWrapArea}
+
+% X position for spine: Bleed + WrapArea + TrimWidth
+\setlength{\CoverSpineX}{\CoverBackX}
+\addtolength{\CoverSpineX}{\CoverTrimWidth}
+
+% X position for front cover: Bleed + WrapArea + TrimWidth + Spine
+\setlength{\CoverFrontX}{\CoverSpineX}
+\addtolength{\CoverFrontX}{\CoverSpineWidth}
+
+% Y position for content (back/front covers): Bleed + WrapArea
+\setlength{\CoverContentY}{\CoverBleed}
+\addtolength{\CoverContentY}{\CoverWrapArea}
+
+% Center Y for spine text: (TrimHeight/2) + Bleed + WrapArea
+\setlength{\CoverCenterY}{\CoverTrimHeight}
+\divide\CoverCenterY by 2
+\addtolength{\CoverCenterY}{\CoverBleed}
+\addtolength{\CoverCenterY}{\CoverWrapArea}
+
+% Spine center X: SpineX + (SpineWidth/2)
+\setlength{\CoverSpineCenterX}{\CoverSpineWidth}
+\divide\CoverSpineCenterX by 2
+\addtolength{\CoverSpineCenterX}{\CoverSpineX}
+
+% Ornament positions (relative to content area, not bleed)
+\setlength{\SpineOrnamentInset}{0.35in}
+\setlength{\SpineOrnamentTopY}{\CoverHeight}
+\addtolength{\SpineOrnamentTopY}{-\CoverBleed}
+\addtolength{\SpineOrnamentTopY}{-\CoverWrapArea}
+\addtolength{\SpineOrnamentTopY}{-\SpineOrnamentInset}
+\setlength{\SpineOrnamentBottomY}{\CoverBleed}
+\addtolength{\SpineOrnamentBottomY}{\CoverWrapArea}
+\addtolength{\SpineOrnamentBottomY}{\SpineOrnamentInset}
+
+% ==========================================================================
+% SPINE TEXT (optional)
+% ==========================================================================
+\newif\ifcoverspine
+\coverspinetrue
+\newcommand{\CoverSpineTitle}{LLM Essentials for Law and Finance}
+\newcommand{\SpineTitleMain}{%
+	L\kern0.06em L\kern0.06em M\kern0.12em\kern0.12em E\kern0.05em S\kern0.05em S\kern0.05em E\kern0.05em N\kern0.05em T\kern0.05em I\kern0.05em A\kern0.05em L\kern0.05em S%
+}
+\newcommand{\SpineTitleSub}{%
+	F\kern0.05em O\kern0.05em R\kern0.12em\kern0.12em L\kern0.05em A\kern0.05em W\kern0.12em\kern0.12em \&\kern0.12em\kern0.12em F\kern0.05em I\kern0.05em N\kern0.05em A\kern0.05em N\kern0.05em C\kern0.05em E%
+}
+\newcommand{\SpineOrnamentId}{61}
+\newcommand{\SpineOrnamentSize}{0.45in}
+
+% Cover-specific colors (Blue/Teal theme for LLM book)
+\definecolor{DeepTeal}{HTML}{0D3B4C}
+\definecolor{MidTeal}{HTML}{1A5A6B}
+\definecolor{LightTeal}{HTML}{2D8299}
+\definecolor{CircleTeal}{HTML}{3FA3BD}
+\definecolor{CircleBlue}{HTML}{4B7BA8}
+\definecolor{CircleLight}{HTML}{7EC8D4}
+\definecolor{AccentGold}{HTML}{D4A84B}
+\definecolor{AccentWarm}{HTML}{E8C87A}
+\definecolor{TextPure}{HTML}{FFFFFF}
+\definecolor{TextSoft}{HTML}{E8F0F2}
+\definecolor{TextMuted}{HTML}{A8C8D4}
+
+% Set page size for wrap cover before document starts.
+\geometry{paperwidth=\CoverWidth, paperheight=\CoverHeight, margin=0pt}
+
+\begin{document}
+\thispagestyle{empty}
+
+\begin{tikzpicture}[remember picture, overlay]
+	\begin{scope}[shift={(current page.south west)}]
+
+		% Base background to ensure full bleed coverage
+		\shade[top color=MidTeal, bottom color=DeepTeal]
+		(0,0) rectangle (\CoverWidth, \CoverHeight);
+
+		% Back cover (left) - positioned at (BackX, ContentY)
+		\node[anchor=south west, inner sep=0pt] at (\CoverBackX, \CoverContentY) {%
+			\includegraphics[width=\CoverTrimWidth, height=\CoverTrimHeight]{covers/cover-back.pdf}%
+		};
+
+		% Front cover (right) - positioned at (FrontX, ContentY)
+		\node[anchor=south west, inner sep=0pt] at (\CoverFrontX, \CoverContentY) {%
+			\includegraphics[width=\CoverTrimWidth, height=\CoverTrimHeight]{covers/cover-front.pdf}%
+		};
+
+		% Spine decoration (subtle two-tone band + concentric rings)
+		\shade[left color=DeepTeal, right color=MidTeal, opacity=0.55]
+		(\CoverSpineX, 0) rectangle ++(\CoverSpineWidth, \CoverHeight);
+		\begin{scope}[shift={(\CoverSpineCenterX, \CoverCenterY)}]
+			\draw[CircleLight, opacity=0.18, line width=0.6pt] (0, 0) circle (0.28in);
+			\draw[CircleTeal, opacity=0.22, line width=0.6pt] (0, 0) circle (0.18in);
+		\end{scope}
+
+		% Vectorian ornaments (pgfornament) - top and bottom of spine
+		\node[inner sep=0pt, rotate=0] at (\CoverSpineCenterX, \SpineOrnamentTopY) {%
+			\pgfornament[width=\SpineOrnamentSize, color=AccentWarm, opacity=0.33]{\SpineOrnamentId}%
+		};
+		\node[inner sep=0pt, rotate=90] at (\CoverSpineCenterX, \SpineOrnamentBottomY) {%
+			\pgfornament[width=\SpineOrnamentSize, color=AccentWarm, opacity=0.33]{\SpineOrnamentId}%
+		};
+
+		% Spine text (rotate -90 for top-to-bottom reading)
+		\ifcoverspine
+			\node[rotate=270, align=center, inner sep=0pt] at (\CoverSpineCenterX, \CoverCenterY) {%
+			\shortstack[c]{%
+			{\rmfamily\bfseries\fontsize{16}{19}\selectfont\color{TextPure}\SpineTitleMain}\\[3pt]
+			{\rmfamily\fontsize{14}{16}\selectfont\color{AccentWarm}\SpineTitleSub}%
+			}%
+			};
+		\fi
+
+	\end{scope}
+\end{tikzpicture}
+
+\end{document}

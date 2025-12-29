@@ -1,0 +1,172 @@
+% ============================================================================
+% LLM ESSENTIALS FOR LAW AND FINANCE
+% ============================================================================
+% A comprehensive guide to understanding and deploying large language models
+% in legal and financial contexts.
+%
+% Authors: Michael J. Bommarito II, Daniel M. Katz, Jillian Bommarito
+% First Edition, 2025
+%
+% Build: xelatex main.tex (single compiler, no separate cover compilation)
+% ============================================================================
+
+\documentclass[10pt,twoside,openright]{book}
+
+% ============================================================================
+% LOAD PREAMBLE (packages, colors, tikz, boxes, styling, commands)
+% ============================================================================
+\input{preamble/main}
+
+% ============================================================================
+% BIBLIOGRAPHY DATABASE
+% ============================================================================
+\addbibresource{bib/refs.bib}
+
+% ============================================================================
+% GLOSSARY ENTRIES
+% ============================================================================
+\input{front-matter/glossary-entries}
+
+% ============================================================================
+% PDF METADATA
+% ============================================================================
+\hypersetup{
+  pdftitle={LLM Essentials for Law and Finance},
+  pdfauthor={Michael J. Bommarito II, Daniel M. Katz, Jillian Bommarito},
+  pdfsubject={Large Language Models, Legal Technology, Financial Technology, AI},
+  pdfkeywords={LLM, large language models, legal AI, financial AI, prompt engineering, RAG}
+}
+
+% ============================================================================
+% DOCUMENT
+% ============================================================================
+\begin{document}
+
+% ============================================================================
+% FRONT COVER (jacket front)
+% ============================================================================
+% Use Alph numbering for cover pages to avoid hyperref anchor conflicts
+% with frontmatter roman numerals.
+\pagenumbering{Alph}
+\input{front-matter/cover/cover}
+
+% Blank verso (back of cover, traditionally blank)
+\newpage
+\thispagestyle{empty}
+\null
+\newpage
+
+% ============================================================================
+% FRONT MATTER
+% ============================================================================
+% Traditional US Trade book order:
+%   p.i   (recto)  Title page
+%   p.ii  (verso)  Copyright — back of title page
+%   p.iii (recto)  Table of Contents
+%   p.v+  (recto)  Preface
+%   etc.
+% ============================================================================
+\frontmatter
+\usefrontmatterstyle
+\enablecleardoublepage
+
+% ----------------------------------------------------------------------------
+% TITLE PAGE (page i, recto)
+% ----------------------------------------------------------------------------
+\input{front-matter/title-page}
+
+% ----------------------------------------------------------------------------
+% COPYRIGHT PAGE (page ii, verso — back of title page)
+% ----------------------------------------------------------------------------
+% No \cleardoublepage here: copyright MUST be on verso (back of title page)
+\input{front-matter/copyright}
+
+% ----------------------------------------------------------------------------
+% TABLE OF CONTENTS (starts page iii, recto)
+% ----------------------------------------------------------------------------
+\cleardoublepage
+\tableofcontents
+
+% ----------------------------------------------------------------------------
+% PREFACE (starts on recto)
+% ----------------------------------------------------------------------------
+\cleardoublepage
+\input{front-matter/preface}
+
+% ----------------------------------------------------------------------------
+% HOW TO READ THIS BOOK (starts on recto)
+% ----------------------------------------------------------------------------
+\cleardoublepage
+\input{front-matter/how-to-read}
+
+% ============================================================================
+% MAIN MATTER
+% ============================================================================
+% Re-enable blank page insertion so chapters start on right-hand (odd) pages
+\enablecleardoublepage
+\cleardoublepage
+\mainmatter
+\usemainmatterstyle
+
+% ----------------------------------------------------------------------------
+% CHAPTER 1: What Am I Working With?
+% ----------------------------------------------------------------------------
+\chapter{What Am I Working With?}
+\label{ch:llm-mechanics}
+\input{chapters/01-llm-mechanics/chapter}
+
+% ----------------------------------------------------------------------------
+% CHAPTER 2: How Do I Get It to Reason?
+% ----------------------------------------------------------------------------
+\chapter{How Do I Get It to Reason?}
+\label{ch:conversations-reasoning}
+\input{chapters/02-conversations-reasoning/chapter}
+
+% ----------------------------------------------------------------------------
+% CHAPTER 3: How Do I Get Reliable Output?
+% ----------------------------------------------------------------------------
+\chapter{How Do I Get Reliable Output?}
+\label{ch:structured-outputs-tools}
+\input{chapters/03-structured-outputs-tools/chapter}
+
+% ----------------------------------------------------------------------------
+% CHAPTER 4: How Do I Handle Real Documents?
+% ----------------------------------------------------------------------------
+\chapter{How Do I Handle Real Documents?}
+\label{ch:multimodal}
+\input{chapters/04-multimodal/chapter}
+
+% ----------------------------------------------------------------------------
+% CHAPTER 5: How Do I Improve Systematically?
+% ----------------------------------------------------------------------------
+\chapter{How Do I Improve Systematically?}
+\label{ch:prompt-engineering}
+\input{chapters/05-prompt-engineering/chapter}
+
+% ============================================================================
+% BACK MATTER
+% ============================================================================
+% Disable blank page insertion for back matter (no blank pages needed)
+\disablecleardoublepage
+\backmatter
+\usebackmatterstyle
+
+% ----------------------------------------------------------------------------
+% GLOSSARY
+% ----------------------------------------------------------------------------
+\clearpage
+\printglossary[title={Glossary of Key Terms}]
+
+% ----------------------------------------------------------------------------
+% BIBLIOGRAPHY
+% ----------------------------------------------------------------------------
+\clearpage
+\printbibliography[title={References}]
+
+% ----------------------------------------------------------------------------
+% BACK COVER
+% ----------------------------------------------------------------------------
+\clearpage
+\input{back-matter/back-cover}
+
+\end{document}

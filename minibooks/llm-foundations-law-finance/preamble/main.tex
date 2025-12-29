@@ -1,0 +1,28 @@
+% ============================================================================
+% PREAMBLE - Master preamble file
+% ============================================================================
+% This file loads all preamble components in the correct order.
+% Include this file in your document with: \input{preamble/main}
+%
+% Components:
+%   packages.tex  - Core package loading (geometry, fonts, etc.)
+%   colors.tex    - Complete color system (book + cover)
+%   tikz.tex      - TikZ graphics setup
+%   boxes.tex     - tcolorbox environments
+%   styling.tex   - Section formatting and ToC
+%   commands.tex  - Custom commands
+%
+% Do NOT include \documentclass or \begin{document} here.
+% ============================================================================
+
+% Load order matters - packages first, then colors (needs xcolor),
+% then TikZ (needs colors), then boxes (needs tcolorbox + colors),
+% then styling (needs colors), then commands (needs colors)
+
+\input{preamble/packages}
+\input{preamble/colors}
+\input{preamble/tikz}
+\input{preamble/boxes}
+\input{preamble/styling}
+\input{preamble/commands}
+\input{preamble/headers}

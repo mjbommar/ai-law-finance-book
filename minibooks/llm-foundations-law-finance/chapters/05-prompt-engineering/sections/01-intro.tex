@@ -1,0 +1,78 @@
+% =============================================================================
+% Introduction — Prompt Design, Evaluation, Optimization
+% Purpose: Scope and bridge
+% Label: sec:llmD-intro
+% =============================================================================
+
+\section{Introduction and Scope}
+\label{sec:llmD-intro}
+
+Previous chapters established the mechanics of large language models, conversational patterns, and structured integration with external systems. This chapter formalizes prompt design as a specification discipline, introduces rigorous evaluation frameworks, and presents optimization strategies that enable reliable, auditable behavior in legal and financial settings.
+
+\subsection{The Prompt Engineering Imperative}
+\label{sec:llmD-intro-imperative}
+
+In regulated industries, prompts are not casual instructions---they are specifications that determine system behavior, risk exposure, and compliance posture. A poorly designed prompt can produce inconsistent outputs, hallucinated citations, or advice that crosses regulatory boundaries. Conversely, a well-engineered prompt system provides predictable behavior, measurable quality, and defensible audit trails.
+
+This chapter treats prompt engineering as a form of software specification. Just as traditional software requires requirements documents, test suites, and version control, LLM-based systems require prompt specifications, evaluation harnesses, and change management processes. The stakes in legal and financial applications---client outcomes, regulatory scrutiny, fiduciary duties---demand this level of rigor.
+
+\subsection{From Ad-Hoc to Systematic}
+\label{sec:llmD-intro-systematic}
+
+Many organizations begin their LLM journey with ad-hoc prompting: individual practitioners craft prompts based on intuition, share them informally, and iterate without systematic measurement. This approach may suffice for exploration but fails in production:
+
+\begin{itemize}
+  \item \textbf{Inconsistency}: Different team members produce different prompts for the same task, leading to variable outputs.
+  \item \textbf{Regression risk}: Model updates or prompt changes break previously working functionality without detection.
+  \item \textbf{Audit gaps}: Without versioning and logging, organizations cannot demonstrate what prompt produced a given output.
+  \item \textbf{Optimization ceiling}: Without measurement, teams cannot systematically improve prompt performance.
+\end{itemize}
+
+This chapter provides the frameworks and patterns to move from ad-hoc prompting to systematic prompt engineering, where prompts are treated as first-class artifacts with specifications, tests, and governance.
+
+\subsection{Chapter Roadmap}
+\label{sec:llmD-intro-roadmap}
+
+We organize this chapter around four interconnected themes:
+
+\paragraph{Prompt Design as Specification (Section~\ref{sec:llmD-design}).}
+We formalize the prompt maturity model, introduce container formats and specification templates, and establish principles for designing few-shot exemplars. The goal is prompts that are self-documenting, testable, and maintainable.
+
+\paragraph{Strategy Catalog (Section~\ref{sec:llmE-strategy}).}
+We catalog architectural patterns for LLM-based systems---from simple direct prompting to modular pipelines---with guidance on when to use each. This section focuses on operationalizing the reasoning patterns introduced in Chapter~2.
+
+\paragraph{Evaluation and Testing (Section~\ref{sec:llmD-eval}).}
+We present frameworks for measuring prompt quality, including key metrics, test set design, and adversarial robustness testing. Without measurement, optimization is guesswork.
+
+\paragraph{Optimization and Change Management (Section~\ref{sec:llmD-opt}).}
+We address the full lifecycle: version control for prompts, A/B testing, fine-tuning decision frameworks, and registry patterns for production deployment.
+
+\paragraph{Security and Operations (Sections~\ref{sec:llmE-threats}--\ref{sec:llmE-telemetry}).}
+We cover threat modeling, red-teaming protocols, and telemetry pipelines that connect prompt systems to governance and audit infrastructure.
+
+\subsection{Prerequisites and Assumptions}
+\label{sec:llmD-intro-prereqs}
+
+This chapter assumes familiarity with:
+\begin{itemize}
+  \item Token mechanics, sampling parameters, and context windows (Chapter~1)
+  \item Conversational patterns and reasoning strategies (Chapter~2)
+  \item Structured outputs, tool use, and evidence records (Chapter~3)
+\end{itemize}
+
+Readers should have hands-on experience prompting LLMs, though not necessarily in production settings. Code examples use Python with standard libraries; the patterns apply across languages and frameworks.
+
+\subsection{What This Chapter Does Not Cover}
+\label{sec:llmD-intro-notcovered}
+
+Several important topics are deferred to later chapters:
+
+\begin{itemize}
+  \item \textbf{Agentic architectures}: Multi-step autonomous systems are covered in our companion volume, \textit{Agentic AI in Law and Finance}.
+  \item \textbf{Fine-tuning implementation}: We discuss when to fine-tune but defer implementation details to specialized resources.
+  \item \textbf{Infrastructure and deployment}: Cloud architecture, scaling, and MLOps are beyond our scope.
+  \item \textbf{Domain-specific prompt libraries}: We provide patterns, not exhaustive prompt catalogs for every legal or financial task.
+\end{itemize}
+
+With this foundation, we proceed to prompt design as specification.
+

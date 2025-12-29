@@ -1,0 +1,205 @@
+% ============================================================================
+% COLORS - Complete color system for book and cover
+% ============================================================================
+%
+% ARCHITECTURE:
+%   Layer 1: PRIMITIVES - Raw RGB values (slate-900, green-600, etc.)
+%   Layer 2: SEMANTICS - Educational content types (definition, example, key)
+%   Layer 3: COMPONENTS - Usage contexts (bg-*, border-*, text-*)
+%   Layer 4: COVER - Cover-specific colors
+%   Layer 5: LEGACY - Backward compatibility aliases
+%
+% ============================================================================
+
+\usepackage{xcolor}
+
+% ============================================================================
+% LAYER 1: PRIMITIVE COLOR PALETTE
+% ============================================================================
+
+% --- SLATE/BLUE FAMILY ---
+\definecolor{slate-900}{RGB}{30,58,95}
+\definecolor{slate-700}{RGB}{71,101,135}
+\definecolor{slate-100}{RGB}{240,246,252}
+
+% --- GREEN FAMILY ---
+\definecolor{green-900}{RGB}{46,125,50}
+\definecolor{green-600}{RGB}{67,160,71}
+\definecolor{green-100}{RGB}{232,245,233}
+
+% --- AMBER/ORANGE FAMILY ---
+\definecolor{amber-900}{RGB}{230,124,0}
+\definecolor{amber-600}{RGB}{251,140,0}
+\definecolor{amber-100}{RGB}{255,243,224}
+
+% --- RED FAMILY ---
+\definecolor{red-900}{RGB}{198,40,40}
+\definecolor{red-600}{RGB}{229,57,53}
+\definecolor{red-100}{RGB}{255,235,238}
+
+% --- TEAL FAMILY ---
+\definecolor{teal-700}{RGB}{0,128,128}
+\definecolor{teal-600}{RGB}{0,137,123}
+\definecolor{teal-100}{RGB}{224,242,241}
+
+% --- INDIGO/PURPLE FAMILY ---
+\definecolor{indigo-700}{RGB}{63,81,181}
+\definecolor{indigo-600}{RGB}{92,107,192}
+\definecolor{indigo-100}{RGB}{232,234,246}
+
+% --- GRAY FAMILY ---
+\definecolor{gray-900}{RGB}{30,32,34}
+\definecolor{gray-800}{RGB}{52,58,64}
+\definecolor{gray-700}{RGB}{73,80,87}
+\definecolor{gray-600}{RGB}{95,100,105}
+\definecolor{gray-500}{RGB}{134,142,150}
+\definecolor{gray-400}{RGB}{173,181,189}
+\definecolor{gray-300}{RGB}{210,215,220}
+\definecolor{gray-200}{RGB}{233,236,239}
+\definecolor{gray-50}{RGB}{252,253,254}
+\definecolor{gray-100}{RGB}{247,248,250}
+
+% --- WARM NEUTRALS ---
+\definecolor{cream-100}{RGB}{252,250,246}
+
+% ============================================================================
+% LAYER 2: SEMANTIC COLOR MAPPINGS
+% ============================================================================
+
+% --- DEFINITION: Blue ---
+\definecolor{definition-dark}{RGB}{30,58,95}
+\definecolor{definition-base}{RGB}{71,101,135}
+\definecolor{definition-light}{RGB}{240,246,252}
+
+% --- EXAMPLE: Green ---
+\definecolor{example-dark}{RGB}{46,125,50}
+\definecolor{example-base}{RGB}{67,160,71}
+\definecolor{example-light}{RGB}{232,245,233}
+
+% --- KEY: Orange/Amber ---
+\definecolor{key-dark}{RGB}{230,124,0}
+\definecolor{key-base}{RGB}{251,140,0}
+\definecolor{key-light}{RGB}{255,243,224}
+
+% --- CAUTION: Red ---
+\definecolor{caution-dark}{RGB}{198,40,40}
+\definecolor{caution-base}{RGB}{229,57,53}
+\definecolor{caution-light}{RGB}{255,235,238}
+
+% --- NOTE: Neutral/Gray ---
+\definecolor{note-dark}{RGB}{73,80,87}
+\definecolor{note-base}{RGB}{134,142,150}
+\definecolor{note-light}{RGB}{252,250,246}
+
+% --- THEOREM: Indigo/Purple ---
+\definecolor{theorem-dark}{RGB}{63,81,181}
+\definecolor{theorem-base}{RGB}{92,107,192}
+\definecolor{theorem-light}{RGB}{232,234,246}
+
+% --- PRACTICE: Teal ---
+\definecolor{practice-dark}{RGB}{0,128,128}
+\definecolor{practice-base}{RGB}{0,137,123}
+\definecolor{practice-light}{RGB}{224,242,241}
+
+% ============================================================================
+% LAYER 3: COMPONENT-SPECIFIC ALIASES
+% ============================================================================
+
+% --- Text Colors ---
+\definecolor{text-primary}{RGB}{30,32,34}
+\definecolor{text-secondary}{RGB}{73,80,87}
+\definecolor{text-muted}{RGB}{95,100,105}
+
+% --- Background Colors ---
+\definecolor{bg-definition}{RGB}{240,246,252}
+\definecolor{bg-example}{RGB}{232,245,233}
+\definecolor{bg-key}{RGB}{255,243,224}
+\definecolor{bg-caution}{RGB}{255,235,238}
+\definecolor{bg-note}{RGB}{252,250,246}
+\definecolor{bg-theorem}{RGB}{232,234,246}
+\definecolor{bg-practice}{RGB}{224,242,241}
+\definecolor{bg-neutral}{RGB}{247,248,250}
+
+% --- Border Colors ---
+\definecolor{border-definition}{RGB}{71,101,135}
+\definecolor{border-example}{RGB}{67,160,71}
+\definecolor{border-key}{RGB}{251,140,0}
+\definecolor{border-caution}{RGB}{229,57,53}
+\definecolor{border-note}{RGB}{210,215,220}
+\definecolor{border-theorem}{RGB}{92,107,192}
+\definecolor{border-practice}{RGB}{0,137,123}
+\definecolor{border-neutral}{RGB}{210,215,220}
+
+% --- Text Colors for Boxes ---
+\definecolor{text-definition}{RGB}{30,58,95}
+\definecolor{text-example}{RGB}{46,125,50}
+\definecolor{text-key}{RGB}{230,124,0}
+\definecolor{text-caution}{RGB}{198,40,40}
+\definecolor{text-note}{RGB}{73,80,87}
+\definecolor{text-theorem}{RGB}{63,81,181}
+\definecolor{text-practice}{RGB}{0,128,128}
+
+% --- Primary Structural Colors ---
+\definecolor{primary}{RGB}{30,58,95}
+\definecolor{primary-light}{RGB}{71,101,135}
+\definecolor{accent}{RGB}{251,140,0}
+
+% ============================================================================
+% LAYER 4: COVER-SPECIFIC COLORS
+% ============================================================================
+% These colors are used by the cover design (front-matter/cover/)
+
+% --- Background ---
+\definecolor{DeepSlate}{RGB}{18,28,48}
+\definecolor{MidSlate}{RGB}{28,42,68}
+\definecolor{LightSlate}{RGB}{45,62,95}
+
+% --- Accent (copper/bronze) ---
+\definecolor{CopperGlow}{RGB}{180,120,80}
+\definecolor{CopperLight}{RGB}{220,170,120}
+\definecolor{CopperDark}{RGB}{140,90,55}
+
+% --- Circle colors ---
+\definecolor{CircleDeep}{RGB}{35,55,95}
+\definecolor{CircleMid}{RGB}{50,75,120}
+\definecolor{CircleLight}{RGB}{70,100,150}
+
+% --- Band colors ---
+\definecolor{BandBase}{RGB}{10,14,22}
+\definecolor{BandAccent}{RGB}{20,30,50}
+\definecolor{BandHighlight}{RGB}{35,50,80}
+
+% --- Cover text colors ---
+\definecolor{TextPure}{RGB}{255,255,255}
+\definecolor{TextSoft}{RGB}{200,210,225}
+\definecolor{TextMuted}{RGB}{140,155,180}
+
+% --- Edge accents ---
+\definecolor{EdgeGlow}{RGB}{100,130,180}
+
+% --- Decision tree colors ---
+\definecolor{TreeGreen}{RGB}{67,160,71}
+\definecolor{TreeGreenDark}{RGB}{46,125,50}
+\definecolor{TreeRed}{RGB}{229,57,53}
+\definecolor{TreeRedDark}{RGB}{198,40,40}
+
+% ============================================================================
+% LAYER 5: LEGACY COMPATIBILITY ALIASES
+% ============================================================================
+
+\definecolor{agentblue}{RGB}{30,58,95}
+\definecolor{agentlightblue}{RGB}{240,246,252}
+\definecolor{accentorange}{RGB}{191,97,35}
+\definecolor{highlightgray}{RGB}{252,250,246}
+\definecolor{bordergray}{RGB}{210,215,220}
+\definecolor{darkgray}{RGB}{95,100,105}
+
+\definecolor{primary-slate}{RGB}{30,58,95}
+\definecolor{accent-amber}{RGB}{191,97,35}
+\definecolor{secondary-sage}{RGB}{82,121,111}
+\definecolor{bg-ice}{RGB}{240,246,252}
+\definecolor{bg-cream}{RGB}{252,250,246}
+\definecolor{bg-amber-light}{RGB}{254,245,237}
+\definecolor{bg-gray-cool}{RGB}{247,248,250}
+\definecolor{border-slate}{RGB}{71,101,135}
+\definecolor{border-sage}{RGB}{118,145,137}

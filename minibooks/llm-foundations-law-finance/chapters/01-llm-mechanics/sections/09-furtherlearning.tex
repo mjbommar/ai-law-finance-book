@@ -1,0 +1,205 @@
+% =============================================================================
+% Further Learning — LLM Primer & Mechanics
+% Purpose: Annotated bibliography; curated resources
+% Label: sec:llm1-further
+% =============================================================================
+
+\section{Further Learning}
+\label{sec:llm1-further}
+
+This section provides an annotated guide to primary sources and resources for readers who wish to deepen their understanding of LLM mechanics. We organize resources by topic, with brief annotations explaining the relevance and accessibility of each source.
+
+\subsection{Foundational Architecture}
+\label{sec:llm1-further-architecture}
+
+\paragraph{The Original Transformer Paper.}
+\fullcite{vaswani2017attention}
+
+The seminal paper introducing the Transformer architecture. While technical, the paper is clearly written and remains essential for understanding the attention mechanism that underlies all modern LLMs. Readers comfortable with basic linear algebra will find the core concepts accessible. The attention mechanism described here---scaled dot-product attention---is the foundation of everything we discuss in this chapter.
+
+\paragraph{BERT and Contextual Embeddings.}
+\fullcite{devlin2019bert}
+
+BERT demonstrated the power of bidirectional pre-training for language understanding. While GPT-style decoder-only models now dominate, BERT's encoder architecture remains important for embeddings and classification. The paper clearly explains pre-training objectives (masked language modeling) and their benefits.
+
+\paragraph{GPT-3 and Emergence.}
+\fullcite{brown2020fewshot}
+
+The GPT-3 paper demonstrated that scale produces emergent capabilities---particularly few-shot learning where the model can perform tasks from examples in the prompt. This paper marks the practical beginning of the modern LLM era and remains essential for understanding why large models behave differently from small ones.
+
+\subsection{Scaling and Efficiency}
+\label{sec:llm1-further-scaling}
+
+\paragraph{Original Scaling Laws.}
+\fullcite{kaplan2020scaling}
+
+The OpenAI scaling laws paper that formalized the relationship between model size, data, compute, and performance. This paper transformed AI development from art to engineering by demonstrating predictable power-law improvements. Essential for understanding why the industry pursued ever-larger models.
+
+\paragraph{Chinchilla and Compute-Optimal Training.}
+\fullcite{hoffmann2022chinchilla}
+
+The Chinchilla paper refined scaling law understanding, demonstrating that most models were ``undertrained''---using too many parameters relative to training data. This insight explains the current emphasis on data quality and training efficiency, and the viability of smaller but well-trained models.
+
+\paragraph{FlashAttention and Practical Efficiency.}
+\fullcite{dao2022flashattention}
+
+FlashAttention demonstrates how algorithmic improvements---not just hardware---can dramatically improve LLM efficiency. Understanding that attention computation can be optimized helps practitioners reason about why context windows have expanded and why long-context models are now practical.
+
+\subsection{Alignment and Instruction Following}
+\label{sec:llm1-further-alignment}
+
+\paragraph{InstructGPT and RLHF.}
+\fullcite{ouyang2022training}
+
+The InstructGPT paper introduced Reinforcement Learning from Human Feedback (RLHF) to make models follow instructions. This paper explains why ChatGPT-style assistants behave so differently from raw base models. Essential for understanding the three-phase training pipeline (pre-training, SFT, RLHF).
+
+\paragraph{FLAN and Instruction Tuning.}
+\fullcite{wei2022finetuned}
+
+The FLAN paper demonstrated that instruction tuning on diverse tasks produces models with strong zero-shot generalization. This work established the paradigm of creating general-purpose assistants through multi-task instruction fine-tuning.
+
+\paragraph{Direct Preference Optimization.}
+\fullcite{rafailov2023dpo}
+
+DPO provides a simpler alternative to RLHF that has become widely adopted. Understanding DPO helps practitioners reason about how modern alignment works and why different models may have different alignment characteristics.
+
+\subsection{Tokenization and Representation}
+\label{sec:llm1-further-tokenization}
+
+\paragraph{Byte Pair Encoding.}
+\fullcite{sennrich2016bpe}
+
+The original BPE paper for neural machine translation. While focused on translation, this paper explains the subword tokenization algorithm used by most modern LLMs. Understanding BPE helps explain tokenization artifacts discussed in this chapter.
+
+\paragraph{SentencePiece.}
+\fullcite{kudo2018sentencepiece}
+
+SentencePiece provides language-agnostic tokenization used by many models. This paper explains the practical implementation of subword tokenization and the unigram model that some tokenizers use.
+
+\paragraph{Word2Vec and Embeddings.}
+\fullcite{mikolov2013word2vec}
+
+The Word2Vec paper introduced the idea that word meanings could be represented as vectors with geometric properties (the famous ``king - man + woman = queen'' analogy). While pre-Transformer, this paper remains essential for understanding why embeddings work.
+
+\subsection{Sampling and Generation}
+\label{sec:llm1-further-sampling}
+
+\paragraph{Nucleus (Top-p) Sampling.}
+\fullcite{holtzman2020curious}
+
+This paper introduced nucleus sampling (top-p) and analyzed why simpler strategies (like beam search or random sampling) produce degenerate text. Essential for understanding the sampling parameters discussed in this chapter and why top-p is preferred.
+
+\paragraph{Self-Consistency.}
+\fullcite{wang2022selfconsistency}
+
+The self-consistency paper demonstrates that generating multiple samples and aggregating improves reasoning accuracy. This technique is particularly relevant for legal and financial applications where reliability matters.
+
+\subsection{Retrieval and RAG}
+\label{sec:llm1-further-retrieval}
+
+\paragraph{Retrieval-Augmented Generation.}
+\fullcite{lewis2020rag}
+
+The original RAG paper that established the paradigm of grounding LLMs in retrieved documents. Essential reading for understanding how to address knowledge cutoff and hallucination through retrieval.
+
+\paragraph{Dense Passage Retrieval.}
+\fullcite{karpukhin2020dpr}
+
+DPR introduced dense embeddings for passage retrieval, demonstrating that learned embeddings outperform traditional keyword methods for many tasks. This paper explains the semantic search concepts from our embeddings section.
+
+\paragraph{ColBERT and Efficient Re-ranking.}
+\fullcite{khattab2020colbert}
+
+ColBERT demonstrates efficient cross-encoder re-ranking that combines the efficiency of bi-encoders with the accuracy of cross-encoders. Understanding re-ranking is essential for production retrieval systems.
+
+\paragraph{Lost in the Middle.}
+\fullcite{liu2023lostmiddle}
+
+This paper documents the U-shaped performance curve where models struggle to use information in the middle of long contexts. Essential for understanding context window limitations and designing effective prompts.
+
+\subsection{Failure Modes and Safety}
+\label{sec:llm1-further-safety}
+
+\paragraph{Hallucination Survey.}
+\fullcite{ji2023hallucination}
+
+A comprehensive survey of hallucination in NLP systems, providing taxonomy and mitigation strategies. Essential for understanding the scope of the hallucination problem.
+
+\paragraph{Updated Hallucination Survey.}
+\fullcite{huang2023survey}
+
+A more recent survey focused specifically on LLM hallucination, including analysis of causes and emerging mitigation techniques.
+
+\paragraph{Prompt Injection Attacks.}
+\fullcite{liu2023prompt}
+
+Analyzes prompt injection vulnerabilities in LLM applications. Essential reading for security-conscious deployments in legal and financial contexts.
+
+\paragraph{Indirect Prompt Injection.}
+\fullcite{greshake2023youve}
+
+Demonstrates how malicious content in documents or websites can compromise LLM-integrated applications. Critical for understanding RAG security risks.
+
+\subsection{Broader Context and Ethics}
+\label{sec:llm1-further-ethics}
+
+\paragraph{Foundation Models Report.}
+\fullcite{bommasani2021opportunities}
+
+The Stanford report on foundation models provides comprehensive analysis of opportunities and risks. Excellent for understanding the broader landscape and implications of LLM technology.
+
+\paragraph{Stochastic Parrots.}
+\fullcite{bender2021stochastic}
+
+A critical perspective on LLMs highlighting environmental costs, bias amplification, and the risks of systems that mimic understanding without genuine comprehension. Important for maintaining appropriate skepticism.
+
+\subsection{Domain-Specific Resources}
+\label{sec:llm1-further-domain}
+
+\paragraph{LLM Primer for Economists.}
+\fullcite{kwon2024economists}
+
+A Bank for International Settlements primer on LLMs for economists. Provides an accessible introduction tailored to financial professionals, covering similar concepts to this chapter from an economics perspective.
+
+\paragraph{OWASP Top 10 for LLMs.}
+\fullcite{owasp2025llm}
+
+The OWASP security risk taxonomy for LLM applications. Essential reference for security assessments and compliance frameworks.
+
+\paragraph{EU AI Act.}
+\fullcite{euaiact2024}
+
+The European Union's AI Act establishes transparency and risk-based governance requirements for AI systems including LLMs. Essential for understanding evolving regulatory requirements.
+
+\subsection{Practical Guides and Documentation}
+\label{sec:llm1-further-practical}
+
+Beyond academic papers, practitioners benefit from vendor documentation and guides:
+
+\begin{itemize}
+  \item \textbf{OpenAI Documentation:} Comprehensive API documentation including best practices for prompting, sampling, and structured outputs. \url{https://platform.openai.com/docs}
+
+  \item \textbf{Anthropic Documentation:} Claude model documentation including context window management and safety features. \url{https://docs.anthropic.com}
+
+  \item \textbf{Hugging Face Course:} Free course on NLP and Transformers with hands-on exercises. \url{https://huggingface.co/course}
+
+  \item \textbf{LangChain Documentation:} Documentation for the popular LLM orchestration framework. \url{https://python.langchain.com/docs}
+\end{itemize}
+
+\subsection{Staying Current}
+\label{sec:llm1-further-current}
+
+LLM technology evolves rapidly. Resources for staying current:
+
+\begin{itemize}
+  \item \textbf{arXiv cs.CL and cs.LG:} Preprint servers where new research appears. Many papers cited above were arXiv preprints before formal publication.
+
+  \item \textbf{The Gradient:} Accessible explanations of AI research for practitioners. \url{https://thegradient.pub}
+
+  \item \textbf{AI safety newsletters:} Various newsletters track safety and alignment research relevant to deployment risks.
+
+  \item \textbf{Vendor blogs and research:} OpenAI, Anthropic, Google DeepMind, and Meta AI publish research and product updates.
+\end{itemize}
+
+The field moves quickly; papers from 2022 may already be partially obsoleted by subsequent work. We recommend checking publication dates and looking for subsequent citations when evaluating older sources.
+

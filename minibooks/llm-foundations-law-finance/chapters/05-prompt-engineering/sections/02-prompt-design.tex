@@ -1,0 +1,878 @@
+% =============================================================================
+% Prompt Design — Prompt Design, Evaluation, Optimization
+% Purpose: Prompts as specifications with success criteria
+% Label: sec:llmD-design
+% =============================================================================
+
+\section{Prompt Design as Specification}
+\label{sec:llmD-design}
+
+A \keyterm{prompt} is not merely an instruction to an LLM---it is a \emph{specification} of a computational process. Like any specification in software engineering, legal drafting, or financial analysis, a well-constructed prompt defines inputs, outputs, constraints, edge cases, and success criteria. However, unlike traditional deterministic systems, prompts operate on statistical models that introduce both power and unpredictability.
+
+The maturity of a prompt engineering practice can be measured along a spectrum from exploratory natural language experiments to production-grade, modular systems with full test coverage. This section formalizes that progression through the lens of the \keyterm{Prompt Design Maturity Model}, establishes best practices for container formats and specifications, and introduces systematic approaches to exemplar management and validation.
+
+\subsection{The Prompt Design Maturity Model}
+\label{sec:llmD-maturity}
+
+Most organizations begin their LLM journey with ad hoc experimentation---pasting text into a chat interface and seeing what happens. While this is appropriate for initial exploration, production deployments in law and finance require significantly higher levels of rigor. The \keyterm{Prompt Design Maturity Model} provides a five-phase framework for understanding and advancing prompt engineering practices.
+
+\subsubsection{Phase 1: Zero-Shot Exploration}
+\label{sec:llmD-phase1}
+
+In \keyterm{zero-shot prompting}, the user provides a task description in natural language with no structured formatting or examples. The model relies entirely on its pre-training and instruction-tuning to interpret the request.
+
+\begin{definitionbox}[title={Phase 1: Zero-Shot}]
+\textbf{Characteristics}:
+\begin{itemize}
+  \item Unstructured natural language input
+  \item No formatting conventions or schemas
+  \item Freeform text output
+  \item No validation mechanisms
+\end{itemize}
+
+\textbf{Testability}: Very low. Outputs vary significantly across runs, model versions, and even temperature settings. Regression testing is impractical.
+
+\textbf{Appropriate Use Cases}:
+\begin{itemize}
+  \item Initial exploration and prototyping
+  \item Understanding model capabilities
+  \item Creative brainstorming tasks
+  \item Internal research with no downstream dependencies
+\end{itemize}
+\end{definitionbox}
+
+\paragraph{Example.} A lawyer might ask: ``What are the key issues in this contract?'' and paste the full text. While this can surface useful insights, the lack of structure makes it impossible to automate, test, or integrate into workflows.
+
+\paragraph{Limitations.} Zero-shot prompting is fundamentally unsuitable for production systems because:
+\begin{itemize}
+  \item \textbf{Ambiguity}: The model must infer intent, leading to inconsistent interpretations
+  \item \textbf{No validation}: There is no programmatic way to verify output correctness
+  \item \textbf{No reproducibility}: Results vary across runs even with identical inputs
+  \item \textbf{No error handling}: The system cannot distinguish between valid outputs, hallucinations, or refusals
+\end{itemize}
+
+\subsubsection{Phase 2: Few-Shot Pattern Establishment}
+\label{sec:llmD-phase2}
+
+\keyterm{Few-shot prompting} adds examples to guide the model's behavior. By demonstrating the desired input-output pattern through concrete instances, the model can generalize to new cases.
+
+\begin{definitionbox}[title={Phase 2: Few-Shot}]
+\textbf{Characteristics}:
+\begin{itemize}
+  \item Natural language input with embedded examples
+  \item Examples establish formatting conventions
+  \item Output format guided by examples, but still freeform
+  \item No formal schema validation
+\end{itemize}
+
+\textbf{Testability}: Low to medium. While examples improve consistency, outputs remain freeform and difficult to validate programmatically.
+
+\textbf{Appropriate Use Cases}:
+\begin{itemize}
+  \item Teaching output format through demonstration
+  \item Establishing tone and style expectations
+  \item Domain-specific pattern recognition
+  \item Situations where rigid schemas are impractical
+\end{itemize}
+\end{definitionbox}
+
+\paragraph{Example.} A few-shot prompt for contract clause extraction might include:
+
+\begin{quote}
+\texttt{Extract the key terms from the following contracts.}
+
+\texttt{Contract 1: "Party A agrees to deliver 1,000 widgets by December 31, 2025."}\\
+\texttt{Key Terms: Deliverable: 1,000 widgets; Deadline: December 31, 2025}
+
+\texttt{Contract 2: "Consultant will provide monthly reports for \$5,000/month."}\\
+\texttt{Key Terms: Service: Monthly reports; Compensation: \$5,000/month}
+
+\texttt{Now extract key terms from: "Vendor shall maintain \$10M insurance coverage..."}
+\end{quote}
+
+\paragraph{Advancement Over Phase 1.} Few-shot prompting provides:
+\begin{itemize}
+  \item \textbf{Format guidance}: Examples demonstrate expected structure
+  \item \textbf{Implicit constraints}: The model learns what to include and exclude
+  \item \textbf{Better consistency}: Outputs follow the demonstrated pattern more reliably
+\end{itemize}
+
+\paragraph{Remaining Limitations.}
+\begin{itemize}
+  \item \textbf{Still freeform}: Output structure is suggested, not enforced
+  \item \textbf{Example dependency}: Performance degrades if new inputs differ significantly from examples
+  \item \textbf{Limited validation}: No programmatic way to verify output conformance
+  \item \textbf{Context budget}: Examples consume tokens, reducing space for actual content
+\end{itemize}
+
+\subsubsection{Phase 3: Structured Input}
+\label{sec:llmD-phase3}
+
+In \keyterm{structured input prompting}, the data provided to the model conforms to a formal schema (typically JSON or XML), while the output may still be freeform text.
+
+\begin{definitionbox}[title={Phase 3: Structured Input}]
+\textbf{Characteristics}:
+\begin{itemize}
+  \item Input data formatted as JSON, XML, or other structured format
+  \item Clear separation of instructions vs. data
+  \item Input validation ensures well-formed data contracts
+  \item Output remains natural language or semi-structured
+\end{itemize}
+
+\textbf{Testability}: Medium. Input is validated, but output variability remains high.
+
+\textbf{Appropriate Use Cases}:
+\begin{itemize}
+  \item Summarization or analysis tasks where input is well-defined
+  \item Systems integrating with databases or APIs providing structured data
+  \item Scenarios where output is consumed by humans (not downstream systems)
+\end{itemize}
+\end{definitionbox}
+
+\paragraph{Example.} A legal document analyzer might receive:
+
+\begin{lstlisting}[basicstyle=\small\ttfamily]
+{
+  "document_type": "commercial_lease",
+  "jurisdiction": "NY",
+  "parties": {
+    "lessor": "ABC Properties LLC",
+    "lessee": "XYZ Corp"
+  },
+  "key_clauses": [
+    {"type": "rent", "text": "..."},
+    {"type": "maintenance", "text": "..."}
+  ],
+  "task": "Identify non-standard provisions"
+}
+\end{lstlisting}
+
+The prompt instructions would specify how to interpret this schema, while the output might be freeform analysis text.
+
+\paragraph{Benefits.}
+\begin{itemize}
+  \item \textbf{Explicit data contracts}: No ambiguity about what information is provided
+  \item \textbf{Input validation}: Malformed data is rejected before reaching the model
+  \item \textbf{Separation of concerns}: Instructions and data are clearly delineated
+  \item \textbf{Reusability}: The same schema can be used across multiple prompts
+\end{itemize}
+
+\paragraph{Limitations.}
+\begin{itemize}
+  \item \textbf{Output unpredictability}: Freeform outputs are still difficult to parse and validate
+  \item \textbf{Integration challenges}: Downstream systems must handle unstructured text
+  \item \textbf{Testing complexity}: Verifying output correctness requires manual review or complex NLP validation
+\end{itemize}
+
+\subsubsection{Phase 4: Structured Input/Output}
+\label{sec:llmD-phase4}
+
+\keyterm{Structured I/O prompting} enforces formal schemas for both inputs and outputs. This is the \emph{minimum acceptable standard for production systems} in legal and financial contexts.
+
+\begin{definitionbox}[title={Phase 4: Structured I/O (Production Minimum)}]
+\textbf{Characteristics}:
+\begin{itemize}
+  \item Both input and output conform to formal schemas
+  \item Output validation enforces schema compliance
+  \item Programmatic error handling for invalid outputs
+  \item Explicit versioning of schemas and prompts
+\end{itemize}
+
+\textbf{Testability}: High. Both inputs and outputs can be validated programmatically, enabling comprehensive test suites.
+
+\textbf{Appropriate Use Cases}:
+\begin{itemize}
+  \item All production deployments in regulated industries
+  \item Automated workflows requiring downstream processing
+  \item Systems requiring audit trails and reproducibility
+  \item Integration with enterprise systems
+\end{itemize}
+\end{definitionbox}
+
+\paragraph{Example.} An automated contract risk analyzer would specify:
+
+\begin{lstlisting}[basicstyle=\small\ttfamily,caption={Input Schema}]
+{
+  "contract_id": "string (required)",
+  "document_text": "string (required)",
+  "jurisdiction": "string (required, enum: [NY, CA, DE, ...])",
+  "contract_type": "string (required, enum: [lease, service, ...])",
+  "analysis_depth": "string (optional, enum: [quick, standard, deep])"
+}
+\end{lstlisting}
+
+\begin{lstlisting}[basicstyle=\small\ttfamily,caption={Output Schema}]
+{
+  "contract_id": "string (must match input)",
+  "risk_score": "integer (0-100)",
+  "risks_identified": [
+    {
+      "category": "string (enum: [financial, liability, compliance, ...])",
+      "severity": "string (enum: [low, medium, high, critical])",
+      "clause_reference": "string",
+      "description": "string (max 500 chars)",
+      "recommendation": "string (max 300 chars)"
+    }
+  ],
+  "requires_human_review": "boolean",
+  "confidence": "float (0.0-1.0)"
+}
+\end{lstlisting}
+
+The system validates both input and output, rejecting malformed responses and triggering retries or human escalation.
+
+\paragraph{Critical Requirements.}
+\begin{itemize}
+  \item \textbf{Schema enforcement}: Use JSON Schema, Pydantic, or similar frameworks to validate outputs
+  \item \textbf{Retry logic}: If output fails validation, retry with clarified instructions (typically 1--3 attempts)
+  \item \textbf{Fallback mechanisms}: Define what happens when retries are exhausted (human escalation, error response, default behavior)
+  \item \textbf{Version control}: Schemas, prompts, and model configurations must be versioned together
+  \item \textbf{Observability}: Log all inputs, outputs, validation failures, and retries
+\end{itemize}
+
+\paragraph{Structured Output Techniques.} Modern LLM APIs support several mechanisms for enforcing structured outputs:
+
+\begin{itemize}
+  \item \textbf{JSON mode}: Models guarantee valid JSON output (e.g., OpenAI's \texttt{response\_format=\{"type": "json\_object"\}})
+  \item \textbf{Function calling}: The model populates function arguments according to a schema (originally designed for tool use, now widely used for structured extraction)
+  \item \textbf{Grammar constraints}: Some systems (e.g., llama.cpp, Guidance) allow specifying formal grammars that the model must follow during generation
+  \item \textbf{Post-generation validation}: Parse output and retry if schema is violated
+\end{itemize}
+
+\begin{keybox}[title={Phase 4 is the Production Minimum}]
+Structured I/O is not optional for production legal and financial systems. It is the minimum standard for:
+\begin{itemize}
+  \item \textbf{Auditability}: Structured outputs can be logged, indexed, and searched
+  \item \textbf{Testability}: Automated tests can verify output correctness
+  \item \textbf{Reliability}: Validation catches errors before they propagate
+  \item \textbf{Integration}: Downstream systems can consume outputs programmatically
+\end{itemize}
+\end{keybox}
+
+\subsubsection{Phase 5: Modular, Compositional Pipelines}
+\label{sec:llmD-phase5}
+
+The highest maturity level decomposes complex tasks into \keyterm{modular pipelines}, where each module is a self-contained, testable component with well-defined inputs, outputs, and responsibilities.
+
+\begin{definitionbox}[title={Phase 5: Modular Pipelines}]
+\textbf{Characteristics}:
+\begin{itemize}
+  \item Tasks decomposed into specialized modules (intent classification, entity extraction, reasoning, validation)
+  \item Each module has independent test coverage
+  \item Modules communicate via structured interfaces
+  \item Pipeline orchestration handles data flow and error propagation
+  \item Version control applies to individual modules and pipeline configurations
+\end{itemize}
+
+\textbf{Testability}: Very high. Each module can be unit tested, integration tested, and regression tested independently.
+
+\textbf{Appropriate Use Cases}:
+\begin{itemize}
+  \item Mission-critical systems requiring highest reliability
+  \item Complex multi-step workflows (e.g., document intake $\to$ classification $\to$ extraction $\to$ analysis $\to$ report generation)
+  \item Systems requiring explainability and auditability of each decision step
+  \item Long-running processes with checkpointing and resumption requirements
+\end{itemize}
+\end{definitionbox}
+
+\paragraph{Example: Multi-Stage Contract Analysis.} A production contract review system might decompose into:
+
+\begin{enumerate}
+  \item \textbf{Document Classifier}: Determines contract type (NDA, service agreement, lease, etc.) from structured input
+  \item \textbf{Clause Extractor}: Identifies and extracts key clauses (payment terms, liability, termination, etc.)
+  \item \textbf{Risk Analyzer}: Evaluates each clause against known risk patterns
+  \item \textbf{Compliance Checker}: Verifies jurisdiction-specific requirements
+  \item \textbf{Report Generator}: Synthesizes findings into structured report
+  \item \textbf{Validator}: Confirms all required fields are present and within acceptable ranges
+\end{enumerate}
+
+Each module has:
+\begin{itemize}
+  \item A defined input schema (validated before execution)
+  \item A defined output schema (validated after execution)
+  \item Unit tests covering typical and edge cases
+  \item Version number and change log
+  \item Performance metrics (latency, token usage, error rate)
+\end{itemize}
+
+\paragraph{Benefits of Modularity.}
+\begin{itemize}
+  \item \textbf{Testability}: Each module can be tested in isolation
+  \item \textbf{Debuggability}: Failures can be traced to specific modules
+  \item \textbf{Maintainability}: Modules can be updated independently
+  \item \textbf{Reusability}: Modules can be composed into different pipelines
+  \item \textbf{Scalability}: Modules can be parallelized or scaled independently
+  \item \textbf{Observability}: Telemetry at each stage enables fine-grained monitoring
+\end{itemize}
+
+\paragraph{Trade-offs.}
+\begin{itemize}
+  \item \textbf{Complexity}: More moving parts require orchestration logic
+  \item \textbf{Latency}: Sequential modules increase end-to-end latency (though parallelization can mitigate this)
+  \item \textbf{Token overhead}: Each module consumes context budget
+  \item \textbf{Engineering cost}: Requires significant upfront design and testing
+\end{itemize}
+
+\begin{highlightbox}[title={Looking Ahead: Agentic Architectures}]
+Our companion volume, \textit{Agentic AI in Law and Finance}, extends modular architectures to autonomous agents using the \keyterm{Delegation pattern}, where agents dynamically select and compose modules based on task requirements. The architectural principles established here---clear interfaces, validation, and composability---form the foundation for agentic reasoning systems.
+\end{highlightbox}
+
+\subsubsection{Maturity Model Summary Table}
+
+\Cref{tab:llmD-maturity-model} summarizes the five phases across key dimensions.
+
+\begin{table}[htbp]
+\centering
+\caption{Prompt Design Maturity Model: Five Phases}
+\label{tab:llmD-maturity-model}
+\small
+\begin{tabular}{@{}p{2.0cm}p{2.5cm}p{2.5cm}p{2.5cm}p{3.0cm}@{}}
+\toprule
+\textbf{Phase} & \textbf{Input} & \textbf{Output} & \textbf{Testability} & \textbf{Use Case} \\
+\midrule
+1. Zero-Shot & Unstructured text & Freeform text & Very Low & Exploration, prototyping \\
+\addlinespace
+2. Few-Shot & Text + examples & Guided text & Low & Format teaching, pattern establishment \\
+\addlinespace
+3. Structured Input & JSON/XML & Freeform text & Medium & Analysis tasks with defined inputs \\
+\addlinespace
+4. Structured I/O & JSON/XML & JSON/XML (validated) & High & \textbf{Production minimum} for regulated industries \\
+\addlinespace
+5. Modular & JSON/XML (per module) & JSON/XML (per module) & Very High & Mission-critical, complex workflows \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Container Format Selection}
+\label{sec:llmD-containers}
+
+Once structured prompting is adopted (Phase 3+), the choice of \keyterm{container format} becomes critical. The container format determines how instructions, data, and examples are encoded in the prompt. The three primary options are Markdown, JSON, and XML, each with distinct advantages and trade-offs.
+
+\subsubsection{Markdown: Human-Readable Instructions}
+
+\keyterm{Markdown} is a lightweight markup language designed for human readability. It excels at encoding instructions, explanations, and hierarchical content.
+
+\paragraph{Strengths.}
+\begin{itemize}
+  \item \textbf{Readability}: Easy for humans to write, read, and maintain
+  \item \textbf{Hierarchical structure}: Headers, lists, and code blocks provide clear organization
+  \item \textbf{Familiar}: Widely used in documentation, so LLMs are well-trained on it
+  \item \textbf{Mixing text and code}: Supports inline code and fenced code blocks
+\end{itemize}
+
+\paragraph{Weaknesses.}
+\begin{itemize}
+  \item \textbf{Not machine-parseable}: Cannot be validated programmatically
+  \item \textbf{Ambiguity}: Formatting is suggestive, not enforced
+  \item \textbf{Limited nesting}: Deep hierarchies become visually cluttered
+\end{itemize}
+
+\paragraph{Best Use.} Markdown is ideal for the \emph{instruction} portion of a prompt: task descriptions, role definitions, constraints, and examples. It should be combined with structured formats (JSON/XML) for the \emph{data} portion.
+
+\subsubsection{JSON: Machine-Readable Data}
+
+\keyterm{JSON} (JavaScript Object Notation) is the de facto standard for structured data interchange. It is concise, widely supported, and easily validated.
+
+\paragraph{Strengths.}
+\begin{itemize}
+  \item \textbf{Machine-parseable}: Can be validated against schemas (JSON Schema)
+  \item \textbf{Compact}: Minimal syntax overhead
+  \item \textbf{Ubiquitous}: Supported by all major programming languages and APIs
+  \item \textbf{Typed}: Distinguishes strings, numbers, booleans, arrays, objects
+\end{itemize}
+
+\paragraph{Weaknesses.}
+\begin{itemize}
+  \item \textbf{Less readable}: Nested structures can be hard to scan visually
+  \item \textbf{No comments}: Cannot annotate data inline (though some parsers allow comments)
+  \item \textbf{Escaping complexity}: Special characters in strings require escaping
+\end{itemize}
+
+\paragraph{Best Use.} JSON is the preferred format for \emph{input data} and \emph{output specifications}. It enables validation, ensures unambiguous structure, and integrates seamlessly with application code.
+
+\subsubsection{XML: Explicit Nesting and Legacy Compatibility}
+
+\keyterm{XML} (eXtensible Markup Language) predates JSON and is still prevalent in legacy systems, legal document standards (e.g., Akoma Ntoso for legislation), and financial reporting (e.g., XBRL).
+
+\paragraph{Strengths.}
+\begin{itemize}
+  \item \textbf{Explicit hierarchy}: Opening and closing tags make structure unambiguous
+  \item \textbf{Attributes and content}: Supports both tag attributes and nested content
+  \item \textbf{Schema validation}: DTD, XSD, and RelaxNG provide rigorous validation
+  \item \textbf{Legacy compatibility}: Required for interfacing with older systems
+\end{itemize}
+
+\paragraph{Weaknesses.}
+\begin{itemize}
+  \item \textbf{Verbose}: Requires more tokens than JSON for equivalent data
+  \item \textbf{Complexity}: More difficult to write and read than JSON
+  \item \textbf{Less common in modern LLM training}: Models may be less familiar with XML conventions
+\end{itemize}
+
+\paragraph{Best Use.} XML is appropriate when:
+\begin{itemize}
+  \item Interfacing with legacy systems that require XML
+  \item Working with legal/financial standards that mandate XML formats
+  \item Explicit, self-documenting markup is required (e.g., complex nested contracts)
+\end{itemize}
+
+\subsubsection{Decision Framework: Choosing a Container Format}
+
+\Cref{tab:llmD-container-decision} provides a decision matrix for selecting the appropriate container format.
+
+\begin{table}[htbp]
+\centering
+\caption{Container Format Selection Decision Matrix}
+\label{tab:llmD-container-decision}
+\small
+\begin{tabular}{@{}p{3.5cm}p{4.0cm}p{5.0cm}@{}}
+\toprule
+\textbf{Use Case} & \textbf{Recommended Format} & \textbf{Rationale} \\
+\midrule
+Task instructions & Markdown & Human-readable, hierarchical \\
+\addlinespace
+Input data & JSON & Compact, machine-parseable, widely supported \\
+\addlinespace
+Output schema & JSON & Validation, integration with application code \\
+\addlinespace
+Legacy system integration & XML & Compatibility with existing standards \\
+\addlinespace
+Legal document markup & XML (if mandated) & Explicit structure, schema validation \\
+\addlinespace
+Few-shot examples & Markdown + JSON & Markdown for explanation, JSON for data \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Hybrid Approach: Markdown Instructions + JSON Data.} The most effective prompts often combine formats:
+
+\begin{lstlisting}[basicstyle=\small\ttfamily,caption={Hybrid Prompt Example}]
+# Task: Contract Risk Analysis
+
+You are a legal risk analyst. Analyze the provided contract and identify risks.
+
+## Instructions
+1. Review each clause in the input JSON
+2. Categorize risks as: financial, liability, compliance, or operational
+3. Assign severity: low, medium, high, critical
+4. Output results as JSON conforming to the schema below
+
+## Input Schema
+```json
+{
+  "contract_id": "string",
+  "clauses": [{"id": "string", "text": "string"}]
+}
+```
+
+## Output Schema
+```json
+{
+  "contract_id": "string",
+  "risks": [
+    {
+      "clause_id": "string",
+      "category": "financial|liability|compliance|operational",
+      "severity": "low|medium|high|critical",
+      "description": "string"
+    }
+  ]
+}
+```
+
+## Example
+[Few-shot example here...]
+
+## Now analyze this contract:
+```json
+{"contract_id": "C-12345", "clauses": [...]}
+```
+\end{lstlisting}
+
+This approach leverages Markdown for readability and JSON for data integrity.
+
+\subsection{Prompt Specification Templates}
+\label{sec:llmD-spec-template}
+
+A \keyterm{prompt specification} is a complete, versioned document that defines all aspects of a prompt's behavior. It serves as both implementation guide and contract between developers, domain experts, and the LLM.
+
+\subsubsection{Core Components of a Prompt Specification}
+
+\begin{definitionbox}[title={Complete Prompt Specification}]
+A production-grade prompt specification includes:
+\begin{enumerate}
+  \item \textbf{Metadata}: Version number, author, date, change log
+  \item \textbf{Role/Identity}: What the assistant is and its scope of authority
+  \item \textbf{Objective}: Precisely what the task accomplishes
+  \item \textbf{Constraints}: What the assistant must and must not do
+  \item \textbf{Input Schema}: Formal definition of expected inputs (JSON Schema, etc.)
+  \item \textbf{Output Schema}: Formal definition of expected outputs
+  \item \textbf{Success Criteria}: How correctness is measured
+  \item \textbf{Examples}: Few-shot demonstrations covering typical and edge cases
+  \item \textbf{Edge Case Handling}: Explicit instructions for ambiguous, incomplete, or adversarial inputs
+  \item \textbf{Refusal Criteria}: When to refuse to process (e.g., out-of-scope, insufficient information)
+  \item \textbf{Error Handling}: What to return when processing fails
+  \item \textbf{Performance Expectations}: Latency, token budget, cost constraints
+\end{enumerate}
+\end{definitionbox}
+
+\paragraph{Template Example: Legal Document Classifier.}
+
+\begin{lstlisting}[caption={Prompt Specification Template (YAML Format)}]
+prompt_spec:
+  version: "2.1.0"
+  author: "Legal AI Team"
+  date: "2025-01-15"
+  changelog:
+    - version: "2.1.0"
+      date: "2025-01-15"
+      changes: "Added support for international contracts"
+    - version: "2.0.0"
+      date: "2024-10-01"
+      changes: "Migrated to structured I/O"
+
+  role:
+    identity: "Legal Document Classifier"
+    scope: "U.S. commercial contracts (NY, CA, DE jurisdictions)"
+    authority: "Classification only, no legal advice"
+
+  objective: |
+    Classify contract documents into standard categories
+    based on content analysis, not just filename or metadata.
+
+  constraints:
+    must:
+      - "Use only information in the document text"
+      - "Provide confidence scores for classifications"
+      - "Flag ambiguous cases for human review"
+    must_not:
+      - "Provide legal advice or interpretations"
+      - "Make assumptions about unstated terms"
+      - "Use external knowledge beyond training data"
+
+  input_schema:
+    type: "object"
+    required: ["document_id", "document_text"]
+    properties:
+      document_id: {type: "string"}
+      document_text: {type: "string", max_length: 50000}
+      jurisdiction: {type: "string", enum: ["NY", "CA", "DE"]}
+
+  output_schema:
+    type: "object"
+    required: ["document_id", "classification", "confidence"]
+    properties:
+      document_id: {type: "string"}
+      classification:
+        type: "string"
+        enum: ["nda", "service_agreement", "lease",
+               "employment", "license", "other"]
+      confidence: {type: "number", minimum: 0.0, maximum: 1.0}
+      requires_review: {type: "boolean"}
+      reasoning: {type: "string", max_length: 500}
+
+  success_criteria:
+    - "Precision > 95% on held-out test set"
+    - "Recall > 90% on held-out test set"
+    - "Flags for review if confidence < 0.85"
+
+  edge_cases:
+    - condition: "Document text is empty or < 100 chars"
+      action: "Return classification='other', requires_review=true"
+    - condition: "Multiple contract types in one document"
+      action: "Return primary type, note in reasoning, requires_review=true"
+    - condition: "Non-English text detected"
+      action: "Return classification='other', requires_review=true"
+
+  refusal_criteria:
+    - "Document exceeds max_length"
+    - "Document appears to be non-contractual (e.g., marketing material)"
+
+  examples:
+    - input:
+        document_id: "DOC-001"
+        document_text: "This Non-Disclosure Agreement..."
+      output:
+        document_id: "DOC-001"
+        classification: "nda"
+        confidence: 0.98
+        requires_review: false
+        reasoning: "Contains standard NDA language and confidentiality clauses"
+\end{lstlisting}
+
+\subsubsection{Versioning and Change Management}
+
+Prompt specifications must be versioned using semantic versioning (MAJOR.MINOR.PATCH):
+\begin{itemize}
+  \item \textbf{MAJOR}: Breaking changes to input/output schemas or behavior
+  \item \textbf{MINOR}: New features or examples added, backward-compatible
+  \item \textbf{PATCH}: Bug fixes, clarifications, no functional change
+\end{itemize}
+
+Versioning ensures:
+\begin{itemize}
+  \item \textbf{Reproducibility}: Specific prompt versions can be retrieved and re-run
+  \item \textbf{Auditability}: Changes are tracked with rationale
+  \item \textbf{Rollback}: If a new version underperforms, revert to previous version
+  \item \textbf{A/B testing}: Run multiple versions in parallel to compare performance
+\end{itemize}
+
+\subsection{Designing Few-Shot Exemplars}
+\label{sec:llmD-exemplars}
+
+Few-shot examples are the most powerful mechanism for teaching LLMs task-specific behavior. However, poorly chosen examples can introduce bias, leak answers, or create brittle prompts that fail on edge cases.
+
+\subsubsection{Principles of Effective Exemplar Design}
+
+\begin{keybox}[title={Few-Shot Exemplar Design Principles}]
+\begin{enumerate}
+  \item \textbf{Diversity}: Examples should span the range of expected inputs (simple, complex, edge cases)
+  \item \textbf{Representativeness}: Examples should reflect real-world distribution, not just easy cases
+  \item \textbf{Conciseness}: Keep examples minimal to preserve context budget
+  \item \textbf{Clarity}: Examples should be unambiguous; avoid cases requiring extensive domain knowledge
+  \item \textbf{Hard negatives}: Include at least one example of a common mistake or edge case
+  \item \textbf{Boundary cases}: Include examples at the limits of acceptable inputs
+  \item \textbf{No label leakage}: Examples should not reveal answers to the current task
+\end{enumerate}
+\end{keybox}
+
+\subsubsection{Example Selection Strategies}
+
+\paragraph{Golden Path + Edge Cases.} A common anti-pattern is to provide only ``golden path'' examples---perfectly clean, unambiguous cases. Real-world inputs are messy, incomplete, and ambiguous. Effective exemplars include:
+
+\begin{itemize}
+  \item \textbf{1--2 clean examples}: Establish the baseline pattern
+  \item \textbf{1--2 edge cases}: Incomplete data, ambiguous phrasing, adversarial inputs
+  \item \textbf{1 hard negative}: A case that looks correct but is actually wrong, with explanation
+\end{itemize}
+
+\paragraph{Example: Contract Clause Extraction.}
+
+\begin{lstlisting}[basicstyle=\small\ttfamily,caption={Exemplar Set for Clause Extraction}]
+# Example 1: Clean Case
+Input: "Lessee shall pay $5,000 monthly rent by the 1st of each month."
+Output: {"type": "payment", "amount": 5000, "frequency": "monthly", "due_date": 1}
+
+# Example 2: Ambiguous Case
+Input: "Rent is five thousand dollars per month."
+Output: {"type": "payment", "amount": 5000, "frequency": "monthly", "due_date": null}
+Note: Due date not specified, set to null.
+
+# Example 3: Edge Case - Incomplete Information
+Input: "Rent shall be paid monthly."
+Output: {"type": "payment", "amount": null, "frequency": "monthly", "due_date": null}
+Note: Amount not specified, flag for human review.
+
+# Example 4: Hard Negative - Looks Like Payment but Isn't
+Input: "Lessor may increase rent upon 30 days notice."
+Output: {"type": "modification_clause", "amount": null, "frequency": null, "due_date": null}
+Note: This is a modification provision, not a payment term.
+\end{lstlisting}
+
+\subsubsection{Metadata for Exemplars}
+
+In production systems, exemplars should be stored with metadata to support retrieval, versioning, and auditing:
+
+\begin{itemize}
+  \item \textbf{Domain}: Legal, finance, compliance, etc.
+  \item \textbf{Subdomain}: Contract type, jurisdiction, document category
+  \item \textbf{Difficulty}: Easy, medium, hard
+  \item \textbf{Edge case type}: Incomplete, ambiguous, adversarial, boundary
+  \item \textbf{Date added}: When the example was created
+  \item \textbf{Source}: Where the example came from (synthetic, real-world redacted, etc.)
+  \item \textbf{Performance}: How well models perform on this example (for regression testing)
+\end{itemize}
+
+\subsection{Exemplar Library Design and Retrieval}
+\label{sec:llmD-library}
+
+As prompt engineering practices mature, organizations accumulate large collections of exemplars. Managing this library systematically is critical to maintaining quality and avoiding staleness.
+
+\subsubsection{Organizing Exemplar Libraries}
+
+\paragraph{Hierarchical Taxonomy.} Organize exemplars by domain, task, and difficulty:
+
+\begin{lstlisting}
+exemplars/
+  legal/
+    contract-classification/
+      clean/
+      edge-cases/
+      hard-negatives/
+    clause-extraction/
+    risk-analysis/
+  finance/
+    earnings-calls/
+    sec-filings/
+    regulatory-reports/
+  compliance/
+    aml/
+    kyc/
+\end{lstlisting}
+
+\paragraph{Metadata Schema.} Each exemplar is stored with structured metadata:
+
+\begin{lstlisting}[basicstyle=\small\ttfamily]
+{
+  "exemplar_id": "LEG-CC-001",
+  "domain": "legal",
+  "task": "contract-classification",
+  "difficulty": "easy",
+  "edge_case_type": null,
+  "input": {...},
+  "output": {...},
+  "added_date": "2025-01-15",
+  "source": "synthetic",
+  "performance_metrics": {
+    "gpt-4": {"accuracy": 1.0},
+    "claude-opus": {"accuracy": 1.0}
+  }
+}
+\end{lstlisting}
+
+\subsubsection{Dynamic Exemplar Retrieval}
+
+Rather than hardcoding examples into prompts, advanced systems retrieve relevant exemplars at runtime using \keyterm{semantic similarity}.
+
+\paragraph{Process.}
+\begin{enumerate}
+  \item \textbf{Embed exemplars}: Compute embeddings for all exemplar inputs
+  \item \textbf{Embed current input}: Compute embedding for the task at hand
+  \item \textbf{Retrieve top-k similar exemplars}: Use cosine similarity or vector search (e.g., FAISS, Pinecone)
+  \item \textbf{Filter by metadata}: Ensure retrieved exemplars match domain, task, and difficulty constraints
+  \item \textbf{Diversify}: Avoid retrieving redundant examples; ensure coverage of edge cases
+  \item \textbf{Inject into prompt}: Prepend retrieved exemplars to the task instructions
+\end{enumerate}
+
+\paragraph{Benefits.}
+\begin{itemize}
+  \item \textbf{Scalability}: Library can grow without manual prompt curation
+  \item \textbf{Relevance}: Examples are tailored to the specific input
+  \item \textbf{Context efficiency}: Only the most relevant examples consume tokens
+\end{itemize}
+
+\paragraph{Cautions.}
+\begin{itemize}
+  \item \textbf{Avoid label leakage}: Ensure retrieved exemplars do not include the current task's answer
+  \item \textbf{Monitor retrieval quality}: Periodically review retrieved exemplars for relevance
+  \item \textbf{Edge case coverage}: Ensure retrieval does not overly favor clean cases
+\end{itemize}
+
+\subsubsection{Avoiding Exemplar Staleness}
+
+Exemplars can become stale due to:
+\begin{itemize}
+  \item \textbf{Domain drift}: Legal/financial practices evolve; old examples may reflect outdated norms
+  \item \textbf{Model updates}: New model versions may not benefit from examples designed for older models
+  \item \textbf{Schema changes}: Input/output schemas evolve, invalidating old examples
+\end{itemize}
+
+\paragraph{Mitigation Strategies.}
+\begin{itemize}
+  \item \textbf{Periodic review}: Audit exemplars quarterly for relevance
+  \item \textbf{Performance tracking}: Measure model accuracy on each exemplar; remove underperforming examples
+  \item \textbf{Versioning}: Tag exemplars with schema versions; filter by compatibility
+  \item \textbf{Expiration dates}: Set expiration dates for time-sensitive exemplars (e.g., regulatory examples)
+\end{itemize}
+
+\subsection{The Prompt Design Checklist}
+\label{sec:llmD-checklist}
+
+\begin{keybox}[title={Prompt Design Checklist}]
+Before deploying a prompt to production, verify:
+
+\textbf{1. Task Definition}
+\begin{itemize}
+  \item[$\square$] Task objective is precise and unambiguous
+  \item[$\square$] Inputs are formally defined (schema documented)
+  \item[$\square$] Outputs are formally defined (schema documented)
+  \item[$\square$] Success criteria are explicit and measurable
+\end{itemize}
+
+\textbf{2. Container Format}
+\begin{itemize}
+  \item[$\square$] Markdown used for instructions and explanations
+  \item[$\square$] JSON/XML used for structured data
+  \item[$\square$] Format choice justified and documented
+\end{itemize}
+
+\textbf{3. Few-Shot Examples}
+\begin{itemize}
+  \item[$\square$] At least 3--5 exemplars provided
+  \item[$\square$] Examples span typical, edge, and hard negative cases
+  \item[$\square$] Examples are concise (preserve context budget)
+  \item[$\square$] No label leakage in exemplars
+\end{itemize}
+
+\textbf{4. Output Schema and Validation}
+\begin{itemize}
+  \item[$\square$] Output schema is formal (JSON Schema, Pydantic, etc.)
+  \item[$\square$] Validation logic is implemented
+  \item[$\square$] Retry logic is defined (max retries, backoff strategy)
+  \item[$\square$] Fallback behavior is specified (human escalation, default response)
+\end{itemize}
+
+\textbf{5. Architecture (Monolithic vs Modular)}
+\begin{itemize}
+  \item[$\square$] Complexity justified: monolithic for simple tasks, modular for complex
+  \item[$\square$] If modular: each module has defined inputs/outputs
+  \item[$\square$] If modular: data flow between modules is documented
+  \item[$\square$] If modular: error propagation strategy is defined
+\end{itemize}
+
+\textbf{6. Inference Parameters}
+\begin{itemize}
+  \item[$\square$] Temperature set appropriately (low for deterministic, higher for creative)
+  \item[$\square$] Max tokens set to prevent truncation or runaway generation
+  \item[$\square$] Stop sequences defined (if applicable)
+  \item[$\square$] Top-p, frequency penalty, presence penalty tuned (if applicable)
+\end{itemize}
+
+\textbf{7. Versioning and Observability}
+\begin{itemize}
+  \item[$\square$] Prompt specification versioned (MAJOR.MINOR.PATCH)
+  \item[$\square$] Schemas versioned alongside prompts
+  \item[$\square$] Inference parameters versioned alongside prompts
+  \item[$\square$] All inputs, outputs, and errors logged
+  \item[$\square$] Telemetry instrumented (latency, token usage, error rates)
+\end{itemize}
+
+\textbf{8. Edge Cases and Safety}
+\begin{itemize}
+  \item[$\square$] Refusal criteria defined
+  \item[$\square$] Edge case handling documented
+  \item[$\square$] Adversarial inputs tested (prompt injection, jailbreak attempts)
+  \item[$\square$] Human review triggers defined
+\end{itemize}
+\end{keybox}
+
+\subsection{Anti-Patterns in Prompt Design}
+\label{sec:llmD-antipatterns}
+
+\subsubsection{Golden-Path-Only Examples}
+
+Providing only clean, unambiguous examples creates brittle prompts that fail on real-world variability. Always include edge cases and hard negatives.
+
+\subsubsection{Label Leakage in Exemplars}
+
+If few-shot examples inadvertently reveal the answer to the current task, the model may pattern-match rather than reason. Ensure exemplars are structurally similar but semantically distinct from the task at hand.
+
+\subsubsection{Overly Long Exemplars}
+
+Exemplars should be concise. Lengthy examples consume context budget and reduce the number of examples that can be included. Extract only the essential information.
+
+\subsubsection{Ignoring Output Validation}
+
+Assuming the model will always produce valid outputs is a critical failure mode. Always validate outputs and implement retry logic.
+
+\subsubsection{Static Prompts for Dynamic Domains}
+
+Legal and financial domains evolve. Prompts referencing specific regulations, case law, or market conditions must be reviewed and updated periodically.
+
+\subsection{Summary}
+
+Prompt design is a specification discipline, not ad hoc instruction writing. The Prompt Design Maturity Model provides a roadmap from exploratory zero-shot prompts to production-grade modular pipelines. Structured I/O (Phase 4) is the minimum standard for production deployments, while modular architectures (Phase 5) enable mission-critical systems.
+
+Effective prompts combine Markdown instructions with JSON data, enforce schemas for both inputs and outputs, and use carefully curated exemplars that span typical cases, edge cases, and hard negatives. Exemplar libraries must be organized, versioned, and periodically reviewed to avoid staleness.
+
+The next section, \Cref{sec:llmE-strategy}, catalogs reasoning strategies---Chain-of-Thought, self-consistency, ReAct, and Tree-of-Thought---and provides decision frameworks for selecting the appropriate strategy for a given task.

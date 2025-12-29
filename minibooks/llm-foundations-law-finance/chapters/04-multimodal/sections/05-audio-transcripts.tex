@@ -1,0 +1,249 @@
+% =============================================================================
+% Audio & Transcripts — Multimodal Fundamentals
+% Purpose: Summaries with timestamps and speakers
+% Label: sec:llmD2-audio
+% =============================================================================
+
+\section{Audio and Transcripts}
+\label{sec:llmD2-audio}
+
+Extending retrieval-augmented generation to temporal media (audio and video) introduces the dimension of time. A retrieved result is not just a ``document'' but a specific time span within a media file. For legal and financial practitioners, this means earnings calls, depositions, regulatory hearings, and training recordings become searchable and quotable with timestamp precision.
+
+\subsection{Audio RAG Pipelines}
+\label{sec:llmD2-audio-rag}
+
+Audio RAG pipelines depend on the quality of automatic speech recognition (ASR) and the preservation of temporal metadata:
+
+\paragraph{Transcription with Timestamps.} Models like \keyterm{Whisper} (OpenAI) and \keyterm{AssemblyAI} convert audio to text while preserving word-level or segment-level timestamps. When a relevant chunk is found during retrieval, the system maps the text back to the original timestamps, allowing the user to ``jump to'' the exact moment in the audio player.
+
+\paragraph{Speaker Diarization.} Crucially, the transcription step must include \keyterm{speaker diarization}---identifying who is speaking. ``Speaker A said X'' is semantically different from ``Speaker B said X.'' In a deposition or earnings call, attributing statements to the correct speaker is essential for accurate analysis.
+
+\begin{definitionbox}[title={Audio RAG Pipeline Components}]
+\begin{enumerate}
+  \item \textbf{Ingestion}: Audio files processed through ASR with diarization enabled.
+  \item \textbf{Segmentation}: Text chunked by semantic breaks, speaker turns, or silence rather than arbitrary token counts.
+  \item \textbf{Embedding}: Transcript segments embedded with speaker and timestamp metadata.
+  \item \textbf{Retrieval}: Query matches return text plus temporal coordinates.
+  \item \textbf{Synthesis}: Response includes citations with timestamps and optional audio playback links.
+\end{enumerate}
+\end{definitionbox}
+
+\paragraph{Error Rates and Mitigation.} ASR is imperfect. Technical terminology, proper names, and accented speech increase word error rates (WER). For legal and financial applications:
+
+\begin{itemize}
+  \item Provide custom vocabularies (company names, legal terms) to the ASR system.
+  \item Consider human review for high-stakes transcripts (depositions, regulatory testimony).
+  \item Retain the original audio alongside transcripts for verification.
+  \item Display confidence scores where available to flag uncertain passages.
+\end{itemize}
+
+\subsection{Video Understanding and Retrieval}
+\label{sec:llmD2-video-rag}
+
+Video RAG treats video as a sequence of visual frames synchronized with an audio track, enabling queries that span both modalities.
+
+\paragraph{Dual-Stream Indexing.} A comprehensive video RAG system indexes both:
+\begin{itemize}
+  \item \textbf{Transcript vectors}: What was said (from ASR with diarization).
+  \item \textbf{Visual frame descriptions}: What was shown (from keyframe extraction and VLM captioning).
+\end{itemize}
+
+A user query searches both streams, allowing questions like ``Find the scene where the speaker discusses quarterly revenue while showing the bar chart.''
+
+\paragraph{Keyframe Extraction.} Keyframes are extracted at regular intervals (e.g., 1 frame per second) or at scene changes. Each frame is processed by a VLM to generate textual descriptions (``scene graphs'') or embedded directly using CLIP. For legal and financial video---training materials, recorded presentations, regulatory hearings---meaningful frames often coincide with slide transitions.
+
+\paragraph{VideoRAG Architecture.} Advanced frameworks like \keyterm{VideoRAG} employ a dual-channel architecture with ``Graph-based Textual Knowledge Grounding'' to transform visual signals into structured text representations while preserving temporal dependencies. This allows complex queries that span both audio and visual content.
+
+\begin{highlightbox}[title={Multimodal Video Query}]
+\textit{Query}: ``Find where the CFO discusses the accounting change while the slide shows the impact table.''
+
+\textit{System behavior}:
+\begin{enumerate}
+  \item Search transcript for ``accounting change'' + speaker ``CFO''
+  \item Search visual index for ``table'' or ``impact''
+  \item Intersect temporal windows to find overlapping segments
+  \item Return video clips with start/end timestamps
+\end{enumerate}
+\end{highlightbox}
+
+\subsection{Practical Considerations}
+\label{sec:llmD2-audio-video-practical}
+
+\paragraph{Storage and Streaming.} Video and audio files are large. Systems typically:
+\begin{itemize}
+  \item Store original media in object storage (S3, Azure Blob).
+  \item Generate and index transcripts/descriptions separately.
+  \item Stream relevant segments via FFMPEG or cloud media services.
+  \item Return playback links with timestamp parameters rather than downloading entire files.
+\end{itemize}
+
+\paragraph{Privacy and Access Control.} Audio and video often contain sensitive content---voices are biometric identifiers, and recordings may capture privileged communications. Apply the privacy controls discussed in Section~\ref{sec:llmD2-privacy} before ingestion:
+\begin{itemize}
+  \item Redact or exclude segments containing privileged discussions.
+  \item Apply speaker-level access controls where content is speaker-specific.
+  \item Consider whether transcripts alone (without audio) suffice for the use case.
+\end{itemize}
+
+\begin{keybox}[title={Audio/Video RAG Best Practices}]
+\begin{itemize}
+  \item Always preserve timestamp-to-text mappings for citation.
+  \item Enable speaker diarization for multi-party recordings.
+  \item Provide custom vocabularies for domain-specific terminology.
+  \item Retain original media for verification of AI-generated transcripts.
+  \item Apply access controls at the segment level where sensitivity varies.
+\end{itemize}
+\end{keybox}
+
+\subsection{ASR Error Handling and Quality Control}
+\label{sec:llmD2-asr-quality}
+
+Automatic speech recognition is imperfect, and legal and financial applications require explicit quality management.
+
+\paragraph{Word Error Rate Estimation.}
+WER measures transcription quality but requires ground truth for calculation. In production:
+
+\begin{itemize}
+  \item Use confidence scores from the ASR engine as proxies.
+  \item Flag low-confidence segments for review.
+  \item Sample and manually review a percentage of transcripts to estimate system-wide WER.
+  \item Track WER by speaker, audio quality, and domain to identify systematic issues.
+\end{itemize}
+
+\paragraph{Confidence Thresholds.}
+Configure thresholds to balance automation and quality:
+
+\begin{itemize}
+  \item \textbf{High confidence ($>$0.9)}: Accept without review for routine use.
+  \item \textbf{Medium confidence (0.7--0.9)}: Flag for optional review; acceptable for search but not citation.
+  \item \textbf{Low confidence ($<$0.7)}: Require human review before reliance; mark uncertain passages visually.
+\end{itemize}
+
+\paragraph{Domain-Specific Vocabulary.}
+Legal and financial terminology often confuses general ASR models:
+
+\begin{itemize}
+  \item \textbf{Custom vocabulary lists}: Company names, product names, legal terms, ticker symbols.
+  \item \textbf{Pronunciation hints}: Guide recognition for unusual names or acronyms.
+  \item \textbf{Boosted phrases}: Increase likelihood of domain-specific terms appearing.
+  \item \textbf{Post-processing correction}: Rule-based substitution for common errors.
+\end{itemize}
+
+\begin{highlightbox}[title={Financial Earnings Call Vocabulary}]
+For an earnings call transcription system:
+\begin{itemize}
+  \item Boost company name, subsidiary names, and executive names.
+  \item Include accounting terms: ``EBITDA,'' ``goodwill impairment,'' ``diluted EPS.''
+  \item Add industry-specific terminology: ``basis points,'' ``comps,'' ``guidance.''
+  \item Handle ticker symbols and numeric expressions.
+\end{itemize}
+\end{highlightbox}
+
+\subsection{Video Frame Analysis}
+\label{sec:llmD2-video-frames}
+
+Beyond the audio track, video content carries visual information that may be critical for understanding.
+
+\paragraph{Keyframe Selection Strategies.}
+Not every frame needs processing. Selection strategies include:
+
+\begin{itemize}
+  \item \textbf{Fixed interval}: Sample every N seconds (simple but may miss important moments).
+  \item \textbf{Scene change detection}: Identify visual transitions and sample at boundaries.
+  \item \textbf{Motion analysis}: Capture frames when significant visual change occurs.
+  \item \textbf{Audio-aligned}: Select frames when speakers change or key topics are mentioned.
+\end{itemize}
+
+\paragraph{Frame Understanding.}
+Process selected keyframes through vision-language models to extract:
+
+\begin{itemize}
+  \item Scene descriptions (``Speaker at podium with presentation slide'').
+  \item Text visible in frame (slide content, whiteboard text, on-screen graphics).
+  \item Object detection (people, documents, equipment).
+  \item Face identification (if authorized and relevant).
+\end{itemize}
+
+\paragraph{Exhibit Detection in Depositions.}
+Video depositions often include exhibit presentations. Detection should:
+
+\begin{itemize}
+  \item Identify when documents are shown on camera.
+  \item Capture exhibit images for separate processing.
+  \item Link exhibit appearances to transcript timestamps.
+  \item Note when witnesses are reviewing documents versus speaking.
+\end{itemize}
+
+\subsection{Slide Deck Extraction}
+\label{sec:llmD2-slides}
+
+Recorded presentations often feature slide decks that carry structured information separate from the spoken narrative.
+
+\paragraph{Slide Detection and Extraction.}
+\begin{itemize}
+  \item Detect slide transitions in the video stream.
+  \item Capture representative frame for each slide.
+  \item OCR slide text content.
+  \item Extract charts and diagrams for visual analysis.
+\end{itemize}
+
+\paragraph{Slide-Transcript Synchronization.}
+Align extracted slides with the spoken transcript:
+
+\begin{itemize}
+  \item Map slide transitions to transcript timestamps.
+  \item Associate spoken content with the visible slide.
+  \item Enable queries like ``What did the speaker say about slide 5?''
+\end{itemize}
+
+\paragraph{Speaker Notes and Metadata.}
+If the original presentation file is available (PowerPoint, Google Slides):
+
+\begin{itemize}
+  \item Extract speaker notes as additional context.
+  \item Preserve slide titles and section structure.
+  \item Capture embedded links and references.
+  \item Index slide-level metadata alongside video segments.
+\end{itemize}
+
+\subsection{Real-Time vs. Batch Processing}
+\label{sec:llmD2-realtime}
+
+Audio and video processing can occur live or after recording, with different trade-offs.
+
+\paragraph{Real-Time Transcription.}
+Live transcription for hearings, meetings, or trading floors:
+
+\begin{itemize}
+  \item Lower latency requirements (seconds, not minutes).
+  \item Streaming ASR models that process audio chunks incrementally.
+  \item Immediate display for participants (accessibility, record-keeping).
+  \item Reduced accuracy compared to batch processing (less context available).
+\end{itemize}
+
+\paragraph{Batch Processing for Discovery.}
+Historical recordings processed in bulk:
+
+\begin{itemize}
+  \item Higher accuracy through multiple passes and post-processing.
+  \item Full audio context available for each segment.
+  \item Batch speaker diarization with cross-recording speaker linking.
+  \item Parallelization across compute resources.
+\end{itemize}
+
+\paragraph{Latency-Accuracy Trade-offs.}
+The fundamental trade-off:
+
+\begin{itemize}
+  \item Real-time: Lower latency, lower accuracy, immediate availability.
+  \item Batch: Higher latency, higher accuracy, suitable for archival and search.
+  \item Hybrid: Real-time draft followed by batch refinement for permanent record.
+\end{itemize}
+
+\begin{keybox}[title={Processing Mode Selection}]
+\begin{description}
+  \item[Real-time] Accessibility for live events, trading floor monitoring, meeting assistance.
+  \item[Batch] E-discovery, historical research, compliance review, permanent transcripts.
+  \item[Hybrid] Live captioning refined overnight for searchable archives.
+\end{description}
+\end{keybox}
+

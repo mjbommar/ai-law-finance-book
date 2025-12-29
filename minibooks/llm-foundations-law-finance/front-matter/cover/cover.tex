@@ -1,0 +1,19 @@
+% ============================================================================
+% COVER PAGE - Inline TikZ cover for US Trade (6x9)
+% ============================================================================
+% This file is included directly in main.tex, not compiled separately.
+% Uses \newgeometry for full-bleed, then restores normal margins.
+% ============================================================================
+
+% Set full-bleed geometry for cover page
+\newgeometry{margin=0pt}
+\thispagestyle{empty}
+
+\begin{tikzpicture}[remember picture, overlay]
+	\begin{scope}[shift={(current page.south west)}]
+		\input{front-matter/cover/front-cover-art}
+	\end{scope}
+\end{tikzpicture}
+
+% Restore normal geometry (page ends naturally with next content)
+\restoregeometry

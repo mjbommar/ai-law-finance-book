@@ -1,0 +1,84 @@
+% ============================================================================
+% HOW TO READ THIS BOOK
+% ============================================================================
+
+\chapter*{How to Read This Book}
+\addcontentsline{toc}{chapter}{How to Read This Book}
+\markboth{How to Read This Book}{}
+
+\section*{Chapter Outline}
+
+The five chapters follow a practitioner's journey: \textit{understand} \textrightarrow{} \textit{communicate} \textrightarrow{} \textit{control} \textrightarrow{} \textit{apply} \textrightarrow{} \textit{improve}. Read straight through for cumulative understanding, or jump to whichever chapter addresses your immediate need.
+
+\textbf{Chapter~1: What Am I Working With?} provides foundational understanding. If you need to reason about why LLMs behave as they do---why tokens cause certain errors, why context windows impose limits, why hallucinations occur---start here. The chapter synthesizes the mechanics of modern language models into a practical mental model. For a shorter read, focus on the History/Architecture section and Failure Modes; the technical sections on tokenization and embeddings add depth.
+
+\textbf{Chapter~2: How Do I Get It to Reason?} addresses communication patterns. If you are moving beyond casual chat to structured professional analysis, this chapter explains conversation management, context strategies, and reasoning patterns like chain-of-thought and ReAct. Each section stands alone, so you can read selectively based on which techniques you need.
+
+\textbf{Chapter~3: How Do I Get Reliable Output?} covers production concerns. If you need outputs that survive audit and scrutiny---structured JSON, validated results, traceable decisions---this chapter provides the techniques. Grounding, retrieval-augmented generation, structured outputs, and tool use each address specific reliability challenges.
+
+\textbf{Chapter~4: How Do I Handle Real Documents?} addresses multimodal workflows. If your work involves contracts, financial statements, images, tables, or audio recordings, this chapter explains how to process them effectively. Privacy considerations and redaction strategies ensure compliance with data protection requirements.
+
+\textbf{Chapter~5: How Do I Improve Systematically?} covers operational excellence. If you are moving from ad-hoc prompting to disciplined engineering, this chapter provides evaluation frameworks, versioning strategies, threat modeling, and optimization techniques. This transforms intuitive prompt crafting into measurable, improvable practice.
+
+\section*{Reading Paths by Role}
+
+Different readers will benefit from different emphases:
+
+\paragraph{For the Strategic Leader (1--2 hours).} Focus on each chapter's opening sections and failure mode discussions. Chapters~1 and~5 are most relevant: Chapter~1 explains the technology's capabilities and limitations; Chapter~5 covers systematic improvement and risk management. Skim the technical sections to understand the vocabulary your teams will use.
+
+\paragraph{For the AI Engineer and Architect (8--10 hours).} Read all chapters thoroughly. The technical sections on tokenization, embeddings, structured outputs, and tool use contain operational parameters that directly influence system performance, reliability, and cost. Pay special attention to validation patterns and the evaluation framework in Chapter~5.
+
+\paragraph{For the Risk and Compliance Officer (4--6 hours).} Chapter~1's failure modes provide the risk taxonomy. Chapter~3's grounding and evidence record sections address auditability. Chapter~4's privacy and redaction content covers data protection. Chapter~5's threat modeling and evaluation sections support validation frameworks.
+
+\paragraph{For the Practicing Attorney or Analyst (3--4 hours).} Start with Chapter~1 for conceptual grounding, then move to Chapter~4 for document handling relevant to your work. Chapter~2's reasoning patterns will help you structure complex analytical tasks. Return to Chapter~3 when you need reliable, defensible outputs.
+
+\paragraph{For the Time-Constrained Reader (1 hour).} Read each chapter's ``How to Read'' section and Key Objectives boxes. Skim the synthesis sections that conclude each chapter. This provides the essential mental model without the supporting detail.
+
+\needspace{8\baselineskip}
+\section*{Visual Elements}
+
+Colored boxes signal different types of content. Color is functional, not decorative; it indicates how to read what follows.
+
+\begin{keybox}[title={Key Takeaways}]
+Orange boxes highlight essential points to remember or operationalize.
+\end{keybox}
+
+\begin{definitionbox}[title={Definitions}]
+Blue boxes introduce formal definitions and terms of art used throughout.
+\end{definitionbox}
+
+\begin{examplebox}[title={Concrete Examples}]
+Green boxes provide scenarios and case studies from law and finance.
+\end{examplebox}
+
+\begin{practicebox}[title={Practice Checklists}]
+Teal boxes offer checklists and workflows for direct application.
+\end{practicebox}
+
+\begin{cautionbox}[title={Warnings and Risks}]
+Red boxes flag error modes, compliance risks, and failure cases.
+\end{cautionbox}
+
+\begin{technicalbox}[title={Technical Details}]
+Indigo boxes contain implementation mechanics; optional on first reading.
+\end{technicalbox}
+
+\section*{Reference Materials}
+
+\paragraph{Glossary} Technical terms with specific meanings appear in the glossary at the end. First uses are often marked with \keyterm{key term formatting}.
+
+\paragraph{References} The bibliography consolidates citations from all five chapters. Parenthetical citations \parencite{vaswani2017attention} indicate background sources; narrative citations like \textcite{vaswani2017attention} appear when the author is part of the sentence.
+
+\section*{Dependencies Between Chapters}
+
+While each chapter can be read independently, they build on each other:
+
+\begin{itemize}
+  \item \textbf{Chapter~1} provides vocabulary (tokens, embeddings, sampling) used throughout.
+  \item \textbf{Chapter~2} assumes familiarity with context windows and model behavior from Chapter~1.
+  \item \textbf{Chapter~3} builds on conversation patterns from Chapter~2 for tool use and RAG.
+  \item \textbf{Chapter~4} applies structured output techniques from Chapter~3 to document processing.
+  \item \textbf{Chapter~5} integrates all prior concepts into systematic workflows.
+\end{itemize}
+
+If you find yourself confused by terminology, the glossary and Chapter~1 will provide orientation.

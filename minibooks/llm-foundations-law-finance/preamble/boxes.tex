@@ -1,0 +1,337 @@
+% ============================================================================
+% BOXES - tcolorbox environments for educational content
+% ============================================================================
+
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable,skins,theorems,listings}
+
+% Listings package for code formatting
+\usepackage{listings}
+\lstset{
+  basicstyle=\small\ttfamily\color{gray-900},
+  breaklines=true,
+  breakatwhitespace=false,
+  columns=flexible,
+  keepspaces=true,
+  showstringspaces=false,
+  tabsize=2,
+  xleftmargin=0pt,
+  framexleftmargin=0pt,
+  keywordstyle=\color{slate-700}\bfseries,
+  stringstyle=\color{green-900},
+  commentstyle=\color{gray-600}\itshape,
+  emphstyle=\color{amber-900},
+}
+
+% ============================================================================
+% SMART BREAKING DEFAULTS (applies to all boxes)
+% ============================================================================
+% These settings control how boxes break across pages:
+% - lines before break: minimum lines before allowing a page break
+% - short: convenience style for boxes that should never break
+% - long: convenience style for boxes that may need to break
+\tcbset{
+  % Require at least 3 lines before breaking to next page
+  lines before break=3,
+  % Convenience styles for content authors
+  short/.style={unbreakable},
+  long/.style={breakable, lines before break=4}
+}
+
+% ============================================================================
+% IMPORTANCE SCALING (applies to all boxes)
+% ============================================================================
+\tcbset{
+  importance/.is choice,
+  importance/high/.style={
+    boxrule=2pt,
+    top=10pt,bottom=10pt,left=12pt,right=12pt
+  },
+  importance/medium/.style={},
+  importance/low/.style={
+    boxrule=0.8pt,
+    opacityback=0.92,
+    opacityframe=0.6,
+    boxed title style={opacityback=0.85},
+    top=6pt,bottom=6pt,left=8pt,right=8pt
+  },
+  importance/.default=medium
+}
+
+% ============================================================================
+% DEFINITION BOX - Formal definitions, theoretical concepts
+% ============================================================================
+% Default: unbreakable (keeps box together). Use breakable=true for long definitions.
+\newtcolorbox{definitionbox}[1][]{
+  enhanced,
+  colback=bg-definition,
+  colframe=border-definition,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  unbreakable,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=definition-dark,
+    colframe=definition-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% ============================================================================
+% EXAMPLE BOX - Concrete examples and demonstrations
+% ============================================================================
+% Default: unbreakable. Use breakable=true for long examples.
+\newtcolorbox{examplebox}[1][]{
+  enhanced,
+  colback=bg-example,
+  colframe=border-example,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  unbreakable,
+  borderline west={3pt}{0pt}{example-base},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=example-dark,
+    colframe=example-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% ============================================================================
+% HIGHLIGHT BOX - Notes, context, supplementary info
+% ============================================================================
+% Default: unbreakable. Use breakable=true for long notes.
+\newtcolorbox{highlightbox}[1][]{
+  enhanced,
+  colback=bg-note,
+  colframe=border-note,
+  fonttitle=\bfseries\large,
+  coltitle=note-dark,
+  boxrule=1pt,
+  arc=2.5pt,
+  left=10pt,
+  right=10pt,
+  top=8pt,
+  bottom=8pt,
+  unbreakable,
+  #1
+}
+
+% ============================================================================
+% KEY BOX - Important takeaways, essential points
+% ============================================================================
+% Default: unbreakable. Use breakable=true for long key points.
+\newtcolorbox{keybox}[1][]{
+  enhanced,
+  colback=bg-key,
+  colframe=key-base,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=2pt,
+  arc=3pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  unbreakable,
+  borderline west={3pt}{0pt}{key-base},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=key-base,
+    colframe=key-base,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% ============================================================================
+% QUESTION BOX - Evaluation questions
+% ============================================================================
+% Default: unbreakable. Use breakable=true for long question sets.
+\newtcolorbox{questionbox}[1][]{
+  enhanced,
+  colback=gray-100,
+  colframe=gray-600,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=2pt,
+  left=10pt,
+  right=10pt,
+  top=8pt,
+  bottom=8pt,
+  unbreakable,
+  borderline west={4pt}{0pt}{slate-700},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=slate-700,
+    colframe=slate-700,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% ============================================================================
+% THEOREM BOX - Formal statements, proofs
+% ============================================================================
+% Default: unbreakable. Use breakable=true for long theorems.
+\newtcolorbox{theorembox}[1][]{
+  enhanced,
+  colback=bg-theorem,
+  colframe=border-theorem,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  unbreakable,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=theorem-dark,
+    colframe=theorem-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% ============================================================================
+% CAUTION BOX - Warnings, pitfalls
+% ============================================================================
+% Default: unbreakable. Use breakable=true for long warnings.
+\newtcolorbox{cautionbox}[1][]{
+  enhanced,
+  colback=bg-caution,
+  colframe=border-caution,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  unbreakable,
+  borderline west={4pt}{0pt}{caution-dark},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=caution-dark,
+    colframe=caution-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% ============================================================================
+% TECHNICAL BOX - Deep mechanics, algorithms
+% ============================================================================
+% Default: unbreakable. Use breakable=true for long technical content.
+\newtcolorbox{technicalbox}[1][]{
+  enhanced,
+  colback=bg-theorem,
+  colframe=border-theorem,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  unbreakable,
+  borderline west={4pt}{0pt}{theorem-dark},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=theorem-dark,
+    colframe=theorem-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% ============================================================================
+% PRACTICE BOX - Exercises, hands-on activities
+% ============================================================================
+% Default: unbreakable. Use breakable=true for long exercises.
+\newtcolorbox{practicebox}[1][]{
+  enhanced,
+  colback=bg-practice,
+  colframe=border-practice,
+  fonttitle=\bfseries\large,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  left=8pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  unbreakable,
+  borderline west={4pt}{0pt}{practice-dark},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=practice-dark,
+    colframe=practice-dark,
+    arc=2pt,
+    boxrule=0pt
+  },
+  #1
+}
+
+% ============================================================================
+% LISTING BOX - Code examples
+% ============================================================================
+% Default to unbreakable to keep code together on one page.
+% For long listings, authors can override with: \begin{listingbox}[breakable]
+\newtcblisting{listingbox}[1][]{
+  enhanced,
+  colback=gray-100,
+  colframe=gray-400,
+  fonttitle=\bfseries\large\sffamily,
+  coltitle=gray-800,
+  boxrule=1pt,
+  arc=2pt,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  unbreakable,
+  listing only,
+  listing options={
+    basicstyle=\small\ttfamily\color{gray-900},
+    breaklines=true,
+    columns=flexible,
+    keepspaces=true,
+  },
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={
+    colback=gray-600,
+    colframe=gray-600,
+    arc=2pt,
+    boxrule=0pt
+  },
+  coltitle=white,
+  #1
+}

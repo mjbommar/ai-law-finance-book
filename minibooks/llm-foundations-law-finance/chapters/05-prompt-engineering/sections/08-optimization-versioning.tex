@@ -1,0 +1,442 @@
+% =============================================================================
+% Optimization & Versioning — Prompt Design, Evaluation, Optimization
+% Purpose: A/B tests; drift control; change management
+% Label: sec:llmD-opt
+% =============================================================================
+
+\section{Optimization, Versioning, and Change Management}
+\label{sec:llmD-opt}
+
+% Outline (comments): A/B tests; data drift; prompt registries; rollback; governance tie-in
+
+Prompts are not static documents---they evolve as you refine instructions, add exemplars, and respond to new failure modes. Without version control and change management, prompt iteration becomes chaotic: you lose track of what changed, why it changed, and whether it improved performance. Worse, you cannot roll back when a change degrades quality.
+
+This section treats prompts as \keyterm{software artifacts} subject to the same engineering discipline as code: version control, testing, deployment gates, and rollback procedures. We cover what to version, how to organize versioning (monolithic vs. modular), when to escalate from prompt engineering to fine-tuning, and how to manage risk through governance and shadow testing.
+
+\begin{keybox}[title={Operational Hygiene}]
+Minimum requirements for production prompt systems:
+\begin{itemize}
+  \item \textbf{Version control}: Track every prompt template, exemplar set, and configuration change with commit messages and dates.
+  \item \textbf{Test coverage}: Run evaluation harness before deploying any change; require passing tests.
+  \item \textbf{Approval gates}: Require human review for production changes; document who approved and why.
+  \item \textbf{Rollback plans}: Maintain previous versions in a registry; define rollback triggers and procedures.
+  \item \textbf{Change logs}: Document what changed, expected impact, and observed results.
+\end{itemize}
+Without these practices, prompt systems drift unpredictably and become undebuggable.
+\end{keybox}
+
+\subsection{Prompts Are Code}
+
+The mindset shift from ``prompts are text'' to ``prompts are code'' fundamentally changes how you approach prompt engineering. Code is versioned, tested, reviewed, and deployed with discipline. Prompts deserve the same treatment.
+
+\subsubsection{Implications of Treating Prompts as Code}
+
+\paragraph{Version Control is Required.} Store prompt templates in a version control system (Git, Mercurial, etc.) alongside application code. Track changes with commit messages that explain what changed and why. Use branches for experimental changes and merge only after testing.
+
+\paragraph{Code Review Applies.} Just as software teams review pull requests, require peer review for prompt changes. Reviewers check for clarity, correctness, and potential side effects (e.g., increased token cost, new failure modes). Prompt changes that affect production systems require senior approval.
+
+\paragraph{Testing is Non-Negotiable.} Every prompt change must pass the evaluation harness before deployment. Treat failing tests as blockers, not warnings. If a prompt improves one metric but degrades another, document the tradeoff and decide explicitly whether to accept it.
+
+\paragraph{Deployment Needs Staging.} Deploy prompt changes to a staging environment first, run integration tests, and compare metrics against production baselines. Only after validating in staging do you promote to production.
+
+\subsubsection{What Makes Prompts Different from Code}
+
+Despite these parallels, prompts differ from traditional code in important ways:
+
+\paragraph{Non-Deterministic Outputs.} Code is deterministic: given the same inputs, it produces the same outputs. Prompts are probabilistic: even with temperature 0, outputs vary across calls. This means testing requires statistical methods, not exact assertions.
+
+\paragraph{Model Dependency.} Prompts are coupled to specific model versions. A prompt tuned for GPT-4 may perform poorly on Claude or Gemini. Model updates (even minor version bumps) can change behavior, requiring re-validation.
+
+\paragraph{Context Sensitivity.} Prompts depend on context: retrieved documents, user history, system state. Small changes in context can produce large changes in output. Testing must cover the range of realistic contexts.
+
+These differences mean prompt engineering requires domain-specific tooling and practices beyond standard software development workflows.
+
+\subsection{What to Version}
+
+Versioning prompts alone is insufficient. A complete prompt system includes templates, configuration, schemas, and test artifacts. Version all of them together to ensure reproducibility.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{p{4.5cm}p{5cm}p{5cm}}
+\toprule
+\textbf{Artifact Type} & \textbf{What to Version} & \textbf{Why} \\
+\midrule
+\textbf{Prompt Templates} & System prompt, instruction templates, variable placeholders & Core logic; changes affect all calls \\
+\addlinespace
+\textbf{Exemplar Sets} & Few-shot examples with metadata (source, date, label) & Examples shape model behavior; changes affect accuracy \\
+\addlinespace
+\textbf{Model Configuration} & Model ID, temperature, top-p, max\_tokens, stop sequences & Parameters affect output distribution and cost \\
+\addlinespace
+\textbf{Input Schemas} & JSON Schema or spec for input validation & Defines valid inputs; prevents malformed requests \\
+\addlinespace
+\textbf{Output Schemas} & JSON Schema or spec for output validation & Defines expected structure; enables automated checks \\
+\addlinespace
+\textbf{Validation Rules} & Custom checks (citation fidelity, date ranges, etc.) & Task-specific correctness rules \\
+\addlinespace
+\textbf{Gold Test Sets} & Test cases with inputs and expected outputs & Regression detection; version with test set version tag \\
+\addlinespace
+\textbf{Evaluation Scripts} & Code that runs tests and computes metrics & Ensures consistent evaluation across versions \\
+\addlinespace
+\textbf{Baseline Metrics} & Performance scores from previous versions & Comparison baseline for new versions \\
+\bottomrule
+\end{tabular}
+\caption{Artifacts to version in a prompt system. Versioning these together ensures you can reproduce any past evaluation and trace how changes affected performance.}
+\label{tab:llmD-opt-version-artifacts}
+\end{table}
+
+\subsubsection{Versioning Granularity}
+
+You can version at different granularities:
+\begin{itemize}
+  \item \textbf{Coarse (system-level)}: Tag the entire prompt system with a single version (e.g., \texttt{v2.3.1}). Simple but requires versioning everything together.
+  \item \textbf{Fine (component-level)}: Version templates, exemplars, and configs independently (e.g., template \texttt{v1.2}, exemplars \texttt{v3.0}, config \texttt{v1.1}). More flexible but requires tracking compatibility.
+\end{itemize}
+
+The right choice depends on team size and system complexity. Small teams often prefer coarse versioning for simplicity. Larger teams with multiple owners benefit from component-level versioning.
+
+\subsection{Monolithic vs. Modular Versioning}
+
+As prompt systems grow, you face a choice: version everything together (monolithic) or version components independently (modular). Each approach has tradeoffs.
+
+\subsubsection{Monolithic Versioning}
+
+\keyterm{Monolithic versioning} treats the prompt system as a single unit. All components---templates, exemplars, configuration---are versioned together under a single identifier (e.g., \texttt{prompt-system-v4.2.0}).
+
+\paragraph{Advantages:}
+\begin{itemize}
+  \item \textbf{Simplicity}: One version tag to track; no compatibility matrix.
+  \item \textbf{Atomic changes}: All components change together; no partial updates.
+  \item \textbf{Reproducibility}: Given version \texttt{v4.2.0}, you can reconstruct the exact state of the entire system.
+\end{itemize}
+
+\paragraph{Disadvantages:}
+\begin{itemize}
+  \item \textbf{Version bump churn}: Any change to any component requires bumping the global version.
+  \item \textbf{Coarse rollback}: Rolling back rolls back all components, even if only one had a problem.
+  \item \textbf{Coordination overhead}: Multiple teams working on different components must synchronize releases.
+\end{itemize}
+
+\paragraph{When to Use:} Monolithic versioning works well for small teams, single-owner systems, or when components are tightly coupled and tested together.
+
+\subsubsection{Modular Versioning}
+
+\keyterm{Modular versioning} treats each component (template, exemplar set, configuration) as independently versioned. The system composes components at runtime, specifying which version of each to use.
+
+\paragraph{Advantages:}
+\begin{itemize}
+  \item \textbf{Granular updates}: Change exemplars without touching templates; update config without re-testing exemplars.
+  \item \textbf{Clear ownership}: Each module has an owner responsible for versioning and quality.
+  \item \textbf{Selective rollback}: Roll back only the component that caused a problem.
+\end{itemize}
+
+\paragraph{Disadvantages:}
+\begin{itemize}
+  \item \textbf{Compatibility matrix}: Must track which versions of components work together.
+  \item \textbf{Integration testing}: Need tests that validate component combinations, not just individual modules.
+  \item \textbf{Version sprawl}: More versions to track; higher cognitive overhead.
+\end{itemize}
+
+\paragraph{When to Use:} Modular versioning suits larger teams, multi-tenant systems, or scenarios where components evolve at different rates.
+
+\subsubsection{Compatibility Tracking}
+
+If you use modular versioning, maintain a \keyterm{compatibility matrix} that specifies which versions of components work together:
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{ccccl}
+\toprule
+\textbf{Template} & \textbf{Exemplars} & \textbf{Config} & \textbf{Model} & \textbf{Status} \\
+\midrule
+v1.2 & v3.0 & v1.1 & gpt-4-0613 & Production \\
+v1.3 & v3.0 & v1.1 & gpt-4-0613 & Staging \\
+v1.2 & v3.1 & v1.1 & gpt-4-0613 & Deprecated \\
+v1.3 & v3.1 & v1.2 & gpt-4-1106 & Testing \\
+\bottomrule
+\end{tabular}
+\caption{Example compatibility matrix for modular versioning. Each row specifies a tested combination of components and deployment status.}
+\label{tab:llmD-opt-compat-matrix}
+\end{table}
+
+Automate compatibility checks in your deployment pipeline: reject combinations not listed in the matrix.
+
+\subsection{When to Fine-Tune (Escalation Ladder)}
+
+Fine-tuning---training a model on domain-specific data---can improve performance on specialized tasks, but it comes with significant costs: data curation, computational expense, ongoing maintenance, and governance overhead. Before committing to fine-tuning, exhaust cheaper alternatives.
+
+\subsubsection{The Escalation Ladder}
+
+Follow this sequence, escalating to the next step only if the current one fails to meet your quality bar:
+
+\begin{enumerate}
+  \item \textbf{Prompt Design}: Refine instructions, add structure, clarify edge cases. Cost: minimal. Time: hours to days.
+  \item \textbf{Few-Shot Exemplars}: Add 3--5 curated examples. Cost: low (increased tokens). Time: days.
+  \item \textbf{Retrieval-Augmented Generation (RAG)}: Provide relevant documents as context. Cost: moderate (retrieval + tokens). Time: weeks.
+  \item \textbf{Tool Use}: Give the model access to external functions (calculators, databases, APIs). Cost: moderate (tool calls + orchestration). Time: weeks.
+  \item \textbf{Fine-Tuning}: Train on domain-specific data. Cost: high (data curation, compute, maintenance). Time: months.
+\end{enumerate}
+
+\paragraph{When to Consider Fine-Tuning.} Move to fine-tuning only when:
+\begin{itemize}
+  \item \textbf{Stable, organization-wide need}: The task is core to your business and will be used for years, justifying long-term investment.
+  \item \textbf{Ceiling reached}: Prompt design, RAG, and tools have plateaued; adding more exemplars or context no longer improves performance.
+  \item \textbf{Governance capacity}: You have the infrastructure and processes to manage training data lifecycles, model weights, and ongoing evaluation.
+  \item \textbf{Data availability}: You have thousands of high-quality labeled examples and can curate them ethically and legally.
+\end{itemize}
+
+Fine-tuning is not a panacea. It requires ongoing maintenance as the task evolves, models update, and regulations change.
+
+\subsection{Fine-Tuning Methods at a Glance}
+
+If you decide to fine-tune, you face another choice: full fine-tuning (updating all model parameters) or parameter-efficient methods (updating a small subset). Each has tradeoffs.
+
+\subsubsection{Full Fine-Tuning}
+
+\keyterm{Full fine-tuning} trains all model parameters on your data. This gives maximum flexibility but requires substantial compute and storage.
+
+\paragraph{Advantages:}
+\begin{itemize}
+  \item Maximum adaptation to domain-specific patterns.
+  \item Can learn entirely new vocabulary or stylistic conventions.
+\end{itemize}
+
+\paragraph{Disadvantages:}
+\begin{itemize}
+  \item Expensive: requires GPUs/TPUs and long training runs.
+  \item Storage overhead: must store a full copy of model weights.
+  \item Risk of catastrophic forgetting: model may lose general capabilities.
+\end{itemize}
+
+\subsubsection{Parameter-Efficient Fine-Tuning (LoRA/Adapters)}
+
+\keyterm{Parameter-efficient fine-tuning} updates only a small fraction of model parameters, typically by training low-rank adapter layers. LoRA (Low-Rank Adaptation) is a popular method.
+
+\paragraph{Advantages:}
+\begin{itemize}
+  \item Cheaper: trains faster and uses less compute.
+  \item Smaller storage: adapter weights are megabytes, not gigabytes.
+  \item Preserves general capabilities: less risk of catastrophic forgetting.
+\end{itemize}
+
+\paragraph{Disadvantages:}
+\begin{itemize}
+  \item Limited adaptation: may not capture complex domain-specific patterns as well as full fine-tuning.
+  \item Compatibility: adapters are tied to specific base models and versions.
+\end{itemize}
+
+\subsubsection{Data and Governance Constraints}
+
+\paragraph{Track Datasets.} Document the source, creation date, and purpose of all training data. Legal and financial datasets often include confidential or privileged information---ensure you have the right to use them for training.
+
+\paragraph{Licenses and Privacy.} Check licenses for third-party data. If training on client data, confirm consent and compliance with privacy regulations (GDPR, CCPA, attorney-client privilege).
+
+\paragraph{Re-Evaluate Pre/Post.} Run your gold test sets on both the base model and the fine-tuned model. Report improvements (or regressions) on each metric. Fine-tuning sometimes improves one task while degrading others---make this tradeoff explicit.
+
+\subsection{Risk, Cost, and Governance}
+
+Fine-tuning introduces new risks: model degradation, data leakage, and compliance failures. Robust governance processes mitigate these risks.
+
+\subsubsection{Training Data Provenance}
+
+\paragraph{Document Sources.} Record where each training example came from: internal annotations, client submissions, public datasets, or synthetic generation. Include collection dates and consent status.
+
+\paragraph{Consent and Confidentiality.} Verify that you have legal and ethical permission to use the data. For client data, confirm that training does not violate confidentiality agreements or attorney-client privilege. For employee data, ensure compliance with employment law.
+
+\paragraph{Data Retention and Deletion.} Define how long training data is retained and under what conditions it must be deleted (e.g., client offboarding, regulatory compliance). Automate deletion where possible.
+
+\subsubsection{Approval and Shadow Testing}
+
+\paragraph{Require Approvals.} Fine-tuning changes require senior approval: technical leads, legal/compliance, and data governance. Document who approved, when, and based on what evaluation results.
+
+\paragraph{Shadow Testing.} Deploy the fine-tuned model in shadow mode: run it in parallel with the production model but do not serve its outputs to users. Compare metrics across both models on live traffic. Only promote the fine-tuned model to production after shadow testing confirms improvement.
+
+\paragraph{Rollback Procedures.} Maintain the previous production model as a hot standby. Define rollback triggers (e.g., accuracy drops below baseline, citation fidelity degrades) and automate rollback where possible.
+
+\subsubsection{Model Cards and Documentation}
+
+\keyterm{Model cards} document key facts about a fine-tuned model: training data, intended use, known limitations, and evaluation results. Adapt the model card format to legal and financial contexts:
+
+\begin{itemize}
+  \item \textbf{Intended use}: What tasks is this model designed for? What tasks should it not be used for?
+  \item \textbf{Training data}: How many examples? What jurisdictions, time periods, and document types?
+  \item \textbf{Evaluation results}: Performance on gold sets, broken down by task and domain.
+  \item \textbf{Limitations}: Known failure modes, biases, and edge cases.
+  \item \textbf{Update history}: Dates and reasons for retraining or updating.
+\end{itemize}
+
+Maintain model cards as versioned documents alongside the model weights.
+
+\subsection{Registries, Rollbacks, and Shadow Tests}
+
+Production prompt systems require operational discipline: you must know what version is running, be able to roll back quickly, and validate changes before full deployment. \keyterm{Prompt registries}, \keyterm{rollback procedures}, and \keyterm{shadow testing} provide this discipline.
+
+\subsubsection{Prompt Registries}
+
+A \keyterm{prompt registry} is a versioned catalog of all production prompts, configurations, and evaluation results. It serves as the single source of truth for what is deployed and when.
+
+\paragraph{Registry Contents:}
+\begin{itemize}
+  \item \textbf{Version identifier}: Unique tag (e.g., \texttt{contract-extractor-v3.2.1}).
+  \item \textbf{Artifacts}: Prompt templates, exemplar sets, configuration files, schemas.
+  \item \textbf{Evaluation metrics}: Results from gold test sets, broken down by task and domain.
+  \item \textbf{Deployment status}: Production, staging, deprecated, or experimental.
+  \item \textbf{Change log}: What changed, who approved, when deployed.
+  \item \textbf{Dependencies}: Model version, API version, external tools.
+\end{itemize}
+
+\paragraph{Example Registry Entry:}
+\begin{lstlisting}[basicstyle=\small\ttfamily]
+{
+  "version": "contract-extractor-v3.2.1",
+  "status": "production",
+  "deployed": "2024-11-15T14:30:00Z",
+  "approved_by": "alice@example.com",
+  "model": "gpt-4-1106-preview",
+  "artifacts": {
+    "template": "templates/contract-v3.2.txt",
+    "exemplars": "exemplars/contract-v2.1.json",
+    "config": "configs/contract-v1.3.yaml"
+  },
+  "metrics": {
+    "accuracy": 0.87,
+    "citation_fidelity": 0.92,
+    "schema_pass_rate": 0.98
+  },
+  "changelog": "Added edge case handling for multi-jurisdiction contracts"
+}
+\end{lstlisting}
+
+\subsubsection{Rollback Procedures}
+
+When a deployment degrades quality, you need to roll back quickly. Define explicit rollback triggers and automate the process where possible.
+
+\paragraph{Rollback Triggers:}
+\begin{itemize}
+  \item \textbf{Accuracy drop}: Quality metric falls below baseline by more than 5\%.
+  \item \textbf{Error rate spike}: Schema validation failures exceed threshold.
+  \item \textbf{Latency degradation}: p95 latency exceeds SLA.
+  \item \textbf{Manual escalation}: Human reviewer flags systematic errors.
+\end{itemize}
+
+\paragraph{Rollback Process:}
+\begin{enumerate}
+  \item \textbf{Detect}: Automated monitoring detects trigger condition.
+  \item \textbf{Alert}: Notify on-call team via pager/Slack.
+  \item \textbf{Assess}: Review metrics and decide whether to roll back.
+  \item \textbf{Execute}: Revert registry pointer to previous version; redeploy.
+  \item \textbf{Postmortem}: Document what went wrong and how to prevent recurrence.
+\end{enumerate}
+
+Automate steps 1--4 where possible. Human judgment is required for assessment, but detection and execution should be scripted.
+
+\subsubsection{Shadow Testing}
+
+\keyterm{Shadow testing} runs a new prompt version in parallel with production, logging outputs without serving them to users. This allows you to compare metrics on live traffic before committing to a full rollout.
+
+\paragraph{Shadow Test Workflow:}
+\begin{enumerate}
+  \item \textbf{Deploy shadow version}: Run new prompt version alongside production.
+  \item \textbf{Route traffic}: Send 100\% of production traffic to both versions.
+  \item \textbf{Log outputs}: Store outputs from both versions with request IDs.
+  \item \textbf{Compare metrics}: Compute accuracy, latency, and cost for both versions.
+  \item \textbf{Decide}: Promote shadow version if metrics improve; otherwise, abandon.
+\end{enumerate}
+
+Shadow testing catches regressions before they affect users but doubles inference cost during the test. Budget for this overhead.
+
+\paragraph{Feature Flags.} Use feature flags to control which users see which prompt versions. Start with a small rollout (1\% of traffic), monitor metrics, and gradually increase to 100\% if results are positive. This \keyterm{progressive rollout} reduces risk compared to all-at-once deployment.
+
+\subsection{Active Learning and Human-in-the-Loop}
+
+Prompt systems improve over time by learning from mistakes. \keyterm{Active learning} identifies cases where the model struggled, and \keyterm{human-in-the-loop} workflows incorporate expert corrections back into the system.
+
+\subsubsection{Selecting Hard Cases for Review}
+
+Not all outputs require human review. Focus expert attention on cases where the model is uncertain or wrong:
+
+\paragraph{Selection Criteria:}
+\begin{itemize}
+  \item \textbf{Low confidence}: Model reports low confidence or abstains.
+  \item \textbf{Schema failure}: Output fails validation checks.
+  \item \textbf{Disagreement}: Multi-call consistency check produces conflicting answers.
+  \item \textbf{Near-boundary}: Model score is close to decision threshold.
+  \item \textbf{Rare patterns}: Input matches a rarely-seen pattern (e.g., uncommon jurisdiction).
+\end{itemize}
+
+\paragraph{Review Workflow:}
+\begin{enumerate}
+  \item \textbf{Flag}: Automated system flags cases meeting selection criteria.
+  \item \textbf{Queue}: Add flagged cases to expert review queue.
+  \item \textbf{Review}: Expert examines input, model output, and sources; provides correct answer.
+  \item \textbf{Feedback}: Expert labels the case and explains the decision.
+  \item \textbf{Incorporate}: Add labeled case to exemplar library or fine-tuning dataset.
+\end{enumerate}
+
+\subsubsection{Curated Examples Back into Libraries}
+
+Once experts correct a hard case, add it to your exemplar library or fine-tuning dataset with full metadata:
+
+\begin{itemize}
+  \item \textbf{Input and output}: Original input and corrected output.
+  \item \textbf{Metadata}: Jurisdiction, document type, date, difficulty rating.
+  \item \textbf{Decision notes}: Why the model failed; what pattern it missed.
+  \item \textbf{Reviewer}: Who labeled the case and when.
+\end{itemize}
+
+\paragraph{Documented Decisions.} Track why certain edge cases were labeled in specific ways. Future reviewers (or future you) will need this context when new ambiguous cases arise. Store decision notes in a shared knowledge base.
+
+\subsection{A/B Testing Prompts and Exemplars}
+
+\keyterm{A/B testing} measures the causal effect of prompt changes by randomly assigning users to different versions and comparing outcomes. This is the gold standard for validating improvements in production.
+
+\subsubsection{Experiment Design}
+
+\paragraph{Hypothesis.} State what you expect to change: ``Adding exemplars will improve accuracy by 5\% while increasing latency by 10\%.''
+
+\paragraph{Variants.} Define control (baseline prompt) and treatment (new prompt). Ensure only one thing changes between variants to isolate causal effects.
+
+\paragraph{Randomization.} Randomly assign users or requests to control or treatment. Use consistent hashing to ensure the same user sees the same variant across requests.
+
+\paragraph{Sample Size.} Calculate required sample size based on effect size, statistical power, and significance threshold. Use standard power analysis tools.
+
+\subsubsection{Metrics and Statistical Significance}
+
+Track primary metrics (accuracy, citation fidelity) and secondary metrics (latency, cost). Define success criteria upfront: ``Treatment must improve accuracy by $\geq$ 3\% with $p < 0.05$.''
+
+\paragraph{Guard Against P-Hacking.} Run the test for a predetermined duration and sample size. Do not stop early because results look good (or bad). Do not run multiple tests and cherry-pick the best result. These practices inflate false positive rates.
+
+\paragraph{Confidence Intervals.} Report effect sizes with confidence intervals, not just p-values. Example: ``Treatment improved accuracy by 4.2\% (95\% CI: [2.1\%, 6.3\%]).'' This communicates both magnitude and uncertainty.
+
+\subsubsection{Cost-Benefit Analysis}
+
+Even if a prompt change improves accuracy, it may not be worth deploying if it increases cost or latency too much. Compute the cost-benefit tradeoff explicitly:
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Variant} & \textbf{Accuracy} & \textbf{Latency (p95)} & \textbf{Cost per 1k} & \textbf{Net Benefit} \\
+\midrule
+Control & 82\% & 1.8s & \$25 & Baseline \\
+Treatment & 86\% & 2.3s & \$32 & +4\% accuracy, +28\% cost \\
+\bottomrule
+\end{tabular}
+\caption{Example A/B test results with cost-benefit tradeoff. Treatment improves accuracy but increases cost. Whether to deploy depends on the value of 4\% accuracy improvement relative to \$7 per 1k calls.}
+\label{tab:llmD-opt-ab-tradeoff}
+\end{table}
+
+If accuracy improvement is worth the cost increase, deploy. If not, iterate on the prompt to reduce cost or explore alternative approaches.
+
+\subsection{Scaling to Agentic Systems}
+
+The versioning and change management practices in this section apply to single-prompt systems. As you move to multi-step agentic systems, additional complexity arises:
+\begin{itemize}
+  \item \textbf{Multi-component versioning}: Agents compose multiple prompts, tools, and retrieval components. Governance patterns must address how to version and test these compositions.
+  \item \textbf{Structured logging and auditability}: Agentic systems produce multi-turn traces that require richer logging than single-call systems, including trace management and audit requirements.
+  \item \textbf{Continuous evaluation in production}: Telemetry and monitoring patterns extend the offline evaluation techniques here to live traffic.
+\end{itemize}
+
+Our companion volume, \textit{Agentic AI in Law and Finance}, provides comprehensive coverage of these agentic system patterns.

@@ -1,0 +1,63 @@
+% ============================================================================
+% STANDALONE BACK COVER — For print production
+% ============================================================================
+% This generates a single-page PDF of the back cover for submission to
+% print-on-demand services (Lulu, KDP, IngramSpark, etc.) that require cover
+% as a separate file from the interior.
+%
+% Build from project root: xelatex -output-directory=covers covers/cover-back.tex
+% Output: covers/cover-back.pdf (single page, 6" x 9")
+% ============================================================================
+
+\documentclass[10pt]{article}
+
+% Page geometry: US Trade 6" x 9" with no margins (full bleed cover)
+\usepackage[
+  paperwidth=6in,
+  paperheight=9in,
+  margin=0pt
+]{geometry}
+
+% Essential packages for cover
+\usepackage{fontspec}
+\usepackage{tikz}
+\usetikzlibrary{calc,positioning,arrows.meta,decorations.pathmorphing,backgrounds,shapes.geometric}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+% Load colors from preamble
+\input{preamble/colors}
+
+% Cover-specific colors (Blue/Teal theme for LLM book)
+\definecolor{DeepTeal}{HTML}{0D3B4C}
+\definecolor{MidTeal}{HTML}{1A5A6B}
+\definecolor{LightTeal}{HTML}{2D8299}
+\definecolor{CircleTeal}{HTML}{3FA3BD}
+\definecolor{CircleBlue}{HTML}{4B7BA8}
+\definecolor{CircleLight}{HTML}{7EC8D4}
+\definecolor{AccentGold}{HTML}{D4A84B}
+\definecolor{AccentWarm}{HTML}{E8C87A}
+\definecolor{TextPure}{HTML}{FFFFFF}
+\definecolor{TextSoft}{HTML}{E8F0F2}
+\definecolor{TextMuted}{HTML}{A8C8D4}
+
+% Fonts
+\setmainfont{TeX Gyre Termes}
+\setsansfont{TeX Gyre Heros}
+
+% No page numbers
+\pagestyle{empty}
+
+% Disable \newgeometry and \restoregeometry for standalone (already set above)
+\let\newgeometry\relax
+\let\restoregeometry\relax
+
+\begin{document}
+
+% Start a page with empty content (tikz overlay needs a page to exist)
+\mbox{}
+
+% Import the back cover design
+\input{back-matter/back-cover}
+
+\end{document}
