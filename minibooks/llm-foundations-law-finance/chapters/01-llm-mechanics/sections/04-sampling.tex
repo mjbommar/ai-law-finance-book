@@ -4,7 +4,7 @@
 % Label: sec:llm1-sampling
 % =============================================================================
 
-\section{Sampling and Decoding: Controlling Generation}
+\section{Controlling Randomness: Temperature, Sampling, and Consistency}
 \label{sec:llm1-sampling}
 
 Once the model processes input tokens through its attention mechanisms, it does not simply ``pick'' the next word. Instead, it computes a probability distribution---called \keyterm{logits}---over its entire vocabulary (often 50,000--100,000 possible tokens) for what should come next. How the system selects the actual next token from this distribution is determined by \keyterm{sampling parameters}. Understanding these parameters is essential for controlling the hallucination rate, reproducibility, and appropriateness of outputs for regulated applications.
@@ -297,7 +297,7 @@ For complex reasoning tasks, \textcite{wang2022selfconsistency} demonstrated tha
 
 Operationally, it can be viewed as ``sample multiple reasoning paths and vote.'' If the model is confident and the task is well-specified, answers tend to converge; if answers diverge, the disagreement itself is a useful signal to escalate to retrieval, tools, or human review.
 
-\paragraph{Where to go deeper.} Chapter~2 (Conversations and Reasoning) provides the primary treatment of self-consistency as a reasoning reliability strategy, including when to use it (and when not to) in professional workflows.
+\paragraph{Where to go deeper.} Chapter~3 (Reasoning and Conversations) provides the primary treatment of self-consistency as a reasoning reliability strategy, including when to use it (and when not to) in professional workflows.
 
 \subsection{Putting It Together: Sampling Configuration}
 \label{sec:llm1-sampling-configuration}

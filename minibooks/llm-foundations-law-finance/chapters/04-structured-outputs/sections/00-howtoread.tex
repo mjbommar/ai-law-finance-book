@@ -1,0 +1,58 @@
+% =============================================================================
+% How to Read — Structured Outputs
+% Purpose: Audience paths; scope
+% Label: sec:llmC-howtoread
+% =============================================================================
+
+\section*{How to Read This Chapter}
+\addcontentsline{toc}{section}{How to Read This Chapter}
+
+This chapter transforms LLM outputs from free-form text into structured, machine-readable data that satisfies compliance and audit requirements. Building on the grounding foundations from Chapter~2 (in-context learning, RAG basics, and professional domain requirements) and the reasoning patterns from Chapter~3, this chapter addresses how to constrain outputs to specific formats and maintain audit trails.
+
+\subsection*{Prerequisites}
+
+This chapter assumes familiarity with:
+\begin{itemize}
+  \item \textbf{In-context learning} (\Cref{sec:llmB-icl}): How LLMs adapt based on context content
+  \item \textbf{RAG fundamentals} (\Cref{sec:llmB-rag}): Chunking, embeddings, and basic retrieval
+  \item \textbf{Reasoning patterns} (\Cref{sec:llmB-reason}): Chain-of-thought and structured reasoning
+\end{itemize}
+
+If these concepts are unfamiliar, review Chapters~2--3 before proceeding.
+
+\subsection*{Reading Paths}
+
+\begin{highlightbox}[colback=bg-definition, colframe=definition-base, title={Path 1: Production Retrieval (20--30 minutes)}]
+If you need to scale from prototype to production retrieval:
+\begin{itemize}
+  \item \textbf{\Cref{sec:llmC-advanced-retrieval}}: Multi-stage retrieval, query rewriting, and citation fidelity
+  \item \textbf{\Cref{sec:llmC-evidence}}: Canonical evidence records for audit trails
+\end{itemize}
+\end{highlightbox}
+
+\begin{highlightbox}[colback=bg-example, colframe=example-base, title={Path 2: Structured Outputs (25--35 minutes)}]
+If you need reliable JSON, CSV, or XML outputs:
+\begin{itemize}
+  \item \textbf{\Cref{sec:llmC-structured}}: Schema design, validation, and constrained generation
+  \item \textbf{\Cref{sec:llmC2-synthesis}}: Integration patterns for production systems
+\end{itemize}
+\end{highlightbox}
+
+\begin{keybox}[title={Key Objectives}]
+By the end of this chapter, you will be able to:
+\begin{itemize}
+  \item Implement \textbf{multi-stage retrieval} with reranking and query expansion for production systems
+  \item Construct \textbf{canonical evidence records} that provide full provenance for audit trails
+  \item Design \textbf{schemas and validators} to get reliable JSON/CSV/XML outputs
+  \item Apply \textbf{constrained generation} techniques to enforce output formats
+\end{itemize}
+\end{keybox}
+
+\subsection*{What This Chapter Does Not Cover}
+
+\begin{itemize}
+  \item \textbf{Tool use and function calling}: Connecting LLMs to external systems is covered in Chapter~5
+  \item \textbf{Multimodal inputs}: PDFs, tables, and audio processing are addressed in Chapter~6
+  \item \textbf{Evaluation and optimization}: Systematic measurement and improvement are covered in Chapter~7
+  \item \textbf{Agent architectures}: Autonomous planning and execution loops are addressed in \textit{Agentic AI in Law and Finance}
+\end{itemize}

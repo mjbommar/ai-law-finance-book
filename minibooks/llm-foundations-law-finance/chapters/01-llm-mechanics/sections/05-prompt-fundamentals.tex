@@ -9,9 +9,9 @@
 
 Now that we understand how LLMs tokenize text, generate outputs through sampling, and represent meaning through attention, we turn to the practical question: how do you communicate effectively with these systems? The answer lies in \keyterm{prompt design}---the art and engineering of constructing inputs that elicit the desired behavior.
 
-This section provides a first exposure to prompt fundamentals. We introduce core concepts (prompt anatomy, zero-shot versus few-shot, structured inputs and outputs) and present the \keyterm{Prompt Maturity Model}---a five-phase framework that structures the progression from raw text to modular, testable prompt systems. This framework guides the organization of the book itself: Chapters~2 through 5 walk through increasingly sophisticated prompt design patterns.
+This section provides a first exposure to prompt fundamentals. We introduce core concepts (prompt anatomy, zero-shot versus few-shot, structured inputs and outputs) and present the \keyterm{Prompt Maturity Model}---a five-phase framework that structures the progression from raw text to modular, testable prompt systems. This framework guides the organization of the book itself: Chapters~2 through 7 walk through increasingly sophisticated prompt design patterns.
 
-Think of this section as establishing vocabulary and mental models. Chapter~5 (Prompt Design, Evaluation, and Optimization) provides the comprehensive treatment of prompt engineering as specification, testing, and optimization. Our companion volume, \textit{Agentic AI in Law and Finance}, extends these patterns to autonomous agents that combine prompts with tools, memory, and control flow.
+Think of this section as establishing vocabulary and mental models. Chapter~7 (Prompt Design, Evaluation, and Optimization) provides the comprehensive treatment of prompt engineering as specification, testing, and optimization. Our companion volume, \textit{Agentic AI in Law and Finance}, extends these patterns to autonomous agents that combine prompts with tools, memory, and control flow.
 
 \subsection{Anatomy of a Prompt}
 \label{sec:llm1-prompt-anatomy}
@@ -190,11 +190,11 @@ The examples teach the model (1) the JSON schema, (2) how to parse citation form
   \item \textbf{Include edge cases:} Show how to handle missing data, errors, ambiguity
   \item \textbf{Quality over quantity:} 3--5 high-quality examples often outperform 20 mediocre ones
   \item \textbf{Order matters:} Place the most relevant example last (recency bias in attention)
-  \item \textbf{Reasoning traces:} For complex tasks, show intermediate steps, not just final answers (preview of chain-of-thought in Chapter~2)
+  \item \textbf{Reasoning traces:} For complex tasks, show intermediate steps, not just final answers (preview of chain-of-thought in Chapter~3)
 \end{enumerate}
 \end{keybox}
 
-\paragraph{Forward Reference.} Few-shot prompting is a deep topic. Chapter~2 (Conversations and Reasoning) extends few-shot to chain-of-thought and self-consistency. Chapter~5 (Prompt Design, Evaluation, and Optimization) covers exemplar selection, diversity management, and programmatic exemplar construction for production systems.
+\paragraph{Forward Reference.} Few-shot prompting is a deep topic. Chapter~3 (Reasoning and Conversations) extends few-shot to chain-of-thought and self-consistency. Chapter~7 (Prompt Design, Evaluation, and Optimization) covers exemplar selection, diversity management, and programmatic exemplar construction for production systems.
 
 \subsection{The Prompt Maturity Model}
 \label{sec:llm1-prompt-maturity}
@@ -209,30 +209,20 @@ As prompts evolve from exploratory prototypes to production systems, they follow
 \toprule
 \textbf{Phase} & \textbf{Input} & \textbf{Output} & \textbf{Testability} & \textbf{Chapters} \\
 \midrule
-1: Zero-shot & Freeform text & Freeform text & None (manual review) & 1--2 \\
-2: Few-shot & Examples + text & Freeform text & Low (human eval) & 2 \\
-3: Structured Input & JSON/XML input & Freeform text & Medium (input validation) & 3, 5 \\
-4: Structured I/O & JSON/XML input & JSON/XML output & High (schema validation) & 3, 5 \\
-5: Modular & Decomposed pipeline & Structured, composable & Full (unit + integration tests) & 5--7 \\
+1: Zero-shot & Freeform text & Freeform text & None (manual review) & 1--3 \\
+2: Few-shot & Examples + text & Freeform text & Low (human eval) & 2--3 \\
+3: Structured Input & JSON/XML input & Freeform text & Medium (input validation) & 4, 7 \\
+4: Structured I/O & JSON/XML input & JSON/XML output & High (schema validation) & 4, 7 \\
+5: Modular & Decomposed pipeline & Structured, composable & Full (unit + integration tests) & 7 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 The progression reflects real-world experience: projects start with Phase~1 (raw text in, raw text out), but frustration with reliability drives adoption of examples (Phase~2). Integration requirements drive structured outputs (Phases~3--4). Scale and complexity drive modular decomposition (Phase~5).
 
-\paragraph{Key Insight: Testability Drives Maturity.} The central theme is testability. Phases~1--2 require human review of every output. Phase~4 (structured I/O) is the minimum standard for production legal and financial applications because outputs can be validated against schemas and evaluated with quantitative metrics. Phase~5 (modular pipelines) enables unit testing of individual prompts, integration testing of workflows, and regression testing across versions.
+\paragraph{Key Insight: Testability Drives Maturity.} The central theme is testability. Phases~1--2 require human review of every output. Phase~4 (structured I/O) is the \emph{minimum standard} for production legal and financial applications because outputs can be validated against schemas and evaluated with quantitative metrics.
 
-\begin{keybox}[title={Phase Summary}]
-\begin{description}
-  \item[Phase 1 (Zero-shot):] Natural language in/out. Use for prototyping only.
-  \item[Phase 2 (Few-shot):] Examples improve consistency. Still requires human review.
-  \item[Phase 3 (Structured Input):] Programmatic inputs enable validation before LLM calls.
-  \item[Phase 4 (Structured I/O):] Production minimum. Schema validation enables automation.
-  \item[Phase 5 (Modular):] Enterprise standard. Decomposed, testable, auditable.
-\end{description}
-\end{keybox}
-
-Chapter~5 (Prompt Design, Evaluation, and Optimization) provides the comprehensive treatment of the Prompt Maturity Model, including detailed guidance on structured I/O design, testing strategies, and modular pipeline architecture. Our companion volume, \textit{Agentic AI in Law and Finance}, demonstrates Phase~5 patterns in autonomous systems.
+\paragraph{Forward Reference.} Chapter~7 (Prompt Design, Evaluation, and Optimization) provides comprehensive treatment of each phase, including detailed guidance on structured I/O design, testing strategies, and modular pipeline architecture.
 
 \subsection{Principles of Effective Prompts}
 \label{sec:llm1-prompt-principles}
@@ -328,7 +318,7 @@ For retrieval-augmented generation (RAG), this becomes essential: the model must
   \item Repeat
 \end{enumerate}
 
-Document what you tried and why. Version your prompts. Track performance metrics over time. Chapter~5 formalizes this as prompt optimization and evaluation.
+Document what you tried and why. Version your prompts. Track performance metrics over time. Chapter~7 formalizes this as prompt optimization and evaluation.
 
 \begin{keybox}[title={Prompt Design Checklist}]
 Before deploying a prompt to production, verify:
@@ -350,11 +340,15 @@ Before deploying a prompt to production, verify:
 This section introduced prompt fundamentals: the anatomy of prompts, zero-shot versus few-shot approaches, and the Prompt Maturity Model that structures the progression from raw text to modular systems. These concepts recur throughout the book:
 
 \begin{itemize}
-  \item \textbf{Chapter~2 (Conversations and Reasoning):} Extends few-shot to chain-of-thought, self-consistency, and reasoning reliability. Covers role-based prompting, memory strategies, and multi-turn conversation design.
+  \item \textbf{Chapter~2 (Providing Context):} Establishes grounding through in-context learning and retrieval-augmented generation. Covers how to connect models to authoritative sources.
 
-  \item \textbf{Chapter~3 (Structured Inputs, Tools, and Function Calling):} Comprehensive treatment of Phase~4 (Structured I/O). Covers JSON schemas, constrained decoding, tool use, and function calling for integration with deterministic systems.
+  \item \textbf{Chapter~3 (Reasoning and Conversations):} Extends few-shot to chain-of-thought, self-consistency, and reasoning reliability. Covers role-based prompting, memory strategies, and multi-turn conversation design.
 
-  \item \textbf{Chapter~5 (Prompt Design, Evaluation, and Optimization):} The definitive treatment of prompts as specifications. Covers testing methodologies, exemplar management, automated optimization, A/B testing, and production deployment patterns.
+  \item \textbf{Chapter~4 (Structured Outputs):} Comprehensive treatment of Phase~4 (Structured I/O). Covers JSON schemas, constrained decoding, and evidence records for audit trails.
+
+  \item \textbf{Chapter~5 (Tool Use):} Function calling and integration with external systems---calculators, databases, APIs---for extending LLM capabilities.
+
+  \item \textbf{Chapter~7 (Prompt Design, Evaluation, and Optimization):} The definitive treatment of prompts as specifications. Covers testing methodologies, exemplar management, automated optimization, A/B testing, and production deployment patterns.
 
   \item \textbf{Agentic AI in Law and Finance} (companion volume): Extends prompting to autonomous systems. Agents are, at core, sophisticated prompt orchestration---planning prompts, tool-selection prompts, reflection prompts---composed into goal-directed pipelines. All the principles from this section apply, but at the level of system architecture.
 \end{itemize}

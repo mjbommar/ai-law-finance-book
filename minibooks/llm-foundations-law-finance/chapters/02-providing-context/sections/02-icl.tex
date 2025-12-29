@@ -1,0 +1,200 @@
+% =============================================================================
+% In-Context Learning — How Do I Ground and Reason?
+% Purpose: Foundational concept explaining why grounding techniques work
+% Label: sec:llmB-icl
+% =============================================================================
+
+\section{Teaching by Example: In-Context Learning}
+\label{sec:llmB-icl}
+
+Before examining specific grounding techniques, we must understand the fundamental capability that makes them effective. When you provide examples, documents, or instructions in a prompt, the model adapts its responses based on that content. This adaptation occurs without any change to the model's underlying parameters---the weights remain frozen. Yet the model's behavior changes dramatically based on what appears in its input. This phenomenon is called \keyterm{in-context learning} (ICL), and it is the conceptual foundation for everything that follows in this chapter.
+
+\subsection{The ICL Paradigm: Learning Without Weight Updates}
+\label{sec:llmB-icl-paradigm}
+
+Traditional machine learning requires explicit training: you provide labeled examples, the algorithm updates its parameters, and the model gradually learns to perform the task. This process is expensive, slow, and requires substantial data. Once trained, the model's behavior is fixed until you retrain it.
+
+In-context learning works differently. Large language models can adapt their behavior based on information provided in the prompt, without any parameter update \parencite{brown2020gpt3}. When you show a model three examples of legal citation formatting, it begins producing citations in that format. When you provide a contract clause and ask for analysis, the model reasons about that specific clause. The model has not been retrained; it has \emph{learned in context}.
+
+\begin{definitionbox}[title={In-Context Learning}]
+\keyterm{In-context learning (ICL)} is the ability of large language models to adapt their behavior based on information provided in their input, without updating model weights. The model ``learns'' from the examples, documents, and instructions in its context window, adjusting its outputs accordingly.
+
+\smallskip
+This is not learning in the traditional machine learning sense of updating parameters. It is learning \emph{within the conversation}---a form of adaptation that occurs entirely at inference time.
+\end{definitionbox}
+
+The practical implications are profound. ICL means you can customize model behavior for specific tasks without any training infrastructure. A general-purpose model becomes a legal research assistant when you provide legal context. The same model becomes a financial analyst when you provide financial data. The context window is, in effect, a programming interface.
+
+\subsection{Why Context Window Content Shapes Behavior}
+\label{sec:llmB-icl-why}
+
+Understanding why ICL works helps predict when it will succeed and when it will fail. The mechanism is statistical rather than logical: the model has learned patterns from its training data about how to continue text that resembles the patterns in its input.
+
+When you provide examples of a particular format, you are effectively telling the model: ``The text you are about to generate should resemble the patterns in these examples.'' The model's next-token prediction is conditioned on everything in the context window, so examples and instructions shape the probability distribution over possible outputs.
+
+Consider a simple illustration. If your prompt contains:
+
+\begin{quote}
+\texttt{Citation: Brown v. Board of Education, 347 U.S. 483 (1954)}\\
+\texttt{Citation: Roe v. Wade, 410 U.S. 113 (1973)}\\
+\texttt{Citation:}
+\end{quote}
+
+The model will likely continue with a citation in the same format because the preceding pattern establishes a template. This same mechanism operates at much higher levels of abstraction: providing legal analysis examples shapes how the model structures its own analysis, and providing financial data shapes how the model reasons about financial questions.
+
+\begin{keybox}[title={The Context Window as a Programming Interface}]
+What you put in the context window directly shapes model behavior. This is not a bug or a quirk---it is the fundamental mechanism by which we customize LLM behavior without training. Few-shot examples, retrieved documents, system instructions, and conversation history all work through in-context learning.
+\end{keybox}
+
+\subsection{Few-Shot Prompting as In-Context Learning}
+\label{sec:llmB-icl-fewshot}
+
+The most direct application of ICL is \keyterm{few-shot prompting}: providing a small number of examples in the prompt to demonstrate the desired task. The term ``few-shot'' contrasts with ``zero-shot'' (no examples) and traditional supervised learning (thousands or millions of examples).
+
+\paragraph{Zero-Shot.} In zero-shot prompting, you describe the task without examples:
+
+\begin{quote}
+\texttt{Classify the following contract clause as either "limitation of liability" or "indemnification":}\\
+\texttt{"Neither party shall be liable for any indirect, incidental, or consequential damages..."}
+\end{quote}
+
+The model must infer from its training what these categories mean and how to apply them. This works for well-defined tasks but often fails when the task is ambiguous or domain-specific.
+
+\paragraph{Few-Shot.} In few-shot prompting, you provide examples before the actual query:
+
+\begin{quote}
+\texttt{Example 1:}\\
+\texttt{Clause: "The vendor agrees to defend, indemnify, and hold harmless the client..."}\\
+\texttt{Classification: indemnification}
+
+\smallskip
+\texttt{Example 2:}\\
+\texttt{Clause: "In no event shall either party's liability exceed the fees paid..."}\\
+\texttt{Classification: limitation of liability}
+
+\smallskip
+\texttt{Now classify:}\\
+\texttt{Clause: "Neither party shall be liable for any indirect, incidental, or consequential damages..."}\\
+\texttt{Classification:}
+\end{quote}
+
+The examples demonstrate both the task format and the reasoning. The model learns from these examples in context, without any parameter update.
+
+\paragraph{When Few-Shot Helps.} Few-shot prompting is particularly valuable when:
+\begin{itemize}
+  \item The task has domain-specific conventions (legal citation formats, financial report structures)
+  \item The desired output format is not obvious from the instruction alone
+  \item Edge cases need to be demonstrated rather than described
+  \item You need to calibrate the model's judgment (what counts as ``material'' in this context?)
+\end{itemize}
+
+For legal and financial professionals, few-shot prompting allows you to teach the model firm-specific conventions, jurisdictional requirements, or client preferences without any engineering intervention.
+
+\subsection{RAG as In-Context Learning with Retrieved Knowledge}
+\label{sec:llmB-icl-rag}
+
+Retrieval-augmented generation extends ICL from curated examples to retrieved documents. Instead of manually selecting examples to include in the prompt, RAG systems automatically retrieve relevant content from a knowledge base and inject it into the context window. The model then learns from that retrieved content, adapting its response to incorporate the specific information provided.
+
+The mechanism is identical: the model's behavior changes based on what appears in its context. The difference is that RAG automates the selection process, enabling the model to access far more knowledge than could be manually curated.
+
+\begin{definitionbox}[title={RAG as ICL}]
+\keyterm{Retrieval-augmented generation} is in-context learning with retrieved documents. The model learns from the retrieved content at inference time, adapting its response to incorporate specific facts, precedents, and data that it could not have memorized during training.
+\end{definitionbox}
+
+This framing clarifies several important points:
+
+\begin{itemize}
+  \item \textbf{RAG works because of ICL.} If models could not learn from context, providing documents would be useless. The model would ignore the retrieved content and hallucinate from training.
+
+  \item \textbf{Retrieval quality matters.} Since the model learns from what is retrieved, poor retrieval leads to poor adaptation. If you retrieve irrelevant documents, the model learns from irrelevant content.
+
+  \item \textbf{Context window limits apply.} ICL operates within the context window. You cannot retrieve more content than fits, and very long contexts may degrade learning quality (the ``lost in the middle'' phenomenon discussed in \Cref{sec:llmB-convo}).
+\end{itemize}
+
+\subsection{The Grounding Continuum}
+\label{sec:llmB-icl-continuum}
+
+ICL enables a continuum of grounding strategies, ranging from no grounding (pure parametric knowledge) to heavy grounding (extensive retrieved context). Understanding this continuum helps you choose the right approach for each task.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    node distance=0.3cm,
+    box/.style={rectangle, draw=definition-dark, fill=definition-light, minimum width=3.2cm, minimum height=1.2cm, align=center, font=\small},
+    arrow/.style={->, >=stealth, thick, definition-dark}
+]
+% Boxes
+\node[box] (zero) {Zero-Shot\\(parametric only)};
+\node[box, right=of zero] (few) {Few-Shot\\(curated examples)};
+\node[box, right=of few] (many) {Many-Shot\\(extensive examples)};
+\node[box, right=of many] (rag) {RAG\\(retrieved documents)};
+
+% Arrows
+\draw[arrow] (zero) -- (few);
+\draw[arrow] (few) -- (many);
+\draw[arrow] (many) -- (rag);
+
+% Labels
+\node[below=0.8cm of zero, font=\footnotesize, text=text-muted] {Less grounded};
+\node[below=0.8cm of rag, font=\footnotesize, text=text-muted] {More grounded};
+
+% Gradient arrow below
+\draw[thick, ->, definition-dark] ([yshift=-1.5cm]zero.south west) -- ([yshift=-1.5cm]rag.south east);
+\node[below=1.8cm of few, font=\footnotesize\itshape, text=text-secondary] {Increasing reliance on in-context information};
+\end{tikzpicture}
+\caption{The grounding continuum: from parametric knowledge to fully grounded retrieval. As you move right, model behavior depends more on context and less on training.}
+\label{fig:llmB-icl-continuum}
+\end{figure}
+
+\paragraph{Zero-Shot (Parametric Only).} The model relies entirely on knowledge encoded in its weights during training. Useful for general knowledge tasks but unreliable for specific, current, or domain-specific information. An LLM answering ``What is consideration in contract law?'' from zero-shot can give a reasonable general answer but cannot cite the specific statute or case law relevant to your jurisdiction.
+
+\paragraph{Few-Shot (Curated Examples).} A small number of manually selected examples demonstrate the task. Useful when you need to establish format, calibrate judgment, or demonstrate edge cases. A legal assistant given three examples of proper citation format will produce citations in that format.
+
+\paragraph{Many-Shot (Extensive Examples).} More examples (dozens to hundreds) provide richer demonstration. Recent research shows that performance can continue improving with hundreds of examples, though gains diminish \parencite{agarwal2024manyshot}. Many-shot prompting can approximate fine-tuning for some tasks.
+
+\paragraph{RAG (Retrieved Documents).} The model is grounded in automatically retrieved content---documents, data, or prior work product. The retrieval system determines what the model learns from, making retrieval quality critical.
+
+\begin{keybox}[title={Moving Along the Continuum}]
+As you move from zero-shot toward RAG, you trade \textbf{generality} for \textbf{specificity}. Zero-shot answers are generic; RAG answers can be specific to the exact documents retrieved. For professional work, you almost always want to be on the grounded end of this continuum.
+\end{keybox}
+
+\subsection{Conversation History as In-Context Learning}
+\label{sec:llmB-icl-conversation}
+
+Multi-turn conversations are another form of ICL. Each previous turn becomes part of the context window, and the model learns from the accumulated dialogue. This is why a chatbot ``remembers'' earlier parts of the conversation: those earlier exchanges are literally present in its input.
+
+This framing explains several conversation phenomena:
+
+\begin{itemize}
+  \item \textbf{Why context limits matter.} When conversation history exceeds the context window, earlier turns must be dropped or summarized. The model cannot learn from content it cannot see.
+
+  \item \textbf{Why instruction drift occurs.} As conversation lengthens, early instructions (like system prompts) become a smaller fraction of the total context. The model's attention shifts to more recent content.
+
+  \item \textbf{Why corrections propagate.} When you correct a model's mistake, the correction becomes part of context. Subsequent responses learn from that correction (at least until it scrolls out of the window).
+\end{itemize}
+
+\Cref{sec:llmB-convo} examines conversation management in detail, but the key insight is that conversation state is maintained through ICL: the model learns from its own prior outputs as they appear in the accumulated context.
+
+\subsection{Implications for Professional Practice}
+\label{sec:llmB-icl-implications}
+
+Understanding ICL has immediate practical implications for legal and financial professionals deploying LLM systems:
+
+\paragraph{What You Put in Context Matters Enormously.} Since the model learns from its context, garbage in means garbage out at a fundamental level. Poor-quality retrieved documents, badly formatted examples, or unclear instructions all degrade model performance through ICL. Conversely, high-quality context---authoritative sources, clear examples, precise instructions---produces dramatically better results.
+
+\paragraph{Grounding Is Not Optional for Professional Work.} Relying on zero-shot parametric knowledge is suitable for general conversation but inappropriate for professional analysis. The model's training data may be outdated, incomplete, or simply wrong about the specific matter at hand. Grounding via RAG ensures the model reasons from current, authoritative sources.
+
+\paragraph{Examples Are a Powerful Control Mechanism.} Few-shot examples are not just helpful hints; they are a programming interface. By carefully selecting examples, you can shape model behavior with high precision. For domain-specific tasks (Bluebook citations, GAAP disclosures, regulatory filing formats), examples often outperform lengthy instructions.
+
+\paragraph{Context Window Size Is a Hard Constraint.} All grounding operates within the context window. You cannot retrieve infinite documents or maintain infinite conversation history. Systems must be designed to work within these limits, prioritizing the most relevant content.
+
+\begin{cautionbox}[title={ICL Does Not Guarantee Factual Accuracy}]
+In-context learning means the model adapts to its context; it does not mean the model verifies what it learns. If you retrieve documents containing errors, the model will learn from those errors. If your few-shot examples demonstrate incorrect reasoning, the model may replicate that reasoning. ICL is a mechanism for adaptation, not verification. Verification requires additional safeguards discussed in Chapter~3.
+\end{cautionbox}
+
+\subsection{From Concept to Practice}
+\label{sec:llmB-icl-transition}
+
+In-context learning is the conceptual foundation; retrieval-augmented generation is the practical technique for populating that context with relevant information. Understanding ICL explains \emph{why} RAG works: the retrieved documents become learning material that shapes model behavior. Understanding RAG explains \emph{how} to implement grounding in practice: the mechanics of retrieval, chunking, and prompt construction.
+
+With ICL established as the foundation, we now turn to the practical techniques for grounding model responses in authoritative sources. The next section examines retrieval-augmented generation: how to identify, retrieve, and inject relevant documents into the model's context.

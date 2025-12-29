@@ -1,0 +1,112 @@
+% =============================================================================
+% Further Learning — Providing Context
+% Purpose: Annotated bibliography for context and retrieval topics
+% Label: sec:llmB2-further
+% =============================================================================
+
+\section{Further Learning}
+\label{sec:llmB2-further}
+
+This section provides an annotated guide to resources for readers who wish to deepen their understanding of context provision techniques, in-context learning, and retrieval-augmented generation.
+
+\subsection{In-Context Learning Foundations}
+\label{sec:llmB2-further-icl}
+
+\paragraph{The GPT-3 Paper.}
+\fullcite{brown2020fewshot}
+
+The GPT-3 paper introduced few-shot learning as a practical paradigm, demonstrating that large models can learn from examples in the prompt without weight updates. Essential for understanding why in-context learning works and its scaling properties.
+
+\paragraph{Rethinking the Role of Demonstrations.}
+\fullcite{min2022rethinking}
+
+This paper challenges assumptions about few-shot learning, showing that models often rely more on the format of demonstrations than their content. Important for understanding that in-context learning is not classical learning but rather a form of task specification.
+
+\paragraph{What Can Transformers Learn In-Context?}
+\fullcite{garg2022transformers}
+
+A theoretical analysis of in-context learning as implicit meta-learning. Helps explain the mechanisms by which Transformers adapt to examples in the prompt.
+
+\subsection{Retrieval-Augmented Generation}
+\label{sec:llmB2-further-rag}
+
+\paragraph{The Original RAG Paper.}
+\fullcite{lewis2020rag}
+
+The foundational paper introducing retrieval-augmented generation. Establishes the pattern of combining parametric knowledge (model weights) with non-parametric knowledge (retrieved documents). Essential reading for understanding the RAG architecture.
+
+\paragraph{Dense Passage Retrieval.}
+\fullcite{karpukhin2020dpr}
+
+Introduces learned dense embeddings for passage retrieval, demonstrating that semantic embeddings outperform keyword methods for many tasks. Foundation for understanding modern embedding-based retrieval.
+
+\paragraph{Lost in the Middle.}
+\fullcite{liu2023lostmiddle}
+
+Documents the U-shaped attention pattern where models struggle to use information positioned in the middle of long contexts. Critical for understanding context window limitations and designing effective retrieval strategies.
+
+\paragraph{ColBERT and Efficient Retrieval.}
+\fullcite{khattab2020colbert}
+
+Introduces late interaction for efficient cross-encoder-quality retrieval. Important for understanding production retrieval systems that balance accuracy and latency.
+
+\subsection{Hybrid Search and Retrieval Quality}
+\label{sec:llmB2-further-hybrid}
+
+\paragraph{BM25: The Baseline.}
+The BM25 algorithm, while dating to the 1990s, remains a strong baseline for keyword retrieval. Understanding BM25 helps explain why hybrid approaches combining keyword and semantic search often outperform either alone. Standard implementations are available in Elasticsearch, Lucene, and dedicated libraries.
+
+\paragraph{Re-ranking for Precision.}
+Cross-encoder re-ranking using models like Cohere Rerank or similar architectures can dramatically improve retrieval precision at modest latency cost. The pattern of fast first-stage retrieval followed by expensive re-ranking is standard in production systems.
+
+\subsection{Embeddings and Vector Databases}
+\label{sec:llmB2-further-embeddings}
+
+\paragraph{Sentence Transformers.}
+\fullcite{reimers2019sentencebert}
+
+Introduces efficient sentence embeddings that enable semantic search. The foundation of most modern embedding approaches for retrieval.
+
+\paragraph{Text and Code Embeddings.}
+\fullcite{openai2022embedding}
+
+OpenAI's embedding models (text-embedding-ada-002 and successors) have become standard choices for retrieval. Understanding their properties---including dimensionality, domain coverage, and multilingual support---helps in system design.
+
+\paragraph{Vector Database Selection.}
+Production RAG systems require vector databases for efficient similarity search. Options include Pinecone, Weaviate, Qdrant, Milvus, and pgvector (PostgreSQL extension). Selection criteria include scale requirements, hosting preferences, and integration capabilities.
+
+\subsection{Domain-Specific Retrieval}
+\label{sec:llmB2-further-domain}
+
+\paragraph{Legal Information Retrieval.}
+Legal retrieval has a long history predating LLMs. Traditional systems like Westlaw and LexisNexis incorporate citation analysis, authority ranking, and jurisdictional filtering. Modern legal AI must integrate with or replicate these capabilities.
+
+\paragraph{Financial Document Processing.}
+Financial documents present particular challenges: structured tables, standardized formats (XBRL, EDGAR), and regulatory requirements for accuracy. SEC filings, earnings transcripts, and financial statements each require specialized preprocessing.
+
+\subsection{Practical Implementation Guides}
+\label{sec:llmB2-further-practical}
+
+\begin{itemize}
+  \item \textbf{LangChain Documentation:} Comprehensive framework for building RAG pipelines with retrieval, chunking, and generation components. \url{https://python.langchain.com/docs}
+
+  \item \textbf{LlamaIndex:} Framework focused on data indexing and retrieval for LLM applications. \url{https://docs.llamaindex.ai}
+
+  \item \textbf{Anthropic Cookbook:} Practical guides for Claude including context window management and RAG patterns. \url{https://docs.anthropic.com/cookbook}
+
+  \item \textbf{OpenAI Cookbook:} Implementation examples including retrieval and embedding use cases. \url{https://cookbook.openai.com}
+\end{itemize}
+
+\subsection{Staying Current}
+\label{sec:llmB2-further-current}
+
+RAG and retrieval techniques evolve rapidly. Resources for staying current:
+
+\begin{itemize}
+  \item \textbf{arXiv cs.IR and cs.CL:} New retrieval and NLP research appears as preprints
+  \item \textbf{Vendor blogs:} OpenAI, Anthropic, Cohere, and vector database vendors publish implementation guidance
+  \item \textbf{Community resources:} The RAG community shares techniques through blog posts, podcasts, and open-source implementations
+\end{itemize}
+
+The field moves quickly; techniques from early 2024 may already be superseded. Check publication dates and look for subsequent citations when evaluating sources.
+

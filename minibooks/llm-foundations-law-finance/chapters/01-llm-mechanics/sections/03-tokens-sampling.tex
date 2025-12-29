@@ -217,9 +217,9 @@ Best practices for efficient context usage:
 
 Long context windows do not imply uniform retrieval. Empirical work shows a \textbf{U-shaped retrieval curve}: models more reliably use information placed at the beginning and end of the context than information buried in the middle \parencite{liu2023lostmiddle}. For practitioners, the implication is straightforward: pasting an entire agreement or filing into the prompt can still produce omission or hallucination if the relevant provision is located ``in the middle.''
 
-\paragraph{Where to go deeper.} Chapter~2 (Conversations and Reasoning) provides the primary treatment of ``Lost in the Middle'' in the context of prompt assembly, memory strategies, and instruction placement.
+\paragraph{Where to go deeper.} Chapter~3 (Reasoning and Conversations) provides the primary treatment of ``Lost in the Middle'' in the context of prompt assembly, memory strategies, and instruction placement.
 
-\paragraph{Preview: Roles and Chat Formatting.} Most production systems structure interactions as role-tagged messages (system, user, assistant, tool). This is central to building stateful conversational systems and to understanding why prompt injection is a systems security problem, not a ``prompting trick.'' Chapter~2 covers role-based prompting and guardrails; this chapter's failure modes section (\Cref{sec:llm1-fail}) covers prompt injection risk and mitigations.
+\paragraph{Preview: Roles and Chat Formatting.} Most production systems structure interactions as role-tagged messages (system, user, assistant, tool). This is central to building stateful conversational systems and to understanding why prompt injection is a systems security problem, not a ``prompting trick.'' Chapter~3 covers role-based prompting and guardrails; this chapter's failure modes section (\Cref{sec:llm1-fail}) covers prompt injection risk and mitigations.
 
 \subsection{Token Efficiency and Prompt Engineering}
 \label{sec:llm1-tokens-efficiency}

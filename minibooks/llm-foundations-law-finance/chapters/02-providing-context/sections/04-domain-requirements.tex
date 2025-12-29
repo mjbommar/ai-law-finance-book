@@ -1,0 +1,232 @@
+% =============================================================================
+% Professional Domain Requirements — How Do I Ground and Reason?
+% Purpose: Authority hierarchy, jurisdiction, temporal scope, isolation
+% Label: sec:llmB-domain
+% =============================================================================
+
+\section{Professional Domain Requirements}
+\label{sec:llmB-domain}
+
+The RAG patterns introduced in the previous section provide the mechanics for grounding model responses in retrieved documents. But general-purpose retrieval is insufficient for regulated professional services. Legal and financial applications require additional constraints that generic search systems do not provide: authority hierarchies, jurisdictional filtering, temporal validity, and matter isolation. This section examines these domain-specific requirements that distinguish professional AI systems from consumer chatbots.
+
+\subsection{Authority Hierarchy and Source Ranking}
+\label{sec:llmB-domain-authority}
+
+Not all sources carry equal weight. A Supreme Court opinion outranks a law review article discussing the same doctrine. A statute supersedes a regulation that contradicts it. An SEC no-action letter provides more reliable guidance than a client alert summarizing the same issue. Human professionals instinctively apply these hierarchies; retrieval systems must be designed to do the same.
+
+\begin{definitionbox}[title={Authority Hierarchy}]
+\keyterm{Authority hierarchy} refers to the relative weight given to different sources based on their legal or institutional standing. In legal contexts, this maps to the distinction between primary and secondary sources, and between binding and persuasive authority. In financial contexts, it distinguishes official filings from commentary.
+\end{definitionbox}
+
+\paragraph{Primary vs. Secondary Sources.} In legal research, \keyterm{primary sources} are the law itself: constitutions, statutes, regulations, and judicial opinions. \keyterm{Secondary sources} interpret or discuss the law: treatises, law review articles, practice guides, and commentary. A retrieval system should surface primary sources more prominently than secondary sources when both are relevant, because primary sources are what courts actually apply.
+
+\paragraph{Binding vs. Persuasive Authority.} Among primary sources, some are binding while others are merely persuasive. A decision from the jurisdiction's highest court binds all lower courts in that jurisdiction. A decision from a sister jurisdiction or lower court may be persuasive but does not compel the same result. When researching California employment law, a California Supreme Court decision is binding; a Ninth Circuit decision on California law is highly persuasive; a Texas Supreme Court decision on a similar issue is merely informative.
+
+Retrieval systems should tag documents with their position in this hierarchy:
+
+\begin{itemize}
+  \item \textbf{Source type}: Primary (statute, regulation, case) or secondary (treatise, article, commentary)
+  \item \textbf{Authority level}: Constitutional, statutory, regulatory, judicial
+  \item \textbf{Court level}: Supreme court, appellate court, trial court
+  \item \textbf{Binding status}: Binding in the relevant jurisdiction, persuasive, or merely informative
+\end{itemize}
+
+When results are returned to the model, higher-authority sources should rank higher. A system that retrieves a blog post ahead of controlling Supreme Court precedent has failed at a fundamental level, regardless of how semantically similar the blog post is to the query.
+
+\paragraph{Financial Source Hierarchy.} Similar hierarchies apply in finance. Official SEC filings (10-K, 10-Q, 8-K) outrank analyst reports discussing those filings. Exchange rules outrank broker guidance. Central bank policy statements outrank market commentary about those statements. Source classification enables appropriate weighting:
+
+\begin{itemize}
+  \item \textbf{Official filings}: SEC EDGAR, exchange disclosures, regulatory filings
+  \item \textbf{Regulatory guidance}: No-action letters, staff bulletins, FAQs
+  \item \textbf{Professional analysis}: Audited financials, certified reports
+  \item \textbf{Commentary}: News, analyst reports, market opinions
+\end{itemize}
+
+\begin{keybox}[title={Authority-Aware Retrieval}]
+Retrieval systems for professional applications must rank by authority, not just relevance. Semantic similarity measures how well the content matches the query; authority measures how much weight the content should receive. Both dimensions matter for professional work.
+\end{keybox}
+
+\subsection{Jurisdiction and Temporal Scope}
+\label{sec:llmB-domain-jurisdiction}
+
+Legal and financial information does not exist in a vacuum. It operates within territorial and temporal boundaries. California precedent does not bind Texas courts. EU regulations have no force in Singapore. A statute in effect in 2020 may have been amended or repealed by 2024. Retrieval systems must enforce these boundaries.
+
+\subsubsection{Jurisdictional Filtering}
+
+When an attorney researches Delaware corporate law, the system should filter results to surface Delaware authorities as controlling. Authorities from other jurisdictions may be relevant as persuasive precedent, but they must be clearly distinguished from binding authority.
+
+Implementation requires rich metadata:
+
+\begin{itemize}
+  \item \textbf{Primary jurisdiction}: The jurisdiction where the document has binding effect (e.g., \texttt{US-federal}, \texttt{US-DE}, \texttt{EU}, \texttt{UK})
+  \item \textbf{Subject matter jurisdiction}: The regulatory domain (e.g., \texttt{securities}, \texttt{employment}, \texttt{tax})
+  \item \textbf{Court or agency}: The issuing body for judicial opinions and regulatory guidance
+\end{itemize}
+
+At query time, the system should accept a jurisdiction constraint:
+
+\begin{quote}
+\textit{``Search for case law on fiduciary duty in Delaware corporate law.''}
+\end{quote}
+
+The retrieval system should interpret ``Delaware corporate law'' as a scope constraint, returning Delaware Chancery Court and Delaware Supreme Court opinions as primary results, with other jurisdictions clearly marked as persuasive authority.
+
+\subsubsection{Temporal Validity}
+
+Law evolves through amendments, repeal, and judicial interpretation. A case from 1995 may have been explicitly overruled, limited to its facts, or superseded by statute. Financial data expires even faster: market prices become stale in milliseconds, earnings reports remain relevant for quarters, and industry analyses may hold value for years.
+
+Temporal validity requires multiple metadata elements:
+
+\begin{itemize}
+  \item \textbf{Effective date}: When the document became effective or was published
+  \item \textbf{Superseded date}: When the document was replaced by a newer version (if applicable)
+  \item \textbf{Current status}: Whether the document remains valid, has been amended, or has been repealed
+\end{itemize}
+
+For legal authorities, integration with \keyterm{citator services} like Shepard's (LexisNexis) or KeyCite (Westlaw) is essential. These services track the subsequent history of cases: whether they have been followed, distinguished, criticized, or overruled. A retrieval system that returns a case without checking its citator status may surface authority that is no longer good law.
+
+\begin{cautionbox}[title={Citing Overruled Authority}]
+One of the most dangerous failure modes for legal AI is citing authority that has been overruled or superseded. This can constitute malpractice if relied upon in legal work. Retrieval systems must integrate validity checking, either through citator services or manual curation, before presenting legal authorities to users.
+\end{cautionbox}
+
+\subsubsection{Version Control for Regulatory Changes}
+
+Regulations change frequently. The tax code is amended annually; securities regulations are updated through rulemaking; banking rules respond to market conditions. A retrieval system must track versions:
+
+\begin{itemize}
+  \item \textbf{Version identifier}: A unique ID for each version (e.g., \texttt{26-USC-162-v2024})
+  \item \textbf{Effective period}: The date range during which this version was in force
+  \item \textbf{Amendment history}: Links to prior and subsequent versions
+\end{itemize}
+
+When answering questions about historical compliance (``What were the disclosure requirements in 2018?''), the system must retrieve the version effective at that time, not the current version.
+
+\subsection{Matter and Client Isolation}
+\label{sec:llmB-domain-isolation}
+
+Perhaps no aspect of retrieval architecture matters more for professional services than enforcing strict boundaries between matters and clients. The consequences of failure are severe: if a system working on Matter A inadvertently retrieves privileged information from Matter B (particularly when the matters involve adverse parties), the result may be privilege waiver, disqualification, and malpractice liability. Financial services face parallel risks when Material Non-Public Information (MNPI) leaks across the walls that separate investment banking from trading operations.
+
+\begin{definitionbox}[title={Ethical Walls}]
+\keyterm{Ethical walls} (also called ``Chinese walls'' or information barriers) are policies and procedures that prevent the flow of confidential information between different parts of an organization. In law firms, ethical walls prevent attorneys working for one client from accessing information about adverse clients. In financial institutions, ethical walls separate investment banking from research and trading.
+\end{definitionbox}
+
+\subsubsection{Architectural Isolation}
+
+Effective separation requires architectural controls, not just policies. Each matter should occupy its own namespace within the retrieval system, creating a logical partition that separates its documents from all other matters.
+
+\begin{itemize}
+  \item \textbf{Namespace isolation}: Documents are indexed within matter-specific namespaces. A query in the context of Matter A searches only Matter A's namespace.
+  \item \textbf{Cross-namespace restrictions}: Queries cannot span namespaces unless explicitly authorized and logged.
+  \item \textbf{Default denial}: If a document's matter assignment is unclear, it should be inaccessible rather than broadly available.
+\end{itemize}
+
+\subsubsection{Role-Based Access Controls}
+
+Access controls determine which users and agents can query each namespace. These controls should mirror the ethical wall policies that firms already maintain for human professionals:
+
+\begin{itemize}
+  \item \textbf{Matter-level access}: Users are granted access to specific matters; queries are scoped to authorized matters only.
+  \item \textbf{Role-based permissions}: Different roles (partner, associate, paralegal) may have different access levels.
+  \item \textbf{Conflict checking}: Before granting access to a new matter, the system should check for conflicts with existing matters.
+\end{itemize}
+
+An associate staffed on a merger transaction should have access to that deal's documents but not to documents from litigation against the same company being handled by a different team.
+
+\subsubsection{Audit Trails}
+
+Every retrieval operation should be logged with sufficient detail to reconstruct what information was accessed:
+
+\begin{itemize}
+  \item \textbf{Timestamp}: When the retrieval occurred
+  \item \textbf{User/agent identity}: Who or what requested the retrieval
+  \item \textbf{Matter context}: Which matter the retrieval was performed for
+  \item \textbf{Query}: What was searched for
+  \item \textbf{Results}: What documents were returned (at minimum, document IDs)
+\end{itemize}
+
+These logs serve multiple purposes: they enable compliance review, support investigations if a breach is suspected, and provide documentation that the organization maintained appropriate controls. In litigation, being able to demonstrate that information barriers were properly implemented can be the difference between surviving a disqualification motion and losing a case.
+
+\begin{keybox}[title={Matter Isolation Is Non-Negotiable}]
+For legal and financial applications, matter isolation is not a nice-to-have feature---it is a fundamental requirement. Systems that cannot enforce confidentiality boundaries should not be deployed in professional contexts, regardless of their other capabilities.
+\end{keybox}
+
+\subsection{Identifier Normalization}
+\label{sec:llmB-domain-identifiers}
+
+Professional domains generate identifier chaos. Legal citations appear in multiple formats; the same case might be cited as ``123 F.3d 456'' or ``123 F3d 456'' depending on the source. Companies accumulate multiple identifiers: stock tickers, CUSIPs, ISINs, and Legal Entity Identifiers (LEIs) all point to the same entity but appear in different documents.
+
+Without careful normalization, retrieval systems fail to connect related records, fragmenting information that belongs together.
+
+\subsubsection{Legal Citation Normalization}
+
+Legal citations follow jurisdiction-specific conventions (Bluebook in the US, OSCOLA in the UK, McGill Guide in Canada). A normalization layer should:
+
+\begin{itemize}
+  \item \textbf{Parse variant formats}: Recognize ``347 U.S. 483'', ``347 US 483'', and ``Brown v. Board of Education'' as referring to the same case.
+  \item \textbf{Map to canonical identifiers}: Convert all variants to a standard internal identifier.
+  \item \textbf{Support parallel citations}: Handle cases that appear in multiple reporters (official and unofficial).
+\end{itemize}
+
+\subsubsection{Financial Identifier Resolution}
+
+Financial instruments and entities have multiple identifiers:
+
+\begin{itemize}
+  \item \textbf{Companies}: Ticker symbols (AAPL), CUSIPs, ISINs, LEIs, SEC CIK numbers
+  \item \textbf{Securities}: CUSIP, ISIN, FIGI, exchange-specific identifiers
+  \item \textbf{Funds}: Ticker symbols, fund identifiers, share class identifiers
+\end{itemize}
+
+A query about ``Apple'' should retrieve SEC filings using CIK 0000320193, market data using ticker AAPL, and debt instruments using the appropriate CUSIPs. This requires maintaining mappings between identifier systems and applying them during both indexing and retrieval.
+
+\subsection{Implementing Domain Requirements}
+\label{sec:llmB-domain-implementation}
+
+These domain requirements translate into concrete implementation patterns:
+
+\paragraph{Metadata-Enriched Indexing.} Every document chunk should carry metadata fields:
+\begin{itemize}
+  \item \texttt{jurisdiction}: Applicable jurisdiction(s)
+  \item \texttt{authority\_type}: Primary/secondary, binding/persuasive
+  \item \texttt{effective\_date}: When the content became effective
+  \item \texttt{valid\_until}: When superseded (if applicable)
+  \item \texttt{matter\_id}: Confidentiality namespace
+  \item \texttt{source\_type}: Filing, opinion, regulation, commentary, etc.
+  \item \texttt{canonical\_id}: Normalized identifier
+\end{itemize}
+
+\paragraph{Filtered Retrieval.} Queries should accept filter parameters that constrain results:
+\begin{itemize}
+  \item Jurisdiction filters: Return only content from specified jurisdictions
+  \item Date filters: Return only content effective as of a specified date
+  \item Matter filters: Return only content accessible to the specified matter
+  \item Authority filters: Boost or require binding authority
+\end{itemize}
+
+\paragraph{Ranked Reranking.} After initial retrieval, rerank results by authority:
+\begin{enumerate}
+  \item Apply semantic similarity to find candidate documents
+  \item Filter by jurisdiction, date, and matter constraints
+  \item Rerank by authority hierarchy (binding > persuasive > commentary)
+  \item Validate currency through citator services
+  \item Return ranked results with authority indicators
+\end{enumerate}
+
+\begin{highlightbox}[title={Professional vs. Consumer Retrieval}]
+These requirements distinguish professional RAG systems from consumer search. A general-purpose chatbot can return any relevant content; a legal research system must return authoritative, current, appropriately scoped content while respecting confidentiality boundaries. The underlying retrieval technology may be similar, but the governance layer is fundamentally different.
+\end{highlightbox}
+
+\subsection{Forward References}
+\label{sec:llmB-domain-forward}
+
+This section has introduced the domain requirements; subsequent chapters address implementation details:
+
+\begin{itemize}
+  \item \textbf{Advanced retrieval patterns} (Chapter~3) examines multi-stage retrieval, query rewriting, and citation fidelity mechanisms that implement these requirements.
+
+  \item \textbf{Evidence records} (Chapter~3) formalizes how to capture provenance and maintain audit trails for every claim made by the system.
+
+  \item \textbf{Evaluation and monitoring} (Chapter~5) addresses how to measure whether your system is meeting these domain requirements and how to detect degradation over time.
+\end{itemize}
+
+With the domain requirements established, we now turn to maintaining coherent conversations within these constraints. The next section examines how to manage state across multi-turn dialogues while respecting context window limits.

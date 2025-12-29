@@ -1,0 +1,47 @@
+% =============================================================================
+% Conclusion — Structured Outputs
+% Purpose: Closing summary and handoff to tool use chapter
+% Label: sec:llmC2-conclusion
+% =============================================================================
+
+\section*{Conclusion}
+\addcontentsline{toc}{section}{Conclusion}
+\label{sec:llmC2-conclusion}
+
+This chapter addressed a fundamental challenge: transforming probabilistic text generation into deterministic, validated, auditable data. We moved from treating LLMs as conversational tools to deploying them as embedded components within strict data pipelines that professional practice demands.
+
+\subsection*{Key Takeaways}
+
+\paragraph{Structured Outputs Enable Integration.} Free-form text cannot be directly consumed by databases, compliance systems, or analytics pipelines. Structured outputs---schema-constrained JSON, XML, or CSV---transform AI from a conversational curiosity into a production-grade data source. The techniques we examined, from prompt-based formatting to constrained decoding, provide the interface between probabilistic generation and deterministic systems.
+
+\paragraph{Evidence Records Enable Audit.} In professional practice, every claim must be traceable. The Canonical Evidence Record schema captures source, location, quote, jurisdiction, date, and cryptographic hash for every assertion. This transforms opaque AI outputs into auditable artifacts suitable for legal proceedings and regulatory scrutiny.
+
+\paragraph{Production Retrieval Differs from Prototype.} The RAG fundamentals from Chapter~2 are necessary but not sufficient. Production systems require multi-stage retrieval, query rewriting, re-ranking, and continuous quality measurement. A prototype that works 80\% of the time is interesting; a production system that fails 20\% of the time is unacceptable.
+
+\paragraph{Validation is Architectural.} Never trust LLM outputs without validation. Schema validation catches structural errors; semantic validation catches type errors; business rule validation catches domain violations. Implement retry logic, fallback handling, and human escalation paths.
+
+\subsection*{The Core Insight}
+
+The central theme of this chapter is that \textbf{structure enables, not constrains}. Imposing schemas, validation, and evidence requirements does not limit what AI systems can do---it enables them to participate in professional workflows where reliability and auditability are non-negotiable.
+
+An unstructured system produces text that must be read, interpreted, and manually entered. A structured system produces data that flows directly into downstream processes. The difference is not cosmetic; it is architectural.
+
+\subsection*{Looking Forward}
+
+\paragraph{Chapter 5: Tool Use.} With structured outputs established, we extend the model's capabilities to take actions in the world. Function calling enables LLMs to invoke calculators, query databases, search the web, and integrate with enterprise APIs. The structured output foundations from this chapter---schemas, validation, evidence records---apply directly to tool use.
+
+\paragraph{Chapter 6: Multimodal Documents.} We extend structured extraction to the documents professionals actually work with: PDFs with complex layouts, financial statements with tables, charts and visualizations, audio transcripts. The same schema patterns and evidence records apply; we add modality-specific parsing.
+
+\paragraph{Chapter 7: Systematic Improvement.} We treat prompts and pipelines as engineering artifacts subject to evaluation, optimization, and version control. Structured outputs enable quantitative measurement---schema compliance rates, citation accuracy, field extraction precision---that drives systematic improvement.
+
+\subsection*{Final Thoughts}
+
+The journey from experimental chatbot to production system requires discipline. Every output must be validated. Every claim must be traceable. Every component must be versioned. This discipline is not bureaucratic overhead---it is the engineering rigor that makes AI systems suitable for high-stakes professional applications.
+
+You now understand how to constrain LLM outputs to structured formats, how to validate those outputs, and how to maintain evidence records for audit. The next chapter extends these foundations to enable AI systems that act, not just analyze.
+
+\vspace{1em}
+\begin{center}
+\rule{0.4\textwidth}{0.4pt}
+\end{center}
+

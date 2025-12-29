@@ -1,0 +1,96 @@
+% =============================================================================
+% Introduction — How Do I Ground and Reason?
+% Purpose: Scope, motivation, and chapter roadmap with grounding-first framing
+% Label: sec:llmB-intro
+% =============================================================================
+
+\section{Introduction: Why Grounding Comes First}
+\label{sec:llmB-intro}
+
+An architect would never design a building without first surveying the site. The soil composition, property boundaries, existing utilities, and zoning constraints must be understood before a single line is drawn. Similarly, a litigator would never draft a brief without first researching the applicable law. The governing statutes, binding precedent, and controlling regulations must be identified before constructing any argument. In both cases, the professional's reasoning ability is necessary but insufficient. Without access to the relevant facts, even the most sophisticated analysis proceeds in a vacuum.
+
+Large Language Models face exactly the same constraint. A model can reason impressively about legal doctrines and financial concepts, but without mechanisms to access current case law, live market data, client documents, or regulatory filings, it cannot deliver reliable professional work. This chapter addresses how to transform a powerful but potentially ungrounded reasoning engine into a system that reasons \emph{from} authoritative sources rather than about them from memory alone.
+
+\subsection{From ``Prevent Hallucination'' to ``Enable Capability''}
+
+The conventional framing of retrieval-augmented generation (RAG) positions it as a defensive measure: models hallucinate, so we give them documents to reduce errors. This framing, while not wrong, misses the deeper point. Grounding is not primarily about preventing failure; it is about \emph{enabling capability}.
+
+Consider the difference between these two instructions to an LLM:
+
+\begin{quote}
+\textit{``Analyze whether the client's termination of the software license agreement was proper.''}
+\end{quote}
+
+\begin{quote}
+\textit{``Analyze whether the client's termination of the software license agreement was proper, based on the attached agreement and the following Delaware case law on software licensing...''}
+\end{quote}
+
+The first instruction asks the model to reason from general knowledge. The second provides the specific materials needed to perform actual legal analysis. The difference is not merely that the second is safer; it is that the second is \emph{capable} of producing professional work while the first is not, regardless of the model's sophistication.
+
+\begin{keybox}[title={The Grounding Principle}]
+Grounding is not a fix for hallucination---it is an architectural necessity for professional reasoning. An ungrounded model can discuss legal concepts; a grounded model can analyze specific legal situations. The distinction is fundamental.
+\end{keybox}
+
+This reframing has practical consequences. If grounding is merely a safety mechanism, you might add it late in development after building your reasoning pipelines. If grounding is a capability enabler, you design it into the architecture from the beginning. This chapter takes the latter approach.
+
+\subsection{The Dual Challenge Revisited}
+
+Chapter~1 introduced the mechanics of LLMs: how tokens become probabilities, how sampling produces text, and how failure modes emerge. With those foundations established, we now face the practical challenge of building systems that can assist with professional work. This requires addressing two interconnected problems:
+
+\begin{definitionbox}[title={Challenge 1: Grounded Context}]
+How do we provide the model with the specific information it needs to reason about a particular matter? This includes retrieving relevant documents, maintaining conversation state, and ensuring the model has access to authoritative sources rather than relying on general knowledge.
+\end{definitionbox}
+
+\begin{definitionbox}[title={Challenge 2: Structured Reasoning}]
+How do we elicit systematic reasoning over that grounded context? Standard ``zero-shot'' prompting often fails on complex tasks because the model attempts to map input directly to output in a single forward pass, relying on surface-level statistical correlations rather than step-by-step analysis \parencite{wei2022cot}.
+\end{definitionbox}
+
+These challenges are deeply interrelated. Effective reasoning requires relevant context, while determining what context is relevant often requires reasoning about the task. The techniques we introduce---from in-context learning to retrieval-augmented generation to chain-of-thought reasoning---address both challenges in an integrated framework.
+
+Crucially, the order matters. We begin with grounding because reasoning without relevant context is speculation, no matter how sophisticated the reasoning patterns employed. A perfectly constructed chain-of-thought analysis based on hallucinated precedent is worse than useless in professional practice.
+
+\subsection{Chapter Roadmap}
+
+This chapter builds from foundations to practice, following the logical order in which these concepts support each other:
+
+\paragraph{\Cref{sec:llmB-icl}: In-Context Learning.} We begin with the fundamental mechanism that makes grounding effective: the ability of LLMs to learn from information provided in their input, without any update to model weights. Understanding in-context learning explains why few-shot examples work, why RAG is effective, and why conversation history shapes model behavior.
+
+\paragraph{\Cref{sec:llmB-rag}: Grounding via Retrieval.} With in-context learning established, we examine how to populate that context with relevant information. Retrieval-augmented generation (RAG) provides the model with authoritative sources---case law, regulations, financial data, client documents---rather than relying on parametric knowledge alone.
+
+\paragraph{\Cref{sec:llmB-domain}: Professional Domain Requirements.} General-purpose retrieval is insufficient for regulated industries. Legal and financial applications require authority hierarchies (binding vs. persuasive precedent), jurisdictional filtering, temporal validity checking, and matter isolation to maintain confidentiality boundaries.
+
+\paragraph{\Cref{sec:llmB2-synthesis}: Synthesis.} We integrate the concepts and prepare the transition to reasoning patterns covered in Chapter~3.
+
+\subsection{A Note on Prerequisites}
+
+This chapter assumes familiarity with the LLM mechanics from Chapter~1, particularly:
+
+\begin{itemize}
+  \item \keyterm{Context windows}: The maximum number of tokens the model can consider in a single inference call (\Cref{sec:llm1-tokens}).
+
+  \item \keyterm{Embeddings}: Vector representations of text that capture semantic meaning (\Cref{sec:llm1-embeddings}).
+
+  \item \keyterm{Sampling parameters}: How temperature and other settings affect generation behavior (\Cref{sec:llm1-sampling}).
+\end{itemize}
+
+If these concepts are unfamiliar, consider reviewing the relevant sections of Chapter~1 before proceeding. The techniques in this chapter build directly on those foundations.
+
+\subsection{What This Chapter Does Not Cover}
+
+While we introduce retrieval-augmented generation and professional domain requirements, this chapter focuses on providing context to models. Related topics are addressed elsewhere:
+
+\begin{itemize}
+  \item \textbf{Reasoning patterns} (chain-of-thought, self-consistency, ReAct) appear in Chapter~3, which builds on the grounded context established here.
+
+  \item \textbf{Conversation state management} (multi-turn dialogue, memory strategies) is covered in Chapter~3.
+
+  \item \textbf{Structured output enforcement} (JSON schemas, function calling, validation) is covered in Chapter~4.
+
+  \item \textbf{Tool use} (function calling, API integration) appears in Chapter~5.
+
+  \item \textbf{Multimodal inputs} (document images, tables, audio) are addressed in Chapter~6.
+
+  \item \textbf{Evaluation and optimization} of retrieval and reasoning pipelines appear in Chapter~7.
+\end{itemize}
+
+With this roadmap established, we turn to the foundational concept that makes all grounding techniques effective: in-context learning.

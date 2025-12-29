@@ -1,0 +1,93 @@
+% =============================================================================
+% Introduction — How Do I Reason and Converse?
+% Purpose: Scope, motivation, and chapter roadmap
+% Label: sec:llmB3-intro
+% =============================================================================
+
+\section{Introduction: From Context to Cognition}
+\label{sec:llmB3-intro}
+
+Chapter~2 established how to provide LLMs with the information they need. We can now retrieve relevant documents, ground responses in authoritative sources, and respect professional constraints like authority hierarchies and matter isolation. But having the right information is only half the challenge. The other half is reasoning correctly over that information.
+
+Consider a legal research assistant that retrieves the relevant statutes and case law for a contract dispute. The grounding problem is solved---the model has access to the right sources. But can it:
+
+\begin{itemize}
+  \item Identify the applicable legal standard?
+  \item Trace the reasoning from facts to conclusion?
+  \item Consider alternative interpretations?
+  \item Explain its analysis in a way that can be verified?
+\end{itemize}
+
+These are not retrieval problems; they are reasoning problems. This chapter addresses how to elicit structured, verifiable reasoning from LLMs operating over grounded context.
+
+\subsection{The Reasoning Challenge}
+
+Standard ``zero-shot'' prompting often fails on complex tasks because the model attempts to map input directly to output in a single forward pass. This works for simple pattern matching but fails for tasks requiring genuine analysis.
+
+\begin{definitionbox}[title={The Direct Mapping Problem}]
+When prompted with a complex analytical question, LLMs trained on next-token prediction will produce the most statistically likely response given their training data. This response may appear plausible without representing genuine reasoning. The model's ``thinking'' occurs entirely within its forward pass, invisible and unverifiable.
+\end{definitionbox}
+
+The solution is to structure the generation process to externalize reasoning---to force the model to show its work. This serves two purposes:
+
+\begin{enumerate}
+  \item \textbf{Improved accuracy}: Breaking complex problems into steps reduces the burden on each forward pass, leading to fewer errors.
+
+  \item \textbf{Verifiability}: Externalized reasoning can be inspected, audited, and corrected. A conclusion without reasoning is an assertion; a conclusion with reasoning is an argument.
+\end{enumerate}
+
+\subsection{The Conversation Challenge}
+
+Professional work typically spans multiple interactions. A single research query may evolve into a series of follow-up questions, refinements, and explorations. This creates a second challenge: maintaining coherent state across turns.
+
+\begin{definitionbox}[title={The Statelessness Problem}]
+LLMs are fundamentally stateless. Each inference call is independent; the model has no memory of previous interactions except what is included in the current context. Multi-turn conversation requires explicit state management within the context window.
+\end{definitionbox}
+
+Effective conversation management requires:
+
+\begin{itemize}
+  \item \textbf{Role clarity}: Distinguishing system instructions, user inputs, and assistant responses
+  \item \textbf{Memory strategies}: Handling conversations that exceed context limits
+  \item \textbf{Context preservation}: Maintaining relevant information while discarding noise
+  \item \textbf{Safety guardrails}: Preventing manipulation through conversation history
+\end{itemize}
+
+\subsection{Chapter Roadmap}
+
+This chapter addresses both challenges in sequence:
+
+\paragraph{\Cref{sec:llmB-convo}: Conversational Models and State.} We begin with the mechanics of multi-turn dialogue: how conversation state is managed within context windows, role-based prompting patterns, memory strategies for long conversations, and safety guardrails that maintain behavioral consistency.
+
+\paragraph{\Cref{sec:llmB-reason}: Reasoning Patterns.} With conversation foundations established, we examine techniques for eliciting structured reasoning. Chain-of-thought prompting externalizes step-by-step analysis. Self-consistency generates multiple reasoning paths and aggregates results. Tree of Thoughts and Graph of Thoughts enable exploration of alternative approaches. ReAct combines reasoning with grounded retrieval and tool use.
+
+\paragraph{\Cref{sec:llmB-strategy}: Strategy Selection.} We synthesize these elements into a decision framework. Different applications have different requirements: some need maximum accuracy regardless of cost; others need fast responses with acceptable error rates. The framework maps task characteristics to appropriate strategy choices.
+
+\paragraph{\Cref{sec:llmB-synthesis}: Synthesis.} We integrate the concepts and prepare the transition to structured outputs and tool use in subsequent chapters.
+
+\subsection{What This Chapter Does Not Cover}
+
+This chapter focuses on reasoning and conversation patterns. Related topics are addressed elsewhere:
+
+\begin{itemize}
+  \item \textbf{Retrieval and grounding}: The context these reasoning patterns operate over is established in Chapter~2.
+
+  \item \textbf{Structured output enforcement}: Constraining outputs to JSON schemas and other formats appears in Chapter~4.
+
+  \item \textbf{Tool use}: Function calling and API integration, which enables ReAct-style patterns, is detailed in Chapter~5.
+
+  \item \textbf{Evaluation}: Measuring reasoning quality systematically appears in Chapter~7.
+\end{itemize}
+
+\subsection{Prerequisites}
+
+This chapter builds directly on Chapter~2. The reasoning patterns we introduce are most effective when applied over grounded context. Key prerequisites include:
+
+\begin{itemize}
+  \item Understanding of in-context learning (\Cref{sec:llmB-icl})
+  \item Familiarity with RAG fundamentals (\Cref{sec:llmB-rag})
+  \item Awareness of professional domain requirements (\Cref{sec:llmB-domain})
+\end{itemize}
+
+With these foundations established, we turn to the mechanics of multi-turn conversation.
+

@@ -1,0 +1,103 @@
+% =============================================================================
+% Further Learning — Structured Outputs
+% Purpose: Annotated bibliography for structured generation and retrieval
+% Label: sec:llmC2-further
+% =============================================================================
+
+\section{Further Learning}
+\label{sec:llmC2-further}
+
+This section provides an annotated guide to resources for readers who wish to deepen their understanding of structured generation, production retrieval, and evidence-based systems.
+
+\subsection{Structured Output Generation}
+\label{sec:llmC2-further-structured}
+
+\paragraph{OpenAI Structured Outputs.}
+\fullcite{openai2024structured}
+
+OpenAI's documentation on structured outputs, including JSON mode and schema-constrained generation. Essential for understanding production implementations of constrained decoding.
+
+\paragraph{Outlines Library.}
+The Outlines library provides constrained generation for open-source models, implementing JSON schema enforcement at the logit level. Demonstrates how constrained decoding works at a technical level. \url{https://github.com/outlines-dev/outlines}
+
+\paragraph{Instructor Library.}
+A Python library that simplifies structured output extraction using Pydantic models with LLM APIs. Provides practical patterns for validation and retry logic. \url{https://github.com/jxnl/instructor}
+
+\subsection{Validation and Type Safety}
+\label{sec:llmC2-further-validation}
+
+\paragraph{Pydantic Documentation.}
+Pydantic provides data validation using Python type annotations. Essential for implementing validation loops in LLM pipelines. \url{https://docs.pydantic.dev}
+
+\paragraph{Zod Documentation.}
+Zod provides TypeScript-first schema validation. Useful for JavaScript/TypeScript implementations of structured output validation. \url{https://zod.dev}
+
+\paragraph{JSON Schema Specification.}
+The JSON Schema specification defines the vocabulary for schema-constrained generation. Understanding JSON Schema is essential for designing effective output schemas. \url{https://json-schema.org}
+
+\subsection{Production Retrieval}
+\label{sec:llmC2-further-retrieval}
+
+\paragraph{ColBERT and Late Interaction.}
+\fullcite{khattab2020colbert}
+
+Introduces late interaction for efficient cross-encoder-quality retrieval. Important for understanding modern re-ranking approaches.
+
+\paragraph{Query Rewriting.}
+\fullcite{gao2022hyde}
+
+HyDE (Hypothetical Document Embeddings) demonstrates query rewriting by generating a hypothetical answer and using it for retrieval. One of several query expansion techniques for improving retrieval.
+
+\paragraph{Self-RAG.}
+\fullcite{asai2023selfrag}
+
+Self-RAG teaches models to retrieve, generate, and critique adaptively. Demonstrates how retrieval can be integrated into the generation loop rather than as a preprocessing step.
+
+\subsection{Evidence and Provenance}
+\label{sec:llmC2-further-evidence}
+
+\paragraph{Attributed QA.}
+\fullcite{bohnet2022attributed}
+
+Examines how to train and evaluate systems that attribute claims to sources. Important for understanding the research foundations of evidence-based generation.
+
+\paragraph{Citation Generation.}
+Research on generating accurate citations is rapidly evolving. Key concerns include citation accuracy (does the citation exist?), faithfulness (does the citation support the claim?), and coverage (are all claims cited?).
+
+\subsection{Security and Governance}
+\label{sec:llmC2-further-security}
+
+\paragraph{OWASP Top 10 for LLMs.}
+\fullcite{owasp2025llm}
+
+The OWASP security risk taxonomy for LLM applications. Essential reference for security assessments and compliance frameworks.
+
+\paragraph{Prompt Injection.}
+\fullcite{liu2023prompt}
+
+Analyzes prompt injection vulnerabilities. Understanding these attacks is essential for designing secure structured output pipelines.
+
+\subsection{Implementation Frameworks}
+\label{sec:llmC2-further-frameworks}
+
+\begin{itemize}
+  \item \textbf{LangChain:} Comprehensive framework for building LLM applications with structured outputs and retrieval. \url{https://python.langchain.com/docs}
+
+  \item \textbf{LlamaIndex:} Framework focused on data indexing and structured extraction. \url{https://docs.llamaindex.ai}
+
+  \item \textbf{Haystack:} Open-source framework for building production-ready LLM applications. \url{https://haystack.deepset.ai}
+\end{itemize}
+
+\subsection{Staying Current}
+\label{sec:llmC2-further-current}
+
+Structured output techniques evolve rapidly. Resources for staying current:
+
+\begin{itemize}
+  \item \textbf{Vendor documentation:} OpenAI, Anthropic, Google, and other providers regularly update their structured output capabilities
+  \item \textbf{arXiv cs.CL and cs.IR:} New research on constrained generation and retrieval appears as preprints
+  \item \textbf{Community resources:} The applied AI community shares practical techniques through blog posts and open-source implementations
+\end{itemize}
+
+The field moves quickly; techniques from 2023 may already be superseded by more capable approaches. Check publication dates and look for subsequent citations when evaluating sources.
+

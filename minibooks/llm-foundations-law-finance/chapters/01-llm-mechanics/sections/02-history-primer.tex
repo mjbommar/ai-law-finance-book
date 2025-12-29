@@ -304,27 +304,11 @@ For legal and financial practitioners, this critique reinforces the importance o
 \subsection{Beyond Text: Tool Use and Multimodal Capabilities}
 \label{sec:llm1-history-beyond}
 
-While this chapter focuses on text, we briefly note the expanding frontier:
+While this chapter focuses on text-based LLMs, we briefly note the expanding frontier. Modern LLMs can be configured to use external tools---calculators, databases, web search---by generating structured ``tool calls'' executed by surrounding systems. This is not built into the LLM itself but achieved through system design that routes structured requests to appropriate tools.
 
-\paragraph{Tool Use.} Modern LLMs can be configured to use external tools---calculators, code interpreters, databases, web search---by generating structured ``tool calls'' that are executed by surrounding systems \parencite{lewis2020rag}. This is not built into the LLM itself but achieved through:
-\begin{itemize}
-  \item Training to recognize when external information is needed
-  \item Outputting structured requests (typically JSON) for tool invocation
-  \item Incorporating tool outputs into subsequent responses
-\end{itemize}
+Similarly, advanced models (GPT-4o, Claude, Gemini) can process images, PDFs, and audio alongside text, enabling analysis of scanned documents, charts, and visual content.
 
-For legal practice, this enables retrieval-augmented generation: the LLM queries a case law database, receives relevant precedents, and incorporates them into its analysis. For finance, it enables real-time data access: querying current stock prices or regulatory filings.
-
-Tool use is covered extensively in Part II (Agents). The key point here: the LLM itself operates in text-only mode; tools extend its capabilities through system design.
-
-\paragraph{Multimodal Models.} Some advanced models (GPT-4o, Claude, Gemini) can process images, PDFs, and other modalities alongside text. This enables:
-\begin{itemize}
-  \item Analyzing scanned documents without OCR pre-processing
-  \item Reviewing charts and figures in financial reports
-  \item Processing handwritten notes or annotations
-\end{itemize}
-
-While we do not cover multimodal processing in depth, awareness of these capabilities is relevant for legal and financial applications where documents often include non-text elements.
+\paragraph{Forward References.} Chapter~5 covers tool use and function calling in detail. Chapter~6 addresses multimodal document processing for PDFs, tables, charts, and audio. The synthesis section (\Cref{sec:llm1-synthesis-ahead}) provides a complete roadmap of upcoming chapters.
 
 \subsection{Strengths and Limits for Legal and Financial Tasks}
 \label{sec:llm1-history-strengths}

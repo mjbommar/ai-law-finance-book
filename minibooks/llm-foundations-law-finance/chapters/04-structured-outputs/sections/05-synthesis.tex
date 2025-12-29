@@ -1,0 +1,87 @@
+% =============================================================================
+% Synthesis — Structured Outputs
+% Purpose: Integration of concepts; bridge to tool use chapter
+% Label: sec:llmC2-synthesis
+% =============================================================================
+
+\section{Synthesis: From Freeform to Structured Data}
+\label{sec:llmC2-synthesis}
+
+We began this chapter confronting a fundamental tension: Large Language Models are probabilistic text generators, but legal and financial systems demand deterministic, validated, auditable data. The journey from conversational AI to production-grade structured outputs requires transforming stochastic text generation into reliable data that downstream systems can safely consume.
+
+\subsection{The Three Pillars Integrated}
+
+The techniques we have examined form an integrated architecture:
+
+\begin{highlightbox}[title={Pillar Integration}]
+\begin{description}
+  \item[Advanced Retrieval] (\Cref{sec:llmC-advanced-retrieval}) provides the grounding layer---production-grade techniques that ensure the model operates from authoritative, relevant sources rather than parametric memory alone.
+
+  \item[Evidence Records] (\Cref{sec:llmC-evidence}) provide the accountability layer---structured logs that capture provenance, enabling audit, verification, and legal defensibility.
+
+  \item[Structured Outputs] (\Cref{sec:llmC-structured}) provide the interface layer---schema-constrained generation that transforms probabilistic text into typed data contracts.
+\end{description}
+Together, these pillars create systems where AI outputs can flow directly into databases, regulatory filings, and downstream analytics without manual parsing or cleanup.
+\end{highlightbox}
+
+\subsection{Key Design Principles}
+
+From our examination of these techniques, several principles emerge:
+
+\begin{keybox}[title={Principle 1: Schema First}]
+Design your output schema before designing your prompts. The schema is a contract between the AI system and its consumers. Starting with the schema forces clarity about what data you actually need and what types are appropriate.
+\end{keybox}
+
+\begin{keybox}[title={Principle 2: Validate Always}]
+Never trust LLM outputs without validation. Use constrained decoding where available to guarantee syntactic correctness. Use Pydantic, Zod, or similar libraries to validate semantic correctness. Implement retry logic for validation failures.
+\end{keybox}
+
+\begin{keybox}[title={Principle 3: Evidence is Mandatory}]
+Every factual claim must be traceable to a source. Evidence records are not optional logging---they are architectural requirements for professional systems. Design for audit from the beginning.
+\end{keybox}
+
+\begin{keybox}[title={Principle 4: Version Everything}]
+Schemas evolve. Prompts change. Models are updated. Maintain version control for all components and include version identifiers in outputs. This enables debugging, regression testing, and compliance audits.
+\end{keybox}
+
+\subsection{What Structured Outputs Enable}
+
+With effective schema design and validation, entirely new capabilities become possible:
+
+\paragraph{Direct Database Integration.} Instead of parsing narrative text, structured outputs flow directly into databases. A contract extraction system produces JSON that maps directly to database columns.
+
+\paragraph{Programmatic Downstream Processing.} Structured outputs can be consumed by other systems---analytics pipelines, compliance checks, reporting tools---without human intervention.
+
+\paragraph{Automated Validation.} Required fields, type constraints, and business rules can be checked automatically. Invalid outputs are rejected or retried rather than silently passed along.
+
+\paragraph{Reproducible Audits.} With evidence records and versioned schemas, any output can be traced back to its sources and the exact system configuration that produced it.
+
+\subsection{What Structured Outputs Do Not Solve}
+
+Structured outputs address format reliability but not all production concerns:
+
+\begin{cautionbox}[title={Limitations}]
+\begin{itemize}
+  \item \textbf{Semantic correctness}: A valid JSON object may contain factually wrong information. Validation checks structure, not truth.
+
+  \item \textbf{Retrieval quality}: If the wrong documents are retrieved, structured outputs will faithfully format incorrect information.
+
+  \item \textbf{Reasoning errors}: Complex analysis may fail even with perfect formatting. The model may misinterpret sources or draw incorrect conclusions.
+
+  \item \textbf{Adversarial robustness}: Prompt injection attacks can manipulate outputs even within constrained generation.
+\end{itemize}
+Structured outputs are necessary but not sufficient for reliable professional systems.
+\end{cautionbox}
+
+\subsection{Looking Ahead: From Passive to Active Systems}
+
+This chapter established how to get structured, validated data from LLMs. The next chapter addresses how to enable LLMs to take actions in the world.
+
+\paragraph{Chapter 5: Tool Use.} We examine function calling, API integration, and the governance frameworks that make AI actions accountable. The structured output foundations from this chapter---schemas, validation, evidence records---apply directly to tool use. A function call is itself a structured output; a tool response becomes part of the evidence record.
+
+\paragraph{Chapter 6: Multimodal Documents.} We extend structured extraction to PDFs, tables, images, and audio. The schema patterns and evidence records transfer directly; we add modality-specific parsing.
+
+\paragraph{Chapter 7: Systematic Improvement.} We treat prompts and pipelines as engineering artifacts subject to evaluation, optimization, and version control. The structured outputs from this chapter enable quantitative measurement.
+
+The combination of grounded context (Chapter~2), structured reasoning (Chapter~3), and structured outputs (this chapter) transforms LLMs from conversational curiosities into components of production systems. Tool use (Chapter~5) extends this foundation to enable AI that acts, not just analyzes.
+

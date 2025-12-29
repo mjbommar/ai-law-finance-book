@@ -1,0 +1,97 @@
+% =============================================================================
+% Synthesis — Providing Context
+% Purpose: Connect concepts; practical integration; bridge to reasoning chapter
+% Label: sec:llmB2-synthesis
+% =============================================================================
+
+\section{Synthesis: From Raw Text to Grounded Context}
+\label{sec:llmB2-synthesis}
+
+We began this chapter with a fundamental reframing: grounding is not merely a safety mechanism to prevent hallucination---it is an architectural necessity that enables professional capability. An ungrounded model can discuss legal and financial concepts; a grounded model can analyze specific situations with reference to authoritative sources. The distinction is the difference between conversation and professional work.
+
+This section synthesizes the context-provision techniques into an integrated understanding and prepares the transition to reasoning strategies in the next chapter.
+
+\subsection{The Context Stack}
+
+The techniques we have examined form a layered architecture for providing relevant information to LLMs:
+
+\begin{highlightbox}[title={Layers of Context Provision}]
+\begin{description}
+  \item[Layer 1: In-Context Learning] The fundamental mechanism by which LLMs adapt their behavior based on prompt content. Understanding ICL (\Cref{sec:llmB-icl}) explains why all subsequent layers work.
+
+  \item[Layer 2: Retrieval-Augmented Generation] The architectural pattern for injecting relevant documents into the context window. RAG (\Cref{sec:llmB-rag}) transforms models from closed-book to open-book systems.
+
+  \item[Layer 3: Professional Domain Requirements] The constraints that distinguish enterprise systems from consumer chatbots: authority hierarchies, jurisdictional filtering, temporal validity, and matter isolation (\Cref{sec:llmB-domain}).
+\end{description}
+Each layer builds on the previous. Professional requirements constrain retrieval, which populates context through in-context learning.
+\end{highlightbox}
+
+\subsection{Key Design Principles}
+
+From our examination of these techniques, several principles emerge:
+
+\begin{keybox}[title={Principle 1: Authority Over Recency}]
+In legal and financial contexts, the \emph{authority} of a source often matters more than its recency. A binding Supreme Court precedent from 1954 outweighs a persuasive district court opinion from last week. Your retrieval system must encode these authority relationships, not merely rank by relevance scores.
+\end{keybox}
+
+\begin{keybox}[title={Principle 2: Jurisdiction as Filter}]
+Retrieval without jurisdictional awareness produces noise. A California contract dispute requires California law; New York precedent, however relevant-seeming, may be misleading. Build jurisdiction filtering into retrieval rather than relying on the model to ignore irrelevant results.
+\end{keybox}
+
+\begin{keybox}[title={Principle 3: Matter Isolation is Mandatory}]
+Client confidentiality is not optional. Professional systems must enforce strict matter boundaries to prevent information leakage---both through retrieval results and through embedding models that might encode sensitive information. This is an architectural requirement, not a prompt engineering concern.
+\end{keybox}
+
+\begin{keybox}[title={Principle 4: Citation is Verification}]
+Requiring the model to cite sources serves two purposes: it creates an audit trail, and it provides a verification mechanism. A citation can be checked; an unsourced claim cannot. Design prompts and schemas that mandate citation.
+\end{keybox}
+
+\subsection{What Grounding Enables}
+
+With effective context provision, entirely new capabilities become possible:
+
+\paragraph{Document-Grounded Analysis.} Instead of asking ``What are the key provisions of a software licensing agreement?'' (generic knowledge), you can ask ``What are the termination provisions in this specific agreement, and how do they compare to market standard?'' (grounded analysis).
+
+\paragraph{Current Information.} Knowledge cutoffs become irrelevant when you retrieve current documents. The model's parametric knowledge provides framework understanding while retrieved documents provide current facts.
+
+\paragraph{Verifiable Claims.} Every substantive claim can be traced to a source document, page, and passage. This transforms LLM outputs from opinions into researched positions.
+
+\paragraph{Confidential Work Product.} Client documents and proprietary data can be analyzed without exposing them to model training or other clients, provided proper matter isolation is implemented.
+
+\subsection{What Grounding Does Not Solve}
+
+Grounding addresses many LLM limitations, but not all:
+
+\begin{cautionbox}[title={Grounding Limitations}]
+\begin{itemize}
+  \item \textbf{Reasoning errors}: A model may reason incorrectly even from perfect context. Grounding provides information; it does not guarantee correct analysis.
+
+  \item \textbf{Retrieval failures}: If the right document is not retrieved, grounding fails silently. The model will reason from whatever context it receives.
+
+  \item \textbf{Context window limits}: Long documents may not fit; relevant passages may be in the ``lost middle'' zone. Chunking and retrieval strategies help but do not eliminate the problem.
+
+  \item \textbf{Adversarial content}: Malicious content in retrieved documents can manipulate model behavior through indirect prompt injection.
+\end{itemize}
+Grounding is necessary but not sufficient for reliable professional systems.
+\end{cautionbox}
+
+\subsection{Looking Ahead: From Context to Reasoning}
+
+This chapter established how to provide LLMs with the information they need. The next chapter addresses how to elicit structured reasoning \emph{over} that information.
+
+Consider the difference between:
+
+\begin{quote}
+\textit{``Here is the contract. Summarize the termination provisions.''}
+\end{quote}
+
+and:
+
+\begin{quote}
+\textit{``Here is the contract. First, identify all termination provisions. Then, for each provision, analyze the triggering conditions, notice requirements, and consequences. Finally, assess whether any provisions conflict or create ambiguity.''}
+\end{quote}
+
+Both operate over grounded context. But the second employs structured reasoning---breaking complex analysis into explicit steps. Chapter~3 explores how to design and select such reasoning patterns, building on the grounded context we have established here.
+
+The combination of grounded context (this chapter) and structured reasoning (next chapter) transforms LLMs from sophisticated autocomplete engines into capable analytical partners for professional work.
+

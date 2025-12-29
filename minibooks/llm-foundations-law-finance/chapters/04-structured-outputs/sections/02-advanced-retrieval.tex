@@ -1,0 +1,174 @@
+% =============================================================================
+% Advanced Retrieval Patterns — How Do I Get Reliable Output?
+% Purpose: Multi-stage retrieval, reranking, query rewriting, citation fidelity
+% Label: sec:llmC-advanced-retrieval
+% =============================================================================
+
+\section{Advanced Retrieval Patterns}
+\label{sec:llmC-advanced-retrieval}
+
+Chapter~2 introduced the fundamentals of retrieval-augmented generation: how to chunk documents, create embeddings, perform similarity search, and apply metadata filters. This section builds on those foundations to address production-grade retrieval systems that must operate reliably at scale in professional environments.
+
+The gap between a working prototype and a production system is substantial. A prototype that retrieves relevant documents 80\% of the time is interesting; a production system that misses critical precedent 20\% of the time is unacceptable. The patterns in this section address that gap.
+
+\subsection{Multi-Stage Retrieval Pipelines}
+\label{sec:llmC-retrieval-pipeline}
+
+Simple single-stage retrieval---embed the query, find similar chunks, return top-k---often falls short for complex professional queries. Multi-stage pipelines improve precision by applying increasingly sophisticated filtering at each stage.
+
+\subsubsection{The Retrieve-Rerank Pattern}
+
+The most common multi-stage pattern separates initial retrieval from reranking:
+
+\begin{enumerate}
+  \item \textbf{Initial Retrieval (Recall-Focused):} Cast a wide net. Use fast, cheap retrieval to find a large candidate set (e.g., top-100 chunks). The goal is high recall---don't miss anything relevant---even at the cost of including irrelevant results.
+
+  \item \textbf{Reranking (Precision-Focused):} Apply a more sophisticated model to score the candidates. Cross-encoder models (which consider query and document jointly) are slower but more accurate than bi-encoder models (which embed query and document separately). The reranker scores all candidates and returns the best ones.
+
+  \item \textbf{Final Selection:} Take the top-k after reranking (e.g., top-5) for inclusion in the prompt.
+\end{enumerate}
+
+\begin{keybox}[title={Why Reranking Helps}]
+Bi-encoder retrieval is fast because query and document embeddings are computed independently. But this speed comes at a cost: the model cannot consider how query terms interact with document terms. Cross-encoder reranking is slower (the model sees both together) but captures these interactions, improving precision for nuanced queries.
+\end{keybox}
+
+For legal research, reranking is particularly valuable because:
+\begin{itemize}
+  \item \textbf{Authority can be scored:} The reranker can boost binding authority over persuasive precedent.
+  \item \textbf{Recency can be weighted:} More recent decisions can be preferred when legal evolution matters.
+  \item \textbf{Specificity can be measured:} A case directly on point can be ranked above a case addressing a related but distinct issue.
+\end{itemize}
+
+\subsubsection{Recursive Retrieval}
+
+For complex research questions, a single retrieval pass may be insufficient. Recursive retrieval uses initial results to inform subsequent searches:
+
+\begin{enumerate}
+  \item \textbf{Initial Query:} ``What is the standard for piercing the corporate veil in Delaware?''
+  \item \textbf{First Retrieval:} Returns cases discussing the general doctrine.
+  \item \textbf{Analysis:} Extracts key terms (``alter ego,'' ``instrumentality test,'' ``fraud or injustice'').
+  \item \textbf{Refined Queries:} Searches specifically for cases applying each test.
+  \item \textbf{Aggregation:} Combines results from all passes into a comprehensive answer.
+\end{enumerate}
+
+This pattern is particularly useful when the user's initial query is underspecified or when the relevant information is spread across multiple documents that use different terminology.
+
+\subsection{Query Rewriting and Expansion}
+\label{sec:llmC-query-rewriting}
+
+User queries are often vague, incomplete, or use different terminology than the documents in the corpus. Query rewriting transforms the user's input into more effective search queries.
+
+\subsubsection{LLM-Powered Query Expansion}
+
+Use the LLM itself to expand queries before retrieval:
+
+\begin{quote}
+\texttt{User query: "Can the CEO be sued personally?"}
+
+\smallskip
+\texttt{Expanded queries:}
+\begin{itemize}
+  \item \texttt{"Personal liability of corporate officers"}
+  \item \texttt{"Piercing the corporate veil against executives"}
+  \item \texttt{"Director and officer liability exposure"}
+  \item \texttt{"Individual liability for corporate actions CEO"}
+\end{itemize}
+\end{quote}
+
+The system retrieves results for all expanded queries, then deduplicates and ranks them. This increases recall by catching documents that use different terminology than the original query.
+
+\subsubsection{Hypothetical Document Embeddings (HyDE)}
+
+A sophisticated approach generates a hypothetical answer first, then uses that answer as the search query \parencite{gao2023hyde}:
+
+\begin{enumerate}
+  \item \textbf{Query:} ``What are the disclosure requirements for material contracts?''
+  \item \textbf{Hypothetical Answer:} The LLM generates what a good answer \emph{might} look like (without retrieval).
+  \item \textbf{Search:} The hypothetical answer is embedded and used to find similar documents.
+  \item \textbf{Retrieval:} Documents similar to the hypothetical answer are retrieved.
+  \item \textbf{Final Answer:} The LLM generates the real answer using the retrieved documents.
+\end{enumerate}
+
+HyDE works because a well-formed answer is often more similar to relevant documents than a short question. The hypothetical answer contains the vocabulary, structure, and concepts that appear in authoritative sources.
+
+\begin{cautionbox}[title={HyDE Limitations}]
+HyDE relies on the LLM's parametric knowledge to generate a plausible hypothetical. For highly specialized domains or very recent information, the hypothetical may be inaccurate, leading to poor retrieval. Always verify retrieved results against the actual query intent.
+\end{cautionbox}
+
+\subsection{Citation Fidelity and Verification}
+\label{sec:llmC-citation-fidelity}
+
+In professional contexts, the model must not only cite sources but cite them \emph{correctly}. Citation fidelity encompasses several requirements:
+
+\subsubsection{Exact Quote Verification}
+
+When the model claims to quote a source, the quote must actually appear in that source. Implementation approaches include:
+
+\begin{itemize}
+  \item \textbf{Constrained Generation:} Force the model to select quotes from retrieved chunks rather than generating text freely.
+  \item \textbf{Post-Generation Verification:} After generation, check that each quoted string appears verbatim in the cited source.
+  \item \textbf{Highlight and Select:} Show the model the retrieved text with highlighting, and have it select spans rather than generate quotes.
+\end{itemize}
+
+\subsubsection{Citation Format Normalization}
+
+Legal citations follow jurisdiction-specific conventions (Bluebook, OSCOLA, McGill Guide). A robust system:
+
+\begin{itemize}
+  \item Parses citations into canonical components (case name, reporter, volume, page, year)
+  \item Validates that the citation resolves to a real document
+  \item Reformats citations according to the required style guide
+  \item Handles parallel citations (the same case in multiple reporters)
+\end{itemize}
+
+\subsubsection{Citator Integration}
+
+Before presenting a case as authority, verify its current status:
+
+\begin{itemize}
+  \item \textbf{Good law:} The case has not been overruled or significantly limited.
+  \item \textbf{Distinguished:} Later courts have limited the holding to specific facts.
+  \item \textbf{Overruled:} The holding is no longer valid precedent.
+  \item \textbf{Superseded:} Legislation has replaced the judicial rule.
+\end{itemize}
+
+Integration with citator services (Shepard's, KeyCite, or open-source alternatives) enables automatic status checking. The system should refuse to cite overruled cases without explicit disclosure.
+
+\begin{keybox}[title={Citation as Verification}]
+In legal practice, citations serve dual purposes: they support the argument and they enable verification. A citation that cannot be verified---because the case doesn't exist, the quote doesn't appear, or the holding has been overruled---is worse than no citation at all. Production systems must treat citation fidelity as a hard requirement, not a nice-to-have.
+\end{keybox}
+
+\subsection{Retrieval Quality Metrics}
+\label{sec:llmC-retrieval-metrics}
+
+Production retrieval systems require ongoing measurement. Key metrics include:
+
+\paragraph{Precision and Recall.} For a given query, \keyterm{precision} measures what fraction of retrieved documents are relevant; \keyterm{recall} measures what fraction of all relevant documents were retrieved. These metrics will be familiar from e-discovery, where courts have recognized them as the standard measures of retrieval effectiveness \parencite{grossman2011tar}.
+
+\paragraph{Mean Reciprocal Rank (MRR).} Measures how far down the result list the first relevant document appears. Higher MRR means relevant results appear earlier. Critical when users (or downstream systems) only examine top results.
+
+\paragraph{Normalized Discounted Cumulative Gain (nDCG).} Accounts for graded relevance (some documents are more relevant than others) and position (earlier results matter more). Useful when relevance is not binary.
+
+\paragraph{Answer Attribution Rate.} For RAG systems specifically, measures what fraction of claims in the generated answer can be traced to retrieved documents. Low attribution rates suggest the model is hallucinating despite having access to sources.
+
+\begin{highlightbox}[title={Continuous Monitoring}]
+Retrieval quality can degrade over time as the corpus grows, query patterns shift, or embedding models drift. Production systems should monitor these metrics continuously and alert when quality drops below acceptable thresholds. Chapter~7 addresses systematic evaluation and monitoring in detail.
+\end{highlightbox}
+
+\subsection{Latency and Cost Optimization}
+\label{sec:llmC-retrieval-optimization}
+
+Professional applications often have strict latency requirements. A research assistant that takes 30 seconds to respond disrupts workflow; a real-time compliance check that takes 5 seconds may be unacceptable.
+
+\paragraph{Caching.} Cache embeddings for common queries. Cache retrieved results for identical or near-identical queries. Implement semantic caching that recognizes paraphrased queries.
+
+\paragraph{Index Partitioning.} Maintain separate indices for different use cases. A quick-lookup index for well-defined queries (specific citations, known documents) versus a deep-search index for exploratory research.
+
+\paragraph{Tiered Retrieval.} Try fast, cheap retrieval first. Only escalate to more expensive methods (cross-encoder reranking, recursive retrieval) if initial results are insufficient.
+
+\paragraph{Async Prefetching.} When user intent is predictable (e.g., during document review), prefetch likely-needed context before the user asks.
+
+\subsection{From Retrieval to Evidence}
+\label{sec:llmC-retrieval-to-evidence}
+
+Retrieval provides the raw materials; the next section examines how to transform retrieved content into structured evidence records that satisfy compliance and audit requirements. The \keyterm{Canonical Evidence Record} schema captures not just what was retrieved but also provenance, verification status, and chain of custody---the metadata that transforms ``the AI found this'' into ``here is auditable evidence supporting this claim.''

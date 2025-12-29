@@ -1,0 +1,95 @@
+% =============================================================================
+% Further Learning — Tool Use
+% Purpose: Annotated bibliography for tool use and function calling
+% Label: sec:llmC3-further
+% =============================================================================
+
+\section{Further Learning}
+\label{sec:llmC3-further}
+
+This section provides an annotated guide to resources for readers who wish to deepen their understanding of tool use, function calling, and AI system integration.
+
+\subsection{Tool Use Foundations}
+\label{sec:llmC3-further-foundations}
+
+\paragraph{Toolformer.}
+\fullcite{schick2023toolformer}
+
+The foundational paper demonstrating that language models can learn to use tools through self-supervised training. Establishes the conceptual framework for tool-augmented language models.
+
+\paragraph{ReAct Pattern.}
+\fullcite{yao2022react}
+
+Introduces the Reasoning + Acting pattern where models interleave reasoning traces with tool calls. Essential for understanding how tool use integrates with structured reasoning.
+
+\paragraph{Function Calling Documentation.}
+OpenAI and Anthropic both provide comprehensive documentation on function calling APIs. These are essential references for implementation:
+\begin{itemize}
+  \item OpenAI: \url{https://platform.openai.com/docs/guides/function-calling}
+  \item Anthropic: \url{https://docs.anthropic.com/claude/docs/tool-use}
+\end{itemize}
+
+\subsection{Security and Governance}
+\label{sec:llmC3-further-security}
+
+\paragraph{OWASP Top 10 for LLMs.}
+\fullcite{owasp2025llm}
+
+The OWASP security risk taxonomy for LLM applications, including tool-related vulnerabilities like insecure plugin design and excessive agency. Essential reference for security assessments.
+
+\paragraph{Prompt Injection Attacks.}
+\fullcite{liu2023prompt}
+
+Analyzes prompt injection vulnerabilities including attacks that manipulate tool calls. Understanding these attacks is essential for designing secure tool-using systems.
+
+\paragraph{Indirect Prompt Injection.}
+\fullcite{greshake2023youve}
+
+Demonstrates how malicious content in external data sources can compromise AI applications. Particularly relevant for tools that retrieve and process external content.
+
+\subsection{Implementation Frameworks}
+\label{sec:llmC3-further-frameworks}
+
+\begin{itemize}
+  \item \textbf{LangChain Tools:} Comprehensive framework for building tool-using agents with pre-built integrations. \url{https://python.langchain.com/docs/modules/agents/tools}
+
+  \item \textbf{Semantic Kernel:} Microsoft's framework for AI orchestration with function calling support. \url{https://github.com/microsoft/semantic-kernel}
+
+  \item \textbf{OpenAI Assistants API:} Production API for building tool-using assistants with built-in code interpreter and file handling. \url{https://platform.openai.com/docs/assistants}
+\end{itemize}
+
+\subsection{Enterprise Integration}
+\label{sec:llmC3-further-enterprise}
+
+\paragraph{API Design.}
+The OpenAPI specification is the standard for describing tool interfaces. Understanding OpenAPI helps in designing tools that integrate cleanly with LLM function calling. \url{https://www.openapis.org}
+
+\paragraph{Authentication and Authorization.}
+OAuth 2.0 and related standards govern secure API access. Tools that call external services must implement proper authentication flows. IETF OAuth specifications provide the foundation.
+
+\paragraph{Rate Limiting and Circuit Breakers.}
+Production systems require rate limiting (to protect external services) and circuit breakers (to handle service failures gracefully). Patterns from resilience engineering apply directly to tool-using AI.
+
+\subsection{Legal and Financial Domain Tools}
+\label{sec:llmC3-further-domain}
+
+\paragraph{Legal Research APIs.}
+Services like Westlaw Edge, LexisNexis, and CourtListener provide APIs for legal research. Understanding their capabilities and limitations helps in designing legal AI tools.
+
+\paragraph{Financial Data APIs.}
+Bloomberg, Refinitiv, and SEC EDGAR provide financial data APIs. Regulatory data from FINRA and CFTC is available through official APIs.
+
+\paragraph{Regulatory Filing.}
+EDGAR, SEDAR+, and other regulatory portals provide submission APIs. Integrating with these requires understanding both technical specifications and regulatory requirements.
+
+\subsection{Staying Current}
+\label{sec:llmC3-further-current}
+
+Tool use capabilities evolve rapidly. Resources for staying current:
+
+\begin{itemize}
+  \item \textbf{Vendor documentation:} OpenAI, Anthropic, and Google regularly update their function calling capabilities
+  \item \textbf{arXiv cs.CL and cs.AI:} New research on tool-augmented language models appears as preprints
+  \item \textbf{Security advisories:} Follow OWASP and vendor security bulletins for emerging vulnerabilities
+\end{itemize}
+

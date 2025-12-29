@@ -1,0 +1,54 @@
+% =============================================================================
+% Conclusion — Tool Use
+% Purpose: Closing summary and handoff to multimodal chapter
+% Label: sec:llmC3-conclusion
+% =============================================================================
+
+\section*{Conclusion}
+\addcontentsline{toc}{section}{Conclusion}
+\label{sec:llmC3-conclusion}
+
+This chapter extended LLM capabilities from analysis to action. With tool use, AI systems can query databases, perform calculations, check external services, and take effects in the world---all while maintaining the governance and auditability that professional practice demands.
+
+\subsection*{Key Takeaways}
+
+\paragraph{Tools Extend Capability.} LLMs are unreliable at arithmetic, lack current information, and cannot affect external systems. Tools address all three limitations: calculators provide precision, APIs provide currency, and integrations enable action. The combination of linguistic reasoning and tool execution is more powerful than either alone.
+
+\paragraph{Governance is Architectural.} Tool use introduces new attack surfaces and accountability requirements. Permissions, logging, validation, and security must be designed into the architecture, not bolted on afterward. Governance metadata---who, what, why, and under what context---enables audit and compliance.
+
+\paragraph{Validation is Two-Way.} Validate tool arguments before calling (schema compliance, permission checks). Validate tool responses before using (type checking, reasonableness bounds). Never trust implicit correctness from either direction.
+
+\paragraph{Design for Failure.} Tools fail. Networks timeout. APIs rate-limit. Design for graceful degradation with informative errors, retry logic, and fallback strategies. Production systems must be resilient.
+
+\subsection*{The Core Insight}
+
+The central theme of this chapter is that \textbf{action requires accountability}. When AI systems can only analyze and recommend, humans remain in the loop. When AI systems can act---query, calculate, file, update---accountability mechanisms become mandatory.
+
+The governance patterns we established---permissions, logging, evidence records---are not bureaucratic overhead. They are the foundation that makes AI action acceptable in professional practice.
+
+\subsection*{Looking Forward}
+
+\paragraph{Chapter 6: Multimodal Documents.} We extend these patterns to the documents professionals actually work with: PDFs with complex layouts, financial statements with tables, charts and visualizations, audio transcripts. The same governance foundations apply; we add modality-specific parsing tools.
+
+\paragraph{Chapter 7: Systematic Improvement.} We treat prompts, tools, and pipelines as engineering artifacts subject to evaluation, optimization, and version control. Tool call success rates become metrics; the entire system becomes measurable and improvable.
+
+\subsection*{Final Thoughts}
+
+With tool use, we complete the transformation from experimental chatbot to production-capable system. An LLM with tools can:
+
+\begin{itemize}
+  \item Ground analysis in authoritative sources (Chapter~2)
+  \item Reason systematically through complex problems (Chapter~3)
+  \item Produce validated structured outputs (Chapter~4)
+  \item Take governed actions in the world (Chapter~5)
+\end{itemize}
+
+This is not a chatbot. This is a system component suitable for integration into professional workflows---provided the governance foundations are properly implemented.
+
+The remaining chapters address the documents that professionals actually work with (Chapter~6) and the engineering discipline that makes AI systems reliable and improvable over time (Chapter~7).
+
+\vspace{1em}
+\begin{center}
+\rule{0.4\textwidth}{0.4pt}
+\end{center}
+

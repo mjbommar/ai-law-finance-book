@@ -1,0 +1,68 @@
+% =============================================================================
+% How to Read — Tool Use
+% Purpose: Audience paths; scope
+% Label: sec:llmC3-howtoread
+% =============================================================================
+
+\section*{How to Read This Chapter}
+\addcontentsline{toc}{section}{How to Read This Chapter}
+
+This chapter extends LLM capabilities from passive analysis to active interaction with external systems. Building on the structured output foundations from Chapter~4, we examine how LLMs can invoke tools---calculators, databases, APIs, and enterprise systems---while maintaining the governance and auditability that professional practice demands.
+
+\subsection*{Prerequisites}
+
+This chapter assumes familiarity with:
+\begin{itemize}
+  \item \textbf{Structured outputs} (\Cref{sec:llmC-structured}): Schema design and constrained generation
+  \item \textbf{Evidence records} (\Cref{sec:llmC-evidence}): Provenance tracking and audit trails
+  \item \textbf{Reasoning patterns} (\Cref{sec:llmB-reason}): ReAct and tool-augmented reasoning
+\end{itemize}
+
+If these concepts are unfamiliar, review Chapters~3--4 before proceeding.
+
+\subsection*{Reading Paths}
+
+\begin{highlightbox}[colback=bg-definition, colframe=definition-base, title={Path 1: Quick Implementation (25--35 minutes)}]
+If you need to add tool calling to an existing system:
+\begin{itemize}
+  \item \textbf{\Cref{sec:llmC-tools}}: Function calling mechanics, tool design, and parameter handling
+  \item \textbf{\Cref{sec:llmC-pitfalls}}: Common failure modes and how to avoid them
+\end{itemize}
+\end{highlightbox}
+
+\begin{highlightbox}[colback=bg-example, colframe=example-base, title={Path 2: Full Technical Understanding (45--60 minutes)}]
+If you need to understand governance, security, and enterprise integration:
+\begin{itemize}
+  \item Read all sections in order, starting with the introduction
+  \item Pay special attention to governance metadata and audit logging
+  \item Review security considerations including OWASP Top 10 for LLMs
+\end{itemize}
+\end{highlightbox}
+
+\begin{highlightbox}[colback=bg-note, colframe=border-note, title={Path 3: Security and Compliance Focus (30--40 minutes)}]
+If your primary concern is secure, compliant tool integration:
+\begin{itemize}
+  \item \textbf{\Cref{sec:llmC-tools}}: Focus on permissions, sandboxing, and governance metadata sections
+  \item \textbf{\Cref{sec:llmC-pitfalls}}: Security vulnerabilities and mitigation strategies
+  \item \textbf{\Cref{sec:llmC3-synthesis}}: Integration with audit and compliance frameworks
+\end{itemize}
+\end{highlightbox}
+
+\begin{keybox}[title={Key Objectives}]
+By the end of this chapter, you will be able to:
+\begin{itemize}
+  \item Design \textbf{tool interfaces} with clear contracts, pre/postconditions, and error handling
+  \item Implement \textbf{function calling} with proper parameter validation and response handling
+  \item Apply \textbf{governance metadata} to log who, what, why, and under what context
+  \item Avoid \textbf{common pitfalls} including injection attacks, permission escalation, and error cascades
+\end{itemize}
+\end{keybox}
+
+\subsection*{What This Chapter Does Not Cover}
+
+\begin{itemize}
+  \item \textbf{Multimodal inputs}: PDFs, tables, and audio processing are addressed in Chapter~6
+  \item \textbf{Prompt optimization}: Systematic improvement of tool-calling prompts appears in Chapter~7
+  \item \textbf{Agent architectures}: Autonomous planning with tool chains is addressed in \textit{Agentic AI in Law and Finance}
+\end{itemize}
+

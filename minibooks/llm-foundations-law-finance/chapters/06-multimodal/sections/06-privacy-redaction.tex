@@ -1,0 +1,255 @@
+% =============================================================================
+% Privacy & Redaction — Multimodal Fundamentals
+% Purpose: PII/privilege safeguards
+% Label: sec:llmD2-privacy
+% =============================================================================
+
+\section{Privacy and Redaction}
+\label{sec:llmD2-privacy}
+
+Data leakage is a primary concern in multimodal RAG systems, while misinformation is a concern in generation. Before data enters the vector database or the LLM context window, it must be scrubbed of personally identifiable information (PII), privileged content, and other sensitive material. Equally important, the provenance of AI-generated content must be trackable.
+
+\subsection{PII Detection and Redaction}
+\label{sec:llmD2-pii-redaction}
+
+\paragraph{The Challenge.} Documents processed through multimodal pipelines often contain:
+\begin{itemize}
+  \item \textbf{Direct identifiers}: Names, Social Security numbers, account numbers.
+  \item \textbf{Quasi-identifiers}: Dates, locations, and demographic details that enable re-identification.
+  \item \textbf{Sensitive categories}: Health information, financial data, legal case details.
+  \item \textbf{Embedded PII}: Information within images, scanned forms, or handwritten notes.
+\end{itemize}
+
+\paragraph{Microsoft Presidio.} \keyterm{Presidio} is an open-source framework for detecting, redacting, masking, and anonymizing sensitive data. It combines:
+\begin{itemize}
+  \item \textbf{Pattern matching}: Regular expressions for structured identifiers (SSN, phone numbers, credit cards).
+  \item \textbf{Named entity recognition (NER)}: Machine learning models to identify names, organizations, and locations.
+  \item \textbf{Configurable anonymizers}: Replace, mask, hash, or encrypt detected entities.
+  \item \textbf{Extensibility}: Custom recognizers for domain-specific identifiers (case numbers, account formats).
+\end{itemize}
+
+\begin{highlightbox}[title={Presidio Redaction Pipeline}]
+A document processing pipeline might:
+\begin{enumerate}
+  \item Extract text from PDF using layout analysis.
+  \item Pass text through Presidio's analyzer to detect PII entities.
+  \item Apply anonymizers: replace names with tokens, mask account numbers.
+  \item Embed and index the redacted text.
+  \item Store mapping between tokens and original values in a secure vault (if reversible redaction is needed).
+\end{enumerate}
+\end{highlightbox}
+
+\paragraph{Image-Based PII.} For scanned documents and images:
+\begin{itemize}
+  \item Run OCR to extract text, then apply text-based PII detection.
+  \item Use bounding box coordinates to redact regions in the original image.
+  \item Consider visual PII (faces, signatures) that text-based methods miss.
+  \item Presidio Image Redactor extends the framework to handle images directly.
+\end{itemize}
+
+\subsection{Privilege and Confidentiality}
+\label{sec:llmD2-privilege}
+
+Beyond PII, legal and financial workflows must protect:
+\begin{itemize}
+  \item \textbf{Attorney-client privilege}: Communications protected from disclosure.
+  \item \textbf{Work product doctrine}: Attorney mental impressions and legal strategy.
+  \item \textbf{Trade secrets}: Proprietary business information.
+  \item \textbf{Material non-public information (MNPI)}: Information that could affect securities prices.
+\end{itemize}
+
+\begin{cautionbox}[title={Privilege in AI Systems}]
+Including privileged content in a shared vector database or sending it to an external LLM API may waive privilege. Design systems to:
+\begin{itemize}
+  \item Segregate privileged content into separate indices with strict access controls.
+  \item Use on-premises or private cloud deployments for sensitive processing.
+  \item Implement privilege review workflows before ingestion.
+  \item Log all access to privileged content for audit purposes.
+\end{itemize}
+\end{cautionbox}
+
+\subsection{Content Authenticity and Provenance}
+\label{sec:llmD2-content-authenticity}
+
+As AI generates increasingly realistic content, tracking provenance becomes critical. The \keyterm{Content Authenticity Initiative (CAI)} and \keyterm{C2PA} (Coalition for Content Provenance and Authenticity) standards address this need.
+
+\paragraph{Content Credentials.} C2PA enables cryptographic signing of media files. This metadata (``Content Credentials'') travels with the file, proving:
+\begin{itemize}
+  \item \textbf{Origin}: Whether content was AI-generated, camera-captured, or edited.
+  \item \textbf{Editing history}: What modifications were applied and by whom.
+  \item \textbf{Tool chain}: Which software or AI models were involved.
+\end{itemize}
+
+This provides a ``digital nutrition label'' that allows consumers to verify the provenance of the content they are viewing.
+
+\paragraph{Application to Legal and Finance.} Content Credentials are particularly relevant for:
+\begin{itemize}
+  \item \textbf{Evidence authenticity}: Establishing the chain of custody for digital evidence.
+  \item \textbf{AI-generated disclosures}: Marking synthetic content in regulatory filings.
+  \item \textbf{Document integrity}: Proving that a contract or filing has not been tampered with.
+  \item \textbf{Audit trails}: Demonstrating the provenance of AI-assisted analysis.
+\end{itemize}
+
+\subsection{Redaction Governance}
+\label{sec:llmD2-redaction-governance}
+
+Effective redaction requires governance beyond the technical implementation:
+
+\begin{keybox}[title={Redaction Governance Checklist}]
+\begin{itemize}
+  \item \textbf{Policy documentation}: Define what must be redacted and under what circumstances.
+  \item \textbf{Version control}: Track changes to redaction rules over time.
+  \item \textbf{Exception handling}: Document when and why redaction was overridden.
+  \item \textbf{Audit logging}: Record who performed redactions, when, and what was affected.
+  \item \textbf{Reversibility decisions}: Determine if redaction should be reversible and secure the mapping.
+  \item \textbf{Quality assurance}: Sample and review redacted output for completeness.
+\end{itemize}
+\end{keybox}
+
+\paragraph{Integration with Evidence Records.} Redaction events should be captured in the canonical evidence record (see Chapter~4). When a document is processed:
+\begin{itemize}
+  \item Log the redaction rules applied (version, configuration).
+  \item Record entities detected and actions taken.
+  \item Preserve checksums of both original and redacted content.
+  \item Link to the redaction policy governing the action.
+\end{itemize}
+
+This ensures that any downstream analysis can be traced back to the original data with full understanding of what was removed and why.
+
+\subsection{Visual Privacy Patterns}
+\label{sec:llmD2-visual-privacy}
+
+Multimodal content introduces privacy risks that text-based detection misses entirely.
+
+\paragraph{Face Detection and Blurring.}
+Images and video containing faces require special handling:
+
+\begin{itemize}
+  \item \textbf{Detection models}: Use face detection (not recognition) to identify face regions.
+  \item \textbf{Blurring techniques}: Gaussian blur, pixelation, or solid overlay for varying anonymization strength.
+  \item \textbf{Temporal consistency}: In video, track faces across frames to maintain consistent blurring.
+  \item \textbf{Edge cases}: Profile views, partial occlusion, and small faces require robust models.
+\end{itemize}
+
+\paragraph{Biometric Data Regulations.}
+Face images constitute biometric data under several regulatory frameworks:
+
+\begin{itemize}
+  \item \textbf{Illinois BIPA}: Requires informed consent before collecting biometric identifiers.
+  \item \textbf{GDPR Article 9}: Classifies biometric data as special category requiring explicit consent.
+  \item \textbf{CCPA/CPRA}: Includes biometric information in the definition of sensitive personal information.
+  \item \textbf{Sector-specific rules}: Financial and healthcare regulations may impose additional requirements.
+\end{itemize}
+
+\paragraph{Visual Signature and Handwriting.}
+Handwritten content carries identifying characteristics:
+
+\begin{itemize}
+  \item Signatures are personally identifying and may constitute biometric data.
+  \item Handwriting style can enable re-identification even when names are redacted.
+  \item Consider redacting handwritten annotations in shared datasets.
+  \item Document whether handwriting analysis was performed and by what method.
+\end{itemize}
+
+\begin{cautionbox}[title={Visual PII in Legal Discovery}]
+During e-discovery, photographs and video may contain faces of witnesses, victims, or bystanders. Before sharing with opposing counsel or including in public filings:
+\begin{itemize}
+  \item Identify all individuals whose faces appear.
+  \item Determine if protective orders require redaction.
+  \item Apply consistent blurring across all appearances.
+  \item Document the redaction in the privilege log or production notes.
+\end{itemize}
+\end{cautionbox}
+
+\subsection{MNPI Detection Workflows}
+\label{sec:llmD2-mnpi-detection}
+
+Material Non-Public Information requires specialized detection beyond general PII frameworks.
+
+\paragraph{The MNPI Challenge.}
+Unlike PII with structural patterns (SSN formats, phone numbers), MNPI is contextual:
+
+\begin{itemize}
+  \item \textbf{Materiality}: Information that a reasonable investor would consider important.
+  \item \textbf{Non-public}: Not yet disclosed through official channels.
+  \item \textbf{Context-dependent}: The same statement may be MNPI before an announcement and public after.
+  \item \textbf{Temporal sensitivity}: MNPI status changes when information is disclosed.
+\end{itemize}
+
+\paragraph{Detection Approaches.}
+Automated MNPI detection combines multiple signals:
+
+\begin{itemize}
+  \item \textbf{Entity recognition}: Identify company names, ticker symbols, and executive names.
+  \item \textbf{Event classification}: Detect references to earnings, M\&A, product launches, regulatory actions.
+  \item \textbf{Temporal analysis}: Cross-reference against public disclosure calendars.
+  \item \textbf{Source classification}: Distinguish between public sources and internal communications.
+\end{itemize}
+
+\paragraph{Integration with Compliance Workflows.}
+MNPI detection integrates with broader compliance systems:
+
+\begin{itemize}
+  \item \textbf{Information barriers}: Enforce separation between deal teams and trading desks.
+  \item \textbf{Watch lists and restricted lists}: Flag securities subject to trading restrictions.
+  \item \textbf{Attestation workflows}: Require certification before accessing sensitive content.
+  \item \textbf{Audit trails}: Log all access to potentially MNPI-containing documents.
+\end{itemize}
+
+\begin{highlightbox}[title={MNPI in Earnings Call Processing}]
+When processing earnings call recordings:
+\begin{enumerate}
+  \item Check if the call is from a public or private company.
+  \item Verify the call has been publicly webcast or transcripted.
+  \item For private companies, classify content as potentially MNPI.
+  \item Apply access controls based on user's compliance status.
+  \item Log all queries and retrieved content for compliance review.
+\end{enumerate}
+\end{highlightbox}
+
+\subsection{Cross-Border Data Considerations}
+\label{sec:llmD2-cross-border}
+
+Multimodal processing often involves cross-border data transfers that trigger additional regulatory requirements.
+
+\paragraph{Data Localization Requirements.}
+Various jurisdictions impose data residency requirements:
+
+\begin{itemize}
+  \item \textbf{GDPR}: Restricts transfers outside the EU/EEA without adequacy decisions or safeguards.
+  \item \textbf{China PIPL}: Requires security assessments for certain cross-border transfers.
+  \item \textbf{Russia}: Mandates storage of Russian citizens' data within Russia.
+  \item \textbf{Sector-specific rules}: Financial regulators may impose additional localization requirements.
+\end{itemize}
+
+\paragraph{Transfer Mechanisms.}
+When processing must occur across borders:
+
+\begin{itemize}
+  \item \textbf{Standard Contractual Clauses}: GDPR-approved contract terms for international transfers.
+  \item \textbf{Binding Corporate Rules}: Internal policies for multinational organizations.
+  \item \textbf{Consent}: Explicit consent from data subjects (limited applicability).
+  \item \textbf{Necessity exceptions}: Transfers necessary for legal claims or vital interests.
+\end{itemize}
+
+\paragraph{Cloud Provider Selection.}
+Choice of cloud infrastructure affects compliance:
+
+\begin{itemize}
+  \item \textbf{Regional deployment}: Process data in the region where it originates.
+  \item \textbf{Provider certifications}: Verify SOC 2, ISO 27001, and sector-specific certifications.
+  \item \textbf{Sub-processor management}: Understand where provider's sub-contractors process data.
+  \item \textbf{Government access}: Consider jurisdiction of cloud provider for government access requests.
+\end{itemize}
+
+\begin{keybox}[title={Cross-Border Checklist for Multimodal AI}]
+\begin{itemize}
+  \item Map data flows: Where does content originate, process, and store?
+  \item Identify applicable laws: Which jurisdictions' privacy laws apply?
+  \item Implement transfer mechanisms: SCCs, BCRs, or other safeguards.
+  \item Configure regional processing: Deploy models and storage in appropriate regions.
+  \item Document compliance: Maintain records of assessments and safeguards.
+  \item Monitor for changes: Regulatory landscape evolves rapidly.
+\end{itemize}
+\end{keybox}
+

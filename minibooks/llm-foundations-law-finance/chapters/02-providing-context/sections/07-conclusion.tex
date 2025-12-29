@@ -1,0 +1,47 @@
+% =============================================================================
+% Conclusion — Providing Context
+% Purpose: Closing summary and handoff to reasoning chapter
+% Label: sec:llmB2-conclusion
+% =============================================================================
+
+\section*{Conclusion}
+\addcontentsline{toc}{section}{Conclusion}
+\label{sec:llmB2-conclusion}
+
+This chapter established the foundational mechanisms for providing LLMs with the context they need to perform professional work. We moved from the single-turn, closed-book interactions of Chapter~1 to systems that can access authoritative sources, respect professional constraints, and produce grounded, verifiable outputs.
+
+\subsection*{Key Takeaways}
+
+\paragraph{In-Context Learning is the Foundation.} The ability of LLMs to adapt their behavior based on prompt content---without weight updates---explains why few-shot examples work, why retrieved documents influence outputs, and why conversation history shapes responses. Understanding this mechanism (\Cref{sec:llmB-icl}) illuminates all other context-provision techniques.
+
+\paragraph{Retrieval Transforms Capability.} Retrieval-augmented generation (\Cref{sec:llmB-rag}) converts models from closed-book systems limited by training data cutoffs into open-book systems that can access current, authoritative sources. This is not merely a safety mechanism---it enables professional capability that ungrounded models cannot achieve.
+
+\paragraph{Professional Requirements are Architectural.} Authority hierarchies, jurisdictional filtering, temporal validity, and matter isolation (\Cref{sec:llmB-domain}) distinguish professional systems from consumer chatbots. These requirements must be designed into system architecture, not addressed through prompt engineering alone.
+
+\paragraph{Grounding is Necessary but Not Sufficient.} Providing relevant context enables analysis but does not guarantee correct analysis. The next chapter addresses how to elicit structured reasoning over grounded context.
+
+\subsection*{The Core Insight}
+
+The central theme of this chapter is that \textbf{grounding is a capability enabler, not merely a risk mitigator}. An architect does not survey a site to avoid mistakes; the architect surveys to enable design. A lawyer does not research precedent to prevent errors; the lawyer researches to enable argument. Similarly, grounding enables LLMs to perform work they simply cannot do without access to relevant sources.
+
+This reframing has practical implications: context provision should be designed into systems from the beginning, not added as a safety layer after building reasoning pipelines.
+
+\subsection*{Looking Forward}
+
+\paragraph{Chapter 3: Reasoning and Conversations.} With grounding mechanisms established, we turn to eliciting structured reasoning over that context. Chain-of-thought, self-consistency, and ReAct patterns all become more powerful when anchored in retrieved sources. We also examine conversation state management and multi-turn dialogue.
+
+\paragraph{Chapter 4: Structured Outputs and Tools.} We constrain model outputs to conform to schemas and enable tool calling for calculations, database queries, and API integration. Evidence records provide audit trails that connect outputs to their sources.
+
+\paragraph{Chapter 5: Multimodal Documents.} We extend these techniques to the documents professionals actually work with: PDFs with complex layouts, tables and financial statements, charts, and audio transcripts.
+
+\subsection*{Final Thoughts}
+
+The techniques in this chapter---in-context learning, retrieval-augmented generation, and professional domain requirements---transform LLMs from impressive but unreliable conversation partners into grounded research assistants. They do not eliminate failure modes, but they create systems whose outputs can be verified, whose claims can be traced to sources, and whose behavior respects professional constraints.
+
+You now understand how to provide LLMs with the context they need. The next chapter addresses how to reason effectively over that context.
+
+\vspace{1em}
+\begin{center}
+\rule{0.4\textwidth}{0.4pt}
+\end{center}
+

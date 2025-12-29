@@ -1,0 +1,86 @@
+% =============================================================================
+% How to Read This Chapter — How Do I Reason and Converse?
+% Purpose: Audience paths, scope, and navigation
+% Label: sec:llmB3-howtoread
+% =============================================================================
+
+\section*{How to Read This Chapter}
+\addcontentsline{toc}{section}{How to Read This Chapter}
+
+This chapter builds on the grounding foundations from Chapter~2 to address two interconnected challenges: how to elicit structured reasoning over grounded context, and how to maintain coherent multi-turn conversations. Whether you are designing analytical workflows that require verifiable reasoning chains, or building conversational interfaces that maintain context across sessions, this chapter provides the patterns and decision frameworks you need.
+
+\subsection*{Reading Paths}
+
+\begin{highlightbox}[colback=bg-definition, colframe=definition-base, title={Path 1: Practitioner Quick Start (30--40 minutes)}]
+If you are already building LLM applications and want immediately applicable reasoning techniques:
+\begin{itemize}
+  \item \textbf{\Cref{sec:llmB-convo}}: Understand conversation state management and role-based prompting
+  \item \textbf{\Cref{sec:llmB-reason}}: Learn chain-of-thought, self-consistency, and ReAct patterns for structured reasoning
+  \item \textbf{\Cref{sec:llmB-strategy}}: Use the decision framework to select strategies based on accuracy, latency, and cost requirements
+\end{itemize}
+This path gives you the patterns needed to build systems that reason systematically and converse coherently.
+\end{highlightbox}
+
+\begin{highlightbox}[colback=bg-example, colframe=example-base, title={Path 2: Full Technical Understanding (60--75 minutes)}]
+If you need to understand the underlying mechanics for system design or architecture decisions:
+\begin{itemize}
+  \item Start with conversational models (\Cref{sec:llmB-convo}) to understand how dialogue state is managed within context windows
+  \item Study the complete reasoning taxonomy in \Cref{sec:llmB-reason}, including Tree of Thoughts and Graph of Thoughts for complex search problems
+  \item Examine the strategy selection framework (\Cref{sec:llmB-strategy}) for systematic trade-off analysis
+  \item Review the synthesis (\Cref{sec:llmB-synthesis}) for integration with subsequent chapters
+\end{itemize}
+This path prepares you to design sophisticated reasoning systems with appropriate cognitive architectures.
+\end{highlightbox}
+
+\begin{highlightbox}[colback=bg-note, colframe=border-note, title={Path 3: Governance and Risk Focus (25--35 minutes)}]
+If your primary concern is compliance, explainability, or audit:
+\begin{itemize}
+  \item \textbf{\Cref{sec:llmB-convo}}: Understand safety guardrails and system prompt design for controlled behavior
+  \item \textbf{\Cref{sec:llmB-reason}}: Learn when reasoning traces should be visible vs. hidden, and how scratchpad patterns support audit without exposing intermediate thoughts
+  \item \textbf{\Cref{sec:llmB-strategy}}: Apply the risk-based decision framework for high-stakes applications
+\end{itemize}
+This path emphasizes explainability and governance for enterprise deployment.
+\end{highlightbox}
+
+\subsection*{Prerequisites}
+
+This chapter assumes familiarity with:
+\begin{itemize}
+  \item \textbf{From Chapter~1}: Tokens, context windows, sampling parameters, and common failure modes
+  \item \textbf{From Chapter~2}: In-context learning, retrieval-augmented generation, and professional domain requirements
+\end{itemize}
+
+The reasoning patterns in this chapter are most effective when applied over grounded context. If you have not read Chapter~2, we recommend at minimum reviewing the RAG section (\Cref{sec:llmB-rag}) before proceeding.
+
+\subsection*{What This Chapter Covers}
+
+\begin{keybox}[title={Key Objectives}]
+By the end of this chapter, you will be able to:
+\begin{enumerate}
+  \item \textbf{Design multi-turn conversations} with clear role separation, effective memory management, and robust context handling
+  \item \textbf{Apply reasoning patterns} (chain-of-thought, self-consistency, Tree of Thoughts, ReAct) to elicit structured analysis over grounded context
+  \item \textbf{Select appropriate strategies} based on task complexity, accuracy requirements, latency constraints, and cost sensitivity
+  \item \textbf{Balance explainability and privacy} using scratchpad patterns that separate reasoning traces from user-facing outputs
+\end{enumerate}
+\end{keybox}
+
+\subsection*{What This Chapter Does Not Cover}
+
+To maintain focus, we defer several related topics to subsequent chapters:
+
+\begin{itemize}
+  \item \textbf{Structured outputs and schemas}: JSON schema enforcement and validation appear in Chapter~4
+  \item \textbf{Tool use and function calling}: API integration patterns are covered in Chapter~5
+  \item \textbf{Multimodal inputs}: Document images, tables, and audio processing are addressed in Chapter~6
+  \item \textbf{Evaluation and optimization}: Systematic prompt improvement appears in Chapter~7
+  \item \textbf{Agent architectures}: Autonomous agents with planning loops are addressed in our companion volume, \textit{Agentic AI in Law and Finance}
+\end{itemize}
+
+\subsection*{Bridge from Providing Context}
+
+Chapter~2 established how to provide models with the information they need through in-context learning and retrieval-augmented generation. This chapter addresses what to do with that information: how to elicit systematic reasoning over grounded context, and how to maintain coherent dialogue across multiple turns.
+
+The distinction is important. A well-grounded model with poor reasoning strategies will retrieve the right documents but fail to analyze them correctly. A model with sophisticated reasoning patterns but poor grounding will reason brilliantly from hallucinated premises. Professional systems require both: grounding (Chapter~2) and reasoning (this chapter).
+
+Together, these capabilities transform LLMs from pattern-matching text predictors into analytical partners capable of structured reasoning over authoritative sources.
+

@@ -1,0 +1,89 @@
+% =============================================================================
+% Introduction — Tool Use
+% Purpose: Scope and bridge from Structured Outputs
+% Label: sec:llmC3-intro
+% =============================================================================
+
+\section{Introduction: From Analysis to Action}
+\label{sec:llmC3-intro}
+
+The previous chapters established how to ground LLMs in authoritative sources (Chapter~2), elicit structured reasoning (Chapter~3), and constrain outputs to validated schemas (Chapter~4). These foundations enable systems that analyze, extract, and format information reliably. But professional practice often requires more than analysis---it requires action.
+
+Consider a compliance officer reviewing a transaction for potential sanctions violations. The AI system can retrieve relevant regulations, reason through the analysis, and format findings as structured JSON. But can it:
+
+\begin{itemize}
+  \item Query the latest OFAC sanctions list in real time?
+  \item Calculate exposure amounts with verified arithmetic?
+  \item File a Suspicious Activity Report through the regulatory portal?
+  \item Update the case management system with findings?
+\end{itemize}
+
+These are not analysis problems; they are action problems. This chapter addresses how to extend LLM capabilities to interact with external systems while maintaining the governance, security, and auditability that professional practice demands.
+
+\subsection{The Tool Use Paradigm}
+
+LLMs possess vast knowledge but are notoriously unreliable at tasks requiring precision, real-time data, or external effects. Rather than expecting the model to ``know'' everything or perform complex calculations internally, we provide it with \keyterm{tools}---callable functions with well-defined interfaces.
+
+\begin{definitionbox}[title={Tool Use}]
+\keyterm{Tool use} (also called \keyterm{function calling}) is an architectural pattern where the LLM reasons about \emph{when} to invoke an external capability and \emph{what arguments} to provide. An orchestration layer executes the call, retrieves the result, and feeds it back to the model for synthesis.
+\end{definitionbox}
+
+This pattern combines the linguistic reasoning of the LLM with the precision of traditional software. The model decides what information is needed; the tool provides it reliably.
+
+\subsection{Why Tools Matter for Professional Practice}
+
+Tool use addresses three fundamental limitations of LLMs:
+
+\paragraph{Precision.} LLMs are unreliable at arithmetic, date calculations, and other precision tasks. A tool that performs compound interest calculations returns exact results every time. A tool that checks business day conventions never confuses holidays.
+
+\paragraph{Currency.} LLM training data has a cutoff date. A tool that queries the latest exchange rates, current stock prices, or today's regulatory filings provides information the model cannot know from its weights.
+
+\paragraph{Effect.} LLMs can analyze and recommend, but they cannot act---unless we give them tools. Filing a document, updating a database, sending a notification: these require external integration.
+
+\subsection{The Governance Imperative}
+
+Tool use introduces significant governance challenges. When the AI can query databases and invoke APIs, we must answer:
+
+\begin{itemize}
+  \item \textbf{Permissions}: What is the AI authorized to do? What data can it access?
+  \item \textbf{Audit}: How do we log every action for compliance review?
+  \item \textbf{Security}: How do we prevent injection attacks that manipulate tool calls?
+  \item \textbf{Accountability}: Who is responsible when the AI takes an action?
+\end{itemize}
+
+These are not theoretical concerns. A financial AI that can execute trades must have appropriate controls. A legal AI that can file documents must verify authority. The techniques in this chapter address these challenges through \keyterm{governance metadata}---annotating every tool call with who, what, why, and under what regulatory context.
+
+\subsection{Chapter Roadmap}
+
+This chapter builds from mechanics to governance:
+
+\paragraph{\Cref{sec:llmC-tools}: Tool Use and Function Calling.} We examine the mechanics of tool design, function calling protocols, parameter validation, and response handling. We cover tool discovery, argument generation, and the orchestration loop that connects LLM reasoning to tool execution.
+
+\paragraph{\Cref{sec:llmC-pitfalls}: Pitfalls and Best Practices.} We catalog common failure modes in tool-using systems: injection attacks, permission escalation, error cascades, and rate limiting failures. For each pitfall, we provide mitigation strategies grounded in production experience.
+
+\paragraph{\Cref{sec:llmC3-synthesis}: Synthesis.} We integrate tool use with the structured outputs, evidence records, and reasoning patterns from previous chapters into a coherent architecture for action-capable AI systems.
+
+\subsection{Relationship to Previous Chapters}
+
+Tool use builds directly on earlier foundations:
+
+\begin{itemize}
+  \item \textbf{Structured outputs} (Chapter~4): Function arguments are structured data. The schema design and validation techniques apply directly.
+
+  \item \textbf{Evidence records} (Chapter~4): Tool calls become part of the evidence trail. Every invocation is logged with inputs, outputs, timestamps, and context.
+
+  \item \textbf{Reasoning patterns} (Chapter~3): ReAct-style reasoning combines thought, action, and observation. This chapter provides the action component.
+\end{itemize}
+
+\subsection{What This Chapter Does Not Cover}
+
+This chapter focuses on single-turn and simple multi-turn tool use. More advanced topics are addressed elsewhere:
+
+\begin{itemize}
+  \item \textbf{Multimodal tools}: Tools that process images, PDFs, or audio are covered in Chapter~6
+  \item \textbf{Evaluation}: Measuring tool use quality systematically appears in Chapter~7
+  \item \textbf{Autonomous agents}: Multi-step planning with tool chains is addressed in \textit{Agentic AI in Law and Finance}
+\end{itemize}
+
+With these foundations established, we turn to the mechanics of tool design and function calling.
+

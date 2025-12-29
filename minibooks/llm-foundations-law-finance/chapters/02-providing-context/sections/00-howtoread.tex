@@ -1,0 +1,104 @@
+% =============================================================================
+% How to Read This Chapter — How Do I Provide Context?
+% Purpose: Audience paths, scope, and navigation
+% Label: sec:llmB-howtoread
+% =============================================================================
+
+\section*{How to Read This Chapter}
+\addcontentsline{toc}{section}{How to Read This Chapter}
+
+This chapter transforms the single-turn prompting concepts from Chapter~1 into a foundation for grounded AI systems. The organizing principle is \emph{grounding first}: before eliciting sophisticated reasoning, we ensure the model has access to authoritative sources. Whether you are a legal professional building research assistants, a financial analyst designing due diligence workflows, or an architect implementing enterprise AI systems, this chapter provides the conceptual and practical tools for building systems that cite sources rather than hallucinate.
+
+\subsection*{Reading Paths}
+
+\begin{highlightbox}[colback=bg-definition, colframe=definition-base, title={Path 1: Practitioner Quick Start (20--30 minutes)}]
+If you are already experimenting with LLMs and want immediately applicable techniques for grounded responses:
+\begin{itemize}
+  \item \textbf{\Cref{sec:llmB-icl}}: Understand why in-context learning is the mechanism that makes all grounding work
+  \item \textbf{\Cref{sec:llmB-rag}}: Learn retrieval-augmented generation (RAG) for grounding responses in authoritative sources
+  \item \textbf{\Cref{sec:llmB-domain}}: Apply professional domain requirements including authority hierarchies and matter isolation
+\end{itemize}
+This path gives you the patterns needed to build systems that cite sources rather than hallucinate.
+\end{highlightbox}
+
+\begin{highlightbox}[colback=bg-example, colframe=example-base, title={Path 2: Full Technical Understanding (45--60 minutes)}]
+If you need to understand the underlying mechanics for system design or architecture decisions:
+\begin{itemize}
+  \item Read all sections in order, starting with the conceptual foundation of in-context learning (\Cref{sec:llmB-icl})
+  \item Study the RAG patterns (\Cref{sec:llmB-rag}): embedding-based retrieval, chunking strategies, and hybrid search
+  \item Examine the professional domain requirements (\Cref{sec:llmB-domain}): authority hierarchies, jurisdiction filtering, and matter isolation
+  \item Review the synthesis (\Cref{sec:llmB2-synthesis}) for integration principles
+\end{itemize}
+This path prepares you to design sophisticated grounded systems for professional contexts.
+\end{highlightbox}
+
+\begin{highlightbox}[colback=bg-note, colframe=border-note, title={Path 3: Governance and Risk Focus (25--35 minutes)}]
+If your primary concern is compliance, risk management, or audit:
+\begin{itemize}
+  \item \textbf{\Cref{sec:llmB-domain}}: Understand authority hierarchies, jurisdictional filtering, and matter isolation---the controls that distinguish professional systems from consumer chatbots
+  \item \textbf{\Cref{sec:llmB-rag}}: Learn citation fidelity requirements and how to create auditable source trails
+  \item \textbf{\Cref{sec:llmB2-synthesis}}: Review the design principles for professional deployments
+\end{itemize}
+This path emphasizes the governance dimensions essential for enterprise deployment.
+\end{highlightbox}
+
+\subsection*{Prerequisites}
+
+This chapter assumes familiarity with the concepts introduced in Chapter~1 (The LLM Primer):
+\begin{itemize}
+  \item How tokens and tokenization work
+  \item The autoregressive generation process
+  \item Embeddings and vector representations of meaning
+  \item Basic prompt structure and the role of context
+  \item Common failure modes (hallucination, sensitivity to phrasing)
+\end{itemize}
+
+If these concepts are unfamiliar, we recommend reviewing the LLM Primer before proceeding.
+
+\subsection*{What This Chapter Covers}
+
+\begin{keybox}[title={Key Objectives}]
+By the end of this chapter, you will be able to:
+\begin{enumerate}
+  \item \textbf{Understand in-context learning} as the foundational mechanism that enables few-shot prompting, RAG, and conversation memory
+  \item \textbf{Implement retrieval-augmented generation} to ground model responses in authoritative sources with proper citations
+  \item \textbf{Apply professional domain requirements} including authority hierarchies, jurisdictional filtering, temporal validity, and matter isolation
+  \item \textbf{Design context provision strategies} that respect professional constraints and enable verifiable outputs
+\end{enumerate}
+\end{keybox}
+
+\begin{highlightbox}[title={Visual Cues (Boxes)}]
+Throughout the chapter, colored boxes signal intent:
+\begin{itemize}
+  \item \textbf{Key takeaways (\texttt{keybox}):} objectives, frameworks, and decision rules
+  \item \textbf{Notes (\texttt{highlightbox}):} quick-start paths, intuition, and plain-English context
+  \item \textbf{Definitions (\texttt{definitionbox}):} formal definitions and core concepts
+  \item \textbf{Warnings (\texttt{cautionbox}):} risk and governance pitfalls
+  \item \textbf{Code/examples (\texttt{listingbox}):} reproducible snippets and technical artifacts
+\end{itemize}
+\end{highlightbox}
+
+\subsection*{What This Chapter Does Not Cover}
+
+To maintain focus, we defer several related topics to subsequent chapters:
+
+\begin{itemize}
+  \item \textbf{Reasoning patterns}: Chain-of-thought, self-consistency, and ReAct patterns are covered in Chapter~3
+  \item \textbf{Conversation state management}: Multi-turn dialogue and memory strategies appear in Chapter~3
+  \item \textbf{Structured outputs and schemas}: JSON schema enforcement and function calling appear in Chapter~4
+  \item \textbf{Tool use}: Function calling and API integration are addressed in Chapter~5
+  \item \textbf{Multimodal inputs}: Document images, tables, and audio processing are addressed in Chapter~6
+  \item \textbf{Agent architectures}: Autonomous agent design with planning and execution loops is addressed in our companion volume, \textit{Agentic AI in Law and Finance}
+\end{itemize}
+
+\subsection*{Bridge from the LLM Primer}
+
+In the previous chapter, we examined how LLMs process and generate text in single-turn interactions. We saw that these models are fundamentally stateless: each inference call is independent, with the model retaining no memory of previous interactions. We explored how prompt design influences output quality and how various failure modes can compromise reliability.
+
+This chapter extends those foundations by addressing a critical question: \emph{how do we provide the model with the specific information it needs?}
+
+\paragraph{From Parametric Knowledge to Grounded Context.} Chapter~1 showed that LLMs encode vast knowledge in their weights, but that knowledge may be outdated, incomplete, or simply wrong for your specific task. This chapter introduces in-context learning and RAG as mechanisms for providing the model with specific, authoritative information---transforming it from a general knowledge system into a grounded research assistant.
+
+\paragraph{From Generic to Professional.} Consumer chatbots can retrieve any relevant content. Professional systems must respect authority hierarchies, filter by jurisdiction, validate temporal currency, and maintain matter isolation. This chapter establishes the domain requirements that distinguish professional AI systems from consumer applications.
+
+The techniques we introduce here form the foundation for the reasoning patterns, structured outputs, and tool use covered in subsequent chapters.

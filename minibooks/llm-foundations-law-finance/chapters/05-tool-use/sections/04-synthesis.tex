@@ -1,0 +1,97 @@
+% =============================================================================
+% Synthesis — Tool Use
+% Purpose: Integration of concepts; bridge to multimodal chapter
+% Label: sec:llmC3-synthesis
+% =============================================================================
+
+\section{Synthesis: From Passive to Active Systems}
+\label{sec:llmC3-synthesis}
+
+We began this chapter with a fundamental extension: moving LLMs from analysis to action. With tool use, AI systems can query databases, perform calculations, check external services, and take effects in the world---all while maintaining the governance and auditability that professional practice demands.
+
+\subsection{The Complete Stack}
+
+Tool use completes the four-pillar architecture introduced in Chapter~4:
+
+\begin{highlightbox}[title={Four Pillars of Production AI}]
+\begin{description}
+  \item[Pillar 1: Advanced Retrieval] (Chapter~4) Provides grounding in authoritative sources through production-grade retrieval pipelines.
+
+  \item[Pillar 2: Evidence Records] (Chapter~4) Provides auditability through structured provenance logging.
+
+  \item[Pillar 3: Structured Outputs] (Chapter~4) Provides reliability through schema-constrained generation and validation.
+
+  \item[Pillar 4: Tool Use] (This chapter) Provides capability extension through governed function calling.
+\end{description}
+Together, these pillars create systems that are grounded, auditable, reliable, and capable.
+\end{highlightbox}
+
+\subsection{Key Design Principles}
+
+From our examination of tool use, several principles emerge:
+
+\begin{keybox}[title={Principle 1: Least Privilege}]
+Tools should have the minimum permissions necessary for their function. A calculation tool needs no database access. A query tool needs read-only access. Design tool permissions narrowly and audit regularly.
+\end{keybox}
+
+\begin{keybox}[title={Principle 2: Fail Safely}]
+Tools will fail. Networks timeout. APIs rate-limit. Databases go down. Design for graceful degradation: return informative errors, implement retries with backoff, and have fallback strategies.
+\end{keybox}
+
+\begin{keybox}[title={Principle 3: Log Everything}]
+Every tool invocation must be logged with inputs, outputs, timing, user context, and regulatory metadata. These logs are not debugging aids---they are compliance evidence.
+\end{keybox}
+
+\begin{keybox}[title={Principle 4: Validate Both Ways}]
+Validate tool arguments before calling (schema compliance, permission checks). Validate tool responses before using (type checking, reasonableness bounds). Trust nothing implicitly.
+\end{keybox}
+
+\subsection{Integration with Evidence Records}
+
+Tool calls become part of the evidence trail established in Chapter~4:
+
+\begin{itemize}
+  \item \textbf{Call logging}: Every tool invocation is recorded with timestamp, arguments, and context
+  \item \textbf{Response logging}: Tool outputs are captured with any transformation applied
+  \item \textbf{Chain linking}: Tool calls are linked to the reasoning that triggered them and the conclusions that used their results
+  \item \textbf{Versioning}: Tool versions are recorded to enable replay and debugging
+\end{itemize}
+
+This integration ensures that any AI action can be fully reconstructed: what information was available, what reasoning was applied, what tools were called, and what results were used.
+
+\subsection{Security Architecture}
+
+Tool use introduces attack surfaces that must be actively managed:
+
+\paragraph{Input Sanitization.} User inputs that flow into tool arguments must be sanitized. SQL injection, command injection, and path traversal attacks all apply to tool-using AI systems.
+
+\paragraph{Output Validation.} Tool outputs that flow back to the model can carry malicious content. Indirect prompt injection through tool responses is a real attack vector.
+
+\paragraph{Permission Boundaries.} The AI should not be able to escalate permissions by calling tools in unexpected combinations. Implement defense in depth with multiple authorization checks.
+
+\paragraph{Rate Limiting.} Protect both external services and your own infrastructure from runaway tool calls. Implement circuit breakers and backoff strategies.
+
+\subsection{Looking Ahead: Multimodal and Beyond}
+
+This chapter completes the foundation for text-based AI systems. The remaining chapters extend these patterns:
+
+\paragraph{Chapter 6: Multimodal Documents.} We extend structured extraction and tool use to PDFs, tables, images, and audio. The governance patterns---evidence records, permission boundaries, audit logging---apply directly. We add modality-specific parsing tools.
+
+\paragraph{Chapter 7: Systematic Improvement.} We treat prompts, tools, and pipelines as engineering artifacts subject to evaluation, optimization, and version control. Tool call success rates become metrics; parameter accuracy becomes a target for optimization.
+
+\paragraph{Agentic AI.} Our companion volume extends tool use to autonomous agents that plan, execute, and adapt over extended task horizons. The governance foundations from this chapter---permissions, logging, accountability---become critical for systems that act without step-by-step human oversight.
+
+\subsection{The Transformation Complete}
+
+Across the first five chapters, we have transformed the LLM from a conversational text generator into a production-grade system component:
+
+\begin{enumerate}
+  \item \textbf{Chapter 1}: Understood the mechanics of text generation
+  \item \textbf{Chapter 2}: Grounded the model in authoritative sources
+  \item \textbf{Chapter 3}: Elicited structured reasoning over that context
+  \item \textbf{Chapter 4}: Constrained outputs to validated schemas
+  \item \textbf{Chapter 5}: Extended capabilities through governed tool use
+\end{enumerate}
+
+The result is an AI system that can analyze documents, reason through complex problems, produce reliable structured outputs, and take actions in the world---all with the auditability and governance that professional practice demands.
+
