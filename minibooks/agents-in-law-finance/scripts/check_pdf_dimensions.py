@@ -35,19 +35,22 @@ def parse_length_in(value: str) -> float:
 def sizes_from_cover_vars(vars_path: Path) -> tuple[float, float]:
     text = vars_path.read_text()
 
-    def find_length(name: str) -> float:
+    def find_length(name: str, default: float = 0.0) -> float:
         match = re.search(rf"\\setlength{{\\{name}}}{{([^}}]+)}}", text)
         if not match:
-            raise ValueError(f"missing {name} in {vars_path}")
+            return default
         return parse_length_in(match.group(1))
 
     trim_w = find_length("CoverTrimWidth")
     trim_h = find_length("CoverTrimHeight")
     bleed = find_length("CoverBleed")
     spine = find_length("CoverSpineWidth")
+    wrap = find_length("CoverWrapArea", default=0.0)  # Hardcover has wrap area
 
-    width_in = (2 * trim_w) + spine + (2 * bleed)
-    height_in = trim_h + (2 * bleed)
+    # Width: 2×trim + spine + 2×bleed + 2×wrap (wrap on left and right)
+    # Height: trim + 2×bleed + 2×wrap (wrap on top and bottom)
+    width_in = (2 * trim_w) + spine + (2 * bleed) + (2 * wrap)
+    height_in = trim_h + (2 * bleed) + (2 * wrap)
     return width_in, height_in
 
 
