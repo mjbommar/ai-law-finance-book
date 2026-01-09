@@ -4,9 +4,11 @@
 % This file loads the base preamble and overrides settings for e-readers.
 %
 % Key differences from print version:
-%   - Larger base font (14pt via extbook class in main-ebook.tex)
+%   - Larger base font (13pt via extbook class in main-ebook.tex)
 %   - Narrower margins (more text per page)
 %   - One-sided layout (no inner/outer margin distinction)
+%   - No headers (page numbers in footer only)
+%   - Normalized font sizes across headings and boxes
 %   - No blank verso pages
 %
 % Include this file with: \input{preamble/main-ebook}
@@ -31,7 +33,8 @@
   top=0.5in,
   bottom=0.6in,
   footskip=0.3in,
-  headheight=17pt   % Accommodate 14pt font in headers
+  headheight=0pt,   % No headers in ebook version
+  headsep=0pt       % No space needed for headers
 }
 
 % ----------------------------------------------------------------------------
@@ -42,30 +45,32 @@
 
 \fancypagestyle{frontmatterstyle}{%
   \fancyhf{}%
-  \fancyhead[R]{\thepage}% Folio at right
+  % No headers for ebook - page number in footer
+  \fancyfoot[C]{\thepage}% Page number centered in footer
   \renewcommand{\headrulewidth}{0pt}%
   \renewcommand{\footrulewidth}{0pt}%
 }
 
 \fancypagestyle{mainmatterstyle}{%
   \fancyhf{}%
-  \fancyhead[L]{\textsc{\booktitle}}% Book title on left
-  \fancyhead[R]{\thepage}% Folio on right
-  \renewcommand{\headrulewidth}{0.4pt}%
+  % No headers for ebook - margins too tight with large font
+  \fancyfoot[C]{\thepage}% Page number centered in footer
+  \renewcommand{\headrulewidth}{0pt}%
   \renewcommand{\footrulewidth}{0pt}%
 }
 
 \fancypagestyle{backmatterstyle}{%
   \fancyhf{}%
-  \fancyhead[L]{\textsc{\booktitle}}%
-  \fancyhead[R]{\thepage}%
-  \renewcommand{\headrulewidth}{0.4pt}%
+  % No headers for ebook - margins too tight with large font
+  \fancyfoot[C]{\thepage}% Page number centered in footer
+  \renewcommand{\headrulewidth}{0pt}%
   \renewcommand{\footrulewidth}{0pt}%
 }
 
 \fancypagestyle{plain}{%
   \fancyhf{}%
-  \fancyhead[R]{\thepage}% Folio at right only
+  % No headers for ebook - page number in footer
+  \fancyfoot[C]{\thepage}% Page number centered in footer
   \renewcommand{\headrulewidth}{0pt}%
   \renewcommand{\footrulewidth}{0pt}%
 }
@@ -97,4 +102,43 @@
 % For ebook, always disable cleardoublepage (no blank pages needed)
 \AtBeginDocument{%
   \disablecleardoublepage
+}
+
+% ----------------------------------------------------------------------------
+% E-book Table of Contents (shallower depth)
+% ----------------------------------------------------------------------------
+% Show only chapters and sections in ebook TOC (not subsections)
+% This keeps the TOC concise for e-reader navigation
+\setcounter{tocdepth}{1}
+
+% ----------------------------------------------------------------------------
+% E-book Font Size Normalization
+% ----------------------------------------------------------------------------
+% With 13pt base font, we want more consistent sizing across elements.
+% Print version has section=13pt, subsection=11pt which looks odd with 13pt body.
+% For ebook: keep all text closer to the 13pt base for visual consistency.
+
+% Override section formatting (from styling.tex)
+% Section: 14pt (slightly larger than 13pt body)
+\titleformat{\section}
+  {\fontsize{14pt}{16.8pt}\selectfont\bfseries\color{primary}}
+  {\thesection}{1em}{}
+
+% Subsection: 13pt bold (same as body, bold distinguishes it)
+\titleformat{\subsection}
+  {\fontsize{13pt}{15.6pt}\selectfont\bfseries\color{primary}}
+  {\thesubsection}{1em}{}
+
+% Subsubsection: 13pt bold, secondary color
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{text-secondary}}
+  {\thesubsubsection}{1em}{}
+
+% ----------------------------------------------------------------------------
+% E-book Box Title Size Override
+% ----------------------------------------------------------------------------
+% Box titles use \large in print which scales too big with larger base fonts.
+% Override to use normalsize bold for consistency with body text.
+\tcbset{
+  fonttitle=\bfseries\normalsize
 }

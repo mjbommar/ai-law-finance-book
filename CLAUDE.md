@@ -2,9 +2,34 @@
 
 > **⚠️ Note on File Naming**: This file is named `CLAUDE.md` because Claude Code requires this exact filename. It contains **AI assistant workflow and quick start guide**, not content about AI agents or Claude (which is the book's subject matter found in `chapters/`).
 
-**Last Updated**: November 1, 2025
+**Last Updated**: December 29, 2025
 **Purpose**: Primary entry point for AI assistants (like Claude Code) working on this textbook project
 **Scope**: Entire repository
+
+---
+
+## ⚠️ CRITICAL: Current Date and Technology Verification
+
+**Today's Date**: December 2025 (nearly 2026)
+
+**MANDATORY**: Before writing about ANY models, APIs, or technical capabilities:
+1. **USE WEB SEARCH** to verify current state of technology
+2. **DO NOT RELY** on training data — it is outdated
+3. **VERIFY** model names, versions, and capabilities against official sources
+
+**Current Model Landscape (as of Dec 2025)** — ALWAYS verify via web search:
+- **Anthropic**: Claude Opus 4.5, Sonnet 4.5, Haiku 4.5 (Claude 3.x deprecated/retired)
+- **OpenAI**: GPT-5/GPT-5 mini (flagship), GPT-4.1 series (1M context), o3/o3-pro/o4-mini (reasoning)
+- **Google**: Gemini 3 Pro/Flash (current), Gemini 2.5 Flash (available), Gemini 2.0 (deprecated)
+- **Meta**: Llama 4 Scout (17B, 10M context), Llama 4 Maverick (400B total, 1M context)
+- **Open source**: Mistral, Qwen, DeepSeek v3 (verify current versions)
+
+**When encountering model references in existing content**:
+- GPT-4, GPT-4o → outdated, current is GPT-5 and GPT-4.1 series
+- Claude 3, Claude 3.5 → outdated/deprecated, current is Claude 4.5 family
+- Gemini 1.x, Gemini 2.0 → outdated/deprecated, current is Gemini 3
+- Llama 3.x → outdated, current is Llama 4
+- Any model reference > 6 months old → VERIFY before keeping
 
 ---
 
@@ -238,6 +263,35 @@ Cross-reference with Section~\ref{sec:other} or \Cref{sec:other}.
 \begin{highlightbox}
   Supplementary information...
 \end{highlightbox}
+```
+
+### ⚠️ Box Title and Table Width Constraints
+
+**Box Titles MUST be short** (≤ 4-5 words):
+- ✅ GOOD: `title={Key Point}`, `title={Why This Matters}`, `title={RAG Pipeline}`
+- ❌ BAD: `title={Understanding the Fundamental Principles of Retrieval-Augmented Generation}`
+- **Reason**: Long titles overflow into margins and bleed off the page
+
+**Tables MUST fit within text width**:
+- Use `@{}` column specifiers to reduce padding
+- Use `p{Xcm}` or `p{X\textwidth}` for controlled column widths
+- Prefer `tabularx` with `X` columns for automatic width distribution
+- If table is too wide:
+  1. **Shorten column headers** (use abbreviations, footnotes for full terms)
+  2. **Move content to narrative** — convert some columns to prose paragraphs
+  3. **Split into multiple tables** — one table per logical grouping
+  4. **Use enumerated lists** instead of tables for simple comparisons
+
+**Example of narrow table formatting**:
+```latex
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+\textbf{Model} & \textbf{Strengths} & \textbf{Limitations} \\
+\midrule
+Claude 4.5 & Long context, reasoning & API-only \\
+GPT-4o & Multimodal, fast & Cost at scale \\
+\bottomrule
+\end{tabularx}
 ```
 
 ### When Researching
@@ -633,6 +687,8 @@ README.md
 |------|--------|--------|
 | 2025-10-31 | Initial creation, consolidation of guidance files | Claude Code |
 | 2025-10-31 | Moved detailed guides to docs/, updated all references | Claude Code |
+| 2025-12-29 | Added CRITICAL section for date awareness and web search requirement | Claude Code |
+| 2025-12-29 | Added box title and table width constraints | Claude Code |
 
 ---
 

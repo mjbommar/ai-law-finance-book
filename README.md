@@ -10,48 +10,36 @@ Welcome! This repository contains the evolving draft of *Artificial Intelligence
 
 ---
 
-## 🧭 Chapter Roadmap (ToC + TODO)
+## 📚 Chapter Roadmap
 
-Legend:
-- `[x]` Finished chapter (current working draft ready for readers)
-- `[~]` In progress (substantial draft exists, still being developed)
-- `[ ]` Planned (outline or resources only)
+> Each chapter directory contains a `README.md` with detailed section structure and a `main.pdf` draft.
+
+**Legend**: ✅ Complete | 🔄 In Progress | 📋 Planned
 
 ### Part I — Foundations: LLMs and Prompting
 
-- [~] **01 — Foundations: LLM Primer and Mechanics**  
-  [source](chapters/01-foundations-llm-primer-mechanics)
-
-- [~] **02 — Foundations: Conversations and Reasoning**  
-  [source](chapters/02-foundations-conversations-reasoning)
-
-- [~] **03 — Foundations: Structured Outputs and Tool Use**  
-  [source](chapters/03-foundations-structured-tools-multimodal)
-
-- [~] **04 — Foundations: Multimodal Fundamentals**  
-  [source](chapters/04-foundations-multimodal)
-
-- [~] **05 — Foundations: Prompt Design, Evaluation, and Optimization**  
-  [source](chapters/05-foundations-prompt-design-eval-optimization)
+| | Chapter | Description |
+|:-:|---------|-------------|
+| 🔄 | [**01 — LLM Primer and Mechanics**](chapters/01-foundations-llm-primer-mechanics) | Tokens, sampling, embeddings, context windows, and failure modes for practitioners. |
+| 🔄 | [**02 — Conversations and Reasoning**](chapters/02-foundations-conversations-reasoning) | Multi-turn state management, context strategies, and reasoning patterns (CoT, ReAct). |
+| 🔄 | [**03 — Structured Outputs and Tool Use**](chapters/03-foundations-structured-outputs-tools) | JSON schemas, validation, function calling, RAG basics, and the Evidence Record. |
+| 🔄 | [**04 — Multimodal Fundamentals**](chapters/04-foundations-multimodal) | Documents, images, tables, charts, and audio—with privacy for regulated domains. |
+| 🔄 | [**05 — Prompt Design and Optimization**](chapters/05-foundations-prompt-design-eval-optimization) | Specifications, evaluation test sets, meta-prompting, threat modeling, and versioning. |
 
 ### Part II — Agents and Agentic Systems
 
-- [x] **06 — Agents Part I: What Is an Agent?**  
-  [PDF](chapters/06-agents-part-1/main.pdf) · [source](chapters/06-agents-part-1)
-
-- [x] **07 — Agents Part II: How to Build an Agent**  
-  [PDF](chapters/07-agents-part-2/main.pdf) · [source](chapters/07-agents-part-2)
-
-- [x] **08 — Agents Part III: How to Govern an Agent**  
-  [PDF](chapters/08-agents-part-3/main.pdf) · [source](chapters/08-agents-part-3)
+| | Chapter | Description |
+|:-:|---------|-------------|
+| ✅ | [**06 — What Is an Agent?**](chapters/06-agents-part-1) | Seven decades of agency scholarship synthesized into practical evaluation frameworks. |
+| ✅ | [**07 — How to Design an Agent**](chapters/07-agents-part-2) | Ten architectural questions: triggers, perception, memory, planning, and escalation. |
+| ✅ | [**08 — How to Govern an Agent**](chapters/08-agents-part-3) | Risk calibration, compliance stacks, and accountability for regulated industries. |
 
 ### Part III — Knowledge Graphs & Semantic Web
 
-- [~] **09 — Knowledge Graphs & Semantic Web: Foundations for Law and Finance**  
-  [source](chapters/09-kg-foundations)
-
-- [~] **10 — Knowledge Graphs & Semantic Web: Operations with LLMs**  
-  [source](chapters/10-kg-operations-llm)
+| | Chapter | Description |
+|:-:|---------|-------------|
+| 📋 | [**09 — Foundations**](chapters/09-kg-foundations) | RDF, RDFS/OWL, SKOS, SPARQL, SHACL, and JSON-LD with legal and financial examples. |
+| 📋 | [**10 — Operations with LLMs**](chapters/10-kg-operations-llm) | Ingestion pipelines, LLM-assisted curation, hybrid retrieval, and evaluation. |
 
 ## 📚 About This Book
 
@@ -74,39 +62,31 @@ We're building a dedicated website at **[ai4lf.com](https://ai4lf.com)** where y
 
 Stay tuned for the launch!
 
-## 📖 Read the Latest Drafts
+## 📖 Read the Book
 
-Want to dive right in? Here's where to find the current PDF drafts:
+**Complete Book**: Generate `main.pdf` locally with `make pdf` — all chapters integrated into one document.
 
-### 📚 Complete Book
-- **main.pdf** — The full book with all current chapters integrated (working draft). Generate locally via `make pdf`.
-
-### 📑 Individual Chapters
-Current standalone chapter PDFs (all working drafts unless marked finished in the roadmap):
-
-- **01 — Foundations: LLM Primer and Mechanics** — [chapters/01-foundations-llm-primer-mechanics/main.pdf](chapters/01-foundations-llm-primer-mechanics/main.pdf)
-- **02 — Foundations: Conversations and Reasoning** — [chapters/02-foundations-conversations-reasoning/main.pdf](chapters/02-foundations-conversations-reasoning/main.pdf)
-- **03 — Foundations: Structured Outputs and Tool Use** — [chapters/03-foundations-structured-tools-multimodal/main.pdf](chapters/03-foundations-structured-tools-multimodal/main.pdf)
-- **04 — Foundations: Multimodal Fundamentals** — [chapters/04-foundations-multimodal/main.pdf](chapters/04-foundations-multimodal/main.pdf)
-- **05 — Foundations: Prompt Design, Evaluation, and Optimization** — [chapters/05-foundations-prompt-design-eval-optimization/main.pdf](chapters/05-foundations-prompt-design-eval-optimization/main.pdf)
-- **06 — Agents Part I: What Is an Agent?** — [chapters/06-agents-part-1/main.pdf](chapters/06-agents-part-1/main.pdf)
-- **07 — Agents Part II: How to Build an Agent** — [chapters/07-agents-part-2/main.pdf](chapters/07-agents-part-2/main.pdf)
-- **08 — Agents Part III: How to Govern an Agent** — [chapters/08-agents-part-3/main.pdf](chapters/08-agents-part-3/main.pdf)
-- **09 — Knowledge Graphs & Semantic Web: Foundations for Law and Finance** — [chapters/09-kg-foundations/main.pdf](chapters/09-kg-foundations/main.pdf)
-- **10 — Knowledge Graphs & Semantic Web: Operations with LLMs** — [chapters/10-kg-operations-llm/main.pdf](chapters/10-kg-operations-llm/main.pdf)
-
-More chapters coming soon! This is a living document—we're actively writing and revising.
+**Individual Chapters**: Each chapter in the [roadmap above](#-chapter-roadmap) links to a directory containing:
+- `README.md` — Chapter overview with section-by-section structure
+- `main.pdf` — Standalone chapter PDF (working draft)
+- `sections/` — LaTeX source files
 
 ⭐ **Star this repository** to get notified when new chapters are published!
 
 ## 📘 Mini Books
 
-- **Agents in Law & Finance** — [minibooks/agents-in-law-finance](minibooks/agents-in-law-finance) (standalone mini book with its own build files)
+### Agentic AI in Law and Finance
+
+A standalone book covering the core agent chapters (What Is an Agent?, How to Design an Agent, How to Govern an Agent) in a polished, print-ready format.
+
+- **Read now**: [main.pdf](minibooks/agents-in-law-finance/main.pdf)
+- **Source**: [minibooks/agents-in-law-finance](minibooks/agents-in-law-finance)
+- **Coming soon**: Paperback and hardcover editions
 
 ## 🚀 Getting Started
 
 ### For Readers
-Simply download the PDFs above and start reading! We welcome feedback through [GitHub issues](https://github.com/mjbommar/ai-law-finance-book/issues).
+Click any chapter in the [roadmap](#-chapter-roadmap) to find its PDF and start reading! We welcome feedback through [GitHub issues](https://github.com/mjbommar/ai-law-finance-book/issues).
 
 ### For Contributors
 We'd love your help making this book better! Whether you're fixing a typo, improving an explanation, or adding new content, your contributions are welcome.
@@ -142,7 +122,7 @@ We've organized everything to be intuitive and maintainable:
 ├── 📁 chapters/          # Individual chapter workspaces
 │   ├── 📁 01-foundations-llm-primer-mechanics/
 │   ├── 📁 02-foundations-conversations-reasoning/
-│   ├── 📁 03-foundations-structured-tools-multimodal/
+│   ├── 📁 03-foundations-structured-outputs-tools/
 │   ├── 📁 04-foundations-multimodal/
 │   ├── 📁 05-foundations-prompt-design-eval-optimization/
 │   ├── 📁 06-agents-part-1/
