@@ -1,0 +1,207 @@
+% =============================================================================
+% Further Learning — Multimodal Fundamentals
+% Purpose: Primary sources for OCR/layout/table/audio
+% Label: sec:llmD2-further
+% =============================================================================
+
+\section{Further Learning}
+\label{sec:llmD2-further}
+
+This section provides an annotated guide to primary sources and resources for readers who wish to deepen their understanding of multimodal document processing, retrieval, and privacy. We organize resources by topic, with brief annotations explaining the relevance and accessibility of each source.
+
+\subsection{Document Layout and Structure}
+\label{sec:llmD2-further-layout}
+
+\paragraph{LayoutLM Family.}
+The LayoutLM series from Microsoft Research represents the state of the art in document understanding:
+
+\begin{itemize}
+  \item \textbf{LayoutLM} (Xu et al., 2020): Introduced the combination of text and layout information in a pre-trained transformer. Foundational for understanding modern document AI.
+  \item \textbf{LayoutLMv2} (Xu et al., 2021): Added visual features from document images, enabling recognition of non-textual elements.
+  \item \textbf{LayoutLMv3} (Huang et al., 2022): Unified text-image pre-training with improved performance across document understanding tasks.
+\end{itemize}
+
+\paragraph{Object Detection Approaches.}
+For high-throughput document processing:
+
+\begin{itemize}
+  \item \textbf{DocLayout-YOLO}: Adapts YOLO object detection for document layout analysis. Useful for fast identification of headers, paragraphs, tables, and figures.
+  \item \textbf{PaddleOCR}: Baidu's open-source OCR system with layout analysis capabilities.
+  \item \textbf{Tesseract LSTM}: The open-source standard, with neural network-based recognition.
+\end{itemize}
+
+\paragraph{Commercial Solutions.}
+Enterprise-grade document processing:
+
+\begin{itemize}
+  \item \textbf{Azure AI Document Intelligence}: Microsoft's cloud service with pre-trained models for invoices, receipts, and custom documents.
+  \item \textbf{Amazon Textract}: AWS service for OCR, table extraction, and form processing.
+  \item \textbf{Google Document AI}: Cloud-based document understanding with specialized processors.
+\end{itemize}
+
+\subsection{Table and Chart Understanding}
+\label{sec:llmD2-further-tables}
+
+\paragraph{Table Reasoning.}
+Moving beyond table extraction to table understanding:
+
+\begin{itemize}
+  \item \textbf{Chain-of-Table} (Wang et al., ICLR 2024): Framework for table reasoning through iterative operations. Demonstrates that step-by-step reasoning outperforms single-pass table ingestion.
+  \item \textbf{Table-GPT}: Research on specialized table understanding models and prompting strategies.
+  \item \textbf{TAPAS/TAPEX}: Google's table pre-training approaches for question answering over tables.
+\end{itemize}
+
+\paragraph{Chart Understanding.}
+Extracting information from data visualizations:
+
+\begin{itemize}
+  \item \textbf{CHARGE}: Chart-based Question Answering Generation framework for extracting and verifying information from visualizations.
+  \item \textbf{ChartQA}: Benchmark for visual question answering on charts.
+  \item \textbf{MatCha/DePlot}: Google's chart understanding models that convert charts to tables.
+\end{itemize}
+
+\subsection{Audio and Video Processing}
+\label{sec:llmD2-further-audio}
+
+\paragraph{Speech Recognition.}
+Automatic speech recognition for transcription:
+
+\begin{itemize}
+  \item \textbf{Whisper} (OpenAI): Open-source ASR supporting 99 languages with word-level timestamps. The practical standard for most applications.
+  \item \textbf{AssemblyAI}: Commercial ASR with speaker diarization and real-time streaming.
+  \item \textbf{Deepgram}: Enterprise ASR with customization for domain vocabulary.
+  \item \textbf{AWS Transcribe}: Amazon's ASR service with custom vocabulary support.
+\end{itemize}
+
+\paragraph{Speaker Diarization.}
+Identifying who is speaking:
+
+\begin{itemize}
+  \item \textbf{pyannote.audio}: Open-source speaker diarization toolkit in Python.
+  \item \textbf{NeMo}: NVIDIA's toolkit includes speaker diarization models.
+  \item \textbf{Commercial APIs}: AssemblyAI, Rev.ai, and others provide diarization as a service.
+\end{itemize}
+
+\paragraph{Video Understanding.}
+Processing video content:
+
+\begin{itemize}
+  \item \textbf{VideoRAG}: Frameworks for long-context video understanding with dual-channel retrieval.
+  \item \textbf{Twelve Labs}: Commercial video understanding and search API.
+  \item \textbf{Video-LLaVA}: Open-source video understanding models.
+\end{itemize}
+
+\subsection{Multimodal Embeddings}
+\label{sec:llmD2-further-embeddings}
+
+\paragraph{Vision-Language Models.}
+Unified understanding of images and text:
+
+\begin{itemize}
+  \item \textbf{CLIP} (OpenAI): Contrastive Language-Image Pre-training. Foundational model for cross-modal retrieval.
+  \item \textbf{SigLIP} (Google): Sigmoid Loss for Language Image Pre-Training. Improved calibration for retrieval tasks.
+  \item \textbf{OpenCLIP}: Open-source CLIP implementations with various model sizes.
+\end{itemize}
+
+\paragraph{Multimodal RAG Architectures.}
+Combining retrieval across modalities:
+
+\begin{itemize}
+  \item \textbf{Late Fusion}: Research comparing unified embeddings versus modality-specific indices with score fusion.
+  \item \textbf{ColPali/ColQwen2}: Dense retrieval models for document understanding.
+  \item \textbf{BLIP-2}: Bootstrapped vision-language pre-training for multimodal understanding.
+\end{itemize}
+
+\subsection{Privacy and Content Authenticity}
+\label{sec:llmD2-further-privacy}
+
+\paragraph{PII Detection and Redaction.}
+
+\begin{itemize}
+  \item \textbf{Microsoft Presidio}: Open-source PII detection and anonymization framework. Supports text and images, extensible for custom entity types.
+  \item \textbf{spaCy NER}: Named entity recognition for identifying names, organizations, and locations.
+  \item \textbf{AWS Comprehend}: Amazon's NLP service with PII detection capabilities.
+\end{itemize}
+
+\paragraph{Content Authenticity.}
+Provenance and tamper-evidence:
+
+\begin{itemize}
+  \item \textbf{C2PA Specification}: The Coalition for Content Provenance and Authenticity technical specification for cryptographic content credentials.
+  \item \textbf{Content Authenticity Initiative}: Adobe-led consortium developing tools and standards for content provenance.
+  \item \textbf{c2pa-rs}: Open-source Rust implementation of the C2PA specification.
+\end{itemize}
+
+\subsection{Practical Guides and Documentation}
+\label{sec:llmD2-further-practical}
+
+Beyond research papers, practitioners benefit from implementation guides:
+
+\begin{itemize}
+  \item \textbf{Unstructured.io}: Open-source library for document parsing with practical documentation. \url{https://unstructured.io}
+
+  \item \textbf{LangChain Document Loaders}: Framework components for loading and parsing diverse document types. \url{https://docs.langchain.com}
+
+  \item \textbf{LlamaIndex}: Data connectors and document processing for RAG applications. \url{https://docs.llamaindex.ai}
+
+  \item \textbf{Azure AI Documentation}: Comprehensive guides for Document Intelligence, including table extraction and custom models. \url{https://learn.microsoft.com/azure/ai-services/document-intelligence}
+\end{itemize}
+
+\subsection{Common Misconceptions}
+\label{sec:llmD2-further-misconceptions}
+
+Before concluding, several common misconceptions warrant clarification:
+
+\paragraph{Misconception: VLMs eliminate the need for specialized extraction.}
+Vision-language models can understand documents directly, but specialized extraction pipelines remain more reliable, faster, and cheaper for production workloads. VLMs complement rather than replace structured extraction.
+
+\paragraph{Misconception: OCR is a solved problem.}
+Modern OCR achieves high accuracy on clean printed text, but handwriting, low-quality scans, and complex layouts still challenge even the best systems. Quality varies significantly by document type.
+
+\paragraph{Misconception: Audio transcription is accurate enough for legal use.}
+ASR error rates, while low for clear speech, can exceed 10--20\% for technical terminology, accented speech, or poor audio quality. Legal and financial applications require human review for high-stakes content.
+
+\paragraph{Misconception: Redaction is reversible if you keep the mapping.}
+While technical reversibility is possible, legal and regulatory requirements may prohibit retaining mappings. Design for true deletion when required.
+
+\subsection{Exercises for Practitioners}
+\label{sec:llmD2-further-exercises}
+
+To solidify understanding of the concepts in this chapter, we recommend the following exercises:
+
+\paragraph{Exercise 1: Table Extraction Comparison.}
+Take a complex financial table (earnings report, balance sheet) and process it through multiple extraction methods:
+\begin{enumerate}
+  \item Extract using basic text extraction (pypdf).
+  \item Extract using layout analysis (Unstructured, Azure).
+  \item Extract using VLM description (GPT-4V, Claude).
+  \item Compare outputs: Which preserves structure best? Which handles merged cells?
+\end{enumerate}
+
+\paragraph{Exercise 2: ASR Quality Assessment.}
+Record a simulated earnings call with technical terminology:
+\begin{enumerate}
+  \item Transcribe using Whisper or another ASR system.
+  \item Create a ground truth transcript manually.
+  \item Calculate WER and identify systematic errors.
+  \item Add custom vocabulary and measure improvement.
+\end{enumerate}
+
+\paragraph{Exercise 3: Privacy Pipeline Design.}
+Design a document processing pipeline for a hypothetical law firm:
+\begin{enumerate}
+  \item Document types to process (contracts, correspondence, pleadings).
+  \item PII categories to detect and handling for each.
+  \item Privilege markers to identify and routing rules.
+  \item Access control model for processed content.
+\end{enumerate}
+
+\paragraph{Exercise 4: Multimodal Query Design.}
+For a video deposition with exhibits:
+\begin{enumerate}
+  \item Design the indexing strategy (transcript, exhibits, video frames).
+  \item Write 5 queries that span multiple modalities.
+  \item Describe how the system would retrieve and present results.
+  \item Identify what metadata is needed for accurate citation.
+\end{enumerate}
+

@@ -1,0 +1,83 @@
+% Decision Tree / Binary Tree Diagram - Upper Right Circle
+% Centered at (6.2in, 8.2in) with radius 2.0in
+% Compact 3-level tree (root → 2 → 4 nodes)
+% Uses green (left/yes) and red (right/no) from minibook preamble
+% More transparent version (~50% reduced opacity)
+
+\begin{scope}[shift={(6.2in, 8.2in)}]
+  % Compact 3-level tree fitting in r=2.0in circle
+  % Safe zone ~1.5in radius
+
+  % Level positions (relative to center)
+  \def\levelA{0.9in}    % root (top)
+  \def\levelB{0.0in}    % level 1 (middle)
+  \def\levelC{-0.9in}   % level 2 / leaves (bottom)
+
+  % Horizontal spread
+  \def\spreadB{0.7in}   % level 1 spread
+  \def\spreadC{0.4in}   % additional spread for level 2
+
+  % Define node positions
+  % Level 0 (root)
+  \coordinate (n0) at (0, \levelA);
+
+  % Level 1
+  \coordinate (n1L) at (-\spreadB, \levelB);
+  \coordinate (n1R) at (\spreadB, \levelB);
+
+  % Level 2 (leaves) - 4 nodes
+  \coordinate (n2LL) at (-\spreadB - \spreadC, \levelC);
+  \coordinate (n2LR) at (-\spreadB + \spreadC, \levelC);
+  \coordinate (n2RL) at (\spreadB - \spreadC, \levelC);
+  \coordinate (n2RR) at (\spreadB + \spreadC, \levelC);
+
+  % Draw edges first (behind nodes)
+  % Left branches (green - yes/accept)
+  \begin{scope}[TreeGreen, opacity=0.15, line width=0.8pt]
+    \draw (n0) -- (n1L);
+    \draw (n1L) -- (n2LL);
+    \draw (n1R) -- (n2RL);
+  \end{scope}
+
+  % Right branches (red - no/reject)
+  \begin{scope}[TreeRed, opacity=0.15, line width=0.8pt]
+    \draw (n0) -- (n1R);
+    \draw (n1L) -- (n2LR);
+    \draw (n1R) -- (n2RR);
+  \end{scope}
+
+  % Draw nodes - root (largest, copper - neutral decision point)
+  \fill[CopperGlow, opacity=0.08] (n0) circle (14pt);
+  \fill[CopperGlow, opacity=0.18] (n0) circle (8pt);
+  \fill[TextSoft, opacity=0.50] (n0) circle (3.5pt);
+
+  % Level 1 nodes - green (left) and red (right)
+  % Left node (green path)
+  \fill[TreeGreen, opacity=0.07] (n1L) circle (12pt);
+  \fill[TreeGreen, opacity=0.18] (n1L) circle (6.5pt);
+  \fill[TextSoft, opacity=0.45] (n1L) circle (3pt);
+  % Right node (red path)
+  \fill[TreeRed, opacity=0.07] (n1R) circle (12pt);
+  \fill[TreeRed, opacity=0.18] (n1R) circle (6.5pt);
+  \fill[TextSoft, opacity=0.45] (n1R) circle (3pt);
+
+  % Level 2 nodes (leaves) - alternating by branch direction
+  % Green leaves (left branches)
+  \fill[TreeGreen, opacity=0.06] (n2LL) circle (10pt);
+  \fill[TreeGreen, opacity=0.16] (n2LL) circle (5pt);
+  \fill[TextSoft, opacity=0.40] (n2LL) circle (2.5pt);
+
+  \fill[TreeGreen, opacity=0.06] (n2RL) circle (10pt);
+  \fill[TreeGreen, opacity=0.16] (n2RL) circle (5pt);
+  \fill[TextSoft, opacity=0.40] (n2RL) circle (2.5pt);
+
+  % Red leaves (right branches)
+  \fill[TreeRed, opacity=0.06] (n2LR) circle (10pt);
+  \fill[TreeRed, opacity=0.16] (n2LR) circle (5pt);
+  \fill[TextSoft, opacity=0.40] (n2LR) circle (2.5pt);
+
+  \fill[TreeRed, opacity=0.06] (n2RR) circle (10pt);
+  \fill[TreeRed, opacity=0.16] (n2RR) circle (5pt);
+  \fill[TextSoft, opacity=0.40] (n2RR) circle (2.5pt);
+
+\end{scope}

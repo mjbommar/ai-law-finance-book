@@ -1,0 +1,245 @@
+% =============================================================================
+% Telemetry & Monitoring — Prompt Design, Evaluation, Optimization
+% Purpose: KPIs/SLAs, logs → governance; tamper-evident trails
+% Label: sec:llmE-telemetry
+% =============================================================================
+
+\section{Telemetry, Monitoring, and Evidence Pipelines}
+\label{sec:llmE-telemetry}
+
+Production LLM systems require comprehensive observability to ensure reliability, detect issues, and satisfy audit requirements. This section establishes the telemetry architecture for prompt-based systems, connecting operational metrics to the evidence record framework introduced in Chapter~3.
+
+\subsection{Operational KPIs for LLM Systems}
+\label{sec:llmE-telemetry-kpis}
+
+Effective monitoring begins with well-chosen metrics. LLM systems require both traditional software metrics and domain-specific measures.
+
+\paragraph{Latency Metrics.}
+Response time directly impacts user experience and may have SLA implications:
+
+\begin{itemize}
+  \item \textbf{P50/P95/P99 latency}: Percentile distributions reveal tail behavior.
+  \item \textbf{Time to first token}: For streaming responses, perceived responsiveness.
+  \item \textbf{Tokens per second}: Generation throughput.
+  \item \textbf{Tool call latency}: Time spent in external tool invocations.
+\end{itemize}
+
+\paragraph{Error and Retry Metrics.}
+\begin{itemize}
+  \item \textbf{Error rate by type}: API errors, timeouts, rate limits, validation failures.
+  \item \textbf{Retry rate}: Frequency of automatic retries; high rates indicate systemic issues.
+  \item \textbf{Circuit breaker trips}: When fallbacks activate due to upstream failures.
+  \item \textbf{Schema validation failure rate}: Outputs that fail structured output validation.
+\end{itemize}
+
+\paragraph{Quality Metrics.}
+\begin{itemize}
+  \item \textbf{Citation fidelity rate}: Percentage of outputs with valid, verifiable citations.
+  \item \textbf{Abstention rate}: How often the system declines to answer due to uncertainty.
+  \item \textbf{Escalation rate}: Requests routed to human review.
+  \item \textbf{User feedback scores}: Explicit ratings or implicit signals (edits, regenerations).
+\end{itemize}
+
+\paragraph{Cost Metrics.}
+\begin{itemize}
+  \item \textbf{Token consumption}: Input and output tokens per request and aggregate.
+  \item \textbf{Cost per request}: Monetary cost including API fees, compute, storage.
+  \item \textbf{Cache hit rate}: Effectiveness of response caching.
+\end{itemize}
+
+\begin{keybox}[title={Core KPI Dashboard}]
+\begin{itemize}
+  \item Latency percentiles (P50/P95/P99)
+  \item Error rate by category
+  \item Schema validation pass rate
+  \item Citation fidelity rate
+  \item Escalation/abstention rate
+  \item Token consumption and cost
+\end{itemize}
+\end{keybox}
+
+\subsection{Dashboards and Alerting}
+\label{sec:llmE-telemetry-dashboards}
+
+Raw metrics require visualization and alerting to be actionable.
+
+\paragraph{Operational Dashboards.}
+Real-time dashboards should display:
+
+\begin{itemize}
+  \item \textbf{Health overview}: Green/yellow/red status for each system component.
+  \item \textbf{Traffic patterns}: Request volume, geographic distribution, user segments.
+  \item \textbf{Error drilldown}: Errors by type, endpoint, and time window.
+  \item \textbf{Resource utilization}: API quota consumption, compute utilization.
+\end{itemize}
+
+\paragraph{Quality Dashboards.}
+Separate dashboards track output quality:
+
+\begin{itemize}
+  \item \textbf{Accuracy trends}: Rolling evaluation metrics from production samples.
+  \item \textbf{Drift detection}: Changes in output distributions over time.
+  \item \textbf{Human feedback}: Aggregated user ratings and reviewer assessments.
+  \item \textbf{Prompt version comparison}: A/B test results and version performance.
+\end{itemize}
+
+\paragraph{Alerting Strategy.}
+Configure alerts for:
+
+\begin{itemize}
+  \item \textbf{Critical}: System unavailable, error rate spike, security incidents.
+  \item \textbf{Warning}: Latency degradation, quality metric decline, quota approaching limits.
+  \item \textbf{Informational}: Unusual traffic patterns, new error types, model updates detected.
+\end{itemize}
+
+Alert fatigue is a serious risk. Tune thresholds to minimize false positives while ensuring genuine issues are caught. Use on-call rotations with clear escalation procedures.
+
+\subsection{Integration with Evidence Records}
+\label{sec:llmE-telemetry-evidence}
+
+Telemetry data forms the foundation of the evidence record infrastructure established in Section~\ref{sec:llmC-evidence}. Each LLM interaction should generate a structured record suitable for audit and governance.
+
+\paragraph{What to Capture.}
+For each request, log:
+
+\begin{itemize}
+  \item \textbf{Correlation ID}: Unique identifier linking all records for a request.
+  \item \textbf{Timestamp}: ISO 8601 with timezone; prefer server-side capture.
+  \item \textbf{Actor}: User identity, session, and authorization context.
+  \item \textbf{Input}: Full prompt (or hash if sensitive), including system instructions.
+  \item \textbf{Model configuration}: Model ID, version, temperature, and other parameters.
+  \item \textbf{Tool calls}: Each tool invocation with parameters and results.
+  \item \textbf{Output}: Full response (or hash), including structured fields.
+  \item \textbf{Metrics}: Latency, token counts, retry attempts.
+  \item \textbf{Provenance}: Retrieved documents with source locators and hashes.
+\end{itemize}
+
+\paragraph{Schema Alignment.}
+Logs should conform to the canonical evidence record schema to enable cross-system queries. Key fields include:
+
+\begin{itemize}
+  \item \texttt{correlationId}: UUID for request tracing
+  \item \texttt{timestamp}: When the interaction occurred
+  \item \texttt{actor}: Who initiated the request
+  \item \texttt{hazardClassification}: PII detected, legal interpretation, financial advice flags
+  \item \texttt{evidence}: Retrieved sources with locators, quotes, hashes
+\end{itemize}
+
+\paragraph{W3C PROV-O Mapping.}
+For advanced provenance queries, map telemetry to PROV-O ontology (Section~\ref{sec:llmC-evidence-provo}):
+
+\begin{itemize}
+  \item \textbf{Entity}: The prompt, retrieved documents, model output
+  \item \textbf{Activity}: The inference call, tool invocations
+  \item \textbf{Agent}: The user, the model, the system
+\end{itemize}
+
+This mapping enables lineage queries: ``What sources influenced this output?'' ``Which outputs used this document?''
+
+\subsection{Compliance Exports and Audit Support}
+\label{sec:llmE-telemetry-compliance}
+
+Telemetry must support regulatory and internal audit requirements.
+
+\paragraph{DPIA and TRA Exports.}
+Data Protection Impact Assessments (DPIA) and Technical Risk Assessments (TRA) require evidence of:
+
+\begin{itemize}
+  \item Data flows and processing activities
+  \item Risk mitigations and their effectiveness
+  \item Incident history and response
+\end{itemize}
+
+Design export functions that produce audit-ready reports from telemetry data.
+
+\paragraph{Retention Policies.}
+Define retention periods based on:
+
+\begin{itemize}
+  \item Regulatory requirements (varies by jurisdiction and data type)
+  \item Statute of limitations for potential disputes
+  \item Storage costs and practical constraints
+\end{itemize}
+
+Implement automated retention enforcement with documented exceptions.
+
+\paragraph{Access Controls.}
+Telemetry containing prompts and outputs may include sensitive information. Implement:
+
+\begin{itemize}
+  \item Role-based access to logs and dashboards
+  \item Audit trails for who accessed what data
+  \item Redaction capabilities for PII in exports
+\end{itemize}
+
+\subsection{Tamper-Evident Storage}
+\label{sec:llmE-telemetry-immutable}
+
+For legal and regulatory defensibility, logs must be tamper-evident.
+
+\paragraph{Append-Only Architecture.}
+Use storage systems that prevent modification of historical records:
+
+\begin{itemize}
+  \item Write-once-read-many (WORM) storage
+  \item Append-only databases or log systems
+  \item Blockchain or distributed ledger for highest assurance
+\end{itemize}
+
+\paragraph{Cryptographic Integrity.}
+Hash each log entry and chain hashes to detect tampering:
+
+\begin{itemize}
+  \item SHA-256 or stronger hash of each record
+  \item Merkle trees for efficient integrity verification
+  \item Periodic snapshots signed with organizational keys
+\end{itemize}
+
+\paragraph{Third-Party Timestamping.}
+For legal proceedings, third-party timestamps provide independent verification:
+
+\begin{itemize}
+  \item RFC 3161 trusted timestamping services
+  \item Blockchain-anchored timestamps
+  \item Document retention services with legal standing
+\end{itemize}
+
+\begin{keybox}[title={Evidence Pipeline Requirements}]
+\begin{enumerate}
+  \item \textbf{Capture}: Log all interactions with correlation IDs.
+  \item \textbf{Structure}: Conform to canonical evidence record schema.
+  \item \textbf{Protect}: Implement tamper-evident storage.
+  \item \textbf{Retain}: Define and enforce retention policies.
+  \item \textbf{Export}: Support audit and compliance reporting.
+\end{enumerate}
+\end{keybox}
+
+\subsection{Anomaly Detection and Incident Response}
+\label{sec:llmE-telemetry-anomaly}
+
+Beyond static thresholds, anomaly detection identifies unusual patterns that may indicate attacks, failures, or drift.
+
+\paragraph{Statistical Anomalies.}
+\begin{itemize}
+  \item Unusual request patterns (volume, timing, source)
+  \item Output distribution shifts (topic, sentiment, length)
+  \item Error clustering (many failures from one user or region)
+\end{itemize}
+
+\paragraph{Security Anomalies.}
+\begin{itemize}
+  \item Prompt injection patterns in inputs
+  \item Sensitive content in outputs
+  \item Unusual tool call sequences
+\end{itemize}
+
+\paragraph{Incident Response Integration.}
+Connect anomaly detection to incident response:
+
+\begin{itemize}
+  \item Automated alerts to on-call teams
+  \item Runbooks for common incident types
+  \item Kill switches to disable problematic features
+  \item Post-incident review and remediation tracking
+\end{itemize}
+

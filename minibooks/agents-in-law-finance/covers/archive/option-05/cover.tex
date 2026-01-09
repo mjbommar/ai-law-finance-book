@@ -1,0 +1,210 @@
+\documentclass[tikz,border=0pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{libertinus}
+\usepackage{tikz}
+\usetikzlibrary{calc,positioning,shapes.geometric,fadings}
+
+% Colors - Sophisticated ink blue with glowing polygon mesh
+\definecolor{DeepInk}{RGB}{10,20,40}
+\definecolor{MidInk}{RGB}{18,35,62}
+\definecolor{GlowCyan}{RGB}{0,220,185}
+\definecolor{GlowTeal}{RGB}{40,180,160}
+\definecolor{GlowBlue}{RGB}{80,150,220}
+\definecolor{GlowGold}{RGB}{220,180,80}
+\definecolor{NodeCore}{RGB}{255,255,255}
+\definecolor{WireGlow}{RGB}{60,190,170}
+\definecolor{MetalLight}{RGB}{198,203,215}
+\definecolor{MetalDark}{RGB}{138,148,165}
+
+\begin{document}
+\begin{tikzpicture}
+
+\def\pagewidth{8.5in}
+\def\pageheight{11in}
+
+% Background gradient
+\shade[top color=MidInk, bottom color=DeepInk]
+  (0,0) rectangle (\pagewidth,\pageheight);
+
+% Scattered particles
+\foreach \i in {1,...,100} {
+  \pgfmathsetmacro{\px}{random()*8.5}
+  \pgfmathsetmacro{\py}{random()*11}
+  \pgfmathsetmacro{\psize}{0.3 + random()*1.0}
+  \pgfmathsetmacro{\popacity}{0.08 + random()*0.28}
+  \fill[GlowCyan, opacity=\popacity] (\px in, \py in) circle (\psize pt);
+}
+
+% Motion blur streaks
+\begin{scope}[shift={(4.25in, 6.4in)}]
+  \foreach \angle in {18, 54, 90, 126, 162, 198, 234, 270, 306, 342} {
+    \pgfmathsetmacro{\len}{1.3 + random()*0.8}
+    \pgfmathsetmacro{\startdist}{2.0}
+    \pgfmathsetmacro{\sx}{\startdist*cos(\angle)}
+    \pgfmathsetmacro{\sy}{\startdist*sin(\angle)*0.72}
+    \pgfmathsetmacro{\ex}{(\startdist+\len)*cos(\angle)}
+    \pgfmathsetmacro{\ey}{(\startdist+\len)*sin(\angle)*0.72}
+    \draw[GlowTeal, opacity=0.18, line width=1.8pt, line cap=round]
+      (\sx in, \sy in) -- (\ex in, \ey in);
+    \draw[GlowCyan, opacity=0.08, line width=4pt, line cap=round]
+      (\sx in, \sy in) -- (\ex in, \ey in);
+  }
+\end{scope}
+
+% GEOMETRIC POLYGON MESH - BRAIN/CRYSTAL STRUCTURE
+\begin{scope}[shift={(4.25in, 6.4in)}]
+
+  % Background glow
+  \fill[GlowCyan, opacity=0.05] (0,0) ellipse (2.4in and 1.7in);
+
+  % Define outer polygon vertices (10-sided, organic shape)
+  \coordinate (p1) at ({1.7*cos(90)*0.85} in, {1.7*sin(90)*0.7} in);
+  \coordinate (p2) at ({1.8*cos(126)*0.85} in, {1.8*sin(126)*0.7} in);
+  \coordinate (p3) at ({1.75*cos(162)*0.85} in, {1.75*sin(162)*0.7} in);
+  \coordinate (p4) at ({1.65*cos(198)*0.85} in, {1.65*sin(198)*0.7} in);
+  \coordinate (p5) at ({1.7*cos(234)*0.85} in, {1.7*sin(234)*0.7} in);
+  \coordinate (p6) at ({1.8*cos(270)*0.85} in, {1.8*sin(270)*0.7} in);
+  \coordinate (p7) at ({1.7*cos(306)*0.85} in, {1.7*sin(306)*0.7} in);
+  \coordinate (p8) at ({1.65*cos(342)*0.85} in, {1.65*sin(342)*0.7} in);
+  \coordinate (p9) at ({1.75*cos(18)*0.85} in, {1.75*sin(18)*0.7} in);
+  \coordinate (p10) at ({1.8*cos(54)*0.85} in, {1.8*sin(54)*0.7} in);
+
+  % Inner vertices
+  \coordinate (i1) at ({1.0*cos(72)*0.85} in, {1.0*sin(72)*0.7} in);
+  \coordinate (i2) at ({1.05*cos(144)*0.85} in, {1.05*sin(144)*0.7} in);
+  \coordinate (i3) at ({0.95*cos(216)*0.85} in, {0.95*sin(216)*0.7} in);
+  \coordinate (i4) at ({1.0*cos(288)*0.85} in, {1.0*sin(288)*0.7} in);
+  \coordinate (i5) at ({1.0*cos(0)*0.85} in, {1.0*sin(0)*0.7} in);
+
+  % Core vertices
+  \coordinate (c1) at ({0.45*cos(36)*0.85} in, {0.45*sin(36)*0.7} in);
+  \coordinate (c2) at ({0.45*cos(108)*0.85} in, {0.45*sin(108)*0.7} in);
+  \coordinate (c3) at ({0.45*cos(180)*0.85} in, {0.45*sin(180)*0.7} in);
+  \coordinate (c4) at ({0.45*cos(252)*0.85} in, {0.45*sin(252)*0.7} in);
+  \coordinate (c5) at ({0.45*cos(324)*0.85} in, {0.45*sin(324)*0.7} in);
+
+  % ===== FILLED POLYGON FACETS =====
+  \begin{scope}[opacity=0.12]
+    \fill[GlowTeal] (p1) -- (p2) -- (i1) -- cycle;
+    \fill[GlowCyan] (p2) -- (p3) -- (i2) -- (i1) -- cycle;
+    \fill[GlowBlue] (p3) -- (p4) -- (i2) -- cycle;
+    \fill[GlowGold] (p4) -- (p5) -- (i3) -- (i2) -- cycle;
+    \fill[GlowTeal] (p5) -- (p6) -- (i3) -- cycle;
+    \fill[GlowCyan] (p6) -- (p7) -- (i4) -- (i3) -- cycle;
+    \fill[GlowBlue] (p7) -- (p8) -- (i4) -- cycle;
+    \fill[GlowGold] (p8) -- (p9) -- (i5) -- (i4) -- cycle;
+    \fill[GlowTeal] (p9) -- (p10) -- (i5) -- cycle;
+    \fill[GlowCyan] (p10) -- (p1) -- (i1) -- (i5) -- cycle;
+  \end{scope}
+
+  % Inner facets
+  \begin{scope}[opacity=0.15]
+    \fill[GlowCyan] (i1) -- (i2) -- (c2) -- (c1) -- cycle;
+    \fill[GlowTeal] (i2) -- (i3) -- (c3) -- (c2) -- cycle;
+    \fill[GlowBlue] (i3) -- (i4) -- (c4) -- (c3) -- cycle;
+    \fill[GlowGold] (i4) -- (i5) -- (c5) -- (c4) -- cycle;
+    \fill[GlowCyan] (i5) -- (i1) -- (c1) -- (c5) -- cycle;
+  \end{scope}
+
+  % Core facets
+  \begin{scope}[opacity=0.18]
+    \fill[GlowCyan] (0,0) -- (c1) -- (c2) -- cycle;
+    \fill[GlowTeal] (0,0) -- (c2) -- (c3) -- cycle;
+    \fill[GlowBlue] (0,0) -- (c3) -- (c4) -- cycle;
+    \fill[GlowGold] (0,0) -- (c4) -- (c5) -- cycle;
+    \fill[GlowCyan] (0,0) -- (c5) -- (c1) -- cycle;
+  \end{scope}
+
+  % ===== WIREFRAME EDGES =====
+  \begin{scope}[WireGlow, opacity=0.5, line width=0.7pt]
+    % Outer ring
+    \draw (p1) -- (p2) -- (p3) -- (p4) -- (p5) -- (p6) -- (p7) -- (p8) -- (p9) -- (p10) -- cycle;
+    % Outer to inner
+    \draw (p1) -- (i1); \draw (p2) -- (i1); \draw (p2) -- (i2);
+    \draw (p3) -- (i2); \draw (p4) -- (i2); \draw (p4) -- (i3);
+    \draw (p5) -- (i3); \draw (p6) -- (i3); \draw (p6) -- (i4);
+    \draw (p7) -- (i4); \draw (p8) -- (i4); \draw (p8) -- (i5);
+    \draw (p9) -- (i5); \draw (p10) -- (i5); \draw (p10) -- (i1);
+    % Inner ring
+    \draw (i1) -- (i2) -- (i3) -- (i4) -- (i5) -- cycle;
+    % Inner to core
+    \draw (i1) -- (c1); \draw (i1) -- (c2);
+    \draw (i2) -- (c2); \draw (i2) -- (c3);
+    \draw (i3) -- (c3); \draw (i3) -- (c4);
+    \draw (i4) -- (c4); \draw (i4) -- (c5);
+    \draw (i5) -- (c5); \draw (i5) -- (c1);
+    % Core ring
+    \draw (c1) -- (c2) -- (c3) -- (c4) -- (c5) -- cycle;
+    % Core to center
+    \draw (c1) -- (0,0); \draw (c2) -- (0,0); \draw (c3) -- (0,0);
+    \draw (c4) -- (0,0); \draw (c5) -- (0,0);
+  \end{scope}
+
+  % ===== OUTER VERTICES =====
+  \foreach \p in {p1, p2, p3, p4, p5, p6, p7, p8, p9, p10} {
+    \fill[GlowCyan, opacity=0.15] (\p) circle (6pt);
+    \fill[GlowTeal, opacity=0.4] (\p) circle (4pt);
+    \fill[NodeCore, opacity=0.9] (\p) circle (2pt);
+  }
+
+  % ===== INNER VERTICES =====
+  \foreach \i in {i1, i2, i3, i4, i5} {
+    \fill[GlowCyan, opacity=0.18] (\i) circle (9pt);
+    \fill[GlowTeal, opacity=0.45] (\i) circle (6pt);
+    \fill[GlowCyan, opacity=0.85] (\i) circle (3.5pt);
+    \fill[NodeCore] (\i) circle (1.8pt);
+  }
+
+  % ===== CORE VERTICES =====
+  \foreach \c in {c1, c2, c3, c4, c5} {
+    \fill[GlowGold, opacity=0.15] (\c) circle (10pt);
+    \fill[GlowCyan, opacity=0.4] (\c) circle (6pt);
+    \fill[GlowTeal, opacity=0.85] (\c) circle (4pt);
+    \fill[NodeCore] (\c) circle (2pt);
+  }
+
+  % ===== CENTRAL HUB =====
+  \fill[GlowCyan, opacity=0.18] (0,0) circle (16pt);
+  \fill[GlowGold, opacity=0.35] (0,0) circle (11pt);
+  \fill[GlowCyan, opacity=0.7] (0,0) circle (7pt);
+  \fill[NodeCore] (0,0) circle (3.5pt);
+
+\end{scope}
+
+% Corner accents
+\begin{scope}[GlowCyan, opacity=0.25, line width=1pt]
+  % Top left
+  \draw (0.35in, {11in - 0.35in}) -- (0.35in, {11in - 0.9in});
+  \draw (0.35in, {11in - 0.35in}) -- (0.9in, {11in - 0.35in});
+  \fill[GlowCyan, opacity=0.4] (0.35in, {11in - 0.35in}) circle (3pt);
+  % Top right
+  \draw ({8.5in - 0.35in}, {11in - 0.35in}) -- ({8.5in - 0.35in}, {11in - 0.9in});
+  \draw ({8.5in - 0.35in}, {11in - 0.35in}) -- ({8.5in - 0.9in}, {11in - 0.35in});
+  \fill[GlowCyan, opacity=0.4] ({8.5in - 0.35in}, {11in - 0.35in}) circle (3pt);
+\end{scope}
+
+% ============ TITLE SECTION ============
+
+\node[anchor=center, align=center] at (4.25in, 3.35in) {
+  {\fontsize{48}{56}\selectfont\bfseries\color{white}AI AGENTS}
+};
+
+\node[anchor=center, align=center] at (4.25in, 2.5in) {
+  {\fontsize{15}{20}\selectfont\color{white!85}A NEW ERA FOR AUTONOMOUS SYSTEMS IN LAW \& FINANCE}
+};
+
+% ============ METALLIC BAND ============
+
+\shade[top color=MetalLight, bottom color=MetalDark]
+  (0, 0) rectangle (\pagewidth, 1.1in);
+
+\fill[white, opacity=0.35] (0, 1.08in) rectangle (\pagewidth, 1.1in);
+\fill[black, opacity=0.12] (0, 1.1in) rectangle (\pagewidth, 1.14in);
+
+\node[anchor=center, align=center] at (4.25in, 0.55in) {
+  {\fontsize{13}{16}\selectfont\color{DeepInk}\textbf{MICHAEL BOMMARITO, DANIEL MARTIN KATZ}}\\[0.08in]
+  {\fontsize{13}{16}\selectfont\color{DeepInk}\textbf{\& JILLIAN BOMMARITO}}
+};
+
+\end{tikzpicture}
+\end{document}

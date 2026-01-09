@@ -1,0 +1,29 @@
+% ============================================================================
+% HALF TITLE PAGE (bastard title) — page i, recto
+% ============================================================================
+% The first printed page of a book, containing only the main title.
+% Traditionally minimal — just the title, centered, with generous whitespace.
+% This page establishes the book's identity before the full title page.
+%
+% Traditional US Trade order:
+%   p.i   (recto)  Half-title
+%   p.ii  (verso)  Blank (or series list / frontispiece)
+%   p.iii (recto)  Full title page
+%   p.iv  (verso)  Copyright
+% ============================================================================
+
+\thispagestyle{empty}
+
+% Generous top spacing (about 1/3 down the page)
+\vspace*{0.3\textheight}
+
+\begin{center}
+  % Title in large italic — elegant and understated
+  % Matches the gravitas of the full title page but simpler
+  {\Huge\itshape\color{text-primary}%
+  Agentic AI\\[0.3em]
+  in Law \&\ Finance}
+\end{center}
+
+% Let the rest of the page be whitespace
+\vfill

@@ -1,0 +1,157 @@
+% ============================================================================
+% AGENTIC AI IN LAW AND FINANCE — E-BOOK PDF VERSION
+% ============================================================================
+% Optimized for reading on tablets and e-readers:
+%   - Larger font (14pt via extbook class)
+%   - Narrower margins (0.5" symmetric)
+%   - One-sided layout (no binding gutter)
+%   - Same content as main.tex
+%
+% Build: xelatex main-ebook.tex
+%        biber main-ebook
+%        xelatex main-ebook.tex (x2)
+%
+% Authors: Michael J. Bommarito II, Daniel M. Katz, Jillian Bommarito
+% First Edition, 2025
+% ============================================================================
+
+\documentclass[14pt,oneside]{extbook}
+
+% ============================================================================
+% LOAD E-BOOK PREAMBLE (larger fonts, narrower margins)
+% ============================================================================
+\input{preamble/main-ebook}
+
+% ============================================================================
+% BIBLIOGRAPHY DATABASE
+% ============================================================================
+\addbibresource{bib/refs.bib}
+
+% ============================================================================
+% GLOSSARY ENTRIES
+% ============================================================================
+\input{front-matter/glossary-entries}
+
+% ============================================================================
+% PDF METADATA
+% ============================================================================
+\hypersetup{
+  pdftitle={Agentic AI in Law and Finance},
+  pdfauthor={Michael J. Bommarito II, Daniel M. Katz, Jillian Bommarito},
+  pdfsubject={Artificial Intelligence, Agentic AI, Legal Technology, Financial Technology},
+  pdfkeywords={agentic AI, AI agents, legal AI, financial AI, AI governance, ebook}
+}
+
+% ============================================================================
+% DOCUMENT
+% ============================================================================
+\begin{document}
+
+% ============================================================================
+% FRONT COVER
+% ============================================================================
+% Use Alph numbering for cover pages to avoid hyperref anchor conflicts
+\pagenumbering{Alph}
+\input{front-matter/cover/cover}
+
+% Blank page after cover (single page, not cleardoublepage)
+\newpage
+\thispagestyle{empty}
+\null
+\newpage
+
+% ============================================================================
+% FRONT MATTER
+% ============================================================================
+\frontmatter
+\usefrontmatterstyle
+
+% ----------------------------------------------------------------------------
+% HALF TITLE (page i)
+% ----------------------------------------------------------------------------
+\input{front-matter/half-title}
+\clearpage
+
+% ----------------------------------------------------------------------------
+% TITLE PAGE (page ii)
+% ----------------------------------------------------------------------------
+\input{front-matter/title-page}
+
+% ----------------------------------------------------------------------------
+% COPYRIGHT PAGE — E-book version (smaller fonts)
+% ----------------------------------------------------------------------------
+\input{front-matter/copyright-ebook}
+
+% ----------------------------------------------------------------------------
+% TABLE OF CONTENTS (smaller for ebook)
+% ----------------------------------------------------------------------------
+\clearpage
+\begingroup\small
+\tableofcontents
+\endgroup
+
+% ----------------------------------------------------------------------------
+% PREFACE
+% ----------------------------------------------------------------------------
+\clearpage
+\input{front-matter/preface}
+
+% ----------------------------------------------------------------------------
+% HOW TO READ THIS BOOK
+% ----------------------------------------------------------------------------
+\clearpage
+\input{front-matter/how-to-read}
+
+% ============================================================================
+% MAIN MATTER
+% ============================================================================
+\clearpage
+\mainmatter
+\usemainmatterstyle
+
+% ----------------------------------------------------------------------------
+% CHAPTER 1: What is an Agent?
+% ----------------------------------------------------------------------------
+\chapter{What is an Agent?}
+\label{ch:what-is-agent}
+\input{chapters/01-what-is-agent/chapter}
+
+% ----------------------------------------------------------------------------
+% CHAPTER 2: How to Design an Agent
+% ----------------------------------------------------------------------------
+\chapter{How to Design an Agent}
+\label{ch:how-to-design}
+\input{chapters/02-how-to-design/chapter}
+
+% ----------------------------------------------------------------------------
+% CHAPTER 3: How to Govern an Agent
+% ----------------------------------------------------------------------------
+\chapter{How to Govern an Agent}
+\label{ch:how-to-govern}
+\input{chapters/03-how-to-govern/chapter}
+
+% ============================================================================
+% BACK MATTER
+% ============================================================================
+\backmatter
+\usebackmatterstyle
+
+% ----------------------------------------------------------------------------
+% GLOSSARY
+% ----------------------------------------------------------------------------
+\clearpage
+\printglossary[title={Glossary of Key Terms}]
+
+% ----------------------------------------------------------------------------
+% BIBLIOGRAPHY
+% ----------------------------------------------------------------------------
+\clearpage
+\printbibliography[title={References}]
+
+% ----------------------------------------------------------------------------
+% BACK COVER (same as print - TikZ renders fine in ebook PDF)
+% ----------------------------------------------------------------------------
+\clearpage
+\input{back-matter/back-cover}
+
+\end{document}

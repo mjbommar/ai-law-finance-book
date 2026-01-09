@@ -1,0 +1,206 @@
+% =============================================================================
+% BOOK COVER - Option 06
+% =============================================================================
+% Design: Futuristic professional - "slate & copper in 2050"
+% Rich materials feel, clean typography, subtle depth
+% =============================================================================
+
+\documentclass[tikz,border=0pt]{standalone}
+
+% Fonts - Linux Libertine O (same family as book's Libertinus)
+% Libertinus is a fork of Linux Libertine - visually nearly identical
+\usepackage{fontspec}
+\setmainfont{Linux Libertine O}[
+  BoldFont = Linux Libertine O Bold,
+  ItalicFont = Linux Libertine O Italic,
+  SmallCapsFont = Linux Libertine O,
+  SmallCapsFeatures = {Letters=SmallCaps}
+]
+\setsansfont{Linux Biolinum O}[Scale=MatchLowercase]
+
+\usepackage{tikz}
+\usetikzlibrary{calc,shadings,fadings,shadows,decorations.pathmorphing}
+
+% =============================================================================
+% COLOR PALETTE - Deep slate with copper/bronze accents
+% =============================================================================
+
+% Background - rich deep slate blue
+\definecolor{DeepSlate}{RGB}{18,28,48}
+\definecolor{MidSlate}{RGB}{28,42,68}
+\definecolor{LightSlate}{RGB}{45,62,95}
+
+% Accent colors - warm copper/bronze for futuristic warmth
+\definecolor{CopperGlow}{RGB}{180,120,80}
+\definecolor{CopperLight}{RGB}{220,170,120}
+\definecolor{CopperDark}{RGB}{140,90,55}
+
+% Circle colors - cool blues with slight warmth
+\definecolor{CircleDeep}{RGB}{35,55,95}
+\definecolor{CircleMid}{RGB}{50,75,120}
+\definecolor{CircleLight}{RGB}{70,100,150}
+
+% Band colors - near black with blue undertone
+\definecolor{BandBase}{RGB}{10,14,22}
+\definecolor{BandAccent}{RGB}{20,30,50}
+\definecolor{BandHighlight}{RGB}{35,50,80}
+
+% Text colors
+\definecolor{TextPure}{RGB}{255,255,255}
+\definecolor{TextSoft}{RGB}{200,210,225}
+\definecolor{TextMuted}{RGB}{140,155,180}
+
+% Edge accents
+\definecolor{EdgeGlow}{RGB}{100,130,180}
+
+% Decision tree colors - from minibook preamble
+\definecolor{TreeGreen}{RGB}{67,160,71}      % green-600
+\definecolor{TreeGreenDark}{RGB}{46,125,50}  % green-900
+\definecolor{TreeRed}{RGB}{229,57,53}        % red-600
+\definecolor{TreeRedDark}{RGB}{198,40,40}    % red-900
+
+% =============================================================================
+% PAGE DIMENSIONS
+% =============================================================================
+
+\def\pagewidth{8.5in}
+\def\pageheight{11in}
+\def\bandLeftHeight{0.09}
+\def\bandRightHeight{0.145}
+
+\begin{document}
+\begin{tikzpicture}
+
+% Lock bounding box to exact page dimensions
+\useasboundingbox (0,0) rectangle (\pagewidth, \pageheight);
+
+% =============================================================================
+% LAYER 1: BACKGROUND - Rich gradient
+% =============================================================================
+\shade[top color=MidSlate, bottom color=DeepSlate]
+    (0,0) rectangle (\pagewidth, \pageheight);
+
+% =============================================================================
+% LAYER 1.5: SUBTLE TEXTURE - Fine noise grain
+% =============================================================================
+% Scattered micro-particles for material texture
+\foreach \i in {1,...,400} {
+    \pgfmathsetmacro{\px}{rnd * 8.5}
+    \pgfmathsetmacro{\py}{rnd * 11}
+    \pgfmathsetmacro{\psize}{0.3 + rnd * 0.8}
+    \pgfmathsetmacro{\popacity}{0.02 + rnd * 0.04}
+    \fill[white, opacity=\popacity] (\px in, \py in) circle (\psize pt);
+}
+\foreach \i in {1,...,300} {
+    \pgfmathsetmacro{\px}{rnd * 8.5}
+    \pgfmathsetmacro{\py}{rnd * 11}
+    \pgfmathsetmacro{\psize}{0.2 + rnd * 0.5}
+    \pgfmathsetmacro{\popacity}{0.03 + rnd * 0.05}
+    \fill[black, opacity=\popacity] (\px in, \py in) circle (\psize pt);
+}
+
+% =============================================================================
+% LAYER 2: OVERLAPPING CIRCLES - Refined, subtle
+% =============================================================================
+
+% Large primary circles - asymmetric, creating depth
+\fill[CircleDeep, opacity=0.20] (2.2in, 7.6in) circle (2.4in);
+\fill[CircleMid, opacity=0.15] (6.2in, 8.2in) circle (2.0in);
+\fill[CircleLight, opacity=0.12] (4.2in, 6.0in) circle (1.8in);
+
+% Secondary circles for layered depth
+\fill[CircleDeep, opacity=0.10] (1.0in, 9.0in) circle (1.6in);
+\fill[CircleMid, opacity=0.08] (7.2in, 6.8in) circle (1.4in);
+
+% Subtle inner glow circles
+\fill[white, opacity=0.02] (3.5in, 7.4in) circle (1.5in);
+\fill[white, opacity=0.015] (5.5in, 7.8in) circle (1.2in);
+
+% =============================================================================
+% LAYER 2.5: NETWORK GRAPHS - Inside the circles
+% =============================================================================
+
+% Background network: Large radial/spiral network (more transparent, simulates depth)
+\input{network-mlp.tex}
+
+% Radar chart diagram - Upper LEFT circle (2.2in, 7.6in)
+\input{diagram-radar.tex}
+
+% Decision tree diagram - Upper RIGHT circle (6.0in, 8.0in)
+\input{diagram-tree.tex}
+
+% Foreground network: Modular brain-like network
+% Positioned in CircleLight at (4.2in, 6.2in)
+\input{network-graph.tex}
+
+% =============================================================================
+% LAYER 3: BOTTOM BAND - Removed (clean gradient background)
+% =============================================================================
+
+% =============================================================================
+% LAYER 4: TITLE - Futuristic typography
+% =============================================================================
+
+
+% --- MAIN TITLE ---
+% Deep shadow layer
+\node[anchor=center, align=center, opacity=0.12] at (4.32in, 3.28in) {
+    {\fontsize{44}{52}\selectfont\color{black}A\kern0.06em G\kern0.06em E\kern0.06em N\kern0.06em T\kern0.06em I\kern0.06em C\kern0.12em\kern0.12em A\kern0.06em I}\\[0.30in]
+    {\fontsize{20}{24}\selectfont\color{black}I\kern0.05em N\kern0.12em\kern0.12em L\kern0.05em A\kern0.05em W\kern0.12em\kern0.12em \&\kern0.12em\kern0.12em F\kern0.05em I\kern0.05em N\kern0.05em A\kern0.05em N\kern0.05em C\kern0.05em E}
+};
+
+% Medium shadow layer
+\node[anchor=center, align=center, opacity=0.25] at (4.28in, 3.32in) {
+    {\fontsize{44}{52}\selectfont\color{DeepSlate}A\kern0.06em G\kern0.06em E\kern0.06em N\kern0.06em T\kern0.06em I\kern0.06em C\kern0.12em\kern0.12em A\kern0.06em I}\\[0.30in]
+    {\fontsize{20}{24}\selectfont\color{DeepSlate}I\kern0.05em N\kern0.12em\kern0.12em L\kern0.05em A\kern0.05em W\kern0.12em\kern0.12em \&\kern0.12em\kern0.12em F\kern0.05em I\kern0.05em N\kern0.05em A\kern0.05em N\kern0.05em C\kern0.05em E}
+};
+
+% Main title - all caps with letter spacing
+\node[anchor=center, align=center] at (4.25in, 3.38in) {
+    {\fontsize{44}{52}\selectfont\bfseries\color{TextPure}A\kern0.06em G\kern0.06em E\kern0.06em N\kern0.06em T\kern0.06em I\kern0.06em C\kern0.12em\kern0.12em A\kern0.06em I}\\[0.30in]
+    {\fontsize{20}{24}\selectfont\color{CopperLight}I\kern0.05em N\kern0.12em\kern0.12em L\kern0.05em A\kern0.05em W\kern0.12em\kern0.12em \&\kern0.12em\kern0.12em F\kern0.05em I\kern0.05em N\kern0.05em A\kern0.05em N\kern0.05em C\kern0.05em E}
+};
+
+% --- Decorative divider ---
+\draw[TextMuted, line width=0.4pt, opacity=0.4]
+    (2.6in, 2.55in) -- (3.7in, 2.55in);
+\fill[CopperGlow, opacity=0.6] (4.25in, 2.55in) circle (2pt);
+\draw[TextMuted, line width=0.4pt, opacity=0.4]
+    (4.8in, 2.55in) -- (5.9in, 2.55in);
+
+% --- SUBTITLE ---
+\node[anchor=center, align=center] at (4.25in, 1.95in) {
+    {\fontsize{18}{22}\selectfont\itshape\color{TextSoft}%
+    Navigating a New Era of}\\[0.12in]
+    {\fontsize{18}{22}\selectfont\itshape\color{TextSoft}%
+    Autonomous Systems}
+};
+
+% =============================================================================
+% LAYER 5: AUTHOR NAMES
+% =============================================================================
+
+\node[anchor=center, align=center] at (4.25in, 0.58in) {
+    {\fontsize{11}{13}\selectfont\color{TextSoft}%
+    M\kern0.06em I\kern0.06em C\kern0.06em H\kern0.06em A\kern0.06em E\kern0.06em L\ %
+    J\kern0.06em.\ %
+    B\kern0.06em O\kern0.06em M\kern0.06em M\kern0.06em A\kern0.06em R\kern0.06em I\kern0.06em T\kern0.06em O\ %
+    I\kern0.06em I%
+    \quad \textbullet \quad %
+    D\kern0.06em A\kern0.06em N\kern0.06em I\kern0.06em E\kern0.06em L\ %
+    M\kern0.06em.\ %
+    K\kern0.06em A\kern0.06em T\kern0.06em Z%
+    \quad \textbullet \quad %
+    J\kern0.06em I\kern0.06em L\kern0.06em L\kern0.06em I\kern0.06em A\kern0.06em N\ %
+    B\kern0.06em O\kern0.06em M\kern0.06em M\kern0.06em A\kern0.06em R\kern0.06em I\kern0.06em T\kern0.06em O}
+};
+
+% --- FIRST EDITION ---
+\node[anchor=center, align=center] at (4.25in, 0.30in) {
+    {\fontsize{9}{11}\selectfont\color{TextMuted}%
+    F\kern0.06em I\kern0.06em R\kern0.06em S\kern0.06em T\kern0.15em\kern0.15em %
+    E\kern0.06em D\kern0.06em I\kern0.06em T\kern0.06em I\kern0.06em O\kern0.06em N}
+};
+
+\end{tikzpicture}
+\end{document}

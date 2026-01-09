@@ -7,6 +7,8 @@
 # Usage:
 #   make          - Build the complete mini-book PDF
 #   make pdf      - Same as above
+#   make ebook    - Build e-reader PDF (14pt large font)
+#   make release  - Build all formats with timestamps (in build/)
 #   make quick    - Single-pass build (for minor edits)
 #   make watch    - Continuous compilation on file changes
 #   make validate - Check for undefined references
@@ -42,6 +44,12 @@ BLEED_INPUT = \\def\\BleedMode{1}\\input{$(TEXFILE)}
 COVER_HC_VARS = front-matter/cover/cover-vars-hardcover.tex
 COVER_HC_PDF = lulu-cover-hardcover.pdf
 COVER_HC_JOB = lulu-cover-hardcover
+
+# Release build configuration
+# Timestamped builds go to BUILD_DIR for distribution
+BOOK_TITLE = Agentic AI in Law and Finance
+BUILD_DIR = build
+TIMESTAMP = $(shell date +%Y%m%d-%H%M)
 
 # LaTeX tools - using XeLaTeX for fontspec support (works with standalone+tikz)
 LATEX = xelatex
@@ -123,6 +131,82 @@ quick:
 	@echo "$(BOLD)$(BLUE)$(ARROW) Quick build (single pass)...$(RESET)"
 	$(LATEX) $(LATEX_OPTS) $(TEXFILE)
 	@echo "$(BOLD)$(GREEN)$(CHECK) Quick build complete$(RESET)"
+
+# ----------------------------------------------------------------------------
+# Ebook build (large font for e-readers)
+# ----------------------------------------------------------------------------
+
+EBOOK_MAIN = main-ebook
+EBOOK_TEX = $(EBOOK_MAIN).tex
+EBOOK_PDF = $(EBOOK_MAIN).pdf
+
+.PHONY: ebook
+ebook: $(EBOOK_PDF)
+	@echo ""
+	@echo "$(BOLD)$(GREEN)$(CHECK) Ebook build complete: $(EBOOK_PDF)$(RESET)"
+	@if command -v pdfinfo >/dev/null 2>&1; then \
+		pages=$$(pdfinfo $(EBOOK_PDF) 2>/dev/null | grep Pages | awk '{print $$2}'); \
+		size=$$(du -h $(EBOOK_PDF) | cut -f1); \
+		echo "$(CYAN)   Pages: $$pages | Size: $$size$(RESET)"; \
+	fi
+
+$(EBOOK_PDF): $(TEX_DEPS) $(EBOOK_TEX) preamble/main-ebook.tex front-matter/copyright-ebook.tex
+	@echo "$(BOLD)$(BLUE)$(ARROW) Building $(EBOOK_PDF) (14pt e-reader version)...$(RESET)"
+	@if command -v $(LATEXMK) >/dev/null 2>&1; then \
+		echo "$(CYAN)   Using latexmk (smart compilation)$(RESET)"; \
+		$(LATEXMK) $(LATEXMK_OPTS) $(EBOOK_TEX); \
+	else \
+		echo "$(CYAN)   Using manual compilation (4-pass)$(RESET)"; \
+		$(LATEX) $(LATEX_OPTS) $(EBOOK_TEX) || exit 1; \
+		$(BIBER) $(EBOOK_MAIN) || exit 1; \
+		$(LATEX) $(LATEX_OPTS) $(EBOOK_TEX) || exit 1; \
+		$(LATEX) $(LATEX_OPTS) $(EBOOK_TEX) || exit 1; \
+	fi
+
+# ----------------------------------------------------------------------------
+# Release build (all formats with timestamps)
+# ----------------------------------------------------------------------------
+# Creates timestamped copies of all PDF formats in BUILD_DIR for distribution.
+# Use this before publishing to create a versioned snapshot.
+# ----------------------------------------------------------------------------
+
+.PHONY: release
+release: pdf ebook $(INTERIOR_BLEED_PDF)
+	@echo ""
+	@echo "$(BOLD)$(BLUE)$(ARROW) Creating timestamped release files...$(RESET)"
+	@mkdir -p $(BUILD_DIR)/pdf
+	@cp $(PDFFILE) "$(BUILD_DIR)/pdf/$(BOOK_TITLE) - $(TIMESTAMP) - PRINT.pdf"
+	@cp $(EBOOK_PDF) "$(BUILD_DIR)/pdf/$(BOOK_TITLE) - $(TIMESTAMP) - EBOOK.pdf"
+	@cp $(INTERIOR_BLEED_PDF) "$(BUILD_DIR)/pdf/$(BOOK_TITLE) - $(TIMESTAMP) - PRINT-BLEED.pdf"
+	@echo ""
+	@echo "$(BOLD)$(GREEN)$(CHECK) Release files created in $(BUILD_DIR)/pdf/:$(RESET)"
+	@ls -lh "$(BUILD_DIR)/pdf/"*"$(TIMESTAMP)"* 2>/dev/null | while read line; do \
+		echo "$(CYAN)   $$line$(RESET)"; \
+	done
+	@echo ""
+	@echo "$(CYAN)File types:$(RESET)"
+	@echo "   PRINT       - Standard 6x9 for print-on-demand (with covers)"
+	@echo "   EBOOK       - Large font (14pt) for e-readers"
+	@echo "   PRINT-BLEED - Interior with bleed margins for Lulu"
+
+# Build all formats (for future EPUB/Kindle support)
+.PHONY: all-formats
+all-formats: release
+	@echo ""
+	@echo "$(BOLD)$(GREEN)$(STAR) All formats built!$(RESET)"
+	@echo ""
+	@echo "$(CYAN)Output files in $(BUILD_DIR)/:$(RESET)"
+	@find $(BUILD_DIR) -type f -name "*.pdf" | sort | while read f; do \
+		size=$$(du -h "$$f" | cut -f1); \
+		echo "   $$f ($$size)"; \
+	done
+
+# Clean release files
+.PHONY: clean-release
+clean-release:
+	@echo "$(BOLD)$(BLUE)$(ARROW) Removing release files...$(RESET)"
+	@rm -rf $(BUILD_DIR)
+	@echo "$(GREEN)$(CHECK) Removed $(BUILD_DIR)/$(RESET)"
 
 # ----------------------------------------------------------------------------
 # Watch mode (continuous compilation)
@@ -216,6 +300,12 @@ clean:
 	@rm -f $(MAIN).run.xml $(MAIN).toc $(MAIN).lot $(MAIN).lof
 	@rm -f $(MAIN).synctex.gz $(MAIN).synctex
 	@rm -f $(MAIN).xdv
+	@# Clean ebook auxiliary files
+	@rm -f $(EBOOK_MAIN).aux $(EBOOK_MAIN).bbl $(EBOOK_MAIN).bcf $(EBOOK_MAIN).blg
+	@rm -f $(EBOOK_MAIN).fdb_latexmk $(EBOOK_MAIN).fls $(EBOOK_MAIN).log $(EBOOK_MAIN).out
+	@rm -f $(EBOOK_MAIN).run.xml $(EBOOK_MAIN).toc $(EBOOK_MAIN).lot $(EBOOK_MAIN).lof
+	@rm -f $(EBOOK_MAIN).synctex.gz $(EBOOK_MAIN).synctex $(EBOOK_MAIN).xdv
+	@rm -f $(EBOOK_MAIN).glo $(EBOOK_MAIN).gls $(EBOOK_MAIN).glg $(EBOOK_MAIN).ist
 	@rm -f $(COVER).aux $(COVER).log $(COVER).out
 	@rm -f $(COVER).fdb_latexmk $(COVER).fls $(COVER).toc
 	@rm -f $(COVER).synctex.gz $(COVER).synctex $(COVER).xdv
@@ -236,11 +326,11 @@ clean:
 .PHONY: cleanall
 cleanall: clean
 	@echo "$(BOLD)$(BLUE)$(ARROW) Removing PDF...$(RESET)"
-	@rm -f $(PDFFILE)
+	@rm -f $(PDFFILE) $(EBOOK_PDF)
 	@rm -f $(COVER_PDF) $(COVER_FRONT_PDF) $(COVER_BACK_PDF) $(INTERIOR_PDF)
 	@rm -f $(COVER_HC_PDF) $(COVER_HC_VARS)
 	@rm -f $(INTERIOR_BLEED_PDF)
-	@echo "$(GREEN)$(CHECK) Removed $(PDFFILE)$(RESET)"
+	@echo "$(GREEN)$(CHECK) Removed PDFs$(RESET)"
 
 # ----------------------------------------------------------------------------
 # Lulu interior and wrap cover
@@ -470,6 +560,7 @@ help:
 	@echo ""
 	@echo "$(BOLD)Build Targets:$(RESET)"
 	@echo "  $(CYAN)pdf$(RESET)              Build the complete mini-book PDF (default)"
+	@echo "  $(CYAN)ebook$(RESET)            Build e-reader PDF (14pt large font)"
 	@echo "  $(CYAN)quick$(RESET)            Single-pass build for minor edits"
 	@echo "  $(CYAN)watch$(RESET)            Continuous compilation on file changes"
 	@echo "  $(CYAN)validate$(RESET)         Check for undefined references and citations"
@@ -492,6 +583,11 @@ help:
 	@echo "$(BOLD)Cover Components:$(RESET)"
 	@echo "  $(CYAN)cover-front$(RESET)      Build front cover PDF (6x9)"
 	@echo "  $(CYAN)cover-back$(RESET)       Build back cover PDF (6x9)"
+	@echo ""
+	@echo "$(BOLD)Release Builds (timestamped, in build/):$(RESET)"
+	@echo "  $(CYAN)release$(RESET)          Build all PDF formats with timestamps"
+	@echo "  $(CYAN)all-formats$(RESET)      Build everything (PDF + future EPUB/Kindle)"
+	@echo "  $(CYAN)clean-release$(RESET)    Remove build/ directory"
 	@echo ""
 	@echo "$(BOLD)Utilities:$(RESET)"
 	@echo "  $(CYAN)view$(RESET)             Open the PDF in default viewer"

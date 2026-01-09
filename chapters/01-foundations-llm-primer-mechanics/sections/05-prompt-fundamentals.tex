@@ -1,0 +1,364 @@
+% =============================================================================
+% Prompt Fundamentals (First Touch) — LLM Primer & Mechanics
+% Purpose: Basic prompt design concepts, zero/few-shot, maturity model
+% Label: sec:llm1-prompt-fundamentals
+% =============================================================================
+
+\section{Prompt Fundamentals (First Touch)}
+\label{sec:llm1-prompt-fundamentals}
+
+Now that we understand how LLMs tokenize text, generate outputs through sampling, and represent meaning through attention, we turn to the practical question: how do you communicate effectively with these systems? The answer lies in \keyterm{prompt design}---the art and engineering of constructing inputs that elicit the desired behavior.
+
+This section provides a first exposure to prompt fundamentals. We introduce core concepts (prompt anatomy, zero-shot versus few-shot, structured inputs and outputs) and present the \keyterm{Prompt Maturity Model}---a five-phase framework that structures the progression from raw text to modular, testable prompt systems. This framework guides the organization of the book itself: Chapters~2 through 5 walk through increasingly sophisticated prompt design patterns.
+
+Think of this section as establishing vocabulary and mental models. Chapter~5 (Prompt Design, Evaluation, and Optimization) provides the comprehensive treatment of prompt engineering as specification, testing, and optimization. Chapters~6 and 7 extend these patterns to autonomous agents that combine prompts with tools, memory, and control flow.
+
+\subsection{Anatomy of a Prompt}
+\label{sec:llm1-prompt-anatomy}
+
+A \keyterm{prompt} is the text input you provide to an LLM. While it might seem as simple as ``asking a question,'' effective prompts have internal structure. Modern systems decompose prompts into distinct components, each serving a specific purpose:
+
+\begin{definitionbox}[title={Prompt Components}]
+\textbf{System:} Instructions defining the assistant's role, behavior, and constraints. Often set once per session and treated as higher-priority context by the model.
+
+\textbf{Instruction:} The specific task you want performed (``Summarize this contract,'' ``Extract the parties,'' ``Classify this filing'').
+
+\textbf{Context:} Background information the model needs to perform the task (the document to summarize, the contract to analyze, the filing to classify).
+
+\textbf{Input:} The specific query or data point being processed (a clause to interpret, a transaction to evaluate, a question to answer).
+\end{definitionbox}
+
+\paragraph{Why Separation Matters.} Separating these components is not just organizational hygiene---it has operational consequences:
+
+\begin{itemize}
+  \item \textbf{Control:} System-level instructions can be enforced more strictly than user inputs, reducing prompt injection risk
+  \item \textbf{Caching:} Repeated system prompts and static context can be cached to reduce latency and cost
+  \item \textbf{Safety:} Role boundaries help prevent user inputs from overriding intended behavior
+  \item \textbf{Modularity:} You can swap context or inputs without rewriting instructions
+\end{itemize}
+
+\begin{highlightbox}[title={Example: Contract Summarization Prompt}]
+\textbf{System:}
+\begin{verbatim}
+You are a legal document analysis assistant. Your task is
+to provide accurate, concise summaries of legal agreements.
+Always cite specific sections when making claims. If you
+cannot find information, say so explicitly.
+\end{verbatim}
+
+\textbf{Instruction:}
+\begin{verbatim}
+Summarize the key terms of the following merger agreement.
+Focus on: purchase price, closing conditions, termination
+rights, and governing law.
+\end{verbatim}
+
+\textbf{Context:}
+\begin{verbatim}
+[Full text of merger agreement...]
+\end{verbatim}
+
+\textbf{Input:}
+\begin{verbatim}
+[May be empty for single-document analysis, or could be
+a specific question: "What are the conditions precedent?"]
+\end{verbatim}
+\end{highlightbox}
+
+In practice, some systems merge these categories or represent them differently (role-tagged messages, XML delimiters, structured API fields), but the conceptual separation remains valuable.
+
+\subsection{Zero-Shot Prompting}
+\label{sec:llm1-prompt-zeroshot}
+
+\keyterm{Zero-shot prompting} means providing instructions but no examples of the task. You describe what you want; the model must infer how to do it from its pre-training alone.
+
+\paragraph{When Zero-Shot Works.} For tasks the model encountered frequently in training, zero-shot prompts are often sufficient:
+
+\begin{itemize}
+  \item Simple text transformations (``Translate this to French,'' ``Summarize in one sentence'')
+  \item General knowledge questions (``What is the capital of Delaware?'')
+  \item Standard formatting (``Convert this to JSON,'' ``List the main points'')
+  \item Classification into well-known categories (``Is this positive or negative?'')
+\end{itemize}
+
+\paragraph{When Zero-Shot Fails.} Zero-shot prompts struggle with:
+
+\begin{itemize}
+  \item \textbf{Complex reasoning:} Multi-step logic, arithmetic, sophisticated comparisons
+  \item \textbf{Domain-specific formats:} Legal citation styles, financial report templates, specialized taxonomies
+  \item \textbf{Ambiguous tasks:} ``Analyze this contract'' is too vague without examples of desired analysis depth and focus
+  \item \textbf{Novel output structures:} Custom JSON schemas, proprietary data formats
+\end{itemize}
+
+\begin{highlightbox}[title={Zero-Shot Example: Document Classification}]
+\textbf{Prompt:}
+\begin{verbatim}
+Classify the following SEC filing as one of: 10-K, 10-Q,
+8-K, DEF 14A, S-1.
+
+Filing text: [...]
+\end{verbatim}
+
+This works well because SEC filing types are standard and likely well-represented in training data. The model can recognize the format and labels.
+\end{highlightbox}
+
+\begin{cautionbox}[title={Zero-Shot Limitations}]
+For legal and financial applications:
+\begin{itemize}
+  \item Zero-shot may produce outputs in the ``general shape'' of what you want but miss critical details
+  \item The model's prior training may encode biases or outdated practices
+  \item Without examples, you cannot precisely define your output format or style
+  \item Consistency across multiple inputs is lower without examples to anchor the model
+\end{itemize}
+Treat zero-shot as a starting point, not a production-ready approach for high-stakes tasks.
+\end{cautionbox}
+
+\subsection{Few-Shot Prompting (Introduction)}
+\label{sec:llm1-prompt-fewshot}
+
+\keyterm{Few-shot prompting} provides examples of the desired input-output behavior directly in the prompt. This leverages the model's ability to learn patterns from context---what researchers call \keyterm{in-context learning} \parencite{brown2020fewshot}.
+
+The term ``few-shot'' is inherited from machine learning (few-shot learning means training from limited examples), but in the LLM context, no training occurs. Instead, the model \emph{conditions} its generation on the examples. It's pattern completion: ``You showed me three examples of $X \to Y$; for this new $X$, I will generate a similar $Y$.''
+
+\paragraph{Basic Structure.} Few-shot prompts follow a simple template:
+
+\begin{verbatim}
+Task description.
+
+Example 1:
+Input: [...]
+Output: [...]
+
+Example 2:
+Input: [...]
+Output: [...]
+
+Example 3:
+Input: [...]
+Output: [...]
+
+Now you try:
+Input: [actual input]
+Output:
+\end{verbatim}
+
+The model sees this as a pattern to continue. The quality and relevance of the examples directly determine output quality.
+
+\paragraph{Why Few-Shot Is Powerful.} Few-shot prompting allows you to:
+
+\begin{itemize}
+  \item \textbf{Define output format:} Show exactly what structure you want (JSON schema, citation style, level of detail)
+  \item \textbf{Demonstrate reasoning:} Include intermediate steps, not just final answers
+  \item \textbf{Calibrate tone and style:} Examples establish the ``voice'' you expect
+  \item \textbf{Handle edge cases:} Show how to handle missing data, ambiguity, or unusual inputs
+  \item \textbf{Improve consistency:} Anchoring the model to examples reduces variation across inputs
+\end{itemize}
+
+\begin{highlightbox}[title={Few-Shot Example: Legal Citation Extraction}]
+\textbf{Prompt:}
+\begin{verbatim}
+Extract all case citations from the text and return as JSON.
+
+Example 1:
+Input: "Pursuant to Brown v. Board of Education, 347 U.S. 483
+(1954), segregation is unconstitutional."
+Output: {"citations": [{"case": "Brown v. Board of Education",
+"reporter": "347 U.S. 483", "year": 1954}]}
+
+Example 2:
+Input: "See also Roe v. Wade, 410 U.S. 113 (1973)."
+Output: {"citations": [{"case": "Roe v. Wade",
+"reporter": "410 U.S. 113", "year": 1973}]}
+
+Example 3:
+Input: "No citations in this text."
+Output: {"citations": []}
+
+Now extract from this text:
+Input: "As held in Marbury v. Madison, 5 U.S. 137 (1803),
+judicial review is a cornerstone of constitutional law."
+Output:
+\end{verbatim}
+
+The examples teach the model (1) the JSON schema, (2) how to parse citation format, and (3) how to handle empty results.
+\end{highlightbox}
+
+\begin{keybox}[title={Few-Shot Design Principles}]
+\begin{enumerate}
+  \item \textbf{Representative examples:} Cover the diversity of inputs you expect, not just easy cases
+  \item \textbf{Clear input-output boundaries:} Use consistent delimiters (``Input:'', ``Output:'') to avoid ambiguity
+  \item \textbf{Include edge cases:} Show how to handle missing data, errors, ambiguity
+  \item \textbf{Quality over quantity:} 3--5 high-quality examples often outperform 20 mediocre ones
+  \item \textbf{Order matters:} Place the most relevant example last (recency bias in attention)
+  \item \textbf{Reasoning traces:} For complex tasks, show intermediate steps, not just final answers (preview of chain-of-thought in Chapter~2)
+\end{enumerate}
+\end{keybox}
+
+\paragraph{Forward Reference.} Few-shot prompting is a deep topic. Chapter~2 (Conversations and Reasoning) extends few-shot to chain-of-thought and self-consistency. Chapter~5 (Prompt Design, Evaluation, and Optimization) covers exemplar selection, diversity management, and programmatic exemplar construction for production systems.
+
+\subsection{The Prompt Maturity Model}
+\label{sec:llm1-prompt-maturity}
+
+As prompts evolve from exploratory prototypes to production systems, they follow a predictable progression. The \keyterm{Prompt Maturity Model} is a five-phase framework that describes this journey from ad-hoc text inputs to modular, testable, production-grade prompt pipelines.
+
+\begin{table}[htbp]
+\centering
+\caption{The Five-Phase Prompt Maturity Model}
+\label{tab:llm1-prompt-maturity}
+\begin{tabular}{@{}clp{4cm}p{3cm}l@{}}
+\toprule
+\textbf{Phase} & \textbf{Input} & \textbf{Output} & \textbf{Testability} & \textbf{Chapters} \\
+\midrule
+1: Zero-shot & Freeform text & Freeform text & None (manual review) & 1--2 \\
+2: Few-shot & Examples + text & Freeform text & Low (human eval) & 2 \\
+3: Structured Input & JSON/XML input & Freeform text & Medium (input validation) & 3, 5 \\
+4: Structured I/O & JSON/XML input & JSON/XML output & High (schema validation) & 3, 5 \\
+5: Modular & Decomposed pipeline & Structured, composable & Full (unit + integration tests) & 5--7 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The progression reflects real-world experience: projects start with Phase~1 (raw text in, raw text out), but frustration with reliability drives adoption of examples (Phase~2). Integration requirements drive structured outputs (Phases~3--4). Scale and complexity drive modular decomposition (Phase~5).
+
+\paragraph{Key Insight: Testability Drives Maturity.} The central theme is testability. Phases~1--2 require human review of every output. Phase~4 (structured I/O) is the minimum standard for production legal and financial applications because outputs can be validated against schemas and evaluated with quantitative metrics. Phase~5 (modular pipelines) enables unit testing of individual prompts, integration testing of workflows, and regression testing across versions.
+
+\begin{keybox}[title={Phase Summary}]
+\begin{description}
+  \item[Phase 1 (Zero-shot):] Natural language in/out. Use for prototyping only.
+  \item[Phase 2 (Few-shot):] Examples improve consistency. Still requires human review.
+  \item[Phase 3 (Structured Input):] Programmatic inputs enable validation before LLM calls.
+  \item[Phase 4 (Structured I/O):] Production minimum. Schema validation enables automation.
+  \item[Phase 5 (Modular):] Enterprise standard. Decomposed, testable, auditable.
+\end{description}
+\end{keybox}
+
+Chapter~5 (Prompt Design, Evaluation, and Optimization) provides the comprehensive treatment of the Prompt Maturity Model, including detailed guidance on structured I/O design, testing strategies, and modular pipeline architecture. Chapters~6--7 (Agents) demonstrate Phase~5 patterns in autonomous systems.
+
+\subsection{Principles of Effective Prompts}
+\label{sec:llm1-prompt-principles}
+
+Across all maturity phases, certain principles consistently improve prompt effectiveness. These are not rigid rules but heuristics refined through empirical observation and research.
+
+\subsubsection{Clarity and Specificity}
+
+\paragraph{Principle:} The model cannot read your mind. Vague instructions yield vague outputs.
+
+\textbf{Ineffective:}
+\begin{verbatim}
+Analyze this contract.
+\end{verbatim}
+
+\textbf{Effective:}
+\begin{verbatim}
+Extract the following from this merger agreement:
+- Purchase price (including any adjustments)
+- Closing conditions precedent
+- Termination rights and associated fees
+- Governing law and dispute resolution
+Return as JSON with these exact keys.
+\end{verbatim}
+
+The effective version defines scope, format, and specific fields. The model has clear success criteria.
+
+\subsubsection{Appropriate Constraints}
+
+\paragraph{Principle:} Strike a balance between over-constraining (which stifles useful outputs) and under-constraining (which permits hallucination or drift).
+
+\textbf{Over-constrained:}
+\begin{verbatim}
+Summarize this 50-page contract in exactly 147 words, using
+only nouns and verbs, with no more than 12 sentences, each
+beginning with a different letter of the alphabet.
+\end{verbatim}
+
+\textbf{Under-constrained:}
+\begin{verbatim}
+Tell me about this contract.
+\end{verbatim}
+
+\textbf{Appropriately constrained:}
+\begin{verbatim}
+Summarize this contract in 200-300 words. Focus on key
+business terms, material risks, and any unusual provisions.
+\end{verbatim}
+
+The appropriate version gives guidance without imposing arbitrary restrictions.
+
+\subsubsection{Failure Mode Awareness}
+
+\paragraph{Principle:} Design prompts defensively. Anticipate what could go wrong and instruct the model how to handle edge cases.
+
+\begin{itemize}
+  \item \textbf{Missing data:} ``If the document does not contain a purchase price, return null for that field.''
+  \item \textbf{Ambiguity:} ``If the governing law is unclear, provide the most likely jurisdiction and note your uncertainty.''
+  \item \textbf{Out-of-scope inputs:} ``If this is not a merger agreement, return an error indicating document type mismatch.''
+  \item \textbf{Hallucination risk:} ``Only cite information explicitly present in the document. Do not infer or assume facts.''
+\end{itemize}
+
+Explicitly instructing the model how to fail gracefully reduces catastrophic errors.
+
+\subsubsection{Grounding and Citation}
+
+\paragraph{Principle:} For factual tasks, require the model to ground outputs in sources and cite evidence.
+
+\begin{verbatim}
+When making a claim about the contract, cite the specific
+section number. Format: "The termination fee is $50M
+(Section 8.2)."
+\end{verbatim}
+
+This serves dual purposes:
+\begin{enumerate}
+  \item Makes outputs verifiable (you can check the cited section)
+  \item Reduces hallucination (requiring citation discourages fabrication)
+\end{enumerate}
+
+For retrieval-augmented generation (RAG), this becomes essential: the model must distinguish between information in the retrieved documents versus information from its pre-training.
+
+\subsubsection{Iterative Refinement}
+
+\paragraph{Principle:} Prompts are software. They require testing, debugging, and version control.
+
+\begin{enumerate}
+  \item Start with a simple baseline prompt
+  \item Test on representative examples
+  \item Identify failure cases
+  \item Refine instructions, examples, or constraints
+  \item Re-test
+  \item Repeat
+\end{enumerate}
+
+Document what you tried and why. Version your prompts. Track performance metrics over time. Chapter~5 formalizes this as prompt optimization and evaluation.
+
+\begin{keybox}[title={Prompt Design Checklist}]
+Before deploying a prompt to production, verify:
+\begin{enumerate}
+  \item \textbf{Clear task definition:} Can a human understand exactly what you want?
+  \item \textbf{Specified output format:} Have you shown (few-shot) or enforced (schema) the desired structure?
+  \item \textbf{Edge case handling:} Does the prompt explain what to do with missing data, ambiguity, or errors?
+  \item \textbf{Grounding requirements:} For factual tasks, do you require citations or quotations?
+  \item \textbf{Validation strategy:} How will you detect failures (schema validation, human review, automated checks)?
+  \item \textbf{Representative testing:} Have you tested on real examples, including difficult cases?
+  \item \textbf{Token budget:} Does the prompt + expected output fit comfortably within context limits?
+  \item \textbf{Sampling parameters:} Have you set appropriate temperature, top-p, and max tokens?
+\end{enumerate}
+\end{keybox}
+
+\subsection{Forward References and Chapter Roadmap}
+\label{sec:llm1-prompt-forward}
+
+This section introduced prompt fundamentals: the anatomy of prompts, zero-shot versus few-shot approaches, and the Prompt Maturity Model that structures the progression from raw text to modular systems. These concepts recur throughout the book:
+
+\begin{itemize}
+  \item \textbf{Chapter~2 (Conversations and Reasoning):} Extends few-shot to chain-of-thought, self-consistency, and reasoning reliability. Covers role-based prompting, memory strategies, and multi-turn conversation design.
+
+  \item \textbf{Chapter~3 (Structured Inputs, Tools, and Function Calling):} Comprehensive treatment of Phase~4 (Structured I/O). Covers JSON schemas, constrained decoding, tool use, and function calling for integration with deterministic systems.
+
+  \item \textbf{Chapter~5 (Prompt Design, Evaluation, and Optimization):} The definitive treatment of prompts as specifications. Covers testing methodologies, exemplar management, automated optimization, A/B testing, and production deployment patterns.
+
+  \item \textbf{Chapters~6--7 (Agents):} Extends prompting to autonomous systems. Agents are, at core, sophisticated prompt orchestration---planning prompts, tool-selection prompts, reflection prompts---composed into goal-directed pipelines. All the principles from this section apply, but at the level of system architecture.
+\end{itemize}
+
+Think of this section as establishing a shared language. When we say ``few-shot,'' you understand we mean in-context learning from examples. When we say ``Phase~4,'' you understand we mean structured I/O with schema validation. These concepts are the building blocks for everything that follows.
+
+With prompt fundamentals established, we now examine how LLMs represent meaning numerically---the embedding space that enables semantic search, retrieval-augmented generation, and many advanced techniques central to legal and financial applications.

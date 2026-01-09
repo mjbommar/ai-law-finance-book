@@ -1,0 +1,100 @@
+% ============================================================================
+% PREAMBLE - E-book variant (large font, narrow margins, one-sided)
+% ============================================================================
+% This file loads the base preamble and overrides settings for e-readers.
+%
+% Key differences from print version:
+%   - Larger base font (14pt via extbook class in main-ebook.tex)
+%   - Narrower margins (more text per page)
+%   - One-sided layout (no inner/outer margin distinction)
+%   - No blank verso pages
+%
+% Include this file with: \input{preamble/main-ebook}
+% ============================================================================
+
+% Load the full base preamble first
+\input{preamble/main}
+
+% ----------------------------------------------------------------------------
+% Override Geometry for E-readers
+% ----------------------------------------------------------------------------
+% E-readers benefit from:
+%   - Narrower margins (maximizes reading area on small screens)
+%   - Symmetric margins (no binding gutter needed)
+%   - Same 6x9 page size (maintains proportions)
+%
+% Note: \geometry{} reconfigures the already-loaded geometry package
+\geometry{
+  papersize={6in,9in},
+  left=0.5in,
+  right=0.5in,
+  top=0.5in,
+  bottom=0.6in,
+  footskip=0.3in,
+  headheight=17pt   % Accommodate 14pt font in headers
+}
+
+% ----------------------------------------------------------------------------
+% Override Header Styles for One-sided Layout
+% ----------------------------------------------------------------------------
+% With oneside, there's no LE/RO distinction - all pages are "odd" (recto).
+% Redefine styles to work with single-sided layout.
+
+\fancypagestyle{frontmatterstyle}{%
+  \fancyhf{}%
+  \fancyhead[R]{\thepage}% Folio at right
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+
+\fancypagestyle{mainmatterstyle}{%
+  \fancyhf{}%
+  \fancyhead[L]{\textsc{\booktitle}}% Book title on left
+  \fancyhead[R]{\thepage}% Folio on right
+  \renewcommand{\headrulewidth}{0.4pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+
+\fancypagestyle{backmatterstyle}{%
+  \fancyhf{}%
+  \fancyhead[L]{\textsc{\booktitle}}%
+  \fancyhead[R]{\thepage}%
+  \renewcommand{\headrulewidth}{0.4pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyhead[R]{\thepage}% Folio at right only
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+
+% ----------------------------------------------------------------------------
+% E-book Typography Optimizations
+% ----------------------------------------------------------------------------
+% Screen reading benefits from:
+%   - Increased line spacing (1.25× vs default 1.0×)
+%   - Extra stretch allowance for narrow margins
+%   - Same principles as web accessibility guidelines
+
+% Load setspace if not already loaded (for \setstretch)
+\makeatletter
+\@ifpackageloaded{setspace}{}{\usepackage{setspace}}
+\makeatother
+
+% Increase line spacing for better screen readability
+% Best practices recommend 1.5× but 1.25× balances readability with page count
+\setstretch{1.25}
+
+% Allow extra stretch to avoid overfull lines with narrow margins
+\setlength{\emergencystretch}{3em}
+
+% ----------------------------------------------------------------------------
+% E-book Specific Commands
+% ----------------------------------------------------------------------------
+
+% For ebook, always disable cleardoublepage (no blank pages needed)
+\AtBeginDocument{%
+  \disablecleardoublepage
+}

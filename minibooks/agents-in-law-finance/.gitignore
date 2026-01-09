@@ -29,3 +29,4 @@ png/
 
 # Temporary files
 texput.log
+build/

@@ -1,0 +1,112 @@
+% =============================================================================
+% Synthesis — Structured Outputs, Tools, Multimodal
+% Purpose: Summarize and bridge
+% Label: sec:llmC-synthesis
+% =============================================================================
+
+\section{Synthesis}
+\label{sec:llmC-synthesis}
+
+We began this chapter confronting a fundamental tension: Large Language Models are powerful reasoning engines, yet they generate free-form text in a world that demands structured data, verifiable sources, and auditable actions. The journey from conversational AI to production-grade system component requires transforming stochastic text generation into deterministic, reliable outputs that legal and financial professionals can trust.
+
+\subsection*{From Text Generator to System Component}
+
+The transformation we have outlined is not merely technical—it is architectural. In \Cref{sec:llmC-structured}, we saw how structured outputs move us from unpredictable narratives to machine-readable data contracts. By enforcing JSON schemas at the API level or through constrained decoding, we eliminate an entire class of integration failures. The AI no longer produces text that must be parsed and cleaned; it produces typed data that can flow directly into databases, regulatory filings, or downstream analytics.
+
+This shift has profound implications. When an AI assistant extracts key terms from a contract, we no longer receive a paragraph describing those terms—we receive a validated JSON object with fields for parties, dates, obligations, and governing law. The difference is not cosmetic. Structured outputs enable \keyterm{composition}: the output of one AI component becomes the reliable input to another, building complex workflows from simple, verified pieces.
+
+\Cref{sec:llmC-tools} extended this foundation by giving models the ability to act. Through function calling and tool use, we bridge the gap between what the model knows (its parametric memory) and what it needs (real-time data, precise calculations, external actions). The calculator example is humble but illustrative: rather than trust the model to compute interest correctly in its neural weights, we delegate arithmetic to a deterministic function. The model orchestrates, the tool executes.
+
+This division of labor—neural for understanding, symbolic for precision—is the essence of \keyterm{neuro-symbolic AI}. We saw in the notes how frameworks like Chain of Code and Program-Aided Language Models formalize this pattern, achieving dramatic accuracy improvements on tasks requiring both semantic reasoning and computational correctness.
+
+\subsection*{The Accountability Framework: Data, Format, Oversight}
+
+Three pillars support trustworthy AI systems in regulated domains:
+
+\begin{enumerate}
+  \item \textbf{Grounding (Data Accountability):} \Cref{sec:llmC-rag} introduced retrieval-augmented generation as the mechanism for anchoring AI outputs in verifiable sources. Rather than hallucinate answers from frozen training data, the model retrieves current, relevant documents and cites them. This transforms the AI from an oracle into a research assistant that shows its work.
+
+  The canonical evidence record (\Cref{sec:llmC-evidence}) formalizes this accountability. Every claim carries provenance: the source document, the specific passage, the retrieval timestamp, and cryptographic hashes proving the text has not been altered. In litigation or audit, these records provide the chain of custody that courts and regulators demand.
+
+  \item \textbf{Structure (Format Accountability):} Schemas are not constraints that limit the AI—they are contracts that make it reliable. By specifying output format upfront, we prevent the model from inventing new fields, omitting required data, or mixing data types. This is particularly critical in financial reporting (where a decimal in the wrong place is a material misstatement) and legal filings (where form compliance determines acceptance or rejection).
+
+  Versioning these schemas, as discussed in \Cref{sec:llmC-structured}, ensures that changes are deliberate and tracked. When the interest calculation function changes from version 1.2 to 1.3 to add compounding frequency, both the AI and the systems consuming its output know which contract is in force.
+
+  \item \textbf{Logging (Oversight Accountability):} Every tool invocation must be logged with governance metadata: who requested the action, why it was needed, what privilege level the data carries, and which regulatory context applies. These logs, as emphasized in \Cref{sec:llmC-tools}, are not debugging artifacts—they are compliance evidence.
+
+  The immutable audit trail allows reconstruction of any decision. If an AI recommended a high-risk classification for a transaction, the log shows the input data (with hashes), the retrieval results (with source citations), the tool calls made (credit score lookup, policy rule check), and the reasoning trace. Without this trail, the AI's decision is a black box. With it, we have a glass box: transparent, explainable, defensible.
+\end{enumerate}
+
+\subsection*{How the Pieces Fit Together}
+
+Consider a realistic workflow in a compliance context. A bank's AI system reviews a mortgage application:
+
+\begin{enumerate}
+  \item \textbf{Input:} The application arrives as structured JSON (applicant data, employment history, requested amount).
+  \item \textbf{Retrieval:} The system queries a vector database to retrieve current underwriting guidelines and relevant case precedents where similar applications were flagged.
+  \item \textbf{Tool Use:} The AI calls \texttt{getCreditScore(applicant\_id)} to fetch real-time credit data and \texttt{calculateDebtToIncomeRatio(income, obligations)} to compute a precise metric.
+  \item \textbf{Reasoning:} The model synthesizes retrieved guidelines, credit score, and calculated ratios to classify risk as "Approved with conditions."
+  \item \textbf{Output:} A structured decision object conforming to the decision schema (version 2.3), including risk level, conditions, and supporting evidence records.
+  \item \textbf{Audit:} Every step is logged with timestamps, correlation IDs linking back to the original application, and governance tags (jurisdiction: US-MI, regulation: fair-lending, data-level: confidential).
+\end{enumerate}
+
+This workflow demonstrates the integration of all three pillars. The data is grounded (retrieved guidelines, real credit scores), the format is reliable (validated schema), and the process is auditable (complete logs with evidence). The AI is not merely answering a question—it is executing a compliant, traceable workflow that a human reviewer or regulator can inspect and verify.
+
+\subsection*{The Multimodal Dimension (Preview)}
+
+While this chapter has focused primarily on text-based structured outputs and tool use, we touched briefly on the multimodal foundations in the source materials. Modern legal and financial work does not exist in pure text: contracts arrive as PDFs with tables and scanned signatures, financial reports include charts and spreadsheets, discovery materials include audio depositions and video evidence.
+
+Chapter~4 (Multimodal Fundamentals) extends these principles to rich media. The techniques transfer directly:
+
+\begin{itemize}
+  \item \textbf{Structured Extraction:} Just as we extract contract terms into JSON, we will extract tables from PDFs into structured CSV or JSON, using layout analysis models and vision-language models to preserve semantic relationships between cells and headers.
+
+  \item \textbf{Grounding with Multimedia Evidence:} Evidence records will expand to include page numbers in PDF documents, timestamps in audio transcripts, and frame references in video depositions. The canonical evidence record schema accommodates these locators, ensuring that "this claim came from page 5 of Exhibit A" is as precise as "this claim came from Section 10(b) of the statute."
+
+  \item \textbf{Tool Use for Parsing:} OCR (optical character recognition), speech-to-text, and chart extraction become specialized tools in the model's toolkit. The AI calls \texttt{extractTableFromPDF(document, page\_number)} rather than attempting to parse the visual layout in its weights.
+\end{itemize}
+
+The scaffolding we have built—schemas, validation, function contracts, evidence records, and audit logs—remains unchanged. We simply extend it to handle richer input modalities while preserving the same accountability guarantees.
+
+\subsection*{Preview of Prompt Design and Evaluation}
+
+Having established \textit{what} the AI outputs (structured data) and \textit{how} it acts (tool calling), the next frontier is optimizing \textit{how we ask}. Chapter~5 (Prompt Design, Evaluation, and Optimization) treats prompt engineering as a rigorous discipline, not an art of trial and error.
+
+We will see how to:
+
+\begin{itemize}
+  \item Design prompts that explicitly invoke schemas and tools, leveraging few-shot examples and chain-of-thought reasoning to improve reliability.
+  \item Evaluate AI performance systematically using held-out test sets, measuring not just accuracy but format compliance, citation quality, and reasoning coherence.
+  \item Optimize prompts iteratively, using techniques like prompt meta-learning and automated prompt refinement to discover phrasing that maximizes both correctness and efficiency (minimizing tokens and latency).
+  \item Balance competing objectives: a highly detailed prompt may improve accuracy but increase cost and latency; a terse prompt may be fast but error-prone. Evaluation frameworks quantify these trade-offs.
+\end{itemize}
+
+The connection to this chapter is direct. Structured outputs and tool use give us \textit{measurable} outcomes: did the JSON validate? Did the tool call succeed? Did the evidence record include all required fields? These binary or numeric signals enable systematic evaluation, which in turn enables optimization. Without structure and tooling, evaluation remains subjective and anecdotal. With them, we can treat AI performance as an engineering problem with quantifiable metrics and reproducible experiments.
+
+\subsection*{The Central Insight: Structure Enables, Not Constrains}
+
+A recurring theme throughout this chapter is that imposing structure on AI outputs and actions does not limit the model's usefulness—it unlocks it. The freedom to generate any text is dangerous in high-stakes settings; the discipline to generate \textit{correct} text within a contract is powerful.
+
+By specifying schemas, we force the AI to think in terms of the data model we actually need. By exposing tools, we force the AI to recognize the boundaries of its competence and call for help when precision or fresh data are required. By requiring evidence records, we force the AI to operate as a professional would: not just stating conclusions, but justifying them with cited authority.
+
+This is the philosophical shift from "AI as magic" to "AI as system." Magic is unpredictable, impressive, but unreliable. Systems are boring, predictable, and composable. In legal and financial domains, we need boring reliability far more than we need impressive creativity.
+
+The techniques in this chapter—constrained decoding, schema validation, function calling with governance metadata, retrieval with canonical evidence, and multimodal parsing—are the engineering tools that transform stochastic text models into deterministic system components. They form the foundation upon which we will build agents (in later chapters) that can autonomously execute complex workflows while remaining fully auditable and aligned with human oversight.
+
+\subsection*{Key Takeaways}
+
+As we close this synthesis and move toward the chapter conclusion, we reflect on the essential lessons:
+
+\begin{itemize}
+  \item \textbf{Transformation, not decoration:} Structured outputs and tool use fundamentally change what AI can do in professional settings, moving from creative text generation to reliable data extraction and action execution.
+
+  \item \textbf{Accountability in three dimensions:} Grounding provides data accountability (verifiable sources), schemas provide format accountability (predictable structure), and logging provides oversight accountability (traceable actions).
+
+  \item \textbf{Composition through contracts:} Reliable AI systems are built by composing smaller, well-specified components (each with a schema and tool contract) rather than deploying monolithic, unstructured models.
+
+  \item \textbf{Multimodal is natural extension:} The principles generalize seamlessly to documents, tables, audio, and video—we simply add specialized parsing tools and extend evidence records with richer locators.
+
+  \item \textbf{Evaluation requires measurement:} Only by producing structured outputs can we rigorously evaluate and optimize AI performance, leading directly into the next chapter's focus on prompt design and systematic evaluation.
+\end{itemize}
+
+In the next section (\Cref{sec:llmC-further}), we point you to the research and resources that deepen understanding of each of these pillars. Then, in the conclusion, we summarize the chapter's achievement and hand off to the prompt design and evaluation chapter that builds on this foundation.

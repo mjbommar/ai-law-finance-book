@@ -1,0 +1,166 @@
+\documentclass[tikz,border=0pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{libertinus}
+\usepackage{tikz}
+\usetikzlibrary{calc,positioning,shapes.geometric,fadings}
+
+% Colors - Deep blue with overlapping glowing circles
+\definecolor{DeepBlue}{RGB}{10,20,38}
+\definecolor{MidBlue}{RGB}{18,35,60}
+\definecolor{GlowCyan}{RGB}{0,220,190}
+\definecolor{GlowTeal}{RGB}{30,180,160}
+\definecolor{GlowBlue}{RGB}{60,140,220}
+\definecolor{GlowPurple}{RGB}{120,100,200}
+\definecolor{NodeCore}{RGB}{255,255,255}
+\definecolor{WireColor}{RGB}{80,200,180}
+\definecolor{MetalLight}{RGB}{200,205,215}
+\definecolor{MetalDark}{RGB}{140,150,165}
+
+\begin{document}
+\begin{tikzpicture}
+
+\def\pagewidth{8.5in}
+\def\pageheight{11in}
+
+% Background gradient
+\shade[top color=MidBlue, bottom color=DeepBlue]
+  (0,0) rectangle (\pagewidth,\pageheight);
+
+% Scattered particles
+\foreach \i in {1,...,110} {
+  \pgfmathsetmacro{\px}{random()*8.5}
+  \pgfmathsetmacro{\py}{random()*11}
+  \pgfmathsetmacro{\psize}{0.3 + random()*1.1}
+  \pgfmathsetmacro{\popacity}{0.1 + random()*0.35}
+  \fill[GlowCyan, opacity=\popacity] (\px in, \py in) circle (\psize pt);
+}
+
+% Motion blur streaks
+\begin{scope}[shift={(4.25in, 6.4in)}]
+  \foreach \angle in {10, 50, 85, 125, 160, 195, 230, 270, 305, 340} {
+    \pgfmathsetmacro{\len}{1.4 + random()*0.9}
+    \pgfmathsetmacro{\startdist}{2.1}
+    \pgfmathsetmacro{\sx}{\startdist*cos(\angle)}
+    \pgfmathsetmacro{\sy}{\startdist*sin(\angle)*0.72}
+    \pgfmathsetmacro{\ex}{(\startdist+\len)*cos(\angle)}
+    \pgfmathsetmacro{\ey}{(\startdist+\len)*sin(\angle)*0.72}
+    \draw[GlowTeal, opacity=0.18, line width=2pt, line cap=round]
+      (\sx in, \sy in) -- (\ex in, \ey in);
+    \draw[GlowCyan, opacity=0.08, line width=4.5pt, line cap=round]
+      (\sx in, \sy in) -- (\ex in, \ey in);
+  }
+\end{scope}
+
+% OVERLAPPING CIRCLES WITH TREE STRUCTURE
+\begin{scope}[shift={(4.25in, 6.4in)}]
+
+  % Large overlapping translucent circles - Venn style
+  % These create the brain-like boundary
+  \fill[GlowBlue, opacity=0.12] (-0.7in, 0.4in) circle (1.5in);
+  \fill[GlowTeal, opacity=0.12] (0.7in, 0.4in) circle (1.5in);
+  \fill[GlowPurple, opacity=0.12] (0, -0.6in) circle (1.5in);
+
+  % Inner overlapping circles - more concentrated
+  \fill[GlowCyan, opacity=0.15] (-0.35in, 0.2in) circle (0.9in);
+  \fill[GlowCyan, opacity=0.15] (0.35in, 0.2in) circle (0.9in);
+  \fill[GlowCyan, opacity=0.15] (0, -0.35in) circle (0.9in);
+
+  % Core intersection glow
+  \fill[GlowCyan, opacity=0.1] (0, 0) circle (0.5in);
+  \fill[NodeCore, opacity=0.08] (0, 0) circle (0.35in);
+
+  % ===== WIREFRAME CONNECTIONS =====
+
+  % Root to Level 1
+  \draw[WireColor, opacity=0.5, line width=1pt] (0, 0.08in) -- ({0.65*cos(120)} in, {0.65*sin(120)*0.7} in);
+  \draw[WireColor, opacity=0.5, line width=1pt] (0, 0.08in) -- ({0.65*cos(60)} in, {0.65*sin(60)*0.7} in);
+  \draw[WireColor, opacity=0.5, line width=1pt] (0, 0.08in) -- ({0.65*cos(270)} in, {0.65*sin(270)*0.65} in);
+
+  % Level 1 to Level 2
+  \draw[WireColor, opacity=0.4, line width=0.8pt]
+    ({0.65*cos(120)} in, {0.65*sin(120)*0.7} in) -- ({1.15*cos(150)} in, {1.15*sin(150)*0.68} in);
+  \draw[WireColor, opacity=0.4, line width=0.8pt]
+    ({0.65*cos(120)} in, {0.65*sin(120)*0.7} in) -- ({1.15*cos(95)} in, {1.15*sin(95)*0.68} in);
+  \draw[WireColor, opacity=0.4, line width=0.8pt]
+    ({0.65*cos(60)} in, {0.65*sin(60)*0.7} in) -- ({1.15*cos(85)} in, {1.15*sin(85)*0.68} in);
+  \draw[WireColor, opacity=0.4, line width=0.8pt]
+    ({0.65*cos(60)} in, {0.65*sin(60)*0.7} in) -- ({1.15*cos(30)} in, {1.15*sin(30)*0.68} in);
+  \draw[WireColor, opacity=0.4, line width=0.8pt]
+    ({0.65*cos(270)} in, {0.65*sin(270)*0.65} in) -- ({1.15*cos(240)} in, {1.15*sin(240)*0.68} in);
+  \draw[WireColor, opacity=0.4, line width=0.8pt]
+    ({0.65*cos(270)} in, {0.65*sin(270)*0.65} in) -- ({1.15*cos(300)} in, {1.15*sin(300)*0.68} in);
+
+  % ===== ROOT NODE =====
+  \fill[GlowCyan, opacity=0.18] (0, 0.08in) circle (16pt);
+  \fill[GlowTeal, opacity=0.4] (0, 0.08in) circle (11pt);
+  \fill[GlowCyan, opacity=0.8] (0, 0.08in) circle (7pt);
+  \fill[NodeCore] (0, 0.08in) circle (3.5pt);
+
+  % ===== LEVEL 1 NODES =====
+  \foreach \angle in {120, 60, 270} {
+    \pgfmathsetmacro{\vertscale}{\angle == 270 ? 0.65 : 0.7}
+    \pgfmathsetmacro{\nx}{0.65*cos(\angle)}
+    \pgfmathsetmacro{\ny}{0.65*sin(\angle)*\vertscale}
+    \fill[GlowCyan, opacity=0.15] (\nx in, \ny in) circle (12pt);
+    \fill[GlowTeal, opacity=0.35] (\nx in, \ny in) circle (8pt);
+    \fill[GlowCyan, opacity=0.85] (\nx in, \ny in) circle (5pt);
+    \fill[NodeCore] (\nx in, \ny in) circle (2.5pt);
+  }
+
+  % ===== LEVEL 2 NODES =====
+  \foreach \angle in {150, 95, 85, 30, 240, 300} {
+    \pgfmathsetmacro{\nx}{1.15*cos(\angle)}
+    \pgfmathsetmacro{\ny}{1.15*sin(\angle)*0.68}
+    \fill[GlowTeal, opacity=0.12] (\nx in, \ny in) circle (9pt);
+    \fill[GlowCyan, opacity=0.3] (\nx in, \ny in) circle (5.5pt);
+    \fill[NodeCore, opacity=0.9] (\nx in, \ny in) circle (2.5pt);
+  }
+
+  % ===== OUTER DATA RING =====
+  \foreach \i in {0,...,29} {
+    \pgfmathsetmacro{\angle}{\i * 12}
+    \pgfmathsetmacro{\nx}{1.85*cos(\angle)}
+    \pgfmathsetmacro{\ny}{1.85*sin(\angle)*0.7}
+    \fill[GlowCyan, opacity=0.2] (\nx in, \ny in) circle (1.8pt);
+  }
+
+\end{scope}
+
+% Corner decorations
+\begin{scope}[shift={(0.9in, 9.5in)}, opacity=0.2]
+  \fill[GlowCyan] (0,0) circle (6pt);
+  \fill[GlowTeal] (0.25in, -0.1in) circle (4pt);
+  \fill[GlowBlue] (0.1in, -0.25in) circle (3pt);
+\end{scope}
+
+\begin{scope}[shift={(7.3in, 9in)}, opacity=0.18]
+  \fill[GlowTeal] (0,0) circle (5pt);
+  \fill[GlowCyan] (-0.2in, -0.15in) circle (4pt);
+  \fill[GlowPurple] (0.1in, -0.22in) circle (3pt);
+\end{scope}
+
+% ============ TITLE SECTION ============
+
+\node[anchor=center, align=center] at (4.25in, 3.35in) {
+  {\fontsize{48}{56}\selectfont\bfseries\color{white}AI AGENTS}
+};
+
+\node[anchor=center, align=center] at (4.25in, 2.5in) {
+  {\fontsize{15}{20}\selectfont\color{white!85}A NEW ERA FOR AUTONOMOUS SYSTEMS IN LAW \& FINANCE}
+};
+
+% ============ METALLIC BAND ============
+
+\shade[top color=MetalLight, bottom color=MetalDark]
+  (0, 0) rectangle (\pagewidth, 1.1in);
+
+\fill[white, opacity=0.35] (0, 1.08in) rectangle (\pagewidth, 1.1in);
+\fill[black, opacity=0.12] (0, 1.1in) rectangle (\pagewidth, 1.14in);
+
+\node[anchor=center, align=center] at (4.25in, 0.55in) {
+  {\fontsize{13}{16}\selectfont\color{DeepBlue}\textbf{MICHAEL BOMMARITO, DANIEL MARTIN KATZ}}\\[0.08in]
+  {\fontsize{13}{16}\selectfont\color{DeepBlue}\textbf{\& JILLIAN BOMMARITO}}
+};
+
+\end{tikzpicture}
+\end{document}

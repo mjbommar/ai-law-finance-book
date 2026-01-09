@@ -1,0 +1,236 @@
+% =============================================================================
+% Images and Visual Content — Multimodal Fundamentals
+% Purpose: OCR, handwriting, diagrams, visual understanding
+% Label: sec:llmD2-images
+% =============================================================================
+
+\section{Images and Visual Content}
+\label{sec:llmD2-images}
+
+Beyond structured documents, legal and financial workflows frequently encounter standalone images: scanned forms, photographs of evidence, screenshots of applications, diagrams, and handwritten notes. This section addresses image understanding, OCR for text extraction, and specialized visual content types.
+
+\subsection{Image Understanding in Legal and Financial Context}
+\label{sec:llmD2-images-context}
+
+Images in professional settings differ from general-purpose computer vision tasks. The content is often text-heavy, formally structured, and carries legal or evidentiary significance:
+
+\begin{itemize}
+  \item \textbf{Evidence photographs}: Crime scenes, property damage, product defects.
+  \item \textbf{Scanned historical documents}: Pre-digital records, handwritten ledgers, typed correspondence.
+  \item \textbf{Application screenshots}: UI states as evidence in software disputes, compliance monitoring.
+  \item \textbf{Whiteboards and notes}: Meeting artifacts, informal agreements, expert sketches.
+  \item \textbf{Identity documents}: Passports, driver's licenses, corporate filings with seals.
+\end{itemize}
+
+Vision-language models (VLMs) like GPT-5, Claude 4.5, and Gemini 3 can interpret these images directly, providing descriptions, extracting visible text, and answering questions about content. However, for systematic processing at scale, specialized pipelines remain more reliable and cost-effective.
+
+\subsection{OCR: From Scanned Documents to Text}
+\label{sec:llmD2-ocr}
+
+Optical Character Recognition (OCR) converts images of text into machine-readable characters. For legal and financial documents, OCR quality directly impacts downstream accuracy.
+
+\paragraph{OCR Engines.}
+Modern OCR options span a range of capabilities:
+
+\begin{definitionbox}[title={OCR Engine Comparison}]
+\begin{description}
+  \item[Tesseract (Open Source)] Mature, widely used, supports 100+ languages. Accuracy varies with image quality; benefits from preprocessing. No cost for processing.
+  \item[Google Cloud Vision OCR] High accuracy, handles complex layouts, returns confidence scores. Requires API access and incurs per-page costs.
+  \item[Azure AI Document Intelligence] Combines OCR with layout analysis and field extraction. Pretrained models for invoices, receipts, and IDs. Enterprise pricing.
+  \item[Amazon Textract] OCR with table and form extraction. Integrates with AWS ecosystem.
+  \item[ABBYY FineReader] Commercial solution with high accuracy on complex documents. Often used in legal e-discovery.
+\end{description}
+\end{definitionbox}
+
+\paragraph{Accuracy Metrics.}
+OCR quality is measured by:
+
+\begin{itemize}
+  \item \textbf{Character Error Rate (CER)}: Percentage of characters incorrectly recognized.
+  \item \textbf{Word Error Rate (WER)}: Percentage of words with any error.
+  \item \textbf{Confidence scores}: Per-character or per-word confidence from the OCR engine.
+\end{itemize}
+
+For legal documents, even 99\% accuracy means errors in 1 of every 100 words---potentially changing the meaning of a contract clause. High-stakes applications require human review or multiple OCR passes.
+
+\paragraph{Handling Low-Quality Scans.}
+Scanned documents often suffer from:
+
+\begin{itemize}
+  \item \textbf{Low resolution}: Aim for 300 DPI minimum; 600 DPI for fine print.
+  \item \textbf{Skew and rotation}: Apply deskewing algorithms before OCR.
+  \item \textbf{Noise and artifacts}: Photocopier marks, fax degradation, coffee stains.
+  \item \textbf{Poor contrast}: Faded ink, colored backgrounds, highlighted text.
+\end{itemize}
+
+\begin{keybox}[title={OCR Preprocessing Pipeline}]
+\begin{enumerate}
+  \item \textbf{Deskew}: Correct rotation and perspective distortion.
+  \item \textbf{Denoise}: Remove speckles, lines, and artifacts.
+  \item \textbf{Binarize}: Convert to black and white with adaptive thresholding.
+  \item \textbf{Resize}: Scale to optimal resolution for the OCR engine.
+  \item \textbf{Segment}: Identify text regions versus images, tables, and margins.
+\end{enumerate}
+\end{keybox}
+
+\subsection{Handwriting and Signature Recognition}
+\label{sec:llmD2-handwriting}
+
+Handwritten content presents additional challenges beyond printed text.
+
+\paragraph{Handwritten Text Recognition (HTR).}
+HTR models are trained specifically on handwriting samples:
+
+\begin{itemize}
+  \item \textbf{Google Cloud Vision}: Supports handwriting detection with the \texttt{DOCUMENT\_TEXT\_DETECTION} feature.
+  \item \textbf{Microsoft Azure}: Handwriting recognition through Document Intelligence.
+  \item \textbf{AWS Textract}: Detects handwriting in form fields.
+  \item \textbf{Transkribus}: Specialized platform for historical handwritten documents.
+\end{itemize}
+
+Accuracy varies significantly with handwriting legibility. Cursive, stylized, or hurried writing degrades recognition. For legal applications, handwritten amendments to contracts or handwritten wills require careful verification.
+
+\paragraph{Signature Verification.}
+Signatures serve as identity verification and consent indicators. Processing involves:
+
+\begin{itemize}
+  \item \textbf{Detection}: Locate signature regions within documents.
+  \item \textbf{Extraction}: Isolate the signature image for analysis.
+  \item \textbf{Comparison}: Match against known signature samples (for verification).
+  \item \textbf{Authenticity assessment}: Detect potential forgeries or alterations.
+\end{itemize}
+
+\begin{cautionbox}[title={Legal Admissibility of Signature Analysis}]
+Automated signature verification is not universally accepted as evidence of authenticity. Courts may require expert testimony to validate AI-based signature analysis. Document the methodology, confidence levels, and limitations when signature verification is legally significant.
+\end{cautionbox}
+
+\subsection{Diagrams, Flowcharts, and Schematics}
+\label{sec:llmD2-diagrams}
+
+Technical documents often contain diagrams that encode important information:
+
+\paragraph{Common Diagram Types.}
+\begin{itemize}
+  \item \textbf{Organizational charts}: Corporate structure, reporting relationships.
+  \item \textbf{Process flowcharts}: Workflow diagrams, decision trees.
+  \item \textbf{Technical schematics}: Engineering drawings, circuit diagrams, architectural plans.
+  \item \textbf{Patent figures}: Invention illustrations with labeled components.
+  \item \textbf{Network diagrams}: System architecture, data flow.
+\end{itemize}
+
+\paragraph{Extraction Approaches.}
+Diagram understanding combines visual and structural analysis:
+
+\begin{itemize}
+  \item \textbf{VLM description}: Ask a vision-language model to describe the diagram, identify entities, and explain relationships.
+  \item \textbf{Object detection}: Identify boxes, arrows, and connectors as distinct elements.
+  \item \textbf{Graph extraction}: Convert visual structure to a machine-readable graph (nodes and edges).
+  \item \textbf{Label extraction}: OCR the text labels and associate them with visual elements.
+\end{itemize}
+
+\begin{highlightbox}[title={Patent Diagram Analysis}]
+Patent filings typically include multiple figures with numbered components referenced in the claims. A patent analysis system should:
+\begin{enumerate}
+  \item Identify figure numbers and their bounding regions.
+  \item Extract component labels (``102'', ``104a'', etc.).
+  \item Link labels to their positions in the diagram.
+  \item Cross-reference with claim text mentioning those components.
+\end{enumerate}
+\end{highlightbox}
+
+\subsection{Image Classification and Document Routing}
+\label{sec:llmD2-image-classification}
+
+Before detailed processing, images must be classified and routed to appropriate pipelines.
+
+\paragraph{Document Type Classification.}
+Classify incoming images by document type:
+
+\begin{itemize}
+  \item \textbf{Invoices, receipts, purchase orders}: Route to accounts payable extraction.
+  \item \textbf{Contracts and agreements}: Route to legal review and clause extraction.
+  \item \textbf{Identity documents}: Route to KYC/AML verification.
+  \item \textbf{Correspondence}: Route to communication logging.
+  \item \textbf{Evidence photographs}: Route to case file with metadata capture.
+\end{itemize}
+
+\paragraph{Bates Stamps and Exhibit Labels.}
+Legal documents in discovery often carry:
+
+\begin{itemize}
+  \item \textbf{Bates numbers}: Sequential identifiers for tracking pages across a case.
+  \item \textbf{Exhibit stamps}: Labels indicating exhibit designation (``Plaintiff's Exhibit 1'').
+  \item \textbf{Confidentiality markings}: Designations like ``Confidential'' or ``Attorneys' Eyes Only.''
+\end{itemize}
+
+Automated detection of these markings enables routing, access control, and citation generation.
+
+\subsection{Screenshot and UI Analysis}
+\label{sec:llmD2-screenshots}
+
+Application screenshots serve as evidence in software disputes, compliance monitoring, and user research.
+
+\paragraph{UI Element Detection.}
+Specialized models can identify:
+
+\begin{itemize}
+  \item \textbf{Buttons, menus, and controls}: What actions were available.
+  \item \textbf{Text fields and their content}: What data was displayed or entered.
+  \item \textbf{Error messages and notifications}: System state at capture time.
+  \item \textbf{Layout and visual hierarchy}: How information was presented.
+\end{itemize}
+
+\paragraph{Temporal Context.}
+Screenshots capture a moment in time. Metadata should include:
+
+\begin{itemize}
+  \item Timestamp of capture (if available from system metadata).
+  \item Application and version being captured.
+  \item User context (if relevant and permissible).
+  \item Screen resolution and display settings.
+\end{itemize}
+
+For compliance monitoring (e.g., trading desk surveillance), screenshots may be captured systematically and require automated analysis at scale.
+
+\subsection{Visual PII and Privilege Markers}
+\label{sec:llmD2-visual-pii}
+
+Images may contain sensitive information that text-based PII detection misses.
+
+\paragraph{Faces and Biometric Data.}
+Photographs containing faces require special handling:
+
+\begin{itemize}
+  \item \textbf{Detection}: Identify face regions using face detection models.
+  \item \textbf{Blurring/redaction}: Apply blur or solid overlay to protect identity.
+  \item \textbf{Consent tracking}: Document whether face capture was consented.
+  \item \textbf{Biometric regulations}: BIPA (Illinois), GDPR, and other laws restrict biometric data processing.
+\end{itemize}
+
+\paragraph{Signatures and Handwriting.}
+Handwritten content may reveal identity:
+
+\begin{itemize}
+  \item Signatures are personally identifying and should be redacted in shared datasets.
+  \item Handwriting style can be identifying; consider redaction for anonymization.
+\end{itemize}
+
+\paragraph{Privilege Stamps and Watermarks.}
+Visual markers indicating privilege status:
+
+\begin{itemize}
+  \item \textbf{``Privileged and Confidential'' stamps}: Route to secure handling.
+  \item \textbf{``Draft'' watermarks}: Indicate non-final status.
+  \item \textbf{Firm letterheads}: May indicate attorney-client communication.
+\end{itemize}
+
+\begin{keybox}[title={Visual Content Privacy Checklist}]
+\begin{itemize}
+  \item Detect and handle faces per applicable biometric laws.
+  \item Identify and redact signatures when anonymization is required.
+  \item Recognize privilege stamps and route to appropriate controls.
+  \item Strip or preserve EXIF metadata based on use case.
+  \item Apply C2PA content credentials for provenance tracking.
+\end{itemize}
+\end{keybox}
+
