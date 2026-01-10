@@ -45,6 +45,14 @@ COVER_HC_VARS = front-matter/cover/cover-vars-hardcover.tex
 COVER_HC_PDF = lulu-cover-hardcover.pdf
 COVER_HC_JOB = lulu-cover-hardcover
 
+# Amazon KDP configuration
+# KDP uses slightly different spine formula but same bleed (0.125")
+# Interior is same as Lulu; cover uses lulu-cover.tex with KDP vars
+KDP_INTERIOR_PDF = kdp-interior.pdf
+KDP_COVER_VARS = front-matter/cover/kdp-cover-vars.tex
+KDP_COVER_PDF = kdp-cover.pdf
+KDP_COVER_JOB = kdp-cover
+
 # Release build configuration
 # Timestamped builds go to BUILD_DIR for distribution
 BOOK_TITLE = Agentic AI in Law and Finance
@@ -312,6 +320,9 @@ clean:
 	@rm -f $(COVER_HC_JOB).aux $(COVER_HC_JOB).log $(COVER_HC_JOB).out
 	@rm -f $(COVER_HC_JOB).fdb_latexmk $(COVER_HC_JOB).fls $(COVER_HC_JOB).toc
 	@rm -f $(COVER_HC_JOB).synctex.gz $(COVER_HC_JOB).synctex $(COVER_HC_JOB).xdv
+	@rm -f $(KDP_COVER_JOB).aux $(KDP_COVER_JOB).log $(KDP_COVER_JOB).out
+	@rm -f $(KDP_COVER_JOB).fdb_latexmk $(KDP_COVER_JOB).fls $(KDP_COVER_JOB).toc
+	@rm -f $(KDP_COVER_JOB).synctex.gz $(KDP_COVER_JOB).synctex $(KDP_COVER_JOB).xdv
 	@rm -f covers/*.aux covers/*.log covers/*.out covers/*.fdb_latexmk
 	@rm -f covers/*.fls covers/*.synctex.gz covers/*.synctex covers/*.xdv
 	@rm -f covers/*.toc
@@ -330,6 +341,7 @@ cleanall: clean
 	@rm -f $(COVER_PDF) $(COVER_FRONT_PDF) $(COVER_BACK_PDF) $(INTERIOR_PDF)
 	@rm -f $(COVER_HC_PDF) $(COVER_HC_VARS)
 	@rm -f $(INTERIOR_BLEED_PDF)
+	@rm -f $(KDP_INTERIOR_PDF) $(KDP_COVER_PDF) $(KDP_COVER_VARS)
 	@echo "$(GREEN)$(CHECK) Removed PDFs$(RESET)"
 
 # ----------------------------------------------------------------------------
@@ -519,6 +531,116 @@ lulu-paperback: $(INTERIOR_PDF) $(COVER_PDF)
 	@echo ""
 
 # ----------------------------------------------------------------------------
+# Amazon KDP Publishing targets
+# ----------------------------------------------------------------------------
+# KDP Print (paperback) and Kindle (fixed-layout Print Replica)
+#
+# For KDP Print: Upload kdp-interior.pdf + kdp-cover.pdf
+# For Kindle:    Upload kdp-interior.pdf (KDP creates Print Replica)
+#
+# Fixed-layout Kindle preserves exact page layout, diagrams, and tables.
+# This is ideal for technical content like this book.
+# ----------------------------------------------------------------------------
+
+.PHONY: kdp-interior
+kdp-interior: $(KDP_INTERIOR_PDF)
+
+# KDP interior is the same as Lulu interior (strip covers from main.pdf)
+$(KDP_INTERIOR_PDF): $(PDFFILE)
+	@echo "$(BOLD)$(BLUE)$(ARROW) Building KDP interior (strip covers)...$(RESET)"
+	@if ! command -v mutool >/dev/null 2>&1; then \
+		echo "$(RED)$(CROSS) mutool not found (install mupdf-tools)$(RESET)"; \
+		exit 1; \
+	fi
+	@pages=$$(if command -v pdfinfo >/dev/null 2>&1; then \
+		pdfinfo $(PDFFILE) 2>/dev/null | awk '/^Pages:/ {print $$2}'; \
+	else \
+		mutool info -M $(PDFFILE) 2>/dev/null | awk '/^Pages:/ {print $$2}'; \
+	fi); \
+	if [ -z "$$pages" ]; then \
+		echo "$(RED)$(CROSS) Could not determine page count$(RESET)"; \
+		exit 1; \
+	fi; \
+	if [ $$pages -le 3 ]; then \
+		echo "$(RED)$(CROSS) Not enough pages to strip covers$(RESET)"; \
+		exit 1; \
+	fi; \
+	last=$$((pages-1)); \
+	mutool merge -o $(KDP_INTERIOR_PDF) $(PDFFILE) 3-$$last
+	@echo "$(BOLD)$(GREEN)$(CHECK) KDP interior built: $(KDP_INTERIOR_PDF)$(RESET)"
+
+.PHONY: kdp-cover-vars
+kdp-cover-vars: $(KDP_COVER_VARS)
+
+$(KDP_COVER_VARS): $(KDP_INTERIOR_PDF) scripts/update_kdp_cover_vars.py
+	@echo "$(BOLD)$(BLUE)$(ARROW) Calculating KDP cover dimensions...$(RESET)"
+	@python3 scripts/update_kdp_cover_vars.py --pdf $(KDP_INTERIOR_PDF) --output $(KDP_COVER_VARS)
+	@echo "$(GREEN)$(CHECK) Cover variables written to $(KDP_COVER_VARS)$(RESET)"
+
+.PHONY: kdp-cover
+kdp-cover: $(KDP_COVER_PDF)
+
+# Build KDP cover using lulu-cover.tex with KDP variables
+$(KDP_COVER_PDF): $(COVER_TEX) $(KDP_COVER_VARS) $(COVER_FRONT_PDF) $(COVER_BACK_PDF)
+	@echo "$(BOLD)$(BLUE)$(ARROW) Building KDP wrap cover (3 passes for TikZ)...$(RESET)"
+	@# Temporarily swap cover-vars to use KDP dimensions
+	@cp $(COVER_VARS) $(COVER_VARS).bak 2>/dev/null || true
+	@cp $(KDP_COVER_VARS) $(COVER_VARS)
+	@echo "$(CYAN)   Pass 1/3...$(RESET)"
+	@$(LATEX) $(LATEX_OPTS) -jobname=$(KDP_COVER_JOB) $(COVER_TEX) >/dev/null 2>&1 || $(LATEX) $(LATEX_OPTS) -jobname=$(KDP_COVER_JOB) $(COVER_TEX)
+	@echo "$(CYAN)   Pass 2/3...$(RESET)"
+	@$(LATEX) $(LATEX_OPTS) -jobname=$(KDP_COVER_JOB) $(COVER_TEX) >/dev/null 2>&1
+	@echo "$(CYAN)   Pass 3/3...$(RESET)"
+	@$(LATEX) $(LATEX_OPTS) -jobname=$(KDP_COVER_JOB) $(COVER_TEX) >/dev/null 2>&1
+	@# Restore original cover-vars
+	@mv $(COVER_VARS).bak $(COVER_VARS) 2>/dev/null || true
+	@if command -v gs >/dev/null 2>&1; then \
+		echo "$(CYAN)   Flattening transparency (Ghostscript PDF 1.3)...$(RESET)"; \
+		gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.3 -dNOPAUSE -dBATCH -dSAFER \
+			-dPDFSETTINGS=/prepress -sOutputFile=/tmp/gs-flatten-kdp.pdf "$(KDP_COVER_PDF)" >/dev/null 2>&1 && \
+		mv /tmp/gs-flatten-kdp.pdf "$(KDP_COVER_PDF)"; \
+	else \
+		echo "$(YELLOW)   gs not found; skipping flattening$(RESET)"; \
+	fi
+	@echo "$(BOLD)$(GREEN)$(CHECK) KDP cover built: $(KDP_COVER_PDF)$(RESET)"
+
+.PHONY: kdp-cover-check
+kdp-cover-check: $(KDP_COVER_PDF)
+	@echo "$(BOLD)$(BLUE)$(ARROW) Checking KDP cover dimensions...$(RESET)"
+	@python3 scripts/check_pdf_dimensions.py $(KDP_COVER_PDF) --vars $(KDP_COVER_VARS) --pages 1
+
+# Convenience target: build all KDP Print files
+.PHONY: kdp
+kdp: $(KDP_INTERIOR_PDF) $(KDP_COVER_PDF)
+	@echo ""
+	@echo "$(BOLD)$(GREEN)$(STAR) KDP Print files ready for upload:$(RESET)"
+	@echo "$(CYAN)   Interior: $(KDP_INTERIOR_PDF)$(RESET)"
+	@echo "$(CYAN)   Cover:    $(KDP_COVER_PDF)$(RESET)"
+	@if command -v pdfinfo >/dev/null 2>&1; then \
+		pages=$$(pdfinfo $(KDP_INTERIOR_PDF) 2>/dev/null | grep Pages | awk '{print $$2}'); \
+		echo "$(CYAN)   Pages:   $$pages$(RESET)"; \
+	fi
+	@echo ""
+	@echo "$(BOLD)For Kindle (fixed-layout Print Replica):$(RESET)"
+	@echo "$(CYAN)   Upload $(KDP_INTERIOR_PDF) as Kindle eBook$(RESET)"
+	@echo "$(CYAN)   KDP will create a Print Replica with exact layout$(RESET)"
+	@echo ""
+
+# Convenience target: build Kindle-ready PDF
+.PHONY: kindle
+kindle: $(KDP_INTERIOR_PDF)
+	@echo ""
+	@echo "$(BOLD)$(GREEN)$(STAR) Kindle Print Replica file ready:$(RESET)"
+	@echo "$(CYAN)   Upload: $(KDP_INTERIOR_PDF)$(RESET)"
+	@echo ""
+	@echo "$(BOLD)Fixed-Layout Kindle Notes:$(RESET)"
+	@echo "   - Upload the interior PDF to KDP Kindle section"
+	@echo "   - Select 'Print Replica' format when prompted"
+	@echo "   - Preserves exact page layout, diagrams, and tables"
+	@echo "   - Ideal for technical/academic content"
+	@echo ""
+
+# ----------------------------------------------------------------------------
 # Export targets
 # ----------------------------------------------------------------------------
 
@@ -584,9 +706,17 @@ help:
 	@echo "  $(CYAN)cover-front$(RESET)      Build front cover PDF (6x9)"
 	@echo "  $(CYAN)cover-back$(RESET)       Build back cover PDF (6x9)"
 	@echo ""
+	@echo "$(BOLD)Amazon KDP Publishing:$(RESET)"
+	@echo "  $(CYAN)kdp$(RESET)              Build all KDP Print files (interior + cover)"
+	@echo "  $(CYAN)kindle$(RESET)           Build Kindle Print Replica PDF"
+	@echo "  $(CYAN)kdp-interior$(RESET)     Build KDP interior PDF (strip covers)"
+	@echo "  $(CYAN)kdp-cover-vars$(RESET)   Generate KDP cover dimensions"
+	@echo "  $(CYAN)kdp-cover$(RESET)        Build KDP wrap cover PDF"
+	@echo "  $(CYAN)kdp-cover-check$(RESET)  Verify KDP cover dimensions"
+	@echo ""
 	@echo "$(BOLD)Release Builds (timestamped, in build/):$(RESET)"
 	@echo "  $(CYAN)release$(RESET)          Build all PDF formats with timestamps"
-	@echo "  $(CYAN)all-formats$(RESET)      Build everything (PDF + future EPUB/Kindle)"
+	@echo "  $(CYAN)all-formats$(RESET)      Build everything (PDF + Kindle)"
 	@echo "  $(CYAN)clean-release$(RESET)    Remove build/ directory"
 	@echo ""
 	@echo "$(BOLD)Utilities:$(RESET)"
@@ -602,4 +732,13 @@ help:
 	@echo "  Hardcover case wrap has a 0.75\" wrap area that extends around"
 	@echo "  the boards, resulting in a larger cover PDF. The spine is also"
 	@echo "  thicker (calculated via table lookup instead of formula)."
+	@echo ""
+	@echo "$(BOLD)KDP vs Lulu:$(RESET)"
+	@echo "  Both use similar spine formulas. KDP files can be used for:"
+	@echo "  - KDP Print: Upload interior + cover PDFs"
+	@echo "  - Kindle: Upload interior PDF as 'Print Replica' for fixed layout"
+	@echo ""
+	@echo "$(BOLD)Kindle Fixed-Layout (Print Replica):$(RESET)"
+	@echo "  Preserves exact page layout, diagrams, and tables. Ideal for"
+	@echo "  technical content. Upload kdp-interior.pdf to KDP Kindle section."
 	@echo ""

@@ -1,7 +1,8 @@
 % ============================================================================
 % LULU WRAP COVER - Single-page cover spread with bleed
 % ============================================================================
-% Builds a single integrated spread (back + spine + front) for Lulu.
+% Draws everything directly (no pre-rendered PDFs) so background elements
+% extend seamlessly into bleed areas.
 % ============================================================================
 
 \documentclass[10pt]{book}
@@ -20,16 +21,6 @@
 % ==========================================================================
 % DERIVED SIZES
 % ==========================================================================
-% These calculations work for both paperback (WrapArea=0) and hardcover
-% case wrap (WrapArea=0.75"). The cover layout is:
-%
-% Paperback:    [Bleed][Back][Spine][Front][Bleed]
-% Hardcover:    [Bleed][Wrap][Back][Spine][Front][Wrap][Bleed]
-%
-% The front/back cover PDFs are always TrimWidth × TrimHeight.
-% For hardcover, the wrap area extends the background around the boards.
-% ==========================================================================
-
 \newlength{\CoverWidth}
 \newlength{\CoverHeight}
 \newlength{\CoverBackX}
@@ -85,7 +76,7 @@
 \divide\CoverSpineCenterX by 2
 \addtolength{\CoverSpineCenterX}{\CoverSpineX}
 
-% Ornament positions (relative to content area, not bleed)
+% Ornament positions
 \setlength{\SpineOrnamentInset}{0.35in}
 \setlength{\SpineOrnamentTopY}{\CoverHeight}
 \addtolength{\SpineOrnamentTopY}{-\CoverBleed}
@@ -96,11 +87,10 @@
 \addtolength{\SpineOrnamentBottomY}{\SpineOrnamentInset}
 
 % ==========================================================================
-% SPINE TEXT (optional)
+% SPINE TEXT
 % ==========================================================================
 \newif\ifcoverspine
 \coverspinetrue
-\newcommand{\CoverSpineTitle}{Agentic AI in Law and Finance}
 \newcommand{\SpineTitleMain}{%
 	A\kern0.06em G\kern0.06em E\kern0.06em N\kern0.06em T\kern0.06em I\kern0.06em C\kern0.12em\kern0.12em A\kern0.06em I%
 }
@@ -110,7 +100,7 @@
 \newcommand{\SpineOrnamentId}{61}
 \newcommand{\SpineOrnamentSize}{0.45in}
 
-% Set page size for wrap cover before document starts.
+% Set page size for wrap cover
 \geometry{paperwidth=\CoverWidth, paperheight=\CoverHeight, margin=0pt}
 
 \begin{document}
@@ -119,29 +109,193 @@
 \begin{tikzpicture}[remember picture, overlay]
 	\begin{scope}[shift={(current page.south west)}]
 
-		% Base background to ensure full bleed coverage
-		\shade[top color=MidSlate, bottom color=DeepSlate]
-		(0,0) rectangle (\CoverWidth, \CoverHeight);
+		% ==================================================================
+		% BACKGROUND - Full bleed DeepSlate
+		% ==================================================================
+		\fill[DeepSlate] (0,0) rectangle (\CoverWidth, \CoverHeight);
 
-		% Back cover (left) - positioned at (BackX, ContentY)
-		\node[anchor=south west, inner sep=0pt] at (\CoverBackX, \CoverContentY) {%
-			\includegraphics[width=\CoverTrimWidth, height=\CoverTrimHeight]{covers/cover-back.pdf}%
-		};
+		% ==================================================================
+		% TEXTURE - Disabled to reduce memory usage
+		% ==================================================================
+		% (texture dots removed - solid background only)
 
-		% Front cover (right) - positioned at (FrontX, ContentY)
-		\node[anchor=south west, inner sep=0pt] at (\CoverFrontX, \CoverContentY) {%
-			\includegraphics[width=\CoverTrimWidth, height=\CoverTrimHeight]{covers/cover-front.pdf}%
-		};
+		% ==================================================================
+		% FRONT COVER - Decorative circles (can extend into bleed)
+		% ==================================================================
+		\begin{scope}[shift={(\CoverFrontX, \CoverContentY)}]
+			\begin{scope}[scale=0.706, transform shape, shift={(0, 1.4in)}]
+				\fill[CircleDeep, opacity=0.20] (2.2in, 7.6in) circle (2.4in);
+				\fill[CircleMid, opacity=0.15] (6.2in, 8.2in) circle (2.0in);
+				\fill[CircleLight, opacity=0.12] (4.2in, 6.0in) circle (1.8in);
+				\fill[CircleDeep, opacity=0.10] (1.0in, 9.0in) circle (1.6in);
+				\fill[CircleMid, opacity=0.08] (7.2in, 6.8in) circle (1.4in);
+				\fill[white, opacity=0.02] (3.5in, 7.4in) circle (1.5in);
+				\fill[white, opacity=0.015] (5.5in, 7.8in) circle (1.2in);
 
-		% Spine decoration (subtle two-tone band + concentric rings)
-		\shade[left color=DeepSlate, right color=MidSlate, opacity=0.55]
+				% Network Diagrams
+				\input{front-matter/cover/network-mlp}
+				\input{front-matter/cover/diagram-radar}
+				\input{front-matter/cover/diagram-tree}
+				\input{front-matter/cover/network-graph}
+
+				% Title
+				\node[anchor=center, align=center, opacity=0.12] at (4.32in, 3.04in) {
+					{\fontsize{52}{62}\selectfont\color{black}A\kern0.06em G\kern0.06em E\kern0.06em N\kern0.06em T\kern0.06em I\kern0.06em C\kern0.12em\kern0.12em A\kern0.06em I}\\[0.35in]
+					{\fontsize{24}{28}\selectfont\color{black}I\kern0.05em N\kern0.12em\kern0.12em L\kern0.05em A\kern0.05em W\kern0.12em\kern0.12em \&\kern0.12em\kern0.12em F\kern0.05em I\kern0.05em N\kern0.05em A\kern0.05em N\kern0.05em C\kern0.05em E}
+				};
+				\node[anchor=center, align=center, opacity=0.25] at (4.28in, 3.08in) {
+					{\fontsize{52}{62}\selectfont\color{DeepSlate}A\kern0.06em G\kern0.06em E\kern0.06em N\kern0.06em T\kern0.06em I\kern0.06em C\kern0.12em\kern0.12em A\kern0.06em I}\\[0.35in]
+					{\fontsize{24}{28}\selectfont\color{DeepSlate}I\kern0.05em N\kern0.12em\kern0.12em L\kern0.05em A\kern0.05em W\kern0.12em\kern0.12em \&\kern0.12em\kern0.12em F\kern0.05em I\kern0.05em N\kern0.05em A\kern0.05em N\kern0.05em C\kern0.05em E}
+				};
+				\node[anchor=center, align=center] at (4.25in, 3.14in) {
+					{\fontsize{52}{62}\selectfont\bfseries\color{TextPure}A\kern0.06em G\kern0.06em E\kern0.06em N\kern0.06em T\kern0.06em I\kern0.06em C\kern0.12em\kern0.12em A\kern0.06em I}\\[0.35in]
+					{\fontsize{24}{28}\selectfont\color{CopperLight}I\kern0.05em N\kern0.12em\kern0.12em L\kern0.05em A\kern0.05em W\kern0.12em\kern0.12em \&\kern0.12em\kern0.12em F\kern0.05em I\kern0.05em N\kern0.05em A\kern0.05em N\kern0.05em C\kern0.05em E}
+				};
+
+				% Divider
+				\draw[TextMuted, line width=0.4pt, opacity=0.4] (2.6in, 2.31in) -- (3.7in, 2.31in);
+				\fill[CopperGlow, opacity=0.6] (4.25in, 2.31in) circle (2pt);
+				\draw[TextMuted, line width=0.4pt, opacity=0.4] (4.8in, 2.31in) -- (5.9in, 2.31in);
+
+				% Subtitle
+				\node[anchor=center, align=center] at (4.25in, 1.61in) {
+					{\fontsize{21}{26}\selectfont\itshape\color{TextSoft}Navigating a New Era of}\\[0.14in]
+					{\fontsize{21}{26}\selectfont\itshape\color{TextSoft}Autonomous Systems}
+				};
+
+				% Authors
+				\node[anchor=center, align=center] at (4.25in, 0.15in) {
+					{\fontsize{13}{15}\selectfont\color{TextSoft}%
+					M\kern0.06em I\kern0.06em C\kern0.06em H\kern0.06em A\kern0.06em E\kern0.06em L\ %
+					J\kern0.06em.\ %
+					B\kern0.06em O\kern0.06em M\kern0.06em M\kern0.06em A\kern0.06em R\kern0.06em I\kern0.06em T\kern0.06em O\ %
+					I\kern0.06em I%
+					\quad \textbullet \quad %
+					D\kern0.06em A\kern0.06em N\kern0.06em I\kern0.06em E\kern0.06em L\ %
+					M\kern0.06em.\ %
+					K\kern0.06em A\kern0.06em T\kern0.06em Z%
+					\quad \textbullet \quad %
+					J\kern0.06em I\kern0.06em L\kern0.06em L\kern0.06em I\kern0.06em A\kern0.06em N\ %
+					B\kern0.06em O\kern0.06em M\kern0.06em M\kern0.06em A\kern0.06em R\kern0.06em I\kern0.06em T\kern0.06em O}
+				};
+			\end{scope}
+		\end{scope}
+
+		% ==================================================================
+		% BACK COVER
+		% ==================================================================
+		\begin{scope}[shift={(\CoverBackX, \CoverContentY)}]
+			% Network diagram (in scaled scope like front cover)
+			\begin{scope}[scale=0.706, transform shape, shift={(0, 1.4in)}]
+				\input{front-matter/cover/network-mlp-back}
+			\end{scope}
+
+			% Book Summary Box
+			\begin{scope}[shift={(0.45in, 3.60in)}]
+				\fill[black, opacity=0.08, rounded corners=6pt]
+				(0.05in, -0.05in) rectangle (5.15in, 5.05in);
+				\shade[top color=CopperLight, bottom color=MidSlate, opacity=0.12, rounded corners=6pt]
+				(0, 0) rectangle (5.1in, 5.1in);
+				\shade[left color=black!40, right color=DeepSlate, opacity=0.22, rounded corners=5.5pt, shading angle=135]
+				(0, 0) rectangle (5.1in, 5.1in);
+				\fill[white, opacity=0.04, rounded corners=6.5pt] (0, 0) rectangle (5.1in, 5.1in);
+				\draw[white, opacity=0.15, line width=0.5pt, rounded corners=6pt] (0, 0) rectangle (5.1in, 5.1in);
+
+				\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 4.85in) {
+					{\rmfamily\fontsize{10}{12}\selectfont\color{TextPure}\itshape%
+					What makes something agentic or an ``AI agent?'' How do you design one that actually works? And what does it take to deploy one safely in legal and financial applications?}
+				};
+				\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 4.17in) {
+					{\rmfamily\fontsize{8.5}{11}\selectfont\color{TextPure}%
+					The term ``agentic AI'' means different things to different people, creating confusion in procurement, design, and regulation. This book provides a clear framework for building and governing agents in high-stakes domains where precision matters.}
+				};
+				\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 3.47in) {
+					{\rmfamily\fontsize{8.5}{11}\selectfont\color{TextPure}%
+					We move systematically from theory to practice---\textbf{\textcolor{CopperLight}{defining}} what makes systems truly agentic, \textbf{\textcolor{CopperLight}{designing}} architectures that work reliably, and \textbf{\textcolor{CopperLight}{governing}} their deployment in regulated environments.}
+				};
+				\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 2.85in) {
+					{\rmfamily\fontsize{8.5}{11}\selectfont\color{TextPure}%
+					\textbf{\textcolor{TextPure}{Define.}} Before you can build, buy, or evaluate an ``agent,'' you need a definition that holds up. Drawing on seven decades of scholarship, this book provides a framework that separates genuine agency from marketing claims---and gives you tools to test what a system can actually do.}
+				};
+				\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 2.04in) {
+					{\rmfamily\fontsize{8.5}{11}\selectfont\color{TextPure}%
+					\textbf{\textcolor{TextPure}{Design.}} Clear definitions lead to sound architecture. The book translates agency into concrete design choices: how work reaches the system, how it perceives and acts, how it remembers and plans, when it escalates, and how it knows when to stop.}
+				};
+				\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 1.38in) {
+					{\rmfamily\fontsize{8.5}{11}\selectfont\color{TextPure}%
+					\textbf{\textcolor{TextPure}{Govern.}} Good architecture makes oversight possible. In legal and financial settings, duties are non-delegable and supervision is not optional. The book shows how governance must change when systems can act with autonomy, and what controls make agentic systems deployable in regulated environments.}
+				};
+				\node[anchor=north west, inner sep=0pt, text width=4.7in, align=justify] at (0.2in, 0.57in) {
+					{\rmfamily\fontsize{8.5}{11}\selectfont\color{TextPure}%
+					Written for legal practitioners, finance professionals, technology leaders, risk and compliance teams, and regulators who need clarity that will still matter as the technology evolves.}
+				};
+			\end{scope}
+
+			% Authors Box
+			\begin{scope}[shift={(0.45in, 1.10in)}]
+				\fill[black, opacity=0.08, rounded corners=6pt]
+				(0.05in, -0.05in) rectangle (5.15in, 2.25in);
+				\shade[top color=CopperLight, bottom color=MidSlate, opacity=0.12, rounded corners=6pt]
+				(0, 0) rectangle (5.1in, 2.3in);
+				\shade[left color=black!40, right color=DeepSlate, opacity=0.22, rounded corners=5.5pt, shading angle=135]
+				(0, 0) rectangle (5.1in, 2.3in);
+				\fill[white, opacity=0.04, rounded corners=6.5pt] (0, 0) rectangle (5.1in, 2.3in);
+				\draw[white, opacity=0.15, line width=0.5pt, rounded corners=6pt] (0, 0) rectangle (5.1in, 2.3in);
+
+				\node[anchor=north west, inner sep=0pt] at (0.2in, 2.05in) {
+					{\fontsize{13}{15}\selectfont\color{TextSoft}%
+					A\kern0.06em B\kern0.06em O\kern0.06em U\kern0.06em T\ %
+					T\kern0.06em H\kern0.06em E\ %
+					A\kern0.06em U\kern0.06em T\kern0.06em H\kern0.06em O\kern0.06em R\kern0.06em S}
+				};
+				\node[anchor=north west, inner sep=0pt] at (0.2in, 1.75in) {
+					\begin{minipage}[t]{4.7in}
+						\rmfamily\fontsize{7.5}{7.5}\selectfont\color{TextPure}%
+						The authors founded legal tech company LexPredict in 2014, exited in 2018, and today lead 273 Ventures.
+					\end{minipage}
+				};
+				\node[anchor=north west, inner sep=0pt] at (0.2in, 1.5in) {
+					\begin{minipage}[t]{4.7in}
+						\rmfamily\fontsize{7.5}{7.5}\selectfont\color{TextPure}%
+						\textbf{\textcolor{TextPure}{Michael J. Bommarito II, MSE, MA}} --- Serial entrepreneur, researcher, and adjunct professor with 25 years of industry experience.
+					\end{minipage}
+				};
+				\node[anchor=north west, inner sep=0pt] at (0.2in, 1.09in) {
+					\begin{minipage}[t]{4.7in}
+						\rmfamily\fontsize{7.5}{7.5}\selectfont\color{TextPure}%
+						\textbf{\textcolor{TextPure}{Daniel Martin Katz, PhD, JD, MPP}} --- Professor at Illinois Tech - Chicago Kent College of Law, named by the FT as one of the top 20 legal market shapers of the past 20 years.
+					\end{minipage}
+				};
+				\node[anchor=north west, inner sep=0pt] at (0.2in, 0.68in) {
+					\begin{minipage}[t]{4.7in}
+						\rmfamily\fontsize{7.5}{7.5}\selectfont\color{TextPure}%
+						\textbf{\textcolor{TextPure}{Jillian Bommarito, CPA, CIPP/US/E}} --- Advisor, risk and governance expert, and one of the first certified AI auditors in the world.
+					\end{minipage}
+				};
+			\end{scope}
+
+			% Footer
+			\node[anchor=south west, inner sep=0pt] at (0.75in, 0.5in) {
+				{\rmfamily\fontsize{9}{11}\selectfont\bfseries\color{TextPure}\textsc{ai4lf.com}}
+			};
+			\begin{scope}[shift={(5.55in, 0.13in)}]
+				\node[anchor=south east, inner sep=0pt] at (0, 0) {
+					\includegraphics[height=0.75in]{back-matter/isbn-barcode.pdf}
+				};
+			\end{scope}
+		\end{scope}
+
+		% ==================================================================
+		% SPINE
+		% ==================================================================
+		\fill[DeepSlate, opacity=0.55]
 		(\CoverSpineX, 0) rectangle ++(\CoverSpineWidth, \CoverHeight);
 		\begin{scope}[shift={(\CoverSpineCenterX, \CoverCenterY)}]
 			\draw[CircleLight, opacity=0.18, line width=0.6pt] (0, 0) circle (0.28in);
 			\draw[CircleMid, opacity=0.22, line width=0.6pt] (0, 0) circle (0.18in);
 		\end{scope}
 
-		% Vectorian ornaments (pgfornament) - top and bottom of spine
+		% Ornaments
 		\node[inner sep=0pt, rotate=0] at (\CoverSpineCenterX, \SpineOrnamentTopY) {%
 			\pgfornament[width=\SpineOrnamentSize, color=CopperLight, opacity=0.33]{\SpineOrnamentId}%
 		};
@@ -149,7 +303,7 @@
 			\pgfornament[width=\SpineOrnamentSize, color=CopperLight, opacity=0.33]{\SpineOrnamentId}%
 		};
 
-		% Spine text (rotate -90 for top-to-bottom reading)
+		% Spine text
 		\ifcoverspine
 			\node[rotate=270, align=center, inner sep=0pt] at (\CoverSpineCenterX, \CoverCenterY) {%
 			\shortstack[c]{%
