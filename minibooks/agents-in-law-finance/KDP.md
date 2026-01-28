@@ -178,7 +178,7 @@ If you're evaluating AI agents for legal work, financial services, or compliance
 **Use for Bowker MyIdentifiers, library cataloging, and metadata services.**
 
 ```
-The practical guide to AI agent deployment in regulated industries—from the researchers who proved GPT-4 could pass the bar exam.
+The practical guide to AI agent deployment in regulated industries—from the researchers and industry experts who proved GPT-4 could pass the bar exam.
 
 If you're evaluating AI agents for legal work, financial services, or compliance, you need more than vendor demos. You need a framework for understanding what these systems can actually do—and what it takes to deploy them responsibly.
 
@@ -234,7 +234,8 @@ Amazon allows up to 3 categories.
 ### Recommended Categories
 
 1. **Computers & Technology > Computer Science > AI & Machine Learning > General**
-   - Primary category, most directly relevant
+   - Primary 
+, most directly relevant
 
 2. **Law > Legal Services**
    - Captures legal practitioner audience
